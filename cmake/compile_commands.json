@@ -1,0 +1,27 @@
+[
+{
+  "directory": "/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/cmake",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I\"/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/include\"  -g   -o CMakeFiles/neutrino.dir/src/context.cpp.o -c \"/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/context.cpp\"",
+  "file": "/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/context.cpp"
+},
+{
+  "directory": "/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/cmake",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I\"/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/include\"  -g   -o CMakeFiles/neutrino.dir/src/main.cpp.o -c \"/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/main.cpp\"",
+  "file": "/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/main.cpp"
+},
+{
+  "directory": "/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/cmake",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I\"/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/include\"  -g   -o CMakeFiles/neutrino.dir/src/opencl.cpp.o -c \"/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/opencl.cpp\"",
+  "file": "/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/opencl.cpp"
+},
+{
+  "directory": "/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/cmake",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I\"/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/include\"  -g   -o CMakeFiles/neutrino.dir/src/opengl.cpp.o -c \"/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/opengl.cpp\"",
+  "file": "/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/opengl.cpp"
+},
+{
+  "directory": "/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/cmake",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I\"/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/include\"  -g   -o CMakeFiles/neutrino.dir/src/program.cpp.o -c \"/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/program.cpp\"",
+  "file": "/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/program.cpp"
+}
+]
