@@ -35,5 +35,7 @@
   void create_window();
   void init_glew();
   void init_shaders(const char* vertex_shader, const char* fragment_shader);
+  void create_VBO(GLuint* vbo);
+  void create_VAO(GLuint* vao);
 
 #endif
