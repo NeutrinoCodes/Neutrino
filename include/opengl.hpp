@@ -24,6 +24,8 @@
     #include <GL/gl.h>
   #endif
 
+  #include "utils.hpp"
+
   extern  GLFWwindow*				window;
 
   void window_refresh_callback(GLFWwindow* window);
@@ -32,5 +34,6 @@
   void init_hints();
   void create_window();
   void init_glew();
+  void init_shaders(const char* vertex_shader, const char* fragment_shader);
 
 #endif

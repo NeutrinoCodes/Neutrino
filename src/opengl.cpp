@@ -60,3 +60,61 @@ void init_glew()
     exit(EXIT_FAILURE);
   }
 }
+
+void init_shaders(const char* vertex_shader, const char* fragment_shader)
+{
+  GLuint vs, fs, prog;
+  char *vs_source, *fs_source;
+  size_t vs_length, fs_length;
+	GLint success;
+  GLsizei log_size;
+  GLchar *log;
+
+  printf("Action: Initialising OpenGL shaders...\n");                                                                         ///< Printing action message...
+  vs = glCreateShader(GL_VERTEX_SHADER);
+  fs = glCreateShader(GL_FRAGMENT_SHADER);
+  read_file(vertex_shader, &vs_length, &vs_source);
+  read_file(fragment_shader, &fs_length, &fs_source);
+  glShaderSource(vs, 1, (const char**)&vs_source, (GLint*)&vs_length);
+  glShaderSource(fs, 1, (const char**)&fs_source, (GLint*)&fs_length);
+
+	// Compiling vertex shader...
+	glCompileShader(vs);
+  glGetShaderiv(vs, GL_COMPILE_STATUS, &success);
+
+  if (!success)
+  {
+    glGetShaderiv(vs, GL_INFO_LOG_LENGTH, &log_size);
+    log = (char*) malloc(log_size+1);
+    log[log_size] = '\0';
+    glGetShaderInfoLog(vs, log_size+1, NULL, log);
+    printf("%s\n", log);
+    free(log);
+    exit(1);
+  }
+
+	// Compiling fragment shader...
+	glCompileShader(fs);
+  glGetShaderiv(fs, GL_COMPILE_STATUS, &success);
+
+  if (!success)
+  {
+    glGetShaderiv(fs, GL_INFO_LOG_LENGTH, &log_size);
+    log = (char*) malloc(log_size+1);
+    log[log_size] = '\0';
+    glGetShaderInfoLog(fs, log_size+1, NULL, log);
+    printf("%s\n", log);
+    free(log);
+    exit(1);
+  }
+
+	// Creating OpenGL shader program...
+  prog = glCreateProgram();
+  glBindAttribLocation(prog, 0, "in_coords");
+  glBindAttribLocation(prog, 1, "in_color");
+  glAttachShader(prog, vs);
+  glAttachShader(prog, fs);
+  glLinkProgram(prog);
+  glUseProgram(prog);
+  printf("DONE!\n\n");                                                                                                        ///< Printing OK message...
+}

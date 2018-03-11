@@ -23,5 +23,10 @@
   "directory": "/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/cmake",
   "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I\"/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/include\"  -g   -o CMakeFiles/neutrino.dir/src/program.cpp.o -c \"/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/program.cpp\"",
   "file": "/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/program.cpp"
+},
+{
+  "directory": "/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/cmake",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I\"/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/include\"  -g   -o CMakeFiles/neutrino.dir/src/utils.cpp.o -c \"/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/utils.cpp\"",
+  "file": "/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/utils.cpp"
 }
 ]

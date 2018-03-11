@@ -47,6 +47,8 @@ OpenGL/OpenGL.h
 -
 GL/gl.h
 -
+utils.hpp
+../include/utils.hpp
 
 ../include/program.hpp
 stdio.h
@@ -55,6 +57,22 @@ stdlib.h
 -
 opengl.hpp
 ../include/opengl.hpp
+
+../include/utils.hpp
+stdio.h
+-
+stdlib.h
+-
+Windows.h
+-
+unistd.h
+-
+sys/resource.h
+-
+sys/times.h
+-
+time.h
+-
 
 /Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/context.cpp
 context.hpp
@@ -77,4 +95,8 @@ opengl.hpp
 /Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/program.cpp
 program.hpp
 /Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/program.hpp
+
+/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/utils.cpp
+utils.hpp
+/Users/Erik/.CMVolumes/Erik Zorzin/Erik_Alessandro/Neutrino/src/utils.hpp
 

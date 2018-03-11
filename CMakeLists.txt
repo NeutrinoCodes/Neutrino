@@ -14,7 +14,8 @@ src/context.cpp
 src/main.cpp
 src/opencl.cpp
 src/opengl.cpp
-src/program.cpp)
+src/program.cpp
+src/utils.cpp)
 
 # Setting directory for the Mac executable...
 if(APPLE)

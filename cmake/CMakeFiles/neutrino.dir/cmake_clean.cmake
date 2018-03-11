@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/neutrino.dir/src/opencl.cpp.o"
   "CMakeFiles/neutrino.dir/src/opengl.cpp.o"
   "CMakeFiles/neutrino.dir/src/program.cpp.o"
+  "CMakeFiles/neutrino.dir/src/utils.cpp.o"
   "../build/mac/neutrino.pdb"
   "../build/mac/neutrino"
 )

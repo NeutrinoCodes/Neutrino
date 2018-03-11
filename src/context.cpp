@@ -1,6 +1,4 @@
 #include "context.hpp"
-//#include "opengl.hpp"
-//#include "opencl.hpp"
 
 void create_opengl_context()
 {
@@ -8,6 +6,7 @@ void create_opengl_context()
   init_hints();
   create_window();
   init_glew();
+  init_shaders(VERTEX_FILE, FRAGMENT_FILE);
 }
 
 void create_opencl_context()
