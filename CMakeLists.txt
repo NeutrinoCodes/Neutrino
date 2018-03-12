@@ -11,6 +11,7 @@ project (neutrino)
 # Creating a SOURCES variable with a link to all cpp files to compile...
 set(SOURCES
 src/context.cpp
+src/interop.cpp
 src/main.cpp
 src/opencl.cpp
 src/opengl.cpp

@@ -6,7 +6,7 @@ void create_opengl_context()
   init_hints();
   create_window();
   init_glew();
-  init_shaders(VERTEX_FILE, FRAGMENT_FILE);
+  init_shaders();
 }
 
 void create_opencl_context()
@@ -31,9 +31,8 @@ void create_opencl_context()
 
   }
 
-  get_context_properties();
+  set_interop();
   create_context();
-  read_kernel();
   create_program();
   build_program();
   create_queue();

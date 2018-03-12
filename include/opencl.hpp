@@ -13,8 +13,6 @@
     #include <GL/gl.h>
   #endif
 
-  // These files are relative to the build/mac or build/linux directory:
-  #define KERNEL_FILE             "../../kernel/kernel.txt"
   #define KERNEL_NAME             "the_kernel"
   #define KERNEL_OPTIONS          ""
 
@@ -37,10 +35,9 @@
   void    get_platform_info(cl_uint index_platform, cl_platform_info name_param);
   cl_uint get_devices(cl_uint index_platform);
   void    get_device_info(cl_uint index_device, cl_device_info name_param);
-  void    get_context_properties();
   void    create_context();
   void    create_queue();
-  void    read_kernel();
+  void    load_kernel(const char* filename_kernel);
   void    create_program();
   void    build_program();
   void    create_kernel();

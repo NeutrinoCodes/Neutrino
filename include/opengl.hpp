@@ -26,11 +26,11 @@
 
   #include "utils.hpp"
 
-  // These files are relative to the build/mac or build/linux directory:
-  #define VERTEX_FILE     "../../shader/vertex.txt"
-  #define FRAGMENT_FILE   "../../shader/fragment.txt"
-
   extern  GLFWwindow*				window;
+  extern  char*             vertex_source;
+  extern  size_t            size_vertex;
+  extern  char*             fragment_source;
+  extern  size_t            size_fragment;
 
   void window_refresh_callback(GLFWwindow* window);
   void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -38,8 +38,10 @@
   void init_hints();
   void create_window();
   void init_glew();
-  void init_shaders(const char* vertex_shader, const char* fragment_shader);
-  void create_VBO(GLuint* vbo);
+  void load_vertex(const char* filename_vertex);
+  void load_fragment(const char* filename_fragment);
+  void init_shaders();
   void create_VAO(GLuint* vao);
-
+  void create_VBO(GLuint* vbo);
+  
 #endif

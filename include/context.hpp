@@ -6,6 +6,7 @@
 
   #include "opengl.hpp"
   #include "opencl.hpp"
+  #include "interop.hpp"
 
   void create_opengl_context();
   void create_opencl_context();

@@ -1,6 +1,10 @@
 #include "opengl.hpp"
 
 GLFWwindow*				window;
+char*             vertex_source;
+size_t            size_vertex;
+char*             fragment_source;
+size_t            size_fragment;
 
 void window_refresh_callback(GLFWwindow* window)
 {
@@ -61,22 +65,70 @@ void init_glew()
   }
 }
 
-void init_shaders(const char* vertex_shader, const char* fragment_shader)
+void load_vertex(const char* filename_vertex)
 {
-  GLuint vs, fs, prog;
-  char *vs_source, *fs_source;
-  size_t vs_length, fs_length;
-	GLint success;
-  GLsizei log_size;
-  GLchar *log;
+	FILE* handle;
 
-  printf("Action: Initialising OpenGL shaders...\n");                                                                         ///< Printing action message...
+  handle = fopen(filename_vertex, "r");
+  if(handle == NULL)
+  {
+    perror("Couldn't find the file");
+    exit(1);
+  }
+  fseek(handle, 0, SEEK_END);
+  size_vertex = (size_t)ftell(handle);
+  rewind(handle);
+  vertex_source = (char*)malloc(size_vertex + 1);
+  if (!vertex_source)
+  {
+    fprintf(stderr, "Error: unable to allocate buffer memory!\n");
+    exit(EXIT_FAILURE);
+  }
+
+  fread(vertex_source, sizeof(char), size_vertex, handle);
+  fclose(handle);
+  vertex_source[size_vertex] = '\0';
+}
+
+void load_fragment(const char* filename_fragment)
+{
+	FILE* handle;
+
+  handle = fopen(filename_fragment, "r");
+  if(handle == NULL)
+  {
+    perror("Couldn't find the file");
+    exit(1);
+  }
+  fseek(handle, 0, SEEK_END);
+  size_fragment = (size_t)ftell(handle);
+  rewind(handle);
+  fragment_source = (char*)malloc(size_fragment + 1);
+  if (!fragment_source)
+  {
+    fprintf(stderr, "Error: unable to allocate buffer memory!\n");
+    exit(EXIT_FAILURE);
+  }
+
+  fread(fragment_source, sizeof(char), size_fragment, handle);
+  fclose(handle);
+  fragment_source[size_fragment] = '\0';
+}
+
+void init_shaders()
+{
+  GLuint		vs;
+	GLuint 		fs;
+	GLuint 		prog;
+	GLint 		success;
+  GLsizei 	log_size;
+  GLchar*		log;
+
+  printf("Action: Initialising OpenGL shaders...\n");
   vs = glCreateShader(GL_VERTEX_SHADER);
   fs = glCreateShader(GL_FRAGMENT_SHADER);
-  read_file(vertex_shader, &vs_length, &vs_source);
-  read_file(fragment_shader, &fs_length, &fs_source);
-  glShaderSource(vs, 1, (const char**)&vs_source, (GLint*)&vs_length);
-  glShaderSource(fs, 1, (const char**)&fs_source, (GLint*)&fs_length);
+  glShaderSource(vs, 1, (const char**)&vertex_source, (GLint*)&size_vertex);
+  glShaderSource(fs, 1, (const char**)&fragment_source, (GLint*)&size_fragment);
 
 	// Compiling vertex shader...
 	glCompileShader(vs);
@@ -116,19 +168,21 @@ void init_shaders(const char* vertex_shader, const char* fragment_shader)
   glAttachShader(prog, fs);
   glLinkProgram(prog);
   glUseProgram(prog);
-  printf("DONE!\n\n");                                                                                                        ///< Printing OK message...
-}
-
-void create_VBO(GLuint* vbo)
-{
-    printf("Action: Creating OpenGL VBO...\n");                                                                                 ///< Printing action message...
-    glGenBuffers(1, vbo);                                                                                                       ///< Generating the vertex buffer object...
-    printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+  printf("DONE!\n\n");
 }
 
 void create_VAO(GLuint* vao)
 {
-    printf("Action: Creating OpenGL VAO...\n");                                                                                 ///< Printing action message...
-    glGenVertexArrays (1, vao);                                                                                                 ///< Generating the vertex attribute object...
-    printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+    printf("Action: Creating OpenGL VAO...\n");
+    glGenVertexArrays (1, vao);
+		glBindVertexArray(*vao);
+		printf("DONE!\n\n");
+}
+
+void create_VBO(GLuint* vbo)
+{
+    printf("Action: Creating OpenGL VBO...\n");
+    glGenBuffers(1, vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, *vbo);
+    printf("DONE!\n\n");
 }
