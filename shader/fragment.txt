@@ -1,0 +1,9 @@
+#version 410 core
+
+smooth in vec4 the_color;                                                       // (R, G, B, A) color,
+out vec4 out_color;                                                             // Output color.
+
+void main(void)
+{
+  out_color = the_color;                                                        // Assigning "the_color" as OpenGL color...
+}

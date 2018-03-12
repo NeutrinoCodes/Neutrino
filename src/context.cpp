@@ -33,12 +33,11 @@ void create_opencl_context()
 
   get_context_properties();
   create_context();
-  read_file(KERNEL_FILE, &kernel_size, &kernel_source);
-  create_program(context, kernel_source, &kernel_program);
-  free_file(kernel_source);
-  build_program(devices[0], kernel_program, KERNEL_OPTIONS);
-  create_queue(devices[0], context, &queue);
-  create_kernel(kernel_program, KERNEL_NAME, &kernel);
+  read_kernel();
+  create_program();
+  build_program();
+  create_queue();
+  create_kernel();
 }
 
 void destroy_opengl_context()
@@ -49,6 +48,11 @@ void destroy_opengl_context()
 
 void destroy_opencl_context()
 {
+  finish_queue();
+  release_kernel();
+  release_queue();
+  release_program();
+  release_context();
   free(devices);
   free(platforms);
 }

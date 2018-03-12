@@ -26,6 +26,10 @@
 
   #include "utils.hpp"
 
+  // These files are relative to the build/mac or build/linux directory:
+  #define VERTEX_FILE     "../../shader/vertex.txt"
+  #define FRAGMENT_FILE   "../../shader/fragment.txt"
+
   extern  GLFWwindow*				window;
 
   void window_refresh_callback(GLFWwindow* window);

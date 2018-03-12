@@ -7,13 +7,6 @@
   #include "opengl.hpp"
   #include "opencl.hpp"
 
-  // These files are relative to the build/mac or build/linux directory:
-  #define VERTEX_FILE     "../../shader/vertex.txt"
-  #define FRAGMENT_FILE   "../../shader/fragment.txt"
-  #define KERNEL_FILE     "../../kernel/kernel.txt"
-  #define KERNEL_NAME     "the_kernel"
-  #define KERNEL_OPTIONS  ""
-
   void create_opengl_context();
   void create_opencl_context();
   void destroy_opengl_context();
