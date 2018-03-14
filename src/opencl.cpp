@@ -13,48 +13,198 @@ cl_program              kernel_program;
 size_t                  size_global;
 size_t                  size_local;
 cl_uint                 dimension_kernel;
+cl_event*               kernel_event;
+
+const char* get_error(cl_int error)
+{
+  switch(error)
+  {
+    // run-time and JIT compiler errors
+    case 0: return "CL_SUCCESS";
+    case -1: return "CL_DEVICE_NOT_FOUND";
+    case -2: return "CL_DEVICE_NOT_AVAILABLE";
+    case -3: return "CL_COMPILER_NOT_AVAILABLE";
+    case -4: return "CL_MEM_OBJECT_ALLOCATION_FAILURE";
+    case -5: return "CL_OUT_OF_RESOURCES";
+    case -6: return "CL_OUT_OF_HOST_MEMORY";
+    case -7: return "CL_PROFILING_INFO_NOT_AVAILABLE";
+    case -8: return "CL_MEM_COPY_OVERLAP";
+    case -9: return "CL_IMAGE_FORMAT_MISMATCH";
+    case -10: return "CL_IMAGE_FORMAT_NOT_SUPPORTED";
+    case -11: return "CL_BUILD_PROGRAM_FAILURE";
+    case -12: return "CL_MAP_FAILURE";
+    case -13: return "CL_MISALIGNED_SUB_BUFFER_OFFSET";
+    case -14: return "CL_EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST";
+    case -15: return "CL_COMPILE_PROGRAM_FAILURE";
+    case -16: return "CL_LINKER_NOT_AVAILABLE";
+    case -17: return "CL_LINK_PROGRAM_FAILURE";
+    case -18: return "CL_DEVICE_PARTITION_FAILED";
+    case -19: return "CL_KERNEL_ARG_INFO_NOT_AVAILABLE";
+
+    // compile-time errors
+    case -30: return "CL_INVALID_VALUE";
+    case -31: return "CL_INVALID_DEVICE_TYPE";
+    case -32: return "CL_INVALID_PLATFORM";
+    case -33: return "CL_INVALID_DEVICE";
+    case -34: return "CL_INVALID_CONTEXT";
+    case -35: return "CL_INVALID_QUEUE_PROPERTIES";
+    case -36: return "CL_INVALID_COMMAND_QUEUE";
+    case -37: return "CL_INVALID_HOST_PTR";
+    case -38: return "CL_INVALID_MEM_OBJECT";
+    case -39: return "CL_INVALID_IMAGE_FORMAT_DESCRIPTOR";
+    case -40: return "CL_INVALID_IMAGE_SIZE";
+    case -41: return "CL_INVALID_SAMPLER";
+    case -42: return "CL_INVALID_BINARY";
+    case -43: return "CL_INVALID_BUILD_OPTIONS";
+    case -44: return "CL_INVALID_PROGRAM";
+    case -45: return "CL_INVALID_PROGRAM_EXECUTABLE";
+    case -46: return "CL_INVALID_KERNEL_NAME";
+    case -47: return "CL_INVALID_KERNEL_DEFINITION";
+    case -48: return "CL_INVALID_KERNEL";
+    case -49: return "CL_INVALID_ARG_INDEX";
+    case -50: return "CL_INVALID_ARG_VALUE";
+    case -51: return "CL_INVALID_ARG_SIZE";
+    case -52: return "CL_INVALID_KERNEL_ARGS";
+    case -53: return "CL_INVALID_WORK_DIMENSION";
+    case -54: return "CL_INVALID_WORK_GROUP_SIZE";
+    case -55: return "CL_INVALID_WORK_ITEM_SIZE";
+    case -56: return "CL_INVALID_GLOBAL_OFFSET";
+    case -57: return "CL_INVALID_EVENT_WAIT_LIST";
+    case -58: return "CL_INVALID_EVENT";
+    case -59: return "CL_INVALID_OPERATION";
+    case -60: return "CL_INVALID_GL_OBJECT";
+    case -61: return "CL_INVALID_BUFFER_SIZE";
+    case -62: return "CL_INVALID_MIP_LEVEL";
+    case -63: return "CL_INVALID_GLOBAL_WORK_SIZE";
+    case -64: return "CL_INVALID_PROPERTY";
+    case -65: return "CL_INVALID_IMAGE_DESCRIPTOR";
+    case -66: return "CL_INVALID_COMPILER_OPTIONS";
+    case -67: return "CL_INVALID_LINKER_OPTIONS";
+    case -68: return "CL_INVALID_DEVICE_PARTITION_COUNT";
+
+    // extension errors
+    case -1000: return "CL_INVALID_GL_SHAREGROUP_REFERENCE_KHR";
+    case -1001: return "CL_PLATFORM_NOT_FOUND_KHR";
+    case -1002: return "CL_INVALID_D3D10_DEVICE_KHR";
+    case -1003: return "CL_INVALID_D3D10_RESOURCE_KHR";
+    case -1004: return "CL_D3D10_RESOURCE_ALREADY_ACQUIRED_KHR";
+    case -1005: return "CL_D3D10_RESOURCE_NOT_ACQUIRED_KHR";
+    default: return "Unknown OpenCL error";
+  }
+}
 
 cl_uint get_platforms()
 {
+  cl_int err;
   cl_uint num_platforms;
 
-  clGetPlatformIDs(0, NULL, &num_platforms);
+  printf("Action: getting OpenCL platforms... ");
+
+  err = clGetPlatformIDs(0, NULL, &num_platforms);
+
+  if(err != CL_SUCCESS)
+  {
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
+  }
+
   platforms = (cl_platform_id*) malloc(sizeof(cl_platform_id) * num_platforms);
-  clGetPlatformIDs(num_platforms, platforms, NULL);
+
+  err = clGetPlatformIDs(num_platforms, platforms, NULL);
+
+  if(err != CL_SUCCESS)
+  {
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
+  }
+
+  printf("DONE!\n");
 
   return num_platforms;
 }
 
 void get_platform_info(cl_uint index_platform, cl_platform_info name_param)
 {
+  cl_int err;
   size_t  size_value;
 
-  clGetPlatformInfo(platforms[index_platform], name_param, 0, NULL, &size_value);
-  value = (char*) malloc(size_value);
-  clGetPlatformInfo(platforms[index_platform], name_param, size_value, value, NULL);
+  printf("Action: getting OpenCL platform info... ");
 
+  err = clGetPlatformInfo(platforms[index_platform], name_param, 0, NULL, &size_value);
+
+  if(err != CL_SUCCESS)
+  {
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
+  }
+
+  value = (char*) malloc(size_value);
+
+  err = clGetPlatformInfo(platforms[index_platform], name_param, size_value, value, NULL);
+
+  if(err != CL_SUCCESS)
+  {
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
+  }
 
   free(value);
+
+  printf("DONE!\n");
 }
 
 cl_uint get_devices(cl_uint index_platform)
 {
+  cl_int err;
   cl_uint num_devices;
 
-  clGetDeviceIDs(platforms[index_platform], CL_DEVICE_TYPE_ALL, 0, NULL, &num_devices);
+  printf("Action: getting OpenCL devices... ");
+
+  err = clGetDeviceIDs(platforms[index_platform], CL_DEVICE_TYPE_ALL, 0, NULL, &num_devices);
+
+  if(err != CL_SUCCESS)
+  {
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
+  }
+
   devices = (cl_device_id*) malloc(sizeof(cl_device_id) * num_devices);
-  clGetDeviceIDs(platforms[index_platform], CL_DEVICE_TYPE_ALL, num_devices, devices, NULL);
+  err = clGetDeviceIDs(platforms[index_platform], CL_DEVICE_TYPE_ALL, num_devices, devices, NULL);
+
+  if(err != CL_SUCCESS)
+  {
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
+  }
+
+  printf("DONE!\n");
 
   return num_devices;
 }
 
 void get_device_info(cl_uint index_device, cl_device_info name_param)
 {
+  cl_int err;
   size_t  size_value;
 
-  clGetDeviceInfo(devices[index_device], name_param, 0, NULL, &size_value);
+  printf("Action: getting OpenCL device info... ");
+
+  err = clGetDeviceInfo(devices[index_device], name_param, 0, NULL, &size_value);
+
+  if(err != CL_SUCCESS)
+  {
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
+  }
+
   value = (char*) malloc(size_value);
-  clGetDeviceInfo(devices[index_device], name_param, size_value, value, NULL);
+  err = clGetDeviceInfo(devices[index_device], name_param, size_value, value, NULL);
+
+  if(err != CL_SUCCESS)
+  {
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
+  }
 
   switch (name_param)
   {
@@ -110,46 +260,53 @@ void get_device_info(cl_uint index_device, cl_device_info name_param)
     case CL_DRIVER_VERSION:                         printf("CL_DRIVER_VERSION = %s\n", value);
   }
 
+  printf("DONE!\n");
+
   free(value);
 }
 
 void create_context()
 {
-  int err;
+  cl_int err;
 
+  printf("Action: creating OpenCL context for GPU... ");
   context = clCreateContextFromType(properties, CL_DEVICE_TYPE_GPU, NULL, NULL, &err);
 
-  if (!(context))
+  if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "Error: failed to create OpenCL-GL shared context!\n");
+    fprintf(stderr, "Error: %s\n", get_error(err));
     exit(err);
   }
+
+  printf("DONE!\n");
 }
 
 void create_queue()
 {
-    int err;                                                                                                                    ///< Error code [#].
+    cl_int err;
 
-    printf("Action: Creating OpenCL command queue...\n");                                                                       ///< Printing action message...
-    queue = clCreateCommandQueue(context, devices[0], 0, &err);                                                                 ///< Creating command queue...
+    printf("Action: creating OpenCL command queue... ");
+    queue = clCreateCommandQueue(context, devices[0], 0, &err);
 
-    if (!queue)
+    if(err != CL_SUCCESS)
     {
-        fprintf(stderr, "Error: Failed to create command queue!\n");                                                          ///< Printing error message...
-        exit(err);                                                                                                              ///< Exiting the application...
+      fprintf(stderr, "Error: %s\n", get_error(err));
+      exit(err);
     }
 
-    printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+    printf("DONE!\n");
 }
 
 void load_kernel(const char* filename_kernel)
 {
   FILE* handle;
 
+  printf("Action: loading OpenCL... ");
+
   handle = fopen(filename_kernel, "r");
   if(handle == NULL)
   {
-    perror("Couldn't find the file");
+    perror("Error: could not find the file!");
     exit(1);
   }
   fseek(handle, 0, SEEK_END);
@@ -165,295 +322,279 @@ void load_kernel(const char* filename_kernel)
   fread(kernel_source, sizeof(char), size_kernel, handle);
   fclose(handle);
   kernel_source[size_kernel] = '\0';
+
+  printf("DONE!\n");
 }
 
 void create_program()
 {
-  int err;                                                                                                                    ///< Error code [#].
+  cl_int err;
 
-  printf("Action: Creating OpenCL program...\n");                                                                             ///< Printing action message...
-  kernel_program = clCreateProgramWithSource(context, 1, (const char **) &kernel_source, NULL, &err);                                 ///< Creating program from source...
+  printf("Action: creating OpenCL program... ");
+  kernel_program = clCreateProgramWithSource(context, 1, (const char **) &kernel_source, NULL, &err);
 
-  if (!(kernel_program))                                                                                                            ///< Checking program...
+  if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "Error: Failed to create kernel program!\n");                                                          ///< Printing error message...
-    exit(err);                                                                                                              ///< Exiting the application...
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
   }
 
   free(kernel_source);
-  printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+  printf("DONE!\n");
 }
 
 void build_program()
 {
-  int err;                                                                                                                    ///< Error code [#].
-  size_t log_size;                                                                                                            ///< Info buffer size [#].
-  char* log;                                                                                                                  ///< Info buffer.
+  cl_int err;
+  size_t log_size;
+  char* log;
 
-  printf("Action: Building OpenCL program...\n");                                                                             ///< Printing action message...
-  err = clBuildProgram(kernel_program, 0, NULL, KERNEL_OPTIONS, NULL, NULL);                                                                ///< Building the program...
+  printf("Action: building OpenCL program... ");
+  err = clBuildProgram(kernel_program, 0, NULL, KERNEL_OPTIONS, NULL, NULL);
 
-  if (err != CL_SUCCESS)                                                                                                      ///< Checking program...
+  if (err != CL_SUCCESS)
   {
-    fprintf(stderr, "Error: Failed to build program executable!\n");                                                        ///< Printing error message...
+    fprintf(stderr, "Error: %s\n", get_error(err));
 
-    clGetProgramBuildInfo(kernel_program, devices[0], CL_PROGRAM_BUILD_LOG, 0, NULL, &log_size);                                    ///< Getting build info (log size)...
-    log = (char*) calloc(log_size + 1, sizeof(char));                                                                         ///< Allocating buffer for build log...
+    clGetProgramBuildInfo(kernel_program, devices[0], CL_PROGRAM_BUILD_LOG, 0, NULL, &log_size);
+    log = (char*) calloc(log_size + 1, sizeof(char));
 
-    if (!log)                                                                                                               ///< Checking for buffer allocation...
+    if (!log)
     {
-      fprintf(stderr, "Error: unable to allocate buffer memory for program build log!\n");                                ///< Printing error message...
-      exit(EXIT_FAILURE);                                                                                                 ///< Exiting the application...
+      fprintf(stderr, "Error: unable to allocate buffer memory for program build log!\n");
+      exit(EXIT_FAILURE);
     }
 
-    clGetProgramBuildInfo(kernel_program, devices[0], CL_PROGRAM_BUILD_LOG, log_size + 1, log, NULL);                               ///< Getting build info (log data)...
-    printf("%s\n", log);                                                                                                    ///< Printing build info...
-    free(log);                                                                                                              ///< Freeing log buffer...
-    exit(err);                                                                                                              ///< Exiting the application...
+    clGetProgramBuildInfo(kernel_program, devices[0], CL_PROGRAM_BUILD_LOG, log_size + 1, log, NULL);
+    printf("%s\n", log);
+    free(log);
+    exit(err);
   }
 
-  printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+  printf("DONE!\n");
 }
 
 void create_kernel()
 {
-  int err;                                                                                                                    ///< Error code [#].
+  cl_int err;
 
-  printf("Action: Creating OpenCL kernel...\n");                                                                              ///< Printing action message...
-  kernel = clCreateKernel(kernel_program, kernel_source, &err);                                                                       ///< Creating kernel...
+  printf("Action: creating OpenCL kernel... ");
+  kernel = clCreateKernel(kernel_program, kernel_source, &err);
 
-  if (err != CL_SUCCESS)                                                                                                      ///< Checking kernel...
+  if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "Error: Failed to create OpenCL kernel!\n");                                                            ///< Printing error message...
-    exit(err);                                                                                                              ///< Exiting the application...
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
   }
 
-  printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
-}
-
-void create_buffer_from_VBO(GLuint vbo, cl_mem_flags memflags, cl_mem* memory)
-{
-  int err;                                                                                                                    ///< Error code [#].
-
-  printf("Action: Creating openCL buffer from openGL VBO...\n");                                                              ///< Printing action message...
-  *memory = clCreateFromGLBuffer(context, memflags, vbo, &err);                                                               ///< Creating memory buffer...
-
-  if (err != CL_SUCCESS)                                                                                                      ///< Checking memory buffer...
-  {
-    fprintf(stderr, "Error: Failed to allocate device memory! %d\n", err);                                                  ///< Printing error message...
-    exit(err);                                                                                                              ///< Exiting the application...
-  }
-
-  printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+  printf("DONE!\n");
 }
 
 void get_kernel_workgroup_size(cl_kernel kernel, cl_device_id device_id, size_t* local)
 {
-    int err;                                                                                                                    ///< Error code [#].
+    cl_int err;
 
-    printf("Action: getting maximum kernel workgroup size...\n");                                                               ///< Printing action message...
-    err = clGetKernelWorkGroupInfo(kernel, device_id, CL_KERNEL_WORK_GROUP_SIZE, sizeof(*local), local, NULL);                  ///< Getting max kernel workgroup size...
+    printf("Action: getting maximum kernel workgroup size... ");
+    err = clGetKernelWorkGroupInfo(kernel, device_id, CL_KERNEL_WORK_GROUP_SIZE, sizeof(*local), local, NULL);
 
-    if (err != CL_SUCCESS)                                                                                                      ///< Checking error...
+    if(err != CL_SUCCESS)
     {
-        fprintf(stderr, "Error: Failed to retrieve kernel work group info! %d\n", err);                                         ///< Printing error message...
-        exit(err);                                                                                                              ///< Exiting the application...
+      fprintf(stderr, "Error: %s\n", get_error(err));
+      exit(err);
     }
 
-    printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+    printf("DONE!\n");
 }
 
 void execute_kernel()
 {
-  int err;                                                                                                                    ///< Error code [#].
+  cl_int err;
 
-  printf("Action: executing kernel...\n");                                                                                    ///< Printing action message...
-  err = clEnqueueNDRangeKernel(queue, kernel, dimension_kernel, NULL, &size_global, &size_local, 0, NULL, NULL);                                ///< Executing kernel...
+  err = clEnqueueNDRangeKernel(queue, kernel, dimension_kernel, NULL, &size_global, &size_local, 0, NULL, NULL);
 
-  if (err != CL_SUCCESS)                                                                                                      ///< Checking error...
+  if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "Error: Failed to execute kernel! %d\n", err);                                                          ///< Printing error message...
-    exit(err);                                                                                                              ///< Exiting the application...
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
   }
 
-  printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
 }
 
 void acquire_GL_object(cl_mem* CL_memory_buffer)
 {
-  int err;                                                                                                                    ///< Error code [#].
+  cl_int err;
 
-  printf("Action: acquiring OpenCL memory objects...\n");                                                                     ///< Printing action message...
-  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);                                       ///< Acquiring OpenCL memory objects...
+  printf("Action: acquiring OpenCL memory objects... ");
+  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);
 
-  if (err != CL_SUCCESS)                                                                                                      ///< Checking error...
+  if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "Error: Couldn't acquire the GL objects! %d\n", err);                                                   ///< Printing error message...
-    exit(err);                                                                                                              ///< Exiting the application...
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
   }
 
-  printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+  printf("DONE!\n");
 }
 
-void enqueue_task(cl_command_queue queue, cl_kernel kernel, cl_event* kernel_event)
+void enqueue_task()
 {
-    int err;                                                                                                                    ///< Error code [#].
+    cl_int err;
 
-    printf("Action: enqueueing OpenCL task...\n");                                                                              ///< Printing action message...
-    err = clEnqueueTask(queue, kernel, 0, NULL, kernel_event);                                                                  ///< Enqueueing OpenCL task...
+    printf("Action: enqueueing OpenCL task... ");
+    err = clEnqueueTask(queue, kernel, 0, NULL, kernel_event);
 
-    if (err != CL_SUCCESS)                                                                                                      ///< Checking error...
+    if(err != CL_SUCCESS)
     {
-        fprintf(stderr, "Error: Couldn't enqueue the kernel! %d\n", err);                                                       ///< Printing error message...
-        exit(err);                                                                                                              ///< Exiting the application...
+      fprintf(stderr, "Error: %s\n", get_error(err));
+      exit(err);
     }
 
-    printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+    printf("DONE!\n");
 }
 
-void wait_for_events(cl_event* kernel_event)
+void wait_for_event()
 {
-    int err;                                                                                                                    ///< Error code [#].
+    cl_int err;
 
-    printf("Action: waiting for OpenCL events...\n");                                                                           ///< Printing action message...
-    err = clWaitForEvents(1, kernel_event);                                                                                     ///< Waiting for OpenCL events...
+    printf("Action: waiting for OpenCL events... ");
+    err = clWaitForEvents(1, kernel_event);
 
-    if (err != CL_SUCCESS)                                                                                                      ///< Checking error...
+    if(err != CL_SUCCESS)
     {
-        fprintf(stderr, "Error: Couldn't wait for the OpenCL event! %d\n", err);                                                ///< Printing error message...
-        exit(err);                                                                                                              ///< Exiting the application...
+      fprintf(stderr, "Error: %s\n", get_error(err));
+      exit(err);
     }
 
-    printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+    printf("DONE!\n");
 }
 
 void release_GL_object(cl_mem* CL_memory_buffer)
 {
-  int err;                                                                                                                    ///< Error code [#].
+  cl_int err;
 
-  printf("Action: releasing enqueued OpenCL objects...\n");                                                                   ///< Printing action message...
-  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);                                       ///< Releasing OpenCL objects...
+  printf("Action: releasing enqueued OpenCL objects... ");
+  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);
 
-  if (err != CL_SUCCESS)                                                                                                      ///< Checking error...
+  if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "Error: Couldn't release OpenCL objects! %d\n", err);                                                   ///< Printing error message...
-    exit(err);                                                                                                              ///< Exiting the application...
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
   }
 
-  printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+  printf("DONE!\n");
 }
 
 void finish_queue()
 {
-  int err;                                                                                                                    ///< Error code [#].
+  cl_int err;
 
-  printf("Action: waiting for OpenCL command sequence end...\n");                                                             ///< Printing action message...
-  err = clFinish(queue);                                                                                                      ///< Waiting for OpenCL commands to have completed...
+  printf("Action: waiting for OpenCL command sequence end...\n");
+  err = clFinish(queue);
 
-  if (err != CL_SUCCESS)                                                                                                      ///< Checking error...
+  if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "Error: Couldn't wait for OpenCL command sequnce end! %d\n", err);                                      ///< Printing error message...
-    exit(err);                                                                                                              ///< Exiting the application...
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
   }
 
-  printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+  printf("DONE!\n");
 }
 
-void release_event(cl_event kernel_event)
+void release_event()
 {
-    int err;                                                                                                                    ///< Error code [#].
+    cl_int err;
 
-    printf("Action: decrementing the OpenCL event reference count...\n");                                                       ///< Printing action message...
-    err = clReleaseEvent(kernel_event);                                                                                         ///< Decrementing the event reference count...
+    printf("Action: decrementing the OpenCL event reference count...\n");
+    err = clReleaseEvent(*kernel_event);
 
-    if (err != CL_SUCCESS)                                                                                                      ///< Checking error...
+    if(err != CL_SUCCESS)
     {
-        fprintf(stderr, "Error: Couldn't decrement the OpenCL event reference count! %d\n", err);                               ///< Printing error message...
-        exit(err);                                                                                                              ///< Exiting the application...
+      fprintf(stderr, "Error: %s\n", get_error(err));
+      exit(err);
     }
 
-    printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+    printf("DONE!\n");
 }
 
 void release_mem_object(cl_mem CL_memory_buffer)
 {
-  int err;                                                                                                                    ///< Error code [#].
+  cl_int err;
 
-  printf("Action: decrementing the OpenCL memory object reference count...\n");                                               ///< Printing action message...
+  printf("Action: decrementing the OpenCL memory object reference count...\n");
 
-  err = clReleaseMemObject(CL_memory_buffer);                                                                                 ///< Decrementing the memory object reference count...
+  err = clReleaseMemObject(CL_memory_buffer);
 
-  if (err != CL_SUCCESS)                                                                                                      ///< Checking error...
+  if(err != CL_SUCCESS)
   {
-      fprintf(stderr, "Error: Couldn't decrement the OpenCL memory object reference count! %d\n", err);                       ///< Printing error message...
-      exit(err);                                                                                                              ///< Exiting the application...
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
   }
 
-  printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+  printf("DONE!\n");
 }
 
 void release_kernel()
 {
-  int err;                                                                                                                    ///< Error code [#].
+  cl_int err;
 
-  printf("Action: releasing the OpenCL command queue...\n");                                                      ///< Printing action message...
-  err = clReleaseKernel(kernel);                                                                                                    ///< Releasing kernel...
+  printf("Action: releasing the OpenCL command queue...\n");
+  err = clReleaseKernel(kernel);
 
-  if (err != CL_SUCCESS)                                                                                                      ///< Checking error...
+  if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "Error: Couldn't release kernel! %d\n", err);                                                           ///< Printing error message...
-    exit(err);                                                                                                              ///< Exiting the application...
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
   }
 
-  printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+  printf("DONE!\n");
 }
 
 void release_queue()
 {
-  int err;                                                                                                                    ///< Error code [#].
+  cl_int err;
 
-  printf("Action: releasing the OpenCL command queue...\n");                                                                  ///< Printing action message...
+  printf("Action: releasing the OpenCL command queue...\n");
   err = clReleaseCommandQueue(queue);
 
-  if (err != CL_SUCCESS)                                                                                                      ///< Checking error...
+  if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "Error: Couldn't release OpenCL command queue! %d\n", err);                                             ///< Printing error message...
-    exit(err);                                                                                                              ///< Exiting the application...
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
   }
 
-  printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+  printf("DONE!\n");
 }
 
 void release_program()
 {
-  int err;                                                                                                                    ///< Error code [#].
+  cl_int err;
 
-  printf("Action: releasing the OpenCL program...\n");                                                                        ///< Printing action message...
+  printf("Action: releasing the OpenCL program...\n");
 
   err = clReleaseProgram(kernel_program);
 
-  if (err != CL_SUCCESS)                                                                                                      ///< Checking error...
+  if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "Error: Couldn't release OpenCL program! %d\n", err);                                                   ///< Printing error message...
-    exit(err);                                                                                                              ///< Exiting the application...
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
   }
 
-  printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+  printf("DONE!\n");
 }
 
 void release_context()
 {
-  int err;                                                                                                                    ///< Error code [#].
+  cl_int err;
 
-  printf("Action: releasing the OpenCL context...\n");                                                                        ///< Printing action message...
+  printf("Action: releasing the OpenCL context...\n");
 
   err = clReleaseContext(context);
 
-  if (err != CL_SUCCESS)                                                                                                      ///< Checking error...
+  if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "Error: Couldn't release OpenCL context! %d\n", err);                                                   ///< Printing error message...
-    exit(err);                                                                                                              ///< Exiting the application...
+    fprintf(stderr, "Error: %s\n", get_error(err));
+    exit(err);
   }
 
-  printf("DONE!\n\n");                                                                                                        ///< Printing DONE! message...
+  printf("DONE!\n");
 }

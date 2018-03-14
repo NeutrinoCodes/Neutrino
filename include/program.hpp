@@ -5,9 +5,11 @@
 #include <stdlib.h>
 #include "opengl.hpp"
 #include "opencl.hpp"
+#include "data.hpp"
+#include "interop.hpp"
 
 void setup();
 void loop();
 void terminate();
 
-#endif                                                                          // program_hpp
+#endif

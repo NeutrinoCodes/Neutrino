@@ -6,7 +6,9 @@
 
 #include "opengl.hpp"
 #include "opencl.hpp"
+#include "data.hpp"
 
   void set_interop();
+  void set_kernel_argument(data_float4& data);
 
 #endif

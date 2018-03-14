@@ -33,3 +33,43 @@ void set_interop()
     };
   #endif
 }
+
+void set_kernel_argument(data_float4 &data)
+{
+  int err;
+  unsigned int i;
+  float* unfolded_data;
+
+  unfolded_data = new float[data.size];
+
+  for (i = 0; i < data.size; i++)
+  {
+    unfolded_data[4*i]     = data.x[i];
+    unfolded_data[4*i + 1] = data.y[i];
+    unfolded_data[4*i + 2] = data.z[i];
+    unfolded_data[4*i + 3] = data.w[i];
+  }
+
+  glGenVertexArrays(1, &data.vao);
+  glBindVertexArray(data.vao);
+  glGenBuffers(1, &data.vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, data.vbo);
+  glBufferData(GL_ARRAY_BUFFER, 4*data.size, unfolded_data, GL_DYNAMIC_DRAW);
+  glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+  glEnableVertexAttribArray(0);
+
+  data.buffer = clCreateFromGLBuffer(context, CL_MEM_READ_WRITE, data.vbo, &err);
+  if(err < 0)
+  {
+    perror("Couldn’t create a buffer object from the VBO");
+    exit(EXIT_FAILURE);
+  }
+
+  err = clSetKernelArg(kernel, 0, sizeof(cl_mem), &data.buffer);
+
+  if(err < 0)
+  {
+    printf("Couldn’t set a kernel argument");
+    exit(EXIT_FAILURE);
+  };
+}

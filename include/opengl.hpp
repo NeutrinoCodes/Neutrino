@@ -41,7 +41,5 @@
   void load_vertex(const char* filename_vertex);
   void load_fragment(const char* filename_fragment);
   void init_shaders();
-  void create_VAO(GLuint* vao);
-  void create_VBO(GLuint* vbo);
-  
+
 #endif

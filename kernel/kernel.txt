@@ -1,7 +1,17 @@
-__kernel void the_kernel(__global float4*  data_coords,
-                         __global float4*  data_colors,
-                         int               num_points,
-                         float             tick)
+{
+ "error": {
+  "errors": [
+   {
+    "domain": "usageLimits",
+    "reason": "rateLimitExceeded",
+    "message": "Rate Limit Exceeded"
+   }
+  ],
+  "code": 403,
+  "message": "Rate Limit Exceeded"
+ }
+}
+t             tick)
 {
     float       x;
     float       x_min = -1.00f;

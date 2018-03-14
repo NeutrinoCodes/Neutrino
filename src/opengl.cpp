@@ -170,19 +170,3 @@ void init_shaders()
   glUseProgram(prog);
   printf("DONE!\n\n");
 }
-
-void create_VAO(GLuint* vao)
-{
-    printf("Action: Creating OpenGL VAO...\n");
-    glGenVertexArrays (1, vao);
-		glBindVertexArray(*vao);
-		printf("DONE!\n\n");
-}
-
-void create_VBO(GLuint* vbo)
-{
-    printf("Action: Creating OpenGL VBO...\n");
-    glGenBuffers(1, vbo);
-		glBindBuffer(GL_ARRAY_BUFFER, *vbo);
-    printf("DONE!\n\n");
-}
