@@ -3,6 +3,7 @@
 
 int main()
 {
+  kernel_arg = 0;
   setup();
   create_opengl_context();
 	create_opencl_context();

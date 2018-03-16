@@ -1,26 +1,11 @@
+__kernel void pippo(__global float4*  points, int num_points, float tick)
 {
- "error": {
-  "errors": [
-   {
-    "domain": "usageLimits",
-    "reason": "rateLimitExceeded",
-    "message": "Rate Limit Exceeded"
-   }
-  ],
-  "code": 403,
-  "message": "Rate Limit Exceeded"
- }
-}
-t             tick)
-{
-    float       x;
-    float       x_min = -1.00f;
-    float       x_max = 1.00f;
+  float       x;
+  float       x_min = -1.00f;
+  float       x_max = 1.00f;
 
-    int i = get_global_id(0);
+  int i = get_global_id(0);
 
-    x = ((x_max - x_min)/(float)num_points)*(float)i + x_min;
-    data_coords[i] = (float4)(x, sin(10*x + 2*tick), 0.00f, 1.00f);
-    data_colors[i] = (float4)(1.00f, 1.00f, 1.00f, 1.00f);
-
+  x = ((x_max - x_min)/(float)num_points)*(float)i + x_min;
+  points[i] = (float4)(x, sin(10*x + 2*tick), 0.00f, 1.00f);
 }

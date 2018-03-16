@@ -69,10 +69,12 @@ void load_vertex(const char* filename_vertex)
 {
 	FILE* handle;
 
+	printf("Action: loading OpenGL vertex source from file... ");
+
   handle = fopen(filename_vertex, "r");
   if(handle == NULL)
   {
-    perror("Couldn't find the file");
+    fprintf(stderr, "\nError: could not find the file!\n");
     exit(1);
   }
   fseek(handle, 0, SEEK_END);
@@ -81,23 +83,27 @@ void load_vertex(const char* filename_vertex)
   vertex_source = (char*)malloc(size_vertex + 1);
   if (!vertex_source)
   {
-    fprintf(stderr, "Error: unable to allocate buffer memory!\n");
+    fprintf(stderr, "\nError: unable to allocate buffer memory!\n");
     exit(EXIT_FAILURE);
   }
 
   fread(vertex_source, sizeof(char), size_vertex, handle);
   fclose(handle);
   vertex_source[size_vertex] = '\0';
+
+	printf("DONE!\n");
 }
 
 void load_fragment(const char* filename_fragment)
 {
 	FILE* handle;
 
+	printf("Action: loading OpenGL fragment source from file... ");
+
   handle = fopen(filename_fragment, "r");
   if(handle == NULL)
   {
-    perror("Couldn't find the file");
+    fprintf(stderr, "\nError: could not find the file!\n");
     exit(1);
   }
   fseek(handle, 0, SEEK_END);
@@ -106,13 +112,15 @@ void load_fragment(const char* filename_fragment)
   fragment_source = (char*)malloc(size_fragment + 1);
   if (!fragment_source)
   {
-    fprintf(stderr, "Error: unable to allocate buffer memory!\n");
+    fprintf(stderr, "\nError: unable to allocate buffer memory!\n");
     exit(EXIT_FAILURE);
   }
 
   fread(fragment_source, sizeof(char), size_fragment, handle);
   fclose(handle);
   fragment_source[size_fragment] = '\0';
+
+	printf("DONE!\n");
 }
 
 void init_shaders()
@@ -124,7 +132,7 @@ void init_shaders()
   GLsizei 	log_size;
   GLchar*		log;
 
-  printf("Action: Initialising OpenGL shaders...\n");
+  printf("Action: initialising OpenGL shaders... ");
   vs = glCreateShader(GL_VERTEX_SHADER);
   fs = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(vs, 1, (const char**)&vertex_source, (GLint*)&size_vertex);
@@ -162,11 +170,11 @@ void init_shaders()
 
 	// Creating OpenGL shader program...
   prog = glCreateProgram();
-  glBindAttribLocation(prog, 0, "in_coords");
+  glBindAttribLocation(prog, 0, "in_point");
   glBindAttribLocation(prog, 1, "in_color");
   glAttachShader(prog, vs);
   glAttachShader(prog, fs);
   glLinkProgram(prog);
   glUseProgram(prog);
-  printf("DONE!\n\n");
+  printf("DONE!\n");
 }

@@ -13,12 +13,14 @@
     #include <GL/gl.h>
   #endif
 
-  #define KERNEL_NAME             "the_kernel"
+  #define KERNEL_NAME             "pippo"
   #define KERNEL_OPTIONS          ""
 
   extern  char*                   value;
   extern  cl_platform_id*         platforms;
+  extern  unsigned int            num_platforms;
   extern  cl_device_id*           devices;
+  extern  unsigned int            num_devices;
   extern  cl_context_properties*  properties;
   extern  cl_context              context;
   extern  cl_command_queue        queue;
@@ -28,9 +30,9 @@
   extern  size_t                  size_kernel;
   extern  cl_program              kernel_program;
   extern  size_t                  size_global;
-  extern  size_t                  size_local;
   extern  cl_uint                 dimension_kernel;
   extern  cl_event*               kernel_event;
+  extern  size_t                  kernel_arg;
 
   const char* get_error(cl_int error);
   cl_uint     get_platforms();
@@ -38,10 +40,10 @@
   cl_uint     get_devices(cl_uint index_platform);
   void        get_device_info(cl_uint index_device, cl_device_info name_param);
   void        create_context();
-  void        create_queue();
   void        load_kernel(const char* filename_kernel);
   void        create_program();
   void        build_program();
+  void        create_queue();
   void        create_kernel();
   void        get_kernel_workgroup_size(cl_kernel kernel, cl_device_id device_id, size_t* local);
   void        execute_kernel();

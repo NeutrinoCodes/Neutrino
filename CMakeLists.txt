@@ -1,17 +1,12 @@
-{
- "error": {
-  "errors": [
-   {
-    "domain": "usageLimits",
-    "reason": "rateLimitExceeded",
-    "message": "Rate Limit Exceeded"
-   }
-  ],
-  "code": 403,
-  "message": "Rate Limit Exceeded"
- }
-}
- (neutrino)
+cmake_minimum_required(VERSION 3.0)
+
+# Setting LINUX variable, according to an existing LINUX (but not APPLE) OS...
+if(UNIX AND NOT APPLE)
+  set(LINUX TRUE)
+endif()
+
+# Setting project name...
+project (neutrino)
 
 # Creating a SOURCES variable with a link to all cpp files to compile...
 set(SOURCES

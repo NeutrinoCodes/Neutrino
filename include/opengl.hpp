@@ -4,6 +4,7 @@
   #include <stdio.h>
   #include <stdlib.h>
   #include <GL/glew.h>
+  #include <glm/glm.hpp>
 
   #ifdef __WINDOWS__
     #define GLFW_EXPOSE_NATIVE_WIN32

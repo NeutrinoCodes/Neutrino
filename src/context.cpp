@@ -11,22 +11,29 @@ void create_opengl_context()
 
 void create_opencl_context()
 {
+  num_platforms = get_platforms();
 
-  for (cl_uint i = 0; i < get_platforms(); i++)
+  for (cl_uint i = 0; i < num_platforms; i++)
   {
+    printf("Action: getting OpenCL platform info... \n");
     get_platform_info(i, CL_PLATFORM_NAME);
     get_platform_info(i, CL_PLATFORM_PROFILE);
     get_platform_info(i, CL_PLATFORM_VERSION);
     get_platform_info(i, CL_PLATFORM_VENDOR);
     get_platform_info(i, CL_PLATFORM_EXTENSIONS);
+    printf("        DONE!\n");
 
-    for (cl_uint j = 0; j < get_devices(i); j++)
+    num_devices = get_devices(i);
+
+    for (cl_uint j = 0; j < num_devices; j++)
     {
+      printf("Action: getting OpenCL device info... \n");
       get_device_info(j, CL_DEVICE_NAME);
       get_device_info(j, CL_DEVICE_VERSION);
       get_device_info(j, CL_DRIVER_VERSION);
-      get_device_info(j, CL_DEVICE_OPENCL_C_VERSION);
+      //get_device_info(j, CL_DEVICE_OPENCL_C_VERSION);
       //get_device_info(j, CL_DEVICE_MAX_COMPUTE_UNITS);
+      printf("        DONE!\n");
     }
 
   }
