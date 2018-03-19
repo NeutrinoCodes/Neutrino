@@ -3,7 +3,7 @@
 // These files are relative to the build/mac or build/linux directory:
 #define VERTEX_FILE     "../../shader/vertex.txt"
 #define FRAGMENT_FILE   "../../shader/fragment.txt"
-#define KERNEL_FILE     "../../kernel/kernel.txt"
+#define KERNEL_FILE     "../../kernel/thekernel.txt"
 
 #define NUM_POINTS      100
 

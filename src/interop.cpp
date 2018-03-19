@@ -65,7 +65,7 @@ void push_float4_data(data_float4 &data)
   data.buffer = clCreateFromGLBuffer(context, CL_MEM_READ_WRITE, data.vbo, &err);
   if(err < 0)
   {
-    fprintf(stderr, "Couldn’t create a buffer object from the VBO");
+    printf("Error:  could not create a buffer object from the VBO");
     exit(EXIT_FAILURE);
   }
 
@@ -73,7 +73,7 @@ void push_float4_data(data_float4 &data)
 
   if(err < 0)
   {
-    fprintf(stderr, "Couldn’t set a kernel argument");
+    printf("Error:  could not set a kernel argument");
     exit(EXIT_FAILURE);
   };
 }
@@ -107,7 +107,7 @@ void push_float4_size(data_float4 &data)
   data.buffer = clCreateFromGLBuffer(context, CL_MEM_READ_WRITE, data.vbo, &err);
   if(err < 0)
   {
-    fprintf(stderr, "Couldn’t create a buffer object from the VBO");
+    printf("Error:  could not create a buffer object from the VBO");
     exit(EXIT_FAILURE);
   }
 
@@ -115,7 +115,7 @@ void push_float4_size(data_float4 &data)
 
   if(err < 0)
   {
-    fprintf(stderr, "Couldn’t set a kernel argument");
+    printf("Error:  could not set a kernel argument");
     exit(EXIT_FAILURE);
   };
 }
@@ -146,7 +146,7 @@ void push_float_data(data_float &data)
   data.buffer = clCreateFromGLBuffer(context, CL_MEM_READ_WRITE, data.vbo, &err);
   if(err < 0)
   {
-    fprintf(stderr, "Couldn’t create a buffer object from the VBO");
+    printf("Error:  could not create a buffer object from the VBO");
     exit(EXIT_FAILURE);
   }
 
@@ -154,7 +154,7 @@ void push_float_data(data_float &data)
 
   if(err < 0)
   {
-    fprintf(stderr, "Couldn’t set a kernel argument");
+    printf("Error:  could not set a kernel argument");
     exit(EXIT_FAILURE);
   };
 }
@@ -185,7 +185,7 @@ void push_float_size(data_float &data)
   data.buffer = clCreateFromGLBuffer(context, CL_MEM_READ_WRITE, data.vbo, &err);
   if(err < 0)
   {
-    fprintf(stderr, "Couldn’t create a buffer object from the VBO");
+    printf("Error:  could not create a buffer object from the VBO");
     exit(EXIT_FAILURE);
   }
 
@@ -193,7 +193,7 @@ void push_float_size(data_float &data)
 
   if(err < 0)
   {
-    fprintf(stderr, "Couldn’t set a kernel argument");
+    printf("Error:  could not set a kernel argument");
     exit(EXIT_FAILURE);
   };
 }
@@ -227,7 +227,7 @@ void push_int4_data(data_int4 &data)
   data.buffer = clCreateFromGLBuffer(context, CL_MEM_READ_WRITE, data.vbo, &err);
   if(err < 0)
   {
-    fprintf(stderr, "Couldn’t create a buffer object from the VBO");
+    printf("Error:  could not create a buffer object from the VBO");
     exit(EXIT_FAILURE);
   }
 
@@ -235,7 +235,7 @@ void push_int4_data(data_int4 &data)
 
   if(err < 0)
   {
-    fprintf(stderr, "Couldn’t set a kernel argument");
+    printf("Error:  could not set a kernel argument");
     exit(EXIT_FAILURE);
   };
 }
@@ -269,7 +269,7 @@ void push_int4_size(data_int4 &data)
   data.buffer = clCreateFromGLBuffer(context, CL_MEM_READ_WRITE, data.vbo, &err);
   if(err < 0)
   {
-    fprintf(stderr, "Couldn’t create a buffer object from the VBO");
+    printf("Error:  could not create a buffer object from the VBO");
     exit(EXIT_FAILURE);
   }
 
@@ -277,7 +277,7 @@ void push_int4_size(data_int4 &data)
 
   if(err < 0)
   {
-    fprintf(stderr, "Couldn’t set a kernel argument");
+    printf("Error:  could not set a kernel argument");
     exit(EXIT_FAILURE);
   };
 }
@@ -308,7 +308,7 @@ void push_int_data(data_int &data)
   data.buffer = clCreateFromGLBuffer(context, CL_MEM_READ_WRITE, data.vbo, &err);
   if(err < 0)
   {
-    fprintf(stderr, "Couldn’t create a buffer object from the VBO");
+    printf("Error:  could not create a buffer object from the VBO");
     exit(EXIT_FAILURE);
   }
 
@@ -316,7 +316,7 @@ void push_int_data(data_int &data)
 
   if(err < 0)
   {
-    fprintf(stderr, "Couldn’t set a kernel argument");
+    printf("Error:  could not set a kernel argument");
     exit(EXIT_FAILURE);
   };
 }
@@ -347,7 +347,7 @@ void push_int_size(data_int &data)
   data.buffer = clCreateFromGLBuffer(context, CL_MEM_READ_WRITE, data.vbo, &err);
   if(err < 0)
   {
-    fprintf(stderr, "Couldn’t create a buffer object from the VBO");
+    printf("Error:  could not create a buffer object from the VBO");
     exit(EXIT_FAILURE);
   }
 
@@ -355,7 +355,7 @@ void push_int_size(data_int &data)
 
   if(err < 0)
   {
-    fprintf(stderr, "Couldn’t set a kernel argument");
+    printf("Error:  could not set a kernel argument");
     exit(EXIT_FAILURE);
   };
 }

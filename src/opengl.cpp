@@ -24,7 +24,7 @@ void init_glfw()
 {
   if (glfwInit() != GLFW_TRUE)
 	{
-  	fprintf(stderr, "Error: unable to initialize GLFW!\n");
+  	printf("Error:  unable to initialize GLFW!\n");
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
@@ -44,7 +44,7 @@ void create_window()
   window = glfwCreateWindow(800, 600, "Test interop CPP", NULL, NULL);
   if (!window)
 	{
-		fprintf(stderr, "Error: unable to create window!\n");
+		printf("Error:  unable to create window!\n");
     glfwTerminate();
     exit(EXIT_FAILURE);
   }
@@ -60,7 +60,7 @@ void init_glew()
 
 	if (glewInit() != GLEW_OK)
 	{
-    fprintf(stderr, "Error: unable to initialize GLEW!\n");
+    printf("Error:  unable to initialize GLEW!\n");
     exit(EXIT_FAILURE);
   }
 }
@@ -71,10 +71,10 @@ void load_vertex(const char* filename_vertex)
 
 	printf("Action: loading OpenGL vertex source from file... ");
 
-  handle = fopen(filename_vertex, "r");
+  handle = fopen(filename_vertex, "rb");
   if(handle == NULL)
   {
-    fprintf(stderr, "\nError: could not find the file!\n");
+    printf("\nError:  could not find the file!\n");
     exit(1);
   }
   fseek(handle, 0, SEEK_END);
@@ -83,7 +83,7 @@ void load_vertex(const char* filename_vertex)
   vertex_source = (char*)malloc(size_vertex + 1);
   if (!vertex_source)
   {
-    fprintf(stderr, "\nError: unable to allocate buffer memory!\n");
+    printf("\nError:  unable to allocate buffer memory!\n");
     exit(EXIT_FAILURE);
   }
 
@@ -100,10 +100,10 @@ void load_fragment(const char* filename_fragment)
 
 	printf("Action: loading OpenGL fragment source from file... ");
 
-  handle = fopen(filename_fragment, "r");
+  handle = fopen(filename_fragment, "rb");
   if(handle == NULL)
   {
-    fprintf(stderr, "\nError: could not find the file!\n");
+    printf("\nError:  could not find the file!\n");
     exit(1);
   }
   fseek(handle, 0, SEEK_END);
@@ -112,7 +112,7 @@ void load_fragment(const char* filename_fragment)
   fragment_source = (char*)malloc(size_fragment + 1);
   if (!fragment_source)
   {
-    fprintf(stderr, "\nError: unable to allocate buffer memory!\n");
+    printf("\nError:  unable to allocate buffer memory!\n");
     exit(EXIT_FAILURE);
   }
 

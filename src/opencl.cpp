@@ -106,7 +106,7 @@ cl_uint get_platforms()
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -116,7 +116,7 @@ cl_uint get_platforms()
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -134,7 +134,7 @@ void get_platform_info(cl_uint index_platform, cl_platform_info name_param)
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -144,7 +144,7 @@ void get_platform_info(cl_uint index_platform, cl_platform_info name_param)
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -171,7 +171,7 @@ cl_uint get_devices(cl_uint index_platform)
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -180,7 +180,7 @@ cl_uint get_devices(cl_uint index_platform)
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -198,7 +198,7 @@ void get_device_info(cl_uint index_device, cl_device_info name_param)
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "Error: %s\n", get_error(err));
+    printf("Error:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -207,7 +207,7 @@ void get_device_info(cl_uint index_device, cl_device_info name_param)
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "Error: %s\n", get_error(err));
+    printf("Error:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -277,7 +277,86 @@ void create_context()
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  printf("DONE!\n");
+}
+
+void load_kernel(const char* filename_kernel)
+{
+  FILE* handle;
+
+  printf("Action: loading OpenCL kernel from file... ");
+
+  handle = fopen(filename_kernel, "rb");
+
+  if(handle == NULL)
+  {
+    printf("\nError:  could not find the file!");
+    exit(1);
+  }
+  fseek(handle, 0, SEEK_END);
+  size_kernel = (size_t)ftell(handle);
+  rewind(handle);
+  kernel_source = (char*)malloc(size_kernel + 1);
+  if (!kernel_source)
+  {
+    printf("\nError:  unable to allocate buffer memory!\n");
+    exit(EXIT_FAILURE);
+  }
+
+  fread(kernel_source, sizeof(char), size_kernel, handle);
+  kernel_source[size_kernel] = '\0';
+  printf("%s\n", kernel_source);
+  fclose(handle);
+
+  printf("DONE!\n");
+}
+
+void create_program()
+{
+  cl_int err;
+
+  printf("Action: creating OpenCL program... ");
+  kernel_program = clCreateProgramWithSource(context, 1, (const char **) &kernel_source, &size_kernel, &err);
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  free(kernel_source);
+  printf("DONE!\n");
+}
+
+void build_program()
+{
+  cl_int err;
+  size_t log_size;
+  char* log;
+
+  printf("Action: building OpenCL program... ");
+  err = clBuildProgram(kernel_program, 1, devices, "", NULL, NULL);
+
+  if (err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+
+    clGetProgramBuildInfo(kernel_program, devices[0], CL_PROGRAM_BUILD_LOG, 0, NULL, &log_size);
+    log = (char*) calloc(log_size + 1, sizeof(char));
+
+    if (!log)
+    {
+      printf("\nError:  unable to allocate buffer memory for program build log!\n");
+      exit(EXIT_FAILURE);
+    }
+
+    clGetProgramBuildInfo(kernel_program, devices[0], CL_PROGRAM_BUILD_LOG, log_size + 1, log, NULL);
+    printf("%s\n", log);
+    free(log);
     exit(err);
   }
 
@@ -293,89 +372,11 @@ void create_queue()
 
     if(err != CL_SUCCESS)
     {
-      fprintf(stderr, "\nError: %s\n", get_error(err));
+      printf("\nError:  %s\n", get_error(err));
       exit(err);
     }
 
     printf("DONE!\n");
-}
-
-void load_kernel(const char* filename_kernel)
-{
-  FILE* handle;
-
-  printf("Action: loading OpenCL kernel from file... ");
-
-  handle = fopen(filename_kernel, "r");
-
-  if(handle == NULL)
-  {
-    fprintf(stderr, "\nError: could not find the file!");
-    exit(1);
-  }
-  fseek(handle, 0, SEEK_END);
-  size_kernel = (size_t)ftell(handle);
-  rewind(handle);
-  kernel_source = (char*)malloc(size_kernel + 1);
-  if (!kernel_source)
-  {
-    fprintf(stderr, "\nError: unable to allocate buffer memory!\n");
-    exit(EXIT_FAILURE);
-  }
-
-  kernel_source[size_kernel] = '\0';
-  fread(kernel_source, sizeof(char), size_kernel, handle);
-  fclose(handle);
-
-  printf("DONE!\n");
-}
-
-void create_program()
-{
-  cl_int err;
-
-  printf("Action: creating OpenCL program... ");
-  kernel_program = clCreateProgramWithSource(context, 1, (const char **) &kernel_source, NULL, &err);
-
-  if(err != CL_SUCCESS)
-  {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
-    exit(err);
-  }
-
-  free(kernel_source);
-  printf("DONE!\n");
-}
-
-void build_program()
-{
-  cl_int err;
-  size_t log_size;
-  char* log;
-
-  printf("Action: building OpenCL program... ");
-  err = clBuildProgram(kernel_program, 0, NULL, KERNEL_OPTIONS, NULL, NULL);
-
-  if (err != CL_SUCCESS)
-  {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
-
-    clGetProgramBuildInfo(kernel_program, devices[0], CL_PROGRAM_BUILD_LOG, 0, NULL, &log_size);
-    log = (char*) calloc(log_size + 1, sizeof(char));
-
-    if (!log)
-    {
-      fprintf(stderr, "\nError: unable to allocate buffer memory for program build log!\n");
-      exit(EXIT_FAILURE);
-    }
-
-    clGetProgramBuildInfo(kernel_program, devices[0], CL_PROGRAM_BUILD_LOG, log_size + 1, log, NULL);
-    printf("%s\n", log);
-    free(log);
-    exit(err);
-  }
-
-  printf("DONE!\n");
 }
 
 void create_kernel()
@@ -383,11 +384,11 @@ void create_kernel()
   cl_int err;
 
   printf("Action: creating OpenCL kernel... ");
-  kernel = clCreateKernel(kernel_program, kernel_source, &err);
+  kernel = clCreateKernel(kernel_program, KERNEL_NAME, &err);
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -403,7 +404,7 @@ void get_kernel_workgroup_size(cl_kernel kernel, cl_device_id device_id, size_t*
 
     if(err != CL_SUCCESS)
     {
-      fprintf(stderr, "\nError: %s\n", get_error(err));
+      printf("\nError:  %s\n", get_error(err));
       exit(err);
     }
 
@@ -418,7 +419,7 @@ void execute_kernel()
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -433,7 +434,7 @@ void acquire_GL_object(cl_mem* CL_memory_buffer)
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -449,7 +450,7 @@ void enqueue_task()
 
     if(err != CL_SUCCESS)
     {
-      fprintf(stderr, "\nError: %s\n", get_error(err));
+      printf("\nError:  %s\n", get_error(err));
       exit(err);
     }
 
@@ -465,7 +466,7 @@ void wait_for_event()
 
     if(err != CL_SUCCESS)
     {
-      fprintf(stderr, "\nError: %s\n", get_error(err));
+      printf("\nError:  %s\n", get_error(err));
       exit(err);
     }
 
@@ -481,7 +482,7 @@ void release_GL_object(cl_mem* CL_memory_buffer)
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -497,7 +498,7 @@ void finish_queue()
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -513,7 +514,7 @@ void release_event()
 
     if(err != CL_SUCCESS)
     {
-      fprintf(stderr, "\nError: %s\n", get_error(err));
+      printf("\nError:  %s\n", get_error(err));
       exit(err);
     }
 
@@ -530,7 +531,7 @@ void release_mem_object(cl_mem CL_memory_buffer)
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -546,7 +547,7 @@ void release_kernel()
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -562,7 +563,7 @@ void release_queue()
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -579,7 +580,7 @@ void release_program()
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
 
@@ -596,7 +597,7 @@ void release_context()
 
   if(err != CL_SUCCESS)
   {
-    fprintf(stderr, "\nError: %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
 

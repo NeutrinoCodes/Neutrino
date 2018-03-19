@@ -13,7 +13,7 @@
     #include <GL/gl.h>
   #endif
 
-  #define KERNEL_NAME             "pippo"
+  #define KERNEL_NAME             "thekernel"
   #define KERNEL_OPTIONS          ""
 
   extern  char*                   value;

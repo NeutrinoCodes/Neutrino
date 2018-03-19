@@ -16,7 +16,7 @@ I use the "Atom editor": I installed the packages:
     GCC include paths: ./include/*
     GCC error limit: 0
     Suppress GCC warnings: unchecked
-    String GCC prepends to error: errors
+    String GCC prepends to Error:  errors
     String GCC prepends to warnings: warning
     String GCC prepends to notes: note
     Lint on-the-fly: checked
