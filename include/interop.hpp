@@ -8,8 +8,8 @@
 #include "opencl.hpp"
 #include "data.hpp"
 
-  void set_interop();
-  void push_float4_data(data_float4& data);
+  //void set_interop();
+  void push_float4_data(data_float4* data);
   void push_float4_size(data_float4 &data);
   void push_float_data(data_float& data);
   void push_float_size(data_float& data);

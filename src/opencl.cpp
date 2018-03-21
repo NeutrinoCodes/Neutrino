@@ -13,8 +13,8 @@ char*                   kernel_source;
 size_t                  size_kernel;
 cl_program              kernel_program;
 size_t                  size_global;
-cl_uint                 dimension_kernel;
-cl_event*               kernel_event;
+cl_uint                 dim_kernel;
+cl_event                kernel_event;
 size_t                  kernel_arg;
 
 const char* get_error(cl_int error)
@@ -120,7 +120,8 @@ cl_uint get_platforms()
     exit(err);
   }
 
-  printf("DONE!\n");
+  printf("\n        Found %d platform(s)!\n", num_platforms);
+  printf("        DONE!\n");
 
   return num_platforms;
 }
@@ -184,7 +185,8 @@ cl_uint get_devices(cl_uint index_platform)
     exit(err);
   }
 
-  printf("DONE!\n");
+  printf("\n        Found %d device(s)!\n", num_devices);
+  printf("        DONE!\n");
 
   return num_devices;
 }
@@ -233,7 +235,7 @@ void get_device_info(cl_uint index_device, cl_device_info name_param)
     case CL_DEVICE_LOCAL_MEM_SIZE:                  printf("        CL_DEVICE_LOCAL_MEM_SIZE = %s\n", value); break;
     case CL_DEVICE_LOCAL_MEM_TYPE:                  printf("        CL_DEVICE_LOCAL_MEM_TYPE = %s\n", value); break;
     case CL_DEVICE_MAX_CLOCK_FREQUENCY:             printf("        CL_DEVICE_MAX_CLOCK_FREQUENCY = %s\n", value); break;
-    case CL_DEVICE_MAX_COMPUTE_UNITS:               printf("        CL_DEVICE_MAX_COMPUTE_UNITS = %s\n", value); break;
+    case CL_DEVICE_MAX_COMPUTE_UNITS:               printf("        CL_DEVICE_MAX_COMPUTE_UNITS = %d\n", (int)*value); break;
     case CL_DEVICE_MAX_CONSTANT_ARGS:               printf("        CL_DEVICE_MAX_CONSTANT_ARGS = %s\n", value); break;
     case CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE:        printf("        CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE = %s\n", value); break;
     case CL_DEVICE_MAX_MEM_ALLOC_SIZE:              printf("        CL_DEVICE_MAX_MEM_ALLOC_SIZE = %s\n", value); break;
@@ -268,22 +270,6 @@ void get_device_info(cl_uint index_device, cl_device_info name_param)
   free(value);
 }
 
-void create_context()
-{
-  cl_int err;
-
-  printf("Action: creating OpenCL context for GPU... ");
-  context = clCreateContextFromType(properties, CL_DEVICE_TYPE_GPU, NULL, NULL, &err);
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  printf("DONE!\n");
-}
-
 void load_kernel(const char* filename_kernel)
 {
   FILE* handle;
@@ -309,7 +295,6 @@ void load_kernel(const char* filename_kernel)
 
   fread(kernel_source, sizeof(char), size_kernel, handle);
   kernel_source[size_kernel] = '\0';
-  printf("%s\n", kernel_source);
   fclose(handle);
 
   printf("DONE!\n");
@@ -415,7 +400,7 @@ void execute_kernel()
 {
   cl_int err;
 
-  err = clEnqueueNDRangeKernel(queue, kernel, dimension_kernel, NULL, &size_global, NULL, 0, NULL, kernel_event);
+  err = clEnqueueNDRangeKernel(queue, kernel, dim_kernel, NULL, &size_global, NULL, 0, NULL, &kernel_event);
 
   if(err != CL_SUCCESS)
   {
@@ -446,7 +431,7 @@ void enqueue_task()
     cl_int err;
 
     printf("Action: enqueueing OpenCL task... ");
-    err = clEnqueueTask(queue, kernel, 0, NULL, kernel_event);
+    err = clEnqueueTask(queue, kernel, 0, NULL, &kernel_event);
 
     if(err != CL_SUCCESS)
     {
@@ -462,7 +447,7 @@ void wait_for_event()
     cl_int err;
 
     printf("Action: waiting for OpenCL events... ");
-    err = clWaitForEvents(1, kernel_event);
+    err = clWaitForEvents(1, &kernel_event);
 
     if(err != CL_SUCCESS)
     {
@@ -510,7 +495,7 @@ void release_event()
     cl_int err;
 
     printf("Action: decrementing the OpenCL event reference count... ");
-    err = clReleaseEvent(*kernel_event);
+    err = clReleaseEvent(kernel_event);
 
     if(err != CL_SUCCESS)
     {
@@ -527,12 +512,15 @@ void release_mem_object(cl_mem CL_memory_buffer)
 
   printf("Action: decrementing the OpenCL memory object reference count... ");
 
-  err = clReleaseMemObject(CL_memory_buffer);
-
-  if(err != CL_SUCCESS)
+  if(CL_memory_buffer != NULL)
   {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
+    err = clReleaseMemObject(CL_memory_buffer);
+
+    if(err != CL_SUCCESS)
+    {
+      printf("\nError:  %s\n", get_error(err));
+      exit(err);
+    }
   }
 
   printf("DONE!\n");

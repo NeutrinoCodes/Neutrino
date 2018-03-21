@@ -5,20 +5,24 @@
 #define FRAGMENT_FILE   "../../shader/fragment.txt"
 #define KERNEL_FILE     "../../kernel/thekernel.txt"
 
-#define NUM_POINTS      100
+#define NUM_POINTS      5
 
-void setup()
+data_float4 points(NUM_POINTS);
+data_float  tick(1);
+
+void load()
 {
   load_vertex(VERTEX_FILE);
   load_fragment(FRAGMENT_FILE);
   load_kernel(KERNEL_FILE);
+}
 
-  //data_float4 points(NUM_POINTS);
-  //data_float  tick(1);
+void setup()
+{
+  size_global = points.size;
+  dim_kernel = 1;
 
-  //size_global = points.size;
-
-  //push_float4_data(points);
+  push_float4_data(&points);
   //push_float4_size(points);
   //push_float_data(tick);
 
@@ -27,13 +31,13 @@ void setup()
 void loop()
 {
   //tick.x[0] += 0.01f;
-  //acquire_GL_object(&points.buffer);
-  //enqueue_task();
-  //wait_for_event();
-  //execute_kernel();
-  //release_GL_object(&points.buffer);
-  //finish_queue();
-  //release_event();
+  acquire_GL_object(&points.buffer);
+  enqueue_task();
+  wait_for_event();
+  execute_kernel();
+  release_GL_object(&points.buffer);
+  finish_queue();
+  release_event();
 
 
   // Scale to window size
@@ -62,8 +66,5 @@ void loop()
 
 void terminate()
 {
-  //delete &points;
-  //delete &tick;
-
   printf("All done!\n");
 }

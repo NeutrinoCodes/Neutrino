@@ -8,6 +8,7 @@
 #include "data.hpp"
 #include "interop.hpp"
 
+void load();
 void setup();
 void loop();
 void terminate();

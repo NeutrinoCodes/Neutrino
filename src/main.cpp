@@ -4,9 +4,15 @@
 int main()
 {
   kernel_arg = 0;
-  setup();
+
+  load();
   create_opengl_context();
 	create_opencl_context();
+  create_program();
+  build_program();
+  create_queue();
+  create_kernel();
+  setup();
 
   while (!glfwWindowShouldClose(window))
   {

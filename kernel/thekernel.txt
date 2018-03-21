@@ -1,4 +1,5 @@
 __kernel void thekernel(__global float4*   points)
 {
-
+  int i = get_global_id(0);
+  points[i] = 0.0;
 }

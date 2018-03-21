@@ -17,11 +17,11 @@
       data_float4(unsigned int num_data);
       ~data_float4();
 
-      float*  x;
-      float*  y;
-      float*  z;
-      float*  w;
-      float*  data;
+      GLfloat*  x;
+      GLfloat*  y;
+      GLfloat*  z;
+      GLfloat*  w;
+      GLfloat*  data;
       unsigned int size;
       GLuint  vao;
       GLuint  vbo;

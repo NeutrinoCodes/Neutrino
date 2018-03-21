@@ -30,8 +30,8 @@
   extern  size_t                  size_kernel;
   extern  cl_program              kernel_program;
   extern  size_t                  size_global;
-  extern  cl_uint                 dimension_kernel;
-  extern  cl_event*               kernel_event;
+  extern  cl_uint                 dim_kernel;
+  extern  cl_event                kernel_event;
   extern  size_t                  kernel_arg;
 
   const char* get_error(cl_int error);
@@ -39,7 +39,6 @@
   void        get_platform_info(cl_uint index_platform, cl_platform_info name_param);
   cl_uint     get_devices(cl_uint index_platform);
   void        get_device_info(cl_uint index_device, cl_device_info name_param);
-  void        create_context();
   void        load_kernel(const char* filename_kernel);
   void        create_program();
   void        build_program();
