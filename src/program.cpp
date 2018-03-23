@@ -42,7 +42,7 @@ void loop()
   //wait_for_event();
   execute_kernel();
   release_GL_object(&points.buffer);
-  acquire_GL_object(&colors.buffer);
+  release_GL_object(&colors.buffer);
   finish_queue();
   //release_event();
 
