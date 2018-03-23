@@ -38,13 +38,13 @@ void loop()
 
   acquire_GL_object(&points.buffer);
   acquire_GL_object(&colors.buffer);
-  enqueue_task();
-  wait_for_event();
+  //enqueue_task();
+  //wait_for_event();
   execute_kernel();
   release_GL_object(&points.buffer);
   acquire_GL_object(&colors.buffer);
   finish_queue();
-  release_event();
+  //release_event();
 
 
   // Scale to window size
