@@ -4,7 +4,7 @@
   #include <stdio.h>
   #include <stdlib.h>
   #include <GL/glew.h>
-  #include <glm/glm.hpp>
+  #include <math.h>
 
   #ifdef __WINDOWS__
     #define GLFW_EXPOSE_NATIVE_WIN32
@@ -42,5 +42,6 @@
   void load_vertex(const char* filename_vertex);
   void load_fragment(const char* filename_fragment);
   void init_shaders();
+  void glPerspective(GLdouble fovY, GLdouble aspect, GLdouble zNear, GLdouble zFar);
 
 #endif

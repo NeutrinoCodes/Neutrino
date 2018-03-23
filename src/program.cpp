@@ -8,6 +8,7 @@
 #define NUM_POINTS      5
 
 data_float4 points(NUM_POINTS);
+data_float4 colors(NUM_POINTS);
 data_float  tick(1);
 
 void load()
@@ -25,6 +26,10 @@ void setup()
   push_float4_data(&points);
   //push_float4_size(points);
   //push_float_data(tick);
+
+  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  glEnable(GL_DEPTH_TEST);
+  glLineWidth(3);
 
 }
 
@@ -46,20 +51,18 @@ void loop()
   glViewport(0, 0, windowWidth, windowHeight);
 
   // Draw stuff
-  glClearColor(0.0, 0.8, 0.3, 1.0);
+  glClearColor(0.0, 0.0, 0.0, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glMatrixMode(GL_PROJECTION_MATRIX);
   glLoadIdentity();
-  gluPerspective( 60, (double)windowWidth / (double)windowHeight, 0.1, 100 );
+  glPerspective(60, (double)windowWidth/(double)windowHeight, 0.1, 100);
   glMatrixMode(GL_MODELVIEW_MATRIX);
   glTranslatef(0,0,-5);
 
-
-  glClear(GL_COLOR_BUFFER_BIT);
-  //glBindVertexArray(points.vao);
-  //glDrawArrays(GL_POINTS, 0, points.size);
-  //glBindVertexArray(0);
+  glBindVertexArray(points.vao);
+  glDrawArrays(GL_POINTS, 0, points.size);
+  glBindVertexArray(0);
   glfwSwapBuffers(window);
   glfwPollEvents();
 }
