@@ -1,5 +1,13 @@
-__kernel void thekernel(__global float4*   points)
+__kernel void thekernel(__global  float4*       points,
+                        __global  float4*       colors,
+                                  unsigned int  num_points)
 {
   int i = get_global_id(0);
-  points[i] = 0.0;
+
+  points[i].x = 2*i/num_points - 1;
+  points[i].y = 0.0;
+  points[i].z = 0.0;
+  points[i].w = 1.0;
+
+  colors[i] = 1.0;
 }
