@@ -5,11 +5,10 @@
 #define FRAGMENT_FILE   "../../shader/fragment.txt"
 #define KERNEL_FILE     "../../kernel/thekernel.txt"
 
-#define NUM_POINTS      5
+#define NUM_POINTS      100
 
 data_float4 points(NUM_POINTS);
 data_float4 colors(NUM_POINTS);
-data_float  tick(1);
 
 void load()
 {
@@ -24,23 +23,26 @@ void setup()
   dim_kernel = 1;
 
   push_float4_data(&points);
-  //push_float4_size(points);
-  //push_float_data(tick);
+  push_float4_data(&colors);
+  push_float4_size(&points);
 
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
   glLineWidth(3);
-
 }
 
 void loop()
 {
-  //tick.x[0] += 0.01f;
+  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
   acquire_GL_object(&points.buffer);
+  acquire_GL_object(&colors.buffer);
   enqueue_task();
   wait_for_event();
   execute_kernel();
   release_GL_object(&points.buffer);
+  acquire_GL_object(&colors.buffer);
   finish_queue();
   release_event();
 
@@ -51,7 +53,6 @@ void loop()
   glViewport(0, 0, windowWidth, windowHeight);
 
   // Draw stuff
-  glClearColor(0.0, 0.0, 0.0, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glMatrixMode(GL_PROJECTION_MATRIX);
@@ -61,6 +62,7 @@ void loop()
   glTranslatef(0,0,-5);
 
   glBindVertexArray(points.vao);
+  glVertexAttrib3f((GLuint)1, 1.0, 0.0, 0.0); // set constant color attribute
   glDrawArrays(GL_POINTS, 0, points.size);
   glBindVertexArray(0);
   glfwSwapBuffers(window);
