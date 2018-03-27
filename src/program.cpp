@@ -58,7 +58,7 @@ void loop()
   glMatrixMode(GL_PROJECTION_MATRIX);
   glLoadIdentity();
   glm::perspective(glm::radians(60.0f), (float)windowWidth/(float)windowHeight, 0.1f, 100.0f);
-  //glPerspective(60, (double)windowWidth/(double)windowHeight, 0.1, 100);
+
   glMatrixMode(GL_MODELVIEW_MATRIX);
   glTranslatef(0,0,-5);
 

@@ -7,6 +7,7 @@
   #include <math.h>
   #include <glm/glm.hpp>
   #include <glm/gtc/matrix_transform.hpp>
+  #include <glm/gtx/transform.hpp>
 
   #ifdef __WINDOWS__
     #define GLFW_EXPOSE_NATIVE_WIN32
@@ -29,6 +30,9 @@
 
   #include "utils.hpp"
 
+  #define SIZE_WINDOW_X 800
+  #define SIZE_WINDOW_Y 600
+
   extern  GLFWwindow*				window;
   extern  char*             vertex_source;
   extern  size_t            size_vertex;
@@ -36,7 +40,10 @@
   extern  size_t            size_fragment;
   extern  double            mouse_x;
   extern  double            mouse_y;
-  extern  bool							mouse_left_button;
+  extern  double            scroll_x;
+  extern  double            scroll_y;
+  extern  bool							mouse_right_button;
+  extern  bool							key_ctrl_L;
 
   void window_refresh_callback(GLFWwindow* window);
   void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);

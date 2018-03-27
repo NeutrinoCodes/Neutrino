@@ -1,13 +1,40 @@
 #include "opengl.hpp"
 
 GLFWwindow*				window;
+int								window_x;
+int								window_y;
+int								size_window_x = SIZE_WINDOW_X;
+int								size_window_y = SIZE_WINDOW_Y;
+float							aspect_ratio = size_window_x/size_window_y;
 char*             vertex_source;
 size_t            size_vertex;
 char*             fragment_source;
 size_t            size_fragment;
 double            mouse_x = 0;
 double            mouse_y = 0;
-bool							mouse_left_button = false;
+double            mouse_x_old = 0;
+double            mouse_y_old = 0;
+bool							mouse_1st_left_click = false;
+double						scroll_x = 0;
+double						scroll_y = 0;
+bool							mouse_right_button = false;
+bool							key_ctrl_L = false;
+
+glm::vec3					I3 = glm::vec3(1.0f, 1.0f, 1.0f);															// 3x1 ones vector.
+glm::vec4					I4 = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);												// 4x1 ones vector.
+glm::mat4					I4x4 = glm::mat4(1.0f);																				// 4x4 identity matrix.
+
+glm::vec3					S3 = I3;																											// 3x1 scale vector.
+glm::vec3					T3 = I3;																											// 3x1 translation vector.
+glm::vec4					viewport = I4;																								// 4x1 viewport vector.
+
+glm::mat4 				S4x4 = I4x4;																									// 4x4 scale matrix.
+glm::mat4					R4x4 = I4x4;																									// 4x4 rotation matrix.
+glm::mat4 				T4x4 = I4x4;																									// 4x4 translation matrix.
+glm::mat4 				M4x4 = I4x4;																									// 4x4 model matrix.
+glm::mat4 				V4x4 = I4x4;																									// 4x4 view matrix.
+glm::mat4 				P4x4 = I4x4;																									// 4x4 projection matrix.
+
 
 void window_refresh_callback(GLFWwindow* window)
 {
@@ -21,35 +48,103 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
   {
     glfwSetWindowShouldClose(window, GL_TRUE);
   }
+
+	if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_PRESS)
+	{
+		key_ctrl_L = true;
+	}
+
+	if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_RELEASE)
+	{
+		key_ctrl_L = false;
+	}
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
   {
-		mouse_left_button = true;
+		if (mouse_1st_left_click == false)
+		{
+			glfwGetCursorPos(window, &mouse_x_old, &mouse_y_old);
+			mouse_1st_left_click = true;
+		}
 	}
 
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
   {
-		mouse_left_button = false;
+		if (mouse_1st_left_click == true)
+		{
+			mouse_1st_left_click = false;
+		}
+	}
+
+	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+  {
+		mouse_right_button = true;
+	}
+
+	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE)
+  {
+		mouse_right_button = false;
 	}
 }
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	if (mouse_left_button)
+	glm::vec3 mouse_screen_near;																									// Mouse vector, screen coordinates at "near plane" (z = 0).
+	glm::vec3 mouse_world;																												// Mouse vector, world coordinates.
+
+	int mouse_left_button = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+
+	if ((mouse_left_button == GLFW_PRESS) && mouse_1st_left_click)
 	{
 		mouse_x = xpos;
 		mouse_y = ypos;
+		mouse_screen_near = glm::vec3(mouse_x_old, mouse_y_old, 0.0f);							// Building mouse screen vector...
+		glfwGetWindowSize(window, &size_window_x, &size_window_y);									// Getting window size...
+		glfwGetWindowPos(window, &window_x, &window_y);															// Getting window position offset...
+		//aspect_ratio = size_window_x/size_window_y;																	// Calculating window aspect ratio...
+		viewport = glm::vec4(window_x, window_y, size_window_x, size_window_y);			// Getting current viewport...
+		mouse_world = glm::unProject(mouse_screen_near, V4x4, P4x4, viewport);			// Building mouse world vector...
 
-		printf("mouse_x = %lf, mouse_y = %lf\n", mouse_x, mouse_y);
+		...EZOR 27MAR2018: arcball to be completed.
+		1. differential mouse world position to be computed
+		2. cross product for the calculation of the momentum to be computed
+		3. quaternion rotation to be computed.
+
+	}
+
+	if (mouse_left_button && key_ctrl_L)
+	{
+		glfwGetWindowSize(window, &size_window_x, &size_window_y);
+		glfwGetWindowPos(window, &window_x, &window_y);
+		aspect_ratio = size_window_x/size_window_y;
+		viewport = glm::vec4(window_x, window_y, size_window_x, size_window_y);			// Getting current viewport...
+		mouse_screen_near = glm::vec3(xpos, ypos, 0.0f);														// Building mouse screen vector...
+		mouse_world = glm::unProject(mouse_screen_near, V4x4, P4x4, viewport);			// Building mouse world vector...
+
+
+		T4x4 = glm::scale(I4x4, I3);
 	}
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
+	scroll_x = xoffset;
+	scroll_y = yoffset;
 
+	if (scroll_y > 0)
+	{
+		S3 = S3*1.1f;
+	}
+
+	if (scroll_y < 0)
+	{
+		S3 = S3/1.1f;
+	}
+
+	S4x4 = glm::scale(I4x4, S3);
 }
 
 void init_glfw()
@@ -73,7 +168,7 @@ void init_hints()
 
 void create_window()
 {
-  window = glfwCreateWindow(800, 600, "Test interop CPP", NULL, NULL);
+  window = glfwCreateWindow(size_window_x, size_window_y, "Test interop CPP", NULL, NULL);
   if (!window)
 	{
 		printf("Error:  unable to create window!\n");
