@@ -5,6 +5,9 @@ char*             vertex_source;
 size_t            size_vertex;
 char*             fragment_source;
 size_t            size_fragment;
+double            mouse_x = 0;
+double            mouse_y = 0;
+bool							mouse_left_button = false;
 
 void window_refresh_callback(GLFWwindow* window)
 {
@@ -18,6 +21,35 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
   {
     glfwSetWindowShouldClose(window, GL_TRUE);
   }
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+  if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+  {
+		mouse_left_button = true;
+	}
+
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+  {
+		mouse_left_button = false;
+	}
+}
+
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	if (mouse_left_button)
+	{
+		mouse_x = xpos;
+		mouse_y = ypos;
+
+		printf("mouse_x = %lf, mouse_y = %lf\n", mouse_x, mouse_y);
+	}
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+
 }
 
 void init_glfw()
@@ -52,6 +84,9 @@ void create_window()
   glfwMakeContextCurrent(window);
 	glfwSetWindowRefreshCallback(window, window_refresh_callback);
   glfwSetKeyCallback(window, key_callback);
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
+	glfwSetCursorPosCallback(window, cursor_position_callback);
+	glfwSetScrollCallback(window, scroll_callback);
 }
 
 void init_glew()
@@ -177,16 +212,4 @@ void init_shaders()
   glLinkProgram(prog);
   glUseProgram(prog);
   printf("DONE!\n");
-}
-
-void glPerspective(GLdouble fovY, GLdouble aspect, GLdouble zNear, GLdouble zFar)
-{
-    const GLdouble pi = 3.1415926535897932384626433832795;
-    GLdouble fW, fH;
-
-    //fH = tan( (fovY / 2) / 180 * pi ) * zNear;
-    fH = tan(fovY/360*pi)*zNear;
-    fW = fH * aspect;
-
-    glFrustum(-fW, fW, -fH, fH, zNear, zFar);
 }
