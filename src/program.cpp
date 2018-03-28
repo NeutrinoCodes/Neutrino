@@ -55,12 +55,24 @@ void loop()
   // Draw stuff
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glMatrixMode(GL_PROJECTION_MATRIX);
-  glLoadIdentity();
-  glm::perspective(glm::radians(60.0f), (float)windowWidth/(float)windowHeight, 0.1f, 100.0f);
+  // Transfer the transformation matrices to the shader program
+  GLint model = glGetUniformLocation(shaderProgram, "Model" );
+  glUniformMatrix4fv(model, 1, GL_FALSE, glm::value_ptr(Model));
 
-  glMatrixMode(GL_MODELVIEW_MATRIX);
-  glTranslatef(0,0,-5);
+  GLint view = glGetUniformLocation(shaderProgram, "View" );
+  glUniformMatrix4fv(view, 1, GL_FALSE, glm::value_ptr(View));
+
+  GLint projection = glGetUniformLocation(shaderProgram, "Projection" );
+  glUniformMatrix4fv(projection, 1, GL_FALSE, glm::value_ptr(Projection));
+
+  EZOR 28MAR2018: to be continued...
+
+  //glMatrixMode(GL_PROJECTION_MATRIX);
+  //glLoadIdentity();
+  //glm::perspective(glm::radians(60.0f), (float)windowWidth/(float)windowHeight, 0.1f, 100.0f);
+
+  //glMatrixMode(GL_MODELVIEW_MATRIX);
+  //glTranslatef(0,0,-5);
 
   glBindVertexArray(points.vao);
   glVertexAttrib3f((GLuint)1, 1.0, 0.0, 0.0); // set constant color attribute

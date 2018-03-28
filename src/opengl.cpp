@@ -14,6 +14,8 @@ double            mouse_x = 0;
 double            mouse_y = 0;
 double            mouse_x_old = 0;
 double            mouse_y_old = 0;
+int								mouse_button = -1;
+int								mouse_action = -1;
 bool							mouse_1st_left_click = false;
 double						scroll_x = 0;
 double						scroll_y = 0;
@@ -25,7 +27,10 @@ glm::vec4					I4 = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);												// 4x1 ones vec
 glm::mat4					I4x4 = glm::mat4(1.0f);																				// 4x4 identity matrix.
 
 glm::vec3					S3 = I3;																											// 3x1 scale vector.
+glm::vec3					R3 = I3;																											// 3x1 rotation vector.
 glm::vec3					T3 = I3;																											// 3x1 translation vector.
+
+glm::quat					R4 = glm::quat(1.0f, 1.0f, 1.0f, 1.0f);												// 4x1 rotation quaternion.
 glm::vec4					viewport = I4;																								// 4x1 viewport vector.
 
 glm::mat4 				S4x4 = I4x4;																									// 4x4 scale matrix.
@@ -35,13 +40,9 @@ glm::mat4 				M4x4 = I4x4;																									// 4x4 model matrix.
 glm::mat4 				V4x4 = I4x4;																									// 4x4 view matrix.
 glm::mat4 				P4x4 = I4x4;																									// 4x4 projection matrix.
 
-
-void window_refresh_callback(GLFWwindow* window)
-{
-	glClear(GL_COLOR_BUFFER_BIT);
-	glfwSwapBuffers(window);
-}
-
+//////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// KEYBOARD /////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -60,72 +61,74 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 }
 
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////// MOUSE ///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void detect_mouse_1st_left_click()
 {
-  if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+	if (mouse_button == GLFW_MOUSE_BUTTON_LEFT && mouse_action == GLFW_PRESS)
   {
 		if (mouse_1st_left_click == false)
 		{
-			glfwGetCursorPos(window, &mouse_x_old, &mouse_y_old);
+			mouse_x_old = mouse_x;
+			mouse_y_old = mouse_y;
 			mouse_1st_left_click = true;
 		}
 	}
 
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+	if (mouse_button == GLFW_MOUSE_BUTTON_LEFT && mouse_action == GLFW_RELEASE)
   {
 		if (mouse_1st_left_click == true)
 		{
 			mouse_1st_left_click = false;
 		}
 	}
+}
 
-	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-  {
-		mouse_right_button = true;
-	}
+void arcball()
+{
+	glm::vec3 mouse_screen;																												// Mouse vector, screen coordinates at z = 0.
+	glm::vec3 mouse_screen_old;																										// Mouse vector, screen coordinates at z = 0.
+	glm::vec3 mouse_world;																												// Mouse vector, world coordinates.
+	glm::vec3 mouse_world_old;																									  // Mouse vector, world coordinates.
+	glm::vec3 mouse_delta;																												// Mouse delta world vector.
+	glm::vec3 momentum;																														// Arcball mmomentum (axis of rotation).
+	double theta;																																	// Arcball angle of rotation.
 
-	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE)
-  {
-		mouse_right_button = false;
-	}
+  glfwGetWindowSize(window, &size_window_x, &size_window_y);										// Getting window size...
+  glfwGetWindowPos(window, &window_x, &window_y);																// Getting window position offset...
+  viewport = glm::vec4(window_x, window_y, size_window_x, size_window_y);				// Getting current viewport...
+	mouse_screen_old = glm::vec3(mouse_x_old, mouse_y_old, 0.0f);									// Building mouse screen vector...
+	mouse_world_old = glm::unProject(mouse_screen_old, V4x4, P4x4, viewport);			// Building mouse world vector...
+	mouse_screen = glm::vec3(mouse_x, mouse_y, 0.0f);															// Building mouse screen vector...
+	mouse_world = glm::unProject(mouse_screen, V4x4, P4x4, viewport);							// Building mouse world vector...
+	mouse_delta = mouse_world - mouse_world_old;																	// Calculating mouse delta..
+	momentum = glm::cross(mouse_delta, mouse_world_old);													// Calculating arcball momentum...
+ 	theta = glm::angle(mouse_world, mouse_world_old);															// Calculating arcball angle...
+	R4 = glm::quat(momentum.x * sin(theta/2.0f),																	// Calculating rotation quaternion...
+								 momentum.y * sin(theta/2.0f),
+							 	 momentum.z * sin(theta/2.0f),
+							   cos(theta/2.0f));
+	R4x4 = glm::toMat4(R4);																												// Transforming quaterion into rotation matrix...
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	mouse_button = button;
+	mouse_action = action;
+	glfwGetCursorPos(window, &mouse_x, &mouse_y);
+	detect_mouse_1st_left_click();
 }
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	glm::vec3 mouse_screen_near;																									// Mouse vector, screen coordinates at "near plane" (z = 0).
-	glm::vec3 mouse_world;																												// Mouse vector, world coordinates.
-
-	int mouse_left_button = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-
-	if ((mouse_left_button == GLFW_PRESS) && mouse_1st_left_click)
+	if (mouse_1st_left_click)
 	{
 		mouse_x = xpos;
 		mouse_y = ypos;
-		mouse_screen_near = glm::vec3(mouse_x_old, mouse_y_old, 0.0f);							// Building mouse screen vector...
-		glfwGetWindowSize(window, &size_window_x, &size_window_y);									// Getting window size...
-		glfwGetWindowPos(window, &window_x, &window_y);															// Getting window position offset...
-		//aspect_ratio = size_window_x/size_window_y;																	// Calculating window aspect ratio...
-		viewport = glm::vec4(window_x, window_y, size_window_x, size_window_y);			// Getting current viewport...
-		mouse_world = glm::unProject(mouse_screen_near, V4x4, P4x4, viewport);			// Building mouse world vector...
-
-		...EZOR 27MAR2018: arcball to be completed.
-		1. differential mouse world position to be computed
-		2. cross product for the calculation of the momentum to be computed
-		3. quaternion rotation to be computed.
-
-	}
-
-	if (mouse_left_button && key_ctrl_L)
-	{
-		glfwGetWindowSize(window, &size_window_x, &size_window_y);
-		glfwGetWindowPos(window, &window_x, &window_y);
-		aspect_ratio = size_window_x/size_window_y;
-		viewport = glm::vec4(window_x, window_y, size_window_x, size_window_y);			// Getting current viewport...
-		mouse_screen_near = glm::vec3(xpos, ypos, 0.0f);														// Building mouse screen vector...
-		mouse_world = glm::unProject(mouse_screen_near, V4x4, P4x4, viewport);			// Building mouse world vector...
-
-
-		T4x4 = glm::scale(I4x4, I3);
+		arcball();
+		mouse_x = mouse_x_old;
+		mouse_y = mouse_y_old;
 	}
 }
 
@@ -145,6 +148,15 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	}
 
 	S4x4 = glm::scale(I4x4, S3);
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////// WINDOW //////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void window_refresh_callback(GLFWwindow* window)
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+	glfwSwapBuffers(window);
 }
 
 void init_glfw()
@@ -195,6 +207,9 @@ void init_glew()
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////// SHADERS /////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 void load_vertex(const char* filename_vertex)
 {
 	FILE* handle;
