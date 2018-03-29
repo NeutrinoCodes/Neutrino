@@ -30,6 +30,7 @@ void setup()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
   glLineWidth(3);
+  P4x4 = glm::perspective(glm::radians(60.0f), aspect_ratio, 0.1f, 100.0f);
 }
 
 void loop()
@@ -56,20 +57,19 @@ void loop()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // Transfer the transformation matrices to the shader program
-  GLint model = glGetUniformLocation(shaderProgram, "Model" );
-  glUniformMatrix4fv(model, 1, GL_FALSE, glm::value_ptr(Model));
+  GLint model = glGetUniformLocation(shader, "S4x4" );
+  glUniformMatrix4fv(model, 1, GL_FALSE, &S4x4[0][0]);
 
-  GLint view = glGetUniformLocation(shaderProgram, "View" );
-  glUniformMatrix4fv(view, 1, GL_FALSE, glm::value_ptr(View));
+  GLint view = glGetUniformLocation(shader, "R4x4" );
+  glUniformMatrix4fv(view, 1, GL_FALSE, &R4x4[0][0]);
 
-  GLint projection = glGetUniformLocation(shaderProgram, "Projection" );
-  glUniformMatrix4fv(projection, 1, GL_FALSE, glm::value_ptr(Projection));
+  GLint projection = glGetUniformLocation(shader, "P4x4" );
+  glUniformMatrix4fv(projection, 1, GL_FALSE, &P4x4[0][0]);
 
-  EZOR 28MAR2018: to be continued...
 
   //glMatrixMode(GL_PROJECTION_MATRIX);
   //glLoadIdentity();
-  //glm::perspective(glm::radians(60.0f), (float)windowWidth/(float)windowHeight, 0.1f, 100.0f);
+
 
   //glMatrixMode(GL_MODELVIEW_MATRIX);
   //glTranslatef(0,0,-5);

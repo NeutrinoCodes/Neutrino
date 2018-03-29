@@ -5,11 +5,12 @@ int								window_x;
 int								window_y;
 int								size_window_x = SIZE_WINDOW_X;
 int								size_window_y = SIZE_WINDOW_Y;
-float							aspect_ratio = size_window_x/size_window_y;
+float							aspect_ratio = (float)size_window_x/(float)size_window_y;
 char*             vertex_source;
 size_t            size_vertex;
 char*             fragment_source;
 size_t            size_fragment;
+GLuint 						shader;
 double            mouse_x = 0;
 double            mouse_y = 0;
 double            mouse_x_old = 0;
@@ -272,7 +273,6 @@ void init_shaders()
 {
   GLuint		vs;
 	GLuint 		fs;
-	GLuint 		prog;
 	GLint 		success;
   GLsizei 	log_size;
   GLchar*		log;
@@ -314,12 +314,12 @@ void init_shaders()
   }
 
 	// Creating OpenGL shader program...
-  prog = glCreateProgram();
-  glBindAttribLocation(prog, 0, "in_point");
-  glBindAttribLocation(prog, 1, "in_color");
-  glAttachShader(prog, vs);
-  glAttachShader(prog, fs);
-  glLinkProgram(prog);
-  glUseProgram(prog);
+  shader = glCreateProgram();
+  glBindAttribLocation(shader, 0, "in_point");
+  glBindAttribLocation(shader, 1, "in_color");
+  glAttachShader(shader, vs);
+  glAttachShader(shader, fs);
+  glLinkProgram(shader);
+  glUseProgram(shader);
   printf("DONE!\n");
 }

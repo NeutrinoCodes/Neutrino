@@ -45,6 +45,7 @@
   extern  size_t            size_vertex;
   extern  char*             fragment_source;
   extern  size_t            size_fragment;
+  extern  GLuint 						shader;
   extern  double            mouse_x;
   extern  double            mouse_y;
   extern  double            mouse_x_old;
