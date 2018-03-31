@@ -54,7 +54,8 @@ void setup()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
   glLineWidth(3);
-  Projection = glm::perspective(glm::radians(60.0f), aspect_ratio, 0.1f, 10.0f);
+  Translation = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -3.0f));
+  Projection = glm::perspective(glm::radians(60.0f), aspect_ratio, 0.1f, 100.0f);
 
   // Generate 1 buffer, put the resulting identifier in vertexbuffer
   glGenBuffers(1, &vertexbuffer);
@@ -89,7 +90,9 @@ void loop()
 
 
   //Scale = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -4.0));
-  View = glm::lookAt(glm::vec3(0.0, 0.0, 5.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
+
+  View = Translation;
+  //View = glm::lookAt(glm::vec3(0.0, 0.0, 5.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0))*View;
   //View = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -0.9f));
   //Projection = glm::perspective(45.0f, 1.0f*aspect_ratio, 0.1f, 10.0f);
 

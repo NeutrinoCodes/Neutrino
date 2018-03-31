@@ -57,6 +57,7 @@
   extern  double						scroll_y;
   extern  bool							mouse_right_button;
   extern  bool							key_ctrl_L;
+  extern  double						zoom;
 
   extern  glm::quat					arcball_axis;                         							// 4x1 rotation quaternion.
   extern  glm::vec4					viewport;																						// 4x1 viewport vector.

@@ -22,6 +22,7 @@ double						scroll_x = 0;
 double						scroll_y = 0;
 bool							mouse_right_button = false;
 bool							key_ctrl_L = false;
+double						zoom = 0;
 
 glm::quat					arcball_axis = glm::quat(1.0f, 1.0f, 1.0f, 1.0f);							// 4x1 arcball rotation quaternion.
 glm::vec4					viewport = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);									// 4x1 viewport vector.
@@ -78,32 +79,51 @@ void detect_mouse_1st_left_click()
 	}
 }
 
+glm::vec3 get_arcball_vector(int x, int y)
+{
+	glfwGetWindowSize(window, &size_window_x, &size_window_y);										// Getting window size...
+  glm::vec3 P = glm::vec3(1.0*x/size_window_x*2 - 1.0, 1.0*y/size_window_y*2 - 1.0, 0);
+  P.y = -P.y;
+  float OP_squared = P.x * P.x + P.y * P.y;
+  if (OP_squared <= 1*1)
+	{
+    P.z = sqrt(1*1 - OP_squared);  																							// Pythagore
+	}
+	else
+	{
+    P = glm::normalize(P);  																										// nearest point
+	}
+	return P;
+}
+
 void arcball()
 {
 	glm::vec3 mouse_screen;																												// Mouse vector, screen coordinates at z = 0.
 	glm::vec3 mouse_screen_old;																										// Mouse vector, screen coordinates at z = 0.
 	glm::vec3 mouse_world;																												// Mouse vector, world coordinates.
 	glm::vec3 mouse_world_old;																									  // Mouse vector, world coordinates.
-	glm::vec3 mouse_delta;																												// Mouse delta world vector.
 	glm::vec3 momentum;																														// Arcball mmomentum (axis of rotation).
 	double theta;																																	// Arcball angle of rotation.
 
   glfwGetWindowSize(window, &size_window_x, &size_window_y);										// Getting window size...
-  glfwGetWindowPos(window, &window_x, &window_y);																// Getting window position offset...
-  viewport = glm::vec4(window_x, window_y, size_window_x, size_window_y);				// Getting current viewport...
+	viewport = glm::vec4(0, 0, size_window_x, size_window_y);											// Getting current viewport...
 	mouse_screen_old = glm::vec3(mouse_x_old, mouse_y_old, 0.0f);									// Building mouse screen vector...
 	mouse_world_old = glm::unProject(mouse_screen_old, View, Projection, viewport);			// Building mouse world vector...
 	mouse_screen = glm::vec3(mouse_x, mouse_y, 0.0f);															// Building mouse screen vector...
 	mouse_world = glm::unProject(mouse_screen, View, Projection, viewport);				// Building mouse world vector...
-	mouse_delta = mouse_world - mouse_world_old;																	// Calculating mouse delta..
-	momentum = glm::cross(mouse_delta, mouse_world_old);													// Calculating arcball momentum...
+	momentum = glm::normalize(glm::cross(mouse_world, mouse_world_old));					// Calculating arcball momentum...
  	theta = glm::angle(mouse_world, mouse_world_old);															// Calculating arcball angle...
 	printf("Theta =    %lf\n", theta);
+	printf("Mouse x = %lf, Mouse y = %lf\n", mouse_world.x, mouse_world.y);
+	printf("Mouse x old = %lf, Mouse y old = %lf\n", mouse_world_old.x, mouse_world_old.y);
+	printf("Momentum x = %lf, Momentum y = %lf, Momentum z = %lf\n", momentum.x, momentum.y, momentum.z);
 	arcball_axis = glm::quat(momentum.x * sin(theta/2.0f),												// Building rotation quaternion...
 								 					 momentum.y * sin(theta/2.0f),
 							 	 			 		 momentum.z * sin(theta/2.0f),
 							   			 		 cos(theta/2.0f));
-	Rotation = glm::toMat4(arcball_axis);																					// Transforming quaterion into rotation matrix...
+
+
+	Rotation = glm::toMat4(arcball_axis);																					// Transforming quaternion into rotation matrix...
 	printf("Rotation = [%lf %lf %lf %lf]\n", Rotation[0][0], Rotation[0][1], Rotation[0][2], Rotation[0][3]);
 	printf("           [%lf %lf %lf %lf]\n", Rotation[1][0], Rotation[1][1], Rotation[1][2], Rotation[1][3]);
 	printf("           [%lf %lf %lf %lf]\n", Rotation[2][0], Rotation[2][1], Rotation[2][2], Rotation[2][3]);
@@ -121,10 +141,12 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
+	glfwGetWindowSize(window, &size_window_x, &size_window_y);										// Getting window size...
+
 	if (mouse_1st_left_click)
 	{
 		mouse_x = xpos;
-		mouse_y = ypos;
+		mouse_y = (size_window_y - 1) - ypos;
 		arcball();
 		mouse_x = mouse_x_old;
 		mouse_y = mouse_y_old;
@@ -135,26 +157,20 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	scroll_x = xoffset;
 	scroll_y = yoffset;
+	zoom = Translation[3][2];
 
 	if (scroll_y > 0)
 	{
-		Scale = Scale*glm::scale(glm::mat4(1.0f), glm::vec3(1.05f, 1.05f, 1.05f));
-		printf("Scale =    [%lf %lf %lf %lf]\n", Scale[0][0], Scale[0][1], Scale[0][2], Scale[0][3]);
-		printf("           [%lf %lf %lf %lf]\n", Scale[1][0], Scale[1][1], Scale[1][2], Scale[1][3]);
-		printf("           [%lf %lf %lf %lf]\n", Scale[2][0], Scale[2][1], Scale[2][2], Scale[2][3]);
-		printf("           [%lf %lf %lf %lf]\n", Scale[3][0], Scale[3][1], Scale[3][2], Scale[3][3]);
-		printf("\n");
+		zoom *= 1.05f;
 	}
 
-	if (scroll_y < 0)
+	else
 	{
-		Scale = Scale*glm::scale(glm::mat4(1.0f), glm::vec3(1.0f/1.05f, 1.0f/1.05f, 1.0f/1.05f));
-		printf("Scale =    [%lf %lf %lf %lf]\n", Scale[0][0], Scale[0][1], Scale[0][2], Scale[0][3]);
-		printf("           [%lf %lf %lf %lf]\n", Scale[1][0], Scale[1][1], Scale[1][2], Scale[1][3]);
-		printf("           [%lf %lf %lf %lf]\n", Scale[2][0], Scale[2][1], Scale[2][2], Scale[2][3]);
-		printf("           [%lf %lf %lf %lf]\n", Scale[3][0], Scale[3][1], Scale[3][2], Scale[3][3]);
-		printf("\n");
+		zoom /= 1.05f;
 	}
+
+	printf("zoom = %lf\n", zoom);
+	Translation = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, zoom));
 }
 
 //////////////////////////////////////////////////////////////////////////////////
