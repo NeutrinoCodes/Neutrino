@@ -414,7 +414,7 @@ void acquire_GL_object(cl_mem* CL_memory_buffer)
 {
   cl_int err;
 
-  printf("Action: acquiring OpenCL memory objects... ");
+  //printf("Action: acquiring OpenCL memory objects... ");
   err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);
 
   if(err != CL_SUCCESS)
@@ -423,7 +423,7 @@ void acquire_GL_object(cl_mem* CL_memory_buffer)
     exit(err);
   }
 
-  printf("DONE!\n");
+  //printf("DONE!\n");
 }
 
 void enqueue_task()
@@ -462,7 +462,7 @@ void release_GL_object(cl_mem* CL_memory_buffer)
 {
   cl_int err;
 
-  printf("Action: releasing enqueued OpenCL objects... ");
+  //printf("Action: releasing enqueued OpenCL objects... ");
   err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);
 
   if(err != CL_SUCCESS)
@@ -471,14 +471,14 @@ void release_GL_object(cl_mem* CL_memory_buffer)
     exit(err);
   }
 
-  printf("DONE!\n");
+  //printf("DONE!\n");
 }
 
 void finish_queue()
 {
   cl_int err;
 
-  printf("Action: waiting for OpenCL command sequence end... ");
+  //printf("Action: waiting for OpenCL command sequence end... ");
   err = clFinish(queue);
 
   if(err != CL_SUCCESS)
@@ -487,7 +487,7 @@ void finish_queue()
     exit(err);
   }
 
-  printf("DONE!\n");
+  //printf("DONE!\n");
 }
 
 void release_event()

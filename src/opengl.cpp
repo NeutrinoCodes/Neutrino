@@ -23,23 +23,15 @@ double						scroll_y = 0;
 bool							mouse_right_button = false;
 bool							key_ctrl_L = false;
 
-glm::vec3					I3 = glm::vec3(1.0f, 1.0f, 1.0f);															// 3x1 ones vector.
-glm::vec4					I4 = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);												// 4x1 ones vector.
-glm::mat4					I4x4 = glm::mat4(1.0f);																				// 4x4 identity matrix.
+glm::quat					arcball_axis = glm::quat(1.0f, 1.0f, 1.0f, 1.0f);							// 4x1 arcball rotation quaternion.
+glm::vec4					viewport = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);									// 4x1 viewport vector.
 
-glm::vec3					S3 = I3;																											// 3x1 scale vector.
-glm::vec3					R3 = I3;																											// 3x1 rotation vector.
-glm::vec3					T3 = I3;																											// 3x1 translation vector.
-
-glm::quat					R4 = glm::quat(1.0f, 1.0f, 1.0f, 1.0f);												// 4x1 rotation quaternion.
-glm::vec4					viewport = I4;																								// 4x1 viewport vector.
-
-glm::mat4 				S4x4 = I4x4;																									// 4x4 scale matrix.
-glm::mat4					R4x4 = I4x4;																									// 4x4 rotation matrix.
-glm::mat4 				T4x4 = I4x4;																									// 4x4 translation matrix.
-glm::mat4 				M4x4 = I4x4;																									// 4x4 model matrix.
-glm::mat4 				V4x4 = I4x4;																									// 4x4 view matrix.
-glm::mat4 				P4x4 = I4x4;																									// 4x4 projection matrix.
+glm::mat4 				Scale = glm::mat4(1.0f);																			// 4x4 scale matrix.
+glm::mat4					Rotation = glm::mat4(1.0f);																		// 4x4 rotation matrix.
+glm::mat4 				Translation = glm::mat4(1.0f);																// 4x4 translation matrix.
+glm::mat4 				Model = glm::mat4(1.0f);																			// 4x4 model matrix.
+glm::mat4 				View = glm::mat4(1.0f);																				// 4x4 view matrix.
+glm::mat4 				Projection = glm::mat4(1.0f);																	// 4x4 projection matrix.
 
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// KEYBOARD /////////////////////////////////////
@@ -100,17 +92,23 @@ void arcball()
   glfwGetWindowPos(window, &window_x, &window_y);																// Getting window position offset...
   viewport = glm::vec4(window_x, window_y, size_window_x, size_window_y);				// Getting current viewport...
 	mouse_screen_old = glm::vec3(mouse_x_old, mouse_y_old, 0.0f);									// Building mouse screen vector...
-	mouse_world_old = glm::unProject(mouse_screen_old, V4x4, P4x4, viewport);			// Building mouse world vector...
+	mouse_world_old = glm::unProject(mouse_screen_old, View, Projection, viewport);			// Building mouse world vector...
 	mouse_screen = glm::vec3(mouse_x, mouse_y, 0.0f);															// Building mouse screen vector...
-	mouse_world = glm::unProject(mouse_screen, V4x4, P4x4, viewport);							// Building mouse world vector...
+	mouse_world = glm::unProject(mouse_screen, View, Projection, viewport);				// Building mouse world vector...
 	mouse_delta = mouse_world - mouse_world_old;																	// Calculating mouse delta..
 	momentum = glm::cross(mouse_delta, mouse_world_old);													// Calculating arcball momentum...
  	theta = glm::angle(mouse_world, mouse_world_old);															// Calculating arcball angle...
-	R4 = glm::quat(momentum.x * sin(theta/2.0f),																	// Calculating rotation quaternion...
-								 momentum.y * sin(theta/2.0f),
-							 	 momentum.z * sin(theta/2.0f),
-							   cos(theta/2.0f));
-	R4x4 = glm::toMat4(R4);																												// Transforming quaterion into rotation matrix...
+	printf("Theta =    %lf\n", theta);
+	arcball_axis = glm::quat(momentum.x * sin(theta/2.0f),												// Building rotation quaternion...
+								 					 momentum.y * sin(theta/2.0f),
+							 	 			 		 momentum.z * sin(theta/2.0f),
+							   			 		 cos(theta/2.0f));
+	Rotation = glm::toMat4(arcball_axis);																					// Transforming quaterion into rotation matrix...
+	printf("Rotation = [%lf %lf %lf %lf]\n", Rotation[0][0], Rotation[0][1], Rotation[0][2], Rotation[0][3]);
+	printf("           [%lf %lf %lf %lf]\n", Rotation[1][0], Rotation[1][1], Rotation[1][2], Rotation[1][3]);
+	printf("           [%lf %lf %lf %lf]\n", Rotation[2][0], Rotation[2][1], Rotation[2][2], Rotation[2][3]);
+	printf("           [%lf %lf %lf %lf]\n", Rotation[3][0], Rotation[3][1], Rotation[3][2], Rotation[3][3]);
+	printf("\n");
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -140,15 +138,23 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
 	if (scroll_y > 0)
 	{
-		S3 = S3*1.1f;
+		Scale = Scale*glm::scale(glm::mat4(1.0f), glm::vec3(1.05f, 1.05f, 1.05f));
+		printf("Scale =    [%lf %lf %lf %lf]\n", Scale[0][0], Scale[0][1], Scale[0][2], Scale[0][3]);
+		printf("           [%lf %lf %lf %lf]\n", Scale[1][0], Scale[1][1], Scale[1][2], Scale[1][3]);
+		printf("           [%lf %lf %lf %lf]\n", Scale[2][0], Scale[2][1], Scale[2][2], Scale[2][3]);
+		printf("           [%lf %lf %lf %lf]\n", Scale[3][0], Scale[3][1], Scale[3][2], Scale[3][3]);
+		printf("\n");
 	}
 
 	if (scroll_y < 0)
 	{
-		S3 = S3/1.1f;
+		Scale = Scale*glm::scale(glm::mat4(1.0f), glm::vec3(1.0f/1.05f, 1.0f/1.05f, 1.0f/1.05f));
+		printf("Scale =    [%lf %lf %lf %lf]\n", Scale[0][0], Scale[0][1], Scale[0][2], Scale[0][3]);
+		printf("           [%lf %lf %lf %lf]\n", Scale[1][0], Scale[1][1], Scale[1][2], Scale[1][3]);
+		printf("           [%lf %lf %lf %lf]\n", Scale[2][0], Scale[2][1], Scale[2][2], Scale[2][3]);
+		printf("           [%lf %lf %lf %lf]\n", Scale[3][0], Scale[3][1], Scale[3][2], Scale[3][3]);
+		printf("\n");
 	}
-
-	S4x4 = glm::scale(I4x4, S3);
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -320,6 +326,5 @@ void init_shaders()
   glAttachShader(shader, vs);
   glAttachShader(shader, fs);
   glLinkProgram(shader);
-  glUseProgram(shader);
   printf("DONE!\n");
 }
