@@ -10,6 +10,6 @@ uniform mat4 Projection;
 void main(void)
 {
   //gl_Position = Project * View * Scale * in_point;                              // Assigning "in_point" as position for OpenGL...
-  gl_Position = View*Scale*in_point;
+  gl_Position = Projection*View*Scale*in_point;
   the_color = in_color;                                                         // Forwarding the "in_color" to the fragment shader...
 }

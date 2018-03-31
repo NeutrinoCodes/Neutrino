@@ -14,7 +14,8 @@ data_float4 colors(NUM_POINTS);
 static const GLfloat g_vertex_buffer_data[] = {
    -1.0f, -1.0f, 0.0f,
    1.0f, -1.0f, 0.0f,
-   0.0f,  1.0f, 0.0f,
+   1.0f,  1.0f, 0.0f,
+   -1.0f, 1.0f ,0.0f
 };
 
 // This will identify our vertex buffer
@@ -88,7 +89,7 @@ void loop()
 
 
   //Scale = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -4.0));
-  View = glm::lookAt(glm::vec3(0.0, 2.0, 0.0), glm::vec3(0.0, 0.0, -4.0), glm::vec3(0.0, 1.0, 0.0));
+  View = glm::lookAt(glm::vec3(0.0, 0.0, 5.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
   //View = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -0.9f));
   //Projection = glm::perspective(45.0f, 1.0f*aspect_ratio, 0.1f, 10.0f);
 
@@ -132,7 +133,7 @@ void loop()
   );
   // Draw the triangle !
   glVertexAttrib3f((GLuint)1, 1.0, 1.0, 1.0); // set constant color attribute
-  glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+  glDrawArrays(GL_LINE_LOOP, 0, 4); // Starting from vertex 0; 3 vertices total -> 1 triangle
   glDisableVertexAttribArray(0);
 
 
