@@ -15,16 +15,14 @@ double            mouse_x = 0;
 double            mouse_y = 0;
 double            mouse_x_old = 0;
 double            mouse_y_old = 0;
-int								mouse_button = -1;
-int								mouse_action = -1;
-bool							mouse_1st_left_click = false;
+bool 							arcball_on = false;
 double						scroll_x = 0;
 double						scroll_y = 0;
 bool							mouse_right_button = false;
 bool							key_ctrl_L = false;
 double						zoom = 0;
 
-glm::quat					arcball_axis = glm::quat(1.0f, 1.0f, 1.0f, 1.0f);							// 4x1 arcball rotation quaternion.
+glm::quat					arcball_quaternion = glm::quat(1.0f, 1.0f, 1.0f, 1.0f);				// 4x1 arcball rotation quaternion.
 glm::vec4					viewport = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);									// 4x1 viewport vector.
 
 glm::mat4 				Scale = glm::mat4(1.0f);																			// 4x4 scale matrix.
@@ -58,27 +56,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// MOUSE ///////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void detect_mouse_1st_left_click()
-{
-	if (mouse_button == GLFW_MOUSE_BUTTON_LEFT && mouse_action == GLFW_PRESS)
-  {
-		if (mouse_1st_left_click == false)
-		{
-			mouse_x_old = mouse_x;
-			mouse_y_old = mouse_y;
-			mouse_1st_left_click = true;
-		}
-	}
-
-	if (mouse_button == GLFW_MOUSE_BUTTON_LEFT && mouse_action == GLFW_RELEASE)
-  {
-		if (mouse_1st_left_click == true)
-		{
-			mouse_1st_left_click = false;
-		}
-	}
-}
-
 glm::vec3 get_arcball_vector(int x, int y)
 {
 	glfwGetWindowSize(window, &size_window_x, &size_window_y);										// Getting window size...
@@ -98,59 +75,51 @@ glm::vec3 get_arcball_vector(int x, int y)
 
 void arcball()
 {
-	glm::vec3 mouse_screen;																												// Mouse vector, screen coordinates at z = 0.
-	glm::vec3 mouse_screen_old;																										// Mouse vector, screen coordinates at z = 0.
-	glm::vec3 mouse_world;																												// Mouse vector, world coordinates.
-	glm::vec3 mouse_world_old;																									  // Mouse vector, world coordinates.
-	glm::vec3 momentum;																														// Arcball mmomentum (axis of rotation).
+	glm::vec3 va;																																	// Mouse vector, world coordinates.
+	glm::vec3 vb;																																  // Mouse vector, world coordinates.
+	glm::vec3 arcball_axis;																												// Arcball axis of rotation.
 	double theta;																																	// Arcball angle of rotation.
 
-  glfwGetWindowSize(window, &size_window_x, &size_window_y);										// Getting window size...
-	viewport = glm::vec4(0, 0, size_window_x, size_window_y);											// Getting current viewport...
-	mouse_screen_old = glm::vec3(mouse_x_old, mouse_y_old, 0.0f);									// Building mouse screen vector...
-	mouse_world_old = glm::unProject(mouse_screen_old, View, Projection, viewport);			// Building mouse world vector...
-	mouse_screen = glm::vec3(mouse_x, mouse_y, 0.0f);															// Building mouse screen vector...
-	mouse_world = glm::unProject(mouse_screen, View, Projection, viewport);				// Building mouse world vector...
-	momentum = glm::normalize(glm::cross(mouse_world, mouse_world_old));					// Calculating arcball momentum...
- 	theta = glm::angle(mouse_world, mouse_world_old);															// Calculating arcball angle...
-	printf("Theta =    %lf\n", theta);
-	printf("Mouse x = %lf, Mouse y = %lf\n", mouse_world.x, mouse_world.y);
-	printf("Mouse x old = %lf, Mouse y old = %lf\n", mouse_world_old.x, mouse_world_old.y);
-	printf("Momentum x = %lf, Momentum y = %lf, Momentum z = %lf\n", momentum.x, momentum.y, momentum.z);
-	arcball_axis = glm::quat(momentum.x * sin(theta/2.0f),												// Building rotation quaternion...
-								 					 momentum.y * sin(theta/2.0f),
-							 	 			 		 momentum.z * sin(theta/2.0f),
-							   			 		 cos(theta/2.0f));
+	if (mouse_x != mouse_x_old || mouse_y != mouse_y_old)
+	{
+		va = get_arcball_vector(mouse_x_old, mouse_y_old);													// Building mouse world vector (old)...
+		vb = get_arcball_vector(mouse_x, mouse_y);																	// Building mouse world vector...
+		theta = acos(glm::min(1.0f, glm::dot(va, vb)));															// Calculating arcball angle...
+		arcball_axis = glm::cross(va, vb);																					// Calculating arcball axis of rotation...
+		arcball_quaternion = glm::quat(cos(theta/2.0f),															// Building rotation quaternion...
+																	 arcball_axis.x * sin(theta/2.0f),
+									 					 			 arcball_axis.y * sin(theta/2.0f),
+								 	 			 		 			 arcball_axis.z * sin(theta/2.0f));
 
-
-	Rotation = glm::toMat4(arcball_axis);																					// Transforming quaternion into rotation matrix...
-	printf("Rotation = [%lf %lf %lf %lf]\n", Rotation[0][0], Rotation[0][1], Rotation[0][2], Rotation[0][3]);
-	printf("           [%lf %lf %lf %lf]\n", Rotation[1][0], Rotation[1][1], Rotation[1][2], Rotation[1][3]);
-	printf("           [%lf %lf %lf %lf]\n", Rotation[2][0], Rotation[2][1], Rotation[2][2], Rotation[2][3]);
-	printf("           [%lf %lf %lf %lf]\n", Rotation[3][0], Rotation[3][1], Rotation[3][2], Rotation[3][3]);
-	printf("\n");
+		Rotation = glm::toMat4(arcball_quaternion);																	// Transforming quaternion into rotation matrix...
+		//mouse_x_old = mouse_x;
+		//mouse_y_old = mouse_y;
+	}
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-	mouse_button = button;
-	mouse_action = action;
-	glfwGetCursorPos(window, &mouse_x, &mouse_y);
-	detect_mouse_1st_left_click();
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && arcball_on == false)
+	{
+		glfwGetCursorPos(window, &mouse_x, &mouse_y);
+		mouse_x_old = mouse_x;
+		mouse_y_old = mouse_y;
+		arcball_on = true;
+  }
+
+	else
+	{
+    arcball_on = false;
+  }
 }
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	glfwGetWindowSize(window, &size_window_x, &size_window_y);										// Getting window size...
-
-	if (mouse_1st_left_click)
+	if (arcball_on)
 	{
-		mouse_x = xpos;
-		mouse_y = (size_window_y - 1) - ypos;
-		arcball();
-		mouse_x = mouse_x_old;
-		mouse_y = mouse_y_old;
-	}
+    mouse_x = xpos;
+    mouse_y = ypos;
+  }
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)

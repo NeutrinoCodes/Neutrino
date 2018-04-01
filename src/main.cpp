@@ -16,6 +16,7 @@ int main()
 
   while (!glfwWindowShouldClose(window))
   {
+    arcball();
     loop();
   }
 

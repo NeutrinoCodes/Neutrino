@@ -50,9 +50,7 @@
   extern  double            mouse_y;
   extern  double            mouse_x_old;
   extern  double            mouse_y_old;
-  extern  int								mouse_button;
-  extern  int								mouse_action;
-  extern  bool							mouse_1st_left_click;
+  extern  bool              arcball_on;
   extern  double						scroll_x;
   extern  double						scroll_y;
   extern  bool							mouse_right_button;
@@ -69,18 +67,20 @@
   extern  glm::mat4 				View;																								// 4x4 view matrix.
   extern  glm::mat4 				Projection;																					// 4x4 projection matrix.
 
-  void window_refresh_callback(GLFWwindow* window);
-  void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-  void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-  void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
-  void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+  void        window_refresh_callback(GLFWwindow* window);
+  void        key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+  glm::vec3   get_arcball_vector(int x, int y);
+  void        arcball();
+  void        mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+  void        cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+  void        scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-  void init_glfw();
-  void init_hints();
-  void create_window();
-  void init_glew();
-  void load_vertex(const char* filename_vertex);
-  void load_fragment(const char* filename_fragment);
-  void init_shaders();
+  void        init_glfw();
+  void        init_hints();
+  void        create_window();
+  void        init_glew();
+  void        load_vertex(const char* filename_vertex);
+  void        load_fragment(const char* filename_fragment);
+  void        init_shaders();
 
 #endif
