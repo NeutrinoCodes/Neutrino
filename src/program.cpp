@@ -16,18 +16,6 @@
 data_float4 points(NUM_POINTS);
 data_float4 colors(NUM_POINTS);
 
-// Vertices of a square:
-static const GLfloat g_vertex_buffer_data[] =
-{
-   -1.2f, -1.2f, 0.0f,
-   1.2f, -1.2f, 0.0f,
-   1.2f,  1.2f, 0.0f,
-   -1.2f, 1.2f ,0.0f
-};
-
-// This will identify our vertex buffer
-GLuint vertexbuffer;
-
 void load()
 {
   load_vertex(VERTEX_FILE);
@@ -76,11 +64,9 @@ void setup()
   push_float4_colors(&colors);
   push_float4_size(&points);
 
-  // Setting buffer for square...
-  glGenBuffers(1, &vertexbuffer);
-  glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
-
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////// Setting up OpenGL environment... //////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
@@ -108,7 +94,6 @@ void loop()
   glUniformMatrix4fv(view_shader, 1, GL_FALSE, &View[0][0]);                    // Setting View matrix on shader...
   glUniformMatrix4fv(projection_shader, 1, GL_FALSE, &Projection[0][0]);        // Setting Projection matrix on shader...
 
-
   // Binding "points" array...
   glEnableVertexAttribArray(0);                                                 // Matches "layout = 0" variable in vertex shader.
   glBindBuffer(GL_ARRAY_BUFFER, points.vbo);
@@ -127,23 +112,6 @@ void loop()
 
   // Unbinding "colors" array...
   glDisableVertexAttribArray(1);                                                // Matches "layout = 1" variable in vertex shader.
-
-
-  // Drawing the square...
-  glEnableVertexAttribArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-  glVertexAttribPointer(
-     0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-     3,                  // size
-     GL_FLOAT,           // type
-     GL_FALSE,           // normalized?
-     0,                  // stride
-     (void*)0            // array buffer offset
-  );
-  glVertexAttrib3f((GLuint)1, 1.0, 1.0, 1.0); // set constant color attribute
-  glDrawArrays(GL_LINE_LOOP, 0, 4); // Starting from vertex 0; 3 vertices total -> 1 triangle
-  glDisableVertexAttribArray(0);
-
 
   glfwSwapBuffers(window);
   glfwPollEvents();
