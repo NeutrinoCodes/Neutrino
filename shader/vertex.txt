@@ -3,13 +3,11 @@
 layout (location = 0) in  vec4 in_point;                                        // First attribute variable (0).
 layout (location = 1) in  vec4 in_color;                                        // Second attribute variable (1).
 smooth out vec4 the_color;                                                      // (R, G, B, A) color,
-uniform mat4 Scale;
 uniform mat4 View;
 uniform mat4 Projection;
 
 void main(void)
 {
-  //gl_Position = Project * View * Scale * in_point;                              // Assigning "in_point" as position for OpenGL...
-  gl_Position = Projection*View*Scale*in_point;
+  gl_Position = Projection*View* in_point;                                      // Assigning "in_point" as position for OpenGL...
   the_color = in_color;                                                         // Forwarding the "in_color" to the fragment shader...
 }

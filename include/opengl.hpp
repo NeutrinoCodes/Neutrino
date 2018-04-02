@@ -48,7 +48,6 @@
   extern  char*             fragment_source;
   extern  size_t            size_fragment;
   extern  GLuint 						shader;
-  extern  GLint 						scale_shader;
   extern  GLint 						view_shader;
   extern  GLint 						projection_shader;
   extern  double            mouse_x;

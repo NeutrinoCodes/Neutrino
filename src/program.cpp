@@ -84,10 +84,8 @@ void loop()
   glUseProgram(shader);
 
   // Transfer the transformation matrices to the shader program
-  scale_shader = glGetUniformLocation(shader, "Scale" );
   view_shader = glGetUniformLocation(shader, "View" );
   projection_shader = glGetUniformLocation(shader, "Projection" );
-  glUniformMatrix4fv(scale_shader, 1, GL_FALSE, &Scale[0][0]);
   glUniformMatrix4fv(view_shader, 1, GL_FALSE, &View[0][0]);
   glUniformMatrix4fv(projection_shader, 1, GL_FALSE, &Projection[0][0]);
 
