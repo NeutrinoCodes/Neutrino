@@ -11,7 +11,6 @@ size_t            size_vertex;
 char*             fragment_source;
 size_t            size_fragment;
 GLuint 						shader;
-GLint 						scale_shader;
 GLint 						view_shader;
 GLint 						projection_shader;
 double            mouse_x = 0;

@@ -23,7 +23,7 @@ void push_float4_data(data_float4* data)
 
   glGenBuffers(1, &data->vbo);
   glBindBuffer(GL_ARRAY_BUFFER, data->vbo);
-  glBufferData(GL_ARRAY_BUFFER, 4*(data->size)*sizeof(GLfloat), unfolded_data, GL_DYNAMIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, 4*sizeof(GLfloat)*(data->size), unfolded_data, GL_DYNAMIC_DRAW);
   glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
   glEnableVertexAttribArray(0);
 
