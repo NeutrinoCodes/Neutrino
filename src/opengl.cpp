@@ -59,17 +59,23 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 //////////////////////////////////////////////////////////////////////////////////
 glm::vec3 get_arcball_vector(int x, int y)
 {
+  glm::vec3 P;																																	// Point "P" on unitary ball.
+	float OP_sq;																																	// Center "O" to "P" squared distance...
+
 	glfwGetWindowSize(window, &size_window_x, &size_window_y);										// Getting window size...
-  glm::vec3 P = glm::vec3(1.0*x/size_window_x*2 - 1.0, 1.0*y/size_window_y*2 - 1.0, 0);
-  P.y = -P.y;
-  float OP_squared = P.x * P.x + P.y * P.y;
-  if (OP_squared <= 1*1)
+
+	P = glm::vec3(2.0*x/size_window_x - 1.0, 2.0*y/size_window_y - 1.0, 0);				// Computing point on unitary ball...
+  P.y = -P.y;																																		// Inverting y-axis (mouse coordinates are opposite to OpenGL)...
+
+	OP_sq = P.x*P.x + P.y*P.y;
+
+  if (OP_sq <= 1.0)																															// Checking P to ball-center distance...
 	{
-    P.z = sqrt(1*1 - OP_squared);  																							// Pythagore
+    P.z = sqrt(1.0 - OP_sq);  																									// Pythagoras' theorem...
 	}
 	else
 	{
-    P = glm::normalize(P);  																										// nearest point
+    P = glm::normalize(P);  																										// Normalizing if too far...
 	}
 	return P;
 }
@@ -92,9 +98,9 @@ void arcball()
 									 					 			 arcball_axis.y * sin(theta/2.0f),
 								 	 			 		 			 arcball_axis.z * sin(theta/2.0f));
 
-		Rotation = glm::toMat4(arcball_quaternion)*Rotation_old;										// Transforming quaternion into rotation matrix...
-		mouse_x_old = mouse_x;
-		mouse_y_old = mouse_y;
+		Rotation = glm::toMat4(arcball_quaternion)*Rotation_old;										// Building rotation matrix...
+		mouse_x_old = mouse_x;																											// Updating mouse position...
+		mouse_y_old = mouse_y;																											// Updating mouse position...
 	}
 }
 
@@ -103,14 +109,14 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && arcball_on == false)
 	{
 		glfwGetCursorPos(window, &mouse_x, &mouse_y);
-		mouse_x_old = mouse_x;
-		mouse_y_old = mouse_y;
-		arcball_on = true;
+		mouse_x_old = mouse_x;																											// Updating mouse position...
+		mouse_y_old = mouse_y;																											// Updating mouse position...
+		arcball_on = true;																													// Turning on arcball...
   }
 
 	else
 	{
-    arcball_on = false;
+    arcball_on = false;																													// Turning off arcball...
   }
 }
 
@@ -118,30 +124,29 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	if (arcball_on)
 	{
-    mouse_x = xpos;
-    mouse_y = ypos;
-		Rotation_old = Rotation;
+    mouse_x = xpos;																															// Getting current mouse position...
+    mouse_y = ypos;																															// Getting current mouse position...
+		Rotation_old = Rotation;																										// Updating Rotation matrix...
   }
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	scroll_x = xoffset;
-	scroll_y = yoffset;
-	zoom = Translation[3][2];
+	scroll_x = xoffset;																														// Getting scroll position...
+	scroll_y = yoffset;																														// Getting scroll position...
+	zoom = Translation[3][2];																											// Getting z-axis translation...
 
 	if (scroll_y > 0)
 	{
-		zoom *= ZOOM_FACTOR;
+		zoom *= ZOOM_FACTOR;																												// Zooming-in...
 	}
 
 	else
 	{
-		zoom /= ZOOM_FACTOR;
+		zoom /= ZOOM_FACTOR;																												// Zooming-out...
 	}
 
-	printf("zoom = %lf\n", zoom);
-	Translation = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, zoom));
+	Translation = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, zoom));				// Building translation matrix...
 }
 
 //////////////////////////////////////////////////////////////////////////////////

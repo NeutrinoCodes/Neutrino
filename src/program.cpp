@@ -11,7 +11,8 @@ data_float4 points(NUM_POINTS);
 data_float4 colors(NUM_POINTS);
 
 // An array of 3 vectors which represents 3 vertices
-static const GLfloat g_vertex_buffer_data[] = {
+static const GLfloat g_vertex_buffer_data[] =
+{
    -1.0f, -1.0f, 0.0f,
    1.0f, -1.0f, 0.0f,
    1.0f,  1.0f, 0.0f,
@@ -42,9 +43,7 @@ void setup()
     colors.x[i] = 1.0;
     colors.y[i] = 1.0;
     colors.z[i] = 1.0;
-
   }
-
 
   push_float4_data(&points);
   push_float4_data(&colors);
