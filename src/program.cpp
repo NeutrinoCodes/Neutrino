@@ -5,13 +5,13 @@
 #define FRAGMENT_FILE   "../../shader/fragment.txt"
 #define KERNEL_FILE     "../../kernel/thekernel.txt"
 
-#define NUM_POINTS      121
+#define NUM_POINTS      900
 #define X_MIN           -1.0f
 #define Y_MIN           -1.0f
-#define SIZE_X          11
-#define SIZE_Y          11
-#define DX              0.2f
-#define DY              0.2f
+#define SIZE_X          30
+#define SIZE_Y          30
+#define DX              0.066f
+#define DY              0.066f
 
 data_float4 points(NUM_POINTS);
 data_float4 colors(NUM_POINTS);
@@ -54,9 +54,9 @@ void setup()
 
   for (i = 0; i < colors.size; i++)
   {
-    colors.x[i] = 1.0f;
-    colors.y[i] = 0.0f;
-    colors.z[i] = 0.0f;
+    colors.x[i] = glm::linearRand(0.0f, 1.0f);
+    colors.y[i] = glm::linearRand(0.0f, 1.0f);
+    colors.z[i] = glm::linearRand(0.0f, 1.0f);
     colors.w[i] = 1.0f;
   }
 
@@ -67,22 +67,27 @@ void setup()
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////// Setting up OpenGL environment... //////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glEnable(GL_DEPTH_TEST);
+  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);                                         // Setting color for clearing window...
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
+  glEnable(GL_DEPTH_TEST);                                                      // Enabling depth test...
   glEnable(GL_PROGRAM_POINT_SIZE);                                              // Enabling "gl_PointSize" in vertex shader...
-  glLineWidth(LINE_WIDTH);
-  Translation = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -3.0f));
-  Projection = glm::perspective(glm::radians(FOV), aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);
+  glLineWidth(LINE_WIDTH);                                                      // Setting line width...
+  Translation = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -3.0f));      // Setting initial Translation matrix...
+  Projection = glm::perspective(glm::radians(FOV),                              // Setting Projection matrix...
+                                aspect_ratio,
+                                NEAR_Z_CLIP,
+                                FAR_Z_CLIP);
 }
 
 void loop()
 {
   acquire_GL_object(&points.buffer);
+  acquire_GL_object(&colors.buffer);
   enqueue_task();
   wait_for_event();
   execute_kernel();
   release_GL_object(&points.buffer);
+  release_GL_object(&colors.buffer);
   finish_queue();
   release_event();
 
