@@ -8,7 +8,7 @@
 #define NUM_POINTS      10
 
 data_float4 points(NUM_POINTS);
-data_float4 colors(NUM_POINTS);
+//data_float4 colors(NUM_POINTS);
 
 // An array of 3 vectors which represents 3 vertices
 static const GLfloat g_vertex_buffer_data[] =
@@ -33,21 +33,8 @@ void setup()
 {
   size_global = points.size;
   dim_kernel = 1;
-  unsigned int i;
-
-  for (i = 0; i < points.size; i++)
-  {
-    points.x[i] = 0.0f;
-    points.y[i] = 0.0f;
-    points.z[i] = 0.0f;
-    colors.x[i] = 1.0f;
-    colors.y[i] = 1.0f;
-    colors.z[i] = 1.0f;
-  }
 
   push_float4_data(&points);
-  push_float4_data(&colors);
-  push_float4_size(&points);
 
   // Setting buffer for square...
   glGenBuffers(1, &vertexbuffer);
@@ -65,12 +52,10 @@ void setup()
 void loop()
 {
   acquire_GL_object(&points.buffer);
-  acquire_GL_object(&colors.buffer);
   enqueue_task();
   wait_for_event();
   execute_kernel();
   release_GL_object(&points.buffer);
-  release_GL_object(&colors.buffer);
   finish_queue();
   release_event();
 
@@ -84,15 +69,15 @@ void loop()
 
 
   // Drawing arrays...
+  glVertexAttrib3f((GLuint)1, 1.0, 1.0, 1.0); // set constant color attribute
   glBindVertexArray(points.vao);
-  //glVertexAttrib3f((GLuint)1, 1.0, 1.0, 1.0); // set constant color attribute
   glDrawArrays(GL_POINTS, 0, points.size);
-  //glBindVertexArray(0);
+  glBindVertexArray(0);
 
 
 
   // Drawing the square...
-  glEnableVertexAttribArray(0);
+  /*glEnableVertexAttribArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
   glVertexAttribPointer(
      0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
@@ -105,6 +90,7 @@ void loop()
   glVertexAttrib3f((GLuint)1, 1.0, 1.0, 1.0); // set constant color attribute
   glDrawArrays(GL_LINE_LOOP, 0, 4); // Starting from vertex 0; 3 vertices total -> 1 triangle
   glDisableVertexAttribArray(0);
+  */
 
   glfwSwapBuffers(window);
   glfwPollEvents();
