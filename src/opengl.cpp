@@ -85,7 +85,7 @@ void arcball()
 	{
 		va = get_arcball_vector(mouse_x_old, mouse_y_old);													// Building mouse world vector (old)...
 		vb = get_arcball_vector(mouse_x, mouse_y);																	// Building mouse world vector...
-		theta = acos(glm::min(1.0f, glm::dot(va, vb)));															// Calculating arcball angle...
+		theta = ROTATION_FACTOR*acos(glm::min(1.0f, glm::dot(va, vb)));							// Calculating arcball angle...
 		arcball_axis = glm::cross(va, vb);																					// Calculating arcball axis of rotation...
 		arcball_quaternion = glm::quat(cos(theta/2.0f),															// Building rotation quaternion...
 																	 arcball_axis.x * sin(theta/2.0f),
@@ -132,12 +132,12 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
 	if (scroll_y > 0)
 	{
-		zoom *= 1.05f;
+		zoom *= ZOOM_FACTOR;
 	}
 
 	else
 	{
-		zoom /= 1.05f;
+		zoom /= ZOOM_FACTOR;
 	}
 
 	printf("zoom = %lf\n", zoom);

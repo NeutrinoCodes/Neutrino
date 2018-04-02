@@ -34,6 +34,8 @@
 
   #define SIZE_WINDOW_X 800
   #define SIZE_WINDOW_Y 600
+  #define ZOOM_FACTOR 1.05f
+  #define ROTATION_FACTOR 5.0f
 
   extern  GLFWwindow*				window;
   extern  int								window_x;
