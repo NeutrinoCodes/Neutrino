@@ -1,9 +1,10 @@
-__kernel void thekernel(__global  float4*       points)
+__kernel void thekernel(__global  float4*       points,
+                        unsigned  int           points_size)
 {
   int i = get_global_id(0);
 
-  points[i].x = 2.0f*(float)i/10.0 - 1.0f;                                      // 10.0 = ten points.
-  points[i].y = 0.0f;
-  points[i].z = 0.0f;
-  points[i].w = 1.0f;
+  //points[i].x = 2.0f*(float)i/points_size - 1.0f;
+  //points[i].y = 0.0f;
+  //points[i].z = 0.0f;
+  //points[i].w = 1.0f;
 }

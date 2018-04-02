@@ -5,7 +5,13 @@
 #define FRAGMENT_FILE   "../../shader/fragment.txt"
 #define KERNEL_FILE     "../../kernel/thekernel.txt"
 
-#define NUM_POINTS      10
+#define NUM_POINTS      100
+#define X_MIN           -1.0f
+#define Y_MIN           -1.0f
+#define SIZE_X          10
+#define SIZE_Y          10
+#define DX              0.2f
+#define DY              0.2f
 
 data_float4 points(NUM_POINTS);
 //data_float4 colors(NUM_POINTS);
@@ -33,8 +39,30 @@ void setup()
 {
   size_global = points.size;
   dim_kernel = 1;
+  int i;
+  int j;
+  float x;
+  float y;
+
+  y = Y_MIN;
+
+  for (j = 0; j < SIZE_Y; j++)
+  {
+    x = X_MIN;
+
+    for (i = 0; i < SIZE_X; i++)
+    {
+      points.x[i + SIZE_X*j]= x;                                                // Setting np "x" positions...
+      points.y[i + SIZE_X*j]= y;                                                // Setting np "y" positions...
+      points.z[i + SIZE_X*j] = 0.0f;                                            // Setting np "z" positions...
+      points.w[i + SIZE_X*j] = 1.0f;                                            // Setting np "w" positions...
+      x += DX;
+    }
+    y += DY;
+  }
 
   push_float4_data(&points);
+  push_float4_size(&points);
 
   // Setting buffer for square...
   glGenBuffers(1, &vertexbuffer);
@@ -44,6 +72,7 @@ void setup()
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
+  glEnable(GL_PROGRAM_POINT_SIZE);
   glLineWidth(LINE_WIDTH);
   Translation = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -3.0f));
   Projection = glm::perspective(glm::radians(FOV), aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);
