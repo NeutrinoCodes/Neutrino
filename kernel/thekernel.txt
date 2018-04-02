@@ -1,4 +1,5 @@
 __kernel void thekernel(__global  float4*       points,
+                        __global  float4*       colors,
                         unsigned  int           points_size)
 {
   int i = get_global_id(0);

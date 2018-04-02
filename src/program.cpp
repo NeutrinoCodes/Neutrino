@@ -5,18 +5,18 @@
 #define FRAGMENT_FILE   "../../shader/fragment.txt"
 #define KERNEL_FILE     "../../kernel/thekernel.txt"
 
-#define NUM_POINTS      100
+#define NUM_POINTS      121
 #define X_MIN           -1.0f
 #define Y_MIN           -1.0f
-#define SIZE_X          10
-#define SIZE_Y          10
+#define SIZE_X          11
+#define SIZE_Y          11
 #define DX              0.2f
 #define DY              0.2f
 
 data_float4 points(NUM_POINTS);
-//data_float4 colors(NUM_POINTS);
+data_float4 colors(NUM_POINTS);
 
-// An array of 3 vectors which represents 3 vertices
+// Vertices of a square:
 static const GLfloat g_vertex_buffer_data[] =
 {
    -1.2f, -1.2f, 0.0f,
@@ -39,11 +39,14 @@ void setup()
 {
   size_global = points.size;
   dim_kernel = 1;
-  int i;
-  int j;
+  unsigned int i;
+  unsigned int j;
   float x;
   float y;
 
+  ////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////// Preparing point array... ///////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   y = Y_MIN;
 
   for (j = 0; j < SIZE_Y; j++)
@@ -61,7 +64,16 @@ void setup()
     y += DY;
   }
 
-  push_float4_data(&points);
+  for (i = 0; i < colors.size; i++)
+  {
+    colors.x[i] = 1.0f;
+    colors.y[i] = 0.0f;
+    colors.z[i] = 0.0f;
+    colors.w[i] = 1.0f;
+  }
+
+  push_float4_points(&points);
+  push_float4_colors(&colors);
   push_float4_size(&points);
 
   // Setting buffer for square...
@@ -72,7 +84,7 @@ void setup()
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
-  glEnable(GL_PROGRAM_POINT_SIZE);
+  glEnable(GL_PROGRAM_POINT_SIZE);                                              // Enabling "gl_PointSize" in vertex shader...
   glLineWidth(LINE_WIDTH);
   Translation = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -3.0f));
   Projection = glm::perspective(glm::radians(FOV), aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);
@@ -97,16 +109,28 @@ void loop()
   glUniformMatrix4fv(projection_shader, 1, GL_FALSE, &Projection[0][0]);        // Setting Projection matrix on shader...
 
 
-  // Drawing arrays...
-  glVertexAttrib3f((GLuint)1, 1.0, 1.0, 1.0); // set constant color attribute
-  glBindVertexArray(points.vao);
-  glDrawArrays(GL_POINTS, 0, points.size);
-  glBindVertexArray(0);
+  // Binding "points" array...
+  glEnableVertexAttribArray(0);                                                 // Matches "layout = 0" variable in vertex shader.
+  glBindBuffer(GL_ARRAY_BUFFER, points.vbo);
+  glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);                        // Matches "layout = 0" variable in vertex shader.
 
+  // Binding "colors" array...
+  glEnableVertexAttribArray(1);                                                 // Matches "layout = 1" variable in vertex shader.
+  glBindBuffer(GL_ARRAY_BUFFER, colors.vbo);
+  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);                        // Matches "layout = 1" variable in vertex shader.
+
+  // Drawing "points"...
+  glDrawArrays(GL_POINTS, 0, points.size);
+
+  // Unbinding "points" array...
+  glDisableVertexAttribArray(0);                                                // Matches "layout = 0" variable in vertex shader.
+
+  // Unbinding "colors" array...
+  glDisableVertexAttribArray(1);                                                // Matches "layout = 1" variable in vertex shader.
 
 
   // Drawing the square...
-  /*glEnableVertexAttribArray(0);
+  glEnableVertexAttribArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
   glVertexAttribPointer(
      0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
@@ -119,7 +143,7 @@ void loop()
   glVertexAttrib3f((GLuint)1, 1.0, 1.0, 1.0); // set constant color attribute
   glDrawArrays(GL_LINE_LOOP, 0, 4); // Starting from vertex 0; 3 vertices total -> 1 triangle
   glDisableVertexAttribArray(0);
-  */
+
 
   glfwSwapBuffers(window);
   glfwPollEvents();
