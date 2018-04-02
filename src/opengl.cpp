@@ -27,6 +27,7 @@ glm::vec4					viewport = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);									// 4x1 viewp
 
 glm::mat4 				Scale = glm::mat4(1.0f);																			// 4x4 scale matrix.
 glm::mat4					Rotation = glm::mat4(1.0f);																		// 4x4 rotation matrix.
+glm::mat4					Rotation_old = glm::mat4(1.0f);																// 4x4 rotation matrix.
 glm::mat4 				Translation = glm::mat4(1.0f);																// 4x4 translation matrix.
 glm::mat4 				Model = glm::mat4(1.0f);																			// 4x4 model matrix.
 glm::mat4 				View = glm::mat4(1.0f);																				// 4x4 view matrix.
@@ -91,9 +92,9 @@ void arcball()
 									 					 			 arcball_axis.y * sin(theta/2.0f),
 								 	 			 		 			 arcball_axis.z * sin(theta/2.0f));
 
-		Rotation = glm::toMat4(arcball_quaternion);																	// Transforming quaternion into rotation matrix...
-		//mouse_x_old = mouse_x;
-		//mouse_y_old = mouse_y;
+		Rotation = glm::toMat4(arcball_quaternion)*Rotation_old;										// Transforming quaternion into rotation matrix...
+		mouse_x_old = mouse_x;
+		mouse_y_old = mouse_y;
 	}
 }
 
@@ -119,6 +120,7 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 	{
     mouse_x = xpos;
     mouse_y = ypos;
+		Rotation_old = Rotation;
   }
 }
 
