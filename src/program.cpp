@@ -52,9 +52,9 @@ void setup()
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
-  glLineWidth(3);
+  glLineWidth(LINE_WIDTH);
   Translation = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -3.0f));
-  Projection = glm::perspective(glm::radians(60.0f), aspect_ratio, 0.1f, 100.0f);
+  Projection = glm::perspective(glm::radians(FOV), aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);
 
   // Generate 1 buffer, put the resulting identifier in vertexbuffer
   glGenBuffers(1, &vertexbuffer);
@@ -70,42 +70,26 @@ void loop()
 
   acquire_GL_object(&points.buffer);
   acquire_GL_object(&colors.buffer);
-  //enqueue_task();
-  //wait_for_event();
+  enqueue_task();
+  wait_for_event();
   execute_kernel();
   release_GL_object(&points.buffer);
   release_GL_object(&colors.buffer);
   finish_queue();
-  //release_event();
-
-
-  // Scale to window size
-  GLint windowWidth, windowHeight;
-  glfwGetWindowSize(window, &windowWidth, &windowHeight);
-  glViewport(0, 0, windowWidth, windowHeight);
+  release_event();
 
   // Draw stuff
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-  //Scale = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -4.0));
-
   View = Translation*Rotation;
-  //View = glm::lookAt(glm::vec3(0.0, 0.0, 5.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0))*View;
-  //View = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -0.9f));
-  //Projection = glm::perspective(45.0f, 1.0f*aspect_ratio, 0.1f, 10.0f);
-
   glUseProgram(shader);
 
   // Transfer the transformation matrices to the shader program
-  GLint scale = glGetUniformLocation(shader, "Scale" );
-  glUniformMatrix4fv(scale, 1, GL_FALSE, &Scale[0][0]);
-
-  GLint view = glGetUniformLocation(shader, "View" );
-  glUniformMatrix4fv(view, 1, GL_FALSE, &View[0][0]);
-
-  GLint projection = glGetUniformLocation(shader, "Projection" );
-  glUniformMatrix4fv(projection, 1, GL_FALSE, &Projection[0][0]);
+  scale_shader = glGetUniformLocation(shader, "Scale" );
+  view_shader = glGetUniformLocation(shader, "View" );
+  projection_shader = glGetUniformLocation(shader, "Projection" );
+  glUniformMatrix4fv(scale_shader, 1, GL_FALSE, &Scale[0][0]);
+  glUniformMatrix4fv(view_shader, 1, GL_FALSE, &View[0][0]);
+  glUniformMatrix4fv(projection_shader, 1, GL_FALSE, &Projection[0][0]);
 
 
   //glMatrixMode(GL_PROJECTION_MATRIX);
@@ -133,13 +117,11 @@ void loop()
      0,                  // stride
      (void*)0            // array buffer offset
   );
-  // Draw the triangle !
+
+  // Drawing the square...
   glVertexAttrib3f((GLuint)1, 1.0, 1.0, 1.0); // set constant color attribute
   glDrawArrays(GL_LINE_LOOP, 0, 4); // Starting from vertex 0; 3 vertices total -> 1 triangle
   glDisableVertexAttribArray(0);
-
-
-
 
   glfwSwapBuffers(window);
   glfwPollEvents();
