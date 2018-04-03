@@ -27,13 +27,13 @@ double						zoom = 0;
 glm::quat					arcball_quaternion = glm::quat(1.0f, 1.0f, 1.0f, 1.0f);				// 4x1 arcball rotation quaternion.
 glm::vec4					viewport = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);									// 4x1 viewport vector.
 
-glm::mat4 				Scale_matrix = glm::mat4(1.0f);																			// 4x4 Scale_matrix matrix.
-glm::mat4					Rotation_matrix = glm::mat4(1.0f);																		// 4x4 rotation matrix.
-glm::mat4					Rotation_matrix_old = glm::mat4(1.0f);																// 4x4 rotation matrix.
-glm::mat4 				Translation_matrix = glm::mat4(1.0f);																// 4x4 translation matrix.
-glm::mat4 				Model_matrix = glm::mat4(1.0f);																			// 4x4 model matrix.
-glm::mat4 				View_matrix = glm::mat4(1.0f);																				// 4x4 view matrix.
-glm::mat4 				Projection_matrix = glm::mat4(1.0f);																	// 4x4 projection matrix.
+glm::mat4 				Scale_matrix = glm::mat4(1.0f);															  // 4x4 Scale_matrix matrix.
+glm::mat4					Rotation_matrix = glm::mat4(1.0f);										 				// 4x4 rotation matrix.
+glm::mat4					Rotation_matrix_old = glm::mat4(1.0f);												// 4x4 rotation matrix.
+glm::mat4 				Translation_matrix = glm::mat4(1.0f);													// 4x4 translation matrix.
+glm::mat4 				Model_matrix = glm::mat4(1.0f);																// 4x4 model matrix.
+glm::mat4 				View_matrix = glm::mat4(1.0f);							   								// 4x4 view matrix.
+glm::mat4 				Projection_matrix = glm::mat4(1.0f);				  								// 4x4 projection matrix.
 
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// KEYBOARD /////////////////////////////////////
@@ -128,7 +128,7 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 	{
     mouse_x = xpos;																															// Getting current mouse position...
     mouse_y = ypos;																															// Getting current mouse position...
-		Rotation_matrix_old = Rotation_matrix;																										// Updating Rotation_matrix matrix...
+		Rotation_matrix_old = Rotation_matrix;																			// Updating Rotation_matrix matrix...
   }
 }
 
@@ -136,7 +136,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	scroll_x = xoffset;																														// Getting scroll position...
 	scroll_y = yoffset;																														// Getting scroll position...
-	zoom = Translation_matrix[3][2];																											// Getting z-axis translation...
+	zoom = Translation_matrix[3][2];																							// Getting z-axis translation...
 
 	if (scroll_y > 0)
 	{
@@ -148,7 +148,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 		zoom /= ZOOM_FACTOR;																												// Zooming-out...
 	}
 
-	Translation_matrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, zoom));				// Building translation matrix...
+	Translation_matrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, zoom));// Building translation matrix...
 }
 
 //////////////////////////////////////////////////////////////////////////////////

@@ -23,6 +23,8 @@ void load()
   load_kernel(KERNEL_FILE);
 }
 
+float tick;
+
 void setup()
 {
   size_global = points.size;
@@ -31,6 +33,8 @@ void setup()
   unsigned int j;
   float x;
   float y;
+
+  tick = 0.0f;
 
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////// Preparing point array... ///////////////////////////
@@ -63,6 +67,7 @@ void setup()
   push_float4_points(&points);
   push_float4_colors(&colors);
   push_float4_size(&points);
+  clSetKernelArg(kernel, 3, sizeof(unsigned int), &tick);                       // "3" is kernel_arg = 3.
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////// Setting up OpenGL environment... //////////////////////
@@ -83,6 +88,7 @@ void loop()
 {
   acquire_GL_object(&points.buffer);
   acquire_GL_object(&colors.buffer);
+  clSetKernelArg(kernel, 3, sizeof(unsigned int), &tick);                       // "3" is kernel_arg = 3.
   enqueue_task();
   wait_for_event();
   execute_kernel();
@@ -91,13 +97,15 @@ void loop()
   finish_queue();
   release_event();
 
+  tick += 0.1f;
+
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing screen...
-  View_matrix = Translation_matrix*Rotation_matrix;                                                  // Setting View_matrix matrix...
+  View_matrix = Translation_matrix*Rotation_matrix;                             // Setting View_matrix matrix...
   glUseProgram(shader);                                                         // Using shader...
-  view_shader = glGetUniformLocation(shader, "View_matrix" );                          // Getting View_matrix matrix handle from shader...
-  projection_shader = glGetUniformLocation(shader, "Projection_matrix" );              // Getting Projection_matrix matrix handle from shader...
-  glUniformMatrix4fv(view_shader, 1, GL_FALSE, &View_matrix[0][0]);                    // Setting View_matrix matrix on shader...
-  glUniformMatrix4fv(projection_shader, 1, GL_FALSE, &Projection_matrix[0][0]);        // Setting Projection_matrix matrix on shader...
+  view_shader = glGetUniformLocation(shader, "View_matrix" );                   // Getting View_matrix matrix handle from shader...
+  projection_shader = glGetUniformLocation(shader, "Projection_matrix" );       // Getting Projection_matrix matrix handle from shader...
+  glUniformMatrix4fv(view_shader, 1, GL_FALSE, &View_matrix[0][0]);             // Setting View_matrix matrix on shader...
+  glUniformMatrix4fv(projection_shader, 1, GL_FALSE, &Projection_matrix[0][0]); // Setting Projection_matrix matrix on shader...
 
   // Binding "points" array...
   glEnableVertexAttribArray(0);                                                 // Matches "layout = 0" variable in vertex shader.
