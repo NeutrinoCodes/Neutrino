@@ -22,10 +22,10 @@
       GLfloat*  z;
       GLfloat*  w;
       GLfloat*  data;
-      unsigned int size;
-      GLuint  vao;
-      GLuint  vbo;
-      cl_mem  buffer;
+      int       size;
+      GLuint    vao;
+      GLuint    vbo;
+      cl_mem    buffer;
   };
 
   // data_float:

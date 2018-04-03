@@ -32,7 +32,6 @@
   extern  size_t                  size_global;
   extern  cl_uint                 dim_kernel;
   extern  cl_event                kernel_event;
-  extern  size_t                  kernel_arg;
 
   const char* get_error(cl_int error);
   cl_uint     get_platforms();
@@ -46,10 +45,12 @@
   void        create_kernel();
   void        get_kernel_workgroup_size(cl_kernel kernel, cl_device_id device_id, size_t* local);
   void        execute_kernel();
-  void        acquire_GL_object(cl_mem* CL_memory_buffer);
+  void        push_points(cl_mem* CL_memory_buffer);
+  void        push_colors(cl_mem* CL_memory_buffer);
   void        enqueue_task();
   void        wait_for_event();
-  void        release_GL_object(cl_mem* CL_memory_buffer);
+  void        pop_points(cl_mem* CL_memory_buffer);
+  void        pop_colors(cl_mem* CL_memory_buffer);
   void        finish_queue();
   void        release_event();
   void        release_mem_object(cl_mem CL_memory_buffer);
@@ -57,5 +58,7 @@
   void        release_queue();
   void        release_program();
   void        release_context();
+  void        push_kernel();
+  void        pop_kernel();
 
 #endif

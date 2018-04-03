@@ -37,6 +37,10 @@
   #define SIZE_WINDOW_Y 600
   #define ZOOM_FACTOR 1.05f
   #define ROTATION_FACTOR 5.0f
+  #define NEAR_Z_CLIP 0.1f
+  #define FAR_Z_CLIP 100.0f
+  #define FOV 60.0f
+  #define LINE_WIDTH 3
 
   extern  GLFWwindow*				window;
   extern  int								window_x;
@@ -87,5 +91,6 @@
   void        load_vertex(const char* filename_vertex);
   void        load_fragment(const char* filename_fragment);
   void        init_shaders();
+  void        init_screen();
 
 #endif

@@ -15,7 +15,6 @@ cl_program              kernel_program;
 size_t                  size_global;
 cl_uint                 dim_kernel;
 cl_event                kernel_event;
-size_t                  kernel_arg;
 
 const char* get_error(cl_int error)
 {
@@ -410,7 +409,23 @@ void execute_kernel()
 
 }
 
-void acquire_GL_object(cl_mem* CL_memory_buffer)
+void push_points(cl_mem* CL_memory_buffer)
+{
+  cl_int err;
+
+  //printf("Action: acquiring OpenCL memory objects... ");
+  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  //printf("DONE!\n");
+}
+
+void push_colors(cl_mem* CL_memory_buffer)
 {
   cl_int err;
 
@@ -458,7 +473,23 @@ void wait_for_event()
     //printf("DONE!\n");
 }
 
-void release_GL_object(cl_mem* CL_memory_buffer)
+void pop_points(cl_mem* CL_memory_buffer)
+{
+  cl_int err;
+
+  //printf("Action: releasing enqueued OpenCL objects... ");
+  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  //printf("DONE!\n");
+}
+
+void pop_colors(cl_mem* CL_memory_buffer)
 {
   cl_int err;
 
@@ -590,4 +621,17 @@ void release_context()
   }
 
   printf("DONE!\n");
+}
+
+void push_kernel()
+{
+  enqueue_task();
+  wait_for_event();
+  execute_kernel();
+}
+
+void pop_kernel()
+{
+  finish_queue();
+  release_event();
 }

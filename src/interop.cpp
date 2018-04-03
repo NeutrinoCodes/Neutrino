@@ -1,9 +1,9 @@
 #include "interop.hpp"
 
-void push_float4_data(data_float4* data)
+void push_float4_data(data_float4* data, int kernel_arg)
 {
   int err;
-  unsigned int i;
+  int i;
   GLfloat* unfolded_data;
 
   printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
@@ -43,18 +43,16 @@ void push_float4_data(data_float4* data)
     exit(EXIT_FAILURE);
   }
 
-  kernel_arg++;
-
   printf("DONE!\n");
 }
 
-void push_float4_size(data_float4* data)
+void set_int(int* data, int kernel_arg)
 {
   int err;
 
   printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
 
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(unsigned int), &data->size);
+  err = clSetKernelArg(kernel, kernel_arg, sizeof(int), data);
 
   if(err < 0)
   {
@@ -62,15 +60,64 @@ void push_float4_size(data_float4* data)
     exit(EXIT_FAILURE);
   }
 
-  kernel_arg++;
+  printf("DONE!\n");
+}
+
+void set_float(float* data, int kernel_arg)
+{
+  int err;
+
+  printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
+
+  err = clSetKernelArg(kernel, kernel_arg, sizeof(float), data);
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
+  }
 
   printf("DONE!\n");
 }
 
-void push_float4_points(data_float4* points)
+void push_float(float* data, int kernel_arg)
 {
   int err;
-  unsigned int i;
+
+  printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
+
+  err = clSetKernelArg(kernel, kernel_arg, sizeof(float), data);
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
+  }
+
+  printf("DONE!\n");
+}
+
+void push_int(int* data, int kernel_arg)
+{
+  int err;
+
+  printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
+
+  err = clSetKernelArg(kernel, kernel_arg, sizeof(int), data);
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
+  }
+
+  printf("DONE!\n");
+}
+
+void set_points(data_float4* points, int kernel_arg)
+{
+  int err;
+  int i;
   GLfloat* unfolded_data;
 
   printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
@@ -113,15 +160,13 @@ void push_float4_points(data_float4* points)
     exit(EXIT_FAILURE);
   }
 
-  kernel_arg++;
-
   printf("DONE!\n");
 }
 
-void push_float4_colors(data_float4* colors)
+void set_colors(data_float4* colors, int kernel_arg)
 {
   int err;
-  unsigned int i;
+  int i;
   GLfloat* unfolded_data;
 
   printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
@@ -163,12 +208,10 @@ void push_float4_colors(data_float4* colors)
     exit(EXIT_FAILURE);
   }
 
-  kernel_arg++;
-
   printf("DONE!\n");
 }
 
-void push_float_data(data_float* data)
+void push_float_data(data_float* data, int kernel_arg)
 {
   int err;
   unsigned int i;
@@ -206,12 +249,10 @@ void push_float_data(data_float* data)
     exit(EXIT_FAILURE);
   }
 
-  kernel_arg++;
-
   printf("DONE!\n");
 }
 
-void push_float_size(data_float* data)
+void push_float_size(data_float* data, int kernel_arg)
 {
   int err;
 
@@ -225,12 +266,10 @@ void push_float_size(data_float* data)
     exit(EXIT_FAILURE);
   }
 
-  kernel_arg++;
-
   printf("DONE!\n");
 }
 
-void push_int4_data(data_int4* data)
+void push_int4_data(data_int4* data, int kernel_arg)
 {
   int err;
   unsigned int i;
@@ -239,8 +278,6 @@ void push_int4_data(data_int4* data)
   printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
 
   unfolded_data = new GLint[4*data->size];
-
-  kernel_arg++;
 
   for (i = 0; i < data->size; i++)
   {
@@ -273,12 +310,10 @@ void push_int4_data(data_int4* data)
     exit(EXIT_FAILURE);
   }
 
-  kernel_arg++;
-
   printf("DONE!\n");
 }
 
-void push_int4_size(data_int4* data)
+void push_int4_size(data_int4* data, int kernel_arg)
 {
   int err;
 
@@ -292,12 +327,10 @@ void push_int4_size(data_int4* data)
     exit(EXIT_FAILURE);
   }
 
-  kernel_arg++;
-
   printf("DONE!\n");
 }
 
-void push_int_data(data_int* data)
+void push_int_data(data_int* data, int kernel_arg)
 {
   int err;
   unsigned int i;
@@ -306,8 +339,6 @@ void push_int_data(data_int* data)
   printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
 
   unfolded_data = new GLint[data->size];
-
-  kernel_arg++;
 
   for (i = 0; i < data->size; i++)
   {
@@ -337,12 +368,10 @@ void push_int_data(data_int* data)
     exit(EXIT_FAILURE);
   }
 
-  kernel_arg++;
-
   printf("DONE!\n");
 }
 
-void push_int_size(data_int* data)
+void push_int_size(data_int* data, int kernel_arg)
 {
   int err;
 
@@ -356,7 +385,36 @@ void push_int_size(data_int* data)
     exit(EXIT_FAILURE);
   }
 
-  kernel_arg++;
-
   printf("DONE!\n");
+}
+
+void plot_points(data_float4* points, data_float4* colors)
+{
+  // Preparing for plotting...
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing screen...
+  View_matrix = Translation_matrix*Rotation_matrix;                             // Setting View_matrix matrix...
+  glUseProgram(shader);                                                         // Using shader...
+  view_shader = glGetUniformLocation(shader, "View_matrix" );                   // Getting View_matrix matrix handle from shader...
+  projection_shader = glGetUniformLocation(shader, "Projection_matrix" );       // Getting Projection_matrix matrix handle from shader...
+  glUniformMatrix4fv(view_shader, 1, GL_FALSE, &View_matrix[0][0]);             // Setting View_matrix matrix on shader...
+  glUniformMatrix4fv(projection_shader, 1, GL_FALSE, &Projection_matrix[0][0]); // Setting Projection_matrix matrix on shader...
+
+  // Binding "points" array...
+  glEnableVertexAttribArray(0);                                                 // Matches "layout = 0" variable in vertex shader.
+  glBindBuffer(GL_ARRAY_BUFFER, points->vbo);
+  glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);                        // Matches "layout = 0" variable in vertex shader.
+
+  // Binding "colors" array...
+  glEnableVertexAttribArray(1);                                                 // Matches "layout = 1" variable in vertex shader.
+  glBindBuffer(GL_ARRAY_BUFFER, colors->vbo);
+  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);                        // Matches "layout = 1" variable in vertex shader.
+
+  // Drawing "points"...
+  glDrawArrays(GL_POINTS, 0, points->size);
+
+  // Unbinding "points" array...
+  glDisableVertexAttribArray(0);                                                // Matches "layout = 0" variable in vertex shader.
+
+  // Unbinding "colors" array...
+  glDisableVertexAttribArray(1);                                                // Matches "layout = 1" variable in vertex shader.
 }

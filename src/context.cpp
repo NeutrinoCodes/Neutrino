@@ -7,6 +7,7 @@ void create_opengl_context()
   create_window();
   init_glew();
   init_shaders();
+  init_screen();
 }
 
 void create_opencl_context()

@@ -3,8 +3,6 @@
 
 int main()
 {
-  kernel_arg = 0;
-
   load();
   create_opengl_context();
 	create_opencl_context();
@@ -18,6 +16,8 @@ int main()
   {
     arcball();
     loop();
+    glfwSwapBuffers(window);
+    glfwPollEvents();
   }
 
 	destroy_opengl_context();
