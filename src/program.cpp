@@ -5,7 +5,13 @@
 #define FRAGMENT_FILE   "../../shader/fragment.txt"
 #define KERNEL_FILE     "../../kernel/thekernel.txt"
 
-#define NUM_POINTS      100
+#define NUM_POINTS      900
+#define X_MIN           -1.0f
+#define Y_MIN           -1.0f
+#define SIZE_X          30
+#define SIZE_Y          30
+#define DX              0.066f
+#define DY              0.066f
 
 data_float4 points(NUM_POINTS);
 data_float4 colors(NUM_POINTS);
@@ -21,50 +27,97 @@ void setup()
 {
   size_global = points.size;
   dim_kernel = 1;
+  unsigned int i;
+  unsigned int j;
+  float x;
+  float y;
 
-  push_float4_data(&points);
-  push_float4_data(&colors);
+  ////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////// Preparing point array... ///////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  y = Y_MIN;
+
+  for (j = 0; j < SIZE_Y; j++)
+  {
+    x = X_MIN;
+
+    for (i = 0; i < SIZE_X; i++)
+    {
+      points.x[i + SIZE_X*j]= x;                                                // Setting np "x" positions...
+      points.y[i + SIZE_X*j]= y;                                                // Setting np "y" positions...
+      points.z[i + SIZE_X*j] = 0.0f;                                            // Setting np "z" positions...
+      points.w[i + SIZE_X*j] = 1.0f;                                            // Setting np "w" positions...
+      x += DX;
+    }
+    y += DY;
+  }
+
+  for (i = 0; i < colors.size; i++)
+  {
+    colors.x[i] = glm::linearRand(0.0f, 1.0f);
+    colors.y[i] = glm::linearRand(0.0f, 1.0f);
+    colors.z[i] = glm::linearRand(0.0f, 1.0f);
+    colors.w[i] = 1.0f;
+  }
+
+  push_float4_points(&points);
+  push_float4_colors(&colors);
   push_float4_size(&points);
 
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glEnable(GL_DEPTH_TEST);
-  glLineWidth(3);
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////// Setting up OpenGL environment... //////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);                                         // Setting color for clearing window...
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
+  glEnable(GL_DEPTH_TEST);                                                      // Enabling depth test...
+  glEnable(GL_PROGRAM_POINT_SIZE);                                              // Enabling "gl_PointSize" in vertex shader...
+  glLineWidth(LINE_WIDTH);                                                      // Setting line width...
+  Translation = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -3.0f));      // Setting initial Translation matrix...
+  Projection = glm::perspective(glm::radians(FOV),                              // Setting Projection matrix...
+                                aspect_ratio,
+                                NEAR_Z_CLIP,
+                                FAR_Z_CLIP);
 }
 
 void loop()
 {
-  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
   acquire_GL_object(&points.buffer);
   acquire_GL_object(&colors.buffer);
-  //enqueue_task();
-  //wait_for_event();
+  enqueue_task();
+  wait_for_event();
   execute_kernel();
   release_GL_object(&points.buffer);
   release_GL_object(&colors.buffer);
   finish_queue();
-  //release_event();
+  release_event();
 
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing screen...
+  View = Translation*Rotation;                                                  // Setting View matrix...
+  glUseProgram(shader);                                                         // Using shader...
+  view_shader = glGetUniformLocation(shader, "View" );                          // Getting View matrix handle from shader...
+  projection_shader = glGetUniformLocation(shader, "Projection" );              // Getting Projection matrix handle from shader...
+  glUniformMatrix4fv(view_shader, 1, GL_FALSE, &View[0][0]);                    // Setting View matrix on shader...
+  glUniformMatrix4fv(projection_shader, 1, GL_FALSE, &Projection[0][0]);        // Setting Projection matrix on shader...
 
-  // Scale to window size
-  GLint windowWidth, windowHeight;
-  glfwGetWindowSize(window, &windowWidth, &windowHeight);
-  glViewport(0, 0, windowWidth, windowHeight);
+  // Binding "points" array...
+  glEnableVertexAttribArray(0);                                                 // Matches "layout = 0" variable in vertex shader.
+  glBindBuffer(GL_ARRAY_BUFFER, points.vbo);
+  glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);                        // Matches "layout = 0" variable in vertex shader.
 
-  // Draw stuff
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  // Binding "colors" array...
+  glEnableVertexAttribArray(1);                                                 // Matches "layout = 1" variable in vertex shader.
+  glBindBuffer(GL_ARRAY_BUFFER, colors.vbo);
+  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);                        // Matches "layout = 1" variable in vertex shader.
 
-  glMatrixMode(GL_PROJECTION_MATRIX);
-  glLoadIdentity();
-  glPerspective(60, (double)windowWidth/(double)windowHeight, 0.1, 100);
-  glMatrixMode(GL_MODELVIEW_MATRIX);
-  glTranslatef(0,0,-5);
-
-  glBindVertexArray(points.vao);
-  glVertexAttrib3f((GLuint)1, 1.0, 0.0, 0.0); // set constant color attribute
+  // Drawing "points"...
   glDrawArrays(GL_POINTS, 0, points.size);
-  glBindVertexArray(0);
+
+  // Unbinding "points" array...
+  glDisableVertexAttribArray(0);                                                // Matches "layout = 0" variable in vertex shader.
+
+  // Unbinding "colors" array...
+  glDisableVertexAttribArray(1);                                                // Matches "layout = 1" variable in vertex shader.
+
   glfwSwapBuffers(window);
   glfwPollEvents();
 }

@@ -10,6 +10,8 @@
 
   void push_float4_data(data_float4* data);
   void push_float4_size(data_float4* data);
+  void push_float4_points(data_float4* points);
+  void push_float4_colors(data_float4* colors);
   void push_float_data(data_float* data);
   void push_float_size(data_float* data);
   void push_int4_data(data_int4* data);

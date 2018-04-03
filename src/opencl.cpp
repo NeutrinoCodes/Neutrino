@@ -414,7 +414,7 @@ void acquire_GL_object(cl_mem* CL_memory_buffer)
 {
   cl_int err;
 
-  printf("Action: acquiring OpenCL memory objects... ");
+  //printf("Action: acquiring OpenCL memory objects... ");
   err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);
 
   if(err != CL_SUCCESS)
@@ -423,14 +423,14 @@ void acquire_GL_object(cl_mem* CL_memory_buffer)
     exit(err);
   }
 
-  printf("DONE!\n");
+  //printf("DONE!\n");
 }
 
 void enqueue_task()
 {
     cl_int err;
 
-    printf("Action: enqueueing OpenCL task... ");
+    //printf("Action: enqueueing OpenCL task... ");
     err = clEnqueueTask(queue, kernel, 0, NULL, &kernel_event);
 
     if(err != CL_SUCCESS)
@@ -439,14 +439,14 @@ void enqueue_task()
       exit(err);
     }
 
-    printf("DONE!\n");
+    //printf("DONE!\n");
 }
 
 void wait_for_event()
 {
     cl_int err;
 
-    printf("Action: waiting for OpenCL events... ");
+    //printf("Action: waiting for OpenCL events... ");
     err = clWaitForEvents(1, &kernel_event);
 
     if(err != CL_SUCCESS)
@@ -455,14 +455,14 @@ void wait_for_event()
       exit(err);
     }
 
-    printf("DONE!\n");
+    //printf("DONE!\n");
 }
 
 void release_GL_object(cl_mem* CL_memory_buffer)
 {
   cl_int err;
 
-  printf("Action: releasing enqueued OpenCL objects... ");
+  //printf("Action: releasing enqueued OpenCL objects... ");
   err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);
 
   if(err != CL_SUCCESS)
@@ -471,14 +471,14 @@ void release_GL_object(cl_mem* CL_memory_buffer)
     exit(err);
   }
 
-  printf("DONE!\n");
+  //printf("DONE!\n");
 }
 
 void finish_queue()
 {
   cl_int err;
 
-  printf("Action: waiting for OpenCL command sequence end... ");
+  //printf("Action: waiting for OpenCL command sequence end... ");
   err = clFinish(queue);
 
   if(err != CL_SUCCESS)
@@ -487,14 +487,14 @@ void finish_queue()
     exit(err);
   }
 
-  printf("DONE!\n");
+  //printf("DONE!\n");
 }
 
 void release_event()
 {
     cl_int err;
 
-    printf("Action: decrementing the OpenCL event reference count... ");
+    //printf("Action: decrementing the OpenCL event reference count... ");
     err = clReleaseEvent(kernel_event);
 
     if(err != CL_SUCCESS)
@@ -503,7 +503,7 @@ void release_event()
       exit(err);
     }
 
-    printf("DONE!\n");
+    //printf("DONE!\n");
 }
 
 void release_mem_object(cl_mem CL_memory_buffer)
