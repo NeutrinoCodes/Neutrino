@@ -65,12 +65,12 @@
   extern  glm::quat					arcball_axis;                         							// 4x1 rotation quaternion.
   extern  glm::vec4					viewport;																						// 4x1 viewport vector.
 
-  extern  glm::mat4 				Scale; 	   																					// 4x4 scale matrix.
-  extern  glm::mat4					Rotation;																					  // 4x4 rotation matrix.
-  extern  glm::mat4 				Translation;																				// 4x4 translation matrix.
-  extern  glm::mat4 				Model;																							// 4x4 model matrix.
-  extern  glm::mat4 				View;																								// 4x4 view matrix.
-  extern  glm::mat4 				Projection;																					// 4x4 projection matrix.
+  extern  glm::mat4 				Scale_matrix; 	   																					// 4x4 Scale_matrix matrix.
+  extern  glm::mat4					Rotation_matrix;																					  // 4x4 rotation matrix.
+  extern  glm::mat4 				Translation_matrix;																				// 4x4 translation matrix.
+  extern  glm::mat4 				Model_matrix;																							// 4x4 model matrix.
+  extern  glm::mat4 				View_matrix;																								// 4x4 view matrix.
+  extern  glm::mat4 				Projection_matrix;																					// 4x4 projection matrix.
 
   void        window_refresh_callback(GLFWwindow* window);
   void        key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
