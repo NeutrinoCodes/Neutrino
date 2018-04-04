@@ -84,7 +84,7 @@ void push_float(float* data, int kernel_arg)
 {
   int err;
 
-  printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
+  //printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
 
   err = clSetKernelArg(kernel, kernel_arg, sizeof(float), data);
 
@@ -94,14 +94,14 @@ void push_float(float* data, int kernel_arg)
     exit(EXIT_FAILURE);
   }
 
-  printf("DONE!\n");
+  //printf("DONE!\n");
 }
 
 void push_int(int* data, int kernel_arg)
 {
   int err;
 
-  printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
+  //printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
 
   err = clSetKernelArg(kernel, kernel_arg, sizeof(int), data);
 
@@ -111,7 +111,7 @@ void push_int(int* data, int kernel_arg)
     exit(EXIT_FAILURE);
   }
 
-  printf("DONE!\n");
+  //printf("DONE!\n");
 }
 
 void set_points(data_float4* points, int kernel_arg)

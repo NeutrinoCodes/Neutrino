@@ -1,6 +1,8 @@
 #ifndef opencl_hpp
 #define opencl_hpp
 
+#define CL_USE_DEPRECATED_OPENCL_1_2_APIS
+
   #include <stdio.h>
   #include <stdlib.h>
 

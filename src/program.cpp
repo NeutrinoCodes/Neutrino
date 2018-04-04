@@ -79,6 +79,7 @@ void loop()
   pop_points(&points.buffer);
   pop_colors(&colors.buffer);
   pop_kernel();
+  init_screen();
 
   tick += 0.1f;
 

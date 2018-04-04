@@ -43,6 +43,7 @@ void create_opencl_context()
   }
 
   #ifdef __APPLE__
+    printf("Found APPLE system!\n");
     CGLContextObj     kCGLContext     = CGLGetCurrentContext();
     CGLShareGroupObj  kCGLShareGroup  = CGLGetShareGroup(kCGLContext);
     cl_context_properties properties[] =
@@ -54,6 +55,7 @@ void create_opencl_context()
   #endif
 
   #ifdef __linux__
+    printf("Found LINUX system!\n");
     cl_context_properties properties[] =
     {
       CL_GL_CONTEXT_KHR, (cl_context_properties)glfwGetGLXContext(window),
@@ -64,6 +66,7 @@ void create_opencl_context()
   #endif
 
   #ifdef __WINDOWS__
+    printf("Found WINDOWS system!\n");
     cl_context_properties properties[] =
     {
       CL_GL_CONTEXT_KHR, (cl_context_properties)glfwGetWGLContext(window),
