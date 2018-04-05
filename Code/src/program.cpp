@@ -5,13 +5,13 @@
 #define FRAGMENT_FILE   "../../shader/fragment.txt"
 #define KERNEL_FILE     "../../kernel/thekernel.txt"
 
-#define NUM_POINTS      900
+#define NUM_POINTS      10000
 #define X_MIN           -1.0f
 #define Y_MIN           -1.0f
-#define SIZE_X          30
-#define SIZE_Y          30
-#define DX              0.066f
-#define DY              0.066f
+#define SIZE_X          100
+#define SIZE_Y          100
+#define DX              0.02f
+#define DY              0.02f
 
 data_float4 points(NUM_POINTS);
 data_float4 colors(NUM_POINTS);
@@ -79,7 +79,7 @@ void loop()
   pop_points(&points.buffer);
   pop_colors(&colors.buffer);
   pop_kernel();
-  init_screen();
+  //init_screen();
 
   tick += 0.1f;
 
