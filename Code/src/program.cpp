@@ -1,9 +1,9 @@
 #include "program.hpp"
 
 // These files are relative to the build/mac or build/linux directory:
-#define VERTEX_FILE     "../../shader/vertex.txt"
-#define FRAGMENT_FILE   "../../shader/fragment.txt"
-#define KERNEL_FILE     "../../kernel/thekernel.txt"
+#define VERTEX_FILE     "../../shader/vertex.vert"
+#define FRAGMENT_FILE   "../../shader/fragment.frag"
+#define KERNEL_FILE     "../../kernel/thekernel.cl"
 
 #define NUM_POINTS      10000
 #define X_MIN           -1.0f
