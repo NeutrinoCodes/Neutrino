@@ -12,9 +12,10 @@
     #include <sys/times.h>
     #include <time.h>
   #else
-    #error "Unable to define getCPUTime( ) for an unknown OS."
+    #error "Unable to define getCPUTime() for an unknown OS."
   #endif
 
-  double getCPUTime();
+  double  getCPUTime();
+  void    load_file(const char* file_name, char* file_buffer, size_t file_size);
 
 #endif

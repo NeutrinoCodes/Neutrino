@@ -91,3 +91,31 @@ double getCPUTime()
 
   return -1.0;
 }
+
+void load_file(const char* file_name, char* file_buffer, size_t file_size)
+{
+	FILE* handle;
+
+  handle = fopen(file_name, "rb");
+
+  if(handle == NULL)
+  {
+    printf("\nError:  could not find the file!\n");
+    exit(1);
+  }
+
+  fseek(handle, 0, SEEK_END);
+  file_size = (size_t)ftell(handle);
+  rewind(handle);
+  file_buffer = (char*)malloc(file_size + 1);
+
+  if (!file_buffer)
+  {
+    printf("\nError:  unable to allocate buffer memory!\n");
+    exit(EXIT_FAILURE);
+  }
+
+  fread(file_buffer, sizeof(char), file_size, handle);
+  fclose(handle);
+  file_buffer[file_size] = '\0';
+}

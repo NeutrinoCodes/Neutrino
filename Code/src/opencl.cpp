@@ -299,11 +299,13 @@ void load_kernel(const char* filename_kernel)
   printf("DONE!\n");
 }
 
-void create_program()
+void init_opencl_kernel()
 {
   cl_int err;
+  size_t log_size;
+  char* log;
 
-  printf("Action: creating OpenCL program... ");
+  printf("Action: initializing OpenCL kernel... ");
   kernel_program = clCreateProgramWithSource(context, 1, (const char **) &kernel_source, &size_kernel, &err);
 
   if(err != CL_SUCCESS)
@@ -313,16 +315,7 @@ void create_program()
   }
 
   free(kernel_source);
-  printf("DONE!\n");
-}
 
-void build_program()
-{
-  cl_int err;
-  size_t log_size;
-  char* log;
-
-  printf("Action: building OpenCL program... ");
   err = clBuildProgram(kernel_program, 1, devices, "", NULL, NULL);
 
   if (err != CL_SUCCESS)
@@ -339,20 +332,6 @@ void build_program()
     }
 
     clGetProgramBuildInfo(kernel_program, devices[0], CL_PROGRAM_BUILD_LOG, log_size + 1, log, NULL);
-    printf("%s\n", log);
-    free(log);
-    exit(err);
-  }
-
-  printf("DONE!\n");
-}
-
-void create_queue()
-{
-    cl_int err;
-
-    printf("Action: creating OpenCL command queue... ");
-    queue = clCreateCommandQueue(context, devices[0], 0, &err);
 
     if(err != CL_SUCCESS)
     {
@@ -360,14 +339,19 @@ void create_queue()
       exit(err);
     }
 
-    printf("DONE!\n");
-}
+    printf("%s\n", log);
+    free(log);
+    exit(err);
+  }
 
-void create_kernel()
-{
-  cl_int err;
+  queue = clCreateCommandQueue(context, devices[0], 0, &err);
 
-  printf("Action: creating OpenCL kernel... ");
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
   kernel = clCreateKernel(kernel_program, KERNEL_NAME, &err);
 
   if(err != CL_SUCCESS)

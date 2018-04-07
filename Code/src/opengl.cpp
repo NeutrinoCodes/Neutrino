@@ -1,39 +1,31 @@
 #include "opengl.hpp"
 
-GLFWwindow*				window;
-int								window_x;
-int								window_y;
-int								size_window_x = SIZE_WINDOW_X;
-int								size_window_y = SIZE_WINDOW_Y;
-float							aspect_ratio = (float)size_window_x/(float)size_window_y;
-char*             vertex_source;
-size_t            size_vertex;
-char*             fragment_source;
-size_t            size_fragment;
-GLuint 						shader;
-GLint 						view_shader;
-GLint 						projection_shader;
-double            mouse_x = 0;
-double            mouse_y = 0;
-double            mouse_x_old = 0;
-double            mouse_y_old = 0;
-bool 							arcball_on = false;
-double						scroll_x = 0;
-double						scroll_y = 0;
-bool							mouse_right_button = false;
-bool							key_ctrl_L = false;
-double						zoom = 0;
+GLFWwindow*				window;                                                       // Window handle.
+int								window_size_x = SIZE_WINDOW_X;                                // Window x-size [px].
+int								window_size_y = SIZE_WINDOW_Y;                                // Window y-size [px].
+float							aspect_ratio = (float)window_size_x/(float)window_size_y;     // Window aspcet-ratio [].
+char*             vertex_source;                                                // Vertex shader source.
+size_t            vertex_size;                                                  // Vertex shader size [characters].
+char*             fragment_source;                                              // Fragment shader source.
+size_t            fragment_size;                                                // Fragment shader size [characters].
+GLuint 						shader;                                                       // Shader program.
 
-glm::quat					arcball_quaternion = glm::quat(1.0f, 1.0f, 1.0f, 1.0f);				// 4x1 arcball rotation quaternion.
-glm::vec4					viewport = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);									// 4x1 viewport vector.
+double            mouse_x = 0;                                                  // Mouse x-coordinate [px].
+double            mouse_y = 0;                                                  // Mouse y-coordinate [px].
+double            mouse_x_old = 0;                                              // Mouse x-coordinate backup [px].
+double            mouse_y_old = 0;                                              // Mouse y-coordinate backup [px].
+double						scroll_x = 0;                                                 // Scroll x-coordinate [px].
+double						scroll_y = 0;                                                 // Scroll y-coordinate [px].
 
-glm::mat4 				Scale_matrix = glm::mat4(1.0f);															  // 4x4 Scale_matrix matrix.
-glm::mat4					Rotation_matrix = glm::mat4(1.0f);										 				// 4x4 rotation matrix.
-glm::mat4					Rotation_matrix_old = glm::mat4(1.0f);												// 4x4 rotation matrix.
-glm::mat4 				Translation_matrix = glm::mat4(1.0f);													// 4x4 translation matrix.
-glm::mat4 				Model_matrix = glm::mat4(1.0f);																// 4x4 model matrix.
-glm::mat4 				View_matrix = glm::mat4(1.0f);							   								// 4x4 view matrix.
-glm::mat4 				Projection_matrix = glm::mat4(1.0f);				  								// 4x4 projection matrix.
+bool 							arcball_on = false;                                           // Arcball activation flag.
+double						zoom = 0;                                                     // Zoom coefficient.
+glm::quat					arcball_quaternion = glm::quat(1.0f, 1.0f, 1.0f, 1.0f);				// Arcball quaternion.
+glm::mat4					Rotation_matrix = glm::mat4(1.0f);										 				// Rotation matrix.
+glm::mat4					Rotation_matrix_old = glm::mat4(1.0f);												// Rotation matrix backup.
+glm::mat4 				Translation_matrix = glm::mat4(1.0f);													// Translation matrix.
+glm::mat4 				Model_matrix = glm::mat4(1.0f);																// Model matrix.
+glm::mat4 				View_matrix = glm::mat4(1.0f);							   								// View matrix.
+glm::mat4 				Projection_matrix = glm::mat4(1.0f);				  								// Projection matrix.
 
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// KEYBOARD /////////////////////////////////////
@@ -44,16 +36,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
   {
     glfwSetWindowShouldClose(window, GL_TRUE);
   }
-
-	if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_PRESS)
-	{
-		key_ctrl_L = true;
-	}
-
-	if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_RELEASE)
-	{
-		key_ctrl_L = false;
-	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -62,24 +44,24 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 glm::vec3 get_arcball_vector(int x, int y)
 {
   glm::vec3 P;																																	// Point "P" on unitary ball.
-	float OP_sq;																																	// Center "O" to "P" squared distance...
+	float OP_sq;																																	// Center "O" to "P" squared distance.
 
-	glfwGetWindowSize(window, &size_window_x, &size_window_y);										// Getting window size...
-
-	P = glm::vec3(2.0*x/size_window_x - 1.0, 2.0*y/size_window_y - 1.0, 0);				// Computing point on unitary ball...
-  P.y = -P.y;																																		// Inverting y-axis (mouse coordinates are opposite to OpenGL)...
-
-	OP_sq = P.x*P.x + P.y*P.y;
+	glfwGetWindowSize(window, &window_size_x, &window_size_y);										// Getting window size...
+	P = glm::vec3(2.0*x/window_size_x - 1.0, 2.0*y/window_size_y - 1.0, 0);				// Computing point on unitary ball...
+  P.y = -P.y;																																		// Inverting y-axis according to OpenGL...
+	OP_sq = P.x*P.x + P.y*P.y;                                                    // Computing "OP" squared...
 
   if (OP_sq <= 1.0)																															// Checking P to ball-center distance...
 	{
     P.z = sqrt(1.0 - OP_sq);  																									// Pythagoras' theorem...
 	}
-	else
+
+  else
 	{
     P = glm::normalize(P);  																										// Normalizing if too far...
 	}
-	return P;
+
+  return P;
 }
 
 void arcball()
@@ -96,15 +78,12 @@ void arcball()
 		theta = ROTATION_FACTOR*acos(glm::clamp(glm::dot(glm::normalize(va),
                                             glm::normalize(vb)), -1.0f, 1.0f));	// Calculating arcball angle...
     arcball_axis = glm::cross(va, vb);																					// Calculating arcball axis of rotation...
-		arcball_quaternion = glm::normalize(glm::quat(cos(theta/2.0f),															// Building rotation quaternion...
+		arcball_quaternion = glm::normalize(glm::quat(cos(theta/2.0f),							// Building rotation quaternion...
 																	 arcball_axis.x * sin(theta/2.0f),
 									 					 			 arcball_axis.y * sin(theta/2.0f),
 								 	 			 		 			 arcball_axis.z * sin(theta/2.0f)));
 
-		Rotation_matrix = glm::toMat4(arcball_quaternion)*Rotation_matrix_old;										      // Building rotation matrix...
-    //Rotation_matrix_old = Rotation_matrix;
-    //mouse_x_old = mouse_x;																											// Updating mouse position...
-		//mouse_y_old = mouse_y;																											// Updating mouse position...
+		Rotation_matrix = glm::toMat4(arcball_quaternion)*Rotation_matrix_old;			// Building rotation matrix...
 	}
 }
 
@@ -112,9 +91,9 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && arcball_on == false)
 	{
-		glfwGetCursorPos(window, &mouse_x, &mouse_y);
-		mouse_x_old = mouse_x;																											// Updating mouse position...
-		mouse_y_old = mouse_y;																											// Updating mouse position...
+		glfwGetCursorPos(window, &mouse_x, &mouse_y);                               // Getting mouse position...
+		mouse_x_old = mouse_x;																											// Backing up mouse position...
+		mouse_y_old = mouse_y;																											// Backing up mouse position...
 		arcball_on = true;																													// Turning on arcball...
   }
 
@@ -125,7 +104,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
 	{
-    Rotation_matrix_old = Rotation_matrix;																			// Updating Rotation_matrix matrix...
+    Rotation_matrix_old = Rotation_matrix;																			// Backing up Rotation_matrix matrix...
   }
 }
 
@@ -133,8 +112,8 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	if (arcball_on)
 	{
-    mouse_x = xpos;																															// Getting current mouse position...
-    mouse_y = ypos;																															// Getting current mouse position...
+    mouse_x = xpos;																															// Getting mouse position...
+    mouse_y = ypos;																															// Getting mouse position...
   }
 }
 
@@ -153,7 +132,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	{
 		zoom /= ZOOM_FACTOR;																												// Zooming-out...
 	}
-  printf("zoom = %lf\n", zoom);
+
 	Translation_matrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, zoom));// Building translation matrix...
 }
 
@@ -162,32 +141,33 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 //////////////////////////////////////////////////////////////////////////////////
 void window_refresh_callback(GLFWwindow* window)
 {
-	glClear(GL_COLOR_BUFFER_BIT);
-	glfwSwapBuffers(window);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
+	glfwSwapBuffers(window);                                                      // Swapping front and back buffers...
 }
 
-void init_glfw()
+void init_window()
 {
+  // Inititalizing GLFW context...
   if (glfwInit() != GLFW_TRUE)
 	{
   	printf("Error:  unable to initialize GLFW!\n");
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
-}
 
-void init_hints()
-{
+  // Initializing GLFW hints...
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_SAMPLES, 4);
-}
 
-void create_window()
-{
-  window = glfwCreateWindow(size_window_x, size_window_y, "Test interop CPP", NULL, NULL);
+  // Creating window...
+  window = glfwCreateWindow(window_size_x,
+                            window_size_y,
+                            "Neutrino",
+                            NULL,
+                            NULL);
   if (!window)
 	{
 		printf("Error:  unable to create window!\n");
@@ -196,15 +176,15 @@ void create_window()
   }
 
   glfwMakeContextCurrent(window);
+
+  // Setting window callbacks...
 	glfwSetWindowRefreshCallback(window, window_refresh_callback);
   glfwSetKeyCallback(window, key_callback);
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
 	glfwSetCursorPosCallback(window, cursor_position_callback);
 	glfwSetScrollCallback(window, scroll_callback);
-}
 
-void init_glew()
-{
+  // Initializing GLEW context...
   glewExperimental = GL_TRUE;
 
 	if (glewInit() != GLEW_OK)
@@ -224,24 +204,27 @@ void load_vertex(const char* filename_vertex)
 	printf("Action: loading OpenGL vertex source from file... ");
 
   handle = fopen(filename_vertex, "rb");
+
   if(handle == NULL)
   {
     printf("\nError:  could not find the file!\n");
     exit(1);
   }
+
   fseek(handle, 0, SEEK_END);
-  size_vertex = (size_t)ftell(handle);
+  vertex_size = (size_t)ftell(handle);
   rewind(handle);
-  vertex_source = (char*)malloc(size_vertex + 1);
+  vertex_source = (char*)malloc(vertex_size + 1);
+
   if (!vertex_source)
   {
     printf("\nError:  unable to allocate buffer memory!\n");
     exit(EXIT_FAILURE);
   }
 
-  fread(vertex_source, sizeof(char), size_vertex, handle);
+  fread(vertex_source, sizeof(char), vertex_size, handle);
   fclose(handle);
-  vertex_source[size_vertex] = '\0';
+  vertex_source[vertex_size] = '\0';
 
 	printf("DONE!\n");
 }
@@ -253,24 +236,27 @@ void load_fragment(const char* filename_fragment)
 	printf("Action: loading OpenGL fragment source from file... ");
 
   handle = fopen(filename_fragment, "rb");
+
   if(handle == NULL)
   {
     printf("\nError:  could not find the file!\n");
     exit(1);
   }
+
   fseek(handle, 0, SEEK_END);
-  size_fragment = (size_t)ftell(handle);
+  fragment_size = (size_t)ftell(handle);
   rewind(handle);
-  fragment_source = (char*)malloc(size_fragment + 1);
+  fragment_source = (char*)malloc(fragment_size + 1);
+
   if (!fragment_source)
   {
     printf("\nError:  unable to allocate buffer memory!\n");
     exit(EXIT_FAILURE);
   }
 
-  fread(fragment_source, sizeof(char), size_fragment, handle);
+  fread(fragment_source, sizeof(char), fragment_size, handle);
   fclose(handle);
-  fragment_source[size_fragment] = '\0';
+  fragment_source[fragment_size] = '\0';
 
 	printf("DONE!\n");
 }
@@ -284,12 +270,10 @@ void init_shaders()
   GLchar*		log;
 
   printf("Action: initialising OpenGL shaders... ");
-  vs = glCreateShader(GL_VERTEX_SHADER);
-  fs = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(vs, 1, (const char**)&vertex_source, (GLint*)&size_vertex);
-  glShaderSource(fs, 1, (const char**)&fragment_source, (GLint*)&size_fragment);
 
-	// Compiling vertex shader...
+  // Compiling vertex shader...
+  vs = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(vs, 1, (const char**)&vertex_source, (GLint*)&vertex_size);
 	glCompileShader(vs);
   glGetShaderiv(vs, GL_COMPILE_STATUS, &success);
 
@@ -305,6 +289,8 @@ void init_shaders()
   }
 
 	// Compiling fragment shader...
+  fs = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fs, 1, (const char**)&fragment_source, (GLint*)&fragment_size);
 	glCompileShader(fs);
   glGetShaderiv(fs, GL_COMPILE_STATUS, &success);
 
@@ -321,11 +307,12 @@ void init_shaders()
 
 	// Creating OpenGL shader program...
   shader = glCreateProgram();
-  glBindAttribLocation(shader, 0, "in_point");
-  glBindAttribLocation(shader, 1, "in_color");
+  glBindAttribLocation(shader, 0, "point");
+  glBindAttribLocation(shader, 1, "vertex_color");
   glAttachShader(shader, vs);
   glAttachShader(shader, fs);
   glLinkProgram(shader);
+
   printf("DONE!\n");
 }
 
@@ -336,8 +323,9 @@ void init_screen()
   glEnable(GL_DEPTH_TEST);                                                      // Enabling depth test...
   glEnable(GL_PROGRAM_POINT_SIZE);                                              // Enabling "gl_PointSize" in vertex shader...
   glLineWidth(LINE_WIDTH);                                                      // Setting line width...
-  Translation_matrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -3.0f));      // Setting initial Translation_matrix matrix...
-  Projection_matrix = glm::perspective(glm::radians(FOV),                              // Setting Projection_matrix matrix...
+  Translation_matrix = glm::translate(glm::mat4(),                              // Setting initial Translation_matrix matrix...
+                                      glm::vec3(0.0f, 0.0f, -3.0f));
+  Projection_matrix = glm::perspective(glm::radians(FOV),                       // Setting Projection_matrix matrix...
                                 aspect_ratio,
                                 NEAR_Z_CLIP,
                                 FAR_Z_CLIP);

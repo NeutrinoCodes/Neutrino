@@ -8,8 +8,8 @@
   #include "opencl.hpp"
   #include "interop.hpp"
 
-  void create_opengl_context();
-  void create_opencl_context();
+  void init_opengl_context();
+  void init_opencl_context();
   void destroy_opengl_context();
 	void destroy_opencl_context();
 

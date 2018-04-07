@@ -41,10 +41,7 @@
   cl_uint     get_devices(cl_uint index_platform);
   void        get_device_info(cl_uint index_device, cl_device_info name_param);
   void        load_kernel(const char* filename_kernel);
-  void        create_program();
-  void        build_program();
-  void        create_queue();
-  void        create_kernel();
+  void        init_opencl_kernel();
   void        get_kernel_workgroup_size(cl_kernel kernel, cl_device_id device_id, size_t* local);
   void        execute_kernel();
   void        push_points(cl_mem* CL_memory_buffer);

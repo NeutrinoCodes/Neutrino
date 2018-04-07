@@ -4,12 +4,9 @@
 int main()
 {
   load();
-  create_opengl_context();
-	create_opencl_context();
-  create_program();
-  build_program();
-  create_queue();
-  create_kernel();
+  init_opengl_context();
+	init_opencl_context();
+  init_opencl_kernel();
   setup();
 
   while (!glfwWindowShouldClose(window))

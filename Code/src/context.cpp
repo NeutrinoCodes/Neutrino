@@ -1,16 +1,13 @@
 #include "context.hpp"
 
-void create_opengl_context()
+void init_opengl_context()
 {
-  init_glfw();
-  init_hints();
-  create_window();
-  init_glew();
+  init_window();
   init_shaders();
   init_screen();
 }
 
-void create_opencl_context()
+void init_opencl_context()
 {
   cl_uint i;
   cl_uint j;
