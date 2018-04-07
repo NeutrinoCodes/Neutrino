@@ -36,7 +36,7 @@
   #define SIZE_WINDOW_X 800
   #define SIZE_WINDOW_Y 600
   #define ZOOM_FACTOR 1.05f
-  #define ROTATION_FACTOR 5.0f
+  #define ROTATION_FACTOR 2.0f
   #define NEAR_Z_CLIP 0.1f
   #define FAR_Z_CLIP 100.0f
   #define FOV 60.0f

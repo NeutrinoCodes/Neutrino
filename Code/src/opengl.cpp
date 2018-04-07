@@ -89,8 +89,8 @@ void arcball()
 	glm::vec3 arcball_axis;																												// Arcball axis of rotation.
 	double theta;																																	// Arcball angle of rotation.
 
-	//if (mouse_x != mouse_x_old || mouse_y != mouse_y_old)
-	//{
+	if (arcball_on &&(mouse_x != mouse_x_old || mouse_y != mouse_y_old))
+	{
 		va = get_arcball_vector(mouse_x_old, mouse_y_old);													// Building mouse world vector (old)...
 		vb = get_arcball_vector(mouse_x, mouse_y);																	// Building mouse world vector...
 		theta = ROTATION_FACTOR*acos(glm::clamp(glm::dot(glm::normalize(va),
@@ -101,11 +101,11 @@ void arcball()
 									 					 			 arcball_axis.y * sin(theta/2.0f),
 								 	 			 		 			 arcball_axis.z * sin(theta/2.0f)));
 
-		Rotation_matrix = glm::toMat4(arcball_quaternion);										      // Building rotation matrix...
+		Rotation_matrix = glm::toMat4(arcball_quaternion)*Rotation_matrix_old;										      // Building rotation matrix...
     //Rotation_matrix_old = Rotation_matrix;
     //mouse_x_old = mouse_x;																											// Updating mouse position...
 		//mouse_y_old = mouse_y;																											// Updating mouse position...
-	//}
+	}
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -118,9 +118,14 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 		arcball_on = true;																													// Turning on arcball...
   }
 
-	else
-	{
+  else
+  {
     arcball_on = false;																													// Turning off arcball...
+  }
+
+  if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+	{
+    Rotation_matrix_old = Rotation_matrix;																			// Updating Rotation_matrix matrix...
   }
 }
 
@@ -130,7 +135,6 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 	{
     mouse_x = xpos;																															// Getting current mouse position...
     mouse_y = ypos;																															// Getting current mouse position...
-		//Rotation_matrix_old = Rotation_matrix;																			// Updating Rotation_matrix matrix...
   }
 }
 
