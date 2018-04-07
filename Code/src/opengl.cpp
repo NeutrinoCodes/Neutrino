@@ -28,18 +28,16 @@ glm::mat4 				View_matrix = glm::mat4(1.0f);							   								// View matrix.
 glm::mat4 				Projection_matrix = glm::mat4(1.0f);				  								// Projection matrix.
 
 //////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////// KEYBOARD /////////////////////////////////////
+/////////////////////////////////// REFRESH //////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void screen_refresh()
 {
-  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-  {
-    glfwSetWindowShouldClose(window, GL_TRUE);
-  }
+  glfwSwapBuffers(window);
+  glfwPollEvents();
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////// MOUSE ///////////////////////////////////////
+/////////////////////////////////// ARCBALL //////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 glm::vec3 get_arcball_vector(int x, int y)
 {
@@ -85,6 +83,17 @@ void arcball()
 
 		Rotation_matrix = glm::toMat4(arcball_quaternion)*Rotation_matrix_old;			// Building rotation matrix...
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// CALLBACKS ////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+  {
+    glfwSetWindowShouldClose(window, GL_TRUE);
+  }
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -136,15 +145,36 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	Translation_matrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, zoom));// Building translation matrix...
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////// WINDOW //////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
 void window_refresh_callback(GLFWwindow* window)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
 	glfwSwapBuffers(window);                                                      // Swapping front and back buffers...
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////// FILES //////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void load_vertex(const char* filename_vertex)
+{
+  printf("Action: loading OpenGL vertex source from file... ");
+
+  load_file(filename_vertex, &vertex_source, &vertex_size);
+
+	printf("DONE!\n");
+}
+
+void load_fragment(const char* filename_fragment)
+{
+	printf("Action: loading OpenGL fragment source from file... ");
+
+  load_file(filename_fragment, &fragment_source, &fragment_size);
+
+	printf("DONE!\n");
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////// INITIALIZATIONS ////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 void init_window()
 {
   // Inititalizing GLFW context...
@@ -192,73 +222,6 @@ void init_window()
     printf("Error:  unable to initialize GLEW!\n");
     exit(EXIT_FAILURE);
   }
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////// SHADERS /////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-void load_vertex(const char* filename_vertex)
-{
-	FILE* handle;
-
-	printf("Action: loading OpenGL vertex source from file... ");
-
-  handle = fopen(filename_vertex, "rb");
-
-  if(handle == NULL)
-  {
-    printf("\nError:  could not find the file!\n");
-    exit(1);
-  }
-
-  fseek(handle, 0, SEEK_END);
-  vertex_size = (size_t)ftell(handle);
-  rewind(handle);
-  vertex_source = (char*)malloc(vertex_size + 1);
-
-  if (!vertex_source)
-  {
-    printf("\nError:  unable to allocate buffer memory!\n");
-    exit(EXIT_FAILURE);
-  }
-
-  fread(vertex_source, sizeof(char), vertex_size, handle);
-  fclose(handle);
-  vertex_source[vertex_size] = '\0';
-
-	printf("DONE!\n");
-}
-
-void load_fragment(const char* filename_fragment)
-{
-	FILE* handle;
-
-	printf("Action: loading OpenGL fragment source from file... ");
-
-  handle = fopen(filename_fragment, "rb");
-
-  if(handle == NULL)
-  {
-    printf("\nError:  could not find the file!\n");
-    exit(1);
-  }
-
-  fseek(handle, 0, SEEK_END);
-  fragment_size = (size_t)ftell(handle);
-  rewind(handle);
-  fragment_source = (char*)malloc(fragment_size + 1);
-
-  if (!fragment_source)
-  {
-    printf("\nError:  unable to allocate buffer memory!\n");
-    exit(EXIT_FAILURE);
-  }
-
-  fread(fragment_source, sizeof(char), fragment_size, handle);
-  fclose(handle);
-  fragment_source[fragment_size] = '\0';
-
-	printf("DONE!\n");
 }
 
 void init_shaders()
@@ -312,6 +275,8 @@ void init_shaders()
   glAttachShader(shader, vs);
   glAttachShader(shader, fs);
   glLinkProgram(shader);
+  free_file(vertex_source);
+  free_file(fragment_source);
 
   printf("DONE!\n");
 }

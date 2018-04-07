@@ -1,5 +1,6 @@
 #include "program.hpp"
 #include "context.hpp"
+#include "utils.hpp"
 
 int main()
 {
@@ -13,10 +14,11 @@ int main()
   {
     arcball();
     loop();
-    glfwSwapBuffers(window);
-    glfwPollEvents();
+    screen_refresh();
+    ascii_spin("Action: running OpenCL program... ");
   }
 
+  ascii_spin_stop();
 	destroy_opengl_context();
 	destroy_opencl_context();
   terminate();

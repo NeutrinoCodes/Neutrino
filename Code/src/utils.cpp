@@ -1,5 +1,7 @@
 #include "utils.hpp"
 
+int ascii_spin_phase = 0;
+
 double getCPUTime()
 {
   double time;
@@ -92,7 +94,7 @@ double getCPUTime()
   return -1.0;
 }
 
-void load_file(const char* file_name, char* file_buffer, size_t file_size)
+void load_file(const char* file_name, char** file_buffer, size_t* file_size)
 {
 	FILE* handle;
 
@@ -105,17 +107,61 @@ void load_file(const char* file_name, char* file_buffer, size_t file_size)
   }
 
   fseek(handle, 0, SEEK_END);
-  file_size = (size_t)ftell(handle);
+  *file_size = (size_t)ftell(handle);
   rewind(handle);
-  file_buffer = (char*)malloc(file_size + 1);
+  *file_buffer = (char*)malloc(*file_size + 1);
 
-  if (!file_buffer)
+  if (!*file_buffer)
   {
     printf("\nError:  unable to allocate buffer memory!\n");
     exit(EXIT_FAILURE);
   }
 
-  fread(file_buffer, sizeof(char), file_size, handle);
+  fread(*file_buffer, sizeof(char), *file_size, handle);
   fclose(handle);
-  file_buffer[file_size] = '\0';
+  file_buffer[0][*file_size] = '\0';
+}
+
+void free_file(char* buffer)
+{
+  free(buffer);                                                                                                               ///< Freeing buffer...
+}
+
+void ascii_spin(const char* text)
+{
+  switch (ascii_spin_phase)
+  {
+    case 0:
+      printf("%s ", text);
+      fflush(stdout);
+      break;
+    case 1:
+        printf("\b|");
+        fflush(stdout);
+        break;
+    case 2:
+      printf("\b/");
+      fflush(stdout);
+      break;
+    case 3:
+      printf("\b-");
+      fflush(stdout);
+      break;
+    case 4:
+      printf("\b\\");
+      fflush(stdout);
+      break;
+  }
+
+  ascii_spin_phase++;
+
+  if (ascii_spin_phase == 5)
+  {
+    ascii_spin_phase = 1;
+  }
+}
+
+void ascii_spin_stop()
+{
+  printf("\bDONE!\n");
 }

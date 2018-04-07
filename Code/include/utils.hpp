@@ -15,7 +15,11 @@
     #error "Unable to define getCPUTime() for an unknown OS."
   #endif
 
-  double  getCPUTime();
-  void    load_file(const char* file_name, char* file_buffer, size_t file_size);
+  extern int ascii_spin_phase;
 
+  double  getCPUTime();
+  void    load_file(const char* file_name, char** file_buffer, size_t* file_size);
+  void    free_file(char* buffer);
+  void    ascii_spin(const char* text);
+  void    ascii_spin_stop();
 #endif
