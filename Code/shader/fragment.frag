@@ -5,5 +5,14 @@ out vec4 color;                                                                 
 
 void main(void)
 {
-  color = fragment_color;                                                       // Assigning "the_color" as OpenGL color...
+  float r = 0.0;
+  float delta = 0.0;
+  float alpha = 1.0;
+  vec2 cxy = 2.0 * gl_PointCoord - 1.0;
+  r = dot(cxy, cxy);
+
+  delta = fwidth(r);
+  alpha = 1.0 - smoothstep(1.0 - delta, 1.0 + delta, r);
+
+  color = fragment_color * alpha;                                               // Assigning "the_color" as OpenGL color...
 }
