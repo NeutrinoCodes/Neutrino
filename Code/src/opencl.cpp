@@ -393,7 +393,7 @@ void execute_kernel()
 
 }
 
-void push_points(cl_mem* CL_memory_buffer)
+void push_points4(cl_mem* CL_memory_buffer)
 {
   cl_int err;
 
@@ -409,7 +409,7 @@ void push_points(cl_mem* CL_memory_buffer)
   //printf("DONE!\n");
 }
 
-void push_colors(cl_mem* CL_memory_buffer)
+void push_colors4(cl_mem* CL_memory_buffer)
 {
   cl_int err;
 
@@ -457,7 +457,7 @@ void wait_for_event()
     //printf("DONE!\n");
 }
 
-void pop_points(cl_mem* CL_memory_buffer)
+void pop_points4(cl_mem* CL_memory_buffer)
 {
   cl_int err;
 
@@ -473,7 +473,7 @@ void pop_points(cl_mem* CL_memory_buffer)
   //printf("DONE!\n");
 }
 
-void pop_colors(cl_mem* CL_memory_buffer)
+void pop_colors4(cl_mem* CL_memory_buffer)
 {
   cl_int err;
 

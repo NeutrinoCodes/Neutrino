@@ -44,12 +44,12 @@
   void        init_opencl_kernel();
   void        get_kernel_workgroup_size(cl_kernel kernel, cl_device_id device_id, size_t* local);
   void        execute_kernel();
-  void        push_points(cl_mem* CL_memory_buffer);
-  void        push_colors(cl_mem* CL_memory_buffer);
+  void        push_points4(cl_mem* CL_memory_buffer);
+  void        push_colors4(cl_mem* CL_memory_buffer);
   void        enqueue_task();
   void        wait_for_event();
-  void        pop_points(cl_mem* CL_memory_buffer);
-  void        pop_colors(cl_mem* CL_memory_buffer);
+  void        pop_points4(cl_mem* CL_memory_buffer);
+  void        pop_colors4(cl_mem* CL_memory_buffer);
   void        finish_queue();
   void        release_event();
   void        release_mem_object(cl_mem CL_memory_buffer);

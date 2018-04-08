@@ -6,16 +6,15 @@
   #include "opengl.hpp"
   #include "opencl.hpp"
 
-  // data_float4:
-  class data_float4
+  class float4
   {
     private:
       int               err;
       unsigned int      i;
 
     public:
-      data_float4(unsigned int num_data);
-      ~data_float4();
+      float4(unsigned int num_data);
+      ~float4();
 
       GLfloat*  x;
       GLfloat*  y;
@@ -28,64 +27,67 @@
       cl_mem    buffer;
   };
 
-  // data_float:
-  class data_float
+  class int4
   {
     private:
       int               err;
       unsigned int      i;
 
     public:
-      data_float(unsigned int num_data);
-      ~data_float();
+      int4(unsigned int num_data);
+      ~int4();
 
-      float*  x;
-      float*  data;
-      unsigned int size;
-      GLuint  vao;
-      GLuint  vbo;
-      cl_mem  buffer;
+      GLint*    x;
+      GLint*    y;
+      GLint*    z;
+      GLint*    w;
+      GLint*    data;
+      int       size;
+      GLuint    vao;
+      GLuint    vbo;
+      cl_mem    buffer;
   };
 
-  // data_int4:
-  class data_int4
+  class point4
   {
     private:
       int               err;
       unsigned int      i;
 
     public:
-      data_int4(unsigned int num_data);
-      ~data_int4();
+      point4(unsigned int num_data);
+      ~point4();
 
-      int*  x;
-      int*  y;
-      int*  z;
-      int*  w;
-      int*  data;
-      unsigned int size;
-      GLuint  vao;
-      GLuint  vbo;
-      cl_mem  buffer;
+      GLfloat*  x;
+      GLfloat*  y;
+      GLfloat*  z;
+      GLfloat*  w;
+      GLfloat*  data;
+      int       size;
+      GLuint    vao;
+      GLuint    vbo;
+      cl_mem    buffer;
   };
 
-  // data_int:
-  class data_int
+  class color4
   {
     private:
       int               err;
       unsigned int      i;
 
     public:
-      data_int(unsigned int num_data);
-      ~data_int();
+      color4(unsigned int num_data);
+      ~color4();
 
-      int*  x;
-      int*  data;
-      unsigned int size;
-      GLuint  vao;
-      GLuint  vbo;
-      cl_mem  buffer;
+      GLfloat*  r;
+      GLfloat*  g;
+      GLfloat*  b;
+      GLfloat*  a;
+      GLfloat*  data;
+      int       size;
+      GLuint    vao;
+      GLuint    vbo;
+      cl_mem    buffer;
   };
 
 #endif
