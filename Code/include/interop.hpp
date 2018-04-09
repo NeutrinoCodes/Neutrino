@@ -14,8 +14,8 @@
   void push_int(int* data, int kernel_arg);
   void set_float(float* data, int kernel_arg);
   void set_int(int* data, int kernel_arg);
-  void set_points4(point4* points, int kernel_arg);
-  void set_colors4(color4* colors, int kernel_arg);
+  void set_point4(point4* points, int kernel_arg);
+  void set_color4(color4* colors, int kernel_arg);
   void plot(point4* points, color4* colors);
 
 #endif
