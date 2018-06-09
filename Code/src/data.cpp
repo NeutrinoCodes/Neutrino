@@ -15,7 +15,7 @@ float4::float4(unsigned int num_data)
 
   for (i = 0; i < num_data; i++)
   {
-    data[4*i]     = x[i] = 0;
+    data[4*i + 0] = x[i] = 0;
     data[4*i + 1] = y[i] = 0;
     data[4*i + 2] = z[i] = 0;
     data[4*i + 3] = w[i] = 1.0;
@@ -44,7 +44,7 @@ int4::int4(unsigned int num_data)
 
   for (i = 0; i < num_data; i++)
   {
-    data[4*i]     = x[i] = 0;
+    data[4*i + 0] = x[i] = 0;
     data[4*i + 1] = y[i] = 0;
     data[4*i + 2] = z[i] = 0;
     data[4*i + 3] = w[i] = 1.0;
@@ -73,7 +73,7 @@ point4::point4(unsigned int num_data)
 
   for (i = 0; i < num_data; i++)
   {
-    data[4*i]     = x[i] = 0;
+    data[4*i + 0] = x[i] = 0;
     data[4*i + 1] = y[i] = 0;
     data[4*i + 2] = z[i] = 0;
     data[4*i + 3] = w[i] = 1.0;
@@ -102,7 +102,7 @@ color4::color4(unsigned int num_data)
 
   for (i = 0; i < num_data; i++)
   {
-    data[4*i]     = r[i] = 0;
+    data[4*i + 0] = r[i] = 0;
     data[4*i + 1] = g[i] = 0;
     data[4*i + 2] = b[i] = 0;
     data[4*i + 3] = a[i] = 1.0;
