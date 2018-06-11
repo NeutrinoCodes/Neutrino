@@ -29,7 +29,7 @@ void setup()
   size_global = points->size;
   dim_kernel = 1;
   int i;
-  unsigned int j;
+  int j;
   float x;
   float y;
 

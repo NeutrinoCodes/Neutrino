@@ -609,13 +609,13 @@ void release_context()
 
 void push_kernel()
 {
-  enqueue_task();
-  wait_for_event();
+  //enqueue_task();
+  //wait_for_event();
   execute_kernel();
 }
 
 void pop_kernel()
 {
   finish_queue();
-  release_event();
+  //release_event();
 }

@@ -1,6 +1,6 @@
 #include "data.hpp"
 
-float4::float4(unsigned int num_data)
+float4::float4(int num_data)
 {
   x = new GLfloat[num_data];
   y = new GLfloat[num_data];
@@ -15,10 +15,10 @@ float4::float4(unsigned int num_data)
 
   for (i = 0; i < num_data; i++)
   {
-    data[4*i + 0] = x[i] = 0;
-    data[4*i + 1] = y[i] = 0;
-    data[4*i + 2] = z[i] = 0;
-    data[4*i + 3] = w[i] = 1.0;
+    data[4*i + 0] = x[i] = 0.0f;
+    data[4*i + 1] = y[i] = 0.0f;
+    data[4*i + 2] = z[i] = 0.0f;
+    data[4*i + 3] = w[i] = 1.0f;
   }
 }
 
@@ -29,7 +29,7 @@ float4::~float4()
   glDeleteBuffers(1, &vao);
 }
 
-int4::int4(unsigned int num_data)
+int4::int4(int num_data)
 {
   x = new GLint[num_data];
   y = new GLint[num_data];
@@ -44,10 +44,10 @@ int4::int4(unsigned int num_data)
 
   for (i = 0; i < num_data; i++)
   {
-    data[4*i + 0] = x[i] = 0;
-    data[4*i + 1] = y[i] = 0;
-    data[4*i + 2] = z[i] = 0;
-    data[4*i + 3] = w[i] = 1.0;
+    data[4*i + 0] = x[i] = 0.0f;
+    data[4*i + 1] = y[i] = 0.0f;
+    data[4*i + 2] = z[i] = 0.0f;
+    data[4*i + 3] = w[i] = 1.0f;
   }
 }
 
@@ -58,7 +58,7 @@ int4::~int4()
   glDeleteBuffers(1, &vao);
 }
 
-point4::point4(unsigned int num_data)
+point4::point4(int num_data)
 {
   x = new GLfloat[num_data];
   y = new GLfloat[num_data];
@@ -73,10 +73,10 @@ point4::point4(unsigned int num_data)
 
   for (i = 0; i < num_data; i++)
   {
-    data[4*i + 0] = x[i] = 0;
-    data[4*i + 1] = y[i] = 0;
-    data[4*i + 2] = z[i] = 0;
-    data[4*i + 3] = w[i] = 1.0;
+    data[4*i + 0] = x[i] = 0.0f;
+    data[4*i + 1] = y[i] = 0.0f;
+    data[4*i + 2] = z[i] = 0.0f;
+    data[4*i + 3] = w[i] = 1.0f;
   }
 }
 
@@ -87,7 +87,7 @@ point4::~point4()
   glDeleteBuffers(1, &vao);
 }
 
-color4::color4(unsigned int num_data)
+color4::color4(int num_data)
 {
   r = new GLfloat[num_data];
   g = new GLfloat[num_data];
@@ -102,10 +102,10 @@ color4::color4(unsigned int num_data)
 
   for (i = 0; i < num_data; i++)
   {
-    data[4*i + 0] = r[i] = 0;
-    data[4*i + 1] = g[i] = 0;
-    data[4*i + 2] = b[i] = 0;
-    data[4*i + 3] = a[i] = 1.0;
+    data[4*i + 0] = r[i] = 0.0f;
+    data[4*i + 1] = g[i] = 0.0f;
+    data[4*i + 2] = b[i] = 0.0f;
+    data[4*i + 3] = a[i] = 1.0f;
   }
 }
 
