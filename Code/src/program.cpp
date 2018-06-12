@@ -67,17 +67,21 @@ void setup()
   set_color4(colors, 1);                                                        // Setting kernel argument #1...
   set_int(&points->size, 2);                                                    // Setting kernel argument #2...
   set_float(&tick, 3);                                                          // Setting kernel argument #3...
+  set_kernel();
 }
 
 void loop()
 {
-  push_point4(&points->buffer);
-  push_color4(&colors->buffer);
+  push_point4(&points->buffer, 0);
+  push_color4(&colors->buffer, 1);
   push_int(&points->size, 2);
   push_float(&tick, 3);
   push_kernel();
-  pop_point4(&points->buffer);
-  pop_color4(&colors->buffer);
+
+  pop_point4(&points->buffer, 0);
+  pop_color4(&colors->buffer, 1);
+  pop_int(&points->size, 2);
+  pop_float(&tick, 3);
   pop_kernel();
 
   tick += 0.1f;
