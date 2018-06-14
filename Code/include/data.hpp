@@ -13,7 +13,7 @@
       unsigned int      i;
 
     public:
-      float4(unsigned int num_data);
+      float4(int num_data);
       ~float4();
 
       GLfloat*  x;
@@ -34,7 +34,7 @@
       unsigned int      i;
 
     public:
-      int4(unsigned int num_data);
+      int4(int num_data);
       ~int4();
 
       GLint*    x;
@@ -55,7 +55,7 @@
       unsigned int      i;
 
     public:
-      point4(unsigned int num_data);
+      point4(int num_data);
       ~point4();
 
       GLfloat*  x;
@@ -63,7 +63,7 @@
       GLfloat*  z;
       GLfloat*  w;
       GLfloat*  data;
-      int       size;
+      int size;
       GLuint    vao;
       GLuint    vbo;
       cl_mem    buffer;
@@ -76,7 +76,7 @@
       unsigned int      i;
 
     public:
-      color4(unsigned int num_data);
+      color4(int num_data);
       ~color4();
 
       GLfloat*  r;

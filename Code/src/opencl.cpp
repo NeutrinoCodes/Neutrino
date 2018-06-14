@@ -393,7 +393,7 @@ void execute_kernel()
 
 }
 
-void push_point4(cl_mem* CL_memory_buffer)
+void push_point4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
@@ -409,7 +409,7 @@ void push_point4(cl_mem* CL_memory_buffer)
   //printf("DONE!\n");
 }
 
-void push_color4(cl_mem* CL_memory_buffer)
+void push_color4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
@@ -457,7 +457,7 @@ void wait_for_event()
     //printf("DONE!\n");
 }
 
-void pop_point4(cl_mem* CL_memory_buffer)
+void pop_point4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
@@ -473,7 +473,7 @@ void pop_point4(cl_mem* CL_memory_buffer)
   //printf("DONE!\n");
 }
 
-void pop_color4(cl_mem* CL_memory_buffer)
+void pop_color4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
@@ -607,15 +607,17 @@ void release_context()
   printf("DONE!\n");
 }
 
+void set_kernel()
+{
+  // Pleonastic function...
+}
+
 void push_kernel()
 {
-  enqueue_task();
-  wait_for_event();
   execute_kernel();
 }
 
 void pop_kernel()
 {
   finish_queue();
-  release_event();
 }
