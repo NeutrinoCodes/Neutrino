@@ -15,17 +15,10 @@ float4::float4(int num_data)
 
   for (i = 0; i < num_data; i++)
   {
-<<<<<<< HEAD
-    data[4*i + 0] = x[i] = 0;
-    data[4*i + 1] = y[i] = 0;
-    data[4*i + 2] = z[i] = 0;
-    data[4*i + 3] = w[i] = 1.0;
-=======
     data[4*i + 0] = x[i] = 0.0f;
     data[4*i + 1] = y[i] = 0.0f;
     data[4*i + 2] = z[i] = 0.0f;
     data[4*i + 3] = w[i] = 1.0f;
->>>>>>> ad470deaf9a0e71eaeba6e7cc85820a9723bc772
   }
 }
 
@@ -51,17 +44,10 @@ int4::int4(int num_data)
 
   for (i = 0; i < num_data; i++)
   {
-<<<<<<< HEAD
-    data[4*i + 0] = x[i] = 0;
-    data[4*i + 1] = y[i] = 0;
-    data[4*i + 2] = z[i] = 0;
-    data[4*i + 3] = w[i] = 1.0;
-=======
     data[4*i + 0] = x[i] = 0.0f;
     data[4*i + 1] = y[i] = 0.0f;
     data[4*i + 2] = z[i] = 0.0f;
     data[4*i + 3] = w[i] = 1.0f;
->>>>>>> ad470deaf9a0e71eaeba6e7cc85820a9723bc772
   }
 }
 
@@ -87,17 +73,10 @@ point4::point4(int num_data)
 
   for (i = 0; i < num_data; i++)
   {
-<<<<<<< HEAD
-    data[4*i + 0] = x[i] = 0;
-    data[4*i + 1] = y[i] = 0;
-    data[4*i + 2] = z[i] = 0;
-    data[4*i + 3] = w[i] = 1.0;
-=======
     data[4*i + 0] = x[i] = 0.0f;
     data[4*i + 1] = y[i] = 0.0f;
     data[4*i + 2] = z[i] = 0.0f;
     data[4*i + 3] = w[i] = 1.0f;
->>>>>>> ad470deaf9a0e71eaeba6e7cc85820a9723bc772
   }
 }
 
@@ -123,17 +102,10 @@ color4::color4(int num_data)
 
   for (i = 0; i < num_data; i++)
   {
-<<<<<<< HEAD
-    data[4*i + 0] = r[i] = 0;
-    data[4*i + 1] = g[i] = 0;
-    data[4*i + 2] = b[i] = 0;
-    data[4*i + 3] = a[i] = 1.0;
-=======
     data[4*i + 0] = r[i] = 0.0f;
     data[4*i + 1] = g[i] = 0.0f;
     data[4*i + 2] = b[i] = 0.0f;
     data[4*i + 3] = a[i] = 1.0f;
->>>>>>> ad470deaf9a0e71eaeba6e7cc85820a9723bc772
   }
 }
 
