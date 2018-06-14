@@ -4,6 +4,9 @@
   #include <stdio.h>
   #include <stdlib.h>
 
+  #include <ft2build.h>
+  #include FT_FREETYPE_H
+
   #if defined(__WINDOWS__)
     #include <Windows.h>
   #elif defined(__linux__) || defined(__APPLE__)
