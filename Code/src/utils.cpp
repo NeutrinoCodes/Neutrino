@@ -1,6 +1,8 @@
 #include "utils.hpp"
 
-int ascii_spin_phase = 0;
+int           ascii_spin_phase = 0;
+FT_Library    ft_library;
+FT_GlyphSlot  ft_glyph = face->glyph;
 
 double getCPUTime()
 {
@@ -164,4 +166,18 @@ void ascii_spin(const char* text)
 void ascii_spin_stop()
 {
   printf("\bDONE!\n");
+}
+
+void init_freetype()
+{
+  printf("Action: initializing FreeType... ");
+
+  if (FT_Init_FreeType(&ft_library))
+  {
+    printf("\nError:  could not initialize FreeType!\n");
+  }
+  else
+  {
+    printf("DONE!\n");
+  }
 }

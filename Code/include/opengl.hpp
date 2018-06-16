@@ -42,8 +42,9 @@
   #define FOV 60.0f
   #define LINE_WIDTH 3
 
-  extern  GLFWwindow*				window;
-  extern  GLuint 						shader;
+  extern  GLFWwindow*				window;                                             // Window handle.
+  extern  GLuint 						shader;                                             // Shader program.
+  extern  GLuint            text_texture;                                       // Text texture.
   extern  glm::mat4					Rotation_matrix;																	  // Rotation matrix.
   extern  glm::mat4 				Translation_matrix;																	// Translation matrix.
   extern  glm::mat4 				Model_matrix;																				// Model matrix.

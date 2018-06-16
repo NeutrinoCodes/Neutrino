@@ -8,6 +8,7 @@ int main()
   init_opengl_context();
 	init_opencl_context();
   init_opencl_kernel();
+  init_freetype();
   setup();
 
   while (!glfwWindowShouldClose(window))

@@ -9,6 +9,7 @@ size_t            vertex_size;                                                  
 char*             fragment_source;                                              // Fragment shader source.
 size_t            fragment_size;                                                // Fragment shader size [characters].
 GLuint 						shader;                                                       // Shader program.
+GLuint            text_texture;                                                 // Text texture.
 
 double            mouse_x = 0;                                                  // Mouse x-coordinate [px].
 double            mouse_y = 0;                                                  // Mouse y-coordinate [px].
@@ -288,6 +289,14 @@ void init_screen()
   glEnable(GL_DEPTH_TEST);                                                      // Enabling depth test...
   glEnable(GL_PROGRAM_POINT_SIZE);                                              // Enabling "gl_PointSize" in vertex shader...
   glLineWidth(LINE_WIDTH);                                                      // Setting line width...
+
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glActiveTexture(GL_TEXTURE0);
+  glGenTextures(1, &text_texture);
+  glBindTexture(GL_TEXTURE_2D, text_texture);
+  glUniform1i(uniform_tex, 0);
+
   Translation_matrix = glm::translate(glm::mat4(),                              // Setting initial Translation_matrix matrix...
                                       glm::vec3(0.0f, 0.0f, -3.0f));
   Projection_matrix = glm::perspective(glm::radians(FOV),                       // Setting Projection_matrix matrix...

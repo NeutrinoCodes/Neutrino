@@ -38,12 +38,12 @@ target_include_directories(neutrino PRIVATE ${CMAKE_HOME_DIRECTORY}/include)
 # Setting the Mac libraries that should be linked in the build command...
 if(APPLE)
   # Setting the libraries that should be linked in the build command...
-  target_link_libraries(neutrino "-framework OpenGL" "-framework OpenCL" "-lGLEW" "-lglfw" "-lm")
+  target_link_libraries(neutrino "-framework OpenGL" "-framework OpenCL" "-lGLEW" "-lglfw" "-lm" "-lfreetype")
   target_include_directories(neutrino PRIVATE /usr/local/opt/freetype/include/freetype2)
 endif(APPLE)
 
 # Setting the Linux libraries that should be linked in the build command...
 if(LINUX)
   # Setting the libraries that should be linked in the build command...
-  target_link_libraries(neutrino "-lOpenGL" "-lOpenCL" "-lGLEW" "-lglfw" "-lm")
+  target_link_libraries(neutrino "-lOpenGL" "-lOpenCL" "-lGLEW" "-lglfw" "-lm" "-lfreetype")
 endif(LINUX)
