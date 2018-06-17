@@ -2,7 +2,7 @@
 
 int           ascii_spin_phase = 0;
 FT_Library    ft_library;
-FT_GlyphSlot  ft_glyph = face->glyph;
+//FT_GlyphSlot  ft_glyph = face->glyph;
 
 double getCPUTime()
 {

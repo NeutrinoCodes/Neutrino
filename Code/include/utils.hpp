@@ -20,7 +20,7 @@
 
   extern int            ascii_spin_phase;
   extern FT_Library     ft_library;
-  extern FT_GlyphSlot   ft_glyph;
+  //extern FT_GlyphSlot   ft_glyph;
 
   double  getCPUTime();
   void    load_file(const char* file_name, char** file_buffer, size_t* file_size);
