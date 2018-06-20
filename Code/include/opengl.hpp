@@ -11,6 +11,8 @@
   #include <glm/gtx/transform.hpp>
   #include <glm/gtx/vector_angle.hpp>
   #include <glm/gtx/quaternion.hpp>
+  #include <ft2build.h>
+  #include FT_FREETYPE_H
 
   #ifdef __WINDOWS__
     #define GLFW_EXPOSE_NATIVE_WIN32
@@ -78,10 +80,22 @@
   void        load_fragment(const char* filename_fragment);
 
   ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////// TEXT /////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  typedef struct Character
+  {
+    GLuint      texture;                                                        // ID handle of the glyph texture.
+    glm::ivec2  size;                                                           // Size of glyph.
+    glm::ivec2  bearing;                                                        // Offset from baseline to left/top of glyph.
+    GLuint      advance;                                                        // Horizontal offset to advance to next glyph.
+  } Character;
+
+  ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// INITIALIZATIONS //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   void        init_window();
   void        init_shaders();
   void        init_screen();
+  void        init_freetype();
 
 #endif

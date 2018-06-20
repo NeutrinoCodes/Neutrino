@@ -9,7 +9,6 @@ size_t            vertex_size;                                                  
 char*             fragment_source;                                              // Fragment shader source.
 size_t            fragment_size;                                                // Fragment shader size [characters].
 GLuint 						shader;                                                       // Shader program.
-GLuint            text_texture;                                                 // Text texture.
 
 double            mouse_x = 0;                                                  // Mouse x-coordinate [px].
 double            mouse_y = 0;                                                  // Mouse y-coordinate [px].
@@ -27,6 +26,8 @@ glm::mat4 				Translation_matrix = glm::mat4(1.0f);													// Translation m
 glm::mat4 				Model_matrix = glm::mat4(1.0f);																// Model matrix.
 glm::mat4 				View_matrix = glm::mat4(1.0f);							   								// View matrix.
 glm::mat4 				Projection_matrix = glm::mat4(1.0f);				  								// Projection matrix.
+
+struct Character  char_list[128];                                               // Array of text charactes.
 
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// REFRESH //////////////////////////////////////
@@ -305,4 +306,71 @@ void init_screen()
                                 aspect_ratio,
                                 NEAR_Z_CLIP,
                                 FAR_Z_CLIP);
+}
+
+void init_freetype()
+{
+  FT_Library  ft;                                                               // FreeType library.
+  FT_Face     face;                                                             // Font face.
+  GLuint      texture;                                                          // Text texture.
+  int         i;                                                                // Text character index.
+
+  printf("Action: initializing FreeType... ");
+
+  if (FT_Init_FreeType(&ft))
+  {
+    printf("\nError:  could not initialize FreeType library!\n");
+    exit(EXIT_FAILURE);
+  }
+
+  if (FT_New_Face(ft, "/Library/Fonts/Arial.ttf", 0, &face))
+  {
+    printf("\nError:  could not load font!\n");
+    exit(EXIT_FAILURE);
+  }
+
+  FT_Set_Pixel_Sizes(face, 0, 48);                                              // Setting font size...
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);                                        // Disabling byte-alignment restriction...
+
+  for (i = 0; i < 128; i++)                                                     // Loading first 128 characters of ASCII set...
+  {
+    if (FT_Load_Char(face, i, FT_LOAD_RENDER))                                  // Loading character glyph...
+    {
+      printf("\nError:  could not load glyph!\n");
+      exit(EXIT_FAILURE);
+    }
+
+    // Generating texture:
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D,
+                 0,
+                 GL_RED,
+                 face->glyph->bitmap.width,
+                 face->glyph->bitmap.rows,
+                 0,
+                 GL_RED,
+                 GL_UNSIGNED_BYTE,
+                face->glyph->bitmap.buffer);
+
+    // Setting texture options:
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Storing character for later use:
+    char_list[i].texture = texture;
+    char_list[i].size = glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows);
+    char_list[i].bearing = glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top);
+    char_list[i].advance = face->glyph->advance.x;
+  }
+
+  glBindTexture(GL_TEXTURE_2D, 0);
+
+  // Destroying FreeType once we're finished...
+  FT_Done_Face(face);
+  FT_Done_FreeType(ft);
+
+  printf("DONE!\n");
 }
