@@ -16,6 +16,8 @@ size_t            text_vertex_size;                                             
 char*             text_fragment_source;                                         // Text fragment shader source.
 size_t            text_fragment_size;                                           // Text fragment shader size [characters].
 GLuint 						text_shader;                                                  // Text shader program.
+GLuint            text_vao;                                                     // Text VAO.
+GLuint            text_vbo;                                                     // Text VBO.
 
 double            mouse_x = 0;                                                  // Mouse x-coordinate [px].
 double            mouse_y = 0;                                                  // Mouse y-coordinate [px].
@@ -253,43 +255,46 @@ void init_window()
 
 void init_shaders()
 {
-  GLuint		vs;
-	GLuint 		fs;
+  GLuint		point_vertex_shader;
+	GLuint 		point_fragment_shader;
+  GLuint		text_vertex_shader;
+	GLuint 		text_fragment_shader;
+
 	GLint 		success;
   GLsizei 	log_size;
   GLchar*		log;
 
   printf("Action: initialising OpenGL shaders... ");
 
-  // Compiling vertex shader...
-  vs = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vs, 1, (const char**)&point_vertex_source, (GLint*)&point_vertex_size);
-	glCompileShader(vs);
-  glGetShaderiv(vs, GL_COMPILE_STATUS, &success);
+  // Compiling point vertex shader...
+  point_vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(point_vertex_shader, 1, (const char**)&point_vertex_source, (GLint*)&point_vertex_size);
+	glCompileShader(point_vertex_shader);
+  glGetShaderiv(point_vertex_shader, GL_COMPILE_STATUS, &success);
 
   if (!success)
   {
-    glGetShaderiv(vs, GL_INFO_LOG_LENGTH, &log_size);
+    glGetShaderiv(point_vertex_shader, GL_INFO_LOG_LENGTH, &log_size);
     log = (char*) malloc(log_size+1);
     log[log_size] = '\0';
-    glGetShaderInfoLog(vs, log_size+1, NULL, log);
+    glGetShaderInfoLog(point_vertex_shader, log_size+1, NULL, log);
     printf("%s\n", log);
     free(log);
     exit(1);
   }
 
-	// Compiling fragment shader...
-  fs = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fs, 1, (const char**)&point_fragment_source, (GLint*)&point_fragment_size);
-	glCompileShader(fs);
-  glGetShaderiv(fs, GL_COMPILE_STATUS, &success);
+	// Compiling point fragment shader...
+  point_fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(point_fragment_shader, 1, (const char**)&point_fragment_source, (GLint*)&point_fragment_size);
+	glCompileShader(point_fragment_shader);
+  glGetShaderiv(point_fragment_shader, GL_COMPILE_STATUS, &success);
 
   if (!success)
   {
-    glGetShaderiv(fs, GL_INFO_LOG_LENGTH, &log_size);
+    glGetShaderiv(point_fragment_shader, GL_INFO_LOG_LENGTH, &log_size);
     log = (char*) malloc(log_size+1);
     log[log_size] = '\0';
-    glGetShaderInfoLog(fs, log_size+1, NULL, log);
+    glGetShaderInfoLog(point_fragment_shader, log_size+1, NULL, log);
     printf("%s\n", log);
     free(log);
     exit(1);
@@ -299,11 +304,55 @@ void init_shaders()
   point_shader = glCreateProgram();
   glBindAttribLocation(point_shader, 0, "point");
   glBindAttribLocation(point_shader, 1, "vertex_color");
-  glAttachShader(point_shader, vs);
-  glAttachShader(point_shader, fs);
+  glAttachShader(point_shader, point_vertex_shader);
+  glAttachShader(point_shader, point_fragment_shader);
   glLinkProgram(point_shader);
   free_file(point_vertex_source);
   free_file(point_fragment_source);
+
+  // Compiling text vertex shader...
+  text_vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(text_vertex_shader, 1, (const char**)&text_vertex_source, (GLint*)&text_vertex_size);
+	glCompileShader(text_vertex_shader);
+  glGetShaderiv(text_vertex_shader, GL_COMPILE_STATUS, &success);
+
+  if (!success)
+  {
+    glGetShaderiv(text_vertex_shader, GL_INFO_LOG_LENGTH, &log_size);
+    log = (char*) malloc(log_size+1);
+    log[log_size] = '\0';
+    glGetShaderInfoLog(text_vertex_shader, log_size+1, NULL, log);
+    printf("%s\n", log);
+    free(log);
+    exit(1);
+  }
+
+	// Compiling text fragment shader...
+  text_fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(text_fragment_shader, 1, (const char**)&text_fragment_source, (GLint*)&text_fragment_size);
+	glCompileShader(text_fragment_shader);
+  glGetShaderiv(text_fragment_shader, GL_COMPILE_STATUS, &success);
+
+  if (!success)
+  {
+    glGetShaderiv(text_fragment_shader, GL_INFO_LOG_LENGTH, &log_size);
+    log = (char*) malloc(log_size+1);
+    log[log_size] = '\0';
+    glGetShaderInfoLog(text_fragment_shader, log_size+1, NULL, log);
+    printf("%s\n", log);
+    free(log);
+    exit(1);
+  }
+
+	// Creating OpenGL shader program...
+  text_shader = glCreateProgram();
+  glBindAttribLocation(text_shader, 0, "point");
+  glBindAttribLocation(text_shader, 1, "vertex_color");
+  glAttachShader(text_shader, text_vertex_shader);
+  glAttachShader(text_shader, text_fragment_shader);
+  glLinkProgram(text_shader);
+  free_file(text_vertex_source);
+  free_file(text_fragment_source);
 
   printf("DONE!\n");
 }
@@ -393,6 +442,23 @@ void init_freetype()
   // Destroying FreeType once we're finished...
   FT_Done_Face(face);
   FT_Done_FreeType(ft);
+
+  // Configuring VAO/VBO for texture quads:
+  glGenVertexArrays(1, &text_vao);
+  glBindVertexArray(text_vao);
+
+  glGenBuffers(1, &text_vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, text_vbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+
+  glEnableVertexAttribArray(0);                                                 // Matches "layout = 0" variable in vertex shader.
+  glBindBuffer(GL_ARRAY_BUFFER, text_vbo);
+  glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);      // Matches "layout = 0" variable in vertex shader.
+
+  //glBindBuffer(GL_ARRAY_BUFFER, 0);
+  //glBindVertexArray(0);
+
+
 
   printf("DONE!\n");
 }

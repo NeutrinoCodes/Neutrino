@@ -272,12 +272,12 @@ void plot(point4* points, color4* colors)
   // Preparing for plotting...
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing screen...
   View_matrix = Translation_matrix*Rotation_matrix;                             // Setting View_matrix matrix...
-  glUseProgram(point_shader);                                                         // Using shader...
-  glUniformMatrix4fv(glGetUniformLocation(point_shader, "View_matrix"),               // Setting View_matrix matrix on shader...
+  glUseProgram(point_shader);                                                   // Using shader...
+  glUniformMatrix4fv(glGetUniformLocation(point_shader, "View_matrix"),         // Setting View_matrix matrix on shader...
                      1,
                      GL_FALSE,
                      &View_matrix[0][0]);
-  glUniformMatrix4fv(glGetUniformLocation(point_shader, "Projection_matrix"),         // Setting Projection_matrix matrix on shader...
+  glUniformMatrix4fv(glGetUniformLocation(point_shader, "Projection_matrix"),   // Setting Projection_matrix matrix on shader...
                      1,
                      GL_FALSE,
                      &Projection_matrix[0][0]);
@@ -300,4 +300,68 @@ void plot(point4* points, color4* colors)
 
   // Unbinding "colors" array...
   glDisableVertexAttribArray(1);                                                // Matches "layout = 1" variable in vertex shader.
+}
+
+void overlay(char* text, int text_length, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
+{
+  int i;
+  Character ch;
+  GLfloat xpos;
+  GLfloat ypos;
+  GLfloat w;
+  GLfloat h;
+
+  // Preparing for plotting...
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing screen...
+  View_matrix = Translation_matrix*Rotation_matrix;                             // Setting View_matrix matrix...
+  glUseProgram(text_shader);                                                    // Using shader...
+
+  glUniform3f(glGetUniformLocation(text_shader, "text_color"), color.x, color.y, color.z);
+
+  glUniformMatrix4fv(glGetUniformLocation(point_shader, "View_matrix"),         // Setting View_matrix matrix on shader...
+                     1,
+                     GL_FALSE,
+                     &View_matrix[0][0]);
+  glUniformMatrix4fv(glGetUniformLocation(point_shader, "Projection_matrix"),   // Setting Projection_matrix matrix on shader...
+                     1,
+                     GL_FALSE,
+                     &Projection_matrix[0][0]);
+
+  glActiveTexture(GL_TEXTURE0);
+  glBindVertexArray(text_vao);
+
+  for (i = 0; i < text_length; i++)
+  {
+    ch = char_list[int(text[i])];
+
+    xpos = x + ch.bearing.x * scale;
+    ypos = y - (ch.size.y - ch.bearing.y) * scale;
+
+    w = ch.size.x * scale;
+    h = ch.size.y * scale;
+
+    // Updating VBO for each character...
+    GLfloat vertices[6][4] = {
+            { xpos,     ypos + h,   0.0, 0.0 },
+            { xpos,     ypos,       0.0, 1.0 },
+            { xpos + w, ypos,       1.0, 1.0 },
+
+            { xpos,     ypos + h,   0.0, 0.0 },
+            { xpos + w, ypos,       1.0, 1.0 },
+            { xpos + w, ypos + h,   1.0, 0.0 }
+        };
+
+    glBindTexture(GL_TEXTURE_2D, ch.texture);                                   // Rendering glyph texture over quad...
+    glBindBuffer(GL_ARRAY_BUFFER, text_vbo);                                    // Updating content of VBO memory...
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);            // Be sure to use glBufferSubData and not glBufferData!
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // Render quad
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+    x += (ch.advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
+  }
+
+  glBindVertexArray(0);
+  glBindTexture(GL_TEXTURE_2D, 0);
 }

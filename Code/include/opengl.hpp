@@ -44,10 +44,20 @@
   #define FOV 60.0f
   #define LINE_WIDTH 3
 
+  typedef struct Character
+  {
+    GLuint      texture;                                                        // ID handle of the glyph texture.
+    glm::ivec2  size;                                                           // Size of glyph.
+    glm::ivec2  bearing;                                                        // Offset from baseline to left/top of glyph.
+    GLuint      advance;                                                        // Horizontal offset to advance to next glyph.
+  } Character;
+
   extern  GLFWwindow*				window;                                             // Window handle.
   extern  GLuint 						point_shader;                                       // Point shader program.
   extern  GLuint 						text_shader;                                        // Text shader program.
   extern  GLuint            text_texture;                                       // Text texture.
+  extern  GLuint            text_vao;                                           // Text VAO.
+  extern  GLuint            text_vbo;                                           // Text VBO.
   extern  glm::mat4					Rotation_matrix;																	  // Rotation matrix.
   extern  glm::mat4 				Translation_matrix;																	// Translation matrix.
   extern  glm::mat4 				Model_matrix;																				// Model matrix.
@@ -85,13 +95,7 @@
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// TEXT /////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  typedef struct Character
-  {
-    GLuint      texture;                                                        // ID handle of the glyph texture.
-    glm::ivec2  size;                                                           // Size of glyph.
-    glm::ivec2  bearing;                                                        // Offset from baseline to left/top of glyph.
-    GLuint      advance;                                                        // Horizontal offset to advance to next glyph.
-  } Character;
+  extern struct Character  char_list[128];                                      // Array of text charactes.
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// INITIALIZATIONS //////////////////////////////

@@ -24,5 +24,6 @@
   void pop_int(int* data, int kernel_arg);
 
   void plot(point4* points, color4* colors);
+  void overlay(char* text, int text_length, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
 
 #endif

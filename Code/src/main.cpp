@@ -18,7 +18,6 @@ int main()
   load_point_fragment(POINT_FRAGMENT_FILE);
   load_text_vertex(TEXT_VERTEX_FILE);
   load_text_fragment(TEXT_FRAGMENT_FILE);
-
   load_kernel(KERNEL_FILE);
 
   init_opengl_context();

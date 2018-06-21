@@ -75,6 +75,7 @@ void loop()
   tick += 0.1f;
 
   plot(points, colors);
+  //overlay("pippo", 5, 1.0, 1.0, 1.0, glm::vec3(1.0, 1.0, 1.0));
 }
 
 void terminate()
