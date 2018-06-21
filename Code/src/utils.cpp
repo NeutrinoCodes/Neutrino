@@ -188,7 +188,7 @@ void ascii_spin(const char* text, double tic, double toc)
 void ascii_spin_stop()
 {
   int i;
-  
+
   printf("\b");
   printf(" ");
   printf("\b");

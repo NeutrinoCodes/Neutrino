@@ -45,7 +45,8 @@
   #define LINE_WIDTH 3
 
   extern  GLFWwindow*				window;                                             // Window handle.
-  extern  GLuint 						shader;                                             // Shader program.
+  extern  GLuint 						point_shader;                                       // Point shader program.
+  extern  GLuint 						text_shader;                                        // Text shader program.
   extern  GLuint            text_texture;                                       // Text texture.
   extern  glm::mat4					Rotation_matrix;																	  // Rotation matrix.
   extern  glm::mat4 				Translation_matrix;																	// Translation matrix.
@@ -76,8 +77,10 @@
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// FILES ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  void        load_vertex(const char* filename_vertex);
-  void        load_fragment(const char* filename_fragment);
+  void        load_point_vertex(const char* filename_vertex);
+  void        load_point_fragment(const char* filename_fragment);
+  void        load_text_vertex(const char* filename_vertex);
+  void        load_text_fragment(const char* filename_fragment);
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// TEXT /////////////////////////////////////

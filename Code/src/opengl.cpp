@@ -4,11 +4,18 @@ GLFWwindow*				window;                                                       // 
 int								window_size_x = SIZE_WINDOW_X;                                // Window x-size [px].
 int								window_size_y = SIZE_WINDOW_Y;                                // Window y-size [px].
 float							aspect_ratio = (float)window_size_x/(float)window_size_y;     // Window aspcet-ratio [].
-char*             vertex_source;                                                // Vertex shader source.
-size_t            vertex_size;                                                  // Vertex shader size [characters].
-char*             fragment_source;                                              // Fragment shader source.
-size_t            fragment_size;                                                // Fragment shader size [characters].
-GLuint 						shader;                                                       // Shader program.
+
+char*             point_vertex_source;                                          // Point vertex shader source.
+size_t            point_vertex_size;                                            // Point vertex shader size [characters].
+char*             point_fragment_source;                                        // Point fragment shader source.
+size_t            point_fragment_size;                                          // Point fragment shader size [characters].
+GLuint 						point_shader;                                                 // Point shader program.
+
+char*             text_vertex_source;                                           // Text vertex shader source.
+size_t            text_vertex_size;                                             // Text vertex shader size [characters].
+char*             text_fragment_source;                                         // Text fragment shader source.
+size_t            text_fragment_size;                                           // Text fragment shader size [characters].
+GLuint 						text_shader;                                                  // Text shader program.
 
 double            mouse_x = 0;                                                  // Mouse x-coordinate [px].
 double            mouse_y = 0;                                                  // Mouse y-coordinate [px].
@@ -156,20 +163,38 @@ void window_refresh_callback(GLFWwindow* window)
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////// FILES //////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void load_vertex(const char* filename_vertex)
+void load_point_vertex(const char* filename_vertex)
 {
-  printf("Action: loading OpenGL vertex source from file... ");
+  printf("Action: loading OpenGL point vertex source from file... ");
 
-  load_file(filename_vertex, &vertex_source, &vertex_size);
+  load_file(filename_vertex, &point_vertex_source, &point_vertex_size);
 
 	printf("DONE!\n");
 }
 
-void load_fragment(const char* filename_fragment)
+void load_point_fragment(const char* filename_fragment)
 {
-	printf("Action: loading OpenGL fragment source from file... ");
+	printf("Action: loading OpenGL point fragment source from file... ");
 
-  load_file(filename_fragment, &fragment_source, &fragment_size);
+  load_file(filename_fragment, &point_fragment_source, &point_fragment_size);
+
+	printf("DONE!\n");
+}
+
+void load_text_vertex(const char* filename_vertex)
+{
+  printf("Action: loading OpenGL text vertex source from file... ");
+
+  load_file(filename_vertex, &text_vertex_source, &text_vertex_size);
+
+	printf("DONE!\n");
+}
+
+void load_text_fragment(const char* filename_fragment)
+{
+	printf("Action: loading OpenGL text fragment source from file... ");
+
+  load_file(filename_fragment, &text_fragment_source, &text_fragment_size);
 
 	printf("DONE!\n");
 }
@@ -238,7 +263,7 @@ void init_shaders()
 
   // Compiling vertex shader...
   vs = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vs, 1, (const char**)&vertex_source, (GLint*)&vertex_size);
+  glShaderSource(vs, 1, (const char**)&point_vertex_source, (GLint*)&point_vertex_size);
 	glCompileShader(vs);
   glGetShaderiv(vs, GL_COMPILE_STATUS, &success);
 
@@ -255,7 +280,7 @@ void init_shaders()
 
 	// Compiling fragment shader...
   fs = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fs, 1, (const char**)&fragment_source, (GLint*)&fragment_size);
+  glShaderSource(fs, 1, (const char**)&point_fragment_source, (GLint*)&point_fragment_size);
 	glCompileShader(fs);
   glGetShaderiv(fs, GL_COMPILE_STATUS, &success);
 
@@ -271,14 +296,14 @@ void init_shaders()
   }
 
 	// Creating OpenGL shader program...
-  shader = glCreateProgram();
-  glBindAttribLocation(shader, 0, "point");
-  glBindAttribLocation(shader, 1, "vertex_color");
-  glAttachShader(shader, vs);
-  glAttachShader(shader, fs);
-  glLinkProgram(shader);
-  free_file(vertex_source);
-  free_file(fragment_source);
+  point_shader = glCreateProgram();
+  glBindAttribLocation(point_shader, 0, "point");
+  glBindAttribLocation(point_shader, 1, "vertex_color");
+  glAttachShader(point_shader, vs);
+  glAttachShader(point_shader, fs);
+  glLinkProgram(point_shader);
+  free_file(point_vertex_source);
+  free_file(point_fragment_source);
 
   printf("DONE!\n");
 }
