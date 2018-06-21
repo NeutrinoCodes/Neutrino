@@ -3,6 +3,7 @@
 
   #include <stdio.h>
   #include <stdlib.h>
+  #include <math.h>
 
   #if defined(__WINDOWS__)
     #include <Windows.h>
@@ -16,10 +17,11 @@
   #endif
 
   extern int            ascii_spin_phase;
-  
+  extern int            n_old;
+
   double  getCPUTime();
   void    load_file(const char* file_name, char** file_buffer, size_t* file_size);
   void    free_file(char* buffer);
-  void    ascii_spin(const char* text);
+  void ascii_spin(const char* text, double tic, double toc);
   void    ascii_spin_stop();
 #endif

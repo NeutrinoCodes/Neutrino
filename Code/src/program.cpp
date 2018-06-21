@@ -1,10 +1,5 @@
 #include "program.hpp"
 
-// These files are relative to the build/mac or build/linux directory:
-#define VERTEX_FILE     "../../shader/vertex.vert"
-#define FRAGMENT_FILE   "../../shader/fragment.frag"
-#define KERNEL_FILE     "../../kernel/thekernel.cl"
-
 #define NUM_POINTS      10000
 #define X_MIN           -1.0f
 #define Y_MIN           -1.0f
@@ -16,13 +11,6 @@
 point4* points = new point4(NUM_POINTS);
 color4* colors = new color4(NUM_POINTS);
 float tick;
-
-void load()
-{
-  load_vertex(VERTEX_FILE);
-  load_fragment(FRAGMENT_FILE);
-  load_kernel(KERNEL_FILE);
-}
 
 void setup()
 {

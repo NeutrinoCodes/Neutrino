@@ -291,14 +291,11 @@ void init_screen()
   glEnable(GL_PROGRAM_POINT_SIZE);                                              // Enabling "gl_PointSize" in vertex shader...
   glLineWidth(LINE_WIDTH);                                                      // Setting line width...
 
-  /* for text...
+  // for text...
+  glEnable(GL_CULL_FACE);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glActiveTexture(GL_TEXTURE0);
-  glGenTextures(1, &text_texture);
-  glBindTexture(GL_TEXTURE_2D, text_texture);
-  glUniform1i(uniform_tex, 0);
-  */
+  // ...for text
 
   Translation_matrix = glm::translate(glm::mat4(),                              // Setting initial Translation_matrix matrix...
                                       glm::vec3(0.0f, 0.0f, -3.0f));
