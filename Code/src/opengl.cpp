@@ -18,6 +18,7 @@ size_t            text_fragment_size;                                           
 GLuint 						text_shader;                                                  // Text shader program.
 GLuint            text_vao;                                                     // Text VAO.
 GLuint            text_vbo;                                                     // Text VBO.
+GLint             pack_alignment;
 
 double            mouse_x = 0;                                                  // Mouse x-coordinate [px].
 double            mouse_y = 0;                                                  // Mouse y-coordinate [px].
@@ -366,7 +367,7 @@ void init_screen()
   glLineWidth(LINE_WIDTH);                                                      // Setting line width...
 
   // for text...
-  glEnable(GL_CULL_FACE);
+  //glEnable(GL_CULL_FACE);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   // ...for text
@@ -401,6 +402,8 @@ void init_freetype()
   }
 
   FT_Set_Pixel_Sizes(face, 0, 48);                                              // Setting font size...
+
+  glGetIntegerv(GL_UNPACK_ALIGNMENT, &pack_alignment);                          // Getting current byte-alignment...
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);                                        // Disabling byte-alignment restriction...
 
   for (i = 0; i < 128; i++)                                                     // Loading first 128 characters of ASCII set...
@@ -455,10 +458,10 @@ void init_freetype()
   glBindBuffer(GL_ARRAY_BUFFER, text_vbo);
   glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);      // Matches "layout = 0" variable in vertex shader.
 
-  //glBindBuffer(GL_ARRAY_BUFFER, 0);
-  //glBindVertexArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
 
-
+  glPixelStorei(GL_UNPACK_ALIGNMENT, pack_alignment);                           // Setting old byte-alignment...
 
   printf("DONE!\n");
 }

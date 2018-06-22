@@ -74,8 +74,16 @@ void loop()
 
   tick += 0.1f;
 
+  char puppo[5];
+  puppo[0] = 'p';
+  puppo[1] = 'i';
+  puppo[2] = 'p';
+  puppo[3] = 'p';
+  puppo[4] = 'o';
+
   plot(points, colors);
-  //overlay("pippo", 5, 1.0, 1.0, 1.0, glm::vec3(1.0, 1.0, 1.0));
+  overlay(puppo, 5, 0.0, 0.0, 1.0/SIZE_WINDOW_X, glm::vec3(1.0, 1.0, 1.0));
+
 }
 
 void terminate()

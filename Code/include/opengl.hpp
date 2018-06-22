@@ -58,6 +58,7 @@
   extern  GLuint            text_texture;                                       // Text texture.
   extern  GLuint            text_vao;                                           // Text VAO.
   extern  GLuint            text_vbo;                                           // Text VBO.
+  extern  GLint             pack_alignment;
   extern  glm::mat4					Rotation_matrix;																	  // Rotation matrix.
   extern  glm::mat4 				Translation_matrix;																	// Translation matrix.
   extern  glm::mat4 				Model_matrix;																				// Model matrix.
