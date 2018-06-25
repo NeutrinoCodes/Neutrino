@@ -6,6 +6,7 @@ out vec4 fragment_color;                                                        
 uniform mat4 View_matrix;                                                       // "View_matrix" matrix.
 uniform mat4 Projection_matrix;                                                 // "Projection_matrix" matrix.
 
+// Computing rendering point coordinates:
 void main(void)
 {
   gl_PointSize = 5;                                                             // Setting point size...
