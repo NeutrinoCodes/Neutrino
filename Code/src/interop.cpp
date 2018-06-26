@@ -322,10 +322,10 @@ void plot(point4* points, color4* colors)
   glDisableVertexAttribArray(LAYOUT_0);                                         // Unbinding "colors" array...
 }
 
-void overlay(char* text, int text_length, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
+void overlay(char* text, int text_length, GLfloat x, GLfloat y, GLfloat scale, glm::vec4 color)
 {
   int i;
-  Character ch;
+  truetype ch;
   GLfloat xpos;
   GLfloat ypos;
   GLfloat w;
@@ -343,27 +343,30 @@ void overlay(char* text, int text_length, GLfloat x, GLfloat y, GLfloat scale, g
   //Projection_matrix = glm::mat4(1.0f);
   glUseProgram(text_shader);                                                    // Using shader...
 
-
-
-  glUniform3f(glGetUniformLocation(text_shader, "text_color"), color.x, color.y, color.z);
-
-  glUniformMatrix4fv(glGetUniformLocation(text_shader, "View_matrix"),         // Setting View_matrix matrix on shader...
+  glUniformMatrix4fv(glGetUniformLocation(text_shader, "View_matrix"),          // Setting View_matrix matrix on shader...
                      1,
                      GL_FALSE,
                      &View_matrix[0][0]);
-  glUniformMatrix4fv(glGetUniformLocation(text_shader, "Projection_matrix"),   // Setting Projection_matrix matrix on shader...
+  glUniformMatrix4fv(glGetUniformLocation(text_shader, "Projection_matrix"),    // Setting Projection_matrix matrix on shader...
                      1,
                      GL_FALSE,
-                     &Projection_matrix[0][0]);
+                     &Projection_matrix[0][0]);                                 // Setting text color (RGBA)...
+  glUniform4f(glGetUniformLocation(text_shader, "text_color"),
+                                   color.x,
+                                   color.y,
+                                   color.z,
+                                   color.w);
 
-
-
+  // Binding "text_points" array:
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, messages->vbo);                                 // Binding VBO...
+  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
   glActiveTexture(GL_TEXTURE0);
   glBindVertexArray(text_vao);
 
   for (i = 0; i < text_length; i++)
   {
-    ch = char_list[int(text[i])];
+    ch = font[int(text[i])];
 
     xpos = x + ch.bearing.x * scale;
     ypos = y - (ch.size.y - ch.bearing.y) * scale;
@@ -373,14 +376,14 @@ void overlay(char* text, int text_length, GLfloat x, GLfloat y, GLfloat scale, g
 
     // Updating VBO for each character...
     GLfloat vertices[6][4] = {
-            { xpos,     ypos + h,   0.0, 0.0 },
-            { xpos,     ypos,       0.0, 1.0 },
-            { xpos + w, ypos,       1.0, 1.0 },
+                                { xpos,     ypos + h,   0.0, 0.0 },
+                                { xpos,     ypos,       0.0, 1.0 },
+                                { xpos + w, ypos,       1.0, 1.0 },
 
-            { xpos,     ypos + h,   0.0, 0.0 },
-            { xpos + w, ypos,       1.0, 1.0 },
-            { xpos + w, ypos + h,   1.0, 0.0 }
-        };
+                                { xpos,     ypos + h,   0.0, 0.0 },
+                                { xpos + w, ypos,       1.0, 1.0 },
+                                { xpos + w, ypos + h,   1.0, 0.0 }
+                              };
 
 
 

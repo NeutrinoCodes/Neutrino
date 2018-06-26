@@ -12,15 +12,23 @@ double getCPUTime()
     FILETIME exitTime;
     FILETIME kernelTime;
     FILETIME userTime;
-    if (GetProcessTimes(GetCurrentProcess(), &createTime, &exitTime, &kernelTime, &userTime ) != -1 )
+
+    if (
+          GetProcessTimes(GetCurrentProcess(),
+                          &createTime,
+                          &exitTime,
+                          &kernelTime,
+                          &userTime)
+          != -1
+        )
     {
       SYSTEMTIME userSystemTime;
       if (FileTimeToSystemTime(&userTime, &userSystemTime) != -1)
       {
-        time =  (double)userSystemTime.wHour * 3600.0 +
-                (double)userSystemTime.wMinute * 60.0 +
+        time =  (double)userSystemTime.wHour*3600.0 +
+                (double)userSystemTime.wMinute*60.0 +
                 (double)userSystemTime.wSecond +
-                (double)userSystemTime.wMilliseconds / 1000.0;
+                (double)userSystemTime.wMilliseconds/1000.0;
         return time;
       }
     }
@@ -50,7 +58,7 @@ double getCPUTime()
 
       if (id != (clockid_t) - 1 && clock_gettime(id, &ts) != -1)
       {
-        time = (double)ts.tv_sec +(double)ts.tv_nsec / 1000000000.0;
+        time = (double)ts.tv_sec + (double)ts.tv_nsec/1000000000.0;
         return time;
       }
     }
@@ -61,7 +69,7 @@ double getCPUTime()
           struct rusage rusage;
           if (getrusage(RUSAGE_SELF, &rusage) != -1)
           {
-            time = (double)rusage.ru_utime.tv_sec + (double)rusage.ru_utime.tv_usec / 1000000.0;
+            time = (double)rusage.ru_utime.tv_sec + (double)rusage.ru_utime.tv_usec/1000000.0;
             return time;
           }
         }
@@ -73,7 +81,7 @@ double getCPUTime()
         struct tms tms;
         if (times(&tms) != (clock_t) - 1)
         {
-          time = (double)tms.tms_utime / ticks;
+          time = (double)tms.tms_utime/ticks;
           return time;
         }
       }

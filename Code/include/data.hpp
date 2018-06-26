@@ -6,6 +6,8 @@
   #include "opengl.hpp"
   #include "opencl.hpp"
 
+  #define SIZE_TEXT_MAX 128                                                     // Maximum number of characters in a text string.
+
   class float4
   {
     private:

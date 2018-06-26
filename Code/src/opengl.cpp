@@ -36,8 +36,7 @@ glm::mat4 				Translation_matrix = glm::mat4(1.0f);													// Translation m
 glm::mat4 				Model_matrix = glm::mat4(1.0f);																// Model matrix.
 glm::mat4 				View_matrix = glm::mat4(1.0f);							   								// View matrix.
 glm::mat4 				Projection_matrix = glm::mat4(1.0f);				  								// Projection matrix.
-
-struct Character  char_list[128];                                               // Array of text charactes.
+struct truetype   font[128];                                                    // Text font.
 
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// REFRESH //////////////////////////////////////
@@ -203,7 +202,7 @@ void load_text_fragment(const char* filename_fragment)
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// INITIALIZATIONS ////////////////////////////////
+////////////////////////////////////// WINDOW ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 void init_window()
 {
@@ -250,6 +249,9 @@ void init_window()
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////// SHADERS ////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 void init_shaders()
 {
   GLuint		point_vertex_shader;                                                // "Point" vertex shader.
@@ -266,9 +268,7 @@ void init_shaders()
 
   printf("Action: initialising OpenGL shaders... ");
 
-  ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////// POINT SHADER //////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  // POINT SHADER:
 
   // Compiling point vertex shader...
   point_vertex_shader = glCreateShader(GL_VERTEX_SHADER);                       // Creating shader...
@@ -322,9 +322,7 @@ void init_shaders()
   free_file(point_vertex_source);                                               // Freeing point vertex source file...
   free_file(point_fragment_source);                                             // Freeing fragment vertex source file...
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////// TEXT SHADER //////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  // TEXT SHADER:
 
   // Compiling text vertex shader:
   text_vertex_shader = glCreateShader(GL_VERTEX_SHADER);                        // Creating shader...
@@ -380,6 +378,9 @@ void init_shaders()
   printf("DONE!\n");
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////// SCREEN ////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 void init_screen()
 {
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);                                         // Setting color for clearing window...
@@ -402,12 +403,18 @@ void init_screen()
                                 FAR_Z_CLIP);
 }
 
-void init_freetype()
+//////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// TEXT /////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void init_text()
 {
   FT_Library  ft;                                                               // FreeType library.
   FT_Face     face;                                                             // Font face.
   GLuint      texture;                                                          // Text texture.
+  GLuint      LAYOUT_0 = 0;
   int         i;                                                                // Text character index.
+  GLuint vao;                                                                   // OpenGL data VAO.
+  GLuint vbo;                                                                   // OpenGL data VBO.
 
   printf("Action: initializing FreeType... ");
 
@@ -417,7 +424,7 @@ void init_freetype()
     exit(EXIT_FAILURE);
   }
 
-  if (FT_New_Face(ft, "/Library/Fonts/Arial.ttf", 0, &face))                    // Initializing font... (this path is for Mac)
+  if (FT_New_Face(ft, "TEXT_FONT", 0, &face))                                   // Initializing font...
   {
     printf("\nError:  could not load font!\n");
     exit(EXIT_FAILURE);
@@ -436,7 +443,6 @@ void init_freetype()
       exit(EXIT_FAILURE);
     }
 
-
     glGenTextures(1, &texture);                                                 // Generating texture...
     glBindTexture(GL_TEXTURE_2D, texture);                                      // Binding texture...
     glTexImage2D(GL_TEXTURE_2D,                                                 // Specifying a two-dimensional texture image...
@@ -449,18 +455,17 @@ void init_freetype()
                  GL_UNSIGNED_BYTE,
                 face->glyph->bitmap.buffer);
 
-
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);        // Setting texture parameters...
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);        // Setting texture parameters...
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);           // Setting texture parameters...
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);           // Setting texture parameters...
 
-    char_list[i].texture = texture;                                             // Storing character for later use...
-    char_list[i].size = glm::ivec2(face->glyph->bitmap.width,                   // Storing character for later use...
+    font[i].texture = texture;                                                  // Storing character for later use...
+    font[i].size = glm::ivec2(face->glyph->bitmap.width,                        // Storing character for later use...
                                    face->glyph->bitmap.rows);                   // Storing character for later use...
-    char_list[i].bearing = glm::ivec2(face->glyph->bitmap_left,                 // Storing character for later use...
+    font[i].bearing = glm::ivec2(face->glyph->bitmap_left,                      // Storing character for later use...
                                       face->glyph->bitmap_top);                 // Storing character for later use...
-    char_list[i].advance = face->glyph->advance.x;                              // Storing character for later use...
+    font[i].advance = face->glyph->advance.x;                                   // Storing character for later use...
   }
 
   glBindTexture(GL_TEXTURE_2D, 0);                                              // Unbinding texture...
@@ -469,23 +474,55 @@ void init_freetype()
   FT_Done_FreeType(ft);                                                         // Destroying FreeType...
 
   // Configuring VAO/VBO for texture quads:
-  glGenVertexArrays(1, &text_vao);
-  glBindVertexArray(text_vao);
-  glGenBuffers(1, &text_vbo);
-
-
-
-  glBindBuffer(GL_ARRAY_BUFFER, text_vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-
-  glEnableVertexAttribArray(0);                                                 // Matches "layout = 0" variable in vertex shader.
-  //glBindBuffer(GL_ARRAY_BUFFER, text_vbo);
-  glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);      // Matches "layout = 0" variable in vertex shader.
-
+  glGenVertexArrays(1, &vao);                                         // Generating VAO...
+  glBindVertexArray(vao);                                             // Binding VAO...
+  glGenBuffers(1, &vbo);                                              // Generating VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);                                 // Binding VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*6*sizeof(GLfloat)*(messages->size),
+               NULL,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);                                 // Binding VBO...
+  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 4*sizeof(GLfloat), 0); // Specifying the format for "layout = 0" attribute in vertex shader...
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
   glPixelStorei(GL_UNPACK_ALIGNMENT, pack_alignment);                           // Setting old byte-alignment...
 
   printf("DONE!\n");
+}
+
+text::text(int num_data)
+{
+  data = new char*[num_data];                                                   // "text" data array.
+
+  for (int i = 0; i < num_data; ++i)
+  {
+    data[i] = new char[SIZE_TEXT_MAX];
+  }
+
+  size = num_data;                                                              // Array size (number of text strings).
+  vao = 0;                                                                      // OpenGL data VAO.
+  vbo = 0;                                                                      // OpenGL data VBO.
+
+  // Filling text arrays with default data:
+  for (i = 0; i < num_data; i++)
+  {
+    for (j = 0; j < SIZE_TEXT_MAX; j++)
+    {
+      data[i][j] = '\0';                                                        // Setting "text" data (NULL)...
+    }
+  }
+
+  x = 0.0;                                                                      // Setting default "x" text position [-1.0 ... 1.0]...
+  y = 0.0;                                                                      // Setting default "y" text position [-1.0 ... 1.0]...
+  sx = 0.1;                                                                     // Setting default "sx" character dimension [-1.0 ... 1.0]...
+  sy = 0.1;                                                                     // Setting default "sy" character dimension [-1.0 ... 1.0]...
+}
+
+text::~text()
+{
+  glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
+  glDeleteBuffers(1, &vao);                                                     // Releasing OpenGL VAO...
 }

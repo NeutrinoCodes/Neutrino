@@ -8,8 +8,11 @@
 #define DX              0.02f
 #define DY              0.02f
 
-point4* points = new point4(NUM_POINTS);
-color4* colors = new color4(NUM_POINTS);
+#define NUM_MESSAGES    128
+
+point4* points =    new point4(NUM_POINTS);
+color4* colors =    new color4(NUM_POINTS);
+text*   messages =  new text(NUM_MESSAGES);
 float tick;
 
 void setup()
@@ -73,20 +76,6 @@ void loop()
   pop_kernel();
 
   tick += 0.1f;
-
-  char puppo[5];
-  puppo[0] = 'p';
-  puppo[1] = 'i';
-  puppo[2] = 'p';
-  puppo[3] = 'p';
-  puppo[4] = 'o';
-
-  char pappo[5];
-  pappo[0] = 'p';
-  pappo[1] = 'a';
-  pappo[2] = 'p';
-  pappo[3] = 'p';
-  pappo[4] = 'o';
 
   plot(points, colors);
   //overlay(puppo, 5, 0.0, 0.0, 1.0/SIZE_WINDOW_X, glm::vec3(0.0, 1.0, 1.0));

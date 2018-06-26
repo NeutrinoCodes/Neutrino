@@ -44,13 +44,34 @@
   #define FOV 60.0f
   #define LINE_WIDTH 3
 
-  typedef struct Character
+  typedef struct truetype
   {
     GLuint      texture;                                                        // ID handle of the glyph texture.
     glm::ivec2  size;                                                           // Size of glyph.
     glm::ivec2  bearing;                                                        // Offset from baseline to left/top of glyph.
     GLuint      advance;                                                        // Horizontal offset to advance to next glyph.
-  } Character;
+  } truetype;
+
+  class text
+  {
+    private:
+      int               err;
+      unsigned int      i;
+      unsigned int      j;
+
+    public:
+      text(int num_data);
+      ~text();
+
+      char**    data;
+      GLfloat   x;                                                              // "x" text position [-1.0 ... 1.0]...
+      GLfloat   y;                                                              // "y" text position [-1.0 ... 1.0]...
+      GLfloat   sx;                                                             // "sx" character dimension [-1.0 ... 1.0]...
+      GLfloat   sy;                                                             // "sy" character dimension [-1.0 ... 1.0]...
+      int       size;
+      GLuint    vao;
+      GLuint    vbo;
+  };
 
   extern  GLFWwindow*				window;                                             // Window handle.
   extern  GLuint 						point_shader;                                       // Point shader program.
@@ -58,12 +79,13 @@
   extern  GLuint            text_texture;                                       // Text texture.
   extern  GLuint            text_vao;                                           // Text VAO.
   extern  GLuint            text_vbo;                                           // Text VBO.
-  extern  GLint             pack_alignment;
+  extern  GLint             pack_alignment;                                     // OpenGL data pack alignment status.
   extern  glm::mat4					Rotation_matrix;																	  // Rotation matrix.
   extern  glm::mat4 				Translation_matrix;																	// Translation matrix.
   extern  glm::mat4 				Model_matrix;																				// Model matrix.
   extern  glm::mat4 				View_matrix;																				// View matrix.
   extern  glm::mat4 				Projection_matrix;																	// Projection matrix.
+  extern  struct truetype   font[128];                                          // Text font.
 
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// REFRESH ////////////////////////////////////
@@ -94,16 +116,23 @@
   void        load_text_fragment(const char* filename_fragment);
 
   ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////// TEXT /////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  extern struct Character  char_list[128];                                      // Array of text charactes.
-
-  ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////// INITIALIZATIONS //////////////////////////////
+  //////////////////////////////////// WINDOW ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   void        init_window();
+
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////// SHADERS ///////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   void        init_shaders();
+
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////// SCREEN ////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   void        init_screen();
-  void        init_freetype();
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////// TEXT /////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  void        init_text();
 
 #endif
