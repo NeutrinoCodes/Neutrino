@@ -1,12 +1,18 @@
 #version 410 core
 
-in vec2 text_coordinates_vertex;
-in vec4 text_color_vertex;
-out vec4 text_color_fragment;
-uniform sampler2D text;
+in  vec4 vertex_color;                                                          // (R, G, B, A) color, from vertex shader.
+out vec4 fragment_color;                                                        // The rendered color.
 
-void main()
+// Rendering points as smoothed circles:
+void main(void)
 {
-  vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, texture_coordinates_vertex).r);
-  text_color_fragment = sampled*vec4(text_color_vertex);
+  float r = 0.0;                                                                // Circle radius.
+  float delta = 0.0;                                                            // Gradient magnitude.
+  float alpha = 1.0;                                                            // Circle border smoothness.
+  vec2 cxy = 2.0 * gl_PointCoord - 1.0;                                         // Circle center.
+
+  r = dot(cxy, cxy);                                                            // Computing circle radius...
+  delta = fwidth(r);                                                            // Computing gradient magnitude...
+  alpha = 1.0 - smoothstep(1.0 - delta, 1.0 + delta, r);                        // Computing border smoothness...
+  fragment_color = alpha*vertex_color;                                          // Assigning "color" as OpenGL color...
 }

@@ -8,6 +8,9 @@
   #include "opencl.hpp"
   #include "data.hpp"
 
+  void init_point4(point4* points);
+  void init_color4(color4* colors);
+
   void set_float(float* data, int kernel_arg);
   void set_int(int* data, int kernel_arg);
   void set_point4(point4* points, int kernel_arg);
@@ -24,6 +27,6 @@
   void pop_int(int* data, int kernel_arg);
 
   void plot(point4* points, color4* colors);
-  void overlay(char* text, int text_length, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+  void overlay(point4* points, color4* colors);
 
 #endif

@@ -1,7 +1,7 @@
 #version 410 core
 
-in  vec4 fragment_color;                                                        // (R, G, B, A) color, from vertex shader.
-out vec4 color;                                                                 // The rendered color.
+in  vec4 vertex_color;                                                          // (R, G, B, A) color, from vertex shader.
+out vec4 fragment_color;                                                        // The rendered color.
 
 // Rendering points as smoothed circles:
 void main(void)
@@ -14,5 +14,5 @@ void main(void)
   r = dot(cxy, cxy);                                                            // Computing circle radius...
   delta = fwidth(r);                                                            // Computing gradient magnitude...
   alpha = 1.0 - smoothstep(1.0 - delta, 1.0 + delta, r);                        // Computing border smoothness...
-  color = alpha*fragment_color;                                                 // Assigning "color" as OpenGL color...
+  fragment_color = alpha*vertex_color;                                          // Assigning "color" as OpenGL color...
 }

@@ -8,11 +8,12 @@
 #define DX              0.02f
 #define DY              0.02f
 
-#define NUM_MESSAGES    128
-
 point4* points =    new point4(NUM_POINTS);
 color4* colors =    new color4(NUM_POINTS);
-text*   messages =  new text(NUM_MESSAGES);
+
+point4* points_1 =    new point4(1);
+color4* colors_1 =    new color4(1);
+
 float tick;
 
 void setup()
@@ -52,7 +53,20 @@ void setup()
     colors->a[i] = 1.0f;                                                        // Setting "w" initial colors...
   }
 
+  points_1->x[0] = 0.0f;
+  points_1->y[0] = 0.0f;
+  points_1->z[0] = 0.0f;
+  points_1->w[0] = 1.0f;
+
+  colors_1->r[0] = 1.0f;
+  colors_1->g[0] = 1.0f;
+  colors_1->b[0] = 1.0f;
+  colors_1->a[0] = 1.0f;
+
   tick = 0.0f;                                                                  // Setting initial time tick...
+
+  init_point4(points_1);
+  init_color4(colors_1);
 
   set_point4(points, 0);                                                        // Setting kernel argument #0...
   set_color4(colors, 1);                                                        // Setting kernel argument #1...
@@ -78,10 +92,7 @@ void loop()
   tick += 0.1f;
 
   plot(points, colors);
-  //overlay(puppo, 5, 0.0, 0.0, 1.0/SIZE_WINDOW_X, glm::vec3(0.0, 1.0, 1.0));
-  //overlay(pappo, 5, -2.0, 0.0, 1.0/SIZE_WINDOW_X, glm::vec3(0.0, 1.0, 1.0));
-  //plot(points, colors);
-
+  overlay(points_1, colors_1);
 }
 
 void terminate()
