@@ -91,7 +91,7 @@ void loop()
 
   tick += 0.1f;
 
-  plot(points, colors);
+  //plot(points, colors);
   overlay(points_1, colors_1);
 }
 

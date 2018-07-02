@@ -179,6 +179,24 @@ void load_point_fragment(const char* filename_fragment)
 	printf("DONE!\n");
 }
 
+void load_text_vertex(const char* filename_vertex)
+{
+  printf("Action: loading OpenGL point vertex source from file... ");
+
+  load_file(filename_vertex, &text_vertex_source, &text_vertex_size);
+
+	printf("DONE!\n");
+}
+
+void load_text_fragment(const char* filename_fragment)
+{
+	printf("Action: loading OpenGL point fragment source from file... ");
+
+  load_file(filename_fragment, &text_fragment_source, &text_fragment_size);
+
+	printf("DONE!\n");
+}
+
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// WINDOW ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
