@@ -1,3 +1,5 @@
+#include "font.hpp"
+
 int font_vertex[3646] = {
 /* Ascii 33 */
    5,  21,   5,   7,   5,   2,   4,   1,   4,   1,   5,   0,   5,   0,   6,   1,
@@ -551,7 +553,7 @@ int font_index[94] = {
 /* Ascii 126 */	3566
 };
 
-int font_subarraysize[94] = {
+int font_trait_size[94] = {
 /* Ascii 33 */20,
 /* Ascii 34 */8,
 /* Ascii 35 */16,
@@ -677,7 +679,7 @@ int font_width[94] = {
 /* Ascii 58 */10,
 /* Ascii 59 */10,
 /* Ascii 60 */24,
-/* Ascii 61 */26
+/* Ascii 61 */26,
 /* Ascii 62 */24,
 /* Ascii 63 */18,
 /* Ascii 64 */27,
@@ -744,6 +746,3 @@ int font_width[94] = {
 /* Ascii 125 */14,
 /* Ascii 126 */24
 };
-
-/* Ascii 32 */int font_space_width = 16;
-/* Inter-character space */ int font interspace_width = 2;

@@ -11,8 +11,8 @@
 point4* points =    new point4(NUM_POINTS);
 color4* colors =    new color4(NUM_POINTS);
 
-point4* points_1 =    new point4(8);
-color4* colors_1 =    new color4(8);
+text_point4* points_1 =    new text_point4("pippo");
+//text_color4* colors_1 =    new text_color4(8);
 
 float tick;
 
@@ -53,90 +53,10 @@ void setup()
     colors->a[i] = 1.0f;                                                        // Setting "w" initial colors...
   }
 
-  points_1->x[0] = 1.10f;
-  points_1->y[0] = 2.50f;
-  points_1->z[0] = 0.0f;
-  points_1->w[0] = 1.0f;
-
-  points_1->x[1] = 0.40f;
-  points_1->y[1] = -0.70f;
-  points_1->z[1] = 0.0f;
-  points_1->w[1] = 1.0f;
-
-  points_1->x[2] = 1.70f;
-  points_1->y[2] = 2.50f;
-  points_1->z[2] = 0.0f;
-  points_1->w[2] = 1.0f;
-
-  points_1->x[3] = 1.00f;
-  points_1->y[3] = -0.70f;
-  points_1->z[3] = 0.0f;
-  points_1->w[3] = 1.0f;
-
-  points_1->x[4] = 0.40f;
-  points_1->y[4] = 1.20f;
-  points_1->z[4] = 0.0f;
-  points_1->w[4] = 1.0f;
-
-  points_1->x[5] = 1.80f;
-  points_1->y[5] = 1.20f;
-  points_1->z[5] = 0.0f;
-  points_1->w[5] = 1.0f;
-
-  points_1->x[6] = 0.30f;
-  points_1->y[6] = 0.60f;
-  points_1->z[6] = 0.0f;
-  points_1->w[6] = 1.0f;
-
-  points_1->x[7] = 1.70f;
-  points_1->y[7] = 0.60f;
-  points_1->z[7] = 0.0f;
-  points_1->w[7] = 1.0f;
-
-  colors_1->r[0] = 1.0f;
-  colors_1->g[0] = 0.0f;
-  colors_1->b[0] = 0.0f;
-  colors_1->a[0] = 1.0f;
-
-  colors_1->r[1] = 1.0f;
-  colors_1->g[1] = 0.0f;
-  colors_1->b[1] = 0.0f;
-  colors_1->a[1] = 1.0f;
-
-  colors_1->r[2] = 0.0f;
-  colors_1->g[2] = 0.0f;
-  colors_1->b[2] = 1.0f;
-  colors_1->a[2] = 1.0f;
-
-  colors_1->r[3] = 0.0f;
-  colors_1->g[3] = 0.0f;
-  colors_1->b[3] = 1.0f;
-  colors_1->a[3] = 1.0f;
-
-  colors_1->r[4] = 1.0f;
-  colors_1->g[4] = 0.0f;
-  colors_1->b[4] = 0.0f;
-  colors_1->a[4] = 1.0f;
-
-  colors_1->r[5] = 1.0f;
-  colors_1->g[5] = 0.0f;
-  colors_1->b[5] = 0.0f;
-  colors_1->a[5] = 1.0f;
-
-  colors_1->r[6] = 0.0f;
-  colors_1->g[6] = 0.0f;
-  colors_1->b[6] = 1.0f;
-  colors_1->a[6] = 1.0f;
-
-  colors_1->r[7] = 0.0f;
-  colors_1->g[7] = 0.0f;
-  colors_1->b[7] = 1.0f;
-  colors_1->a[7] = 1.0f;
-
   tick = 0.0f;                                                                  // Setting initial time tick...
 
-  init_point4(points_1);
-  init_color4(colors_1);
+  //init_point4(points_1);
+  //init_color4(colors_1);
 
   set_point4(points, 0);                                                        // Setting kernel argument #0...
   set_color4(colors, 1);                                                        // Setting kernel argument #1...
@@ -162,7 +82,7 @@ void loop()
   tick += 0.1f;
 
   plot(points, colors);
-  overlay(points_1, colors_1);
+  //overlay(points_1, colors_1);
 }
 
 void terminate()

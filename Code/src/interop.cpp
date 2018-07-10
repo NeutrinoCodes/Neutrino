@@ -3,7 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "INIT" FUNCTIONS //////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void init_point4(point4* points)
+void init_point4(text_point4* points)
 {
   int err;
   int i;
@@ -47,7 +47,7 @@ void init_point4(point4* points)
   printf("DONE!\n");
 }
 
-void init_color4(color4* colors)
+void init_color4(text_color4* colors)
 {
   int err;
   int i;
@@ -413,7 +413,7 @@ void plot(point4* points, color4* colors)
   glDisableVertexAttribArray(LAYOUT_1);                                         // Unbinding "colors" array...
 }
 
-void overlay(point4* points, color4* colors)
+void overlay(text_point4* points, text_color4* colors)
 {
   GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
   GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
