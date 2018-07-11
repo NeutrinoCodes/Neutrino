@@ -10,9 +10,7 @@
 
 point4* points =    new point4(NUM_POINTS);
 color4* colors =    new color4(NUM_POINTS);
-
-text_point4* points_1 =    new text_point4("pippo");
-//text_color4* colors_1 =    new text_color4(8);
+text4* text =       new text4("pippo", 1.0f, 1.0f, 1.0f, 1.0f);
 
 float tick;
 
@@ -55,8 +53,7 @@ void setup()
 
   tick = 0.0f;                                                                  // Setting initial time tick...
 
-  //init_point4(points_1);
-  //init_color4(colors_1);
+  init_text4(text);
 
   set_point4(points, 0);                                                        // Setting kernel argument #0...
   set_color4(colors, 1);                                                        // Setting kernel argument #1...
@@ -82,7 +79,7 @@ void loop()
   tick += 0.1f;
 
   plot(points, colors);
-  //overlay(points_1, colors_1);
+  print(text);
 }
 
 void terminate()

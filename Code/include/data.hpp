@@ -66,7 +66,7 @@
       GLfloat*  y;
       GLfloat*  z;
       GLfloat*  w;
-      GLfloat*  data;
+
       int size;
       GLuint    vao;
       GLuint    vbo;
@@ -87,61 +87,50 @@
       GLfloat*  g;
       GLfloat*  b;
       GLfloat*  a;
-      GLfloat*  data;
+
       int       size;
       GLuint    vao;
       GLuint    vbo;
       cl_mem    buffer;
   };
 
-  class text_point4
+  class text4
   {
     private:
-      int               err;
-      unsigned int      i;
-      unsigned int      j;
-      int               text_size;
-      int               num_traits;
-      int*              ascii_code;
-      int*              ascii_index;
-      int*              ascii_trait;
-      int*              trait_index;
-      int*              ascii_kern;
+      int      err;
+      int      i;
+      int      j;
+      int      even;
+      int      odd;
+      int      text_size;
+      int      num_traits;
+      int      i_traits_max;
+      int*     ascii_code;
+      int*     ascii_index;
+      int*     ascii_trait;
+      int*     trait_index;
+      int*     ascii_kern;
 
     public:
-      text_point4(const char* text);
-      ~text_point4();
+      text4(const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A);
+      ~text4();
 
       GLfloat*  x;
       GLfloat*  y;
       GLfloat*  z;
       GLfloat*  w;
-      GLfloat*  data;
-      int       size;
-      GLuint    vao;
-      GLuint    vbo;
-      cl_mem    buffer;
-  };
-
-  class text_color4
-  {
-    private:
-      int               err;
-      unsigned int      i;
-
-    public:
-      text_color4(int num_data);
-      ~text_color4();
 
       GLfloat*  r;
       GLfloat*  g;
       GLfloat*  b;
       GLfloat*  a;
-      GLfloat*  data;
+
       int       size;
-      GLuint    vao;
-      GLuint    vbo;
-      cl_mem    buffer;
+
+      GLuint    glyph_vao;
+      GLuint    color_vao;
+      GLuint    glyph_vbo;
+      GLuint    color_vbo;
   };
 
 #endif
