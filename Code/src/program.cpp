@@ -10,7 +10,7 @@
 
 point4* points =    new point4(NUM_POINTS);
 color4* colors =    new color4(NUM_POINTS);
-text4* text =       new text4("pippo", 1.0f, 1.0f, 1.0f, 1.0f);
+text4* text =       new text4("K", 1.0f, 1.0f, 1.0f, 1.0f);
 
 float tick;
 
@@ -54,6 +54,7 @@ void setup()
   tick = 0.0f;                                                                  // Setting initial time tick...
 
   init_text4(text);
+  printf("Text size = %d\n", text->size);
 
   set_point4(points, 0);                                                        // Setting kernel argument #0...
   set_color4(colors, 1);                                                        // Setting kernel argument #1...

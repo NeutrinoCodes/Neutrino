@@ -553,7 +553,7 @@ int font_index[94] = {
 /* Ascii 126 */	3566
 };
 
-int font_trait_size[94] = {
+int font_numdata[94] = {
 /* Ascii 33 */20,
 /* Ascii 34 */8,
 /* Ascii 35 */16,

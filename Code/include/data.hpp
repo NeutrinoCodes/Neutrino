@@ -102,14 +102,21 @@
       int      j;
       int      even;
       int      odd;
-      int      text_size;
-      int      num_traits;
-      int      i_traits_max;
-      int*     ascii_code;
-      int*     ascii_index;
-      int*     ascii_trait;
-      int*     trait_index;
-      int*     ascii_kern;
+
+      int      num_char;
+      int      num_data;
+      int      num_points;
+      int      num_strokes;
+
+      int*     char_code;
+      int*     char_item;
+      int*     char_numdata;
+      int*     char_numpoints;
+      int*     char_numstrokes;
+      int*     char_kern;
+
+      int*     data_index;
+      GLfloat* kern;
 
     public:
       text4(const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A);
