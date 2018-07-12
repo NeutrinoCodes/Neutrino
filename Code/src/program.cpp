@@ -10,7 +10,7 @@
 
 point4* points =    new point4(NUM_POINTS);
 color4* colors =    new color4(NUM_POINTS);
-text4* text =       new text4("}", 1.0f, 1.0f, 1.0f, 1.0f);
+text4* text =       new text4("Siamo dentro!", 1.0f, 1.0f, 1.0f, 1.0f);
 
 float tick;
 
