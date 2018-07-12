@@ -100,6 +100,7 @@
       int      err;
       int      i;
       int      j;
+      int      k;
       int      even;
       int      odd;
 
@@ -117,6 +118,7 @@
 
       int*     data_index;
       GLfloat* kern;
+      GLfloat* offset;
 
     public:
       text4(const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A);

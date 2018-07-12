@@ -133,10 +133,10 @@ color4::~color4()
 
 text4::text4(const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A)
 {
-  num_char = strlen(text);                                                      // # of character in input string.
-  num_data = 0;
-  num_points = 0;
-  num_strokes = 0;
+  num_char = strlen(text);                                                      // Total # of characters in input string.
+  num_data = 0;                                                                 // Total # of font data in input string.
+  num_points = 0;                                                               // Total # of font points in input string.
+  num_strokes = 0;                                                              // Total # of font strokes in input string.
 
   char_code         = new int[num_char];                                        // Ascii code for each character in input string.
   char_item         = new int[num_char];                                        // Font character position for each character in input string.
@@ -171,7 +171,8 @@ text4::text4(const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A)
   }
 
   data_index = new int[num_data];                                               // Index of font data for each character in input string.
-  kern = new GLfloat[num_points];
+  kern = new GLfloat[num_points];                                               // Kern character spacing for each font point in input string.
+  offset = new GLfloat[num_points];                                             // Character offset for each font point in input string.
 
   x = new GLfloat[num_points];                                                  // "x" data array.
   y = new GLfloat[num_points];                                                  // "y" data array.
@@ -183,27 +184,52 @@ text4::text4(const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A)
   b = new GLfloat[num_points];                                                  // "b" data array.
   a = new GLfloat[num_points];                                                  // "a" data array.
 
-  size = num_data;                                                              // Text array size.
+  size = num_points;                                                            // Text array size.
 
   glyph_vao = 0;                                                                // OpenGL glyph data VAO.
   color_vao = 0;                                                                // OpenGL color data VAO.
   glyph_vbo = 0;                                                                // OpenGL glyph data VBO.
   color_vbo = 0;                                                                // OpenGL color data VBO.
 
+  k = 0;
+
   for (i = 0; i < num_char; i++)                                                // Looping on all characters in input string...
   {
     for (j = 0; j < char_numdata[i]; j++)                                       // Looping on all font data for each single character...
     {
-      data_index[i*char_numdata[i] + j] = font_index[char_item[i]] + j;         // Computing index of font data for character in input string...
+      data_index[k + j] = font_index[char_item[i]] + j;         // Computing index of font data for character in input string...
     }
+
+    k += char_numdata[i];
   }
 
-  for (i = 0; i < num_char; i++)                                                // Looping on all characters in input string...
+  k = 0;
+
+  for (i = 0; i < num_char; i++)                                              // Looping on all characters in input string...
   {
     for (j = 0; j < char_numpoints[i]; j++)                                     // Looping on all font strokes for each single character...
     {
-      kern[i*char_numdata[i] + j] = char_kern[i];
+      kern[k + j] = char_kern[i];
     }
+
+    k += char_numpoints[i];
+  }
+
+  for (j = 0; j < char_numpoints[0]; j++)
+  {
+    offset[j] = 0.0f;
+  }
+
+  k = 0;
+
+  for (i = 1; i < num_char; i++)                                                // Looping on all characters in input string...
+  {
+    for (j = 0; j < char_numpoints[i]; j++)                                     // Looping on all font strokes for each single character...
+    {
+      offset[k + j] += font_width[char_item[i - 1]];
+    }
+
+    k += char_numpoints[i];
   }
 
   for (i = 0; i < num_points; i++)                                              // Unwrapping text data...
@@ -211,8 +237,8 @@ text4::text4(const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A)
     even = 2*i;                                                                 // Computing "even" index...
     odd  = 2*i + 1;                                                             // Computing "odd" index...
 
-    x[i] = (font_vertex[data_index[even]] +
-              ASCII_SCALE*i*(font_width[char_item[i]] + kern[char_item[i]]));   // Setting "x" data...
+    x[i] = ASCII_SCALE*(font_vertex[data_index[even]]);   // Setting "x" data...
+    //x[i] = font_vertex[data_index[even]]*ASCII_SCALE;
     y[i] = font_vertex[data_index[odd]]*ASCII_SCALE;                            // Setting "y" data...
     z[i] = 0.0f;                                                                // Setting "z" data...
     w[i] = 1.0f;                                                                // Setting "w" data...
