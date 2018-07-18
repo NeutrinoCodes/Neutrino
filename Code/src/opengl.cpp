@@ -4,11 +4,18 @@ GLFWwindow*				window;                                                       // 
 int								window_size_x = SIZE_WINDOW_X;                                // Window x-size [px].
 int								window_size_y = SIZE_WINDOW_Y;                                // Window y-size [px].
 float							aspect_ratio = (float)window_size_x/(float)window_size_y;     // Window aspcet-ratio [].
-char*             vertex_source;                                                // Vertex shader source.
-size_t            vertex_size;                                                  // Vertex shader size [characters].
-char*             fragment_source;                                              // Fragment shader source.
-size_t            fragment_size;                                                // Fragment shader size [characters].
-GLuint 						shader;                                                       // Shader program.
+
+char*             point_vertex_source;                                          // Point vertex shader source.
+size_t            point_vertex_size;                                            // Point vertex shader size [characters].
+char*             point_fragment_source;                                        // Point fragment shader source.
+size_t            point_fragment_size;                                          // Point fragment shader size [characters].
+GLuint 						point_shader;                                                 // Point shader program.
+
+char*             text_vertex_source;                                           // Point vertex shader source.
+size_t            text_vertex_size;                                             // Point vertex shader size [characters].
+char*             text_fragment_source;                                         // Point fragment shader source.
+size_t            text_fragment_size;                                           // Point fragment shader size [characters].
+GLuint 						text_shader;                                                  // Point shader program.
 
 double            mouse_x = 0;                                                  // Mouse x-coordinate [px].
 double            mouse_y = 0;                                                  // Mouse y-coordinate [px].
@@ -34,6 +41,11 @@ void screen_refresh()
 {
   glfwSwapBuffers(window);
   glfwPollEvents();
+}
+
+void screen_clear()
+{
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing screen...
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -154,50 +166,66 @@ void window_refresh_callback(GLFWwindow* window)
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////// FILES //////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void load_vertex(const char* filename_vertex)
+void load_point_vertex(const char* filename_vertex)
 {
-  printf("Action: loading OpenGL vertex source from file... ");
+  printf("Action: loading OpenGL point vertex source from file... ");
 
-  load_file(filename_vertex, &vertex_source, &vertex_size);
+  load_file(filename_vertex, &point_vertex_source, &point_vertex_size);
 
 	printf("DONE!\n");
 }
 
-void load_fragment(const char* filename_fragment)
+void load_point_fragment(const char* filename_fragment)
 {
-	printf("Action: loading OpenGL fragment source from file... ");
+	printf("Action: loading OpenGL point fragment source from file... ");
 
-  load_file(filename_fragment, &fragment_source, &fragment_size);
+  load_file(filename_fragment, &point_fragment_source, &point_fragment_size);
+
+	printf("DONE!\n");
+}
+
+void load_text_vertex(const char* filename_vertex)
+{
+  printf("Action: loading OpenGL point vertex source from file... ");
+
+  load_file(filename_vertex, &text_vertex_source, &text_vertex_size);
+
+	printf("DONE!\n");
+}
+
+void load_text_fragment(const char* filename_fragment)
+{
+	printf("Action: loading OpenGL point fragment source from file... ");
+
+  load_file(filename_fragment, &text_fragment_source, &text_fragment_size);
 
 	printf("DONE!\n");
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// INITIALIZATIONS ////////////////////////////////
+////////////////////////////////////// WINDOW ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 void init_window()
 {
-  // Inititalizing GLFW context...
-  if (glfwInit() != GLFW_TRUE)
+  if (glfwInit() != GLFW_TRUE)                                                  // Inititalizing GLFW context...
 	{
   	printf("Error:  unable to initialize GLFW!\n");
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
 
-  // Initializing GLFW hints...
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_SAMPLES, 4);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);                                // Initializing GLFW hints...
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);                                // Initializing GLFW hints...
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);                          // Initializing GLFW hints...
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);                // Initializing GLFW hints...
+	glfwWindowHint(GLFW_SAMPLES, 4);                                              // Initializing GLFW hints...
 
-  // Creating window...
-  window = glfwCreateWindow(window_size_x,
-                            window_size_y,
-                            "Neutrino",
-                            NULL,
-                            NULL);
+  // Creating window:
+  window = glfwCreateWindow(window_size_x,                                      // Width.
+                            window_size_y,                                      // Height.
+                            "Neutrino",                                         // Title.
+                            NULL,                                               // Monitor.
+                            NULL);                                              // Share.
   if (!window)
 	{
 		printf("Error:  unable to create window!\n");
@@ -205,17 +233,15 @@ void init_window()
     exit(EXIT_FAILURE);
   }
 
-  glfwMakeContextCurrent(window);
+  glfwMakeContextCurrent(window);                                               // Making the context of this window current for the calling thread...
+	glfwSetWindowRefreshCallback(window, window_refresh_callback);                // Setting window callbacks...
+  glfwSetKeyCallback(window, key_callback);                                     // Setting window callbacks...
+	glfwSetMouseButtonCallback(window, mouse_button_callback);                    // Setting window callbacks...
+	glfwSetCursorPosCallback(window, cursor_position_callback);                   // Setting window callbacks...
+	glfwSetScrollCallback(window, scroll_callback);                               // Setting window callbacks...
 
-  // Setting window callbacks...
-	glfwSetWindowRefreshCallback(window, window_refresh_callback);
-  glfwSetKeyCallback(window, key_callback);
-	glfwSetMouseButtonCallback(window, mouse_button_callback);
-	glfwSetCursorPosCallback(window, cursor_position_callback);
-	glfwSetScrollCallback(window, scroll_callback);
-
-  // Initializing GLEW context...
-  glewExperimental = GL_TRUE;
+  // Initializing GLEW context:
+  glewExperimental = GL_TRUE;                                                   // Ensuring that all extensions with valid entry points will be exposed...
 
 	if (glewInit() != GLEW_OK)
 	{
@@ -224,63 +250,139 @@ void init_window()
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////// SHADERS ////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 void init_shaders()
 {
-  GLuint		vs;
-	GLuint 		fs;
+  GLuint		point_vertex_shader;                                                // "Point" vertex shader.
+	GLuint 		point_fragment_shader;                                              // "Point" fragment shader.
+  GLuint    LAYOUT_0 = 0;                                                       // "layout = 0" attribute in vertex shader.
+  GLuint    LAYOUT_1 = 1;                                                       // "layout = 1" attribute in vertex shader.
+
+  GLuint		text_vertex_shader;                                                 // "Text" vertex shader.
+	GLuint 		text_fragment_shader;                                               // "Text" fragment shader.
+
 	GLint 		success;
   GLsizei 	log_size;
   GLchar*		log;
 
   printf("Action: initialising OpenGL shaders... ");
 
-  // Compiling vertex shader...
-  vs = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vs, 1, (const char**)&vertex_source, (GLint*)&vertex_size);
-	glCompileShader(vs);
-  glGetShaderiv(vs, GL_COMPILE_STATUS, &success);
+  // POINT SHADER:
 
+  // Compiling point vertex shader...
+  point_vertex_shader = glCreateShader(GL_VERTEX_SHADER);                       // Creating shader...
+  glShaderSource(point_vertex_shader,                                           // Attaching source code to shader...
+                 1,
+                 (const char**)&point_vertex_source,
+                 (GLint*)&point_vertex_size);
+	glCompileShader(point_vertex_shader);                                         // Compiling shader...
+  glGetShaderiv(point_vertex_shader, GL_COMPILE_STATUS, &success);              // Reading "GL_COMPILE_STATUS" flag...
+
+  // Checking compiled point vertex shader code:
   if (!success)
   {
-    glGetShaderiv(vs, GL_INFO_LOG_LENGTH, &log_size);
-    log = (char*) malloc(log_size+1);
-    log[log_size] = '\0';
-    glGetShaderInfoLog(vs, log_size+1, NULL, log);
-    printf("%s\n", log);
-    free(log);
-    exit(1);
+    glGetShaderiv(point_vertex_shader, GL_INFO_LOG_LENGTH, &log_size);          // Getting log length...
+    log = (char*) malloc(log_size + 1);                                         // Allocating temporary buffer for log...
+    log[log_size] = '\0';                                                       // Null-terminating log buffer...
+    glGetShaderInfoLog(point_vertex_shader, log_size + 1, NULL, log);           // Getting log...
+    printf("%s\n", log);                                                        // Printing log...
+    free(log);                                                                  // Freeing log...
+    exit(1);                                                                    // Exiting...
   }
 
-	// Compiling fragment shader...
-  fs = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fs, 1, (const char**)&fragment_source, (GLint*)&fragment_size);
-	glCompileShader(fs);
-  glGetShaderiv(fs, GL_COMPILE_STATUS, &success);
+	// Compiling point fragment shader...
+  point_fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);                   // Creating shader...
+  glShaderSource(point_fragment_shader,                                         // Attaching source code to shader...
+                 1,
+                 (const char**)&point_fragment_source,
+                 (GLint*)&point_fragment_size);
+	glCompileShader(point_fragment_shader);
+  glGetShaderiv(point_fragment_shader, GL_COMPILE_STATUS, &success);
 
+  // Checking compiled point fragment shader code:
   if (!success)
   {
-    glGetShaderiv(fs, GL_INFO_LOG_LENGTH, &log_size);
-    log = (char*) malloc(log_size+1);
-    log[log_size] = '\0';
-    glGetShaderInfoLog(fs, log_size+1, NULL, log);
-    printf("%s\n", log);
-    free(log);
-    exit(1);
+    glGetShaderiv(point_fragment_shader, GL_INFO_LOG_LENGTH, &log_size);        // Getting log length...
+    log = (char*) malloc(log_size + 1);                                         // Allocating temporary buffer for log...
+    log[log_size] = '\0';                                                       // Null-terminating log buffer...
+    glGetShaderInfoLog(point_fragment_shader, log_size + 1, NULL, log);         // Getting log...
+    printf("%s\n", log);                                                        // Printing log...
+    free(log);                                                                  // Freeing log...
+    exit(1);                                                                    // Exiting...
   }
 
-	// Creating OpenGL shader program...
-  shader = glCreateProgram();
-  glBindAttribLocation(shader, 0, "point");
-  glBindAttribLocation(shader, 1, "vertex_color");
-  glAttachShader(shader, vs);
-  glAttachShader(shader, fs);
-  glLinkProgram(shader);
-  free_file(vertex_source);
-  free_file(fragment_source);
+	// Creating OpenGL shader program:
+  point_shader = glCreateProgram();                                             // Creating program...
+  glBindAttribLocation(point_shader, LAYOUT_0, "point");                        // Binding "point" to "layout = 0" shader attribute...
+  glBindAttribLocation(point_shader, LAYOUT_1, "color");                        // Binding "vertex_color" to "layout = 1" shader attribute...
+  glAttachShader(point_shader, point_vertex_shader);                            // Attaching point vertex shader to program...
+  glAttachShader(point_shader, point_fragment_shader);                          // Attaching point fragment shader to program...
+  glLinkProgram(point_shader);                                                  // Linking program...
+  free_file(point_vertex_source);                                               // Freeing point vertex source file...
+  free_file(point_fragment_source);                                             // Freeing fragment vertex source file...
+
+  // TEXT SHADER:
+
+  // Compiling text vertex shader...
+  text_vertex_shader = glCreateShader(GL_VERTEX_SHADER);                        // Creating shader...
+  glShaderSource(text_vertex_shader,                                            // Attaching source code to shader...
+                 1,
+                 (const char**)&text_vertex_source,
+                 (GLint*)&text_vertex_size);
+	glCompileShader(text_vertex_shader);                                          // Compiling shader...
+  glGetShaderiv(text_vertex_shader, GL_COMPILE_STATUS, &success);               // Reading "GL_COMPILE_STATUS" flag...
+
+  // Checking compiled text vertex shader code:
+  if (!success)
+  {
+    glGetShaderiv(text_vertex_shader, GL_INFO_LOG_LENGTH, &log_size);           // Getting log length...
+    log = (char*) malloc(log_size + 1);                                         // Allocating temporary buffer for log...
+    log[log_size] = '\0';                                                       // Null-terminating log buffer...
+    glGetShaderInfoLog(text_vertex_shader, log_size + 1, NULL, log);            // Getting log...
+    printf("%s\n", log);                                                        // Printing log...
+    free(log);                                                                  // Freeing log...
+    exit(1);                                                                    // Exiting...
+  }
+
+	// Compiling text fragment shader...
+  text_fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);                    // Creating shader...
+  glShaderSource(text_fragment_shader,                                          // Attaching source code to shader...
+                 1,
+                 (const char**)&text_fragment_source,
+                 (GLint*)&text_fragment_size);
+	glCompileShader(text_fragment_shader);
+  glGetShaderiv(text_fragment_shader, GL_COMPILE_STATUS, &success);
+
+  // Checking compiled text fragment shader code:
+  if (!success)
+  {
+    glGetShaderiv(text_fragment_shader, GL_INFO_LOG_LENGTH, &log_size);         // Getting log length...
+    log = (char*) malloc(log_size + 1);                                         // Allocating temporary buffer for log...
+    log[log_size] = '\0';                                                       // Null-terminating log buffer...
+    glGetShaderInfoLog(text_fragment_shader, log_size + 1, NULL, log);          // Getting log...
+    printf("%s\n", log);                                                        // Printing log...
+    free(log);                                                                  // Freeing log...
+    exit(1);                                                                    // Exiting...
+  }
+
+	// Creating OpenGL shader program:
+  text_shader = glCreateProgram();                                              // Creating program...
+  glBindAttribLocation(text_shader, LAYOUT_0, "point");                         // Binding "point" to "layout = 0" shader attribute...
+  glBindAttribLocation(text_shader, LAYOUT_1, "color");                         // Binding "vertex_color" to "layout = 1" shader attribute...
+  glAttachShader(text_shader, text_vertex_shader);                              // Attaching point vertex shader to program...
+  glAttachShader(text_shader, text_fragment_shader);                            // Attaching point fragment shader to program...
+  glLinkProgram(text_shader);                                                   // Linking program...
+  free_file(text_vertex_source);                                                // Freeing point vertex source file...
+  free_file(text_fragment_source);                                              // Freeing fragment vertex source file...
 
   printf("DONE!\n");
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////// SCREEN ////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 void init_screen()
 {
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);                                         // Setting color for clearing window...
@@ -288,6 +390,10 @@ void init_screen()
   glEnable(GL_DEPTH_TEST);                                                      // Enabling depth test...
   glEnable(GL_PROGRAM_POINT_SIZE);                                              // Enabling "gl_PointSize" in vertex shader...
   glLineWidth(LINE_WIDTH);                                                      // Setting line width...
+
+  //glEnable(GL_BLEND);
+  //glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
   Translation_matrix = glm::translate(glm::mat4(),                              // Setting initial Translation_matrix matrix...
                                       glm::vec3(0.0f, 0.0f, -3.0f));
   Projection_matrix = glm::perspective(glm::radians(FOV),                       // Setting Projection_matrix matrix...

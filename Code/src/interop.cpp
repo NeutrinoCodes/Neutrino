@@ -1,5 +1,69 @@
 #include "interop.hpp"
 
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// "INIT" FUNCTIONS ///////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+void init_text4(text4* text)
+{
+  int err;
+  int i;
+  GLfloat* unfolded_glyph_data;                                                 // Text "glyph" data.
+  GLfloat* unfolded_color_data;                                                 // Text "color" data.
+  GLuint    LAYOUT_0 = 0;                                                       // "layout = 0" attribute in vertex shader.
+  GLuint    LAYOUT_1 = 1;                                                       // "layout = 1" attribute in vertex shader.
+
+  printf("Action: initializing OpenGL points... ");
+
+  unfolded_glyph_data = new GLfloat[4*text->size];
+  unfolded_color_data = new GLfloat[4*text->size];
+
+  for (i = 0; i < text->size; i++)
+  {
+    unfolded_glyph_data[4*i + 0] = text->x[i];
+    unfolded_glyph_data[4*i + 1] = text->y[i];
+    unfolded_glyph_data[4*i + 2] = text->z[i];
+    unfolded_glyph_data[4*i + 3] = text->w[i];
+
+    unfolded_color_data[4*i + 0] = text->r[i];
+    unfolded_color_data[4*i + 1] = text->g[i];
+    unfolded_color_data[4*i + 2] = text->b[i];
+    unfolded_color_data[4*i + 3] = text->a[i];
+  }
+
+  // TEXT GLYPHS:
+  glGenVertexArrays(1, &text->glyph_vao);                                       // Generating glyph VAO...
+  glBindVertexArray(text->glyph_vao);                                           // Binding glyph VAO...
+  glGenBuffers(1, &text->glyph_vbo);                                            // Generating glyph VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, text->glyph_vbo);                               // Binding glyph VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*sizeof(GLfloat)*(text->size),
+               unfolded_glyph_data,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, text->glyph_vbo);                               // Binding glyph VBO...
+  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
+
+  // TEXT COLORS:
+  glGenVertexArrays(1, &text->color_vao);                                       // Generating color VAO...
+  glBindVertexArray(text->color_vao);                                           // Binding color VAO...
+  glGenBuffers(1, &text->color_vbo);                                            // Generating color VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, text->color_vbo);                               // Binding color VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*sizeof(GLfloat)*(text->size),
+               unfolded_color_data,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, text->color_vbo);                               // Binding color VBO...
+  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
+
+  printf("DONE!\n");
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// "SET" FUNCTIONS ///////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 void set_float(float* data, int kernel_arg)
 {
   int err;
@@ -39,6 +103,7 @@ void set_point4(point4* points, int kernel_arg)
   int err;
   int i;
   GLfloat* unfolded_data;
+  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
 
   printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
 
@@ -46,25 +111,27 @@ void set_point4(point4* points, int kernel_arg)
 
   for (i = 0; i < points->size; i++)
   {
-    unfolded_data[4*i]     = points->x[i];
+    unfolded_data[4*i + 0] = points->x[i];
     unfolded_data[4*i + 1] = points->y[i];
     unfolded_data[4*i + 2] = points->z[i];
     unfolded_data[4*i + 3] = points->w[i];
   }
 
-  glGenVertexArrays(1, &points->vao);
-  glBindVertexArray(points->vao);
-
-  glGenBuffers(1, &points->vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, points->vbo);
-  glBufferData(GL_ARRAY_BUFFER, 4*sizeof(GLfloat)*(points->size), unfolded_data, GL_DYNAMIC_DRAW);
-
-  glEnableVertexAttribArray(0);                                                 // Matches "layout = 0" variable in vertex shader.
-  glBindBuffer(GL_ARRAY_BUFFER, points->vbo);
-  glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);                        // Matches "layout = 0" variable in vertex shader.
-
-
-  points->buffer = clCreateFromGLBuffer(context, CL_MEM_READ_WRITE, points->vbo, &err);
+  glGenVertexArrays(1, &points->vao);                                           // Generating VAO...
+  glBindVertexArray(points->vao);                                               // Binding VAO...
+  glGenBuffers(1, &points->vbo);                                                // Generating VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, points->vbo);                                   // Binding VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*sizeof(GLfloat)*(points->size),
+               unfolded_data,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, points->vbo);                                   // Binding VBO...
+  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
+  points->buffer = clCreateFromGLBuffer(context,                                // Creating OpenCL buffer from OpenGL buffer...
+                                        CL_MEM_READ_WRITE,
+                                        points->vbo,
+                                        &err);
 
   if(err < 0)
   {
@@ -72,7 +139,7 @@ void set_point4(point4* points, int kernel_arg)
     exit(EXIT_FAILURE);
   }
 
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &points->buffer);
+  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &points->buffer);    // Setting buffer as OpenCL kernel argument...
 
   if(err < 0)
   {
@@ -88,6 +155,7 @@ void set_color4(color4* colors, int kernel_arg)
   int err;
   int i;
   GLfloat* unfolded_data;
+  GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
 
   printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
 
@@ -95,24 +163,27 @@ void set_color4(color4* colors, int kernel_arg)
 
   for (i = 0; i < colors->size; i++)
   {
-    unfolded_data[4*i]     = colors->r[i];
+    unfolded_data[4*i + 0] = colors->r[i];
     unfolded_data[4*i + 1] = colors->g[i];
     unfolded_data[4*i + 2] = colors->b[i];
     unfolded_data[4*i + 3] = colors->a[i];
   }
 
-  glGenVertexArrays(1, &colors->vao);
-  glBindVertexArray(colors->vao);
-
-  glGenBuffers(1, &colors->vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, colors->vbo);
-  glBufferData(GL_ARRAY_BUFFER, 4*sizeof(GLfloat)*(colors->size), unfolded_data, GL_DYNAMIC_DRAW);
-
-  glEnableVertexAttribArray(1);                                                 // Matches "layout = 1" variable in vertex shader.
-  glBindBuffer(GL_ARRAY_BUFFER, colors->vbo);
-  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);                        // Matches "layout = 1" variable in vertex shader.
-
-  colors->buffer = clCreateFromGLBuffer(context, CL_MEM_READ_WRITE, colors->vbo, &err);
+  glGenVertexArrays(1, &colors->vao);                                           // Generating VAO...
+  glBindVertexArray(colors->vao);                                               // Binding VAO...
+  glGenBuffers(1, &colors->vbo);                                                // Generating VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, colors->vbo);                                   // Binding VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*sizeof(GLfloat)*(colors->size),
+               unfolded_data,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, colors->vbo);                                   // Binding VBO...
+  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
+  colors->buffer = clCreateFromGLBuffer(context,                                // Creating OpenCL buffer from OpenGL buffer...
+                                        CL_MEM_READ_WRITE,
+                                        colors->vbo,
+                                        &err);
 
   if(err < 0)
   {
@@ -120,7 +191,7 @@ void set_color4(color4* colors, int kernel_arg)
     exit(EXIT_FAILURE);
   }
 
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &colors->buffer);
+  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &colors->buffer);    // Setting buffer as OpenCL kernel argument...
 
   if(err < 0)
   {
@@ -130,6 +201,10 @@ void set_color4(color4* colors, int kernel_arg)
 
   printf("DONE!\n");
 }
+
+////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// "PUSH" FUNCTIONS //////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 void push_float4(float4* data, int kernel_arg)
 {
@@ -247,6 +322,10 @@ void push_int(int* data, int kernel_arg)
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// "POP" FUNCTIONS ///////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 void pop_float4(float4* data, int kernel_arg)
 {
   // Pleonastic function...
@@ -269,35 +348,68 @@ void pop_int(int* data, int kernel_arg)
 
 void plot(point4* points, color4* colors)
 {
-  // Preparing for plotting...
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing screen...
+  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
+  GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
+
   View_matrix = Translation_matrix*Rotation_matrix;                             // Setting View_matrix matrix...
-  glUseProgram(shader);                                                         // Using shader...
-  glUniformMatrix4fv(glGetUniformLocation(shader, "View_matrix"),               // Setting View_matrix matrix on shader...
+  glUseProgram(point_shader);                                                   // Using shader...
+  glUniformMatrix4fv(glGetUniformLocation(point_shader, "View_matrix"),         // Setting View_matrix matrix on shader...
                      1,
                      GL_FALSE,
                      &View_matrix[0][0]);
-  glUniformMatrix4fv(glGetUniformLocation(shader, "Projection_matrix"),         // Setting Projection_matrix matrix on shader...
+  glUniformMatrix4fv(glGetUniformLocation(point_shader, "Projection_matrix"),   // Setting Projection_matrix matrix on shader...
                      1,
                      GL_FALSE,
                      &Projection_matrix[0][0]);
 
-  // Binding "points" array...
-  glEnableVertexAttribArray(0);                                                 // Matches "layout = 0" variable in vertex shader.
-  glBindBuffer(GL_ARRAY_BUFFER, points->vbo);
-  glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);                        // Matches "layout = 0" variable in vertex shader.
+  // Binding "points" array:
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, points->vbo);                                   // Binding VBO...
+  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
 
-  // Binding "colors" array...
-  glEnableVertexAttribArray(1);                                                 // Matches "layout = 1" variable in vertex shader.
-  glBindBuffer(GL_ARRAY_BUFFER, colors->vbo);
-  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);                        // Matches "layout = 1" variable in vertex shader.
+  // Binding "colors" array:
+  glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, colors->vbo);                                   // Binding VBO...
+  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
 
-  // Drawing "points"...
-  glDrawArrays(GL_POINTS, 0, points->size);
+  // Drawing:
+  glDrawArrays(GL_POINTS, 0, points->size);                                     // Drawing "points"...
 
-  // Unbinding "points" array...
-  glDisableVertexAttribArray(0);                                                // Matches "layout = 0" variable in vertex shader.
+  // Finishing:
+  glDisableVertexAttribArray(LAYOUT_0);                                         // Unbinding "points" array...
+  glDisableVertexAttribArray(LAYOUT_1);                                         // Unbinding "colors" array...
+}
 
-  // Unbinding "colors" array...
-  glDisableVertexAttribArray(1);                                                // Matches "layout = 1" variable in vertex shader.
+void print(text4* text)
+{
+  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
+  GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
+
+  View_matrix = Translation_matrix*Rotation_matrix;                             // Setting View_matrix matrix...
+  glUseProgram(text_shader);                                                    // Using shader...
+  glUniformMatrix4fv(glGetUniformLocation(text_shader, "View_matrix"),          // Setting View_matrix matrix on shader...
+                     1,
+                     GL_FALSE,
+                     &View_matrix[0][0]);
+  glUniformMatrix4fv(glGetUniformLocation(text_shader, "Projection_matrix"),    // Setting Projection_matrix matrix on shader...
+                     1,
+                     GL_FALSE,
+                     &Projection_matrix[0][0]);
+
+  // Binding "glyph" array:
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, text->glyph_vbo);                               // Binding glyph VBO...
+  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
+
+  // Binding "color" array:
+  glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, text->color_vbo);                                // Binding color VBO...
+  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
+
+  // Drawing:
+  glDrawArrays(GL_LINES, 0, text->size);                                        // Drawing "glyphs"...
+
+  // Finishing:
+  glDisableVertexAttribArray(LAYOUT_0);                                         // Unbinding "glyph" array...
+  glDisableVertexAttribArray(LAYOUT_1);                                         // Unbinding "color" array...
 }

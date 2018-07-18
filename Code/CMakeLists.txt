@@ -12,6 +12,7 @@ project (neutrino)
 set(SOURCES
 src/context.cpp
 src/data.cpp
+src/font.cpp
 src/interop.cpp
 src/main.cpp
 src/opencl.cpp

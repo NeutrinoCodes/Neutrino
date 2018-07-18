@@ -8,6 +8,8 @@
   #include "opencl.hpp"
   #include "data.hpp"
 
+  void init_text4(text4* text);
+
   void set_float(float* data, int kernel_arg);
   void set_int(int* data, int kernel_arg);
   void set_point4(point4* points, int kernel_arg);
@@ -24,5 +26,6 @@
   void pop_int(int* data, int kernel_arg);
 
   void plot(point4* points, color4* colors);
+  void print(text4* text);
 
 #endif

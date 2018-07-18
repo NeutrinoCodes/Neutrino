@@ -1,10 +1,5 @@
 #include "program.hpp"
 
-// These files are relative to the build/mac or build/linux directory:
-#define VERTEX_FILE     "../../shader/vertex.vert"
-#define FRAGMENT_FILE   "../../shader/fragment.frag"
-#define KERNEL_FILE     "../../kernel/thekernel.cl"
-
 #define NUM_POINTS      10000
 #define X_MIN           -1.0f
 #define Y_MIN           -1.0f
@@ -13,16 +8,11 @@
 #define DX              0.02f
 #define DY              0.02f
 
-point4* points = new point4(NUM_POINTS);
-color4* colors = new color4(NUM_POINTS);
-float tick;
+point4* points =    new point4(NUM_POINTS);
+color4* colors =    new color4(NUM_POINTS);
+text4*  text =      new text4("Siamo dentro!", 1.0f, 1.0f, 1.0f, 1.0f);
 
-void load()
-{
-  load_vertex(VERTEX_FILE);
-  load_fragment(FRAGMENT_FILE);
-  load_kernel(KERNEL_FILE);
-}
+float tick;
 
 void setup()
 {
@@ -63,6 +53,8 @@ void setup()
 
   tick = 0.0f;                                                                  // Setting initial time tick...
 
+  init_text4(text);
+
   set_point4(points, 0);                                                        // Setting kernel argument #0...
   set_color4(colors, 1);                                                        // Setting kernel argument #1...
   set_int(&points->size, 2);                                                    // Setting kernel argument #2...
@@ -87,11 +79,14 @@ void loop()
   tick += 0.1f;
 
   plot(points, colors);
+  print(text);
 }
 
 void terminate()
 {
   delete points;
   delete colors;
+  delete text;
+
   printf("All done!\n");
 }
