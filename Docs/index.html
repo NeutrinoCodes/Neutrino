@@ -1,1 +1,13 @@
-pippo
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+$$ \alpha $$
+
+<div id="content"></div>
+
+$$ E=mc^2 $$
+
+<script>
+  document.getElementById('content').innerHTML =
+  marked('1. Rendered by **marked**');
+</script>
