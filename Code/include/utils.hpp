@@ -1,6 +1,8 @@
 #ifndef utils_hpp
 #define utils_hpp
 
+  #define GLM_ENABLE_EXPERIMENTAL
+
   #include <stdio.h>
   #include <stdlib.h>
   #include <math.h>

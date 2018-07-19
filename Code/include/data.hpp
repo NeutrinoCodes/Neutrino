@@ -1,6 +1,8 @@
 #ifndef data_hpp
 #define data_hpp
 
+  #define GLM_ENABLE_EXPERIMENTAL
+
   #include <stdio.h>
   #include <stdlib.h>
   #include <string.h>
@@ -9,6 +11,58 @@
   #include "font.hpp"
 
   #define SIZE_TEXT_MAX 128                                                     // Maximum number of characters in a text string.
+
+  class ket3
+  {
+    private:
+
+    public:
+      ket3();
+      ~ket3();
+
+      float x;
+      float y;
+      float z;
+  };
+
+  class ket4
+  {
+    private:
+
+    public:
+      ket4();
+      ~ket4();
+
+      float x;
+      float y;
+      float z;
+  };
+
+  class euclidean_metric
+  {
+    private:
+
+    public:
+      euclidean_metric();
+      ~euclidean_metric();
+
+      float g_11;
+      float g_12;
+      float g_13;
+      float g_14;
+      float g_21;
+      float g_22;
+      float g_23;
+      float g_24;
+      float g_31;
+      float g_32;
+      float g_33;
+      float g_34;
+      float g_41;
+      float g_42;
+      float g_43;
+      float g_44;
+  };
 
   class float4
   {

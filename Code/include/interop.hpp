@@ -1,6 +1,8 @@
 #ifndef interop_hpp
 #define interop_hpp
 
+  #define GLM_ENABLE_EXPERIMENTAL
+
   #include <stdio.h>
   #include <stdlib.h>
 

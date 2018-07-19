@@ -1,6 +1,8 @@
 #ifndef context_hpp
 #define context_hpp
 
+  #define GLM_ENABLE_EXPERIMENTAL
+
   #include <stdio.h>
   #include <stdlib.h>
   #include <string.h>

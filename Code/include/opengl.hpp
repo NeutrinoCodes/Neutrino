@@ -1,6 +1,8 @@
 #ifndef opengl_hpp
 #define opengl_hpp
 
+  #define GLM_ENABLE_EXPERIMENTAL
+
   #include <stdio.h>
   #include <stdlib.h>
   #include <GL/glew.h>
@@ -20,6 +22,7 @@
   #ifdef __linux__
     #define GLFW_EXPOSE_NATIVE_X11
     #define GLFW_EXPOSE_NATIVE_GLX
+
   #endif
 
   #include <GLFW/glfw3.h>
