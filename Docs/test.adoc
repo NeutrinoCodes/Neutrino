@@ -4,3 +4,7 @@ Title
 . pippo
 . poppo
 . pappo
+
+- latexmath:[$\lim_{x\to\infty} f(x) = k \choose r + \frac ab
+  \sum_{n=1}^\infty a_n + \displaystyle{ \left\{ \frac{1}{13}
+  \sum_{n=1}^\infty b_n \right\} }$]
