@@ -1,8 +1,6 @@
 #ifndef opengl_hpp
 #define opengl_hpp
 
-  #define GLM_ENABLE_EXPERIMENTAL
-
   #include <stdio.h>
   #include <stdlib.h>
   #include <GL/glew.h>

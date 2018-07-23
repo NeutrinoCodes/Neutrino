@@ -6,43 +6,6 @@
 #define ASCII_SPACE_LITTLE 4
 #define ASCII_SPACE_BIG 16
 
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////// BRAKET //////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-
-ket3::ket3()
-{
-  x = 0;
-  y = 0;
-  z = 0;
-}
-
-ket3::~ket3()
-{
-
-ket4::ket4()
-{
-  x = 0;
-  y = 0;
-  z = 0;
-  w = 0;
-}
-
-ket4::~ket4()
-{
-
-}
-
-euclidean_metric::euclidean_metric()
-{
-
-}
-
-euclidean_metric::~euclidean_metric()
-{
-
-}
-
 float4::float4(int num_data)
 {
   x = new GLfloat[num_data];                                                    // "x" data array.
