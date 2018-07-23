@@ -26,13 +26,21 @@ double						scroll_y = 0;                                                 // Scr
 
 bool 							arcball_on = false;                                           // Arcball activation flag.
 double						zoom = 0;                                                     // Zoom coefficient.
-glm::quat					arcball_quaternion = glm::quat(1.0f, 1.0f, 1.0f, 1.0f);				// Arcball quaternion.
-glm::mat4					Rotation_matrix = glm::mat4(1.0f);										 				// Rotation matrix.
-glm::mat4					Rotation_matrix_old = glm::mat4(1.0f);												// Rotation matrix backup.
-glm::mat4 				Translation_matrix = glm::mat4(1.0f);													// Translation matrix.
-glm::mat4 				Model_matrix = glm::mat4(1.0f);																// Model matrix.
-glm::mat4 				View_matrix = glm::mat4(1.0f);							   								// View matrix.
-glm::mat4 				Projection_matrix = glm::mat4(1.0f);				  								// Projection matrix.
+
+quaternion        arcball_quaternion;
+float[16]         Rotation_matrix;
+float[16]         Rotation_matrix_old;
+float[16]         Translation_matrix;
+float[16]         Model_matrix;
+float[16]         View_matrix;
+float[16]         Projection_matrix;
+//glm::quat					arcball_quaternion = glm::quat(1.0f, 1.0f, 1.0f, 1.0f);				// Arcball quaternion.
+//glm::mat4					Rotation_matrix = glm::mat4(1.0f);										 				// Rotation matrix.
+//glm::mat4					Rotation_matrix_old = glm::mat4(1.0f);												// Rotation matrix backup.
+//glm::mat4 				Translation_matrix = glm::mat4(1.0f);													// Translation matrix.
+//glm::mat4 				Model_matrix = glm::mat4(1.0f);																// Model matrix.
+//glm::mat4 				View_matrix = glm::mat4(1.0f);							   								// View matrix.
+//glm::mat4 				Projection_matrix = glm::mat4(1.0f);				  								// Projection matrix.
 
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// REFRESH //////////////////////////////////////
@@ -51,13 +59,15 @@ void screen_clear()
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// ARCBALL //////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-glm::vec3 get_arcball_vector(int x, int y)
+vector get_arcball_vector(int x, int y)
 {
-  glm::vec3 P;																																	// Point "P" on unitary ball.
+  vector P;																																	    // Point "P" on unitary ball.
 	float OP_sq;																																	// Center "O" to "P" squared distance.
 
 	glfwGetWindowSize(window, &window_size_x, &window_size_y);										// Getting window size...
-	P = glm::vec3(2.0*x/window_size_x - 1.0, 2.0*y/window_size_y - 1.0, 0);				// Computing point on unitary ball...
+  P.x = 2.0*x/window_size_x - 1.0;                                              // Computing point on unitary ball [x]...
+  P.y = 2.0*y/window_size_y - 1.0;                                              // Computing point on unitary ball [y]...
+  P.z = 0.0;                                                                    // Computing point on unitary ball [z]...
   P.y = -P.y;																																		// Inverting y-axis according to OpenGL...
 	OP_sq = P.x*P.x + P.y*P.y;                                                    // Computing "OP" squared...
 
@@ -68,7 +78,7 @@ glm::vec3 get_arcball_vector(int x, int y)
 
   else
 	{
-    P = glm::normalize(P);  																										// Normalizing if too far...
+    P = normalize(P);  																										      // Normalizing if too far...
 	}
 
   return P;
@@ -76,22 +86,20 @@ glm::vec3 get_arcball_vector(int x, int y)
 
 void arcball()
 {
-	glm::vec3 va;																																	// Mouse vector, world coordinates.
-	glm::vec3 vb;																																  // Mouse vector, world coordinates.
-	glm::vec3 arcball_axis;																												// Arcball axis of rotation.
-	double theta;																																	// Arcball angle of rotation.
+	vector va;																															  		// Mouse vector, world coordinates.
+	vector vb;																															  	  // Mouse vector, world coordinates.
+	vector arcball_axis;																										   		// Arcball axis of rotation.
+	float theta;																																	// Arcball angle of rotation.
 
 	if (arcball_on &&(mouse_x != mouse_x_old || mouse_y != mouse_y_old))
 	{
 		va = get_arcball_vector(mouse_x_old, mouse_y_old);													// Building mouse world vector (old)...
 		vb = get_arcball_vector(mouse_x, mouse_y);																	// Building mouse world vector...
-		theta = ROTATION_FACTOR*acos(glm::clamp(glm::dot(glm::normalize(va),
-                                            glm::normalize(vb)), -1.0f, 1.0f));	// Calculating arcball angle...
-    arcball_axis = glm::cross(va, vb);																					// Calculating arcball axis of rotation...
-		arcball_quaternion = glm::normalize(glm::quat(cos(theta/2.0f),							// Building rotation quaternion...
-																	 arcball_axis.x * sin(theta/2.0f),
-									 					 			 arcball_axis.y * sin(theta/2.0f),
-								 	 			 		 			 arcball_axis.z * sin(theta/2.0f)));
+		theta = ROTATION_FACTOR*angle(va, vb);                                      // Calculating arcball angle...
+    arcball_axis = normalize(cross(va, vb));									           				// Calculating arcball axis of rotation...
+    projective_rotation(Rotation_matrix, arcball_axis, theta);                  // Calculating rotation matrix...
+
+    ...devo fare una funzione che moltiplica le matrici 4x4...
 
 		Rotation_matrix = glm::toMat4(arcball_quaternion)*Rotation_matrix_old;			// Building rotation matrix...
 	}

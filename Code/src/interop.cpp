@@ -354,13 +354,13 @@ void plot(point4* points, color4* colors)
   View_matrix = Translation_matrix*Rotation_matrix;                             // Setting View_matrix matrix...
   glUseProgram(point_shader);                                                   // Using shader...
   glUniformMatrix4fv(glGetUniformLocation(point_shader, "View_matrix"),         // Setting View_matrix matrix on shader...
-                     1,
-                     GL_FALSE,
-                     &View_matrix[0][0]);
+                     1,                                                         // # of matrices to be modified.
+                     GL_FALSE,                                                  // FALSE = column major.
+                     &View_matrix[0][0]);                                       // Matrix.
   glUniformMatrix4fv(glGetUniformLocation(point_shader, "Projection_matrix"),   // Setting Projection_matrix matrix on shader...
-                     1,
-                     GL_FALSE,
-                     &Projection_matrix[0][0]);
+                     1,                                                         // # of matrices to be modified.
+                     GL_FALSE,                                                  // FALSE = column major.
+                     &Projection_matrix[0][0]);                                 // Matrix.
 
   // Binding "points" array:
   glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...

@@ -14,10 +14,12 @@ src/context.cpp
 src/data.cpp
 src/font.cpp
 src/interop.cpp
+src/linalg.cpp
 src/main.cpp
 src/opencl.cpp
 src/opengl.cpp
 src/program.cpp
+src/projgeom.cpp
 src/utils.cpp)
 
 # Setting directory for the Mac executable...
