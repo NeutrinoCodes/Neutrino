@@ -24,7 +24,7 @@ void perspective(float* P, float fov, float aspect_ratio,
     float x_min;
     float y_min;
 
-    y_max = z_near*tanf(fov);
+    y_max = z_near*tanf(fov/2.0);
     x_max = y_max*aspect_ratio;
     //y_min = -y_max;
     //x_min = -x_max;
@@ -87,7 +87,7 @@ void rotate(float* R, float* R_old, vector axis, float theta)
   R[7]  = q41*r21 + q42*r22 + q43*r23 + q44*r24;
   R[8]  = q11*r31 + q12*r32 + q13*r33 + q14*r34;
   R[9]  = q21*r31 + q22*r32 + q23*r33 + q24*r34;
-  R[10] = q31*r31 + q32*r32 + q33*r33 + q44*r34;
+  R[10] = q31*r31 + q32*r32 + q33*r33 + q34*r34;
   R[11] = q41*r31 + q42*r32 + q43*r33 + q44*r34;
   R[12] = q11*r41 + q12*r42 + q13*r43 + q14*r44;
   R[13] = q21*r41 + q22*r42 + q23*r43 + q24*r44;
@@ -135,7 +135,7 @@ void multiplicate(float* C, float* A, float* B)
   C[7]  = a41*b21 + a42*b22 + a43*b23 + a44*b24;
   C[8]  = a11*b31 + a12*b32 + a13*b33 + a14*b34;
   C[9]  = a21*b31 + a22*b32 + a23*b33 + a24*b34;
-  C[10] = a31*b31 + a32*b32 + a33*b33 + a44*b34;
+  C[10] = a31*b31 + a32*b32 + a33*b33 + a34*b34;
   C[11] = a41*b31 + a42*b32 + a43*b33 + a44*b34;
   C[12] = a11*b41 + a12*b42 + a13*b43 + a14*b44;
   C[13] = a21*b41 + a22*b42 + a23*b43 + a24*b44;

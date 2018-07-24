@@ -94,80 +94,6 @@ void load_text_fragment(const char* filename_fragment)
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////// CALLBACKS ////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-  {
-    glfwSetWindowShouldClose(window, GL_TRUE);
-  }
-}
-
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
-{
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && arcball_on == false)
-	{
-		glfwGetCursorPos(window, &mouse_x, &mouse_y);                               // Getting mouse position...
-		mouse_x_old = mouse_x;																											// Backing up mouse position...
-		mouse_y_old = mouse_y;																											// Backing up mouse position...
-		arcball_on = true;																													// Turning on arcball...
-  }
-
-  else
-  {
-    arcball_on = false;																													// Turning off arcball...
-  }
-
-  if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
-	{
-    R_old[0] = R[0]; R_old[4] = R[4]; R_old[8]  = R[8];  R_old[12] = R[12];		  // Backing up Rotation_matrix matrix...
-    R_old[1] = R[1]; R_old[5] = R[5]; R_old[9]  = R[9];  R_old[13] = R[13];			// Backing up Rotation_matrix matrix...
-    R_old[2] = R[2]; R_old[6] = R[6]; R_old[10] = R[10]; R_old[14] = R[14];		  // Backing up Rotation_matrix matrix...
-    R_old[3] = R[3]; R_old[7] = R[7]; R_old[11] = R[11]; R_old[15] = R[15];		  // Backing up Rotation_matrix matrix...
-  }
-}
-
-void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
-{
-	if (arcball_on)
-	{
-    mouse_x = xpos;																															// Getting mouse position...
-    mouse_y = ypos;																															// Getting mouse position...
-  }
-}
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-  vector translation;                                                           // Translation vector.
-
-  scroll_x = xoffset;																														// Getting scroll position...
-	scroll_y = yoffset;																														// Getting scroll position...
-	zoom = T[14];																							                    // Getting z-axis translation...
-  translation.x = 0.0;                                                          // Building translation vector...
-  translation.y = 0.0;                                                          // Building translation vector...
-  translation.z = zoom;                                                         // Building translation vector...
-
-	if (scroll_y > 0)
-	{
-		zoom *= ZOOM_FACTOR;																												// Zooming-in...
-	}
-
-	if (scroll_y < 0)
-	{
-		zoom /= ZOOM_FACTOR;																												// Zooming-out...
-	}
-
-  translate(T, translation);                                                    // Building translation matrix...
-}
-
-void window_refresh_callback(GLFWwindow* window)
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
-	glfwSwapBuffers(window);                                                      // Swapping front and back buffers...
-}
-
-//////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// WINDOW ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 void init_window()
@@ -356,11 +282,22 @@ void init_screen()
   //glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
   initial_translation.x =  0.0;                                                 // Building initial translation vector...
-  initial_translation.x =  0.0;                                                 // Building initial translation vector...
-  initial_translation.x = -3.0;                                                 // Building initial translation vector...
+  initial_translation.y =  0.0;                                                 // Building initial translation vector...
+  initial_translation.z = -3.0;                                                 // Building initial translation vector...
 
   translate(T, initial_translation);                                            // Setting initial Translation_matrix matrix...
-  perspective(P, FOV*M_PI/360.0, aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);        // Setting Projection_matrix matrix...
+  perspective(P, FOV*M_PI/180.0, aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);        // Setting Projection_matrix matrix...
+
+  printf("V11 = %f, V12 = %f, V13 = %f, V14 = %f\n", V[0], V[4], V[8], V[12]);
+  printf("V21 = %f, V22 = %f, V23 = %f, V24 = %f\n", V[1], V[5], V[9], V[13]);
+  printf("V31 = %f, V32 = %f, V33 = %f, V34 = %f\n", V[2], V[6], V[10], V[14]);
+  printf("V41 = %f, V42 = %f, V43 = %f, V44 = %f\n", V[3], V[7], V[11], V[15]);
+
+  printf("T11 = %f, T12 = %f, T13 = %f, T14 = %f\n", T[0], T[4], T[8], T[12]);
+  printf("T21 = %f, T22 = %f, T23 = %f, T24 = %f\n", T[1], T[5], T[9], T[13]);
+  printf("T31 = %f, T32 = %f, T33 = %f, T34 = %f\n", T[2], T[6], T[10], T[14]);
+  printf("T41 = %f, T42 = %f, T43 = %f, T44 = %f\n", T[3], T[7], T[11], T[15]);
+
 }
 
 void refresh_screen()
@@ -380,6 +317,12 @@ void plot(point4* points, color4* colors)
   GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
 
   multiplicate(V, T, R);                                                        // Setting View_matrix matrix...
+
+  printf("V11 = %f, V12 = %f, V13 = %f, V14 = %f\n", V[0], V[4], V[8], V[12]);
+  printf("V21 = %f, V22 = %f, V23 = %f, V24 = %f\n", V[1], V[5], V[9], V[13]);
+  printf("V31 = %f, V32 = %f, V33 = %f, V34 = %f\n", V[2], V[6], V[10], V[14]);
+  printf("V41 = %f, V42 = %f, V43 = %f, V44 = %f\n", V[3], V[7], V[11], V[15]);
+
   glUseProgram(point_shader);                                                   // Using shader...
   glUniformMatrix4fv(glGetUniformLocation(point_shader, "View_matrix"),         // Setting View_matrix matrix on shader...
                      1,                                                         // # of matrices to be modified.
@@ -482,4 +425,78 @@ void print(text4* text)
   // Finishing:
   glDisableVertexAttribArray(LAYOUT_0);                                         // Unbinding "glyph" array...
   glDisableVertexAttribArray(LAYOUT_1);                                         // Unbinding "color" array...
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// WINDOW's CALLBACKS ////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+  {
+    glfwSetWindowShouldClose(window, GL_TRUE);
+  }
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && arcball_on == false)
+	{
+		glfwGetCursorPos(window, &mouse_x, &mouse_y);                               // Getting mouse position...
+		mouse_x_old = mouse_x;																											// Backing up mouse position...
+		mouse_y_old = mouse_y;																											// Backing up mouse position...
+		arcball_on = true;																													// Turning on arcball...
+  }
+
+  else
+  {
+    arcball_on = false;																													// Turning off arcball...
+  }
+
+  if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+	{
+    R_old[0] = R[0]; R_old[4] = R[4]; R_old[8]  = R[8];  R_old[12] = R[12];		  // Backing up Rotation_matrix matrix...
+    R_old[1] = R[1]; R_old[5] = R[5]; R_old[9]  = R[9];  R_old[13] = R[13];			// Backing up Rotation_matrix matrix...
+    R_old[2] = R[2]; R_old[6] = R[6]; R_old[10] = R[10]; R_old[14] = R[14];		  // Backing up Rotation_matrix matrix...
+    R_old[3] = R[3]; R_old[7] = R[7]; R_old[11] = R[11]; R_old[15] = R[15];		  // Backing up Rotation_matrix matrix...
+  }
+}
+
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	if (arcball_on)
+	{
+    mouse_x = xpos;																															// Getting mouse position...
+    mouse_y = ypos;																															// Getting mouse position...
+  }
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+  vector translation;                                                           // Translation vector.
+
+  scroll_x = xoffset;																														// Getting scroll position...
+	scroll_y = yoffset;																														// Getting scroll position...
+	zoom = T[14];																							                    // Getting z-axis translation...
+
+	if (scroll_y > 0)
+	{
+		zoom *= ZOOM_FACTOR;																												// Zooming-in...
+	}
+
+	if (scroll_y < 0)
+	{
+		zoom /= ZOOM_FACTOR;																												// Zooming-out...
+	}
+
+  translation.x = 0.0;                                                          // Building translation vector...
+  translation.y = 0.0;                                                          // Building translation vector...
+  translation.z = zoom;                                                         // Building translation vector...
+  translate(T, translation);                                                    // Building translation matrix...
+}
+
+void window_refresh_callback(GLFWwindow* window)
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
+	glfwSwapBuffers(window);                                                      // Swapping front and back buffers...
 }

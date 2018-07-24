@@ -95,9 +95,9 @@ vector cross(vector a, vector b)
 {
   vector v;
 
-  v.x = a.y*b.z - a.z*b.y;
-  v.y = a.x*b.z - a.z*b.x;
-  v.z = a.x*b.y - a.y*b.x;
+  v.x =    a.y*b.z - a.z*b.y;
+  v.y = - (a.x*b.z - a.z*b.x);
+  v.z =    a.x*b.y - a.y*b.x;
 
   return v;
 }
@@ -109,14 +109,14 @@ matrix rotation_matrix(quaternion q)
   float aa;
   float ab;
   float ac;
-  float ad;
+  float da;
 
   float bb;
   float bc;
-  float bd;
+  float db;
 
   float cc;
-  float cd;
+  float dc;
 
   matrix M;
 
@@ -130,26 +130,18 @@ matrix rotation_matrix(quaternion q)
   aa = q.a*q.a;
   ab = q.a*q.b;
   ac = q.a*q.c;
-  ad = q.a*q.d;
+  da = q.d*q.a;
 
   bb = q.b*q.b;
   bc = q.b*q.c;
-  bd = q.b*q.d;
+  db = q.d*q.b;
 
   cc = q.c*q.c;
-  cd = q.c*q.d;
+  dc = q.d*q.c;
 
-  M.a_11 = 1.0 - 2.0*(bb - cc);
-  M.a_12 = 0.0 + 2.0*(ab - cd);
-  M.a_13 = 0.0 + 2.0*(ac - bd);
-
-  M.a_21 = 0.0 + 2.0*(ab - cd);
-  M.a_22 = 1.0 - 2.0*(aa - cc);
-  M.a_23 = 0.0 + 2.0*(bc - ad);
-
-  M.a_31 = 0.0 + 2.0*(ac - bd);
-  M.a_32 = 0.0 + 2.0*(bc - ad);
-  M.a_33 = 1.0 - 2.0*(aa - bb);
+  M.a_11 = 1.0 - 2.0*(bb - cc); M.a_12 = 0.0 + 2.0*(ab - dc); M.a_13 = 0.0 + 2.0*(ac + db);
+  M.a_21 = 0.0 + 2.0*(ab + dc); M.a_22 = 1.0 - 2.0*(aa + cc); M.a_23 = 0.0 + 2.0*(bc - da);
+  M.a_31 = 0.0 + 2.0*(ac - db); M.a_32 = 0.0 + 2.0*(bc + da); M.a_33 = 1.0 - 2.0*(aa + bb);
 
   return M;
 }
