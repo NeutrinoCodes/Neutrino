@@ -13,14 +13,14 @@ set(SOURCES
 src/context.cpp
 src/data.cpp
 src/font.cpp
-src/interop.cpp
-src/linalg.cpp
+src/interoperability.cpp
+src/linear_algebra.cpp
 src/main.cpp
 src/opencl.cpp
 src/opengl.cpp
 src/program.cpp
-src/projgeom.cpp
-src/utils.cpp)
+src/projective_geometry.cpp
+src/utilities.cpp)
 
 # Setting directory for the Mac executable...
 if(APPLE)

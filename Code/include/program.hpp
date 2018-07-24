@@ -6,7 +6,7 @@
 #include "opengl.hpp"
 #include "opencl.hpp"
 #include "data.hpp"
-#include "interop.hpp"
+#include "interoperability.hpp"
 
 void setup();
 void loop();

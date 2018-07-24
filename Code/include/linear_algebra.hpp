@@ -1,5 +1,5 @@
-#ifndef linalg_hpp
-#define linalg_hpp
+#ifndef linear_algebra_hpp
+#define linear_algebra_hpp
 
   #include <math.h>
 
@@ -57,6 +57,6 @@
   vector  normalize(vector a);
   float   angle(vector a, vector b);
   vector  cross(vector a, vector b);
-  matrix  rotate(quaternion q);
-  
+  matrix  rotation_matrix(quaternion q);
+
 #endif

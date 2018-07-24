@@ -1,9 +1,8 @@
-#include "interop.hpp"
+#include "interoperability.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// "INIT" FUNCTIONS ///////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-
 void init_text4(text4* text)
 {
   int err;
@@ -63,7 +62,6 @@ void init_text4(text4* text)
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "SET" FUNCTIONS ///////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-
 void set_float(float* data, int kernel_arg)
 {
   int err;
@@ -205,7 +203,6 @@ void set_color4(color4* colors, int kernel_arg)
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "PUSH" FUNCTIONS //////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-
 void push_float4(float4* data, int kernel_arg)
 {
   int err;
@@ -325,7 +322,6 @@ void push_int(int* data, int kernel_arg)
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "POP" FUNCTIONS ///////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-
 void pop_float4(float4* data, int kernel_arg)
 {
   // Pleonastic function...
@@ -344,72 +340,4 @@ void pop_float(float* data, int kernel_arg)
 void pop_int(int* data, int kernel_arg)
 {
   // Pleonastic function...
-}
-
-void plot(point4* points, color4* colors)
-{
-  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
-  GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
-
-  View_matrix = Translation_matrix*Rotation_matrix;                             // Setting View_matrix matrix...
-  glUseProgram(point_shader);                                                   // Using shader...
-  glUniformMatrix4fv(glGetUniformLocation(point_shader, "View_matrix"),         // Setting View_matrix matrix on shader...
-                     1,                                                         // # of matrices to be modified.
-                     GL_FALSE,                                                  // FALSE = column major.
-                     &View_matrix[0][0]);                                       // Matrix.
-  glUniformMatrix4fv(glGetUniformLocation(point_shader, "Projection_matrix"),   // Setting Projection_matrix matrix on shader...
-                     1,                                                         // # of matrices to be modified.
-                     GL_FALSE,                                                  // FALSE = column major.
-                     &Projection_matrix[0][0]);                                 // Matrix.
-
-  // Binding "points" array:
-  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
-  glBindBuffer(GL_ARRAY_BUFFER, points->vbo);                                   // Binding VBO...
-  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
-
-  // Binding "colors" array:
-  glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
-  glBindBuffer(GL_ARRAY_BUFFER, colors->vbo);                                   // Binding VBO...
-  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
-
-  // Drawing:
-  glDrawArrays(GL_POINTS, 0, points->size);                                     // Drawing "points"...
-
-  // Finishing:
-  glDisableVertexAttribArray(LAYOUT_0);                                         // Unbinding "points" array...
-  glDisableVertexAttribArray(LAYOUT_1);                                         // Unbinding "colors" array...
-}
-
-void print(text4* text)
-{
-  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
-  GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
-
-  View_matrix = Translation_matrix*Rotation_matrix;                             // Setting View_matrix matrix...
-  glUseProgram(text_shader);                                                    // Using shader...
-  glUniformMatrix4fv(glGetUniformLocation(text_shader, "View_matrix"),          // Setting View_matrix matrix on shader...
-                     1,
-                     GL_FALSE,
-                     &View_matrix[0][0]);
-  glUniformMatrix4fv(glGetUniformLocation(text_shader, "Projection_matrix"),    // Setting Projection_matrix matrix on shader...
-                     1,
-                     GL_FALSE,
-                     &Projection_matrix[0][0]);
-
-  // Binding "glyph" array:
-  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
-  glBindBuffer(GL_ARRAY_BUFFER, text->glyph_vbo);                               // Binding glyph VBO...
-  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
-
-  // Binding "color" array:
-  glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
-  glBindBuffer(GL_ARRAY_BUFFER, text->color_vbo);                                // Binding color VBO...
-  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
-
-  // Drawing:
-  glDrawArrays(GL_LINES, 0, text->size);                                        // Drawing "glyphs"...
-
-  // Finishing:
-  glDisableVertexAttribArray(LAYOUT_0);                                         // Unbinding "glyph" array...
-  glDisableVertexAttribArray(LAYOUT_1);                                         // Unbinding "color" array...
 }

@@ -27,82 +27,70 @@ double						scroll_y = 0;                                                 // Scr
 bool 							arcball_on = false;                                           // Arcball activation flag.
 double						zoom = 0;                                                     // Zoom coefficient.
 
-quaternion        arcball_quaternion;
-float[16]         Rotation_matrix;
-float[16]         Rotation_matrix_old;
-float[16]         Translation_matrix;
-float[16]         Model_matrix;
-float[16]         View_matrix;
-float[16]         Projection_matrix;
-//glm::quat					arcball_quaternion = glm::quat(1.0f, 1.0f, 1.0f, 1.0f);				// Arcball quaternion.
-//glm::mat4					Rotation_matrix = glm::mat4(1.0f);										 				// Rotation matrix.
-//glm::mat4					Rotation_matrix_old = glm::mat4(1.0f);												// Rotation matrix backup.
-//glm::mat4 				Translation_matrix = glm::mat4(1.0f);													// Translation matrix.
-//glm::mat4 				Model_matrix = glm::mat4(1.0f);																// Model matrix.
-//glm::mat4 				View_matrix = glm::mat4(1.0f);							   								// View matrix.
-//glm::mat4 				Projection_matrix = glm::mat4(1.0f);				  								// Projection matrix.
+quaternion        arcball_quaternion;                   // Arcball quaternion.
+
+float         R[16]     = {1.0, 0.0, 0.0, 0.0,                                  // Rotation matrix.
+                           0.0, 1.0, 0.0, 0.0,
+                           0.0, 0.0, 1.0, 0.0,
+                           0.0, 0.0, 0.0, 1.0};
+
+float         R_old[16] = {1.0, 0.0, 0.0, 0.0,                                  // Rotation matrix backup.
+                           0.0, 1.0, 0.0, 0.0,
+                           0.0, 0.0, 1.0, 0.0,
+                           0.0, 0.0, 0.0, 1.0};
+
+float         T[16]     = {1.0, 0.0, 0.0, 0.0,                                  // Translation matrix.
+                           0.0, 1.0, 0.0, 0.0,
+                           0.0, 0.0, 1.0, 0.0,
+                           0.0, 0.0, 0.0, 1.0};
+
+float         V[16]     = {1.0, 0.0, 0.0, 0.0,                                  // View matrix.
+                           0.0, 1.0, 0.0, 0.0,
+                           0.0, 0.0, 1.0, 0.0,
+                           0.0, 0.0, 0.0, 1.0};
+
+float         P[16]     = {1.0, 0.0, 0.0, 0.0,                                  // Projection matrix.
+                           0.0, 1.0, 0.0, 0.0,
+                           0.0, 0.0, 1.0, 0.0,
+                           0.0, 0.0, 0.0, 1.0};
 
 //////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////// REFRESH //////////////////////////////////////
+///////////////////////////////////// FILES //////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void screen_refresh()
+void load_point_vertex(const char* filename_vertex)
 {
-  glfwSwapBuffers(window);
-  glfwPollEvents();
+ printf("Action: loading OpenGL point vertex source from file... ");
+
+ load_file(filename_vertex, &point_vertex_source, &point_vertex_size);
+
+	printf("DONE!\n");
 }
 
-void screen_clear()
+void load_point_fragment(const char* filename_fragment)
 {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing screen...
+	printf("Action: loading OpenGL point fragment source from file... ");
+
+ load_file(filename_fragment, &point_fragment_source, &point_fragment_size);
+
+	printf("DONE!\n");
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////// ARCBALL //////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-vector get_arcball_vector(int x, int y)
+void load_text_vertex(const char* filename_vertex)
 {
-  vector P;																																	    // Point "P" on unitary ball.
-	float OP_sq;																																	// Center "O" to "P" squared distance.
+ printf("Action: loading OpenGL point vertex source from file... ");
 
-	glfwGetWindowSize(window, &window_size_x, &window_size_y);										// Getting window size...
-  P.x = 2.0*x/window_size_x - 1.0;                                              // Computing point on unitary ball [x]...
-  P.y = 2.0*y/window_size_y - 1.0;                                              // Computing point on unitary ball [y]...
-  P.z = 0.0;                                                                    // Computing point on unitary ball [z]...
-  P.y = -P.y;																																		// Inverting y-axis according to OpenGL...
-	OP_sq = P.x*P.x + P.y*P.y;                                                    // Computing "OP" squared...
+ load_file(filename_vertex, &text_vertex_source, &text_vertex_size);
 
-  if (OP_sq <= 1.0)																															// Checking P to ball-center distance...
-	{
-    P.z = sqrt(1.0 - OP_sq);  																									// Pythagoras' theorem...
-	}
-
-  else
-	{
-    P = normalize(P);  																										      // Normalizing if too far...
-	}
-
-  return P;
+	printf("DONE!\n");
 }
 
-void arcball()
+void load_text_fragment(const char* filename_fragment)
 {
-	vector va;																															  		// Mouse vector, world coordinates.
-	vector vb;																															  	  // Mouse vector, world coordinates.
-	vector arcball_axis;																										   		// Arcball axis of rotation.
-	float theta;																																	// Arcball angle of rotation.
+	printf("Action: loading OpenGL point fragment source from file... ");
 
-	if (arcball_on &&(mouse_x != mouse_x_old || mouse_y != mouse_y_old))
-	{
-		va = get_arcball_vector(mouse_x_old, mouse_y_old);													// Building mouse world vector (old)...
-		vb = get_arcball_vector(mouse_x, mouse_y);																	// Building mouse world vector...
-		theta = ROTATION_FACTOR*angle(va, vb);                                      // Calculating arcball angle...
-    arcball_axis = normalize(cross(va, vb));									           				// Calculating arcball axis of rotation...
-    projective_rotation(Rotation_matrix, arcball_axis, theta);                  // Calculating rotation matrix...
+ load_file(filename_fragment, &text_fragment_source, &text_fragment_size);
 
-    ...devo fare una funzione che moltiplica le matrici 4x4...
-
-		Rotation_matrix = glm::toMat4(arcball_quaternion)*Rotation_matrix_old;			// Building rotation matrix...
-	}
+	printf("DONE!\n");
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -133,7 +121,10 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
 	{
-    Rotation_matrix_old = Rotation_matrix;																			// Backing up Rotation_matrix matrix...
+    R_old[0] = R[0]; R_old[4] = R[4]; R_old[8]  = R[8];  R_old[12] = R[12];		  // Backing up Rotation_matrix matrix...
+    R_old[1] = R[1]; R_old[5] = R[5]; R_old[9]  = R[9];  R_old[13] = R[13];			// Backing up Rotation_matrix matrix...
+    R_old[2] = R[2]; R_old[6] = R[6]; R_old[10] = R[10]; R_old[14] = R[14];		  // Backing up Rotation_matrix matrix...
+    R_old[3] = R[3]; R_old[7] = R[7]; R_old[11] = R[11]; R_old[15] = R[15];		  // Backing up Rotation_matrix matrix...
   }
 }
 
@@ -148,9 +139,14 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	scroll_x = xoffset;																														// Getting scroll position...
+  vector translation;                                                           // Translation vector.
+
+  scroll_x = xoffset;																														// Getting scroll position...
 	scroll_y = yoffset;																														// Getting scroll position...
-	zoom = Translation_matrix[3][2];																							// Getting z-axis translation...
+	zoom = T[14];																							                    // Getting z-axis translation...
+  translation.x = 0.0;                                                          // Building translation vector...
+  translation.y = 0.0;                                                          // Building translation vector...
+  translation.z = zoom;                                                         // Building translation vector...
 
 	if (scroll_y > 0)
 	{
@@ -162,52 +158,13 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 		zoom /= ZOOM_FACTOR;																												// Zooming-out...
 	}
 
-	Translation_matrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, zoom));// Building translation matrix...
+  translate(T, translation);                                                    // Building translation matrix...
 }
 
 void window_refresh_callback(GLFWwindow* window)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
 	glfwSwapBuffers(window);                                                      // Swapping front and back buffers...
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////// FILES //////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-void load_point_vertex(const char* filename_vertex)
-{
-  printf("Action: loading OpenGL point vertex source from file... ");
-
-  load_file(filename_vertex, &point_vertex_source, &point_vertex_size);
-
-	printf("DONE!\n");
-}
-
-void load_point_fragment(const char* filename_fragment)
-{
-	printf("Action: loading OpenGL point fragment source from file... ");
-
-  load_file(filename_fragment, &point_fragment_source, &point_fragment_size);
-
-	printf("DONE!\n");
-}
-
-void load_text_vertex(const char* filename_vertex)
-{
-  printf("Action: loading OpenGL point vertex source from file... ");
-
-  load_file(filename_vertex, &text_vertex_source, &text_vertex_size);
-
-	printf("DONE!\n");
-}
-
-void load_text_fragment(const char* filename_fragment)
-{
-	printf("Action: loading OpenGL point fragment source from file... ");
-
-  load_file(filename_fragment, &text_fragment_source, &text_fragment_size);
-
-	printf("DONE!\n");
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -258,9 +215,6 @@ void init_window()
   }
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////// SHADERS ////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
 void init_shaders()
 {
   GLuint		point_vertex_shader;                                                // "Point" vertex shader.
@@ -388,11 +342,10 @@ void init_shaders()
   printf("DONE!\n");
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////// SCREEN ////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
 void init_screen()
 {
+  vector initial_translation;
+
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);                                         // Setting color for clearing window...
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
   glEnable(GL_DEPTH_TEST);                                                      // Enabling depth test...
@@ -402,10 +355,131 @@ void init_screen()
   //glEnable(GL_BLEND);
   //glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
-  Translation_matrix = glm::translate(glm::mat4(),                              // Setting initial Translation_matrix matrix...
-                                      glm::vec3(0.0f, 0.0f, -3.0f));
-  Projection_matrix = glm::perspective(glm::radians(FOV),                       // Setting Projection_matrix matrix...
-                                aspect_ratio,
-                                NEAR_Z_CLIP,
-                                FAR_Z_CLIP);
+  initial_translation.x =  0.0;                                                 // Building initial translation vector...
+  initial_translation.x =  0.0;                                                 // Building initial translation vector...
+  initial_translation.x = -3.0;                                                 // Building initial translation vector...
+
+  translate(T, initial_translation);                                            // Setting initial Translation_matrix matrix...
+  perspective(P, FOV*M_PI/360.0, aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);        // Setting Projection_matrix matrix...
+}
+
+void refresh_screen()
+{
+  glfwSwapBuffers(window);
+  glfwPollEvents();
+}
+
+void clear_screen()
+{
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing screen...
+}
+
+void plot(point4* points, color4* colors)
+{
+  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
+  GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
+
+  multiplicate(V, T, R);                                                        // Setting View_matrix matrix...
+  glUseProgram(point_shader);                                                   // Using shader...
+  glUniformMatrix4fv(glGetUniformLocation(point_shader, "View_matrix"),         // Setting View_matrix matrix on shader...
+                     1,                                                         // # of matrices to be modified.
+                     GL_FALSE,                                                  // FALSE = column major.
+                     &V[0]);                                       // Matrix.
+  glUniformMatrix4fv(glGetUniformLocation(point_shader, "Projection_matrix"),   // Setting Projection_matrix matrix on shader...
+                     1,                                                         // # of matrices to be modified.
+                     GL_FALSE,                                                  // FALSE = column major.
+                     &P[0]);                                 // Matrix.
+
+  // Binding "points" array:
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, points->vbo);                                   // Binding VBO...
+  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
+
+  // Binding "colors" array:
+  glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, colors->vbo);                                   // Binding VBO...
+  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
+
+  // Drawing:
+  glDrawArrays(GL_POINTS, 0, points->size);                                     // Drawing "points"...
+
+  // Finishing:
+  glDisableVertexAttribArray(LAYOUT_0);                                         // Unbinding "points" array...
+  glDisableVertexAttribArray(LAYOUT_1);                                         // Unbinding "colors" array...
+}
+
+vector get_arcball_vector(int x, int y)
+{
+  vector p;																																	    // Point "p" on unitary ball.
+	float  op_sq;																																	// Center "o" to "p" squared distance.
+
+	glfwGetWindowSize(window, &window_size_x, &window_size_y);										// Getting window size...
+  p.x = 2.0*x/window_size_x - 1.0;                                              // Computing point on unitary ball [x]...
+  p.y = 2.0*y/window_size_y - 1.0;                                              // Computing point on unitary ball [y]...
+  p.z = 0.0;                                                                    // Computing point on unitary ball [z]...
+  p.y = -p.y;																																		// Inverting y-axis according to OpenGL...
+	op_sq = p.x*p.x + p.y*p.y;                                                    // Computing "op" squared...
+
+  if (op_sq <= 1.0)																															// Checking p to ball-center distance...
+	{
+    p.z = sqrt(1.0 - op_sq);  																									// Pythagoras' theorem...
+	}
+
+  else
+	{
+    p = normalize(p);  																										      // Normalizing if too far...
+	}
+
+  return p;
+}
+
+void arcball()
+{
+	vector a; 																															  		// Mouse vector, world coordinates.
+	vector b; 																															  	  // Mouse vector, world coordinates.
+	vector axis;																										   		        // Arcball axis of rotation.
+	float  theta;																																	// Arcball angle of rotation.
+
+	if (arcball_on &&(mouse_x != mouse_x_old || mouse_y != mouse_y_old))          // If mouse has been dragged (= left click + move):
+	{
+		a = get_arcball_vector(mouse_x_old, mouse_y_old);							  						// Building mouse world vector (old)...
+		b = get_arcball_vector(mouse_x, mouse_y);												   					// Building mouse world vector...
+		theta = ROTATION_FACTOR*angle(a, b);                                        // Calculating arcball angle...
+    axis = normalize(cross(a, b));									            				        // Calculating arcball axis of rotation...
+    rotate(R, R_old, axis, theta);                                              // Calculating rotation matrix...
+	}
+}
+
+void print(text4* text)
+{
+  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
+  GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
+
+  multiplicate(V, T, R);                                                        // Setting View_matrix matrix...
+  glUseProgram(text_shader);                                                    // Using shader...
+  glUniformMatrix4fv(glGetUniformLocation(text_shader, "View_matrix"),          // Setting View_matrix matrix on shader...
+                     1,
+                     GL_FALSE,
+                     &V[0]);
+  glUniformMatrix4fv(glGetUniformLocation(text_shader, "Projection_matrix"),    // Setting Projection_matrix matrix on shader...
+                     1,
+                     GL_FALSE,
+                     &P[0]);
+
+  // Binding "glyph" array:
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, text->glyph_vbo);                               // Binding glyph VBO...
+  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
+
+  // Binding "color" array:
+  glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, text->color_vbo);                                // Binding color VBO...
+  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
+
+  // Drawing:
+  glDrawArrays(GL_LINES, 0, text->size);                                        // Drawing "glyphs"...
+
+  // Finishing:
+  glDisableVertexAttribArray(LAYOUT_0);                                         // Unbinding "glyph" array...
+  glDisableVertexAttribArray(LAYOUT_1);                                         // Unbinding "color" array...
 }

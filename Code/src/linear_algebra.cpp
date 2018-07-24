@@ -1,4 +1,4 @@
-#include "linalg.hpp"
+#include "linear_algebra.hpp"
 
 vector::vector()
 {
@@ -102,7 +102,7 @@ vector cross(vector a, vector b)
   return v;
 }
 
-matrix rotate(quaternion q)
+matrix rotation_matrix(quaternion q)
 {
   float mag;
 

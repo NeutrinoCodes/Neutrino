@@ -1,5 +1,5 @@
-#ifndef interop_hpp
-#define interop_hpp
+#ifndef interoperability_hpp
+#define interoperability_hpp
 
   #include <stdio.h>
   #include <stdlib.h>
@@ -24,8 +24,5 @@
   void pop_int4(int4* data, int kernel_arg);
   void pop_float(float* data, int kernel_arg);
   void pop_int(int* data, int kernel_arg);
-
-  void plot(point4* points, color4* colors);
-  void print(text4* text);
 
 #endif
