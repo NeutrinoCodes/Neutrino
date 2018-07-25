@@ -60,7 +60,7 @@
   void        init_screen();
   void        refresh_screen();
   void        clear_screen();
-  vector      get_arcball_vector(int x, int y);
+  void        get_arcball_vector(float* p, int x, int y);
   void        arcball();
   void        plot(point4* points, color4* colors);
   void        print(text4* text);

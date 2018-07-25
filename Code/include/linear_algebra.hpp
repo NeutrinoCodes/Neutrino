@@ -1,62 +1,14 @@
 #ifndef linear_algebra_hpp
 #define linear_algebra_hpp
 
+  #include <stdio.h>
   #include <math.h>
 
-  class vector
-  {
-    private:
-
-    public:
-      vector();
-      ~vector();
-
-      float  x;
-      float  y;
-      float  z;
-  };
-
-  class quaternion
-  {
-  private:
-
-  public:
-    quaternion();
-    ~quaternion();
-
-    float  x;
-    float  y;
-    float  z;
-    float  w;
-  };
-
-  class matrix
-  {
-  private:
-
-  public:
-    matrix();
-    ~matrix();
-
-    float  a_11;
-    float  a_12;
-    float  a_13;
-
-    float  a_21;
-    float  a_22;
-    float  a_23;
-
-    float  a_31;
-    float  a_32;
-    float  a_33;
-  };
-
-
-  float   dot(vector a, vector b);
-  float   magnitude(vector a);
-  vector  normalize(vector a);
-  float   angle(vector a, vector b);
-  vector  cross(vector a, vector b);
-  matrix  rotation_matrix(quaternion q);
+  float   dot(float a[3], float b[3]);
+  float   magnitude(float a[3]);
+  void    normalize(float a[3]);
+  float   angle(float a[3], float b[3]);
+  void    cross(float v[3], float a[3], float b[3]);
+  void    rotation_matrix(float M[9], float q[4]);
 
 #endif

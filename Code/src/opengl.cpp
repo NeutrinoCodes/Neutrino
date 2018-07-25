@@ -27,32 +27,32 @@ double						scroll_y = 0;                                                 // Scr
 bool 							arcball_on = false;                                           // Arcball activation flag.
 double						zoom = 0;                                                     // Zoom coefficient.
 
-quaternion        arcball_quaternion;                   // Arcball quaternion.
+float             q[4];                                                         // Arcball quaternion.
 
-float         R[16]     = {1.0, 0.0, 0.0, 0.0,                                  // Rotation matrix.
-                           0.0, 1.0, 0.0, 0.0,
-                           0.0, 0.0, 1.0, 0.0,
+float             R[16]     = {1.0, 0.0, 0.0, 0.0,                              // Rotation matrix.
+                               0.0, 1.0, 0.0, 0.0,
+                               0.0, 0.0, 1.0, 0.0,
                            0.0, 0.0, 0.0, 1.0};
 
-float         R_old[16] = {1.0, 0.0, 0.0, 0.0,                                  // Rotation matrix backup.
-                           0.0, 1.0, 0.0, 0.0,
-                           0.0, 0.0, 1.0, 0.0,
-                           0.0, 0.0, 0.0, 1.0};
+float             R_old[16] = {1.0, 0.0, 0.0, 0.0,                              // Rotation matrix backup.
+                               0.0, 1.0, 0.0, 0.0,
+                               0.0, 0.0, 1.0, 0.0,
+                               0.0, 0.0, 0.0, 1.0};
 
-float         T[16]     = {1.0, 0.0, 0.0, 0.0,                                  // Translation matrix.
-                           0.0, 1.0, 0.0, 0.0,
-                           0.0, 0.0, 1.0, 0.0,
-                           0.0, 0.0, 0.0, 1.0};
+float             T[16]     = {1.0, 0.0, 0.0, 0.0,                              // Translation matrix.
+                               0.0, 1.0, 0.0, 0.0,
+                               0.0, 0.0, 1.0, 0.0,
+                               0.0, 0.0, 0.0, 1.0};
 
-float         V[16]     = {1.0, 0.0, 0.0, 0.0,                                  // View matrix.
-                           0.0, 1.0, 0.0, 0.0,
-                           0.0, 0.0, 1.0, 0.0,
-                           0.0, 0.0, 0.0, 1.0};
+float             V[16]     = {1.0, 0.0, 0.0, 0.0,                              // View matrix.
+                               0.0, 1.0, 0.0, 0.0,
+                               0.0, 0.0, 1.0, 0.0,
+                               0.0, 0.0, 0.0, 1.0};
 
-float         P[16]     = {1.0, 0.0, 0.0, 0.0,                                  // Projection matrix.
-                           0.0, 1.0, 0.0, 0.0,
-                           0.0, 0.0, 1.0, 0.0,
-                           0.0, 0.0, 0.0, 1.0};
+float             P[16]     = {1.0, 0.0, 0.0, 0.0,                              // Projection matrix.
+                               0.0, 1.0, 0.0, 0.0,
+                               0.0, 0.0, 1.0, 0.0,
+                               0.0, 0.0, 0.0, 1.0};
 
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////// FILES //////////////////////////////////////
@@ -270,7 +270,7 @@ void init_shaders()
 
 void init_screen()
 {
-  vector initial_translation;
+  float initial_translation[3];
 
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);                                         // Setting color for clearing window...
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
@@ -281,9 +281,9 @@ void init_screen()
   //glEnable(GL_BLEND);
   //glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
-  initial_translation.x =  0.0;                                                 // Building initial translation vector...
-  initial_translation.y =  0.0;                                                 // Building initial translation vector...
-  initial_translation.z = -3.0;                                                 // Building initial translation vector...
+  initial_translation[0] =  0.0;                                                // Building initial translation vector...
+  initial_translation[1] =  0.0;                                                // Building initial translation vector...
+  initial_translation[2] = -3.0;                                                // Building initial translation vector...
 
   translate(T, initial_translation);                                            // Setting initial Translation_matrix matrix...
   perspective(P, FOV*M_PI/180.0, aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);        // Setting Projection_matrix matrix...
@@ -311,44 +311,45 @@ void clear_screen()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing screen...
 }
 
-vector get_arcball_vector(int x, int y)
+void get_arcball_vector(float* p, int x, int y)
 {
-  vector p;																																	    // Point "p" on unitary ball.
 	float  op_sq;																																	// Center "o" to "p" squared distance.
 
 	glfwGetWindowSize(window, &window_size_x, &window_size_y);										// Getting window size...
-  p.x = 2.0*x/window_size_x - 1.0;                                              // Computing point on unitary ball [x]...
-  p.y = 2.0*y/window_size_y - 1.0;                                              // Computing point on unitary ball [y]...
-  p.z = 0.0;                                                                    // Computing point on unitary ball [z]...
-  p.y = -p.y;																																		// Inverting y-axis according to OpenGL...
-	op_sq = p.x*p.x + p.y*p.y;                                                    // Computing "op" squared...
+  p[0] =   2.0*x/window_size_x - 1.0;                                           // Computing point on unitary ball [x]...
+  p[1] = -(2.0*y/window_size_y - 1.0);                                          // Computing point on unitary ball [y] (axis inverted according to OpenGL)...
+  p[2] =   0.0;                                                                 // Computing point on unitary ball [z]...
+	op_sq = p[0]*p[0] + p[1]*p[1];                                                // Computing "op" squared...
 
   if (op_sq <= 1.0)																															// Checking p to ball-center distance...
 	{
-    p.z = sqrt(1.0 - op_sq);  																									// Pythagoras' theorem...
+    p[2] = sqrt(1.0 - op_sq);  																									// Pythagoras' theorem...
 	}
 
   else
 	{
-    p = normalize(p);  																										      // Normalizing if too far...
+    normalize(p);  																										          // Normalizing if too far...
 	}
-
-  return p;
 }
 
 void arcball()
 {
-	vector a; 																															  		// Mouse vector, world coordinates.
-	vector b; 																															  	  // Mouse vector, world coordinates.
-	vector axis;																										   		        // Arcball axis of rotation.
-	float  theta;																																	// Arcball angle of rotation.
+	float a[3]; 																															    // Mouse vector, world coordinates.
+	float b[3]; 																															    // Mouse vector, world coordinates.
+	float axis[3];																										   		      // Arcball axis of rotation.
+	float theta;																																	// Arcball angle of rotation.
 
-	if (arcball_on &&(mouse_x != mouse_x_old || mouse_y != mouse_y_old))          // If mouse has been dragged (= left click + move):
+	if (arcball_on &&((mouse_x != mouse_x_old) || (mouse_y != mouse_y_old)))      // If mouse has been dragged (= left click + move):
 	{
-		a = get_arcball_vector(mouse_x_old, mouse_y_old);							  						// Building mouse world vector (old)...
-		b = get_arcball_vector(mouse_x, mouse_y);												   					// Building mouse world vector...
+		get_arcball_vector(a, mouse_x_old, mouse_y_old);							  			      // Building mouse world vector (old)...
+		get_arcball_vector(b, mouse_x, mouse_y);												   					// Building mouse world vector...
 		theta = ROTATION_FACTOR*angle(a, b);                                        // Calculating arcball angle...
-    axis = normalize(cross(a, b));									            				        // Calculating arcball axis of rotation...
+    cross(axis, a, b);									            				                    // Calculating arcball axis of rotation...
+    printf("axis_x = %f, axis_y = %f, axis_z = %f\n", axis[0], axis[1], axis[2]);
+    normalize(axis);
+    printf("ax = %f, ay = %f, az = %f\n", a[0], a[1], a[2]);
+    printf("bx = %f, by = %f, bz = %f\n", b[0], b[1], b[2]);
+    printf("axis_x = %f, axis_y = %f, axis_z = %f\n", axis[0], axis[1], axis[2]);
     rotate(R, R_old, axis, theta);                                              // Calculating rotation matrix...
 	}
 }
@@ -473,7 +474,7 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-  vector translation;                                                           // Translation vector.
+  float translation[3];                                                         // Translation vector.
 
   scroll_x = xoffset;																														// Getting scroll position...
 	scroll_y = yoffset;																														// Getting scroll position...
@@ -489,9 +490,9 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 		zoom /= ZOOM_FACTOR;																												// Zooming-out...
 	}
 
-  translation.x = 0.0;                                                          // Building translation vector...
-  translation.y = 0.0;                                                          // Building translation vector...
-  translation.z = zoom;                                                         // Building translation vector...
+  translation[0] = 0.0;                                                         // Building translation vector...
+  translation[1] = 0.0;                                                         // Building translation vector...
+  translation[2] = zoom;                                                        // Building translation vector...
   translate(T, translation);                                                    // Building translation matrix...
 }
 

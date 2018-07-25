@@ -3,14 +3,14 @@
 
   #include "linear_algebra.hpp"
 
-  void frustum(float* F, float left, float right, float bottom,
+  void frustum(float F[16], float left, float right, float bottom,
                   float top, float z_near, float z_far);
-  void perspective(float* P, float fov, float aspect_ratio,
+  void perspective(float P[16], float fov, float aspect_ratio,
                       float z_near, float z_far);
-  void rotate(float* R, float* R_old, vector axis, float theta);
+  void rotate(float R[16], float R_old[16], float axis[3], float theta);
 
-  void translate(float* T, vector translation);
+  void translate(float T[16], float translation[3]);
 
-  void multiplicate(float* C, float* A, float* B);
+  void multiplicate(float C[16], float A[16], float B[16]);
 
 #endif

@@ -1,22 +1,22 @@
 #include "projective_geometry.hpp"
 
-void frustum(float* F, float left, float right, float bottom,
+void frustum(float F[16], float left, float right, float bottom,
              float top, float z_near, float z_far)
 {
-  float a_11 = 2.0*z_near/(right - left);
-  float a_13 = (right + left)/(right - left);
-  float a_22 = 2.0*z_near/(top - bottom);
-  float a_23 = (top + bottom)/(top - bottom);
-  float a_33 = -(z_far + z_near)/(z_far - z_near);
-  float a_34 = -2.0*(z_far*z_near)/(z_far - z_near);
+  float a11 = 2.0*z_near/(right - left);
+  float a13 = (right + left)/(right - left);
+  float a22 = 2.0*z_near/(top - bottom);
+  float a23 = (top + bottom)/(top - bottom);
+  float a33 = -(z_far + z_near)/(z_far - z_near);
+  float a34 = -2.0*(z_far*z_near)/(z_far - z_near);
 
-  F[0]  = a_11;  F[4]  = 0.0;  F[8]  = a_13;  F[12] = 0.0;
-  F[1]  = 0.0;   F[5]  = a_22; F[9]  = a_23;  F[13] = 0.0;
-  F[2]  = 0.0;   F[6]  = 0.0;  F[10] = a_33;  F[14] = a_34;
+  F[0]  = a11;   F[4]  = 0.0;  F[8]  = a13;   F[12] = 0.0;
+  F[1]  = 0.0;   F[5]  = a22;  F[9]  = a23;   F[13] = 0.0;
+  F[2]  = 0.0;   F[6]  = 0.0;  F[10] = a33;   F[14] = a34;
   F[3]  = 0.0;   F[7]  = 0.0;  F[11] = -1.0;  F[15] = 0.0;
 }
 
-void perspective(float* P, float fov, float aspect_ratio,
+void perspective(float P[16], float fov, float aspect_ratio,
                     float z_near, float z_far)
 {
     float x_max;
@@ -32,10 +32,10 @@ void perspective(float* P, float fov, float aspect_ratio,
     frustum(P, -x_max, x_max, -y_max, y_max, z_near, z_far);
 }
 
-void rotate(float* R, float* R_old, vector axis, float theta)
+void rotate(float R[16], float R_old[16], float axis[3], float theta)
 {
-  quaternion q;                                                                 // Quaternion describing the rotation...
-  matrix M;                                                                     // Matrix corresponding to rotation quaternion...
+  float q[4];                                                                   // Quaternion describing the rotation...
+  float M[9];                                                                   // Matrix corresponding to rotation quaternion...
   float Q[16];                                                                  // Projective matrix corresponding to rotation quaternion...
   float cos_theta_half;                                                         // cos(theta/2).
   float sin_theta_half;                                                         // sin(theta/2).
@@ -50,22 +50,22 @@ void rotate(float* R, float* R_old, vector axis, float theta)
   float r31, r32, r33, r34;
   float r41, r42, r43, r44;
 
-
   cos_theta_half = cos(theta/2.0);                                              // Computing cos(theta/2)...
   sin_theta_half = sin(theta/2.0);                                              // Computing sin(theta/2)...
-  axis = normalize(axis);                                                       // Normalizing rotation axis...
 
-  q.x = axis.x*sin_theta_half;
-  q.y = axis.y*sin_theta_half;
-  q.z = axis.z*sin_theta_half;
-  q.w = cos_theta_half;
+  normalize(axis);                                                              // Normalizing rotation axis...
 
-  M = rotation_matrix(q);
+  q[0] = axis[0]*sin_theta_half;
+  q[1] = axis[1]*sin_theta_half;
+  q[2] = axis[2]*sin_theta_half;
+  q[3] = cos_theta_half;
 
-  Q[0]  = M.a_11; Q[4]  = M.a_12; Q[8]  = M.a_13; Q[12] = 0.0;
-  Q[1]  = M.a_21; Q[5]  = M.a_22; Q[9]  = M.a_23; Q[13] = 0.0;
-  Q[2]  = M.a_31; Q[6]  = M.a_32; Q[10] = M.a_33; Q[14] = 0.0;
-  Q[3]  = 0.0;    Q[7]  = 0.0;    Q[11] = 0.0;    Q[15] = 1.0;
+  rotation_matrix(M, q);
+
+  Q[0]  = M[0]; Q[4]  = M[3]; Q[8]  = M[6]; Q[12] = 0.0;
+  Q[1]  = M[1]; Q[5]  = M[4]; Q[9]  = M[7]; Q[13] = 0.0;
+  Q[2]  = M[2]; Q[6]  = M[5]; Q[10] = M[8]; Q[14] = 0.0;
+  Q[3]  = 0.0;  Q[7]  = 0.0;  Q[11] = 0.0;  Q[15] = 1.0;
 
   q11 = Q[0];  q12 = Q[4];  q13 = Q[8];  q14 = Q[12];
   q21 = Q[1];  q22 = Q[5];  q23 = Q[9];  q24 = Q[13];
@@ -81,29 +81,29 @@ void rotate(float* R, float* R_old, vector axis, float theta)
   R[1]  = q21*r11 + q22*r21 + q23*r31 + q24*r41;
   R[2]  = q31*r11 + q32*r21 + q33*r31 + q34*r41;
   R[3]  = q41*r11 + q42*r21 + q43*r31 + q44*r41;
-  R[4]  = q11*r21 + q12*r22 + q13*r23 + q14*r24;
-  R[5]  = q21*r21 + q22*r22 + q23*r23 + q24*r24;
-  R[6]  = q31*r21 + q32*r22 + q33*r23 + q34*r24;
-  R[7]  = q41*r21 + q42*r22 + q43*r23 + q44*r24;
-  R[8]  = q11*r31 + q12*r32 + q13*r33 + q14*r34;
-  R[9]  = q21*r31 + q22*r32 + q23*r33 + q24*r34;
-  R[10] = q31*r31 + q32*r32 + q33*r33 + q34*r34;
-  R[11] = q41*r31 + q42*r32 + q43*r33 + q44*r34;
-  R[12] = q11*r41 + q12*r42 + q13*r43 + q14*r44;
-  R[13] = q21*r41 + q22*r42 + q23*r43 + q24*r44;
-  R[14] = q31*r41 + q32*r42 + q33*r43 + q34*r44;
-  R[15] = q41*r41 + q42*r42 + q43*r43 + q44*r44;
+  R[4]  = q11*r12 + q12*r22 + q13*r32 + q14*r42;
+  R[5]  = q21*r12 + q22*r22 + q23*r32 + q24*r42;
+  R[6]  = q31*r12 + q32*r22 + q33*r32 + q34*r42;
+  R[7]  = q41*r12 + q42*r22 + q43*r32 + q44*r42;
+  R[8]  = q11*r13 + q12*r23 + q13*r33 + q14*r43;
+  R[9]  = q21*r13 + q22*r23 + q23*r33 + q24*r43;
+  R[10] = q31*r13 + q32*r23 + q33*r33 + q34*r43;
+  R[11] = q41*r13 + q42*r23 + q43*r33 + q44*r43;
+  R[12] = q11*r14 + q12*r24 + q13*r34 + q14*r44;
+  R[13] = q21*r14 + q22*r24 + q23*r34 + q24*r44;
+  R[14] = q31*r14 + q32*r24 + q33*r34 + q34*r44;
+  R[15] = q41*r14 + q42*r24 + q43*r34 + q44*r44;
 }
 
-void translate(float* T, vector translation)
+void translate(float T[16], float translation[3])
 {
-  T[0] = 1.0; T[4] = 0.0; T[8]  = 0.0; T[12] = translation.x;
-  T[1] = 0.0; T[5] = 1.0; T[9]  = 0.0; T[13] = translation.y;
-  T[2] = 0.0; T[6] = 0.0; T[10] = 1.0; T[14] = translation.z;
+  T[0] = 1.0; T[4] = 0.0; T[8]  = 0.0; T[12] = translation[0];
+  T[1] = 0.0; T[5] = 1.0; T[9]  = 0.0; T[13] = translation[1];
+  T[2] = 0.0; T[6] = 0.0; T[10] = 1.0; T[14] = translation[2];
   T[3] = 0.0; T[7] = 0.0; T[11] = 0.0; T[15] = 1.0;
 }
 
-void multiplicate(float* C, float* A, float* B)
+void multiplicate(float C[16], float A[16], float B[16])
 {
   float a11, a12, a13, a14;
   float a21, a22, a23, a24;
@@ -129,16 +129,16 @@ void multiplicate(float* C, float* A, float* B)
   C[1]  = a21*b11 + a22*b21 + a23*b31 + a24*b41;
   C[2]  = a31*b11 + a32*b21 + a33*b31 + a34*b41;
   C[3]  = a41*b11 + a42*b21 + a43*b31 + a44*b41;
-  C[4]  = a11*b21 + a12*b22 + a13*b23 + a14*b24;
-  C[5]  = a21*b21 + a22*b22 + a23*b23 + a24*b24;
-  C[6]  = a31*b21 + a32*b22 + a33*b23 + a34*b24;
-  C[7]  = a41*b21 + a42*b22 + a43*b23 + a44*b24;
-  C[8]  = a11*b31 + a12*b32 + a13*b33 + a14*b34;
-  C[9]  = a21*b31 + a22*b32 + a23*b33 + a24*b34;
-  C[10] = a31*b31 + a32*b32 + a33*b33 + a34*b34;
-  C[11] = a41*b31 + a42*b32 + a43*b33 + a44*b34;
-  C[12] = a11*b41 + a12*b42 + a13*b43 + a14*b44;
-  C[13] = a21*b41 + a22*b42 + a23*b43 + a24*b44;
-  C[14] = a31*b41 + a32*b42 + a33*b43 + a34*b44;
-  C[15] = a41*b41 + a42*b42 + a43*b43 + a44*b44;
+  C[4]  = a11*b12 + a12*b22 + a13*b32 + a14*b42;
+  C[5]  = a21*b12 + a22*b22 + a23*b32 + a24*b42;
+  C[6]  = a31*b12 + a32*b22 + a33*b32 + a34*b42;
+  C[7]  = a41*b12 + a42*b22 + a43*b32 + a44*b42;
+  C[8]  = a11*b13 + a12*b23 + a13*b33 + a14*b43;
+  C[9]  = a21*b13 + a22*b23 + a23*b33 + a24*b43;
+  C[10] = a31*b13 + a32*b23 + a33*b33 + a34*b43;
+  C[11] = a41*b13 + a42*b23 + a43*b33 + a44*b43;
+  C[12] = a11*b14 + a12*b24 + a13*b34 + a14*b44;
+  C[13] = a21*b14 + a22*b24 + a23*b34 + a24*b44;
+  C[14] = a31*b14 + a32*b24 + a33*b34 + a34*b44;
+  C[15] = a41*b14 + a42*b24 + a43*b34 + a44*b44;
 }

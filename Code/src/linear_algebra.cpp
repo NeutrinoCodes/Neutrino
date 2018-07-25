@@ -1,72 +1,45 @@
 #include "linear_algebra.hpp"
 
-vector::vector()
+float dot(float a[3], float b[3])
 {
-  x = 0.0;
-  y = 0.0;
-  z = 0.0;
+  return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
 }
 
-vector::~vector()
-{
-
-}
-
-quaternion::quaternion()
-{
-  x = 0.0;                                                                      // Vector component "x".
-  y = 0.0;                                                                      // Vector component "y".
-  z = 0.0;                                                                      // Vector component "z".
-  w = 0.0;                                                                      // Scalar component "w".
-}
-
-quaternion::~quaternion()
-{
-
-}
-
-matrix::matrix()
-{
-  a_11 = 0.0; a_12 = 0.0; a_13 = 0.0;
-  a_21 = 0.0; a_22 = 0.0; a_23 = 0.0;
-  a_31 = 0.0; a_32 = 0.0; a_33 = 0.0;
-}
-
-matrix::~matrix()
-{
-
-}
-
-float dot(vector a, vector b)
-{
-  return a.x*b.x + a.y*b.y + a.z*b.z;
-}
-
-float magnitude(vector a)
+float magnitude(float a[3])
 {
   return sqrt(dot(a, a));
 }
 
-vector normalize(vector a)
+void normalize(float a[3])
 {
-  vector  v;
-  float   mag;
+  float mag;
 
   mag = magnitude(a);
 
-  v.x = a.x/mag;
-  v.y = a.y/mag;
-  v.z = a.z/mag;
-
-  return v;
+  a[0] = a[0]/mag;
+  a[1] = a[1]/mag;
+  a[2] = a[2]/mag;
 }
 
-float angle(vector a, vector b)
+float angle(float a[3], float b[3])
 {
+  float u[3];
+  float v[3];
   float cos_theta;
   float theta;
 
-  cos_theta = dot(normalize(a), normalize(b));                                  // Computing cos_theta...
+  u[0] = a[0];
+  u[1] = a[1];
+  u[2] = a[2];
+
+  v[0] = b[0];
+  v[1] = b[1];
+  v[2] = b[2];
+
+  normalize(u);
+  normalize(v);
+
+  cos_theta = dot(u, v);                                                        // Computing cos_theta...
 
   if (cos_theta > 1.0)                                                          // Clamping cos_theta...
   {
@@ -83,18 +56,14 @@ float angle(vector a, vector b)
   return theta;
 }
 
-vector cross(vector a, vector b)
+void cross(float v[3], float a[3], float b[3])
 {
-  vector v;
-
-  v.x =    a.y*b.z - a.z*b.y;
-  v.y = - (a.x*b.z - a.z*b.x);
-  v.z =    a.x*b.y - a.y*b.x;
-
-  return v;
+  v[0] =    a[1]*b[2] - a[2]*b[1];
+  v[1] = - (a[0]*b[3] - a[3]*b[1]);
+  v[2] =    a[0]*b[1] - a[1]*b[0];
 }
 
-matrix rotation_matrix(quaternion q)
+void rotation_matrix(float M[9], float q[4])
 {
   float mag;
 
@@ -103,32 +72,28 @@ matrix rotation_matrix(quaternion q)
   float z2, zz;
   float wx, wy, wz;
 
-  matrix M;
+  mag = sqrt(q[0]*q[0] + q[1]*q[1] + q[2]*q[2] + q[3]*q[3]);
 
-  mag = sqrt(q.x*q.x + q.y*q.y + q.z*q.z + q.w*q.w);
+  q[0] = q[0]/mag;
+  q[1] = q[1]/mag;
+  q[2] = q[2]/mag;
+  q[3] = q[3]/mag;
 
-  q.x /= mag;
-  q.y /= mag;
-  q.z /= mag;
-  q.w /= mag;
+  x2 = q[0] + q[0],
+  y2 = q[1] + q[1],
+  z2 = q[2] + q[2],
 
-  x2 = q.x + q.x,
-  y2 = q.y + q.y,
-  z2 = q.z + q.z,
+  xx = q[0]*x2,
+  xy = q[0]*y2,
+  xz = q[0]*z2,
+  yy = q[1]*y2,
+  yz = q[1]*z2,
+  zz = q[2]*z2,
+  wx = q[3]*x2,
+  wy = q[3]*y2,
+  wz = q[3]*z2;
 
-  xx = q.x * x2,
-  xy = q.x * y2,
-  xz = q.x * z2,
-  yy = q.y * y2,
-  yz = q.y * z2,
-  zz = q.z * z2,
-  wx = q.w * x2,
-  wy = q.w * y2,
-  wz = q.w * z2;
-
-  M.a_11 = 1.0 - (yy + zz); M.a_12 = xy + wz; M.a_13 = xz - wy;
-  M.a_21 = xy - wz; M.a_22 = 1.0 - (xx + zz); M.a_23 = yz + wx;
-  M.a_31 = xz + wy; M.a_32 = yz - wx; M.a_33 = 1.0 - (xx + yy);
-
-  return M;
+  M[0] = 1.0 - (yy + zz); M[3] = xy - wz;         M[6] = xz + wy;
+  M[1] = xy + wz;         M[4] = 1.0 - (xx + zz); M[7] = yz - wx;
+  M[2] = xz - wy;         M[5] = yz + wx;         M[8] = 1.0 - (xx + yy);
 }
