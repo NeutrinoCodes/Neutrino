@@ -14,10 +14,10 @@ vector::~vector()
 
 quaternion::quaternion()
 {
-  a = 0.0;
-  b = 0.0;
-  c = 0.0;
-  d = 0.0;
+  x = 0.0;                                                                      // Vector component "x".
+  y = 0.0;                                                                      // Vector component "y".
+  z = 0.0;                                                                      // Vector component "z".
+  w = 0.0;                                                                      // Scalar component "w".
 }
 
 quaternion::~quaternion()
@@ -27,17 +27,9 @@ quaternion::~quaternion()
 
 matrix::matrix()
 {
-  a_11 = 0.0;
-  a_12 = 0.0;
-  a_13 = 0.0;
-
-  a_21 = 0.0;
-  a_22 = 0.0;
-  a_23 = 0.0;
-
-  a_31 = 0.0;
-  a_32 = 0.0;
-  a_33 = 0.0;
+  a_11 = 0.0; a_12 = 0.0; a_13 = 0.0;
+  a_21 = 0.0; a_22 = 0.0; a_23 = 0.0;
+  a_31 = 0.0; a_32 = 0.0; a_33 = 0.0;
 }
 
 matrix::~matrix()
@@ -106,42 +98,37 @@ matrix rotation_matrix(quaternion q)
 {
   float mag;
 
-  float aa;
-  float ab;
-  float ac;
-  float da;
-
-  float bb;
-  float bc;
-  float db;
-
-  float cc;
-  float dc;
+  float x2, xx, xy, xz;
+  float y2, yy, yz;
+  float z2, zz;
+  float wx, wy, wz;
 
   matrix M;
 
-  mag = sqrt(q.a*q.a + q.b*q.b + q.c*q.c + q.d*q.d);
+  mag = sqrt(q.x*q.x + q.y*q.y + q.z*q.z + q.w*q.w);
 
-  q.a /= mag;
-  q.b /= mag;
-  q.c /= mag;
-  q.d /= mag;
+  q.x /= mag;
+  q.y /= mag;
+  q.z /= mag;
+  q.w /= mag;
 
-  aa = q.a*q.a;
-  ab = q.a*q.b;
-  ac = q.a*q.c;
-  da = q.d*q.a;
+  x2 = q.x + q.x,
+  y2 = q.y + q.y,
+  z2 = q.z + q.z,
 
-  bb = q.b*q.b;
-  bc = q.b*q.c;
-  db = q.d*q.b;
+  xx = q.x * x2,
+  xy = q.x * y2,
+  xz = q.x * z2,
+  yy = q.y * y2,
+  yz = q.y * z2,
+  zz = q.z * z2,
+  wx = q.w * x2,
+  wy = q.w * y2,
+  wz = q.w * z2;
 
-  cc = q.c*q.c;
-  dc = q.d*q.c;
-
-  M.a_11 = 1.0 - 2.0*(bb - cc); M.a_12 = 0.0 + 2.0*(ab - dc); M.a_13 = 0.0 + 2.0*(ac + db);
-  M.a_21 = 0.0 + 2.0*(ab + dc); M.a_22 = 1.0 - 2.0*(aa + cc); M.a_23 = 0.0 + 2.0*(bc - da);
-  M.a_31 = 0.0 + 2.0*(ac - db); M.a_32 = 0.0 + 2.0*(bc + da); M.a_33 = 1.0 - 2.0*(aa + bb);
+  M.a_11 = 1.0 - (yy + zz); M.a_12 = xy + wz; M.a_13 = xz - wy;
+  M.a_21 = xy - wz; M.a_22 = 1.0 - (xx + zz); M.a_23 = yz + wx;
+  M.a_31 = xz + wy; M.a_32 = yz - wx; M.a_33 = 1.0 - (xx + yy);
 
   return M;
 }

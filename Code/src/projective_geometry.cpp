@@ -55,10 +55,10 @@ void rotate(float* R, float* R_old, vector axis, float theta)
   sin_theta_half = sin(theta/2.0);                                              // Computing sin(theta/2)...
   axis = normalize(axis);                                                       // Normalizing rotation axis...
 
-  q.a = cos_theta_half;
-  q.b = axis.x*sin_theta_half;
-  q.c = axis.y*sin_theta_half;
-  q.d = axis.z*sin_theta_half;
+  q.x = axis.x*sin_theta_half;
+  q.y = axis.y*sin_theta_half;
+  q.z = axis.z*sin_theta_half;
+  q.w = cos_theta_half;
 
   M = rotation_matrix(q);
 
