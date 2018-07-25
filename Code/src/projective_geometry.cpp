@@ -21,14 +21,10 @@ void perspective(float P[16], float fov, float aspect_ratio,
 {
     float x_max;
     float y_max;
-    float x_min;
-    float y_min;
 
     y_max = z_near*tanf(fov/2.0);
     x_max = y_max*aspect_ratio;
-    //y_min = -y_max;
-    //x_min = -x_max;
-
+    
     frustum(P, -x_max, x_max, -y_max, y_max, z_near, z_far);
 }
 

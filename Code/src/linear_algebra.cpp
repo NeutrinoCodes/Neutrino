@@ -16,9 +16,9 @@ void normalize(float a[3])
 
   mag = magnitude(a);
 
-  a[0] = a[0]/mag;
-  a[1] = a[1]/mag;
-  a[2] = a[2]/mag;
+  a[0] /= mag;
+  a[1] /= mag;
+  a[2] /= mag;
 }
 
 float angle(float a[3], float b[3])
@@ -74,10 +74,10 @@ void rotation_matrix(float M[9], float q[4])
 
   mag = sqrt(q[0]*q[0] + q[1]*q[1] + q[2]*q[2] + q[3]*q[3]);
 
-  q[0] = q[0]/mag;
-  q[1] = q[1]/mag;
-  q[2] = q[2]/mag;
-  q[3] = q[3]/mag;
+  q[0] /= mag;
+  q[1] /= mag;
+  q[2] /= mag;
+  q[3] /= mag;
 
   x2 = q[0] + q[0],
   y2 = q[1] + q[1],

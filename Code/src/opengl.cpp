@@ -347,11 +347,7 @@ void arcball()
     normalize(a);
     normalize(b);
     cross(axis, a, b);									            				                    // Calculating arcball axis of rotation...
-    printf("axis_x = %f, axis_y = %f, axis_z = %f\n", axis[0], axis[1], axis[2]);
     normalize(axis);
-    printf("ax = %f, ay = %f, az = %f\n", a[0], a[1], a[2]);
-    printf("bx = %f, by = %f, bz = %f\n", b[0], b[1], b[2]);
-    printf("axis_x = %f, axis_y = %f, axis_z = %f\n", axis[0], axis[1], axis[2]);
     rotate(R, R_old, axis, theta);                                              // Calculating rotation matrix...
 	}
 }
@@ -362,11 +358,6 @@ void plot(point4* points, color4* colors)
   GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
 
   multiplicate(V, T, R);                                                        // Setting View_matrix matrix...
-
-  printf("V11 = %f, V12 = %f, V13 = %f, V14 = %f\n", V[0], V[4], V[8], V[12]);
-  printf("V21 = %f, V22 = %f, V23 = %f, V24 = %f\n", V[1], V[5], V[9], V[13]);
-  printf("V31 = %f, V32 = %f, V33 = %f, V34 = %f\n", V[2], V[6], V[10], V[14]);
-  printf("V41 = %f, V42 = %f, V43 = %f, V44 = %f\n", V[3], V[7], V[11], V[15]);
 
   glUseProgram(point_shader);                                                   // Using shader...
   glUniformMatrix4fv(glGetUniformLocation(point_shader, "View_matrix"),         // Setting View_matrix matrix on shader...
