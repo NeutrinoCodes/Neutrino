@@ -59,7 +59,7 @@ float angle(float a[3], float b[3])
 void cross(float v[3], float a[3], float b[3])
 {
   v[0] =    a[1]*b[2] - a[2]*b[1];
-  v[1] = - (a[0]*b[3] - a[3]*b[1]);
+  v[1] = - (a[0]*b[2] - a[2]*b[0]);
   v[2] =    a[0]*b[1] - a[1]*b[0];
 }
 
