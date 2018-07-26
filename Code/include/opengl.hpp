@@ -5,12 +5,6 @@
   #include <stdlib.h>
   #include <GL/glew.h>
   #include <math.h>
-  #include <glm/glm.hpp>
-  #include <glm/gtc/matrix_transform.hpp>
-  #include <glm/gtc/random.hpp>
-  #include <glm/gtx/transform.hpp>
-  #include <glm/gtx/vector_angle.hpp>
-  #include <glm/gtx/quaternion.hpp>
 
   #ifdef __WINDOWS__
     #define GLFW_EXPOSE_NATIVE_WIN32
@@ -32,46 +26,23 @@
     #include <GL/gl.h>
   #endif
 
-  #include "utils.hpp"
+  #include "data.hpp"
+  #include "linear_algebra.hpp"
+  #include "projective_geometry.hpp"
+  #include "utilities.hpp"
 
-  #define SIZE_WINDOW_X 800
-  #define SIZE_WINDOW_Y 600
-  #define ZOOM_FACTOR 1.05f
-  #define ROTATION_FACTOR 2.0f
-  #define NEAR_Z_CLIP 0.1f
-  #define FAR_Z_CLIP 100.0f
-  #define FOV 60.0f
-  #define LINE_WIDTH 3
+  #define SIZE_WINDOW_X 800                                                     // Window x-size [px].
+  #define SIZE_WINDOW_Y 600                                                     // Window y-size [px].
+  #define ZOOM_FACTOR 1.05f                                                     // Zoom factor [> 1.0].
+  #define ROTATION_FACTOR 2.0f                                                  // Rotation factor [].
+  #define NEAR_Z_CLIP 0.1f                                                      // Near z-clipping distance [> 0.0].
+  #define FAR_Z_CLIP 100.0f                                                     // Far z-clipping distance [< +inf].
+  #define FOV 60.0f                                                             // Field of view [deg].
+  #define LINE_WIDTH 3                                                          // Line width [px].
 
   extern  GLFWwindow*				window;                                             // Window handle.
   extern  GLuint 						point_shader;                                       // Point shader program.
   extern  GLuint 						text_shader;                                        // Text shader program.
-  extern  glm::mat4					Rotation_matrix;																	  // Rotation matrix.
-  extern  glm::mat4 				Translation_matrix;																	// Translation matrix.
-  extern  glm::mat4 				Model_matrix;																				// Model matrix.
-  extern  glm::mat4 				View_matrix;																				// View matrix.
-  extern  glm::mat4 				Projection_matrix;																	// Projection matrix.
-
-  ////////////////////////////////////////////////////////////////////////////////
-  /////////////////////////////////// REFRESH ////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  void        screen_refresh();
-  void        screen_clear();
-
-  ////////////////////////////////////////////////////////////////////////////////
-  /////////////////////////////////// ARCBALL ////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  glm::vec3   get_arcball_vector(int x, int y);
-  void        arcball();
-
-  ////////////////////////////////////////////////////////////////////////////////
-  /////////////////////////////////// CALLBACKS //////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  void        key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-  void        mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-  void        cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
-  void        scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-  void        window_refresh_callback(GLFWwindow* window);
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// FILES ////////////////////////////////////
@@ -85,20 +56,22 @@
   //////////////////////////////////// WINDOW ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   void        init_window();
-
-  ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////// SHADERS ///////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
   void        init_shaders();
-
-  ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////// SCREEN ////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
   void        init_screen();
+  void        refresh_screen();
+  void        clear_screen();
+  void        get_arcball_vector(float* p, int x, int y);
+  void        arcball();
+  void        plot(point4* points, color4* colors);
+  void        print(text4* text);
 
   ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////// TEXT /////////////////////////////////////
+  ///////////////////////////// WINDOW's CALLBACKS ///////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  void        init_text();
+  void        key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+  void        mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+  void        cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+  void        scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+  void        window_refresh_callback(GLFWwindow* window);
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef utils_hpp
-#define utils_hpp
+#ifndef utilities_hpp
+#define utilities_hpp
 
   #include <stdio.h>
   #include <stdlib.h>
@@ -22,6 +22,6 @@
   double  getCPUTime();
   void    load_file(const char* file_name, char** file_buffer, size_t* file_size);
   void    free_file(char* buffer);
-  void ascii_spin(const char* text, double tic, double toc);
+  void    ascii_spin(const char* text, double tic, double toc);
   void    ascii_spin_stop();
 #endif

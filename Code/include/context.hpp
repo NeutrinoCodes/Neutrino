@@ -7,7 +7,7 @@
 
   #include "opengl.hpp"
   #include "opencl.hpp"
-  #include "interop.hpp"
+  #include "interoperability.hpp"
 
   void init_opengl_context();
   void init_opencl_context();
