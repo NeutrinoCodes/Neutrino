@@ -1,0 +1,12 @@
+PROJECT_NAME           = "NEUTRINO"
+PROJECT_BRIEF          = "Fast and light solid OpenCL/GL coding."
+OUTPUT_DIRECTORY       = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen
+INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@/src/ \
+                         @CMAKE_CURRENT_SOURCE_DIR@/include/ \
+                         @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Documentation.md
+                         @CMAKE_CURRENT_SOURCE_DIR@/../Docs/opencl.md
+FILE_PATTERNS          = *.cpp *.hpp
+MARKDOWN_SUPPORT       = YES
+DISABLE_INDEX          = YES
+GENERATE_TREEVIEW      = YES
+GENERATE_RTF           = YES

@@ -1,0 +1,113 @@
+\hypertarget{context_8hpp}{}\section{/\+Users/\+Erik/\+Documents/\+P\+R\+O\+J\+E\+C\+T\+S/\+Bookhouse\+Boys/ezor/\+Neutrino/\+Code/include/context.hpp File Reference}
+\label{context_8hpp}\index{/\+Users/\+Erik/\+Documents/\+P\+R\+O\+J\+E\+C\+T\+S/\+Bookhouse\+Boys/ezor/\+Neutrino/\+Code/include/context.\+hpp@{/\+Users/\+Erik/\+Documents/\+P\+R\+O\+J\+E\+C\+T\+S/\+Bookhouse\+Boys/ezor/\+Neutrino/\+Code/include/context.\+hpp}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}opengl.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}opencl.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}interoperability.\+hpp\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{context_8hpp_a4014df59868f5652057db26b16323955}{init\+\_\+opengl\+\_\+context}} ()
+\begin{DoxyCompactList}\small\item\em {\bfseries Initialization of Open\+GL graphic context\+:} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{context_8hpp_ab1d536e18bf28ad5eaa980f91939373f}{init\+\_\+opencl\+\_\+context}} ()
+\begin{DoxyCompactList}\small\item\em {\bfseries Initialization of Open\+CL computational context\+:} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{context_8hpp_a2a71d477117538f9e64a00cf277c19cf}{destroy\+\_\+opengl\+\_\+context}} ()
+\begin{DoxyCompactList}\small\item\em {\bfseries Destruction of Open\+GL graphic context\+:} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{context_8hpp_a0711609d49cce2ed31b503ce293bd9cc}{destroy\+\_\+opencl\+\_\+context}} ()
+\begin{DoxyCompactList}\small\item\em {\bfseries Destruction of Open\+CL computational context\+:} \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{context_8hpp_a0711609d49cce2ed31b503ce293bd9cc}\label{context_8hpp_a0711609d49cce2ed31b503ce293bd9cc}} 
+\index{context.\+hpp@{context.\+hpp}!destroy\+\_\+opencl\+\_\+context@{destroy\+\_\+opencl\+\_\+context}}
+\index{destroy\+\_\+opencl\+\_\+context@{destroy\+\_\+opencl\+\_\+context}!context.\+hpp@{context.\+hpp}}
+\subsubsection{\texorpdfstring{destroy\+\_\+opencl\+\_\+context()}{destroy\_opencl\_context()}}
+{\footnotesize\ttfamily void destroy\+\_\+opencl\+\_\+context (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+{\bfseries Destruction of Open\+CL computational context\+:} 
+
+Finishing Open\+CL queue...
+
+Releasing Open\+CL kernel...
+
+Releasing Open\+CL queue...
+
+Releasing Open\+CL program...
+
+Releasgin Open\+CL context...
+
+Freeing Open\+CL devices...
+
+Freeing Open\+CL platforms... \mbox{\Hypertarget{context_8hpp_a2a71d477117538f9e64a00cf277c19cf}\label{context_8hpp_a2a71d477117538f9e64a00cf277c19cf}} 
+\index{context.\+hpp@{context.\+hpp}!destroy\+\_\+opengl\+\_\+context@{destroy\+\_\+opengl\+\_\+context}}
+\index{destroy\+\_\+opengl\+\_\+context@{destroy\+\_\+opengl\+\_\+context}!context.\+hpp@{context.\+hpp}}
+\subsubsection{\texorpdfstring{destroy\+\_\+opengl\+\_\+context()}{destroy\_opengl\_context()}}
+{\footnotesize\ttfamily void destroy\+\_\+opengl\+\_\+context (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+{\bfseries Destruction of Open\+GL graphic context\+:} 
+
+Destroying window...
+
+Terminating G\+L\+FW... \mbox{\Hypertarget{context_8hpp_ab1d536e18bf28ad5eaa980f91939373f}\label{context_8hpp_ab1d536e18bf28ad5eaa980f91939373f}} 
+\index{context.\+hpp@{context.\+hpp}!init\+\_\+opencl\+\_\+context@{init\+\_\+opencl\+\_\+context}}
+\index{init\+\_\+opencl\+\_\+context@{init\+\_\+opencl\+\_\+context}!context.\+hpp@{context.\+hpp}}
+\subsubsection{\texorpdfstring{init\+\_\+opencl\+\_\+context()}{init\_opencl\_context()}}
+{\footnotesize\ttfamily void init\+\_\+opencl\+\_\+context (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+{\bfseries Initialization of Open\+CL computational context\+:} 
+
+Platform \#.
+
+Device \#.
+
+Error code.
+
+Getting number of existing platforms...
+
+Getting platform information...
+
+Getting platform information...
+
+Getting platform information...
+
+Getting platform information...
+
+Getting platform information...
+
+Gettign number of existing device on a platform...
+
+Getting device information...
+
+Getting device information...
+
+Getting device information...
+
+Getting device information...
+
+Getting device information...
+
+Setting Open\+CL context properties\+:
+
+Creating Open\+CL context... \mbox{\Hypertarget{context_8hpp_a4014df59868f5652057db26b16323955}\label{context_8hpp_a4014df59868f5652057db26b16323955}} 
+\index{context.\+hpp@{context.\+hpp}!init\+\_\+opengl\+\_\+context@{init\+\_\+opengl\+\_\+context}}
+\index{init\+\_\+opengl\+\_\+context@{init\+\_\+opengl\+\_\+context}!context.\+hpp@{context.\+hpp}}
+\subsubsection{\texorpdfstring{init\+\_\+opengl\+\_\+context()}{init\_opengl\_context()}}
+{\footnotesize\ttfamily void init\+\_\+opengl\+\_\+context (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+{\bfseries Initialization of Open\+GL graphic context\+:} 
+
+Initializing window...
+
+Initializing shaders...
+
+Initializing screen... 
