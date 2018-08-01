@@ -1,3 +1,5 @@
+/// @file
+
 #ifndef utilities_hpp
 #define utilities_hpp
 

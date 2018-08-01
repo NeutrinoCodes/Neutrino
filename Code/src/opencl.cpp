@@ -1,3 +1,5 @@
+/// @file
+
 #include "opencl.hpp"
 
 char*                   value;
@@ -252,7 +254,6 @@ void get_device_info(cl_uint index_device, cl_device_info name_param)
     exit(err);
   }
 
-  // Switching device parameter type:
   switch (name_param)
   {
     case CL_DEVICE_ADDRESS_BITS:

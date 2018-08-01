@@ -1,3 +1,6 @@
+/// @file
+
+/// @function
 __kernel void thekernel(__global  float4*       points,
                         __global  float4*       colors,
                                   int           points_size,

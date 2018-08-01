@@ -1,3 +1,5 @@
+/// @file
+
 #include "projective_geometry.hpp"
 
 void frustum(float F[16], float left, float right, float bottom,
@@ -24,7 +26,7 @@ void perspective(float P[16], float fov, float aspect_ratio,
 
     y_max = z_near*tanf(fov/2.0);
     x_max = y_max*aspect_ratio;
-    
+
     frustum(P, -x_max, x_max, -y_max, y_max, z_near, z_far);
 }
 

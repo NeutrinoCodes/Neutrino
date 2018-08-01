@@ -1,8 +1,10 @@
+/// @file
+
 #include "program.hpp"
 #include "context.hpp"
 #include "utilities.hpp"
 
-// These files are relative to the build/mac or build/linux directory:
+/// These files are relative to the build/mac or build/linux directory:
 #define POINT_VERTEX_FILE       "../../shader/vertex.vert"
 #define POINT_FRAGMENT_FILE     "../../shader/fragment.frag"
 #define TEXT_VERTEX_FILE        "../../shader/text_vertex.vert"

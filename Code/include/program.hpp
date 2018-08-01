@@ -1,3 +1,5 @@
+/// @file
+
 #ifndef program_hpp
 #define program_hpp
 

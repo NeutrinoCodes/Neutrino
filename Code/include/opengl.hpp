@@ -1,3 +1,5 @@
+/// @file
+
 #ifndef opengl_hpp
 #define opengl_hpp
 

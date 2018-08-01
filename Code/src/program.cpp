@@ -1,3 +1,5 @@
+/// @file
+
 #include "program.hpp"
 
 #define NUM_POINTS      10000

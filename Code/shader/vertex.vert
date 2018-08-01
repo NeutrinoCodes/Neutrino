@@ -1,3 +1,5 @@
+/// @file
+
 #version 410 core
 
 layout (location = 0) in  vec4 point;                                           // Input point to be processed.
@@ -6,6 +8,7 @@ out vec4 vertex_color;                                                          
 uniform mat4 View_matrix;                                                       // "View_matrix" matrix.
 uniform mat4 Projection_matrix;                                                 // "Projection_matrix" matrix.
 
+/// @function
 // Computing rendering point coordinates:
 void main(void)
 {
