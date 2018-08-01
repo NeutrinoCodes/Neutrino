@@ -1,3 +1,5 @@
+/// @file
+
 #include "linear_algebra.hpp"
 
 float dot(float a[3], float b[3])

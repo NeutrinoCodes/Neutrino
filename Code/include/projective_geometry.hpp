@@ -1,3 +1,5 @@
+/// @file
+
 #ifndef projgeom_hpp
 #define projgeom_hpp
 

@@ -1,3 +1,5 @@
+/// @file
+
 #ifndef data_hpp
 #define data_hpp
 

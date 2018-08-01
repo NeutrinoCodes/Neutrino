@@ -1,8 +1,11 @@
+/// @file
+
 #version 410 core
 
 in  vec4 vertex_color;                                                          // (R, G, B, A) color, from vertex shader.
 out vec4 fragment_color;                                                        // The rendered color.
 
+/// @function
 // Rendering points as smoothed circles:
 void main(void)
 {

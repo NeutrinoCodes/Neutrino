@@ -1,3 +1,5 @@
+/// @file
+
 #include "opengl.hpp"
 
 GLFWwindow*				window;                                                       // Window handle.
@@ -32,7 +34,7 @@ float             q[4];                                                         
 float             R[16]     = {1.0, 0.0, 0.0, 0.0,                              // Rotation matrix.
                                0.0, 1.0, 0.0, 0.0,
                                0.0, 0.0, 1.0, 0.0,
-                           0.0, 0.0, 0.0, 1.0};
+                               0.0, 0.0, 0.0, 1.0};
 
 float             R_old[16] = {1.0, 0.0, 0.0, 0.0,                              // Rotation matrix backup.
                                0.0, 1.0, 0.0, 0.0,
@@ -57,6 +59,7 @@ float             P[16]     = {1.0, 0.0, 0.0, 0.0,                              
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////// FILES //////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
+
 void load_point_vertex(const char* filename_vertex)
 {
  printf("Action: loading OpenGL point vertex source from file... ");
@@ -96,6 +99,7 @@ void load_text_fragment(const char* filename_fragment)
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// WINDOW ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
+
 void init_window()
 {
   if (glfwInit() != GLFW_TRUE)                                                  // Inititalizing GLFW context...
@@ -424,6 +428,7 @@ void print(text4* text)
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// WINDOW's CALLBACKS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)

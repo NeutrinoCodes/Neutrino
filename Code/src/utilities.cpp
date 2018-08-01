@@ -1,3 +1,5 @@
+/// @file
+
 #include "utilities.hpp"
 
 int           ascii_spin_phase = 0;

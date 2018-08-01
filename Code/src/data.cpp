@@ -1,3 +1,5 @@
+/// @file
+
 #include "data.hpp"
 
 #define ASCII_33 33
