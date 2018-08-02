@@ -19,7 +19,6 @@ message("Creating a SOURCES variable with a link to all cpp files to compile..."
 set(SOURCES
 src/context.cpp
 src/data.cpp
-src/font.cpp
 src/interoperability.cpp
 src/linear_algebra.cpp
 src/main.cpp
