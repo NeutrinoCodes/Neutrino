@@ -28,7 +28,6 @@
     #include <GL/gl.h>
   #endif
 
-  #include "data.hpp"
   #include "linear_algebra.hpp"
   #include "projective_geometry.hpp"
   #include "utilities.hpp"
@@ -62,6 +61,12 @@
   void        init_screen();
   void        refresh_screen();
   void        clear_screen();
+
+  /// **Initialization of OpenGL graphic context:**
+  void        init_opengl_context();
+
+  /// **Destruction of OpenGL graphic context:**
+  void        destroy_opengl_context();
   void        get_arcball_vector(float* p, int x, int y);
   void        arcball();
   void        plot(point4* points, color4* colors);

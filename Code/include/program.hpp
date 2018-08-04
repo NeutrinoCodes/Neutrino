@@ -7,8 +7,6 @@
 #include <stdlib.h>
 #include "opengl.hpp"
 #include "opencl.hpp"
-#include "data.hpp"
-#include "interoperability.hpp"
 
 void setup();
 void loop();
