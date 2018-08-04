@@ -2325,6 +2325,22 @@ void finish_queue()
   //printf("DONE!\n");
 }
 
+void release_queue()
+{
+  cl_int err;
+
+  printf("Action: releasing the OpenCL command queue... ");
+  err = clReleaseCommandQueue(queue);                                           // Releasing OpenCL queue...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  printf("DONE!\n");
+}
+
 void release_event()
 {
     cl_int err;
@@ -2367,22 +2383,6 @@ void release_kernel()
 
   printf("Action: releasing the OpenCL command queue... ");
   err = clReleaseKernel(kernel);                                                // Releasing OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  printf("DONE!\n");
-}
-
-void release_queue()
-{
-  cl_int err;
-
-  printf("Action: releasing the OpenCL command queue... ");
-  err = clReleaseCommandQueue(queue);                                           // Releasing OpenCL queue...
 
   if(err != CL_SUCCESS)
   {
