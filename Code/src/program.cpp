@@ -12,7 +12,7 @@
 
 point4* points =    new point4(NUM_POINTS);
 color4* colors =    new color4(NUM_POINTS);
-text4*  text =      new text4("Bomba!", 1.0f, 1.0f, 1.0f, 1.0f);
+text4*  text =      new text4("neutrino!", 1.0f, 1.0f, 1.0f, 1.0f);
 
 float tick;
 
@@ -55,13 +55,11 @@ void setup()
 
   tick = 0.0f;                                                                  // Setting initial time tick...
 
-  init_text4(text);
-
+  set_text4(text);
   set_point4(points, 0);                                                        // Setting kernel argument #0...
   set_color4(colors, 1);                                                        // Setting kernel argument #1...
   set_int(&points->size, 2);                                                    // Setting kernel argument #2...
   set_float(&tick, 3);                                                          // Setting kernel argument #3...
-  set_kernel();
 }
 
 void loop()
@@ -70,13 +68,13 @@ void loop()
   push_color4(&colors->buffer, 1);
   push_int(&points->size, 2);
   push_float(&tick, 3);
-  push_kernel();
+
+  execute_kernel();
 
   pop_point4(&points->buffer, 0);
   pop_color4(&colors->buffer, 1);
   pop_int(&points->size, 2);
   pop_float(&tick, 3);
-  pop_kernel();
 
   tick += 0.1f;
 

@@ -6,16 +6,19 @@
 /////////////////////////////// "INIT" FUNCTIONS ///////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-void init_text4(text4* text)
+void set_text4(text4* text)
 {
-  int err;
-  int i;
+  int      err;
+  int      i;
   GLfloat* unfolded_glyph_data;                                                 // Text "glyph" data.
   GLfloat* unfolded_color_data;                                                 // Text "color" data.
-  GLuint    LAYOUT_0 = 0;                                                       // "layout = 0" attribute in vertex shader.
-  GLuint    LAYOUT_1 = 1;                                                       // "layout = 1" attribute in vertex shader.
+  GLuint   LAYOUT_0;                                                            // "layout = 0" attribute in vertex shader.
+  GLuint   LAYOUT_1;                                                            // "layout = 1" attribute in vertex shader.
 
-  printf("Action: initializing OpenGL points... ");
+  printf("Action: initializing OpenGL text... ");
+
+  LAYOUT_0 = 0;
+  LAYOUT_1 = 1;
 
   unfolded_glyph_data = new GLfloat[4*text->size];
   unfolded_color_data = new GLfloat[4*text->size];
@@ -37,6 +40,7 @@ void init_text4(text4* text)
   glGenVertexArrays(1, &text->glyph_vao);                                       // Generating glyph VAO...
   glBindVertexArray(text->glyph_vao);                                           // Binding glyph VAO...
   glGenBuffers(1, &text->glyph_vbo);                                            // Generating glyph VBO...
+
   glBindBuffer(GL_ARRAY_BUFFER, text->glyph_vbo);                               // Binding glyph VBO...
   glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
                4*sizeof(GLfloat)*(text->size),
@@ -59,7 +63,8 @@ void init_text4(text4* text)
   glBindBuffer(GL_ARRAY_BUFFER, text->color_vbo);                               // Binding color VBO...
   glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
 
-  printf("DONE!\n");
+  delete[] unfolded_glyph_data;
+  delete[] unfolded_color_data;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -149,6 +154,8 @@ void set_point4(point4* points, int kernel_arg)
     exit(EXIT_FAILURE);
   }
 
+  delete[] unfolded_data;
+
   printf("DONE!\n");
 }
 
@@ -201,6 +208,8 @@ void set_color4(color4* colors, int kernel_arg)
     exit(EXIT_FAILURE);
   }
 
+  delete[] unfolded_data;
+
   printf("DONE!\n");
 }
 
@@ -251,6 +260,8 @@ void push_float4(float4* data, int kernel_arg)
     exit(EXIT_FAILURE);
   }
 
+  delete[] unfolded_data;
+
   printf("DONE!\n");
 }
 
@@ -294,6 +305,8 @@ void push_int4(int4* data, int kernel_arg)
     printf("\nError:  %s\n", get_error(err));
     exit(EXIT_FAILURE);
   }
+
+  delete[] unfolded_data;
 
   printf("DONE!\n");
 }

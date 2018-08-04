@@ -824,18 +824,3 @@ void release_context()
 
   printf("DONE!\n");
 }
-
-void set_kernel()
-{
-  // Pleonastic function...
-}
-
-void push_kernel()
-{
-  execute_kernel();                                                             // Executing OpenCL kernel...
-}
-
-void pop_kernel()
-{
-  finish_queue();
-}

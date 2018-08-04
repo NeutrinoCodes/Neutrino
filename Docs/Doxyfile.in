@@ -1,7 +1,15 @@
+# Setting project name...
 PROJECT_NAME            = "NEUTRINO"
+
+# Setting project caption description...
 PROJECT_BRIEF           = "Fast and light solid OpenCL/GL coding."
+
+# Setting Doxygen documentation output directory...
 OUTPUT_DIRECTORY        = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen
-INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/src/ \
+
+# Setting Doxygen input directories...
+INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/main_page.md \
+                          @CMAKE_CURRENT_SOURCE_DIR@/src/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/include/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/kernel/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/shader/ \
@@ -9,17 +17,41 @@ INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/src/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/../Docs/opengl.md \
                           @CMAKE_CURRENT_SOURCE_DIR@/../Docs/theory.md
 
+# Defining valid file types to be considered in Doxygen...
 FILE_PATTERNS           = *.cpp *.hpp *.cl *.frag *.vert
+
+# Enabling Markdown syntax in Doxygen comments...
 MARKDOWN_SUPPORT        = YES
+
+# Enabling html left-side tree file navigation tree...
 GENERATE_TREEVIEW       = YES
+
+# Enabling the body of functions, classes and enums directly into the documentation...
 INLINE_SOURCES          = YES
+
+# Disabling alphabetical order of members in documentation...
+# Members will appear in declaration order as like as they appear in the source code.
 SORT_MEMBER_DOCS        = NO
-HAVE_DOT                = YES
+
+# Enabling documentation of all entities...
 EXTRACT_ALL             = YES
 EXTRACT_PRIVATE         = YES
 EXTRACT_STATIC          = YES
+
+# Excluding full path file names during include-diagram generation...
+FULL_PATH_NAMES         = YES
+STRIP_FROM_PATH         = ../..
+
+# Enabling GraphViz support...
+HAVE_DOT                = YES
+
+# Enabling Call-graphs...
 CALL_GRAPH              = YES
+
+# Disabling Include-graphs...
 INCLUDE_GRAPH           = NO
+
+USE_MDFILE_AS_MAINPAGE  = main_page.md
+
+# Enabling Latex generation...
 GENERATE_LATEX          = YES
-USE_PDFLATEX            = YES
-PDF_HYPERLINKS          = YES

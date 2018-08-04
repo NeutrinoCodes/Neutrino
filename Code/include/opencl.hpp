@@ -59,8 +59,5 @@
   void        release_queue();
   void        release_program();
   void        release_context();
-  void        set_kernel();
-  void        push_kernel();
-  void        pop_kernel();
 
 #endif

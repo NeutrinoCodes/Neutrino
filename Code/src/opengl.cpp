@@ -291,17 +291,6 @@ void init_screen()
 
   translate(T, initial_translation);                                            // Setting initial Translation_matrix matrix...
   perspective(P, FOV*M_PI/180.0, aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);        // Setting Projection_matrix matrix...
-
-  printf("V11 = %f, V12 = %f, V13 = %f, V14 = %f\n", V[0], V[4], V[8], V[12]);
-  printf("V21 = %f, V22 = %f, V23 = %f, V24 = %f\n", V[1], V[5], V[9], V[13]);
-  printf("V31 = %f, V32 = %f, V33 = %f, V34 = %f\n", V[2], V[6], V[10], V[14]);
-  printf("V41 = %f, V42 = %f, V43 = %f, V44 = %f\n", V[3], V[7], V[11], V[15]);
-
-  printf("T11 = %f, T12 = %f, T13 = %f, T14 = %f\n", T[0], T[4], T[8], T[12]);
-  printf("T21 = %f, T22 = %f, T23 = %f, T24 = %f\n", T[1], T[5], T[9], T[13]);
-  printf("T31 = %f, T32 = %f, T33 = %f, T34 = %f\n", T[2], T[6], T[10], T[14]);
-  printf("T41 = %f, T42 = %f, T43 = %f, T44 = %f\n", T[3], T[7], T[11], T[15]);
-
 }
 
 void refresh_screen()

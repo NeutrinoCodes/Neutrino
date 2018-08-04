@@ -32,32 +32,39 @@
     #include <GL/gl.h>
   #endif
 
-  #include "font.hpp"
   #include "opencl.hpp"
 
   #define SIZE_TEXT_MAX 128                                                     // Maximum number of characters in a text string.
 
+  /// **Declaration of "float4" data class:**
+  /// "float4" are 4 arrays of "num_data" elements.
+  /// These arrays are good because they can be readily used by OpenCL/GL:
+  /// e.g. (x, y, z, w) can be a 4D vector in the projective space (homogeneous coordinates).
   class float4
   {
     private:
-      int               err;
-      unsigned int      i;
+      int               err;                                                    // Declaring "error" code...
+      unsigned int      i;                                                      // Declaring "i" index...
 
     public:
       float4(int num_data);
       ~float4();
 
-      GLfloat*  x;
-      GLfloat*  y;
-      GLfloat*  z;
-      GLfloat*  w;
-      GLfloat*  data;
-      int       size;
-      GLuint    vao;
-      GLuint    vbo;
-      cl_mem    buffer;
+      GLfloat*  x;                                                              // Declaring "x" data...
+      GLfloat*  y;                                                              // Declaring "y" data...
+      GLfloat*  z;                                                              // Declaring "z" data...
+      GLfloat*  w;                                                              // Declaring "w" data...
+      GLfloat*  data;                                                           // Declaring "data" data...
+      int       size;                                                           // Declaring "size" [#]...
+      GLuint    vao;                                                            // Declaring OpenGL Vertex Array Object...
+      GLuint    vbo;                                                            // Declaring OpenGL Vertex Buffer Object...
+      cl_mem    buffer;                                                         // Declaring OpenCL memory buffer...
   };
 
+  /// **Declaration of "int4" data class:**
+  /// "int4" are 4 arrays of "num_data" elements.
+  /// These arrays are good because they can be readily used by OpenCL/GL:
+  /// e.g. (x, y, z, w) can be a 4D vector in the projective space (homogeneous coordinates).
   class int4
   {
     private:
@@ -79,6 +86,11 @@
       cl_mem    buffer;
   };
 
+  /// **Declaration of "point4" data class:**
+  /// "point4" are 4 arrays of "num_data" elements.
+  /// These arrays are used to represent the coordinates of 4D points
+  /// (in the homogeneous coordinates "x, y, z, w") that will we used by
+  /// OpenCL/GL for the 3D graphical rendition in the "plot" function.
   class point4
   {
     private:
@@ -100,6 +112,11 @@
       cl_mem    buffer;
   };
 
+  /// **Declaration of "color4" data class:**
+  /// "color4" are 4 arrays of "num_data" elements.
+  /// These arrays are used to represent the color of 4D points
+  /// (in the color coordinates "r, g, b, a") that will we used by OpenCL/GL
+  /// for the 3D graphical rendition in the "plot" function.
   class color4
   {
     private:
@@ -121,6 +138,13 @@
       cl_mem    buffer;
   };
 
+  /// **Declaration of "text4" data class:**
+  /// "text4" is a 4D vector in the homogeneous coordinates "x, y, z, w"
+  /// indicating the origin of a "text" having color "r, g, b, a".
+  /// The text is by default instatiated on the X-Y plane,
+  /// parallel to the X-axis.
+  /// It will we used by OpenCL/GL for the 3D graphical rendition in
+  /// the "print" function.
   class text4
   {
     private:
