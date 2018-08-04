@@ -5,8 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "opengl.hpp"
-#include "opencl.hpp"
+#include "openclgl.hpp"
 
 void setup();
 void loop();

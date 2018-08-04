@@ -3,12 +3,38 @@
 #ifndef opencl_hpp
 #define opencl_hpp
 
-#define CL_USE_DEPRECATED_OPENCL_1_2_APIS
+  #define CL_USE_DEPRECATED_OPENCL_1_2_APIS
+  #define KERNEL_NAME             "thekernel"
+  #define KERNEL_OPTIONS          ""
+  #define SIZE_TEXT_MAX 128                                                     // Maximum number of characters in a text string.
+  #define SIZE_WINDOW_X 800                                                     // Window x-size [px].
+  #define SIZE_WINDOW_Y 600                                                     // Window y-size [px].
+  #define ZOOM_FACTOR 1.05f                                                     // Zoom factor [> 1.0].
+  #define ROTATION_FACTOR 2.0f                                                  // Rotation factor [].
+  #define NEAR_Z_CLIP 0.1f                                                      // Near z-clipping distance [> 0.0].
+  #define FAR_Z_CLIP 100.0f                                                     // Far z-clipping distance [< +inf].
+  #define FOV 60.0f                                                             // Field of view [deg].
+  #define LINE_WIDTH 3                                                          // Line width [px].
 
   #include <stdio.h>
   #include <stdlib.h>
   #include <string.h>
-    #include <math.h>
+  #include <math.h>
+  #include <GL/glew.h>
+
+  #ifdef __WINDOWS__
+    #define GLFW_EXPOSE_NATIVE_WIN32
+    #define GLFW_EXPOSE_NATIVE_WGL
+  #endif
+
+  #ifdef __linux__
+    #define GLFW_EXPOSE_NATIVE_X11
+    #define GLFW_EXPOSE_NATIVE_GLX
+
+  #endif
+
+  #include <GLFW/glfw3.h>
+  #include <GLFW/glfw3native.h>
 
   #ifdef __APPLE__
     #include <OpenCL/opencl.h>
@@ -19,9 +45,11 @@
     #include <GL/gl.h>
   #endif
 
-  #define KERNEL_NAME             "thekernel"
-  #define KERNEL_OPTIONS          ""
-  #define SIZE_TEXT_MAX 128                                                     // Maximum number of characters in a text string.
+  #include "linear_algebra.hpp"
+  #include "projective_geometry.hpp"
+  #include "utilities.hpp"
+
+  extern  GLFWwindow*				window;                                             // Window handle.
 
   /// **Declaration of "float4" data class:**
   /// "float4" are 4 arrays of "num_data" elements.
@@ -183,6 +211,47 @@
 
 
 
+
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////// FILES ////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  void        load_point_vertex(const char* filename_vertex);
+  void        load_point_fragment(const char* filename_fragment);
+  void        load_text_vertex(const char* filename_vertex);
+  void        load_text_fragment(const char* filename_fragment);
+
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////// WINDOW ////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  void        init_window();
+  void        init_shaders();
+  void        init_screen();
+  void        refresh_screen();
+  void        clear_screen();
+
+  /// **Initialization of OpenGL graphic context:**
+  void        init_opengl_context();
+
+  /// **Destruction of OpenGL graphic context:**
+  void        destroy_opengl_context();
+  void        get_arcball_vector(float* p, int x, int y);
+  void        arcball();
+  void        plot(point4* points, color4* colors);
+  void        print(text4* text);
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////// WINDOW's CALLBACKS ///////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  void        key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+  void        mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+  void        cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+  void        scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+  void        window_refresh_callback(GLFWwindow* window);
+
+
+
+
   const char* get_error(cl_int error);
   cl_uint     get_platforms();
   void        get_platform_info(cl_uint index_platform, cl_platform_info name_param);
@@ -193,8 +262,8 @@
 
   /// **Destruction of OpenCL computational context:**
   void        destroy_opencl_context();
-  void        set_kernel_dimension(cl_uint dimension);
-  void        set_kernel_global_size(size_t size);
+  void        kernel_dimensions(cl_uint dimension);
+  void        kernel_size(size_t size);
   void        typeset(text4* text);
   void        set_float(float* data, int kernel_arg);
   void        set_int(int* data, int kernel_arg);

@@ -17,11 +17,10 @@ project (neutrino)
 
 message("Creating a SOURCES variable with a link to all cpp files to compile...")
 set(SOURCES
-src/linear_algebra.cpp
 src/main.cpp
-src/opencl.cpp
-src/opengl.cpp
+src/openclgl.cpp
 src/program.cpp
+src/linear_algebra.cpp
 src/projective_geometry.cpp
 src/utilities.cpp)
 

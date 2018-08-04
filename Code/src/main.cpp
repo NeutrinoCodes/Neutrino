@@ -1,7 +1,7 @@
 /// @file
 
+#include "openclgl.hpp"
 #include "program.hpp"
-#include "context.hpp"
 #include "utilities.hpp"
 
 /// These files are relative to the build/mac or build/linux directory:

@@ -18,8 +18,6 @@ float tick;
 
 void setup()
 {
-  set_kernel_global_size(points->size);
-  set_kernel_dimension(1);
   int i;
   int j;
   float x;
@@ -55,6 +53,8 @@ void setup()
 
   tick = 0.0f;                                                                  // Setting initial time tick...
 
+  kernel_size(points->size);
+  kernel_dimensions(1);
   typeset(text);                                                                // Typesetting "text"...
 
   set_point4(points, 0);                                                        // Setting kernel argument #0...
