@@ -13,8 +13,7 @@ INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/main_page.md \
                           @CMAKE_CURRENT_SOURCE_DIR@/include/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/kernel/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/shader/ \
-                          @CMAKE_CURRENT_SOURCE_DIR@/../Docs/opencl.md \
-                          @CMAKE_CURRENT_SOURCE_DIR@/../Docs/opengl.md \
+                          @CMAKE_CURRENT_SOURCE_DIR@/../Docs/openclgl.md \
                           @CMAKE_CURRENT_SOURCE_DIR@/../Docs/theory.md
 
 # Defining valid file types to be considered in Doxygen...
