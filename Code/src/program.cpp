@@ -79,7 +79,7 @@ void loop()
 
   tick += 0.1f;
 
-  plot(points, colors);
+  plot(points, colors, STYLE_POINT);
   print(text);
 }
 

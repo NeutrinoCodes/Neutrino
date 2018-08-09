@@ -196,9 +196,9 @@ represent the two *input vectors* of the element-wise vector summation
 *c_array = a_array + b_array*, while the latter one is the *output vector*
 containing the result of that operation.
 
-**Question**: what about the number of element *N* ? How big can it be?
+What about the number of element *N* ? How big can it be?
 
-**Answer**: it depends on the available GPU. There are big and small OpenCL-compatible
+It depends on the available GPU. There are big and small OpenCL-compatible
 GPUs. In case a given GPU is too small to comply with a big *N*, OpenCL has got
 methods to split the computation in sequential time slots: it first fills all
 available compute units and performs a first computation, later it continues with

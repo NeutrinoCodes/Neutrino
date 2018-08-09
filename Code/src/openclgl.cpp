@@ -1492,22 +1492,45 @@ void arcball()
 	}
 }
 
-void plot(point4* points, color4* colors)
+void plot(point4* points, color4* colors, plot_style ps)
 {
   GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
   GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
 
   multiplicate(V, T, R);                                                        // Setting View_matrix matrix...
 
-  glUseProgram(point_shader);                                                   // Using shader...
-  glUniformMatrix4fv(glGetUniformLocation(point_shader, "View_matrix"),         // Setting View_matrix matrix on shader...
-                     1,                                                         // # of matrices to be modified.
-                     GL_FALSE,                                                  // FALSE = column major.
-                     &V[0]);                                       // Matrix.
-  glUniformMatrix4fv(glGetUniformLocation(point_shader, "Projection_matrix"),   // Setting Projection_matrix matrix on shader...
-                     1,                                                         // # of matrices to be modified.
-                     GL_FALSE,                                                  // FALSE = column major.
-                     &P[0]);                                 // Matrix.
+  switch(ps)
+  {
+    case STYLE_POINT:
+      glUseProgram(point_shader);                                               // Using shader...
+      glUniformMatrix4fv(glGetUniformLocation(point_shader,
+                                              "View_matrix"),                   // Setting View_matrix matrix on shader...
+                         1,                                                     // # of matrices to be modified.
+                         GL_FALSE,                                              // FALSE = column major.
+                         &V[0]);                                                // View matrix.
+
+      glUniformMatrix4fv(glGetUniformLocation(point_shader,
+                                              "Projection_matrix"),             // Setting Projection_matrix matrix on shader...
+                         1,                                                     // # of matrices to be modified.
+                         GL_FALSE,                                              // FALSE = column major.
+                         &P[0]);                                                // Projection matrix.
+      break;
+
+    default:
+    glUseProgram(point_shader);                                               // Using shader...
+    glUniformMatrix4fv(glGetUniformLocation(point_shader,
+                                            "View_matrix"),                   // Setting View_matrix matrix on shader...
+                       1,                                                     // # of matrices to be modified.
+                       GL_FALSE,                                              // FALSE = column major.
+                       &V[0]);                                                // View matrix.
+
+    glUniformMatrix4fv(glGetUniformLocation(point_shader,
+                                            "Projection_matrix"),             // Setting Projection_matrix matrix on shader...
+                       1,                                                     // # of matrices to be modified.
+                       GL_FALSE,                                              // FALSE = column major.
+                       &P[0]);                                                // Projection matrix.
+    break;
+  }
 
   // Binding "points" array:
   glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...

@@ -224,6 +224,13 @@
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////// WINDOW ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
+  typedef enum
+    {
+      STYLE_POINT,
+      STYLE_WIREFRAME,
+      STYLE_SHADED
+    } plot_style;
+
   void        init_window();
   void        init_shaders();
   void        init_screen();
@@ -237,7 +244,7 @@
   void        destroy_opengl_context();
   void        get_arcball_vector(float* p, int x, int y);
   void        arcball();
-  void        plot(point4* points, color4* colors);
+  void        plot(point4* points, color4* colors, plot_style ps);
   void        print(text4* text);
 
   ////////////////////////////////////////////////////////////////////////////////
