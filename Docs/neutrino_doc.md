@@ -1,4 +1,4 @@
-# OpenCL/GL framework {#openclgl}
+# Neutrino documentation {#Neutrino_documentation}
 
 # 1. Neutrino in a nutshell {#Neutrino_in_a_nutshell}
 *Neutrino* is a C++ software environment for GPU-accelerated parallel computing,
@@ -32,20 +32,15 @@ graph neutrino_nutshell
 
 # 2. Inside Neutrino {#Inside_Neutrino}
 The Neutrino software is divided into two hierarchical layers:
-- the high level *user* layer
-- the low level *core* layer
+- the high level *user* layer.
+- the low level *core* layer.
 
 The user level consists of:
 - the C++ host program, implemented in the program.cpp file, containing:
-  - the setup() function
-  - the loop() function
-  - the terminate() function
-- the OpenCL client kernel, implemented in the thekernel.cl file
-- the OpenGL *vertex shader*, implemented in the vertex.vert file
-- the OpenGL *fragment shader*, implemented in the fragment.frag file
-
-The vertex and fragment shaders are OpenGL programs written in the [GLSL language](https://en.wikipedia.org/wiki/OpenGL_Shading_Language).
-Both those OpenGL programs are used by the GPU to render the 3D animated GUI.
+  - the setup() function.
+  - the loop() function.
+  - the terminate() function.
+- the OpenCL client kernel, implemented in the thekernel.cl file.
 
 The core level consists of all the infrastructure that makes the main() function
 able to invoke in sequence the following user level functions:
@@ -54,6 +49,11 @@ able to invoke in sequence the following user level functions:
   - the loop() function, implementing code continuously run in a loop
   - the terminate() function, implementing code run only once at the end of
   the program.
+  - several OpenGL *vertex shaders*, implemented in various \*.vert files.
+  - several OpenGL *fragment shaders*, implemented in various \*.frag files.
+
+The vertex and fragment shaders are OpenGL programs written in the [GLSL language](https://en.wikipedia.org/wiki/OpenGL_Shading_Language).
+Both those OpenGL programs are used by the GPU to render the 3D animated GUI.
 
 A Neutrino user is not supposed to need to modify the core level functions, if
 not in order to extend its basic functionalities, in order to solve their problem of
@@ -64,8 +64,8 @@ interest.
   {
     "Neutrino" -> "User layer"
     "Neutrino" -> "Core layer" [style=dotted]
-    "User layer" -> "program.cpp", "thekernel.cl", "vertex.vert", "fragment.frag"
-    "Core layer" -> "main()" [style=dotted]
+    "User layer" -> "program.cpp", "thekernel.cl"
+    "Core layer" -> "main()", "\*.vert", "\*.frag" [style=dotted]
     "main()" -> "setup()", "loop()", "terminate()" [style=dotted]
     "program.cpp" -> "setup()"
     "program.cpp" -> "loop()"
@@ -176,11 +176,12 @@ specific value of the index *i*. In other words, there would be a
 "compute unit 1" where there would be a local variable "a_array[1]" and
 "b_array[1]", a "compute unit 2" where there would be a local variable
 "a_array[2]" and "b_array[2]", ... and so on till the "compute unit N" where
-there would be a local variable "a_array[N]" and "b_array[N]": this is said to
-be a *1D-kernel*. A variable *c* is defined for later use.
-The function *barrier(CLK_GLOBAL_MEM_FENCE)* serves as a synchronization of this
-process of instantiation: for reasons depending on both the OpenCL
-software and the GPU underlying hardware it might be that this kind of
+there would be a local variable "a_array[N]" and "b_array[N]": this is called
+a *1D-kernel* because only one global index is used.
+A variable *c* is defined for later use.
+The function *barrier(CLK_GLOBAL_MEM_FENCE)* serves as a
+synchronization of this process of instantiation: for reasons depending on both
+the OpenCL software and the GPU underlying hardware it might be that this kind of
 operation *will not occur exactly simultaneously* on all compute units. There
 could be a little *time jitter*, therefore the program *must wait* for all compute
 units to complete all the local operations before proceeding with the next steps.
@@ -196,7 +197,7 @@ represent the two *input vectors* of the element-wise vector summation
 *c_array = a_array + b_array*, while the latter one is the *output vector*
 containing the result of that operation.
 
-What about the number of element *N* ? How big can it be?
+What about the number of element *N*? How big can it be?
 
 It depends on the available GPU. There are big and small OpenCL-compatible
 GPUs. In case a given GPU is too small to comply with a big *N*, OpenCL has got
@@ -207,3 +208,92 @@ overhead and must be taken into account in terms of speed optimization.
 It is always better to make the dataset matching the maximum capacity of
 available compute units, at the cost of *padding* the dataset: this approach
 remains valid also at a local level inside the OpenCL kernel.
+
+NOTE:
+A *2D kernel* would be something that would unwrap a C++ loop like this one:
+
+```
+float a[N*M];
+
+for(i = 0; i < N; i++)
+{
+  for(j = 0; j < M; j++)
+  {
+    a[j + N*i] = ...some computation...;
+  }
+}
+```
+
+into an OpenCL kernel as follows:
+
+```
+__kernel void thekernel(__global float* a_array,
+                        int N)
+{
+  int i = get_global_id(0);
+  int j = get_global_id(1);
+
+  float a = a_array[j + N*i];
+  barrier(CLK_GLOBAL_MEM_FENCE);
+
+  a = ...some computation...;
+  a_array[j + N*i] = a;
+  barrier(CLK_GLOBAL_MEM_FENCE);
+}
+```
+
+Similarly for a *3D kernel*. Notice the usage of one-dimensional arrays (not to
+be confused with the OpenCL *kernel dimension* = number of *global indexes*):
+OpenCL does not deal with multi-dimensional C++ arrays. For the latter reason,
+in an OpenCL kernel all multi-dimensional data have always to be interleaved in a
+one-dimensional array.
+
+# 5. Neutrino's OpenCL client-host system {#Neutrino_OpenCL_client_host_system}
+Neutrino takes advantage of both host CPU and client GPU.
+The CPU is used to prepare the initial dataset (e.g. filling data array, reading data
+from a file, etc...) while the GPU is used for mass computation.
+For this to happen, CPU and GPU need to talk together: this means they must
+share some memory. Memory transfer from the client to the host, and viceversa,
+is always an overkilling task. Modern GPUs have fast and dedicated separate
+memory, as opposed to ordinary client CPU memory.
+
+@dot
+graph client_host_memory
+{
+  "CPU client memory" -- "GPU host memory"
+}
+@enddot
+
+The best way of managing this memory exchange is to avoid it as much as possible.
+For instance, if a parallel program have to calculate some heavy computation on
+the GPU, one approach could be the following one:
+- *set* all the *initial data* on the host CPU *only once*. These data are still on the
+  host ordinary memory.
+- *push* the initial data on the client GPU *only once*. Now the data are on its
+  dedicated fast memory.
+- let the GPU elaborate the data (numerous operations, complex algorithms, etc...).
+- *pop* the elaborated data from the client GPU to the host CPU *only once*.
+
+This approach is what is implemented in the program.cpp file running on the host CPU.
+Particularly the general flow chart of program.cpp is:
+
+- in the setup() function all initial setups are supposed to happen.
+  - besides custom user-defined items, this is the place where the *set_\** type
+  of functions have to be used. Each of them prepares, according to its name,
+  a specific type or object data the user needs.
+- in the loop() function data are linked to the client GPU.
+  - the *push_\** functions, matching the *set_\** ones in setup(), upload
+  the corresponding data on the GPU memory.
+  - the execute_kernel() function invokes the OpenCL kernel implemented in the
+    thekernel.cl file: after it returns, the parallel GPU computation is done.
+  - the *pop_\** functions, matching the *push_\** ones, postfix or download the
+  processed data from the client GPU.
+  - a special treatment is reserved for the graphics rendering.
+  The OpenCL/GL interoperability modality allows OpenGL to access the
+  same GPU memory where OpenCL allocates its own. This makes fast 3D animated
+  graphics rendering possible. This is done by Neutrino and the system is
+  implemented in the plot() and print() functions in there if necessary.
+- the terminate() function might seem to be pleonastic, but has been nevertheless
+  implemented for reasons of completeness. The purpose of it is to deallocate
+  previously allocated memory in a clean way, besides all possible needs which
+  might occur between end of the computation and the end of the program.
