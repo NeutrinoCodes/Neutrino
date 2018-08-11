@@ -51,6 +51,42 @@
 
   extern  GLFWwindow*				window;                                             // Window handle.
 
+  /// **Declaration of "float1" data class:**
+  /// "float1" is an array of "num_data" elements.
+  class float1
+  {
+    private:
+      int               err;                                                    // Declaring "error" code...
+      unsigned int      i;                                                      // Declaring "i" index...
+
+    public:
+      float1(int num_data);
+      ~float1();
+
+      float*  x;                                                                // Declaring "x" data...
+      float*  data;                                                             // Declaring "data" data...
+      int       size;                                                           // Declaring "size" [#]...
+      cl_mem    buffer;                                                         // Declaring OpenCL memory buffer...
+  };
+
+  /// **Declaration of "int1" data class:**
+  /// "int4" is an array of "num_data" elements.
+  class int1
+  {
+    private:
+      int               err;
+      unsigned int      i;
+
+    public:
+      int1(int num_data);
+      ~int1();
+
+      GLint*    x;
+      GLint*    data;
+      int       size;
+      cl_mem    buffer;
+  };
+
   /// **Declaration of "float4" data class:**
   /// "float4" are 4 arrays of "num_data" elements.
   /// These arrays are good because they can be readily used by OpenCL/GL:
@@ -71,8 +107,6 @@
       GLfloat*  w;                                                              // Declaring "w" data...
       GLfloat*  data;                                                           // Declaring "data" data...
       int       size;                                                           // Declaring "size" [#]...
-      GLuint    vao;                                                            // Declaring OpenGL Vertex Array Object...
-      GLuint    vbo;                                                            // Declaring OpenGL Vertex Buffer Object...
       cl_mem    buffer;                                                         // Declaring OpenCL memory buffer...
   };
 
@@ -96,8 +130,6 @@
       GLint*    w;
       GLint*    data;
       int       size;
-      GLuint    vao;
-      GLuint    vbo;
       cl_mem    buffer;
   };
 
@@ -274,6 +306,8 @@
   void        typeset(text4* text);
   void        set_float(float* data, int kernel_arg);
   void        set_int(int* data, int kernel_arg);
+  void        set_float4(float4* data, int kernel_arg);
+  void        set_int4(int4* data, int kernel_arg);
   void        set_point4(point4* points, int kernel_arg);
   void        set_color4(color4* colors, int kernel_arg);
 
