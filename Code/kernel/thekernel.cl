@@ -1,31 +1,22 @@
 /// @file
 
-/// @function
-
-#define d(A, B)         fast_distance(A, B)                                     // Distance function.
 #define l(A)            length(A)                                               // Length function.
-#define r(A)            native_recip(A)                                         // Reciprocal function.
-#define DT              0.005                                                   // Time delta.
 
-__kernel void verlet
-(
-  __global float4*    Positions,                                                // #0: Particle positions.
-  __global float4*    Colors,                                                   // #1: Particle colors.
-  __global float4*    Positions_old,                                            // #2: Old particle positions.
-  __global float4*    Velocities,                                               // #3: Particle velocities.
-  __global float4*    Accelerations,                                            // #4: Particle accelerations.
-  __global float4*    Gravity,                                                  // #5: Gravity field.
-  __global float4*    Stiffnesses,                                              // #6: Link stiffnesses.
-  __global float4*    Resting,                                                  // #7: Link resting lengths.
-  __global float4*    Frictions,                                                // #8: Particle frictions.
-  __global float4*    Masses,                                                   // #9: Particle masses.
-  __global int*       indexes_PC,                                               // #10: "CENTRE" particle indexes.
-  __global int*       indexes_PR,                                               // #11: "RIGHT" neighbour particle indexes.
-  __global int*       indexes_PU,                                               // #12: "UP"    neighbour particle indexes.
-  __global int*       indexes_PL,                                               // #13: "LEFT"  neighbour particle indexes.
-  __global int*       indexes_PD,                                               // #14: "DOWN"  neighbour particle indexes.
-)
-
+__kernel void thekernel(__global float4*    Positions,
+                        __global float4*    Colors,
+                        __global float4*    Positions_old,
+                        __global float4*    Velocities,
+                        __global float4*    Accelerations,
+                        __global float4*    Gravity,
+                        __global float4*    Stiffnesses,
+                        __global float4*    Resting,
+                        __global float4*    Frictions,
+                        __global float4*    Masses,
+                        __global int*       indexes_PC,
+                        __global int*       indexes_PR,
+                        __global int*       indexes_PU,
+                        __global int*       indexes_PL,
+                        __global int*       indexes_PD)
 {
     //////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////// INDEXES ///////////////////////////////////
@@ -91,8 +82,8 @@ __kernel void verlet
     //////////////////////////////////////////////////////////////////////////////
     float4      lR  = l(DR);                                                    // "RIGHT" link lengths.
     float4      lU  = l(DU);                                                    // "UP"    link lengths.
-    float4      lL  = l(DL);                                                    // "LEFT"  link lenghts.
-    float4      lD  = l(DD);                                                    // "DOWN"  link lenghts.
+    float4      lL  = l(DL);                                                    // "LEFT"  link lengths.
+    float4      lD  = l(DD);                                                    // "DOWN"  link lengths.
 
     barrier(CLK_GLOBAL_MEM_FENCE);
 
@@ -121,8 +112,8 @@ __kernel void verlet
     //////////////////////////////////////////////////////////////////////////////
     float4      Fe  = kR*UR + kU*UU + kL*UL + kD*UD;                            // Elastic force applied to the centre particles.
     //float4      mag_Fe = fabs(Fe);                                              // Magnitude of Fe.
-    //float4      col = Colors[iPC];
-    //col = (float4)(1.0f, 0.0f, 0.0f, 1.0f);
+    float4      col = Colors[iPC];
+    col = (float4)(1.0f, 0.0f, 0.0f, 1.0f);
 
     //////////////////////////////////////////////////////////////////////////////
     ///////////////////////// CENTRE PARTICLE VISCOUS FORCES /////////////////////
@@ -152,7 +143,7 @@ __kernel void verlet
 
     barrier(CLK_GLOBAL_MEM_FENCE);
 
-    P = P + V + A*DT*DT;                                                        // Calculating and updating new positions...
+    P = P + V + A*0.005f*0.005f;                                                // Calculating and updating new positions...
 
     barrier(CLK_GLOBAL_MEM_FENCE);
 
@@ -171,7 +162,7 @@ __kernel void verlet
     Velocities[iPC].w = 1.0;                                                    // Resetting w (for 3D distance computation)...
     Accelerations[iPC].w = 1.0;                                                 // Resetting w (for 3D distance computation)...
 
-    //Colors[iPC] = col;
+    Colors[iPC] = col;
 
     barrier(CLK_GLOBAL_MEM_FENCE);
 }
