@@ -859,30 +859,70 @@ cl_event                kernel_event;
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// DATA CLASSES ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
+float1::float1(int num_data)
+{
+  x = new float[num_data];                                                      // "x" data array.
+
+  size = num_data;                                                              // Array size (the same for all of them).
+  buffer = NULL;                                                                // OpenCL data buffer.
+
+  for (i = 0; i < num_data; i++)                                                // Filling arrays with default data:
+  {
+    x[i] = 0.0f;                                                                // Setting "x" data...
+  }
+}
+
+float1::~float1()
+{
+  release_mem_object(buffer);                                                   // Releasing OpenCL data buffer...
+  delete[] x;                                                                   // Releasing data memory...
+}
+
+int1::int1(int num_data)
+{
+  x = new int[num_data];                                                        // "x" data array.
+
+  size = num_data;                                                              // Array size (the same for all of them).
+  buffer = NULL;                                                                // OpenCL data buffer.
+
+  for (i = 0; i < num_data; i++)                                                // Filling arrays with default data:
+  {
+    x[i] = 0;                                                                   // Setting "x" data...
+  }
+}
+
+int1::~int1()
+{
+  release_mem_object(buffer);                                                   // Releasing OpenCL data buffer...
+  delete[] x;                                                                   // Releasing data memory...
+}
+
 float4::float4(int num_data)
 {
   x = new float[num_data];                                                      // "x" data array.
   y = new float[num_data];                                                      // "y" data array.
   z = new float[num_data];                                                      // "z" data array.
   w = new float[num_data];                                                      // "w" data array.
+
   size = num_data;                                                              // Array size (the same for all of them).
   buffer = NULL;                                                                // OpenCL data buffer.
 
-  data = new float[4*num_data];                                                 // Allocating data array...
-
-  for (i = 0; i < num_data; i++)                                                // Filling arrays with default data:
+  for (i = 0; i < num_data; i++)                                                // Filling arrays with default data...
   {
-    data[4*i + 0] = x[i] = 0.0f;                                                // Setting "x" data...
-    data[4*i + 1] = y[i] = 0.0f;                                                // Setting "y" data...
-    data[4*i + 2] = z[i] = 0.0f;                                                // Setting "z" data...
-    data[4*i + 3] = w[i] = 1.0f;                                                // Setting "w" data...
+    x[i] = 0.0f;                                                                // Setting "x" data...
+    y[i] = 0.0f;                                                                // Setting "y" data...
+    z[i] = 0.0f;                                                                // Setting "z" data...
+    w[i] = 1.0f;                                                                // Setting "w" data...
   }
 }
 
 float4::~float4()
 {
   release_mem_object(buffer);                                                   // Releasing OpenCL data buffer...
-  delete[] data;                                                                // Releasing data memory...
+  delete[] x;
+  delete[] y;
+  delete[] z;
+  delete[] w;
 }
 
 int4::int4(int num_data)
@@ -891,24 +931,26 @@ int4::int4(int num_data)
   y = new int[num_data];                                                        // "y" data array.
   z = new int[num_data];                                                        // "z" data array.
   w = new int[num_data];                                                        // "w" data array.
+
   size = num_data;                                                              // Array size (the same for all of them).
   buffer = NULL;                                                                // OpenCL data buffer.
 
-  data = new int[4*num_data];                                                   // Allocating data array...
-
-  for (i = 0; i < num_data; i++)                                                // Filling arrays with default data:
+  for (i = 0; i < num_data; i++)                                                // Filling arrays with default data...
   {
-    data[4*i + 0] = x[i] = 0.0f;                                                // Setting "x" data...
-    data[4*i + 1] = y[i] = 0.0f;                                                // Setting "y" data...
-    data[4*i + 2] = z[i] = 0.0f;                                                // Setting "z" data...
-    data[4*i + 3] = w[i] = 1.0f;                                                // Setting "w" data...
+    x[i] = 0;                                                                   // Setting "x" data...
+    y[i] = 0;                                                                   // Setting "y" data...
+    z[i] = 0;                                                                   // Setting "z" data...
+    w[i] = 1;                                                                   // Setting "w" data...
   }
 }
 
 int4::~int4()
 {
   release_mem_object(buffer);                                                   // Releasing OpenCL data buffer...
-  delete[] data;                                                                // Releasing data memory...
+  delete[] x;
+  delete[] y;
+  delete[] z;
+  delete[] w;
 }
 
 point4::point4(int num_data)
@@ -2522,19 +2564,8 @@ void set_float1(float1* data, int kernel_arg)
 {
   int err;
   int i;
-  float* unfolded_data;
 
   printf("Action: setting argument #%d to GPU... ", (int)kernel_arg);
-
-  unfolded_data = new float[data->size];
-
-  for (i = 0; i < points->size; i++)
-  {
-    unfolded_data[4*i + 0] = data->x[i];
-    unfolded_data[4*i + 1] = data->y[i];
-    unfolded_data[4*i + 2] = data->z[i];
-    unfolded_data[4*i + 3] = data->w[i];
-  }
 
   data->buffer = clCreateBuffer(context,
                                 CL_MEM_READ_WRITE,
@@ -2550,8 +2581,6 @@ void set_float1(float1* data, int kernel_arg)
     exit(EXIT_FAILURE);
   }
 
-  delete[] unfolded_data;
-
   printf("DONE!\n");
 }
 
@@ -2559,24 +2588,13 @@ void set_int1(int1* data, int kernel_arg)
 {
   int err;
   int i;
-  int* unfolded_data;
 
   printf("Action: setting argument #%d to GPU... ", (int)kernel_arg);
-
-  unfolded_data = new int[data->size];
-
-  for (i = 0; i < points->size; i++)
-  {
-    data[i + 0] = data->x[i];
-    unfolded_data[4*i + 1] = data->y[i];
-    unfolded_data[4*i + 2] = data->z[i];
-    unfolded_data[4*i + 3] = data->w[i];
-  }
 
   data->buffer = clCreateBuffer(context,
                                 CL_MEM_READ_WRITE,
                                 sizeof(int)*data->size,
-                                data->vbo,
+                                data->x,
                                 &err);
 
   err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &data->buffer);
@@ -2586,8 +2604,6 @@ void set_int1(int1* data, int kernel_arg)
     printf("\nError:  %s\n", get_error(err));
     exit(EXIT_FAILURE);
   }
-
-  delete[] unfolded_data;
 
   printf("DONE!\n");
 }
@@ -2777,111 +2793,68 @@ void set_color4(color4* colors, int kernel_arg)
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "PUSH" FUNCTIONS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
+void push_float1(cl_mem* CL_memory_buffer, int kernel_arg)
+{
+  cl_int err;
+
+  //printf("Action: acquiring OpenCL memory objects... ");
+  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  //printf("DONE!\n");
+}
+
+void push_int1(cl_mem* CL_memory_buffer, int kernel_arg)
+{
+  cl_int err;
+
+  //printf("Action: acquiring OpenCL memory objects... ");
+  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  //printf("DONE!\n");
+}
+
 void push_float4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
-  int err;
-  int i;
-  GLfloat* unfolded_data;
+  cl_int err;
 
-  printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
+  //printf("Action: acquiring OpenCL memory objects... ");
+  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
 
-  unfolded_data = new GLfloat[4*data->size];
-
-  for (i = 0; i < data->size; i++)
-  {
-    unfolded_data[4*i]     = data->x[i];
-    unfolded_data[4*i + 1] = data->y[i];
-    unfolded_data[4*i + 2] = data->z[i];
-    unfolded_data[4*i + 3] = data->w[i];
-  }
-
-
-
-  if(err < 0)
+  if(err != CL_SUCCESS)
   {
     printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
+    exit(err);
   }
 
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &data->buffer);
-
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
-
-  delete[] unfolded_data;
-
-  printf("DONE!\n");
+  //printf("DONE!\n");
 }
 
-void push_int4(int4* data, int kernel_arg)
+void push_int4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
-  int err;
-  int i;
-  GLint* unfolded_data;
+  cl_int err;
 
-  printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
+  //printf("Action: acquiring OpenCL memory objects... ");
+  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
 
-  unfolded_data = new GLint[4*data->size];
-
-  for (i = 0; i < data->size; i++)
-  {
-    unfolded_data[4*i]     = data->x[i];
-    unfolded_data[4*i + 1] = data->y[i];
-    unfolded_data[4*i + 2] = data->z[i];
-    unfolded_data[4*i + 3] = data->w[i];
-  }
-
-  data->buffer = clCreateBuffer(context,
-                                CL_MEM_READ_WRITE,
-                                sizeof(cl_int)*4*data->size,
-                                data->vbo,
-                                &err);
-  if(err < 0)
+  if(err != CL_SUCCESS)
   {
     printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
+    exit(err);
   }
 
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &data->buffer);
-
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
-
-  delete[] unfolded_data;
-
-  printf("DONE!\n");
-}
-
-void push_float(float* data, int kernel_arg)
-{
-  int err;
-
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(float), data);
-
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
-}
-
-void push_int(int* data, int kernel_arg)
-{
-  int err;
-
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(int), data);
-
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
+  //printf("DONE!\n");
 }
 
 void push_point4(cl_mem* CL_memory_buffer, int kernel_arg)
@@ -2919,8 +2892,22 @@ void push_color4(cl_mem* CL_memory_buffer, int kernel_arg)
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "POP" FUNCTIONS /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
+void pop_float1(cl_mem* CL_memory_buffer, int kernel_arg)
+{
+  cl_int err;
 
-void pop_float4(float4* data, int kernel_arg)
+  //printf("Action: releasing enqueued OpenCL objects... ");
+  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "points" from OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  //printf("DONE!\n");
+}
+void pop_int1(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
@@ -2936,7 +2923,7 @@ void pop_float4(float4* data, int kernel_arg)
   //printf("DONE!\n");
 }
 
-void pop_int4(int4* data, int kernel_arg)
+void pop_float4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
@@ -2952,13 +2939,20 @@ void pop_int4(int4* data, int kernel_arg)
   //printf("DONE!\n");
 }
 
-void pop_float(float* data, int kernel_arg)
+void pop_int4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
-  // Pleonastic function...
-}
-void pop_int(int* data, int kernel_arg)
-{
-  // Pleonastic function...
+  cl_int err;
+
+  //printf("Action: releasing enqueued OpenCL objects... ");
+  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "points" from OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  //printf("DONE!\n");
 }
 
 void pop_point4(cl_mem* CL_memory_buffer, int kernel_arg)

@@ -63,8 +63,7 @@
       float1(int num_data);
       ~float1();
 
-      float*  x;                                                                // Declaring "x" data...
-      float*  data;                                                             // Declaring "data" data...
+      float*    x;                                                              // Declaring "x" data...
       int       size;                                                           // Declaring "size" [#]...
       cl_mem    buffer;                                                         // Declaring OpenCL memory buffer...
   };
@@ -81,8 +80,7 @@
       int1(int num_data);
       ~int1();
 
-      GLint*    x;
-      GLint*    data;
+      int*      x;
       int       size;
       cl_mem    buffer;
   };
@@ -101,11 +99,10 @@
       float4(int num_data);
       ~float4();
 
-      GLfloat*  x;                                                              // Declaring "x" data...
-      GLfloat*  y;                                                              // Declaring "y" data...
-      GLfloat*  z;                                                              // Declaring "z" data...
-      GLfloat*  w;                                                              // Declaring "w" data...
-      GLfloat*  data;                                                           // Declaring "data" data...
+      float*    x;                                                              // Declaring "x" data...
+      float*    y;                                                              // Declaring "y" data...
+      float*    z;                                                              // Declaring "z" data...
+      float*    w;                                                              // Declaring "w" data...
       int       size;                                                           // Declaring "size" [#]...
       cl_mem    buffer;                                                         // Declaring OpenCL memory buffer...
   };
@@ -124,11 +121,10 @@
       int4(int num_data);
       ~int4();
 
-      GLint*    x;
-      GLint*    y;
-      GLint*    z;
-      GLint*    w;
-      GLint*    data;
+      int*      x;
+      int*      y;
+      int*      z;
+      int*      w;
       int       size;
       cl_mem    buffer;
   };
@@ -304,8 +300,8 @@
   void        kernel_dimensions(cl_uint dimension);
   void        kernel_size(size_t size);
   void        typeset(text4* text);
-  void        set_float(float* data, int kernel_arg);
-  void        set_int(int* data, int kernel_arg);
+  void        set_float1(float1* data, int kernel_arg);
+  void        set_int1(int1* data, int kernel_arg);
   void        set_float4(float4* data, int kernel_arg);
   void        set_int4(int4* data, int kernel_arg);
   void        set_point4(point4* points, int kernel_arg);
@@ -316,20 +312,20 @@
   void        get_kernel_workgroup_size(cl_kernel kernel, cl_device_id device_id, size_t* local);
   void        execute_kernel();
 
-  void        push_float4(float4* data, int kernel_arg);
-  void        push_int4(int4* data, int kernel_arg);
-  void        push_float(float* data, int kernel_arg);
-  void        push_int(int* data, int kernel_arg);
+  void        push_float1(cl_mem* CL_memory_buffer, int kernel_arg);
+  void        push_int1(cl_mem* CL_memory_buffer, int kernel_arg);
+  void        push_float4(cl_mem* CL_memory_buffer, int kernel_arg);
+  void        push_int4(cl_mem* CL_memory_buffer, int kernel_arg);
   void        push_point4(cl_mem* CL_memory_buffer, int kernel_arg);
   void        push_color4(cl_mem* CL_memory_buffer, int kernel_arg);
 
   void        enqueue_task();
   void        wait_for_event();
 
-  void        pop_float4(float4* data, int kernel_arg);
-  void        pop_int4(int4* data, int kernel_arg);
-  void        pop_float(float* data, int kernel_arg);
-  void        pop_int(int* data, int kernel_arg);
+  void        pop_float1(cl_mem* CL_memory_buffer, int kernel_arg);
+  void        pop_int1(cl_mem* CL_memory_buffer, int kernel_arg);
+  void        pop_float4(cl_mem* CL_memory_buffer, int kernel_arg);
+  void        pop_int4(cl_mem* CL_memory_buffer, int kernel_arg);
   void        pop_point4(cl_mem* CL_memory_buffer, int kernel_arg);
   void        pop_color4(cl_mem* CL_memory_buffer, int kernel_arg);
 
