@@ -63,7 +63,7 @@
       float1(int num_data);
       ~float1();
 
-      float*    x;                                                              // Declaring "x" data...
+      cl_float*    x;                                                           // Declaring "x" data...
       int       size;                                                           // Declaring "size" [#]...
       cl_mem    buffer;                                                         // Declaring OpenCL memory buffer...
   };
@@ -80,7 +80,7 @@
       int1(int num_data);
       ~int1();
 
-      int*      x;
+      cl_int*      x;
       int       size;
       cl_mem    buffer;
   };
@@ -99,10 +99,10 @@
       float4(int num_data);
       ~float4();
 
-      float*    x;                                                              // Declaring "x" data...
-      float*    y;                                                              // Declaring "y" data...
-      float*    z;                                                              // Declaring "z" data...
-      float*    w;                                                              // Declaring "w" data...
+      cl_float*    x;                                                           // Declaring "x" data...
+      cl_float*    y;                                                           // Declaring "y" data...
+      cl_float*    z;                                                           // Declaring "z" data...
+      cl_float*    w;                                                           // Declaring "w" data...
       int       size;                                                           // Declaring "size" [#]...
       cl_mem    buffer;                                                         // Declaring OpenCL memory buffer...
   };
@@ -121,10 +121,10 @@
       int4(int num_data);
       ~int4();
 
-      int*      x;
-      int*      y;
-      int*      z;
-      int*      w;
+      cl_int*      x;
+      cl_int*      y;
+      cl_int*      z;
+      cl_int*      w;
       int       size;
       cl_mem    buffer;
   };
@@ -236,10 +236,6 @@
       GLuint    glyph_vbo;
       GLuint    color_vbo;
   };
-
-
-
-
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// FILES ////////////////////////////////////

@@ -6,7 +6,7 @@
 #define Y_MIN           -1.0f
 #define SIZE_X          100
 #define SIZE_Y          100
-#define NUM_POINTS      SIZE_X*SIZE_Y
+#define NUM_POINTS      (SIZE_X*SIZE_Y)
 #define DX              0.02f
 #define DY              0.02f
 #define DT              0.005
@@ -102,29 +102,27 @@ void setup()
       mass->z[i + SIZE_X*j] = 0.1f;                                             // Setting "z" mass...
       mass->w[i + SIZE_X*j] = 1.0f;                                             // Setting "w" mass...
 
+      color->r[i + SIZE_X*j] = 1.0f;                                            // Setting "x" initial color...
+      color->g[i + SIZE_X*j] = 0.0f;                                            // Setting "y" initial color...
+      color->b[i + SIZE_X*j] = 0.0f;                                            // Setting "z" initial color...
+      color->a[i + SIZE_X*j] = 1.0f;                                            // Setting "w" initial color...
+
       x += DX;
     }
     y += DY;
   }
 
-  for (j = 1; j < (SIZE_X - 1); j++)
-  {
-    for (i = 1; j < (SIZE_X - 1); i++)
-    {
-      index_PC[i + SIZE_X*j] =  i       + SIZE_X*j;
-      index_PR[i + SIZE_X*j] = (i + 1)  + SIZE_X*j;
-      index_PU[i + SIZE_X*j] =  i       + SIZE_X*(j + 1);
-      index_PL[i + SIZE_X*j] = (i - 1)  + SIZE_X*j;
-      index_PD[i + SIZE_X*j] =  i       + SIZE_X*(j - 1);
-    }
-  }
 
-  for (i = 0; i < color->size; i++)
+  for (j = 1; j < (SIZE_Y - 1); j++)
   {
-    color->r[i] = 1.0f;                                                         // Setting "x" initial color...
-    color->g[i] = 0.0f;                                                         // Setting "y" initial color...
-    color->b[i] = 0.0f;                                                         // Setting "z" initial color...
-    color->a[i] = 1.0f;                                                         // Setting "w" initial color...
+    for (i = 1; i < (SIZE_X - 1); i++)
+    {
+      //index_PC[i + SIZE_X*j] =  i       + SIZE_X*j;
+      //index_PR[i + SIZE_X*j] = (i + 1)  + SIZE_X*j;
+      //index_PU[i + SIZE_X*j] =  i       + SIZE_X*(j + 1);
+      //index_PL[i + SIZE_X*j] = (i - 1)  + SIZE_X*j;
+      //index_PD[i + SIZE_X*j] =  i       + SIZE_X*(j - 1);
+    }
   }
 
   tick = 0.0f;                                                                  // Setting initial time tick...
@@ -155,6 +153,8 @@ void loop()
   push_point4(&position->buffer, 0);                                            // Pushing kernel argument #0...
   push_color4(&color->buffer, 1);                                               // Pushing kernel argument #1...
   push_float4(&position_old->buffer, 2);                                        // Pushing kernel argument #2...
+
+  /*
   push_float4(&velocity->buffer, 3);                                            // Pushing kernel argument #3...
   push_float4(&acceleration->buffer, 4);                                        // Pushing kernel argument #4...
   push_float4(&gravity->buffer, 5);                                             // Pushing kernel argument #5...
@@ -167,7 +167,8 @@ void loop()
   push_int1(&index_PU->buffer, 12);                                             // Pushing kernel argument #12...
   push_int1(&index_PL->buffer, 13);                                             // Pushing kernel argument #13...
   push_int1(&index_PD->buffer, 14);                                             // Pushing kernel argument #14...
-
+  */
+  /*
   execute_kernel();
 
   pop_point4(&position->buffer, 0);                                             // Pushing kernel argument #0...
@@ -189,6 +190,7 @@ void loop()
   tick += 0.1f;
 
   plot(position, color, STYLE_POINT);
+  */
   print(text);
 }
 

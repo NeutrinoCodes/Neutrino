@@ -861,7 +861,7 @@ cl_event                kernel_event;
 //////////////////////////////////////////////////////////////////////////////////
 float1::float1(int num_data)
 {
-  x = new float[num_data];                                                      // "x" data array.
+  x = new cl_float[num_data];                                                   // "x" data array.
 
   size = num_data;                                                              // Array size (the same for all of them).
   buffer = NULL;                                                                // OpenCL data buffer.
@@ -880,7 +880,7 @@ float1::~float1()
 
 int1::int1(int num_data)
 {
-  x = new int[num_data];                                                        // "x" data array.
+  x = new cl_int[num_data];                                                     // "x" data array.
 
   size = num_data;                                                              // Array size (the same for all of them).
   buffer = NULL;                                                                // OpenCL data buffer.
@@ -899,10 +899,10 @@ int1::~int1()
 
 float4::float4(int num_data)
 {
-  x = new float[num_data];                                                      // "x" data array.
-  y = new float[num_data];                                                      // "y" data array.
-  z = new float[num_data];                                                      // "z" data array.
-  w = new float[num_data];                                                      // "w" data array.
+  x = new cl_float[num_data];                                                      // "x" data array.
+  y = new cl_float[num_data];                                                      // "y" data array.
+  z = new cl_float[num_data];                                                      // "z" data array.
+  w = new cl_float[num_data];                                                      // "w" data array.
 
   size = num_data;                                                              // Array size (the same for all of them).
   buffer = NULL;                                                                // OpenCL data buffer.
@@ -927,10 +927,10 @@ float4::~float4()
 
 int4::int4(int num_data)
 {
-  x = new int[num_data];                                                        // "x" data array.
-  y = new int[num_data];                                                        // "y" data array.
-  z = new int[num_data];                                                        // "z" data array.
-  w = new int[num_data];                                                        // "w" data array.
+  x = new cl_int[num_data];                                                        // "x" data array.
+  y = new cl_int[num_data];                                                        // "y" data array.
+  z = new cl_int[num_data];                                                        // "z" data array.
+  w = new cl_int[num_data];                                                        // "w" data array.
 
   size = num_data;                                                              // Array size (the same for all of them).
   buffer = NULL;                                                                // OpenCL data buffer.
@@ -2562,14 +2562,14 @@ void typeset(text4* text)
 //////////////////////////////////////////////////////////////////////////////////
 void set_float1(float1* data, int kernel_arg)
 {
-  int err;
+  cl_int err;
   int i;
 
   printf("Action: setting argument #%d to GPU... ", (int)kernel_arg);
 
   data->buffer = clCreateBuffer(context,
                                 CL_MEM_READ_WRITE,
-                                sizeof(float)*data->size,
+                                sizeof(cl_float)*data->size,
                                 data->x,
                                 &err);
 
@@ -2586,14 +2586,14 @@ void set_float1(float1* data, int kernel_arg)
 
 void set_int1(int1* data, int kernel_arg)
 {
-  int err;
+  cl_int err;
   int i;
 
   printf("Action: setting argument #%d to GPU... ", (int)kernel_arg);
 
   data->buffer = clCreateBuffer(context,
                                 CL_MEM_READ_WRITE,
-                                sizeof(int)*data->size,
+                                sizeof(cl_int)*data->size,
                                 data->x,
                                 &err);
 
@@ -2610,13 +2610,13 @@ void set_int1(int1* data, int kernel_arg)
 
 void set_float4(float4* data, int kernel_arg)
 {
-  int err;
+  cl_int err;
   int i;
-  float* unfolded_data;
+  cl_float* unfolded_data;
 
   printf("Action: setting argument #%d to GPU... ", (int)kernel_arg);
 
-  unfolded_data = new float[4*data->size];
+  unfolded_data = new cl_float[4*data->size];
 
   for (i = 0; i < data->size; i++)
   {
@@ -2628,7 +2628,7 @@ void set_float4(float4* data, int kernel_arg)
 
   data->buffer = clCreateBuffer(context,
                                 CL_MEM_READ_WRITE,
-                                sizeof(float)*4*data->size,
+                                sizeof(cl_float)*4*data->size,
                                 unfolded_data,
                                 &err);
 
@@ -2647,13 +2647,13 @@ void set_float4(float4* data, int kernel_arg)
 
 void set_int4(int4* data, int kernel_arg)
 {
-  int err;
+  cl_int err;
   int i;
-  int* unfolded_data;
+  cl_int* unfolded_data;
 
   printf("Action: setting argument #%d to GPU... ", (int)kernel_arg);
 
-  unfolded_data = new int[4*data->size];
+  unfolded_data = new cl_int[4*data->size];
 
   for (i = 0; i < data->size; i++)
   {
@@ -2665,7 +2665,7 @@ void set_int4(int4* data, int kernel_arg)
 
   data->buffer = clCreateBuffer(context,
                                 CL_MEM_READ_WRITE,
-                                sizeof(int)*4*data->size,
+                                sizeof(cl_int)*4*data->size,
                                 unfolded_data,
                                 &err);
 
@@ -2684,7 +2684,7 @@ void set_int4(int4* data, int kernel_arg)
 
 void set_point4(point4* points, int kernel_arg)
 {
-  int err;
+  cl_int err;
   int i;
   GLfloat* unfolded_data;
   GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
@@ -2738,7 +2738,7 @@ void set_point4(point4* points, int kernel_arg)
 
 void set_color4(color4* colors, int kernel_arg)
 {
-  int err;
+  cl_int err;
   int i;
   GLfloat* unfolded_data;
   GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
@@ -2798,7 +2798,7 @@ void push_float1(cl_mem* CL_memory_buffer, int kernel_arg)
   cl_int err;
 
   //printf("Action: acquiring OpenCL memory objects... ");
-  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
+  err = clEnqueueReadBuffer(queue, CL_memory_buffer, CL_TRUE, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
