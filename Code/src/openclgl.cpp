@@ -2568,7 +2568,7 @@ void set_float1(float1* data, int kernel_arg)
   printf("Action: setting argument #%d to GPU... ", (int)kernel_arg);
 
   data->buffer = clCreateBuffer(context,
-                                CL_MEM_READ_WRITE,
+                                CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                 sizeof(cl_float)*data->size,
                                 data->x,
                                 &err);
@@ -2592,7 +2592,7 @@ void set_int1(int1* data, int kernel_arg)
   printf("Action: setting argument #%d to GPU... ", (int)kernel_arg);
 
   data->buffer = clCreateBuffer(context,
-                                CL_MEM_READ_WRITE,
+                                CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                 sizeof(cl_int)*data->size,
                                 data->x,
                                 &err);
@@ -2627,7 +2627,7 @@ void set_float4(float4* data, int kernel_arg)
   }
 
   data->buffer = clCreateBuffer(context,
-                                CL_MEM_READ_WRITE,
+                                CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                 sizeof(cl_float)*4*data->size,
                                 unfolded_data,
                                 &err);
@@ -2664,7 +2664,7 @@ void set_int4(int4* data, int kernel_arg)
   }
 
   data->buffer = clCreateBuffer(context,
-                                CL_MEM_READ_WRITE,
+                                CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                 sizeof(cl_int)*4*data->size,
                                 unfolded_data,
                                 &err);
@@ -2713,7 +2713,7 @@ void set_point4(point4* points, int kernel_arg)
   glBindBuffer(GL_ARRAY_BUFFER, points->vbo);                                   // Binding VBO...
   glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
   points->buffer = clCreateFromGLBuffer(context,                                // Creating OpenCL buffer from OpenGL buffer...
-                                        CL_MEM_READ_WRITE,
+                                        CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                         points->vbo,
                                         &err);
 
@@ -2767,7 +2767,7 @@ void set_color4(color4* colors, int kernel_arg)
   glBindBuffer(GL_ARRAY_BUFFER, colors->vbo);                                   // Binding VBO...
   glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
   colors->buffer = clCreateFromGLBuffer(context,                                // Creating OpenCL buffer from OpenGL buffer...
-                                        CL_MEM_READ_WRITE,
+                                        CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                         colors->vbo,
                                         &err);
 
@@ -2797,71 +2797,67 @@ void push_float1(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
-  //printf("Action: acquiring OpenCL memory objects... ");
-  err = clEnqueueReadBuffer(queue, CL_memory_buffer, CL_TRUE, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
 
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  //printf("DONE!\n");
 }
 
 void push_int1(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
-  //printf("Action: acquiring OpenCL memory objects... ");
-  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
+  err = clEnqueueMapBuffer(queue,
+                           CL_memory_buffer,
+                           CL_TRUE, CL_MAP_READ | CL_MAP_WRITE,
+                           0,
+                           NULL,
+                           err);
 
   if(err != CL_SUCCESS)
   {
     printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
-
-  //printf("DONE!\n");
 }
 
 void push_float4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
-  //printf("Action: acquiring OpenCL memory objects... ");
-  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
+  err = clEnqueueMapBuffer(queue,
+                           CL_memory_buffer,
+                           CL_TRUE, CL_MAP_READ | CL_MAP_WRITE,
+                           0,
+                           NULL,
+                           err);
 
   if(err != CL_SUCCESS)
   {
     printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
-
-  //printf("DONE!\n");
 }
 
 void push_int4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
-  //printf("Action: acquiring OpenCL memory objects... ");
-  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
+  err = clEnqueueMapBuffer(queue,
+                           CL_memory_buffer,
+                           CL_TRUE, CL_MAP_READ | CL_MAP_WRITE,
+                           0,
+                           NULL,
+                           err);
 
   if(err != CL_SUCCESS)
   {
     printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
-
-  //printf("DONE!\n");
 }
 
 void push_point4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
-  //printf("Action: acquiring OpenCL memory objects... ");
   err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
@@ -2869,15 +2865,12 @@ void push_point4(cl_mem* CL_memory_buffer, int kernel_arg)
     printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
-
-  //printf("DONE!\n");
 }
 
 void push_color4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
-  //printf("Action: acquiring OpenCL memory objects... ");
   err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "colors" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
@@ -2885,19 +2878,26 @@ void push_color4(cl_mem* CL_memory_buffer, int kernel_arg)
     printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
-
-  //printf("DONE!\n");
 }
 
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "POP" FUNCTIONS /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void pop_float1(cl_mem* CL_memory_buffer, int kernel_arg)
+void pop_float1(float1* data, int kernel_arg)
 {
   cl_int err;
+  void* mapped_memory;
 
-  //printf("Action: releasing enqueued OpenCL objects... ");
-  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "points" from OpenCL kernel...
+  mapped_memory = clEnqueueMapBuffer(queue,
+                           data->buffer,
+                           CL_TRUE,
+                           CL_MAP_READ | CL_MAP_WRITE,
+                           0,
+                           sizeof(cl_float)*data->x,
+                           0,
+                           NULL,
+                           NULL,
+                           &err);
 
   if(err != CL_SUCCESS)
   {
@@ -2905,14 +2905,31 @@ void pop_float1(cl_mem* CL_memory_buffer, int kernel_arg)
     exit(err);
   }
 
-  //printf("DONE!\n");
+  memcpy(data->buffer, mapped_memory, sizeof(cl_float)*data->size);
+
+  err = clEnqueueUnmapMemObject(queue, data->buffer, mapped_memory, 0, NULL, NULL);
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
 }
-void pop_int1(cl_mem* CL_memory_buffer, int kernel_arg)
+void pop_int1(int1* data, int kernel_arg)
 {
   cl_int err;
+  void* mapped_memory;
 
-  //printf("Action: releasing enqueued OpenCL objects... ");
-  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "points" from OpenCL kernel...
+  mapped_memory = clEnqueueMapBuffer(queue,
+                           data->buffer,
+                           CL_TRUE,
+                           CL_MAP_READ | CL_MAP_WRITE,
+                           0,
+                           sizeof(cl_float)*data->x,
+                           0,
+                           NULL,
+                           NULL,
+                           &err);
 
   if(err != CL_SUCCESS)
   {
@@ -2920,15 +2937,32 @@ void pop_int1(cl_mem* CL_memory_buffer, int kernel_arg)
     exit(err);
   }
 
-  //printf("DONE!\n");
+  memcpy(data->buffer, mapped_memory, sizeof(cl_float)*data->size);
+
+  err = clEnqueueUnmapMemObject(queue, data->buffer, mapped_memory, 0, NULL, NULL);
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
 }
 
 void pop_float4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
+  void* mapped_memory;
 
-  //printf("Action: releasing enqueued OpenCL objects... ");
-  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "points" from OpenCL kernel...
+  mapped_memory = clEnqueueMapBuffer(queue,
+                           data->buffer,
+                           CL_TRUE,
+                           CL_MAP_READ | CL_MAP_WRITE,
+                           0,
+                           sizeof(cl_float)*data->x,
+                           0,
+                           NULL,
+                           NULL,
+                           &err);
 
   if(err != CL_SUCCESS)
   {
@@ -2936,30 +2970,34 @@ void pop_float4(cl_mem* CL_memory_buffer, int kernel_arg)
     exit(err);
   }
 
-  //printf("DONE!\n");
+  memcpy(data->buffer, mapped_memory, sizeof(cl_float)*data->size);
+
+  err = clEnqueueUnmapMemObject(queue, data->buffer, mapped_memory, 0, NULL, NULL);
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
 }
 
 void pop_int4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
-  //printf("Action: releasing enqueued OpenCL objects... ");
-  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "points" from OpenCL kernel...
+  err = clEnqueueUnmapMemObject(queue, 1, CL_memory_buffer, 0, NULL, NULL);
 
   if(err != CL_SUCCESS)
   {
     printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
-
-  //printf("DONE!\n");
 }
 
 void pop_point4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
-  //printf("Action: releasing enqueued OpenCL objects... ");
   err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "points" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
@@ -2967,15 +3005,12 @@ void pop_point4(cl_mem* CL_memory_buffer, int kernel_arg)
     printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
-
-  //printf("DONE!\n");
 }
 
 void pop_color4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
-  //printf("Action: releasing enqueued OpenCL objects... ");
   err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "colors" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
@@ -2983,6 +3018,4 @@ void pop_color4(cl_mem* CL_memory_buffer, int kernel_arg)
     printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
-
-  //printf("DONE!\n");
 }
