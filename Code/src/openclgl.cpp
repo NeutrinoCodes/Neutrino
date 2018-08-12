@@ -864,6 +864,8 @@ float1::float1(int num_data)
   x = new cl_float[num_data];                                                   // "x" data array.
 
   size = num_data;                                                              // Array size (the same for all of them).
+  vao = 0;                                                                      // OpenGL data VAO.
+  vbo = 0;                                                                      // OpenGL data VBO.
   buffer = NULL;                                                                // OpenCL data buffer.
 
   for (i = 0; i < num_data; i++)                                                // Filling arrays with default data:
@@ -875,6 +877,9 @@ float1::float1(int num_data)
 float1::~float1()
 {
   release_mem_object(buffer);                                                   // Releasing OpenCL data buffer...
+  glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
+  glDeleteBuffers(1, &vao);                                                     // Releasing OpenGL VAO...
+
   delete[] x;                                                                   // Releasing data memory...
 }
 
@@ -883,6 +888,8 @@ int1::int1(int num_data)
   x = new cl_int[num_data];                                                     // "x" data array.
 
   size = num_data;                                                              // Array size (the same for all of them).
+  vao = 0;                                                                      // OpenGL data VAO.
+  vbo = 0;                                                                      // OpenGL data VBO.
   buffer = NULL;                                                                // OpenCL data buffer.
 
   for (i = 0; i < num_data; i++)                                                // Filling arrays with default data:
@@ -894,6 +901,9 @@ int1::int1(int num_data)
 int1::~int1()
 {
   release_mem_object(buffer);                                                   // Releasing OpenCL data buffer...
+  glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
+  glDeleteBuffers(1, &vao);                                                     // Releasing OpenGL VAO...
+
   delete[] x;                                                                   // Releasing data memory...
 }
 
@@ -905,6 +915,8 @@ float4::float4(int num_data)
   w = new cl_float[num_data];                                                      // "w" data array.
 
   size = num_data;                                                              // Array size (the same for all of them).
+  vao = 0;                                                                      // OpenGL data VAO.
+  vbo = 0;                                                                      // OpenGL data VBO.
   buffer = NULL;                                                                // OpenCL data buffer.
 
   for (i = 0; i < num_data; i++)                                                // Filling arrays with default data...
@@ -919,6 +931,9 @@ float4::float4(int num_data)
 float4::~float4()
 {
   release_mem_object(buffer);                                                   // Releasing OpenCL data buffer...
+  glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
+  glDeleteBuffers(1, &vao);                                                     // Releasing OpenGL VAO...
+
   delete[] x;
   delete[] y;
   delete[] z;
@@ -927,12 +942,14 @@ float4::~float4()
 
 int4::int4(int num_data)
 {
-  x = new cl_int[num_data];                                                        // "x" data array.
-  y = new cl_int[num_data];                                                        // "y" data array.
-  z = new cl_int[num_data];                                                        // "z" data array.
-  w = new cl_int[num_data];                                                        // "w" data array.
+  x = new cl_int[num_data];                                                     // "x" data array.
+  y = new cl_int[num_data];                                                     // "y" data array.
+  z = new cl_int[num_data];                                                     // "z" data array.
+  w = new cl_int[num_data];                                                     // "w" data array.
 
   size = num_data;                                                              // Array size (the same for all of them).
+  vao = 0;                                                                      // OpenGL data VAO.
+  vbo = 0;                                                                      // OpenGL data VBO.
   buffer = NULL;                                                                // OpenCL data buffer.
 
   for (i = 0; i < num_data; i++)                                                // Filling arrays with default data...
@@ -947,6 +964,9 @@ int4::int4(int num_data)
 int4::~int4()
 {
   release_mem_object(buffer);                                                   // Releasing OpenCL data buffer...
+  glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
+  glDeleteBuffers(1, &vao);                                                     // Releasing OpenGL VAO...
+
   delete[] x;
   delete[] y;
   delete[] z;

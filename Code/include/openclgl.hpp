@@ -64,7 +64,10 @@
       ~float1();
 
       cl_float*    x;                                                           // Declaring "x" data...
+
       int       size;                                                           // Declaring "size" [#]...
+      GLuint    vao;
+      GLuint    vbo;
       cl_mem    buffer;                                                         // Declaring OpenCL memory buffer...
   };
 
@@ -81,7 +84,10 @@
       ~int1();
 
       cl_int*      x;
+
       int       size;
+      GLuint    vao;
+      GLuint    vbo;
       cl_mem    buffer;
   };
 
@@ -103,7 +109,10 @@
       cl_float*    y;                                                           // Declaring "y" data...
       cl_float*    z;                                                           // Declaring "z" data...
       cl_float*    w;                                                           // Declaring "w" data...
+
       int       size;                                                           // Declaring "size" [#]...
+      GLuint    vao;
+      GLuint    vbo;
       cl_mem    buffer;                                                         // Declaring OpenCL memory buffer...
   };
 
@@ -125,7 +134,10 @@
       cl_int*      y;
       cl_int*      z;
       cl_int*      w;
+
       int       size;
+      GLuint    vao;
+      GLuint    vbo;
       cl_mem    buffer;
   };
 
