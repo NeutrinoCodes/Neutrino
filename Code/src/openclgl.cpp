@@ -2584,22 +2584,49 @@ void set_float1(float1* data, int kernel_arg)
 {
   cl_int err;
   int i;
+  GLfloat* unfolded_data;
+  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
 
-  printf("Action: setting argument #%d to GPU... ", (int)kernel_arg);
+  printf("Action: setting argument #%d on GPU... ", (int)kernel_arg);
 
-  data->buffer = clCreateBuffer(context,
-                                CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                sizeof(cl_float)*data->size,
-                                data->x,
-                                &err);
+  unfolded_data = new GLfloat[data->size];
 
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &data->buffer);
+  for (i = 0; i < data->size; i++)
+  {
+    unfolded_data[i] = data->x[i];
+  }
+
+  glGenVertexArrays(1, &data->vao);                                             // Generating VAO...
+  glBindVertexArray(data->vao);                                                 // Binding VAO...
+  glGenBuffers(1, &data->vbo);                                                  // Generating VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*sizeof(GLfloat)*(data->size),
+               unfolded_data,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
+  glVertexAttribPointer(LAYOUT_0, 1, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
+  data->buffer = clCreateFromGLBuffer(context,                                  // Creating OpenCL buffer from OpenGL buffer...
+                                        CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                        data->vbo,
+                                        &err);
 
   if(err < 0)
   {
     printf("\nError:  %s\n", get_error(err));
     exit(EXIT_FAILURE);
   }
+
+  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
+  }
+
+  delete[] unfolded_data;
 
   printf("DONE!\n");
 }
@@ -2608,22 +2635,49 @@ void set_int1(int1* data, int kernel_arg)
 {
   cl_int err;
   int i;
+  GLint* unfolded_data;
+  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
 
-  printf("Action: setting argument #%d to GPU... ", (int)kernel_arg);
+  printf("Action: setting argument #%d on GPU... ", (int)kernel_arg);
 
-  data->buffer = clCreateBuffer(context,
-                                CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                sizeof(cl_int)*data->size,
-                                data->x,
-                                &err);
+  unfolded_data = new GLint[data->size];
 
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &data->buffer);
+  for (i = 0; i < data->size; i++)
+  {
+    unfolded_data[i] = data->x[i];
+  }
+
+  glGenVertexArrays(1, &data->vao);                                             // Generating VAO...
+  glBindVertexArray(data->vao);                                                 // Binding VAO...
+  glGenBuffers(1, &data->vbo);                                                  // Generating VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*sizeof(GLint)*(data->size),
+               unfolded_data,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
+  glVertexAttribPointer(LAYOUT_0, 1, GL_INT, GL_FALSE, 0, 0);                   // Specifying the format for "layout = 0" attribute in vertex shader...
+  data->buffer = clCreateFromGLBuffer(context,                                  // Creating OpenCL buffer from OpenGL buffer...
+                                        CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                        data->vbo,
+                                        &err);
 
   if(err < 0)
   {
     printf("\nError:  %s\n", get_error(err));
     exit(EXIT_FAILURE);
   }
+
+  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
+  }
+
+  delete[] unfolded_data;
 
   printf("DONE!\n");
 }
@@ -2632,11 +2686,12 @@ void set_float4(float4* data, int kernel_arg)
 {
   cl_int err;
   int i;
-  cl_float* unfolded_data;
+  GLfloat* unfolded_data;
+  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
 
-  printf("Action: setting argument #%d to GPU... ", (int)kernel_arg);
+  printf("Action: setting argument #%d on GPU... ", (int)kernel_arg);
 
-  unfolded_data = new cl_float[4*data->size];
+  unfolded_data = new GLfloat[4*data->size];
 
   for (i = 0; i < data->size; i++)
   {
@@ -2646,13 +2701,29 @@ void set_float4(float4* data, int kernel_arg)
     unfolded_data[4*i + 3] = data->w[i];
   }
 
-  data->buffer = clCreateBuffer(context,
-                                CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                sizeof(cl_float)*4*data->size,
-                                unfolded_data,
-                                &err);
+  glGenVertexArrays(1, &data->vao);                                             // Generating VAO...
+  glBindVertexArray(data->vao);                                                 // Binding VAO...
+  glGenBuffers(1, &data->vbo);                                                  // Generating VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*sizeof(GLfloat)*(data->size),
+               unfolded_data,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
+  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
+  data->buffer = clCreateFromGLBuffer(context,                                  // Creating OpenCL buffer from OpenGL buffer...
+                                        CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                        data->vbo,
+                                        &err);
 
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &data->buffer);
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
+  }
+
+  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
 
   if(err < 0)
   {
@@ -2669,11 +2740,12 @@ void set_int4(int4* data, int kernel_arg)
 {
   cl_int err;
   int i;
-  cl_int* unfolded_data;
+  GLint* unfolded_data;
+  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
 
-  printf("Action: setting argument #%d to GPU... ", (int)kernel_arg);
+  printf("Action: setting argument #%d on GPU... ", (int)kernel_arg);
 
-  unfolded_data = new cl_int[4*data->size];
+  unfolded_data = new GLint[4*data->size];
 
   for (i = 0; i < data->size; i++)
   {
@@ -2683,13 +2755,29 @@ void set_int4(int4* data, int kernel_arg)
     unfolded_data[4*i + 3] = data->w[i];
   }
 
-  data->buffer = clCreateBuffer(context,
-                                CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                sizeof(cl_int)*4*data->size,
-                                unfolded_data,
-                                &err);
+  glGenVertexArrays(1, &data->vao);                                             // Generating VAO...
+  glBindVertexArray(data->vao);                                                 // Binding VAO...
+  glGenBuffers(1, &data->vbo);                                                  // Generating VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*sizeof(GLint)*(data->size),
+               unfolded_data,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
+  glVertexAttribPointer(LAYOUT_0, 4, GL_INT, GL_FALSE, 0, 0);                   // Specifying the format for "layout = 0" attribute in vertex shader...
+  data->buffer = clCreateFromGLBuffer(context,                                  // Creating OpenCL buffer from OpenGL buffer...
+                                        CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                        data->vbo,
+                                        &err);
 
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &data->buffer);
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
+  }
+
+  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
 
   if(err < 0)
   {
@@ -2817,19 +2905,20 @@ void push_float1(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
+  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
 
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
 }
 
 void push_int1(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
-  err = clEnqueueMapBuffer(queue,
-                           CL_memory_buffer,
-                           CL_TRUE, CL_MAP_READ | CL_MAP_WRITE,
-                           0,
-                           NULL,
-                           err);
+  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -2842,12 +2931,7 @@ void push_float4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
-  err = clEnqueueMapBuffer(queue,
-                           CL_memory_buffer,
-                           CL_TRUE, CL_MAP_READ | CL_MAP_WRITE,
-                           0,
-                           NULL,
-                           err);
+  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -2860,12 +2944,7 @@ void push_int4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
-  err = clEnqueueMapBuffer(queue,
-                           CL_memory_buffer,
-                           CL_TRUE, CL_MAP_READ | CL_MAP_WRITE,
-                           0,
-                           NULL,
-                           err);
+  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -2903,31 +2982,11 @@ void push_color4(cl_mem* CL_memory_buffer, int kernel_arg)
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "POP" FUNCTIONS /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void pop_float1(float1* data, int kernel_arg)
+void pop_float1(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
-  void* mapped_memory;
 
-  mapped_memory = clEnqueueMapBuffer(queue,
-                           data->buffer,
-                           CL_TRUE,
-                           CL_MAP_READ | CL_MAP_WRITE,
-                           0,
-                           sizeof(cl_float)*data->x,
-                           0,
-                           NULL,
-                           NULL,
-                           &err);
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  memcpy(data->buffer, mapped_memory, sizeof(cl_float)*data->size);
-
-  err = clEnqueueUnmapMemObject(queue, data->buffer, mapped_memory, 0, NULL, NULL);
+  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "points" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -2935,31 +2994,11 @@ void pop_float1(float1* data, int kernel_arg)
     exit(err);
   }
 }
-void pop_int1(int1* data, int kernel_arg)
+void pop_int1(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
-  void* mapped_memory;
 
-  mapped_memory = clEnqueueMapBuffer(queue,
-                           data->buffer,
-                           CL_TRUE,
-                           CL_MAP_READ | CL_MAP_WRITE,
-                           0,
-                           sizeof(cl_float)*data->x,
-                           0,
-                           NULL,
-                           NULL,
-                           &err);
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  memcpy(data->buffer, mapped_memory, sizeof(cl_float)*data->size);
-
-  err = clEnqueueUnmapMemObject(queue, data->buffer, mapped_memory, 0, NULL, NULL);
+  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "points" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -2971,28 +3010,8 @@ void pop_int1(int1* data, int kernel_arg)
 void pop_float4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
-  void* mapped_memory;
 
-  mapped_memory = clEnqueueMapBuffer(queue,
-                           data->buffer,
-                           CL_TRUE,
-                           CL_MAP_READ | CL_MAP_WRITE,
-                           0,
-                           sizeof(cl_float)*data->x,
-                           0,
-                           NULL,
-                           NULL,
-                           &err);
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  memcpy(data->buffer, mapped_memory, sizeof(cl_float)*data->size);
-
-  err = clEnqueueUnmapMemObject(queue, data->buffer, mapped_memory, 0, NULL, NULL);
+  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "points" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -3005,7 +3024,7 @@ void pop_int4(cl_mem* CL_memory_buffer, int kernel_arg)
 {
   cl_int err;
 
-  err = clEnqueueUnmapMemObject(queue, 1, CL_memory_buffer, 0, NULL, NULL);
+  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "points" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
