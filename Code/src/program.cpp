@@ -4,11 +4,13 @@
 
 #define X_MIN           -1.0f
 #define Y_MIN           -1.0f
-#define SIZE_X          100
-#define SIZE_Y          100
+#define X_MAX           1.0f
+#define Y_MAX           1.0f
+#define SIZE_X          11
+#define SIZE_Y          11
 #define NUM_POINTS      (SIZE_X*SIZE_Y)
-#define DX              0.02f
-#define DY              0.02f
+#define DX              (float)((X_MAX-X_MIN)/SIZE_X)
+#define DY              (float)((Y_MAX-Y_MIN)/SIZE_Y)
 #define DT              0.005
 
 float4* position_old      = new float4(NUM_POINTS);                             // Old position.
@@ -62,29 +64,29 @@ void setup()
       // Setting "x" initial position (Taylor's expansion)...
       position->x[i + SIZE_X*j] = position_old->x[i + SIZE_X*j] +               // position_old +
                                   velocity_old->x[i + SIZE_X*j]*DT +            // velocity_old*dt +
-                                  0.5*acceleration_old->x[i + SIZE_X*j]*DT*DT;  // 1/2*acceleration_old*dt^2
+                                  0.5f*acceleration_old->x[i + SIZE_X*j]*DT*DT; // 1/2*acceleration_old*dt^2
 
       // Setting "y" initial position (Taylor's expansion)...
       position->y[i + SIZE_X*j] = position_old->y[i + SIZE_X*j] +               // position_old +
                                   velocity_old->y[i + SIZE_X*j]*DT +            // velocity_old*dt +
-                                  0.5*acceleration_old->y[i + SIZE_X*j]*DT*DT;  // 1/2*acceleration_old*dt^2
+                                  0.5f*acceleration_old->y[i + SIZE_X*j]*DT*DT; // 1/2*acceleration_old*dt^2
 
       // Setting "z" initial position (Taylor's expansion)...
       position->z[i + SIZE_X*j] = position_old->z[i + SIZE_X*j] +               // position_old +
                                   velocity_old->z[i + SIZE_X*j]*DT +            // velocity_old*dt +
-                                  0.5*acceleration_old->z[i + SIZE_X*j]*DT*DT;  // 1/2*acceleration_old*dt^2
+                                  0.5f*acceleration_old->z[i + SIZE_X*j]*DT*DT; // 1/2*acceleration_old*dt^2
 
       // Setting "w" initial position...
-      position->w[i + SIZE_X*j] = 1.0;
+      position->w[i + SIZE_X*j] = 1.0f;
 
       gravity->x[i + SIZE_X*j] = 0.0f;                                          // Setting "x" gravity...
       gravity->y[i + SIZE_X*j] = 0.0f;                                          // Setting "y" gravity...
       gravity->z[i + SIZE_X*j] = 9.81f;                                         // Setting "z" gravity...
       gravity->w[i + SIZE_X*j] = 1.0f;                                          // Setting "w" gravity...
 
-      stiffness->x[i + SIZE_X*j] = 200.0f;                                       // Setting "x" stiffness...
-      stiffness->y[i + SIZE_X*j] = 200.0f;                                       // Setting "y" stiffness...
-      stiffness->z[i + SIZE_X*j] = 200.0f;                                       // Setting "z" stiffness...
+      stiffness->x[i + SIZE_X*j] = 400.0f;                                       // Setting "x" stiffness...
+      stiffness->y[i + SIZE_X*j] = 400.0f;                                       // Setting "y" stiffness...
+      stiffness->z[i + SIZE_X*j] = 400.0f;                                       // Setting "z" stiffness...
       stiffness->w[i + SIZE_X*j] = 1.0f;                                        // Setting "w" stiffness...
 
       resting->x[i + SIZE_X*j] = DX;                                            // Setting "x" resting position...
@@ -112,7 +114,6 @@ void setup()
     y += DY;
   }
 
-
   for (j = 1; j < (SIZE_Y - 1); j++)
   {
     for (i = 1; i < (SIZE_X - 1); i++)
@@ -122,7 +123,6 @@ void setup()
       index_PU->x[i + SIZE_X*j] =  i       + SIZE_X*(j - 1);
       index_PL->x[i + SIZE_X*j] = (i - 1)  + SIZE_X*j;
       index_PD->x[i + SIZE_X*j] =  i       + SIZE_X*(j + 1);
-      printf("i = %d, j = %d\n", i, j);
     }
   }
 

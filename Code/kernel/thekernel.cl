@@ -1,6 +1,7 @@
 /// @file
 
 #define l(A)            length(A)                                               // Length function.
+#define DT              0.005f                                                  // Time delta [s].
 
 __kernel void thekernel(__global float4*    Positions,
                         __global float4*    Colors,
@@ -111,14 +112,13 @@ __kernel void thekernel(__global float4*    Positions,
     ///////////////////////// CENTRE PARTICLE ELASTIC FORCES /////////////////////
     //////////////////////////////////////////////////////////////////////////////
     float4      Fe  = kR*UR + kU*UU + kL*UL + kD*UD;                            // Elastic force applied to the centre particles.
-    //float4      mag_Fe = fabs(Fe);                                              // Magnitude of Fe.
-    float4      col = Colors[iPC];
-    col = (float4)(1.0f, 0.0f, 0.0f, 1.0f);
 
     //////////////////////////////////////////////////////////////////////////////
     ///////////////////////// CENTRE PARTICLE VISCOUS FORCES /////////////////////
     //////////////////////////////////////////////////////////////////////////////
     float4      Fv  = -C*V;                                                     // Viscous force applied to the centre particles.
+
+    barrier(CLK_GLOBAL_MEM_FENCE);
 
     //////////////////////////////////////////////////////////////////////////////
     ////////////////////// CENTRE PARTICLE GRAVITATIONAL FORCES //////////////////
@@ -137,13 +137,27 @@ __kernel void thekernel(__global float4*    Positions,
     //////////////////////////////////////////////////////////////////////////////
     /////////////////////////////// VERLET INTEGRATION ///////////////////////////
     //////////////////////////////////////////////////////////////////////////////
+    // We define V = (P - Po) instead of V = (P - Po)/DT because later we will
+    // have to calculate: P = P + V*DT + A*DT^2,
+    // hence we save one multiplication and one division.
     V = (P - Po);                                                               // Calculating current velocities...
+    V.w = 10.f;
+
     A = Ft/M;                                                                   // Calculating current accelerations...
+    A.w = 1.0f;
+
     Po = P;                                                                     // Updating old positions...
+    Po.w = 1.0f;
 
     barrier(CLK_GLOBAL_MEM_FENCE);
+    float4 pp;
 
-    P = P + V + A*0.005f*0.005f;                                                // Calculating and updating new positions...
+    //P = P + V + A*DT*DT;                                                        // Calculating and updating new positions...
+    pp = P + (float4)(0.0f, 0.0f, 0.001f, 0.0f);
+    barrier(CLK_GLOBAL_MEM_FENCE);
+    P = pp;
+    barrier(CLK_GLOBAL_MEM_FENCE);
+    P.w = 1.0f;
 
     barrier(CLK_GLOBAL_MEM_FENCE);
 
@@ -151,18 +165,6 @@ __kernel void thekernel(__global float4*    Positions,
     Positions[iPC] = P;                                                         // Updating OpenCL array...
     Velocities[iPC] = V;                                                        // Updating OpenCL array...
     Accelerations[iPC] = A;                                                     // Updating OpenCL array...
-
-    barrier(CLK_GLOBAL_MEM_FENCE);
-
-    //////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////// 4th component set ////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////
-    Positions[iPC].w = 1.0;                                                     // Resetting w (for 3D distance computation)...
-    Positions_old[iPC].w = 1.0;                                                 // Resetting w (for 3D distance computation)...
-    Velocities[iPC].w = 1.0;                                                    // Resetting w (for 3D distance computation)...
-    Accelerations[iPC].w = 1.0;                                                 // Resetting w (for 3D distance computation)...
-
-    Colors[iPC] = col;
 
     barrier(CLK_GLOBAL_MEM_FENCE);
 }
