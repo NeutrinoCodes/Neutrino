@@ -1,7 +1,7 @@
 /// @file
 
 #define l(A)            length(A)                                               // Length function.
-#define DT              0.005f                                                  // Time delta [s].
+#define DT              0.0005f                                                  // Time delta [s].
 
 __kernel void thekernel(__global float4*    Positions,
                         __global float4*    Colors,
@@ -17,7 +17,8 @@ __kernel void thekernel(__global float4*    Positions,
                         __global int*       indexes_PR,
                         __global int*       indexes_PU,
                         __global int*       indexes_PL,
-                        __global int*       indexes_PD)
+                        __global int*       indexes_PD,
+                        __global float4*    Freedom)
 {
     //////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////// INDEXES ///////////////////////////////////
@@ -41,6 +42,7 @@ __kernel void thekernel(__global float4*    Positions,
     float4      M   = Masses[iPC];                                              // Centre particle masses.
     float4      G   = Gravity[iPC];                                             // Centre particle gravity field.
     float4      C   = Frictions[iPC];                                           // Centre particle frictions.
+    float4      fr  = Freedom[iPC];
 
     //////////////////////////////////////////////////////////////////////////////
     ////////////////////////// NEIGHBOUR PARTICLES POSITIONS /////////////////////
@@ -91,10 +93,10 @@ __kernel void thekernel(__global float4*    Positions,
     //////////////////////////////////////////////////////////////////////////////
     ///////////////////////////// NEIGHBOUR LINK STRAINS /////////////////////////
     //////////////////////////////////////////////////////////////////////////////
-    float4      sR  = (lR - rR)/lR;                                             // "RIGHT" link strains.
-    float4      sU  = (lU - rU)/lU;                                             // "UP"    link strains.
-    float4      sL  = (lL - rL)/lL;                                             // "LEFT"  link strains.
-    float4      sD  = (lD - rD)/lD;                                             // "DOWN"  link strains.
+    float4      sR  = (lR - rR)/(lR - fr + (float4)(1.0f, 1.0f, 1.0f, 1.0f));                                             // "RIGHT" link strains.
+    float4      sU  = (lU - rU)/(lU - fr + (float4)(1.0f, 1.0f, 1.0f, 1.0f));                                             // "UP"    link strains.
+    float4      sL  = (lL - rL)/(lL - fr + (float4)(1.0f, 1.0f, 1.0f, 1.0f));                                             // "LEFT"  link strains.
+    float4      sD  = (lD - rD)/(lD - fr + (float4)(1.0f, 1.0f, 1.0f, 1.0f));                                             // "DOWN"  link strains.
 
     barrier(CLK_GLOBAL_MEM_FENCE);
 
@@ -130,7 +132,7 @@ __kernel void thekernel(__global float4*    Positions,
     //////////////////////////////////////////////////////////////////////////////
     ///////////////////////// CENTRE PARTICLE TOTAL FORCES ///////////////////////
     //////////////////////////////////////////////////////////////////////////////
-    float4      Ft  = Fe + Fv + Fg;                                             // Total force applied to the centre particles.
+    float4      Ft  = fr*(Fe + Fv + Fg);                                        // Total force applied to the centre particles.
 
     barrier(CLK_GLOBAL_MEM_FENCE);
 
@@ -141,7 +143,7 @@ __kernel void thekernel(__global float4*    Positions,
     // have to calculate: P = P + V*DT + A*DT^2,
     // hence we save one multiplication and one division.
     V = (P - Po);                                                               // Calculating current velocities...
-    V.w = 10.f;
+    V.w = 1.0f;
 
     A = Ft/M;                                                                   // Calculating current accelerations...
     A.w = 1.0f;
@@ -150,12 +152,12 @@ __kernel void thekernel(__global float4*    Positions,
     Po.w = 1.0f;
 
     barrier(CLK_GLOBAL_MEM_FENCE);
-    float4 pp;
+    //float4 pp;
 
-    //P = P + V + A*DT*DT;                                                        // Calculating and updating new positions...
-    pp = P + (float4)(0.0f, 0.0f, 0.001f, 0.0f);
-    barrier(CLK_GLOBAL_MEM_FENCE);
-    P = pp;
+    P = P + V + A*DT*DT;                                                        // Calculating and updating new positions...
+    //pp = P + (float4)(0.0f, 0.0f, 0.001f, 0.0f);
+    //barrier(CLK_GLOBAL_MEM_FENCE);
+    //P = pp;
     barrier(CLK_GLOBAL_MEM_FENCE);
     P.w = 1.0f;
 

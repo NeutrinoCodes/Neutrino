@@ -6,8 +6,8 @@
 #define Y_MIN           -1.0f
 #define X_MAX           1.0f
 #define Y_MAX           1.0f
-#define SIZE_X          11
-#define SIZE_Y          11
+#define SIZE_X          101
+#define SIZE_Y          101
 #define NUM_POINTS      (SIZE_X*SIZE_Y)
 #define DX              (float)((X_MAX-X_MIN)/SIZE_X)
 #define DY              (float)((Y_MAX-Y_MIN)/SIZE_Y)
@@ -33,6 +33,8 @@ int1* index_PR            = new int1(NUM_POINTS);                               
 int1* index_PU            = new int1(NUM_POINTS);                               // Up particle.
 int1* index_PL            = new int1(NUM_POINTS);                               // Left particle.
 int1* index_PD            = new int1(NUM_POINTS);                               // Down particle.
+
+float4* freedom           = new float4(NUM_POINTS);                             // Freedom/constrain flag.
 
 text4*  text              = new text4("neutrino!", 1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -84,9 +86,9 @@ void setup()
       gravity->z[i + SIZE_X*j] = 9.81f;                                         // Setting "z" gravity...
       gravity->w[i + SIZE_X*j] = 1.0f;                                          // Setting "w" gravity...
 
-      stiffness->x[i + SIZE_X*j] = 400.0f;                                       // Setting "x" stiffness...
-      stiffness->y[i + SIZE_X*j] = 400.0f;                                       // Setting "y" stiffness...
-      stiffness->z[i + SIZE_X*j] = 400.0f;                                       // Setting "z" stiffness...
+      stiffness->x[i + SIZE_X*j] = 1000.0f;                                       // Setting "x" stiffness...
+      stiffness->y[i + SIZE_X*j] = 1000.0f;                                       // Setting "y" stiffness...
+      stiffness->z[i + SIZE_X*j] = 1000.0f;                                       // Setting "z" stiffness...
       stiffness->w[i + SIZE_X*j] = 1.0f;                                        // Setting "w" stiffness...
 
       resting->x[i + SIZE_X*j] = DX;                                            // Setting "x" resting position...
@@ -114,15 +116,113 @@ void setup()
     y += DY;
   }
 
-  for (j = 1; j < (SIZE_Y - 1); j++)
+  for (j = 0; j < (SIZE_Y); j++)
   {
-    for (i = 1; i < (SIZE_X - 1); i++)
+    for (i = 0; i < (SIZE_X); i++)
     {
       index_PC->x[i + SIZE_X*j] =  i       + SIZE_X*j;
-      index_PR->x[i + SIZE_X*j] = (i + 1)  + SIZE_X*j;
-      index_PU->x[i + SIZE_X*j] =  i       + SIZE_X*(j - 1);
-      index_PL->x[i + SIZE_X*j] = (i - 1)  + SIZE_X*j;
-      index_PD->x[i + SIZE_X*j] =  i       + SIZE_X*(j + 1);
+
+      freedom->x[i + SIZE_X*j] = 1.0f;
+      freedom->y[i + SIZE_X*j] = 1.0f;
+      freedom->z[i + SIZE_X*j] = 1.0f;
+      freedom->w[i + SIZE_X*j] = 1.0f;
+
+      if ((i != 0) && (i != (SIZE_X - 1)) && (j != 0) && (j != (SIZE_Y - 1)))   // When on bulk:
+      {
+        index_PR->x[i + SIZE_X*j] = (i + 1)  + SIZE_X*j;
+        index_PU->x[i + SIZE_X*j] =  i       + SIZE_X*(j + 1);
+        index_PL->x[i + SIZE_X*j] = (i - 1)  + SIZE_X*j;
+        index_PD->x[i + SIZE_X*j] =  i       + SIZE_X*(j - 1);
+      }
+
+      else                                                                      // When on all borders:
+      {
+        gravity->x[i + SIZE_X*j] = 0.0f;                                        // Setting "x" gravity...
+        gravity->y[i + SIZE_X*j] = 0.0f;                                        // Setting "y" gravity...
+        gravity->z[i + SIZE_X*j] = 0.0f;                                        // Setting "z" gravity...
+        gravity->w[i + SIZE_X*j] = 1.0f;                                        // Setting "w" gravity...
+
+        freedom->x[i + SIZE_X*j] = 0.0f;
+        freedom->y[i + SIZE_X*j] = 0.0f;
+        freedom->z[i + SIZE_X*j] = 0.0f;
+        freedom->w[i + SIZE_X*j] = 1.0f;
+        /*
+        stiffness->x[i + SIZE_X*j] = 0.0f;                                      // Setting "x" gravity...
+        stiffness->y[i + SIZE_X*j] = 0.0f;                                      // Setting "y" gravity...
+        stiffness->z[i + SIZE_X*j] = 0.0f;                                      // Setting "z" gravity...
+        stiffness->w[i + SIZE_X*j] = 1.0f;                                      // Setting "w" gravity...
+
+        friction->x[i + SIZE_X*j] = 0.0f;                                       // Setting "x" gravity...
+        friction->y[i + SIZE_X*j] = 0.0f;                                       // Setting "y" gravity...
+        friction->z[i + SIZE_X*j] = 0.0f;                                       // Setting "z" gravity...
+        friction->w[i + SIZE_X*j] = 1.0f;                                       // Setting "w" gravity...
+        */
+      }
+
+      if ((i == 0) && (j != 0) && (j != (SIZE_Y - 1)))                          // When on left border (excluding extremes):
+      {
+        index_PR->x[i + SIZE_X*j] = (i + 1)  + SIZE_X*j;
+        index_PU->x[i + SIZE_X*j] =  i       + SIZE_X*(j + 1);
+        index_PL->x[i + SIZE_X*j] = index_PC->x[i + SIZE_X*j];
+        index_PD->x[i + SIZE_X*j] =  i       + SIZE_X*(j - 1);
+      }
+
+      if ((i == (SIZE_X - 1)) && (j != 0) && (j != (SIZE_Y - 1)))               // When on right border (excluding extremes):
+      {
+        index_PR->x[i + SIZE_X*j] = index_PC->x[i + SIZE_X*j];
+        index_PU->x[i + SIZE_X*j] =  i       + SIZE_X*(j + 1);
+        index_PL->x[i + SIZE_X*j] = (i - 1)  + SIZE_X*j;
+        index_PD->x[i + SIZE_X*j] =  i       + SIZE_X*(j - 1);
+      }
+
+      if ((j == 0) && (i != 0) && (i != (SIZE_X - 1)))                          // When on low border (excluding extremes):
+      {
+        index_PR->x[i + SIZE_X*j] = (i + 1)  + SIZE_X*j;
+        index_PU->x[i + SIZE_X*j] =  i       + SIZE_X*(j + 1);
+        index_PL->x[i + SIZE_X*j] = (i - 1)  + SIZE_X*j;
+        index_PD->x[i + SIZE_X*j] = index_PC->x[i + SIZE_X*j];
+      }
+
+      if ((j == (SIZE_Y - 1)) && (i != 0) && (i != (SIZE_X - 1)))               // When on high border (excluding extremes):
+      {
+        index_PR->x[i + SIZE_X*j] = (i + 1)  + SIZE_X*j;
+        index_PU->x[i + SIZE_X*j] = index_PC->x[i + SIZE_X*j];
+        index_PL->x[i + SIZE_X*j] = (i - 1)  + SIZE_X*j;
+        index_PD->x[i + SIZE_X*j] =  i       + SIZE_X*(j - 1);
+      }
+
+      if ((i == 0) && (j == 0))                                                 // When on low left corner:
+      {
+        index_PR->x[i + SIZE_X*j] = (i + 1)  + SIZE_X*j;
+        index_PU->x[i + SIZE_X*j] =  i       + SIZE_X*(j + 1);
+        index_PL->x[i + SIZE_X*j] = index_PC->x[i + SIZE_X*j];
+        index_PD->x[i + SIZE_X*j] = index_PC->x[i + SIZE_X*j];
+      }
+
+      if ((i == (SIZE_X - 1)) && (j == 0))                                      // When on low right corner:
+      {
+        index_PR->x[i + SIZE_X*j] = index_PC->x[i + SIZE_X*j];
+        index_PU->x[i + SIZE_X*j] =  i       + SIZE_X*(j + 1);
+        index_PL->x[i + SIZE_X*j] = (i - 1)  + SIZE_X*j;
+        index_PD->x[i + SIZE_X*j] = index_PC->x[i + SIZE_X*j];
+      }
+
+      if ((i == 0) && (j == (SIZE_Y - 1)))                                      // When on high left corner:
+      {
+        index_PR->x[i + SIZE_X*j] = (i + 1)  + SIZE_X*j;
+        index_PU->x[i + SIZE_X*j] = index_PC->x[i + SIZE_X*j];
+        index_PL->x[i + SIZE_X*j] = index_PC->x[i + SIZE_X*j];
+        index_PD->x[i + SIZE_X*j] = i       + SIZE_X*(j - 1);
+      }
+
+      if ((i == (SIZE_X - 1)) && (j == (SIZE_Y - 1)))                           // When on high right corner:
+      {
+        index_PR->x[i + SIZE_X*j] = index_PC->x[i + SIZE_X*j];
+        index_PU->x[i + SIZE_X*j] = index_PC->x[i + SIZE_X*j];
+        index_PL->x[i + SIZE_X*j] = (i - 1)  + SIZE_X*j;
+        index_PD->x[i + SIZE_X*j] =  i       + SIZE_X*(j - 1);
+      }
+
     }
   }
 
@@ -147,6 +247,7 @@ void setup()
   set_int1(index_PU, 12);                                                       // Setting kernel argument #12...
   set_int1(index_PL, 13);                                                       // Setting kernel argument #13...
   set_int1(index_PD, 14);                                                       // Setting kernel argument #14...
+  set_float4(freedom, 15);
 }
 
 void loop()
@@ -166,6 +267,7 @@ void loop()
   push_int1(&index_PU->buffer, 12);                                             // Pushing kernel argument #12...
   push_int1(&index_PL->buffer, 13);                                             // Pushing kernel argument #13...
   push_int1(&index_PD->buffer, 14);                                             // Pushing kernel argument #14...
+  push_float4(&freedom->buffer, 15);
 
   execute_kernel();
 
@@ -184,6 +286,7 @@ void loop()
   pop_int1(&index_PU->buffer, 12);                                              // Pushing kernel argument #12...
   pop_int1(&index_PL->buffer, 13);                                              // Pushing kernel argument #13...
   pop_int1(&index_PD->buffer, 14);                                              // Pushing kernel argument #14...
+  pop_float4(&freedom->buffer, 15);
 
   tick += 0.1f;
 
