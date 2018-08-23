@@ -1,7 +1,7 @@
 /// @file
 
 #define l(A)            length(A)                                               // Length function.
-#define DT              0.0005f                                                  // Time delta [s].
+#define DT              0.001f                                                  // Time delta [s].
 
 __kernel void thekernel(__global float4*    Positions,
                         __global float4*    Colors,
@@ -43,6 +43,7 @@ __kernel void thekernel(__global float4*    Positions,
     float4      G   = Gravity[iPC];                                             // Centre particle gravity field.
     float4      C   = Frictions[iPC];                                           // Centre particle frictions.
     float4      fr  = Freedom[iPC];
+    float4      col = Colors[iPC];
 
     //////////////////////////////////////////////////////////////////////////////
     ////////////////////////// NEIGHBOUR PARTICLES POSITIONS /////////////////////
@@ -98,6 +99,9 @@ __kernel void thekernel(__global float4*    Positions,
     float4      sL  = (lL - rL)/(lL - fr + (float4)(1.0f, 1.0f, 1.0f, 1.0f));                                             // "LEFT"  link strains.
     float4      sD  = (lD - rD)/(lD - fr + (float4)(1.0f, 1.0f, 1.0f, 1.0f));                                             // "DOWN"  link strains.
 
+    //col = fabs(sR + sU + sL + sD)/4;
+    //col.r = 0.2f;
+
     barrier(CLK_GLOBAL_MEM_FENCE);
 
     //////////////////////////////////////////////////////////////////////////////
@@ -113,7 +117,7 @@ __kernel void thekernel(__global float4*    Positions,
     //////////////////////////////////////////////////////////////////////////////
     ///////////////////////// CENTRE PARTICLE ELASTIC FORCES /////////////////////
     //////////////////////////////////////////////////////////////////////////////
-    float4      Fe  = kR*UR + kU*UU + kL*UL + kD*UD;                            // Elastic force applied to the centre particles.
+    float4      Fe  = (kR*UR + kU*UU + kL*UL + kD*UD);                          // Elastic force applied to the centre particles.
 
     //////////////////////////////////////////////////////////////////////////////
     ///////////////////////// CENTRE PARTICLE VISCOUS FORCES /////////////////////
@@ -151,6 +155,7 @@ __kernel void thekernel(__global float4*    Positions,
     Po = P;                                                                     // Updating old positions...
     Po.w = 1.0f;
 
+
     barrier(CLK_GLOBAL_MEM_FENCE);
     //float4 pp;
 
@@ -160,6 +165,9 @@ __kernel void thekernel(__global float4*    Positions,
     //P = pp;
     barrier(CLK_GLOBAL_MEM_FENCE);
     P.w = 1.0f;
+    col.r = sqrt(P.z*P.z)/2.0f;
+    col.g = 0.2f;
+    col.b = 0.3f;
 
     barrier(CLK_GLOBAL_MEM_FENCE);
 
@@ -167,6 +175,7 @@ __kernel void thekernel(__global float4*    Positions,
     Positions[iPC] = P;                                                         // Updating OpenCL array...
     Velocities[iPC] = V;                                                        // Updating OpenCL array...
     Accelerations[iPC] = A;                                                     // Updating OpenCL array...
+    Colors[iPC] = col;
 
     barrier(CLK_GLOBAL_MEM_FENCE);
 }
