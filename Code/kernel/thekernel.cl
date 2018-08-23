@@ -165,9 +165,9 @@ __kernel void thekernel(__global float4*    Positions,
     //P = pp;
     barrier(CLK_GLOBAL_MEM_FENCE);
     P.w = 1.0f;
-    col.r = sqrt(P.z*P.z)/2.0f;
-    col.g = 0.2f;
-    col.b = 0.3f;
+    col.x = sqrt(P.z*P.z)/2.0f;
+    col.y = 0.2f;
+    col.z = 0.3f;
 
     barrier(CLK_GLOBAL_MEM_FENCE);
 
