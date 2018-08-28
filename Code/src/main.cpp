@@ -5,11 +5,11 @@
 #include "utilities.hpp"
 
 /// These files are relative to the build/mac or build/linux directory:
-#define POINT_VERTEX_FILE       "../../shader/vertex.vert"
-#define POINT_FRAGMENT_FILE     "../../shader/fragment.frag"
-#define TEXT_VERTEX_FILE        "../../shader/text_vertex.vert"
-#define TEXT_FRAGMENT_FILE      "../../shader/text_fragment.frag"
-#define KERNEL_FILE             "../../kernel/thekernel.cl"
+#define POINT_VERTEX_FILE       "/home/eyelash/Documents/Research/projects/computational_mechanics/neutrino/Code/shader/vertex.vert"
+#define POINT_FRAGMENT_FILE     "/home/eyelash/Documents/Research/projects/computational_mechanics/neutrino/Code/shader/fragment.frag"
+#define TEXT_VERTEX_FILE        "/home/eyelash/Documents/Research/projects/computational_mechanics/neutrino/Code/shader/text_vertex.vert"
+#define TEXT_FRAGMENT_FILE      "/home/eyelash/Documents/Research/projects/computational_mechanics/neutrino/Code/shader/text_fragment.frag"
+#define KERNEL_FILE             "/home/eyelash/Documents/Research/projects/computational_mechanics/neutrino/Code/kernel/thekernel.cl"
 
 int main()
 {
