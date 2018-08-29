@@ -7,6 +7,8 @@ message("##################################### GCC #############################
 message("################################################################################")
 message("")
 
+# Type: "make" in order to build the project.
+
 message("Setting LINUX variable, according to an existing LINUX (but not APPLE) OS...")
 if(UNIX AND NOT APPLE)
   set(LINUX TRUE)
@@ -43,7 +45,7 @@ target_include_directories(neutrino PRIVATE ${CMAKE_HOME_DIRECTORY}/include)
 message("Setting the Mac libraries that should be linked in the build command...")
 if(APPLE)
   message("Setting the libraries that should be linked in the build command...")
-  target_link_libraries(neutrino "-framework OpenGL" "-framework OpenCL" "-lGLEW" "-lglfw" "-lm" "-g")
+  target_link_libraries(neutrino "-framework OpenGL" "-framework OpenCL" "-lGLEW" "-lglfw" "-lm")
 endif(APPLE)
 
 message("Setting the Linux libraries that should be linked in the build command...")
@@ -60,8 +62,7 @@ message("#################################### DOXYGEN ##########################
 message("################################################################################")
 message("")
 
-message("Indicating the documentation build as an option and setting it to ON by default...")
-option(BUILD_DOC "Build documentation" ON)
+# Type: "make doc" in order to build the Doxygen documentation of the project.
 
 message("Checking if Doxygen is installed...")
 find_package(Doxygen)
@@ -74,8 +75,7 @@ if (DOXYGEN_FOUND)
     configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
     message("Doxygen build started!")
 
-    # Note the option ALL which allows to build the docs together with the application:
-    add_custom_target( doc_doxygen ALL
+    add_custom_target(doc
         COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating API documentation with Doxygen"

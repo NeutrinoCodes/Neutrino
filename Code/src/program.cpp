@@ -12,6 +12,7 @@
 #define DX              (float)((X_MAX-X_MIN)/SIZE_X)
 #define DY              (float)((Y_MAX-Y_MIN)/SIZE_Y)
 #define DT              0.005
+#define KERNEL_FILE     "../../kernel/thekernel.cl"
 
 float4* position_old      = new float4(NUM_POINTS);                             // Old position.
 float4* velocity_old      = new float4(NUM_POINTS);                             // Old velocity.
@@ -46,6 +47,9 @@ void setup()
   int j;
   float x;
   float y;
+
+  load_kernel(KERNEL_FILE);                                                     // Loading OpenCL kernel source...
+  init_opencl_kernel();                                                         // Initializing OpenCL kernel...
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// Preparing arrays... /////////////////////////////
@@ -111,15 +115,6 @@ void setup()
       color->b[i + SIZE_X*j] = 0.0f;                                            // Setting "z" initial color...
       color->a[i + SIZE_X*j] = 1.0f;                                            // Setting "w" initial color...
 
-      x += DX;
-    }
-    y += DY;
-  }
-
-  for (j = 0; j < (SIZE_Y); j++)
-  {
-    for (i = 0; i < (SIZE_X); i++)
-    {
       index_PC->x[i + SIZE_X*j] =  i       + SIZE_X*j;
 
       freedom->x[i + SIZE_X*j] = 1.0f;
@@ -146,17 +141,6 @@ void setup()
         freedom->y[i + SIZE_X*j] = 0.0f;
         freedom->z[i + SIZE_X*j] = 0.0f;
         freedom->w[i + SIZE_X*j] = 1.0f;
-        /*
-        stiffness->x[i + SIZE_X*j] = 0.0f;                                      // Setting "x" gravity...
-        stiffness->y[i + SIZE_X*j] = 0.0f;                                      // Setting "y" gravity...
-        stiffness->z[i + SIZE_X*j] = 0.0f;                                      // Setting "z" gravity...
-        stiffness->w[i + SIZE_X*j] = 1.0f;                                      // Setting "w" gravity...
-
-        friction->x[i + SIZE_X*j] = 0.0f;                                       // Setting "x" gravity...
-        friction->y[i + SIZE_X*j] = 0.0f;                                       // Setting "y" gravity...
-        friction->z[i + SIZE_X*j] = 0.0f;                                       // Setting "z" gravity...
-        friction->w[i + SIZE_X*j] = 1.0f;                                       // Setting "w" gravity...
-        */
       }
 
       if ((i == 0) && (j != 0) && (j != (SIZE_Y - 1)))                          // When on left border (excluding extremes):
@@ -223,7 +207,9 @@ void setup()
         index_PD->x[i + SIZE_X*j] =  i       + SIZE_X*(j - 1);
       }
 
+      x += DX;
     }
+    y += DY;
   }
 
   tick = 0.0f;                                                                  // Setting initial time tick...
@@ -289,7 +275,7 @@ void loop()
   pop_float4(&freedom->buffer, 15);
 
   plot(position, color, STYLE_POINT);
-  //print(text);
+  print(text);
 }
 
 void terminate()
