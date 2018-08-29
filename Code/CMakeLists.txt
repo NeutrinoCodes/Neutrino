@@ -45,7 +45,7 @@ target_include_directories(neutrino PRIVATE ${CMAKE_HOME_DIRECTORY}/include)
 message("Setting the Mac libraries that should be linked in the build command...")
 if(APPLE)
   message("Setting the libraries that should be linked in the build command...")
-  target_link_libraries(neutrino "-framework OpenGL" "-framework OpenCL" "-lGLEW" "-lglfw" "-lm" "-g")
+  target_link_libraries(neutrino "-framework OpenGL" "-framework OpenCL" "-lGLEW" "-lglfw" "-lm")
 endif(APPLE)
 
 message("Setting the Linux libraries that should be linked in the build command...")

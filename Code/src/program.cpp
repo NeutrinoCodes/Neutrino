@@ -275,7 +275,7 @@ void loop()
   pop_float4(&freedom->buffer, 15);
 
   plot(position, color, STYLE_POINT);
-  //print(text);
+  print(text);
 }
 
 void terminate()
