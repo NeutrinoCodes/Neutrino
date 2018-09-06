@@ -252,10 +252,10 @@
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// FILES ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  void        load_point_vertex(const char* filename_vertex);
-  void        load_point_fragment(const char* filename_fragment);
-  void        load_text_vertex(const char* filename_vertex);
-  void        load_text_fragment(const char* filename_fragment);
+  void        load_point_vertex(char* neutrino_path, const char* filename_vertex);
+  void        load_point_fragment(char* neutrino_path, const char* filename_fragment);
+  void        load_text_vertex(char* neutrino_path, const char* filename_vertex);
+  void        load_text_fragment(char* neutrino_path, const char* filename_fragment);
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////// WINDOW ////////////////////////////////////

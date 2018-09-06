@@ -2,8 +2,24 @@
 
 #include "utilities.hpp"
 
-int           ascii_spin_phase = 0;
-int           n_old = 0;
+char*   NEUTRINO_PATH;                                                          // Neutrino path variable...
+int     ascii_spin_phase = 0;
+int     n_old = 0;
+
+void get_neutrino_path()
+{
+  NEUTRINO_PATH = getenv("NEUTRINO_PATH");
+
+  if (NEUTRINO_PATH != NULL)
+  {
+    printf("Action: loading NEUTRINO_PATH environmental variable...\n");
+  }
+  else
+  {
+    printf("Error:  NEUTRINO_PATH environmental variable not defined!\n");
+    exit(1);
+  }
+}
 
 double getCPUTime()
 {
@@ -105,11 +121,14 @@ double getCPUTime()
   return -1.0;
 }
 
-void load_file(const char* file_name, char** file_buffer, size_t* file_size)
+void load_file(char* neutrino_path, const char* file_name, char** file_buffer, size_t* file_size)
 {
 	FILE* handle;
+  char full_name[32768];
 
-  handle = fopen(file_name, "rb");
+  snprintf(full_name, sizeof full_name, "%s%s", neutrino_path, file_name);
+
+  handle = fopen(full_name, "rb");
 
   if(handle == NULL)
   {

@@ -1183,38 +1183,38 @@ text4::~text4()
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// FILES FUNCTIONS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void load_point_vertex(const char* filename_vertex)
+void load_point_vertex(char* neutrino_path, const char* filename_vertex)
 {
  printf("Action: loading OpenGL point vertex source from file... ");
 
- load_file(filename_vertex, &point_vertex_source, &point_vertex_size);
+ load_file(neutrino_path, filename_vertex, &point_vertex_source, &point_vertex_size);
 
 	printf("DONE!\n");
 }
 
-void load_point_fragment(const char* filename_fragment)
+void load_point_fragment(char* neutrino_path, const char* filename_fragment)
 {
 	printf("Action: loading OpenGL point fragment source from file... ");
 
- load_file(filename_fragment, &point_fragment_source, &point_fragment_size);
+ load_file(neutrino_path, filename_fragment, &point_fragment_source, &point_fragment_size);
 
 	printf("DONE!\n");
 }
 
-void load_text_vertex(const char* filename_vertex)
+void load_text_vertex(char* neutrino_path, const char* filename_vertex)
 {
  printf("Action: loading OpenGL point vertex source from file... ");
 
- load_file(filename_vertex, &text_vertex_source, &text_vertex_size);
+ load_file(neutrino_path, filename_vertex, &text_vertex_source, &text_vertex_size);
 
 	printf("DONE!\n");
 }
 
-void load_text_fragment(const char* filename_fragment)
+void load_text_fragment(char* neutrino_path, const char* filename_fragment)
 {
 	printf("Action: loading OpenGL point fragment source from file... ");
 
- load_file(filename_fragment, &text_fragment_source, &text_fragment_size);
+ load_file(neutrino_path, filename_fragment, &text_fragment_source, &text_fragment_size);
 
 	printf("DONE!\n");
 }
