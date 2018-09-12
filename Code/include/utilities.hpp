@@ -22,10 +22,9 @@
   extern int     ascii_spin_phase;
   extern int     n_old;
 
-  void    get_neutrino_path();
+  void    get_neutrino_path(); 
   double  getCPUTime();
   void    load_file(char* neutrino_path, const char* file_name, char** file_buffer, size_t* file_size);
-  void    write_file(const char* file_name, char* file_buffer);
   void    free_file(char* buffer);
   void    ascii_spin(const char* text, double tic, double toc);
   void    ascii_spin_stop();
