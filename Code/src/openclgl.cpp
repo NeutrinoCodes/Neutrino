@@ -2901,11 +2901,11 @@ void set_color4(color4* colors, int kernel_arg)
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "PUSH" FUNCTIONS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void push_float1(cl_mem* CL_memory_buffer, int kernel_arg)
+void push_float1(float1* float1, int kernel_arg)
 {
   cl_int err;
 
-  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
+  err = clEnqueueAcquireGLObjects(queue, 1, &float1->buffer, 0, NULL, NULL);    // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -2914,11 +2914,11 @@ void push_float1(cl_mem* CL_memory_buffer, int kernel_arg)
   }
 }
 
-void push_int1(cl_mem* CL_memory_buffer, int kernel_arg)
+void push_int1(int1* int1, int kernel_arg)
 {
   cl_int err;
 
-  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
+  err = clEnqueueAcquireGLObjects(queue, 1, &int1->buffer, 0, NULL, NULL);      // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -2927,11 +2927,11 @@ void push_int1(cl_mem* CL_memory_buffer, int kernel_arg)
   }
 }
 
-void push_float4(cl_mem* CL_memory_buffer, int kernel_arg)
+void push_float4(float4* float4, int kernel_arg)
 {
   cl_int err;
 
-  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
+  err = clEnqueueAcquireGLObjects(queue, 1, &float4->buffer, 0, NULL, NULL);    // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -2940,11 +2940,11 @@ void push_float4(cl_mem* CL_memory_buffer, int kernel_arg)
   }
 }
 
-void push_int4(cl_mem* CL_memory_buffer, int kernel_arg)
+void push_int4(int4* int4, int kernel_arg)
 {
   cl_int err;
 
-  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
+  err = clEnqueueAcquireGLObjects(queue, 1, &int4->buffer, 0, NULL, NULL);      // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -2953,11 +2953,11 @@ void push_int4(cl_mem* CL_memory_buffer, int kernel_arg)
   }
 }
 
-void push_point4(cl_mem* CL_memory_buffer, int kernel_arg)
+void push_point4(point4* point4, int kernel_arg)
 {
   cl_int err;
 
-  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "points" to OpenCL kernel...
+  err = clEnqueueAcquireGLObjects(queue, 1, &point4->buffer, 0, NULL, NULL);    // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -2966,11 +2966,11 @@ void push_point4(cl_mem* CL_memory_buffer, int kernel_arg)
   }
 }
 
-void push_color4(cl_mem* CL_memory_buffer, int kernel_arg)
+void push_color4(color4* color4, int kernel_arg)
 {
   cl_int err;
 
-  err = clEnqueueAcquireGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Passing "colors" to OpenCL kernel...
+  err = clEnqueueAcquireGLObjects(queue, 1, &color4->buffer, 0, NULL, NULL);    // Passing "colors" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -2982,23 +2982,11 @@ void push_color4(cl_mem* CL_memory_buffer, int kernel_arg)
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "POP" FUNCTIONS /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void pop_float1(cl_mem* CL_memory_buffer, int kernel_arg)
+void pop_float1(float1* float1, int kernel_arg)
 {
   cl_int err;
 
-  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "points" from OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-}
-void pop_int1(cl_mem* CL_memory_buffer, int kernel_arg)
-{
-  cl_int err;
-
-  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "points" from OpenCL kernel...
+  err = clEnqueueReleaseGLObjects(queue, 1, &float1->buffer, 0, NULL, NULL);    // Releasing "points" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -3007,11 +2995,11 @@ void pop_int1(cl_mem* CL_memory_buffer, int kernel_arg)
   }
 }
 
-void pop_float4(cl_mem* CL_memory_buffer, int kernel_arg)
+void pop_int1(int1* int1, int kernel_arg)
 {
   cl_int err;
 
-  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "points" from OpenCL kernel...
+  err = clEnqueueReleaseGLObjects(queue, 1, &int1->buffer, 0, NULL, NULL);      // Releasing "points" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -3020,11 +3008,11 @@ void pop_float4(cl_mem* CL_memory_buffer, int kernel_arg)
   }
 }
 
-void pop_int4(cl_mem* CL_memory_buffer, int kernel_arg)
+void pop_float4(float4* float4, int kernel_arg)
 {
   cl_int err;
 
-  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "points" from OpenCL kernel...
+  err = clEnqueueReleaseGLObjects(queue, 1, &float4->buffer, 0, NULL, NULL);    // Releasing "points" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -3033,11 +3021,11 @@ void pop_int4(cl_mem* CL_memory_buffer, int kernel_arg)
   }
 }
 
-void pop_point4(cl_mem* CL_memory_buffer, int kernel_arg)
+void pop_int4(int4* int4, int kernel_arg)
 {
   cl_int err;
 
-  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "points" from OpenCL kernel...
+  err = clEnqueueReleaseGLObjects(queue, 1, &int4->buffer, 0, NULL, NULL);      // Releasing "points" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -3046,11 +3034,24 @@ void pop_point4(cl_mem* CL_memory_buffer, int kernel_arg)
   }
 }
 
-void pop_color4(cl_mem* CL_memory_buffer, int kernel_arg)
+void pop_point4(point4* point4, int kernel_arg)
 {
   cl_int err;
 
-  err = clEnqueueReleaseGLObjects(queue, 1, CL_memory_buffer, 0, NULL, NULL);   // Releasing "colors" from OpenCL kernel...
+  err = clEnqueueReleaseGLObjects(queue, 1, &point4->buffer, 0, NULL, NULL);    // Releasing "points" from OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+}
+
+void pop_color4(color4* color4, int kernel_arg)
+{
+  cl_int err;
+
+  err = clEnqueueReleaseGLObjects(queue, 1, &color4->buffer, 0, NULL, NULL);    // Releasing "colors" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -3063,6 +3064,7 @@ void pop_color4(cl_mem* CL_memory_buffer, int kernel_arg)
 //////////////////////////////////////////////////////////////////////////////////
 void save_float(const char* file_name, float* data, int num_data)
 {
-  write_file(const char* file_name, char* file_buffer);
-  ...to be completed.
+  //write_file(file_name, file_buffer);
+  //...to be completed.
+
 }

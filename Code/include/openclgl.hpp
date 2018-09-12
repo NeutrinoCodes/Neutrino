@@ -320,22 +320,22 @@
   void        get_kernel_workgroup_size(cl_kernel kernel, cl_device_id device_id, size_t* local);
   void        execute_kernel();
 
-  void        push_float1(cl_mem* CL_memory_buffer, int kernel_arg);
-  void        push_int1(cl_mem* CL_memory_buffer, int kernel_arg);
-  void        push_float4(cl_mem* CL_memory_buffer, int kernel_arg);
-  void        push_int4(cl_mem* CL_memory_buffer, int kernel_arg);
-  void        push_point4(cl_mem* CL_memory_buffer, int kernel_arg);
-  void        push_color4(cl_mem* CL_memory_buffer, int kernel_arg);
+  void        push_float1(float1* float1, int kernel_arg);
+  void        push_int1(int1* int1, int kernel_arg);
+  void        push_float4(float4* float4, int kernel_arg);
+  void        push_int4(int4* int4, int kernel_arg);
+  void        push_point4(point4* point4, int kernel_arg);
+  void        push_color4(color4* color4, int kernel_arg);
 
   void        enqueue_task();
   void        wait_for_event();
 
-  void        pop_float1(cl_mem* CL_memory_buffer, int kernel_arg);
-  void        pop_int1(cl_mem* CL_memory_buffer, int kernel_arg);
-  void        pop_float4(cl_mem* CL_memory_buffer, int kernel_arg);
-  void        pop_int4(cl_mem* CL_memory_buffer, int kernel_arg);
-  void        pop_point4(cl_mem* CL_memory_buffer, int kernel_arg);
-  void        pop_color4(cl_mem* CL_memory_buffer, int kernel_arg);
+  void        pop_float1(float1* float1, int kernel_arg);
+  void        pop_int1(int1* int1, int kernel_arg);
+  void        pop_float4(float4* float4, int kernel_arg);
+  void        pop_int4(int4* int4, int kernel_arg);
+  void        pop_point4(point4* point4, int kernel_arg);
+  void        pop_color4(color4* color4, int kernel_arg);
 
   void        finish_queue();
   void        release_event();
