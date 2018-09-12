@@ -152,6 +152,26 @@ void load_file(char* neutrino_path, const char* file_name, char** file_buffer, s
   file_buffer[0][*file_size] = '\0';
 }
 
+void write_file(const char* file_name, char* file_buffer)
+{
+	FILE* handle;
+
+	printf("Action: writing file \"%s\"...", file_name);
+
+  handle = fopen(file_name, "a");
+
+  if(handle == NULL)
+  {
+    printf("\nError:  could not write the file!\n");
+    exit(1);
+  }
+
+  fputs(file_buffer, handle);
+  fclose(handle);
+
+	printf(" DONE!\n");
+}
+
 void free_file(char* buffer)
 {
   free(buffer);                                                                                                               ///< Freeing buffer...
