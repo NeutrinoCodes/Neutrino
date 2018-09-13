@@ -51,6 +51,26 @@
 
   extern  GLFWwindow*				window;                                             // Window handle.
 
+  class kernel
+  {
+    private:
+
+    public:
+      kernel();
+      ~kernel();
+
+      cl_kernel               thekernel;
+
+      char*                   source_file;
+      size_t                  source_size;
+      char*                   source;
+
+      cl_program              program;
+      size_t                  size;
+      cl_uint                 dimension;
+      cl_event                event;
+  };
+
   /// **Declaration of "float1" data class:**
   /// "float1" is an array of "num_data" elements.
   class float1
@@ -305,44 +325,43 @@
 
   /// **Destruction of OpenCL computational context:**
   void        destroy_opencl_context();
-  void        kernel_dimensions(cl_uint dimension);
-  void        kernel_size(size_t size);
   void        typeset(text4* text);
-  void        set_float1(float1* data, int kernel_arg);
-  void        set_int1(int1* data, int kernel_arg);
-  void        set_float4(float4* data, int kernel_arg);
-  void        set_int4(int4* data, int kernel_arg);
-  void        set_point4(point4* points, int kernel_arg);
-  void        set_color4(color4* colors, int kernel_arg);
+  void        set_float1(float1* data, kernel* k, int kernel_arg);
+  void        set_int1(int1* data, kernel* k, int kernel_arg);
+  void        set_float4(float4* data, kernel* k, int kernel_arg);
+  void        set_int4(int4* data, kernel* k, int kernel_arg);
+  void        set_point4(point4* points, kernel* k, int kernel_arg);
+  void        set_color4(color4* colors, kernel* k, int kernel_arg);
 
-  void        load_kernel(const char* filename_kernel);
-  void        init_opencl_kernel();
-  void        get_kernel_workgroup_size(cl_kernel kernel, cl_device_id device_id, size_t* local);
-  void        execute_kernel();
+  void        load_kernel(kernel* k);
+  void        init_opencl_kernel(kernel* k);
+  void        get_kernel_workgroup_size(kernel* k, cl_device_id device_id, size_t* local);
+  void        execute_kernel(kernel* k);
+  void        enqueue_task(kernel* k);
+  void        wait_for_event(kernel* k);
+  void        release_event(kernel* k);
+  void        release_kernel(kernel* k);
+  void        release_program(kernel* k);
 
-  void        push_float1(float1* float1, int kernel_arg);
-  void        push_int1(int1* int1, int kernel_arg);
-  void        push_float4(float4* float4, int kernel_arg);
-  void        push_int4(int4* int4, int kernel_arg);
-  void        push_point4(point4* point4, int kernel_arg);
-  void        push_color4(color4* color4, int kernel_arg);
+  void        push_float1(float1* float1, kernel* k, int kernel_arg);
+  void        push_int1(int1* int1, kernel* k, int kernel_arg);
+  void        push_float4(float4* float4, kernel* k, int kernel_arg);
+  void        push_int4(int4* int4, kernel* k, int kernel_arg);
+  void        push_point4(point4* point4, kernel* k, int kernel_arg);
+  void        push_color4(color4* color4, kernel* k, int kernel_arg);
 
-  void        enqueue_task();
-  void        wait_for_event();
 
-  void        pop_float1(float1* float1, int kernel_arg);
-  void        pop_int1(int1* int1, int kernel_arg);
-  void        pop_float4(float4* float4, int kernel_arg);
-  void        pop_int4(int4* int4, int kernel_arg);
-  void        pop_point4(point4* point4, int kernel_arg);
-  void        pop_color4(color4* color4, int kernel_arg);
+
+  void        pop_float1(float1* float1, kernel* k, int kernel_arg);
+  void        pop_int1(int1* int1, kernel* k, int kernel_arg);
+  void        pop_float4(float4* float4, kernel* k, int kernel_arg);
+  void        pop_int4(int4* int4, kernel* k, int kernel_arg);
+  void        pop_point4(point4* point4, kernel* k, int kernel_arg);
+  void        pop_color4(color4* color4, kernel* k, int kernel_arg);
 
   void        finish_queue();
-  void        release_event();
   void        release_mem_object(cl_mem CL_memory_buffer);
-  void        release_kernel();
   void        release_queue();
-  void        release_program();
   void        release_context();
 
 #endif

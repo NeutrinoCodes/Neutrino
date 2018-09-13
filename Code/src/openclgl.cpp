@@ -848,14 +848,24 @@ unsigned int            num_devices;
 cl_context_properties*  properties;
 cl_context              context;
 cl_command_queue        queue;
-cl_kernel               kernel;
-char*                   kernel_source;
-size_t                  size_kernel;
-cl_program              kernel_program;
-size_t                  size_global;
-cl_uint                 dim_kernel;
-cl_event                kernel_event;
 
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////// OPENCL CLASSES /////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+kernel::kernel()
+{
+  thekernel = NULL;
+  source = NULL;
+  program = NULL;
+  size = 0;
+  dimension = 0;
+  event = NULL;
+}
+
+kernel::~kernel()
+{
+
+}
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// DATA CLASSES ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
@@ -2190,23 +2200,13 @@ void init_opencl_context()
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////// OPENCL KERNEL FUNCTIONS ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void kernel_dimensions(cl_uint dimension)
-{
-  dim_kernel = dimension;
-}
-
-void kernel_size(size_t size)
-{
-  size_global = size;
-}
-
-void load_kernel(const char* filename_kernel)
+void load_kernel(kernel* k)
 {
   FILE* handle;                                                                 // Input file handle.
 
   printf("Action: loading OpenCL kernel from file... ");
 
-  handle = fopen(filename_kernel, "rb");                                        // Opening OpenCL kernel source file...
+  handle = fopen(k->source_file, "rb");                                   // Opening OpenCL kernel source file...
 
   if(handle == NULL)
   {
@@ -2215,34 +2215,34 @@ void load_kernel(const char* filename_kernel)
   }
 
   fseek(handle, 0, SEEK_END);                                                   // Seeking end of file...
-  size_kernel = (size_t)ftell(handle);                                          // Measuring file size...
+  k->source_size = (size_t)ftell(handle);                                 // Measuring file size...
   rewind(handle);                                                               // Rewinding to the beginning of the file...
-  kernel_source = (char*)malloc(size_kernel + 1);                               // Allocating buffer for reading the file...
+  k->source = (char*)malloc(k->source_size + 1);                             // Allocating buffer for reading the file...
 
-  if (!kernel_source)
+  if (!(k->source))
   {
     printf("\nError:  unable to allocate buffer memory!\n");
     exit(EXIT_FAILURE);
   }
 
-  fread(kernel_source, sizeof(char), size_kernel, handle);                      // Reading file (OpenCL kernel source)...
-  kernel_source[size_kernel] = '\0';                                            // Null-terminating buffer...
+  fread(k->source, sizeof(char), k->source_size, handle);           // Reading file (OpenCL kernel source)...
+  k->source[k->source_size] = '\0';                                 // Null-terminating buffer...
   fclose(handle);                                                               // Closing file.
 
   printf("DONE!\n");
 }
 
-void init_opencl_kernel()
+void init_opencl_kernel(kernel* k)
 {
   cl_int err;
   size_t log_size;
   char* log;
 
   printf("Action: initializing OpenCL kernel... ");
-  kernel_program = clCreateProgramWithSource(context,                           // Creating OpenCL program from its source...
+  k->program = clCreateProgramWithSource(context,                         // Creating OpenCL program from its source...
                                              1,
-                                             (const char **) &kernel_source,
-                                             &size_kernel, &err);
+                                             (const char**)&k->source,
+                                             &k->source_size, &err);
 
   if(err != CL_SUCCESS)
   {
@@ -2250,21 +2250,28 @@ void init_opencl_kernel()
     exit(err);
   }
 
-  free(kernel_source);                                                          // Freeing OpenCL kernel buffer...
+  //free(k->source);                                                        // Freeing OpenCL kernel buffer...
 
-  err = clBuildProgram(kernel_program, 1, devices, "", NULL, NULL);             // Building OpenCL program...
+  err = clBuildProgram(k->program, 1, devices, "", NULL, NULL);           // Building OpenCL program...
 
   // Checking compiled kernel:
   if (err != CL_SUCCESS)
   {
     printf("\nError:  %s\n", get_error(err));
 
-    clGetProgramBuildInfo(kernel_program,                                       // Getting compiler information...
-                          devices[0],
-                          CL_PROGRAM_BUILD_LOG,
-                          0,
-                          NULL,
-                          &log_size);
+    err = clGetProgramBuildInfo(k->program,                               // Getting compiler information...
+                                devices[0],
+                                CL_PROGRAM_BUILD_LOG,
+                                0,
+                                NULL,
+                                &log_size);
+
+    if(err != CL_SUCCESS)
+    {
+      printf("\nError:  %s\n", get_error(err));
+      exit(err);
+    }
+
     log = (char*) calloc(log_size + 1, sizeof(char));                           // Allocating log buffer...
 
     if (!log)
@@ -2273,11 +2280,11 @@ void init_opencl_kernel()
       exit(EXIT_FAILURE);
     }
 
-    clGetProgramBuildInfo(kernel_program, devices[0],                           // Reading log...
-                          CL_PROGRAM_BUILD_LOG,
-                          log_size + 1,
-                          log,
-                          NULL);
+    err = clGetProgramBuildInfo(k->program, devices[0],                   // Reading log...
+                                CL_PROGRAM_BUILD_LOG,
+                                log_size + 1,
+                                log,
+                                NULL);
 
     if(err != CL_SUCCESS)
     {
@@ -2298,7 +2305,7 @@ void init_opencl_kernel()
     exit(err);
   }
 
-  kernel = clCreateKernel(kernel_program, KERNEL_NAME, &err);                   // Creating OpenCL kernel...
+  k->thekernel = clCreateKernel(k->program, KERNEL_NAME, &err);     // Creating OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -2309,12 +2316,12 @@ void init_opencl_kernel()
   printf("DONE!\n");
 }
 
-void get_kernel_workgroup_size(cl_kernel kernel, cl_device_id device_id, size_t* local)
+void get_kernel_workgroup_size(kernel* k, cl_device_id device_id, size_t* local)
 {
     cl_int err;
 
     printf("Action: getting maximum kernel workgroup size... ");
-    err = clGetKernelWorkGroupInfo(kernel,                                      // Getting OpenCL kern linformation...
+    err = clGetKernelWorkGroupInfo(k->thekernel,                          // Getting OpenCL kern linformation...
                                    device_id,
                                    CL_KERNEL_WORK_GROUP_SIZE,
                                    sizeof(*local),
@@ -2330,19 +2337,19 @@ void get_kernel_workgroup_size(cl_kernel kernel, cl_device_id device_id, size_t*
     printf("DONE!\n");
 }
 
-void execute_kernel()
+void execute_kernel(kernel* k)
 {
   cl_int err;
 
   err = clEnqueueNDRangeKernel(queue,                                           // Enqueueing OpenCL kernel (as a single task)...
-                               kernel,
-                               dim_kernel,
+                               k->thekernel,
+                               k->dimension,
                                NULL,
-                               &size_global,
+                               &k->size,
                                NULL,
                                0,
                                NULL,
-                               &kernel_event);
+                               &k->event);
 
   if(err != CL_SUCCESS)
   {
@@ -2352,12 +2359,12 @@ void execute_kernel()
 
 }
 
-void enqueue_task()
+void enqueue_task(kernel* k)
 {
     cl_int err;
 
     //printf("Action: enqueueing OpenCL task... ");
-    err = clEnqueueTask(queue, kernel, 0, NULL, &kernel_event);                 // Enqueueing OpenCL kernel as task (for multiple kernels)...
+    err = clEnqueueTask(queue, k->thekernel, 0, NULL, &k->event);                 // Enqueueing OpenCL kernel as task (for multiple kernels)...
 
     if(err != CL_SUCCESS)
     {
@@ -2368,12 +2375,12 @@ void enqueue_task()
     //printf("DONE!\n");
 }
 
-void wait_for_event()
+void wait_for_event(kernel* k)
 {
     cl_int err;
 
     //printf("Action: waiting for OpenCL events... ");
-    err = clWaitForEvents(1, &kernel_event);                                    // Waiting for OpenCL event (for multiple kernel tasks)...
+    err = clWaitForEvents(1, &k->event);                                    // Waiting for OpenCL event (for multiple kernel tasks)...
 
     if(err != CL_SUCCESS)
     {
@@ -2416,12 +2423,12 @@ void release_queue()
   printf("DONE!\n");
 }
 
-void release_event()
+void release_event(kernel* k)
 {
     cl_int err;
 
     //printf("Action: decrementing the OpenCL event reference count... ");
-    err = clReleaseEvent(kernel_event);                                         // Releasing OpenCL event...
+    err = clReleaseEvent(k->event);                                         // Releasing OpenCL event...
 
     if(err != CL_SUCCESS)
     {
@@ -2452,12 +2459,12 @@ void release_mem_object(cl_mem CL_memory_buffer)
   printf("DONE!\n");
 }
 
-void release_kernel()
+void release_kernel(kernel* k)
 {
   cl_int err;
 
   printf("Action: releasing the OpenCL command queue... ");
-  err = clReleaseKernel(kernel);                                                // Releasing OpenCL kernel...
+  err = clReleaseKernel(k->thekernel);                                                // Releasing OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -2468,13 +2475,13 @@ void release_kernel()
   printf("DONE!\n");
 }
 
-void release_program()
+void release_program(kernel* k)
 {
   cl_int err;
 
   printf("Action: releasing the OpenCL program... ");
 
-  err = clReleaseProgram(kernel_program);                                       // Releasing OpenCL program...
+  err = clReleaseProgram(k->program);                                       // Releasing OpenCL program...
 
   if(err != CL_SUCCESS)
   {
@@ -2505,9 +2512,9 @@ void release_context()
 void destroy_opencl_context()
 {
   finish_queue();                                                               // Finishing OpenCL queue...
-  release_kernel();                                                             // Releasing OpenCL kernel...
+
   release_queue();                                                              // Releasing OpenCL queue...
-  release_program();                                                            // Releasing OpenCL program...
+
   release_context();                                                            // Releasing OpenCL context...
   free(devices);                                                                // Freeing OpenCL devices...
   free(platforms);                                                              // Freeing OpenCL platforms...
@@ -2575,12 +2582,14 @@ void typeset(text4* text)
 
   delete[] unfolded_glyph_data;
   delete[] unfolded_color_data;
+
+  printf("DONE!\n");
 }
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "SET" FUNCTIONS ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void set_float1(float1* data, int kernel_arg)
+void set_float1(float1* data, kernel* k, int kernel_arg)
 {
   cl_int err;
   int i;
@@ -2618,7 +2627,7 @@ void set_float1(float1* data, int kernel_arg)
     exit(EXIT_FAILURE);
   }
 
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
+  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
 
   if(err < 0)
   {
@@ -2631,7 +2640,7 @@ void set_float1(float1* data, int kernel_arg)
   printf("DONE!\n");
 }
 
-void set_int1(int1* data, int kernel_arg)
+void set_int1(int1* data, kernel* k, int kernel_arg)
 {
   cl_int err;
   int i;
@@ -2669,7 +2678,7 @@ void set_int1(int1* data, int kernel_arg)
     exit(EXIT_FAILURE);
   }
 
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
+  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
 
   if(err < 0)
   {
@@ -2682,7 +2691,7 @@ void set_int1(int1* data, int kernel_arg)
   printf("DONE!\n");
 }
 
-void set_float4(float4* data, int kernel_arg)
+void set_float4(float4* data, kernel* k, int kernel_arg)
 {
   cl_int err;
   int i;
@@ -2723,7 +2732,7 @@ void set_float4(float4* data, int kernel_arg)
     exit(EXIT_FAILURE);
   }
 
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
+  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
 
   if(err < 0)
   {
@@ -2736,7 +2745,7 @@ void set_float4(float4* data, int kernel_arg)
   printf("DONE!\n");
 }
 
-void set_int4(int4* data, int kernel_arg)
+void set_int4(int4* data, kernel* k, int kernel_arg)
 {
   cl_int err;
   int i;
@@ -2777,7 +2786,7 @@ void set_int4(int4* data, int kernel_arg)
     exit(EXIT_FAILURE);
   }
 
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
+  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
 
   if(err < 0)
   {
@@ -2790,14 +2799,14 @@ void set_int4(int4* data, int kernel_arg)
   printf("DONE!\n");
 }
 
-void set_point4(point4* points, int kernel_arg)
+void set_point4(point4* points, kernel* k, int kernel_arg)
 {
   cl_int err;
   int i;
   GLfloat* unfolded_data;
   GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
 
-  printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
+  printf("Action: setting argument #%d to GPU... ", (int)kernel_arg);
 
   unfolded_data = new GLfloat[4*points->size];
 
@@ -2831,7 +2840,7 @@ void set_point4(point4* points, int kernel_arg)
     exit(EXIT_FAILURE);
   }
 
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &points->buffer);    // Setting buffer as OpenCL kernel argument...
+  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &points->buffer);    // Setting buffer as OpenCL kernel argument...
 
   if(err < 0)
   {
@@ -2844,14 +2853,14 @@ void set_point4(point4* points, int kernel_arg)
   printf("DONE!\n");
 }
 
-void set_color4(color4* colors, int kernel_arg)
+void set_color4(color4* colors, kernel* k, int kernel_arg)
 {
   cl_int err;
   int i;
   GLfloat* unfolded_data;
   GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
 
-  printf("Action: pushing argument #%d to GPU... ", (int)kernel_arg);
+  printf("Action: setting argument #%d to GPU... ", (int)kernel_arg);
 
   unfolded_data = new GLfloat[4*colors->size];
 
@@ -2885,7 +2894,7 @@ void set_color4(color4* colors, int kernel_arg)
     exit(EXIT_FAILURE);
   }
 
-  err = clSetKernelArg(kernel, kernel_arg, sizeof(cl_mem), &colors->buffer);    // Setting buffer as OpenCL kernel argument...
+  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &colors->buffer);    // Setting buffer as OpenCL kernel argument...
 
   if(err < 0)
   {
@@ -2901,7 +2910,7 @@ void set_color4(color4* colors, int kernel_arg)
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "PUSH" FUNCTIONS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void push_float1(float1* float1, int kernel_arg)
+void push_float1(float1* float1, kernel* k, int kernel_arg)
 {
   cl_int err;
 
@@ -2914,7 +2923,7 @@ void push_float1(float1* float1, int kernel_arg)
   }
 }
 
-void push_int1(int1* int1, int kernel_arg)
+void push_int1(int1* int1, kernel* k, int kernel_arg)
 {
   cl_int err;
 
@@ -2927,7 +2936,7 @@ void push_int1(int1* int1, int kernel_arg)
   }
 }
 
-void push_float4(float4* float4, int kernel_arg)
+void push_float4(float4* float4, kernel* k, int kernel_arg)
 {
   cl_int err;
 
@@ -2940,7 +2949,7 @@ void push_float4(float4* float4, int kernel_arg)
   }
 }
 
-void push_int4(int4* int4, int kernel_arg)
+void push_int4(int4* int4, kernel* k, int kernel_arg)
 {
   cl_int err;
 
@@ -2953,7 +2962,7 @@ void push_int4(int4* int4, int kernel_arg)
   }
 }
 
-void push_point4(point4* point4, int kernel_arg)
+void push_point4(point4* point4, kernel* k, int kernel_arg)
 {
   cl_int err;
 
@@ -2966,7 +2975,7 @@ void push_point4(point4* point4, int kernel_arg)
   }
 }
 
-void push_color4(color4* color4, int kernel_arg)
+void push_color4(color4* color4, kernel* k, int kernel_arg)
 {
   cl_int err;
 
@@ -2982,7 +2991,7 @@ void push_color4(color4* color4, int kernel_arg)
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "POP" FUNCTIONS /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void pop_float1(float1* float1, int kernel_arg)
+void pop_float1(float1* float1, kernel* k, int kernel_arg)
 {
   cl_int err;
 
@@ -2995,7 +3004,7 @@ void pop_float1(float1* float1, int kernel_arg)
   }
 }
 
-void pop_int1(int1* int1, int kernel_arg)
+void pop_int1(int1* int1, kernel* k, int kernel_arg)
 {
   cl_int err;
 
@@ -3008,7 +3017,7 @@ void pop_int1(int1* int1, int kernel_arg)
   }
 }
 
-void pop_float4(float4* float4, int kernel_arg)
+void pop_float4(float4* float4, kernel* k, int kernel_arg)
 {
   cl_int err;
 
@@ -3021,7 +3030,7 @@ void pop_float4(float4* float4, int kernel_arg)
   }
 }
 
-void pop_int4(int4* int4, int kernel_arg)
+void pop_int4(int4* int4, kernel* k, int kernel_arg)
 {
   cl_int err;
 
@@ -3034,7 +3043,7 @@ void pop_int4(int4* int4, int kernel_arg)
   }
 }
 
-void pop_point4(point4* point4, int kernel_arg)
+void pop_point4(point4* point4, kernel* k, int kernel_arg)
 {
   cl_int err;
 
@@ -3047,7 +3056,7 @@ void pop_point4(point4* point4, int kernel_arg)
   }
 }
 
-void pop_color4(color4* color4, int kernel_arg)
+void pop_color4(color4* color4, kernel* k, int kernel_arg)
 {
   cl_int err;
 
