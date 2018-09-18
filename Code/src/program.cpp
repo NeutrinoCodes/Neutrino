@@ -17,7 +17,9 @@
 kernel* k                 = new kernel();
 kernel* k2                = new kernel();
 
+
 float4* position_old      = new float4(NUM_POINTS);                             // Old position.
+/*
 float4* velocity_old      = new float4(NUM_POINTS);                             // Old velocity.
 float4* acceleration_old  = new float4(NUM_POINTS);                             // Old acceleration.
 
@@ -39,7 +41,7 @@ int1* index_PL            = new int1(NUM_POINTS);                               
 int1* index_PD            = new int1(NUM_POINTS);                               // Down particle.
 
 float4* freedom           = new float4(NUM_POINTS);                             // Freedom/constrain flag.
-
+*/
 text4*  text              = new text4("neutrino!", 1.0f, 1.0f, 1.0f, 1.0f);
 
 float tick;
@@ -79,6 +81,7 @@ void setup()
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// Preparing arrays... /////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
+  /*
   y = Y_MIN;
 
   for (j = 0; j < SIZE_Y; j++)
@@ -258,11 +261,8 @@ void setup()
   set_int1(index_PD, k, 14);                                                       // Setting kernel argument #14...
   set_float4(freedom, k, 15);                                                      // Setting kernel argument #15...
 
-
   set_point4(position, k2, 0);                                                      // Setting kernel argument #0...
-  set_point4(position, k, 0);                                                      // Setting kernel argument #0...
-  //set_color4(color, k2, 1);                                                         // Setting kernel argument #1...
-  /*
+  set_color4(color, k2, 1);                                                         // Setting kernel argument #1...
   set_float4(position_old, k2, 2);                                                  // Setting kernel argument #2...
   set_float4(velocity, k2, 3);                                                      // Setting kernel argument #3...
   set_float4(acceleration, k2, 4);                                                  // Setting kernel argument #4...
@@ -278,11 +278,11 @@ void setup()
   set_int1(index_PD, k2, 14);                                                       // Setting kernel argument #14...
   set_float4(freedom, k2, 15);                                                      // Setting kernel argument #15...
   */
-
 }
 
 void loop()
 {
+  /*
   push_point4(position, k, 0);                                                     // Pushing kernel argument #0...
   push_color4(color, k ,1);                                                        // Pushing kernel argument #1...
   push_float4(position_old, k, 2);                                                 // Pushing kernel argument #2...
@@ -365,12 +365,13 @@ void loop()
 
   */
 
-  plot(position, color, STYLE_POINT);                                           // Plotting points...
+  //plot(position, color, STYLE_POINT);                                           // Plotting points...
   print(text);                                                                  // Printing text...
 }
 
 void terminate()
 {
+  /*
   delete position;
   delete color;
   delete velocity;
@@ -388,6 +389,7 @@ void terminate()
   delete index_PL;
   delete index_PR;
   delete index_PU;
+  */
   delete text;
   release_kernel(k);                                                             // Releasing OpenCL kernel...
   release_program(k);                                                            // Releasing OpenCL program...

@@ -79,7 +79,7 @@
       int               err;                                                    // Declaring "error" code...
       unsigned int      i;                                                      // Declaring "i" index...
       // NOTE: There is no need for "unfolded-data" because these data are 1xN.
-      GLuint LAYOUT_0 = 0;                                                      // "layout = 0" attribute in vertex shader.
+      GLuint            LAYOUT_0;                                               // "layout = 0" attribute in vertex shader.
 
     public:
       float1(int num_data);
@@ -101,7 +101,7 @@
       int               err;
       unsigned int      i;
       // NOTE: There is no need for "unfolded-data" because these data are 1xN.
-      GLuint LAYOUT_0 = 0;                                                      // "layout = 0" attribute in vertex shader.
+      GLuint            LAYOUT_0;                                               // "layout = 0" attribute in vertex shader.
 
     public:
       int1(int num_data);
@@ -124,8 +124,8 @@
     private:
       int               err;                                                    // Declaring "error" code...
       unsigned int      i;                                                      // Declaring "i" index...
-      GLfloat* unfolded_data;                                                   // Declaring unfolded data array...
-      GLuint LAYOUT_0 = 0;                                                      // "layout = 0" attribute in vertex shader.
+      GLfloat*          data;                                                   // Declaring unfolded data array...
+      GLuint            LAYOUT_0;                                               // "layout = 0" attribute in vertex shader.
 
     public:
       float4(int num_data);
@@ -151,8 +151,8 @@
     private:
       int               err;
       unsigned int      i;
-      GLint* unfolded_data;                                                     // Declaring unfolded data array...
-      GLuint LAYOUT_0 = 0;                                                      // "layout = 0" attribute in vertex shader.
+      GLint*            data;                                                   // Declaring unfolded data array...
+      GLuint            LAYOUT_0;                                               // "layout = 0" attribute in vertex shader.
 
     public:
       int4(int num_data);
@@ -179,8 +179,8 @@
     private:
       int               err;
       unsigned int      i;
-      GLfloat* unfolded_data;
-      GLuint LAYOUT_0 = 0;                                                      // "layout = 0" attribute in vertex shader.
+      GLfloat*          data;
+      GLuint            LAYOUT_0;                                               // "layout = 0" attribute in vertex shader.
 
     public:
       point4(int num_data);
@@ -207,8 +207,8 @@
     private:
       int               err;
       unsigned int      i;
-      GLfloat* unfolded_data;
-      GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
+      GLfloat*          data;
+      GLuint            LAYOUT_1 = 1;                                           // "layout = 1" attribute in vertex shader.
 
     public:
       color4(int num_data);
