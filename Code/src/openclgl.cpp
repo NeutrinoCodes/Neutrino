@@ -882,6 +882,29 @@ float1::float1(int num_data)
   {
     x[i] = 0.0f;                                                                // Setting "x" data...
   }
+
+  glGenVertexArrays(1, &data->vao);                                             // Generating VAO...
+  glBindVertexArray(data->vao);                                                 // Binding VAO...
+  glGenBuffers(1, &data->vbo);                                                  // Generating VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*sizeof(GLfloat)*(data->size),
+               data->x,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
+  glVertexAttribPointer(LAYOUT_0, 1, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
+  data->buffer = clCreateFromGLBuffer(context,                                  // Creating OpenCL buffer from OpenGL buffer...
+                                        CL_MEM_READ_WRITE,
+                                        data->vbo,
+                                        &err);
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
+  }
+
 }
 
 float1::~float1()
@@ -905,6 +928,28 @@ int1::int1(int num_data)
   for (i = 0; i < num_data; i++)                                                // Filling arrays with default data:
   {
     x[i] = 0;                                                                   // Setting "x" data...
+  }
+
+  glGenVertexArrays(1, &data->vao);                                             // Generating VAO...
+  glBindVertexArray(data->vao);                                                 // Binding VAO...
+  glGenBuffers(1, &data->vbo);                                                  // Generating VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*sizeof(GLint)*(data->size),
+               data->x,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
+  glVertexAttribPointer(LAYOUT_0, 1, GL_INT, GL_FALSE, 0, 0);                   // Specifying the format for "layout = 0" attribute in vertex shader...
+  data->buffer = clCreateFromGLBuffer(context,                                  // Creating OpenCL buffer from OpenGL buffer...
+                                        CL_MEM_READ_WRITE,
+                                        data->vbo,
+                                        &err);
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
   }
 }
 
@@ -936,6 +981,41 @@ float4::float4(int num_data)
     z[i] = 0.0f;                                                                // Setting "z" data...
     w[i] = 1.0f;                                                                // Setting "w" data...
   }
+
+  unfolded_data = new GLfloat[4*data->size];                                    // Creating array for unfolded data...
+
+  for (i = 0; i < data->size; i++)                                              // Filling unfolded data array...
+  {
+    unfolded_data[4*i + 0] = data->x[i];                                        // Filling "x"...
+    unfolded_data[4*i + 1] = data->y[i];                                        // Filling "y"...
+    unfolded_data[4*i + 2] = data->z[i];                                        // Filling "z"...
+    unfolded_data[4*i + 3] = data->w[i];                                        // Filling "w"...
+  }
+
+  glGenVertexArrays(1, &data->vao);                                             // Generating VAO...
+  glBindVertexArray(data->vao);                                                 // Binding VAO...
+  glGenBuffers(1, &data->vbo);                                                  // Generating VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*sizeof(GLfloat)*(data->size),
+               unfolded_data,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
+  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
+  data->buffer = clCreateFromGLBuffer(context,                                  // Creating OpenCL buffer from OpenGL buffer...
+                                        CL_MEM_READ_WRITE,
+                                        data->vbo,
+                                        &err);
+
+  delete[] unfolded_data;                                                       // Deleting array for unfolded data...
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
+  }
+
 }
 
 float4::~float4()
@@ -968,6 +1048,40 @@ int4::int4(int num_data)
     y[i] = 0;                                                                   // Setting "y" data...
     z[i] = 0;                                                                   // Setting "z" data...
     w[i] = 1;                                                                   // Setting "w" data...
+  }
+
+  unfolded_data = new GLint[4*data->size];
+
+  for (i = 0; i < data->size; i++)
+  {
+    unfolded_data[4*i + 0] = data->x[i];
+    unfolded_data[4*i + 1] = data->y[i];
+    unfolded_data[4*i + 2] = data->z[i];
+    unfolded_data[4*i + 3] = data->w[i];
+  }
+
+  glGenVertexArrays(1, &data->vao);                                             // Generating VAO...
+  glBindVertexArray(data->vao);                                                 // Binding VAO...
+  glGenBuffers(1, &data->vbo);                                                  // Generating VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*sizeof(GLint)*(data->size),
+               unfolded_data,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
+  glVertexAttribPointer(LAYOUT_0, 4, GL_INT, GL_FALSE, 0, 0);                   // Specifying the format for "layout = 0" attribute in vertex shader...
+  data->buffer = clCreateFromGLBuffer(context,                                  // Creating OpenCL buffer from OpenGL buffer...
+                                        CL_MEM_READ_WRITE,
+                                        data->vbo,
+                                        &err);
+
+  delete[] unfolded_data;                                                       // Deleting array for unfolded data...
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
   }
 }
 
@@ -1002,6 +1116,40 @@ point4::point4(int num_data)
     z[i] = 0.0f;                                                                // Setting "z" data...
     w[i] = 1.0f;                                                                // Setting "w" data...
   }
+
+  unfolded_data = new GLfloat[4*points->size];
+
+  for (i = 0; i < points->size; i++)
+  {
+    unfolded_data[4*i + 0] = points->x[i];
+    unfolded_data[4*i + 1] = points->y[i];
+    unfolded_data[4*i + 2] = points->z[i];
+    unfolded_data[4*i + 3] = points->w[i];
+  }
+
+  glGenVertexArrays(1, &points->vao);                                           // Generating VAO...
+  glBindVertexArray(points->vao);                                               // Binding VAO...
+  glGenBuffers(1, &points->vbo);                                                // Generating VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, points->vbo);                                   // Binding VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*sizeof(GLfloat)*(points->size),
+               unfolded_data,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, points->vbo);                                   // Binding VBO...
+  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
+  points->buffer = clCreateFromGLBuffer(context,                                // Creating OpenCL buffer from OpenGL buffer...
+                                        CL_MEM_READ_WRITE,
+                                        points->vbo,
+                                        &err);
+
+  delete[] unfolded_data;                                                       // Deleting array for unfolded data...
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
+  }
 }
 
 point4::~point4()
@@ -1034,6 +1182,40 @@ color4::color4(int num_data)
     g[i] = 0.0f;                                                                // Setting "g" data...
     b[i] = 0.0f;                                                                // Setting "b" data...
     a[i] = 1.0f;                                                                // Setting "a" data...
+  }
+
+  unfolded_data = new GLfloat[4*colors->size];
+
+  for (i = 0; i < colors->size; i++)
+  {
+    unfolded_data[4*i + 0] = colors->r[i];
+    unfolded_data[4*i + 1] = colors->g[i];
+    unfolded_data[4*i + 2] = colors->b[i];
+    unfolded_data[4*i + 3] = colors->a[i];
+  }
+
+  glGenVertexArrays(1, &colors->vao);                                           // Generating VAO...
+  glBindVertexArray(colors->vao);                                               // Binding VAO...
+  glGenBuffers(1, &colors->vbo);                                                // Generating VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, colors->vbo);                                   // Binding VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*sizeof(GLfloat)*(colors->size),
+               unfolded_data,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, colors->vbo);                                   // Binding VBO...
+  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
+  colors->buffer = clCreateFromGLBuffer(context,                                // Creating OpenCL buffer from OpenGL buffer...
+                                        CL_MEM_READ_WRITE,
+                                        colors->vbo,
+                                        &err);
+
+  delete[] unfolded_data;                                                       // Deleting array for unfolded data...
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
   }
 }
 
@@ -2592,40 +2774,8 @@ void typeset(text4* text)
 void set_float1(float1* data, kernel* k, int kernel_arg)
 {
   cl_int err;
-  int i;
-  GLfloat* unfolded_data;
-  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
 
   printf("Action: setting argument #%d on GPU... ", (int)kernel_arg);
-
-  unfolded_data = new GLfloat[data->size];
-
-  for (i = 0; i < data->size; i++)
-  {
-    unfolded_data[i] = data->x[i];
-  }
-
-  glGenVertexArrays(1, &data->vao);                                             // Generating VAO...
-  glBindVertexArray(data->vao);                                                 // Binding VAO...
-  glGenBuffers(1, &data->vbo);                                                  // Generating VBO...
-  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
-  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
-               4*sizeof(GLfloat)*(data->size),
-               unfolded_data,
-               GL_DYNAMIC_DRAW);
-  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
-  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
-  glVertexAttribPointer(LAYOUT_0, 1, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
-  data->buffer = clCreateFromGLBuffer(context,                                  // Creating OpenCL buffer from OpenGL buffer...
-                                        CL_MEM_READ_WRITE,
-                                        data->vbo,
-                                        &err);
-
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
 
   err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
 
@@ -2634,8 +2784,6 @@ void set_float1(float1* data, kernel* k, int kernel_arg)
     printf("\nError:  %s\n", get_error(err));
     exit(EXIT_FAILURE);
   }
-
-  delete[] unfolded_data;
 
   printf("DONE!\n");
 }
@@ -2643,40 +2791,8 @@ void set_float1(float1* data, kernel* k, int kernel_arg)
 void set_int1(int1* data, kernel* k, int kernel_arg)
 {
   cl_int err;
-  int i;
-  GLint* unfolded_data;
-  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
 
   printf("Action: setting argument #%d on GPU... ", (int)kernel_arg);
-
-  unfolded_data = new GLint[data->size];
-
-  for (i = 0; i < data->size; i++)
-  {
-    unfolded_data[i] = data->x[i];
-  }
-
-  glGenVertexArrays(1, &data->vao);                                             // Generating VAO...
-  glBindVertexArray(data->vao);                                                 // Binding VAO...
-  glGenBuffers(1, &data->vbo);                                                  // Generating VBO...
-  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
-  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
-               4*sizeof(GLint)*(data->size),
-               unfolded_data,
-               GL_DYNAMIC_DRAW);
-  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
-  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
-  glVertexAttribPointer(LAYOUT_0, 1, GL_INT, GL_FALSE, 0, 0);                   // Specifying the format for "layout = 0" attribute in vertex shader...
-  data->buffer = clCreateFromGLBuffer(context,                                  // Creating OpenCL buffer from OpenGL buffer...
-                                        CL_MEM_READ_WRITE,
-                                        data->vbo,
-                                        &err);
-
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
 
   err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
 
@@ -2685,8 +2801,6 @@ void set_int1(int1* data, kernel* k, int kernel_arg)
     printf("\nError:  %s\n", get_error(err));
     exit(EXIT_FAILURE);
   }
-
-  delete[] unfolded_data;
 
   printf("DONE!\n");
 }
@@ -2694,43 +2808,8 @@ void set_int1(int1* data, kernel* k, int kernel_arg)
 void set_float4(float4* data, kernel* k, int kernel_arg)
 {
   cl_int err;
-  int i;
-  GLfloat* unfolded_data;
-  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
 
   printf("Action: setting argument #%d on GPU... ", (int)kernel_arg);
-
-  unfolded_data = new GLfloat[4*data->size];
-
-  for (i = 0; i < data->size; i++)
-  {
-    unfolded_data[4*i + 0] = data->x[i];
-    unfolded_data[4*i + 1] = data->y[i];
-    unfolded_data[4*i + 2] = data->z[i];
-    unfolded_data[4*i + 3] = data->w[i];
-  }
-
-  glGenVertexArrays(1, &data->vao);                                             // Generating VAO...
-  glBindVertexArray(data->vao);                                                 // Binding VAO...
-  glGenBuffers(1, &data->vbo);                                                  // Generating VBO...
-  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
-  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
-               4*sizeof(GLfloat)*(data->size),
-               unfolded_data,
-               GL_DYNAMIC_DRAW);
-  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
-  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
-  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
-  data->buffer = clCreateFromGLBuffer(context,                                  // Creating OpenCL buffer from OpenGL buffer...
-                                        CL_MEM_READ_WRITE,
-                                        data->vbo,
-                                        &err);
-
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
 
   err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
 
@@ -2739,8 +2818,6 @@ void set_float4(float4* data, kernel* k, int kernel_arg)
     printf("\nError:  %s\n", get_error(err));
     exit(EXIT_FAILURE);
   }
-
-  delete[] unfolded_data;
 
   printf("DONE!\n");
 }
@@ -2748,43 +2825,8 @@ void set_float4(float4* data, kernel* k, int kernel_arg)
 void set_int4(int4* data, kernel* k, int kernel_arg)
 {
   cl_int err;
-  int i;
-  GLint* unfolded_data;
-  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
 
   printf("Action: setting argument #%d on GPU... ", (int)kernel_arg);
-
-  unfolded_data = new GLint[4*data->size];
-
-  for (i = 0; i < data->size; i++)
-  {
-    unfolded_data[4*i + 0] = data->x[i];
-    unfolded_data[4*i + 1] = data->y[i];
-    unfolded_data[4*i + 2] = data->z[i];
-    unfolded_data[4*i + 3] = data->w[i];
-  }
-
-  glGenVertexArrays(1, &data->vao);                                             // Generating VAO...
-  glBindVertexArray(data->vao);                                                 // Binding VAO...
-  glGenBuffers(1, &data->vbo);                                                  // Generating VBO...
-  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
-  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
-               4*sizeof(GLint)*(data->size),
-               unfolded_data,
-               GL_DYNAMIC_DRAW);
-  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
-  glBindBuffer(GL_ARRAY_BUFFER, data->vbo);                                     // Binding VBO...
-  glVertexAttribPointer(LAYOUT_0, 4, GL_INT, GL_FALSE, 0, 0);                   // Specifying the format for "layout = 0" attribute in vertex shader...
-  data->buffer = clCreateFromGLBuffer(context,                                  // Creating OpenCL buffer from OpenGL buffer...
-                                        CL_MEM_READ_WRITE,
-                                        data->vbo,
-                                        &err);
-
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
 
   err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
 
@@ -2794,51 +2836,14 @@ void set_int4(int4* data, kernel* k, int kernel_arg)
     exit(EXIT_FAILURE);
   }
 
-  delete[] unfolded_data;
-
   printf("DONE!\n");
 }
 
 void set_point4(point4* points, kernel* k, int kernel_arg)
 {
   cl_int err;
-  int i;
-  GLfloat* unfolded_data;
-  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
 
-  printf("Action: setting argument #%d to GPU... ", (int)kernel_arg);
-
-  unfolded_data = new GLfloat[4*points->size];
-
-  for (i = 0; i < points->size; i++)
-  {
-    unfolded_data[4*i + 0] = points->x[i];
-    unfolded_data[4*i + 1] = points->y[i];
-    unfolded_data[4*i + 2] = points->z[i];
-    unfolded_data[4*i + 3] = points->w[i];
-  }
-
-  glGenVertexArrays(1, &points->vao);                                           // Generating VAO...
-  glBindVertexArray(points->vao);                                               // Binding VAO...
-  glGenBuffers(1, &points->vbo);                                                // Generating VBO...
-  glBindBuffer(GL_ARRAY_BUFFER, points->vbo);                                   // Binding VBO...
-  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
-               4*sizeof(GLfloat)*(points->size),
-               unfolded_data,
-               GL_DYNAMIC_DRAW);
-  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
-  glBindBuffer(GL_ARRAY_BUFFER, points->vbo);                                   // Binding VBO...
-  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
-  points->buffer = clCreateFromGLBuffer(context,                                // Creating OpenCL buffer from OpenGL buffer...
-                                        CL_MEM_READ_WRITE,
-                                        points->vbo,
-                                        &err);
-
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
+  printf("Action: setting argument #%d on GPU... ", (int)kernel_arg);
 
   err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &points->buffer);    // Setting buffer as OpenCL kernel argument...
 
@@ -2848,51 +2853,14 @@ void set_point4(point4* points, kernel* k, int kernel_arg)
     exit(EXIT_FAILURE);
   }
 
-  delete[] unfolded_data;
-
   printf("DONE!\n");
 }
 
 void set_color4(color4* colors, kernel* k, int kernel_arg)
 {
   cl_int err;
-  int i;
-  GLfloat* unfolded_data;
-  GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
 
-  printf("Action: setting argument #%d to GPU... ", (int)kernel_arg);
-
-  unfolded_data = new GLfloat[4*colors->size];
-
-  for (i = 0; i < colors->size; i++)
-  {
-    unfolded_data[4*i + 0] = colors->r[i];
-    unfolded_data[4*i + 1] = colors->g[i];
-    unfolded_data[4*i + 2] = colors->b[i];
-    unfolded_data[4*i + 3] = colors->a[i];
-  }
-
-  glGenVertexArrays(1, &colors->vao);                                           // Generating VAO...
-  glBindVertexArray(colors->vao);                                               // Binding VAO...
-  glGenBuffers(1, &colors->vbo);                                                // Generating VBO...
-  glBindBuffer(GL_ARRAY_BUFFER, colors->vbo);                                   // Binding VBO...
-  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
-               4*sizeof(GLfloat)*(colors->size),
-               unfolded_data,
-               GL_DYNAMIC_DRAW);
-  glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
-  glBindBuffer(GL_ARRAY_BUFFER, colors->vbo);                                   // Binding VBO...
-  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
-  colors->buffer = clCreateFromGLBuffer(context,                                // Creating OpenCL buffer from OpenGL buffer...
-                                        CL_MEM_READ_WRITE,
-                                        colors->vbo,
-                                        &err);
-
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
+  printf("Action: setting argument #%d on GPU... ", (int)kernel_arg);
 
   err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &colors->buffer);    // Setting buffer as OpenCL kernel argument...
 
@@ -2901,8 +2869,6 @@ void set_color4(color4* colors, kernel* k, int kernel_arg)
     printf("\nError:  %s\n", get_error(err));
     exit(EXIT_FAILURE);
   }
-
-  delete[] unfolded_data;
 
   printf("DONE!\n");
 }
