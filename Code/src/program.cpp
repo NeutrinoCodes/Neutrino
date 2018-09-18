@@ -14,36 +14,6 @@
 #define DT              0.005
 #define KERNEL_FILE     "/Code/kernel/thekernel.cl"                             // Example of kernel. See note in setup().
 
-kernel* k                 = new kernel();
-kernel* k2                = new kernel();
-
-
-float4* position_old      = new float4(NUM_POINTS);                             // Old position.
-/*
-float4* velocity_old      = new float4(NUM_POINTS);                             // Old velocity.
-float4* acceleration_old  = new float4(NUM_POINTS);                             // Old acceleration.
-
-point4* position          = new point4(NUM_POINTS);                             // Position.
-color4* color             = new color4(NUM_POINTS);                             // Particle color.
-float4* velocity          = new float4(NUM_POINTS);                             // Velocity.
-float4* acceleration      = new float4(NUM_POINTS);                             // Acceleration.
-
-float4* gravity           = new float4(NUM_POINTS);                             // Gravity.
-float4* stiffness         = new float4(NUM_POINTS);                             // Stiffness.
-float4* resting           = new float4(NUM_POINTS);                             // Resting.
-float4* friction          = new float4(NUM_POINTS);                             // Friction.
-float4* mass              = new float4(NUM_POINTS);                             // Mass.
-
-int1* index_PC            = new int1(NUM_POINTS);                               // Centre particle.
-int1* index_PR            = new int1(NUM_POINTS);                               // Right particle.
-int1* index_PU            = new int1(NUM_POINTS);                               // Up particle.
-int1* index_PL            = new int1(NUM_POINTS);                               // Left particle.
-int1* index_PD            = new int1(NUM_POINTS);                               // Down particle.
-
-float4* freedom           = new float4(NUM_POINTS);                             // Freedom/constrain flag.
-*/
-text4*  text              = new text4("neutrino!", 1.0f, 1.0f, 1.0f, 1.0f);
-
 float tick;
 
 void setup()
@@ -52,6 +22,34 @@ void setup()
   int j;
   float x;
   float y;
+
+  kernel* k                 = new kernel();
+  kernel* k2                = new kernel();
+
+  float4* position_old      = new float4(NUM_POINTS);                             // Old position.
+  float4* velocity_old      = new float4(NUM_POINTS);                             // Old velocity.
+  float4* acceleration_old  = new float4(NUM_POINTS);                             // Old acceleration.
+
+  point4* position          = new point4(NUM_POINTS);                             // Position.
+  color4* color             = new color4(NUM_POINTS);                             // Particle color.
+  float4* velocity          = new float4(NUM_POINTS);                             // Velocity.
+  float4* acceleration      = new float4(NUM_POINTS);                             // Acceleration.
+
+  float4* gravity           = new float4(NUM_POINTS);                             // Gravity.
+  float4* stiffness         = new float4(NUM_POINTS);                             // Stiffness.
+  float4* resting           = new float4(NUM_POINTS);                             // Resting.
+  float4* friction          = new float4(NUM_POINTS);                             // Friction.
+  float4* mass              = new float4(NUM_POINTS);                             // Mass.
+
+  int1* index_PC            = new int1(NUM_POINTS);                               // Centre particle.
+  int1* index_PR            = new int1(NUM_POINTS);                               // Right particle.
+  int1* index_PU            = new int1(NUM_POINTS);                               // Up particle.
+  int1* index_PL            = new int1(NUM_POINTS);                               // Left particle.
+  int1* index_PD            = new int1(NUM_POINTS);                               // Down particle.
+
+  float4* freedom           = new float4(NUM_POINTS);                             // Freedom/constrain flag.
+
+  text4*  text              = new text4("neutrino!", 1.0f, 1.0f, 1.0f, 1.0f);
 
   /// NOTE: here the kernel file from the Neutrino example is loaded.
   /// The NEUTRINO_PATH environmental variable is used and concatenated with the
@@ -81,7 +79,7 @@ void setup()
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// Preparing arrays... /////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  /*
+
   y = Y_MIN;
 
   for (j = 0; j < SIZE_Y; j++)
@@ -277,12 +275,12 @@ void setup()
   set_int1(index_PL, k2, 13);                                                       // Setting kernel argument #13...
   set_int1(index_PD, k2, 14);                                                       // Setting kernel argument #14...
   set_float4(freedom, k2, 15);                                                      // Setting kernel argument #15...
-  */
+
 }
 
 void loop()
 {
-  /*
+
   push_point4(position, k, 0);                                                     // Pushing kernel argument #0...
   push_color4(color, k ,1);                                                        // Pushing kernel argument #1...
   push_float4(position_old, k, 2);                                                 // Pushing kernel argument #2...
@@ -365,13 +363,12 @@ void loop()
 
   */
 
-  //plot(position, color, STYLE_POINT);                                           // Plotting points...
+  plot(position, color, STYLE_POINT);                                           // Plotting points...
   print(text);                                                                  // Printing text...
 }
 
 void terminate()
 {
-  /*
   delete position;
   delete color;
   delete velocity;
@@ -389,7 +386,7 @@ void terminate()
   delete index_PL;
   delete index_PR;
   delete index_PU;
-  */
+
   delete text;
   release_kernel(k);                                                             // Releasing OpenCL kernel...
   release_program(k);                                                            // Releasing OpenCL program...
