@@ -91,6 +91,11 @@
       GLuint    vao;
       GLuint    vbo;
       cl_mem    buffer;                                                         // Declaring OpenCL memory buffer...
+
+      void      init();
+      void      set(kernel* k, int kernel_arg);
+      void      push(kernel* k, int kernel_arg);
+      void      pop(kernel* k, int kernel_arg);
   };
 
   /// **Declaration of "int1" data class:**
@@ -113,6 +118,11 @@
       GLuint    vao;
       GLuint    vbo;
       cl_mem    buffer;
+
+      void      init();
+      void      set(kernel* k, int kernel_arg);
+      void      push(kernel* k, int kernel_arg);
+      void      pop(kernel* k, int kernel_arg);
   };
 
   /// **Declaration of "float4" data class:**
@@ -140,6 +150,11 @@
       GLuint    vao;
       GLuint    vbo;
       cl_mem    buffer;                                                         // Declaring OpenCL memory buffer...
+
+      void      init();
+      void      set(kernel* k, int kernel_arg);
+      void      push(kernel* k, int kernel_arg);
+      void      pop(kernel* k, int kernel_arg);
   };
 
   /// **Declaration of "int4" data class:**
@@ -167,6 +182,11 @@
       GLuint    vao;
       GLuint    vbo;
       cl_mem    buffer;
+
+      void      init();
+      void      set(kernel* k, int kernel_arg);
+      void      push(kernel* k, int kernel_arg);
+      void      pop(kernel* k, int kernel_arg);
   };
 
   /// **Declaration of "point4" data class:**
@@ -195,6 +215,11 @@
       GLuint    vao;
       GLuint    vbo;
       cl_mem    buffer;
+
+      void      init();
+      void      set(kernel* k, int kernel_arg);
+      void      push(kernel* k, int kernel_arg);
+      void      pop(kernel* k, int kernel_arg);
   };
 
   /// **Declaration of "color4" data class:**
@@ -223,6 +248,11 @@
       GLuint    vao;
       GLuint    vbo;
       cl_mem    buffer;
+
+      void      init();
+      void      set(kernel* k, int kernel_arg);
+      void      push(kernel* k, int kernel_arg);
+      void      pop(kernel* k, int kernel_arg);
   };
 
   /// **Declaration of "text4" data class:**
@@ -324,27 +354,15 @@
   void        scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
   void        window_refresh_callback(GLFWwindow* window);
 
-
-
-
   const char* get_error(cl_int error);
   cl_uint     get_platforms();
   void        get_platform_info(cl_uint index_platform, cl_platform_info name_param);
   cl_uint     get_devices(cl_uint index_platform);
   void        get_device_info(cl_uint index_device, cl_device_info name_param);
-  /// **Initialization of OpenCL computational context:**
   void        init_opencl_context();
-
-  /// **Destruction of OpenCL computational context:**
   void        destroy_opencl_context();
-  void        typeset(text4* text);
-  void        set_float1(float1* data, kernel* k, int kernel_arg);
-  void        set_int1(int1* data, kernel* k, int kernel_arg);
-  void        set_float4(float4* data, kernel* k, int kernel_arg);
-  void        set_int4(int4* data, kernel* k, int kernel_arg);
-  void        set_point4(point4* points, kernel* k, int kernel_arg);
-  void        set_color4(color4* colors, kernel* k, int kernel_arg);
 
+  void        typeset(text4* text);
   void        load_kernel(kernel* k);
   void        init_opencl_kernel(kernel* k);
   void        get_kernel_workgroup_size(kernel* k, cl_device_id device_id, size_t* local);
@@ -354,23 +372,6 @@
   void        release_event(kernel* k);
   void        release_kernel(kernel* k);
   void        release_program(kernel* k);
-
-  void        push_float1(float1* float1, kernel* k, int kernel_arg);
-  void        push_int1(int1* int1, kernel* k, int kernel_arg);
-  void        push_float4(float4* float4, kernel* k, int kernel_arg);
-  void        push_int4(int4* int4, kernel* k, int kernel_arg);
-  void        push_point4(point4* point4, kernel* k, int kernel_arg);
-  void        push_color4(color4* color4, kernel* k, int kernel_arg);
-
-
-
-  void        pop_float1(float1* float1, kernel* k, int kernel_arg);
-  void        pop_int1(int1* int1, kernel* k, int kernel_arg);
-  void        pop_float4(float4* float4, kernel* k, int kernel_arg);
-  void        pop_int4(int4* int4, kernel* k, int kernel_arg);
-  void        pop_point4(point4* point4, kernel* k, int kernel_arg);
-  void        pop_color4(color4* color4, kernel* k, int kernel_arg);
-
   void        finish_queue();
   void        release_mem_object(cl_mem CL_memory_buffer);
   void        release_queue();

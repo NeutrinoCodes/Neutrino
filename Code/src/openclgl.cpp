@@ -883,12 +883,15 @@ float1::float1(int num_data)
   {
     x[i] = 0.0f;                                                                // Setting "x" data...
   }
+}
 
+void float1::init()
+{
   glGenVertexArrays(1, &vao);                                                   // Generating VAO...
   glBindVertexArray(vao);                                                       // Binding VAO...
   glGenBuffers(1, &vbo);                                                        // Generating VBO...
   glBindBuffer(GL_ARRAY_BUFFER, vbo);                                           // Binding VBO...
-  glBufferData(GL_ARRAY_BUFFER, 4*sizeof(GLfloat)*(size), x, GL_DYNAMIC_DRAW);  // Creating and initializing a buffer object's data store...
+  glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*(size), x, GL_DYNAMIC_DRAW);    // Creating and initializing a buffer object's data store...
   glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
   glBindBuffer(GL_ARRAY_BUFFER, vbo);                                           // Binding VBO...
   glVertexAttribPointer(LAYOUT_0, 1, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
@@ -899,7 +902,39 @@ float1::float1(int num_data)
     printf("\nError:  %s\n", get_error(err));
     exit(EXIT_FAILURE);
   }
+}
 
+void float1::set(kernel* k, int kernel_arg)
+{
+  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &buffer);      // Setting buffer as OpenCL kernel argument...
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
+  }
+}
+
+void float1::push(kernel* k, int kernel_arg)
+{
+  err = clEnqueueAcquireGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Passing "points" to OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+}
+
+void float1::pop(kernel* k, int kernel_arg)
+{
+  err = clEnqueueReleaseGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Releasing "points" from OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
 }
 
 float1::~float1()
@@ -924,12 +959,15 @@ int1::int1(int num_data)
   {
     x[i] = 0;                                                                   // Setting "x" data...
   }
+}
 
+void int1::init()
+{
   glGenVertexArrays(1, &vao);                                                   // Generating VAO...
   glBindVertexArray(vao);                                                       // Binding VAO...
   glGenBuffers(1, &vbo);                                                        // Generating VBO...
   glBindBuffer(GL_ARRAY_BUFFER, vbo);                                           // Binding VBO...
-  glBufferData(GL_ARRAY_BUFFER, 4*sizeof(GLint)*(size), x, GL_DYNAMIC_DRAW);    // Creating and initializing a buffer object's data store...
+  glBufferData(GL_ARRAY_BUFFER, sizeof(GLint)*(size), x, GL_DYNAMIC_DRAW);      // Creating and initializing a buffer object's data store...
   glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
   glBindBuffer(GL_ARRAY_BUFFER, vbo);                                           // Binding VBO...
   glVertexAttribPointer(LAYOUT_0, 1, GL_INT, GL_FALSE, 0, 0);                   // Specifying the format for "layout = 0" attribute in vertex shader...
@@ -939,6 +977,39 @@ int1::int1(int num_data)
   {
     printf("\nError:  %s\n", get_error(err));
     exit(EXIT_FAILURE);
+  }
+}
+
+void int1::set(kernel* k, int kernel_arg)
+{
+  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &buffer);      // Setting buffer as OpenCL kernel argument...
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
+  }
+}
+
+void int1::push(kernel* k, int kernel_arg)
+{
+  err = clEnqueueAcquireGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Passing "points" to OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+}
+
+void int1::pop(kernel* k, int kernel_arg)
+{
+  err = clEnqueueReleaseGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Releasing "points" from OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
   }
 }
 
@@ -970,9 +1041,11 @@ float4::float4(int num_data)
     z[i] = 0.0f;                                                                // Setting "z" data...
     w[i] = 1.0f;                                                                // Setting "w" data...
   }
+}
 
+void float4::init()
+{
   data = new GLfloat[4*size];                                                   // Creating array for unfolded data...
-
 
   for (i = 0; i < size; i++)                                                    // Filling unfolded data array...
   {
@@ -982,9 +1055,7 @@ float4::float4(int num_data)
     data[4*i + 3] = w[i];                                                       // Filling "w"...
   }
 
-
   glGenVertexArrays(1, &vao);                                                   // Generating VAO...
-  /*
   glBindVertexArray(vao);                                                       // Binding VAO...
   glGenBuffers(1, &vbo);                                                        // Generating VBO...
   glBindBuffer(GL_ARRAY_BUFFER, vbo);                                           // Binding VBO...
@@ -1001,7 +1072,39 @@ float4::float4(int num_data)
     printf("\nError:  %s\n", get_error(err));
     exit(EXIT_FAILURE);
   }
-  */
+}
+
+void float4::set(kernel* k, int kernel_arg)
+{
+  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &buffer);      // Setting buffer as OpenCL kernel argument...
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
+  }
+}
+
+void float4::push(kernel* k, int kernel_arg)
+{
+  err = clEnqueueAcquireGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Passing "points" to OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+}
+
+void float4::pop(kernel* k, int kernel_arg)
+{
+  err = clEnqueueReleaseGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Releasing "points" from OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
 }
 
 float4::~float4()
@@ -1037,15 +1140,18 @@ int4::int4(int num_data)
     z[i] = 0;                                                                   // Setting "z" data...
     w[i] = 1;                                                                   // Setting "w" data...
   }
+}
 
-  data = new GLint[4*size];
+void int4::init()
+{
+  data = new GLint[4*size];                                                   // Creating array for unfolded data...
 
-  for (i = 0; i < size; i++)
+  for (i = 0; i < size; i++)                                                    // Filling unfolded data array...
   {
-    data[4*i + 0] = x[i];
-    data[4*i + 1] = y[i];
-    data[4*i + 2] = z[i];
-    data[4*i + 3] = w[i];
+    data[4*i + 0] = x[i];                                                       // Filling "x"...
+    data[4*i + 1] = y[i];                                                       // Filling "y"...
+    data[4*i + 2] = z[i];                                                       // Filling "z"...
+    data[4*i + 3] = w[i];                                                       // Filling "w"...
   }
 
   glGenVertexArrays(1, &vao);                                                   // Generating VAO...
@@ -1064,6 +1170,39 @@ int4::int4(int num_data)
   {
     printf("\nError:  %s\n", get_error(err));
     exit(EXIT_FAILURE);
+  }
+}
+
+void int4::set(kernel* k, int kernel_arg)
+{
+  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &buffer);      // Setting buffer as OpenCL kernel argument...
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
+  }
+}
+
+void int4::push(kernel* k, int kernel_arg)
+{
+  err = clEnqueueAcquireGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Passing "points" to OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+}
+
+void int4::pop(kernel* k, int kernel_arg)
+{
+  err = clEnqueueReleaseGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Releasing "points" from OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
   }
 }
 
@@ -1100,15 +1239,18 @@ point4::point4(int num_data)
     z[i] = 0.0f;                                                                // Setting "z" data...
     w[i] = 1.0f;                                                                // Setting "w" data...
   }
+}
 
-  data = new GLfloat[4*size];
+void point4::init()
+{
+  data = new GLfloat[4*size];                                                   // Creating array for unfolded data...
 
-  for (i = 0; i < size; i++)
+  for (i = 0; i < size; i++)                                                    // Filling unfolded data array...
   {
-    data[4*i + 0] = x[i];
-    data[4*i + 1] = y[i];
-    data[4*i + 2] = z[i];
-    data[4*i + 3] = w[i];
+    data[4*i + 0] = x[i];                                                       // Filling "x"...
+    data[4*i + 1] = y[i];                                                       // Filling "y"...
+    data[4*i + 2] = z[i];                                                       // Filling "z"...
+    data[4*i + 3] = w[i];                                                       // Filling "w"...
   }
 
   glGenVertexArrays(1, &vao);                                                   // Generating VAO...
@@ -1127,6 +1269,39 @@ point4::point4(int num_data)
   {
     printf("\nError:  %s\n", get_error(err));
     exit(EXIT_FAILURE);
+  }
+}
+
+void point4::set(kernel* k, int kernel_arg)
+{
+  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &buffer);      // Setting buffer as OpenCL kernel argument...
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
+  }
+}
+
+void point4::push(kernel* k, int kernel_arg)
+{
+  err = clEnqueueAcquireGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Passing "points" to OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+}
+
+void point4::pop(kernel* k, int kernel_arg)
+{
+  err = clEnqueueReleaseGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Releasing "points" from OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
   }
 }
 
@@ -1163,15 +1338,18 @@ color4::color4(int num_data)
     b[i] = 0.0f;                                                                // Setting "b" data...
     a[i] = 1.0f;                                                                // Setting "a" data...
   }
+}
 
-  data = new GLfloat[4*size];
+void color4::init()
+{
+  data = new GLfloat[4*size];                                                   // Creating array for unfolded data...
 
-  for (i = 0; i < size; i++)
+  for (i = 0; i < size; i++)                                                    // Filling unfolded data array...
   {
-    data[4*i + 0] = r[i];
-    data[4*i + 1] = g[i];
-    data[4*i + 2] = b[i];
-    data[4*i + 3] = a[i];
+    data[4*i + 0] = r[i];                                                       // Filling "x"...
+    data[4*i + 1] = g[i];                                                       // Filling "y"...
+    data[4*i + 2] = b[i];                                                       // Filling "z"...
+    data[4*i + 3] = a[i];                                                       // Filling "w"...
   }
 
   glGenVertexArrays(1, &vao);                                                   // Generating VAO...
@@ -1181,7 +1359,7 @@ color4::color4(int num_data)
   glBufferData(GL_ARRAY_BUFFER, 4*sizeof(GLfloat)*(size), data, GL_DYNAMIC_DRAW); // Creating and initializing a buffer object's data store...
   glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
   glBindBuffer(GL_ARRAY_BUFFER, vbo);                                           // Binding VBO...
-  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
+  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
   buffer = clCreateFromGLBuffer(context, CL_MEM_READ_WRITE, vbo, &err);         // Creating OpenCL buffer from OpenGL buffer...
 
   delete[] data;                                                                // Deleting array for unfolded data...
@@ -1190,6 +1368,39 @@ color4::color4(int num_data)
   {
     printf("\nError:  %s\n", get_error(err));
     exit(EXIT_FAILURE);
+  }
+}
+
+void color4::set(kernel* k, int kernel_arg)
+{
+  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &buffer);      // Setting buffer as OpenCL kernel argument...
+
+  if(err < 0)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(EXIT_FAILURE);
+  }
+}
+
+void color4::push(kernel* k, int kernel_arg)
+{
+  err = clEnqueueAcquireGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Passing "points" to OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+}
+
+void color4::pop(kernel* k, int kernel_arg)
+{
+  err = clEnqueueReleaseGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Releasing "points" from OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
   }
 }
 
@@ -2742,272 +2953,6 @@ void typeset(text4* text)
   printf("DONE!\n");
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// "SET" FUNCTIONS ///////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-void set_float1(float1* data, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  printf("Action: setting argument #%d on GPU... ", (int)kernel_arg);
-
-  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
-
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
-
-  printf("DONE!\n");
-}
-
-void set_int1(int1* data, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  printf("Action: setting argument #%d on GPU... ", (int)kernel_arg);
-
-  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
-
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
-
-  printf("DONE!\n");
-}
-
-void set_float4(float4* data, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  printf("Action: setting argument #%d on GPU... ", (int)kernel_arg);
-
-  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
-
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
-
-  printf("DONE!\n");
-}
-
-void set_int4(int4* data, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  printf("Action: setting argument #%d on GPU... ", (int)kernel_arg);
-
-  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &data->buffer);      // Setting buffer as OpenCL kernel argument...
-
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
-
-  printf("DONE!\n");
-}
-
-void set_point4(point4* points, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  printf("Action: setting argument #%d on GPU... ", (int)kernel_arg);
-
-  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &points->buffer);    // Setting buffer as OpenCL kernel argument...
-
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
-
-  printf("DONE!\n");
-}
-
-void set_color4(color4* colors, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  printf("Action: setting argument #%d on GPU... ", (int)kernel_arg);
-
-  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &colors->buffer);    // Setting buffer as OpenCL kernel argument...
-
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
-
-  printf("DONE!\n");
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////// "PUSH" FUNCTIONS ////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-void push_float1(float1* float1, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  err = clEnqueueAcquireGLObjects(queue, 1, &float1->buffer, 0, NULL, NULL);    // Passing "points" to OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-}
-
-void push_int1(int1* int1, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  err = clEnqueueAcquireGLObjects(queue, 1, &int1->buffer, 0, NULL, NULL);      // Passing "points" to OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-}
-
-void push_float4(float4* float4, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  err = clEnqueueAcquireGLObjects(queue, 1, &float4->buffer, 0, NULL, NULL);    // Passing "points" to OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-}
-
-void push_int4(int4* int4, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  err = clEnqueueAcquireGLObjects(queue, 1, &int4->buffer, 0, NULL, NULL);      // Passing "points" to OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-}
-
-void push_point4(point4* point4, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  err = clEnqueueAcquireGLObjects(queue, 1, &point4->buffer, 0, NULL, NULL);    // Passing "points" to OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-}
-
-void push_color4(color4* color4, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  err = clEnqueueAcquireGLObjects(queue, 1, &color4->buffer, 0, NULL, NULL);    // Passing "colors" to OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////// "POP" FUNCTIONS /////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-void pop_float1(float1* float1, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  err = clEnqueueReleaseGLObjects(queue, 1, &float1->buffer, 0, NULL, NULL);    // Releasing "points" from OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-}
-
-void pop_int1(int1* int1, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  err = clEnqueueReleaseGLObjects(queue, 1, &int1->buffer, 0, NULL, NULL);      // Releasing "points" from OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-}
-
-void pop_float4(float4* float4, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  err = clEnqueueReleaseGLObjects(queue, 1, &float4->buffer, 0, NULL, NULL);    // Releasing "points" from OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-}
-
-void pop_int4(int4* int4, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  err = clEnqueueReleaseGLObjects(queue, 1, &int4->buffer, 0, NULL, NULL);      // Releasing "points" from OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-}
-
-void pop_point4(point4* point4, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  err = clEnqueueReleaseGLObjects(queue, 1, &point4->buffer, 0, NULL, NULL);    // Releasing "points" from OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-}
-
-void pop_color4(color4* color4, kernel* k, int kernel_arg)
-{
-  cl_int err;
-
-  err = clEnqueueReleaseGLObjects(queue, 1, &color4->buffer, 0, NULL, NULL);    // Releasing "colors" from OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-}
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "SAVE" FUNCTIONS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
