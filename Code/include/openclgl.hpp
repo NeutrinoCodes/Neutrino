@@ -51,9 +51,24 @@
 
   extern  GLFWwindow*				window;                                             // Window handle.
 
+  class queue
+  {
+    private:
+      cl_int  err;
+
+    public:
+      cl_command_queue        thequeue;
+
+      queue();
+      ~queue();
+  };
+
   class kernel
   {
     private:
+      cl_int  err;
+      size_t  log_size;
+      char*   log;
 
     public:
       kernel();
@@ -69,6 +84,8 @@
       size_t                  size;
       cl_uint                 dimension;
       cl_event                event;
+
+      void init();
   };
 
   /// **Declaration of "float1" data class:**
@@ -339,7 +356,7 @@
   void        init_opengl_context();
 
   /// **Destruction of OpenGL graphic context:**
-  void        destroy_opengl_context();
+  void        release_opengl_context();
   void        get_arcball_vector(float* p, int x, int y);
   void        arcball();
   void        plot(point4* points, color4* colors, plot_style ps);
@@ -360,21 +377,18 @@
   cl_uint     get_devices(cl_uint index_platform);
   void        get_device_info(cl_uint index_device, cl_device_info name_param);
   void        init_opencl_context();
-  void        destroy_opencl_context();
+  void        release_opencl_context();
 
   void        typeset(text4* text);
   void        load_kernel(kernel* k);
   void        init_opencl_kernel(kernel* k);
   void        get_kernel_workgroup_size(kernel* k, cl_device_id device_id, size_t* local);
   void        execute_kernel(kernel* k);
+
   void        enqueue_task(kernel* k);
   void        wait_for_event(kernel* k);
   void        release_event(kernel* k);
-  void        release_kernel(kernel* k);
-  void        release_program(kernel* k);
-  void        finish_queue();
-  void        release_mem_object(cl_mem CL_memory_buffer);
+
   void        release_queue();
-  void        release_context();
 
 #endif

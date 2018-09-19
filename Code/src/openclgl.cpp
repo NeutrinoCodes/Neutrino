@@ -847,11 +847,41 @@ cl_device_id*           devices;
 unsigned int            num_devices;
 cl_context_properties*  properties;
 cl_context              context;
-cl_command_queue        queue;
 
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// OPENCL CLASSES /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
+queue::queue()
+{
+  thequeue = NULL;
+}
+
+void queue::init()
+{
+  thequeue = clCreateCommandQueue(context, devices[0], 0, &err);                   // Creating OpenCL queue...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+}
+
+queue::~queue()
+{
+  printf("Action: releasing the OpenCL command queue... ");
+
+  err = clReleaseCommandQueue(queue);                                           // Releasing OpenCL queue...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  printf("DONE!\n");
+}
+
 kernel::kernel()
 {
   thekernel = NULL;
@@ -862,9 +892,165 @@ kernel::kernel()
   event = NULL;
 }
 
+void kernel::init()
+{
+  FILE* handle;                                                                 // Input file handle.
+
+  printf("Action: loading OpenCL kernel from file... ");
+
+  handle = fopen(source_file, "rb");                                            // Opening OpenCL kernel source file...
+
+  if(handle == NULL)
+  {
+    printf("\nError:  could not find the file!");
+    exit(1);
+  }
+
+  fseek(handle, 0, SEEK_END);                                                   // Seeking end of file...
+  source_size = (size_t)ftell(handle);                                          // Measuring file size...
+  rewind(handle);                                                               // Rewinding to the beginning of the file...
+  source = (char*)malloc(source_size + 1);                                      // Allocating buffer for reading the file...
+
+  if (!(source))
+  {
+    printf("\nError:  unable to allocate buffer memory!\n");
+    exit(EXIT_FAILURE);
+  }
+
+  fread(source, sizeof(char), source_size, handle);                             // Reading file (OpenCL kernel source)...
+  source[source_size] = '\0';                                                   // Null-terminating buffer...
+  fclose(handle);                                                               // Closing file.
+
+  printf("DONE!\n");
+
+  printf("Action: creating OpenCL program... ");
+  program = clCreateProgramWithSource(context,                         // Creating OpenCL program from its source...
+                                             1,
+                                             (const char**)&source,
+                                             &source_size, &err);
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  //free(k->source);                                                        // Freeing OpenCL kernel buffer...
+  printf("DONE!\n");
+
+  printf("Action: building OpenCL program... ");
+  err = clBuildProgram(program, 1, devices, "", NULL, NULL);           // Building OpenCL program...
+
+  // Checking compiled kernel:
+  if (err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+
+    err = clGetProgramBuildInfo(program,                               // Getting compiler information...
+                                devices[0],
+                                CL_PROGRAM_BUILD_LOG,
+                                0,
+                                NULL,
+                                &log_size);
+
+    if(err != CL_SUCCESS)
+    {
+      printf("\nError:  %s\n", get_error(err));
+      exit(err);
+    }
+
+    log = (char*) calloc(log_size + 1, sizeof(char));                           // Allocating log buffer...
+
+    if (!log)
+    {
+      printf("\nError:  unable to allocate buffer memory log!\n");
+      exit(EXIT_FAILURE);
+    }
+
+    err = clGetProgramBuildInfo(program, devices[0],                   // Reading log...
+                                CL_PROGRAM_BUILD_LOG,
+                                log_size + 1,
+                                log,
+                                NULL);
+
+    if(err != CL_SUCCESS)
+    {
+      printf("\nError:  %s\n", get_error(err));
+      exit(err);
+    }
+
+    printf("%s\n", log);                                                        // Displaying log...
+    free(log);                                                                  // Freeing log...
+    exit(err);                                                                  // Exiting...
+  }
+
+  printf("DONE!\n");
+
+
+
+  thekernel = clCreateKernel(program, KERNEL_NAME, &err);     // Creating OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  printf("DONE!\n");
+}
+
+void kernel::execute(queue* q)
+{
+  err = clEnqueueNDRangeKernel(q->thequeue,                                     // Enqueueing OpenCL kernel (as a single task)...
+                               thekernel,
+                               dimension,
+                               NULL,
+                               &size,
+                               NULL,
+                               0,
+                               NULL,
+                               &event);
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  err = clFinish(q->thequeue);                                                  // Waiting for kernel execution to be completed (host blocking)...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+}
+
 kernel::~kernel()
 {
+  printf("Action: releasing OpenCL kernel... ");
 
+  err = clReleaseKernel(thekernel);                                             // Releasing OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  printf("DONE!\n");
+
+  printf("Action: releasing OpenCL program... ");
+
+  err = clReleaseProgram(program);                                              // Releasing OpenCL program...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  printf("DONE!\n");
 }
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// DATA CLASSES ////////////////////////////////
@@ -939,10 +1125,24 @@ void float1::pop(kernel* k, int kernel_arg)
 
 float1::~float1()
 {
-  release_mem_object(buffer);                                                   // Releasing OpenCL data buffer...
+  printf("Action: releasing \"float1\" object... ");
+
+  if(CL_memory_buffer != NULL)
+  {
+    err = clReleaseMemObject(CL_memory_buffer);                                 // Releasing OpenCL buffer object...
+
+    if(err != CL_SUCCESS)
+    {
+      printf("\nError:  %s\n", get_error(err));
+      exit(err);
+    }
+  }
+
   glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
   glDeleteBuffers(1, &vao);                                                     // Releasing OpenGL VAO...
   delete[] x;                                                                   // Releasing data memory...
+
+  printf("DONE!\n");
 }
 
 int1::int1(int num_data)
@@ -1015,10 +1215,24 @@ void int1::pop(kernel* k, int kernel_arg)
 
 int1::~int1()
 {
-  release_mem_object(buffer);                                                   // Releasing OpenCL data buffer...
+  printf("Action: releasing \"float1\" object... ");
+
+  if(CL_memory_buffer != NULL)
+  {
+    err = clReleaseMemObject(CL_memory_buffer);                                 // Releasing OpenCL buffer object...
+
+    if(err != CL_SUCCESS)
+    {
+      printf("\nError:  %s\n", get_error(err));
+      exit(err);
+    }
+  }
+
   glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
   glDeleteBuffers(1, &vao);                                                     // Releasing OpenGL VAO...
   delete[] x;                                                                   // Releasing data memory...
+
+  printf("DONE!\n");
 }
 
 float4::float4(int num_data)
@@ -1109,7 +1323,19 @@ void float4::pop(kernel* k, int kernel_arg)
 
 float4::~float4()
 {
-  release_mem_object(buffer);                                                   // Releasing OpenCL data buffer...
+  printf("Action: releasing \"float1\" object... ");
+
+  if(CL_memory_buffer != NULL)
+  {
+    err = clReleaseMemObject(CL_memory_buffer);                                 // Releasing OpenCL buffer object...
+
+    if(err != CL_SUCCESS)
+    {
+      printf("\nError:  %s\n", get_error(err));
+      exit(err);
+    }
+  }
+
   glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
   glDeleteBuffers(1, &vao);                                                     // Releasing OpenGL VAO...
 
@@ -1117,6 +1343,8 @@ float4::~float4()
   delete[] y;
   delete[] z;
   delete[] w;
+
+  printf("DONE!\n");
 }
 
 int4::int4(int num_data)
@@ -1208,7 +1436,19 @@ void int4::pop(kernel* k, int kernel_arg)
 
 int4::~int4()
 {
-  release_mem_object(buffer);                                                   // Releasing OpenCL data buffer...
+  printf("Action: releasing \"float1\" object... ");
+
+  if(CL_memory_buffer != NULL)
+  {
+    err = clReleaseMemObject(CL_memory_buffer);                                 // Releasing OpenCL buffer object...
+
+    if(err != CL_SUCCESS)
+    {
+      printf("\nError:  %s\n", get_error(err));
+      exit(err);
+    }
+  }
+
   glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
   glDeleteBuffers(1, &vao);                                                     // Releasing OpenGL VAO...
 
@@ -1216,6 +1456,8 @@ int4::~int4()
   delete[] y;
   delete[] z;
   delete[] w;
+
+  printf("DONE!\n");
 }
 
 point4::point4(int num_data)
@@ -1307,7 +1549,19 @@ void point4::pop(kernel* k, int kernel_arg)
 
 point4::~point4()
 {
-  release_mem_object(buffer);                                                   // Releasing OpenCL data buffer...
+  printf("Action: releasing \"float1\" object... ");
+
+  if(CL_memory_buffer != NULL)
+  {
+    err = clReleaseMemObject(CL_memory_buffer);                                 // Releasing OpenCL buffer object...
+
+    if(err != CL_SUCCESS)
+    {
+      printf("\nError:  %s\n", get_error(err));
+      exit(err);
+    }
+  }
+
   glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
   glDeleteBuffers(1, &vao);                                                     // Releasing OpenGL VAO...
 
@@ -1315,6 +1569,8 @@ point4::~point4()
   delete[] y;                                                                   // Releasing "y" data...
   delete[] z;                                                                   // Releasing "z" data...
   delete[] w;                                                                   // Releasing "w" data...
+
+  printf("DONE!\n");
 }
 
 color4::color4(int num_data)
@@ -1406,7 +1662,19 @@ void color4::pop(kernel* k, int kernel_arg)
 
 color4::~color4()
 {
-  release_mem_object(buffer);                                                   // Releasing OpenCL data buffer...
+  printf("Action: releasing \"float1\" object... ");
+
+  if(CL_memory_buffer != NULL)
+  {
+    err = clReleaseMemObject(CL_memory_buffer);                                 // Releasing OpenCL buffer object...
+
+    if(err != CL_SUCCESS)
+    {
+      printf("\nError:  %s\n", get_error(err));
+      exit(err);
+    }
+  }
+
   glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
   glDeleteBuffers(1, &vao);                                                     // Releasing OpenGL VAO...
 
@@ -1414,6 +1682,8 @@ color4::~color4()
   delete[] g;                                                                   // Releasing "g" data...
   delete[] b;                                                                   // Releasing "b" data...
   delete[] a;                                                                   // Releasing "a" data...
+
+  printf("DONE!\n");
 }
 
 text4::text4(const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A)
@@ -2023,7 +2293,7 @@ void init_opengl_context()
   init_screen();                                                                // Initializing screen...
 }
 
-void destroy_opengl_context()
+void release_opengl_context()
 {
   glfwDestroyWindow(window);                                                    // Destroying window...
   glfwTerminate();                                                              // Terminating GLFW...
@@ -2567,122 +2837,6 @@ void init_opencl_context()
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////// OPENCL KERNEL FUNCTIONS ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void load_kernel(kernel* k)
-{
-  FILE* handle;                                                                 // Input file handle.
-
-  printf("Action: loading OpenCL kernel from file... ");
-
-  handle = fopen(k->source_file, "rb");                                   // Opening OpenCL kernel source file...
-
-  if(handle == NULL)
-  {
-    printf("\nError:  could not find the file!");
-    exit(1);
-  }
-
-  fseek(handle, 0, SEEK_END);                                                   // Seeking end of file...
-  k->source_size = (size_t)ftell(handle);                                 // Measuring file size...
-  rewind(handle);                                                               // Rewinding to the beginning of the file...
-  k->source = (char*)malloc(k->source_size + 1);                             // Allocating buffer for reading the file...
-
-  if (!(k->source))
-  {
-    printf("\nError:  unable to allocate buffer memory!\n");
-    exit(EXIT_FAILURE);
-  }
-
-  fread(k->source, sizeof(char), k->source_size, handle);           // Reading file (OpenCL kernel source)...
-  k->source[k->source_size] = '\0';                                 // Null-terminating buffer...
-  fclose(handle);                                                               // Closing file.
-
-  printf("DONE!\n");
-}
-
-void init_opencl_kernel(kernel* k)
-{
-  cl_int err;
-  size_t log_size;
-  char* log;
-
-  printf("Action: initializing OpenCL kernel... ");
-  k->program = clCreateProgramWithSource(context,                         // Creating OpenCL program from its source...
-                                             1,
-                                             (const char**)&k->source,
-                                             &k->source_size, &err);
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  //free(k->source);                                                        // Freeing OpenCL kernel buffer...
-
-  err = clBuildProgram(k->program, 1, devices, "", NULL, NULL);           // Building OpenCL program...
-
-  // Checking compiled kernel:
-  if (err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-
-    err = clGetProgramBuildInfo(k->program,                               // Getting compiler information...
-                                devices[0],
-                                CL_PROGRAM_BUILD_LOG,
-                                0,
-                                NULL,
-                                &log_size);
-
-    if(err != CL_SUCCESS)
-    {
-      printf("\nError:  %s\n", get_error(err));
-      exit(err);
-    }
-
-    log = (char*) calloc(log_size + 1, sizeof(char));                           // Allocating log buffer...
-
-    if (!log)
-    {
-      printf("\nError:  unable to allocate buffer memory log!\n");
-      exit(EXIT_FAILURE);
-    }
-
-    err = clGetProgramBuildInfo(k->program, devices[0],                   // Reading log...
-                                CL_PROGRAM_BUILD_LOG,
-                                log_size + 1,
-                                log,
-                                NULL);
-
-    if(err != CL_SUCCESS)
-    {
-      printf("\nError:  %s\n", get_error(err));
-      exit(err);
-    }
-
-    printf("%s\n", log);                                                        // Displaying log...
-    free(log);                                                                  // Freeing log...
-    exit(err);                                                                  // Exiting...
-  }
-
-  queue = clCreateCommandQueue(context, devices[0], 0, &err);                   // Creating OpenCL queue...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  k->thekernel = clCreateKernel(k->program, KERNEL_NAME, &err);     // Creating OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  printf("DONE!\n");
-}
-
 void get_kernel_workgroup_size(kernel* k, cl_device_id device_id, size_t* local)
 {
     cl_int err;
@@ -2702,28 +2856,6 @@ void get_kernel_workgroup_size(kernel* k, cl_device_id device_id, size_t* local)
     }
 
     printf("DONE!\n");
-}
-
-void execute_kernel(kernel* k)
-{
-  cl_int err;
-
-  err = clEnqueueNDRangeKernel(queue,                                           // Enqueueing OpenCL kernel (as a single task)...
-                               k->thekernel,
-                               k->dimension,
-                               NULL,
-                               &k->size,
-                               NULL,
-                               0,
-                               NULL,
-                               &k->event);
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
 }
 
 void enqueue_task(kernel* k)
@@ -2758,38 +2890,6 @@ void wait_for_event(kernel* k)
     //printf("DONE!\n");
 }
 
-void finish_queue()
-{
-  cl_int err;
-
-  //printf("Action: waiting for OpenCL command sequence end... ");
-  err = clFinish(queue);                                                        // Finishing OpenCL queue...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  //printf("DONE!\n");
-}
-
-void release_queue()
-{
-  cl_int err;
-
-  printf("Action: releasing the OpenCL command queue... ");
-  err = clReleaseCommandQueue(queue);                                           // Releasing OpenCL queue...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  printf("DONE!\n");
-}
-
 void release_event(kernel* k)
 {
     cl_int err;
@@ -2806,60 +2906,7 @@ void release_event(kernel* k)
     //printf("DONE!\n");
 }
 
-void release_mem_object(cl_mem CL_memory_buffer)
-{
-  cl_int err;
-
-  printf("Action: decrementing the OpenCL memory object reference count... ");
-
-  if(CL_memory_buffer != NULL)
-  {
-    err = clReleaseMemObject(CL_memory_buffer);                                 // Releasing OpenCL buffer object...
-
-    if(err != CL_SUCCESS)
-    {
-      printf("\nError:  %s\n", get_error(err));
-      exit(err);
-    }
-  }
-
-  printf("DONE!\n");
-}
-
-void release_kernel(kernel* k)
-{
-  cl_int err;
-
-  printf("Action: releasing the OpenCL command queue... ");
-  err = clReleaseKernel(k->thekernel);                                                // Releasing OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  printf("DONE!\n");
-}
-
-void release_program(kernel* k)
-{
-  cl_int err;
-
-  printf("Action: releasing the OpenCL program... ");
-
-  err = clReleaseProgram(k->program);                                       // Releasing OpenCL program...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  printf("DONE!\n");
-}
-
-void release_context()
+void release_opencl_context()
 {
   cl_int err;
 
@@ -2873,18 +2920,10 @@ void release_context()
     exit(err);
   }
 
-  printf("DONE!\n");
-}
-
-void destroy_opencl_context()
-{
-  finish_queue();                                                               // Finishing OpenCL queue...
-
-  release_queue();                                                              // Releasing OpenCL queue...
-
-  release_context();                                                            // Releasing OpenCL context...
   free(devices);                                                                // Freeing OpenCL devices...
   free(platforms);                                                              // Freeing OpenCL platforms...
+
+  printf("DONE!\n");
 }
 
 //////////////////////////////////////////////////////////////////////////////////
