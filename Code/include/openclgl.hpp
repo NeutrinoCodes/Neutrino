@@ -61,7 +61,14 @@
 
       queue();
       ~queue();
+      void init();
   };
+
+  typedef enum
+    {
+      WAIT,
+      DONT_WAIT,
+    } kernel_event;
 
   class kernel
   {
@@ -71,9 +78,6 @@
       char*   log;
 
     public:
-      kernel();
-      ~kernel();
-
       cl_kernel               thekernel;
 
       char*                   source_file;
@@ -85,7 +89,10 @@
       cl_uint                 dimension;
       cl_event                event;
 
+      kernel();
+      ~kernel();
       void init();
+      void execute(queue* q, kernel_event k_ev);
   };
 
   /// **Declaration of "float1" data class:**
@@ -111,8 +118,8 @@
 
       void      init();
       void      set(kernel* k, int kernel_arg);
-      void      push(kernel* k, int kernel_arg);
-      void      pop(kernel* k, int kernel_arg);
+      void      push(queue* q, kernel* k, int kernel_arg);
+      void      pop(queue* q, kernel* k, int kernel_arg);
   };
 
   /// **Declaration of "int1" data class:**
@@ -138,8 +145,8 @@
 
       void      init();
       void      set(kernel* k, int kernel_arg);
-      void      push(kernel* k, int kernel_arg);
-      void      pop(kernel* k, int kernel_arg);
+      void      push(queue* q, kernel* k, int kernel_arg);
+      void      pop(queue* q, kernel* k, int kernel_arg);
   };
 
   /// **Declaration of "float4" data class:**
@@ -170,8 +177,8 @@
 
       void      init();
       void      set(kernel* k, int kernel_arg);
-      void      push(kernel* k, int kernel_arg);
-      void      pop(kernel* k, int kernel_arg);
+      void      push(queue* q, kernel* k, int kernel_arg);
+      void      pop(queue* q, kernel* k, int kernel_arg);
   };
 
   /// **Declaration of "int4" data class:**
@@ -202,8 +209,8 @@
 
       void      init();
       void      set(kernel* k, int kernel_arg);
-      void      push(kernel* k, int kernel_arg);
-      void      pop(kernel* k, int kernel_arg);
+      void      push(queue* q, kernel* k, int kernel_arg);
+      void      pop(queue* q, kernel* k, int kernel_arg);
   };
 
   /// **Declaration of "point4" data class:**
@@ -235,8 +242,8 @@
 
       void      init();
       void      set(kernel* k, int kernel_arg);
-      void      push(kernel* k, int kernel_arg);
-      void      pop(kernel* k, int kernel_arg);
+      void      push(queue* q, kernel* k, int kernel_arg);
+      void      pop(queue* q, kernel* k, int kernel_arg);
   };
 
   /// **Declaration of "color4" data class:**
@@ -250,7 +257,7 @@
       int               err;
       unsigned int      i;
       GLfloat*          data;
-      GLuint            LAYOUT_1 = 1;                                           // "layout = 1" attribute in vertex shader.
+      GLuint            LAYOUT_1;                                               // "layout = 1" attribute in vertex shader.
 
     public:
       color4(int num_data);
@@ -268,8 +275,8 @@
 
       void      init();
       void      set(kernel* k, int kernel_arg);
-      void      push(kernel* k, int kernel_arg);
-      void      pop(kernel* k, int kernel_arg);
+      void      push(queue* q, kernel* k, int kernel_arg);
+      void      pop(queue* q, kernel* k, int kernel_arg);
   };
 
   /// **Declaration of "text4" data class:**
@@ -380,12 +387,11 @@
   void        release_opencl_context();
 
   void        typeset(text4* text);
-  void        load_kernel(kernel* k);
-  void        init_opencl_kernel(kernel* k);
+  //void        load_kernel(kernel* k);
+  //void        init_opencl_kernel(kernel* k);
   void        get_kernel_workgroup_size(kernel* k, cl_device_id device_id, size_t* local);
   void        execute_kernel(kernel* k);
 
-  void        enqueue_task(kernel* k);
   void        wait_for_event(kernel* k);
   void        release_event(kernel* k);
 

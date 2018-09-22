@@ -841,9 +841,9 @@ float             P[16]     = {1.0, 0.0, 0.0, 0.0,                              
 ///////////////////////////////// OPENCL VARIABLES ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 char*                   value;
-cl_platform_id*         platforms;
+cl_platform_id*         platform;
 unsigned int            num_platforms;
-cl_device_id*           devices;
+cl_device_id*           device;
 unsigned int            num_devices;
 cl_context_properties*  properties;
 cl_context              context;
@@ -858,7 +858,7 @@ queue::queue()
 
 void queue::init()
 {
-  thequeue = clCreateCommandQueue(context, devices[0], 0, &err);                   // Creating OpenCL queue...
+  thequeue = clCreateCommandQueue(context, device[0], 0, &err);                 // Creating OpenCL queue...
 
   if(err != CL_SUCCESS)
   {
@@ -871,7 +871,7 @@ queue::~queue()
 {
   printf("Action: releasing the OpenCL command queue... ");
 
-  err = clReleaseCommandQueue(queue);                                           // Releasing OpenCL queue...
+  err = clReleaseCommandQueue(thequeue);                                        // Releasing OpenCL queue...
 
   if(err != CL_SUCCESS)
   {
@@ -896,7 +896,7 @@ void kernel::init()
 {
   FILE* handle;                                                                 // Input file handle.
 
-  printf("Action: loading OpenCL kernel from file... ");
+  printf("Action: loading OpenCL kernel source from file... ");
 
   handle = fopen(source_file, "rb");                                            // Opening OpenCL kernel source file...
 
@@ -923,8 +923,8 @@ void kernel::init()
 
   printf("DONE!\n");
 
-  printf("Action: creating OpenCL program... ");
-  program = clCreateProgramWithSource(context,                         // Creating OpenCL program from its source...
+  printf("Action: creating OpenCL program from kernel source... ");
+  program = clCreateProgramWithSource(context,                                  // Creating OpenCL program from its source...
                                              1,
                                              (const char**)&source,
                                              &source_size, &err);
@@ -935,19 +935,19 @@ void kernel::init()
     exit(err);
   }
 
-  //free(k->source);                                                        // Freeing OpenCL kernel buffer...
+  free(source);                                                                 // Freeing OpenCL kernel buffer...
   printf("DONE!\n");
 
   printf("Action: building OpenCL program... ");
-  err = clBuildProgram(program, 1, devices, "", NULL, NULL);           // Building OpenCL program...
+  err = clBuildProgram(program, 1, device, "", NULL, NULL);                     // Building OpenCL program...
 
   // Checking compiled kernel:
   if (err != CL_SUCCESS)
   {
     printf("\nError:  %s\n", get_error(err));
 
-    err = clGetProgramBuildInfo(program,                               // Getting compiler information...
-                                devices[0],
+    err = clGetProgramBuildInfo(program,                                        // Getting compiler information...
+                                device[0],
                                 CL_PROGRAM_BUILD_LOG,
                                 0,
                                 NULL,
@@ -967,7 +967,7 @@ void kernel::init()
       exit(EXIT_FAILURE);
     }
 
-    err = clGetProgramBuildInfo(program, devices[0],                   // Reading log...
+    err = clGetProgramBuildInfo(program, device[0],                             // Reading log...
                                 CL_PROGRAM_BUILD_LOG,
                                 log_size + 1,
                                 log,
@@ -986,9 +986,9 @@ void kernel::init()
 
   printf("DONE!\n");
 
+  printf("Action: creating OpenCL kernel object from program... ");
 
-
-  thekernel = clCreateKernel(program, KERNEL_NAME, &err);     // Creating OpenCL kernel...
+  thekernel = clCreateKernel(program, KERNEL_NAME, &err);                       // Creating OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -999,7 +999,7 @@ void kernel::init()
   printf("DONE!\n");
 }
 
-void kernel::execute(queue* q)
+void kernel::execute(queue* q, kernel_event k_ev)
 {
   err = clEnqueueNDRangeKernel(q->thequeue,                                     // Enqueueing OpenCL kernel (as a single task)...
                                thekernel,
@@ -1017,13 +1017,34 @@ void kernel::execute(queue* q)
     exit(err);
   }
 
-  err = clFinish(q->thequeue);                                                  // Waiting for kernel execution to be completed (host blocking)...
-
-  if(err != CL_SUCCESS)
+  switch(k_ev)
   {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
+    case WAIT:
+      err = clWaitForEvents(1, &event);                                         // Waiting for kernel execution to be completed (host blocking)...
+
+      if(err != CL_SUCCESS)
+      {
+        printf("\nError:  %s\n", get_error(err));
+        exit(err);
+      }
+    break;
+
+    case DONT_WAIT:
+                                                                                // Doing nothing!
+    break;
+
+    default:
+      err = clWaitForEvents(1, &event);                                         // Waiting for kernel execution to be completed (host blocking)...
+
+      if(err != CL_SUCCESS)
+      {
+        printf("\nError:  %s\n", get_error(err));
+        exit(err);
+      }
+    break;
   }
+
+
 }
 
 kernel::~kernel()
@@ -1031,6 +1052,17 @@ kernel::~kernel()
   printf("Action: releasing OpenCL kernel... ");
 
   err = clReleaseKernel(thekernel);                                             // Releasing OpenCL kernel...
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  printf("DONE!\n");
+
+  printf("Action: releasing OpenCL kernel event... ");
+  err = clReleaseEvent(event);                                                  // Releasing OpenCL event...
 
   if(err != CL_SUCCESS)
   {
@@ -1101,9 +1133,9 @@ void float1::set(kernel* k, int kernel_arg)
   }
 }
 
-void float1::push(kernel* k, int kernel_arg)
+void float1::push(queue* q, kernel* k, int kernel_arg)
 {
-  err = clEnqueueAcquireGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Passing "points" to OpenCL kernel...
+  err = clEnqueueAcquireGLObjects(q->thequeue, 1, &buffer, 0, NULL, NULL);      // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -1112,9 +1144,9 @@ void float1::push(kernel* k, int kernel_arg)
   }
 }
 
-void float1::pop(kernel* k, int kernel_arg)
+void float1::pop(queue* q, kernel* k, int kernel_arg)
 {
-  err = clEnqueueReleaseGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Releasing "points" from OpenCL kernel...
+  err = clEnqueueReleaseGLObjects(q->thequeue, 1, &buffer, 0, NULL, NULL);      // Releasing "points" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -1127,9 +1159,9 @@ float1::~float1()
 {
   printf("Action: releasing \"float1\" object... ");
 
-  if(CL_memory_buffer != NULL)
+  if(buffer != NULL)
   {
-    err = clReleaseMemObject(CL_memory_buffer);                                 // Releasing OpenCL buffer object...
+    err = clReleaseMemObject(buffer);                                           // Releasing OpenCL buffer object...
 
     if(err != CL_SUCCESS)
     {
@@ -1191,9 +1223,9 @@ void int1::set(kernel* k, int kernel_arg)
   }
 }
 
-void int1::push(kernel* k, int kernel_arg)
+void int1::push(queue* q, kernel* k, int kernel_arg)
 {
-  err = clEnqueueAcquireGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Passing "points" to OpenCL kernel...
+  err = clEnqueueAcquireGLObjects(q->thequeue, 1, &buffer, 0, NULL, NULL);      // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -1202,9 +1234,9 @@ void int1::push(kernel* k, int kernel_arg)
   }
 }
 
-void int1::pop(kernel* k, int kernel_arg)
+void int1::pop(queue* q, kernel* k, int kernel_arg)
 {
-  err = clEnqueueReleaseGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Releasing "points" from OpenCL kernel...
+  err = clEnqueueReleaseGLObjects(q->thequeue, 1, &buffer, 0, NULL, NULL);      // Releasing "points" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -1217,9 +1249,9 @@ int1::~int1()
 {
   printf("Action: releasing \"float1\" object... ");
 
-  if(CL_memory_buffer != NULL)
+  if(buffer != NULL)
   {
-    err = clReleaseMemObject(CL_memory_buffer);                                 // Releasing OpenCL buffer object...
+    err = clReleaseMemObject(buffer);                                           // Releasing OpenCL buffer object...
 
     if(err != CL_SUCCESS)
     {
@@ -1299,9 +1331,9 @@ void float4::set(kernel* k, int kernel_arg)
   }
 }
 
-void float4::push(kernel* k, int kernel_arg)
+void float4::push(queue* q, kernel* k, int kernel_arg)
 {
-  err = clEnqueueAcquireGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Passing "points" to OpenCL kernel...
+  err = clEnqueueAcquireGLObjects(q->thequeue, 1, &buffer, 0, NULL, NULL);      // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -1310,9 +1342,9 @@ void float4::push(kernel* k, int kernel_arg)
   }
 }
 
-void float4::pop(kernel* k, int kernel_arg)
+void float4::pop(queue* q, kernel* k, int kernel_arg)
 {
-  err = clEnqueueReleaseGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Releasing "points" from OpenCL kernel...
+  err = clEnqueueReleaseGLObjects(q->thequeue, 1, &buffer, 0, NULL, NULL);      // Releasing "points" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -1325,9 +1357,9 @@ float4::~float4()
 {
   printf("Action: releasing \"float1\" object... ");
 
-  if(CL_memory_buffer != NULL)
+  if(buffer != NULL)
   {
-    err = clReleaseMemObject(CL_memory_buffer);                                 // Releasing OpenCL buffer object...
+    err = clReleaseMemObject(buffer);                                           // Releasing OpenCL buffer object...
 
     if(err != CL_SUCCESS)
     {
@@ -1412,9 +1444,9 @@ void int4::set(kernel* k, int kernel_arg)
   }
 }
 
-void int4::push(kernel* k, int kernel_arg)
+void int4::push(queue* q, kernel* k, int kernel_arg)
 {
-  err = clEnqueueAcquireGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Passing "points" to OpenCL kernel...
+  err = clEnqueueAcquireGLObjects(q->thequeue, 1, &buffer, 0, NULL, NULL);      // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -1423,9 +1455,9 @@ void int4::push(kernel* k, int kernel_arg)
   }
 }
 
-void int4::pop(kernel* k, int kernel_arg)
+void int4::pop(queue* q, kernel* k, int kernel_arg)
 {
-  err = clEnqueueReleaseGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Releasing "points" from OpenCL kernel...
+  err = clEnqueueReleaseGLObjects(q->thequeue, 1, &buffer, 0, NULL, NULL);      // Releasing "points" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -1438,9 +1470,9 @@ int4::~int4()
 {
   printf("Action: releasing \"float1\" object... ");
 
-  if(CL_memory_buffer != NULL)
+  if(buffer != NULL)
   {
-    err = clReleaseMemObject(CL_memory_buffer);                                 // Releasing OpenCL buffer object...
+    err = clReleaseMemObject(buffer);                                           // Releasing OpenCL buffer object...
 
     if(err != CL_SUCCESS)
     {
@@ -1525,9 +1557,9 @@ void point4::set(kernel* k, int kernel_arg)
   }
 }
 
-void point4::push(kernel* k, int kernel_arg)
+void point4::push(queue* q, kernel* k, int kernel_arg)
 {
-  err = clEnqueueAcquireGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Passing "points" to OpenCL kernel...
+  err = clEnqueueAcquireGLObjects(q->thequeue, 1, &buffer, 0, NULL, NULL);      // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -1536,9 +1568,9 @@ void point4::push(kernel* k, int kernel_arg)
   }
 }
 
-void point4::pop(kernel* k, int kernel_arg)
+void point4::pop(queue* q, kernel* k, int kernel_arg)
 {
-  err = clEnqueueReleaseGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Releasing "points" from OpenCL kernel...
+  err = clEnqueueReleaseGLObjects(q->thequeue, 1, &buffer, 0, NULL, NULL);      // Releasing "points" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -1551,9 +1583,9 @@ point4::~point4()
 {
   printf("Action: releasing \"float1\" object... ");
 
-  if(CL_memory_buffer != NULL)
+  if(buffer != NULL)
   {
-    err = clReleaseMemObject(CL_memory_buffer);                                 // Releasing OpenCL buffer object...
+    err = clReleaseMemObject(buffer);                                           // Releasing OpenCL buffer object...
 
     if(err != CL_SUCCESS)
     {
@@ -1638,9 +1670,9 @@ void color4::set(kernel* k, int kernel_arg)
   }
 }
 
-void color4::push(kernel* k, int kernel_arg)
+void color4::push(queue* q, kernel* k, int kernel_arg)
 {
-  err = clEnqueueAcquireGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Passing "points" to OpenCL kernel...
+  err = clEnqueueAcquireGLObjects(q->thequeue, 1, &buffer, 0, NULL, NULL);      // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -1649,9 +1681,9 @@ void color4::push(kernel* k, int kernel_arg)
   }
 }
 
-void color4::pop(kernel* k, int kernel_arg)
+void color4::pop(queue* q, kernel* k, int kernel_arg)
 {
-  err = clEnqueueReleaseGLObjects(queue, 1, &buffer, 0, NULL, NULL);            // Releasing "points" from OpenCL kernel...
+  err = clEnqueueReleaseGLObjects(q->thequeue, 1, &buffer, 0, NULL, NULL);      // Releasing "points" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -1664,9 +1696,9 @@ color4::~color4()
 {
   printf("Action: releasing \"float1\" object... ");
 
-  if(CL_memory_buffer != NULL)
+  if(buffer != NULL)
   {
-    err = clReleaseMemObject(CL_memory_buffer);                                 // Releasing OpenCL buffer object...
+    err = clReleaseMemObject(buffer);                                           // Releasing OpenCL buffer object...
 
     if(err != CL_SUCCESS)
     {
@@ -2395,9 +2427,9 @@ cl_uint get_platforms()
     exit(err);
   }
 
-  platforms = (cl_platform_id*) malloc(sizeof(cl_platform_id)*num_platforms);   // Allocating platform array...
+  platform = (cl_platform_id*) malloc(sizeof(cl_platform_id)*num_platforms);   // Allocating platform array...
 
-  err = clGetPlatformIDs(num_platforms, platforms, NULL);                       // Getting OpenCL platform IDs...
+  err = clGetPlatformIDs(num_platforms, platform, NULL);                       // Getting OpenCL platform IDs...
 
   if(err != CL_SUCCESS)
   {
@@ -2416,7 +2448,7 @@ void get_platform_info(cl_uint index_platform, cl_platform_info name_param)
   cl_int err;
   size_t  size_value;
 
-  err = clGetPlatformInfo(platforms[index_platform],                            // Getting platform information...
+  err = clGetPlatformInfo(platform[index_platform],                            // Getting platform information...
                           name_param,
                           0,
                           NULL,
@@ -2430,7 +2462,7 @@ void get_platform_info(cl_uint index_platform, cl_platform_info name_param)
 
   value = (char*) malloc(size_value);                                           // Allocating value array...
 
-  err = clGetPlatformInfo(platforms[index_platform],                            // Getting platform information...
+  err = clGetPlatformInfo(platform[index_platform],                            // Getting platform information...
                           name_param,
                           size_value,
                           value,
@@ -2475,7 +2507,7 @@ cl_uint get_devices(cl_uint index_platform)
 
   printf("Action: getting OpenCL devices... ");
 
-  err = clGetDeviceIDs(platforms[index_platform],                               // Getting number of existing OpenCL GPU devices...
+  err = clGetDeviceIDs(platform[index_platform],                               // Getting number of existing OpenCL GPU devices...
                        CL_DEVICE_TYPE_GPU,
                        0,
                        NULL,
@@ -2487,12 +2519,12 @@ cl_uint get_devices(cl_uint index_platform)
     exit(err);
   }
 
-  devices = (cl_device_id*) malloc(sizeof(cl_device_id) * num_devices);         // Allocating device array...
+  device = (cl_device_id*) malloc(sizeof(cl_device_id) * num_devices);         // Allocating device array...
 
-  err = clGetDeviceIDs(platforms[index_platform],                               // Getting OpenCL platform IDs...
+  err = clGetDeviceIDs(platform[index_platform],                               // Getting OpenCL platform IDs...
                        CL_DEVICE_TYPE_GPU,
                        num_devices,
-                       devices,
+                       device,
                        NULL);
 
   if(err != CL_SUCCESS)
@@ -2512,7 +2544,7 @@ void get_device_info(cl_uint index_device, cl_device_info name_param)
   cl_int err;
   size_t  size_value;
 
-  err = clGetDeviceInfo(devices[index_device],                                  // Getting device information...
+  err = clGetDeviceInfo(device[index_device],                                  // Getting device information...
                         name_param,
                         0,
                         NULL,
@@ -2526,7 +2558,7 @@ void get_device_info(cl_uint index_device, cl_device_info name_param)
 
   value = (char*) malloc(size_value);                                           // Allocating value array...
 
-  err = clGetDeviceInfo(devices[index_device],                                  // Getting device information...
+  err = clGetDeviceInfo(device[index_device],                                  // Getting device information...
                         name_param,
                         size_value,
                         value,
@@ -2800,7 +2832,7 @@ void init_opencl_context()
     {
       CL_GL_CONTEXT_KHR, (cl_context_properties)glfwGetGLXContext(window),
       CL_GLX_DISPLAY_KHR, (cl_context_properties)glfwGetX11Display(),
-      CL_CONTEXT_PLATFORM, (cl_context_properties)platforms[0],
+      CL_CONTEXT_PLATFORM, (cl_context_properties)platform[0],
       0
     };
   #endif
@@ -2812,7 +2844,7 @@ void init_opencl_context()
     {
       CL_GL_CONTEXT_KHR, (cl_context_properties)glfwGetWGLContext(window),
       CL_WGL_HDC_KHR, (cl_context_properties)GetDC(glfwGetWin32Window(window)),
-      CL_CONTEXT_PLATFORM, (cl_context_properties)platforms[0],
+      CL_CONTEXT_PLATFORM, (cl_context_properties)platform[0],
       0
     };
   #endif
@@ -2858,54 +2890,6 @@ void get_kernel_workgroup_size(kernel* k, cl_device_id device_id, size_t* local)
     printf("DONE!\n");
 }
 
-void enqueue_task(kernel* k)
-{
-    cl_int err;
-
-    //printf("Action: enqueueing OpenCL task... ");
-    err = clEnqueueTask(queue, k->thekernel, 0, NULL, &k->event);                 // Enqueueing OpenCL kernel as task (for multiple kernels)...
-
-    if(err != CL_SUCCESS)
-    {
-      printf("\nError:  %s\n", get_error(err));
-      exit(err);
-    }
-
-    //printf("DONE!\n");
-}
-
-void wait_for_event(kernel* k)
-{
-    cl_int err;
-
-    //printf("Action: waiting for OpenCL events... ");
-    err = clWaitForEvents(1, &k->event);                                    // Waiting for OpenCL event (for multiple kernel tasks)...
-
-    if(err != CL_SUCCESS)
-    {
-      printf("\nError:  %s\n", get_error(err));
-      exit(err);
-    }
-
-    //printf("DONE!\n");
-}
-
-void release_event(kernel* k)
-{
-    cl_int err;
-
-    //printf("Action: decrementing the OpenCL event reference count... ");
-    err = clReleaseEvent(k->event);                                         // Releasing OpenCL event...
-
-    if(err != CL_SUCCESS)
-    {
-      printf("\nError:  %s\n", get_error(err));
-      exit(err);
-    }
-
-    //printf("DONE!\n");
-}
-
 void release_opencl_context()
 {
   cl_int err;
@@ -2920,8 +2904,8 @@ void release_opencl_context()
     exit(err);
   }
 
-  free(devices);                                                                // Freeing OpenCL devices...
-  free(platforms);                                                              // Freeing OpenCL platforms...
+  free(device);                                                                // Freeing OpenCL devices...
+  free(platform);                                                              // Freeing OpenCL platforms...
 
   printf("DONE!\n");
 }
