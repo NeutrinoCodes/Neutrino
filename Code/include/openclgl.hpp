@@ -91,7 +91,7 @@
 
       kernel();
       ~kernel();
-      void init();
+      void init(char* kernel_source, size_t kernel_size, cl_uint kernel_dimension);
       void execute(queue* q, kernel_event k_ev);
   };
 
@@ -313,6 +313,11 @@
       int*     kern;
       int*     offset;
 
+      GLfloat* glyph_data;                                                      // Text "glyph" data.
+      GLfloat* color_data;                                                      // Text "color" data.
+      GLuint   LAYOUT_0;                                                        // "layout = 0" attribute in vertex shader.
+      GLuint   LAYOUT_1;                                                        // "layout = 1" attribute in vertex shader.
+
     public:
       text4(const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A);
       ~text4();
@@ -333,6 +338,8 @@
       GLuint    color_vao;
       GLuint    glyph_vbo;
       GLuint    color_vbo;
+
+      void init();
   };
 
   ////////////////////////////////////////////////////////////////////////////////

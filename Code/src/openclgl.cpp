@@ -892,11 +892,15 @@ kernel::kernel()
   event = NULL;
 }
 
-void kernel::init()
+void kernel::init(char* kernel_source, size_t kernel_size, cl_uint kernel_dimension)
 {
   FILE* handle;                                                                 // Input file handle.
 
   printf("Action: loading OpenCL kernel source from file... ");
+
+  source_file = kernel_source;
+  size = kernel_size;
+  dimension = kernel_dimension;
 
   handle = fopen(source_file, "rb");                                            // Opening OpenCL kernel source file...
 
@@ -1826,6 +1830,62 @@ text4::text4(const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A)
     b[i] = B;                                                                   // Setting "b" data...
     a[i] = A;                                                                   // Setting "a" data...
   }
+
+  printf("DONE!\n");
+}
+
+void text4::init()
+{
+  printf("Action: initializing OpenGL text... ");
+
+  LAYOUT_0 = 0;
+  LAYOUT_1 = 1;
+
+  glyph_data = new GLfloat[4*size];
+  color_data = new GLfloat[4*size];
+
+  for (i = 0; i < size; i++)
+  {
+    glyph_data[4*i + 0] = x[i];
+    glyph_data[4*i + 1] = y[i];
+    glyph_data[4*i + 2] = z[i];
+    glyph_data[4*i + 3] = w[i];
+
+    color_data[4*i + 0] = r[i];
+    color_data[4*i + 1] = g[i];
+    color_data[4*i + 2] = b[i];
+    color_data[4*i + 3] = a[i];
+  }
+
+  // TEXT GLYPHS:
+  glGenVertexArrays(1, &glyph_vao);                                             // Generating glyph VAO...
+  glBindVertexArray(glyph_vao);                                                 // Binding glyph VAO...
+  glGenBuffers(1, &glyph_vbo);                                                  // Generating glyph VBO...
+
+  glBindBuffer(GL_ARRAY_BUFFER, glyph_vbo);                                     // Binding glyph VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*sizeof(GLfloat)*(size),
+               glyph_data,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, glyph_vbo);                                     // Binding glyph VBO...
+  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
+
+  // TEXT COLORS:
+  glGenVertexArrays(1, &color_vao);                                             // Generating color VAO...
+  glBindVertexArray(color_vao);                                                 // Binding color VAO...
+  glGenBuffers(1, &color_vbo);                                                  // Generating color VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, color_vbo);                                     // Binding color VBO...
+  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
+               4*sizeof(GLfloat)*(size),
+               color_data,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, color_vbo);                                     // Binding color VBO...
+  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
+
+  delete[] glyph_data;
+  delete[] color_data;
 
   printf("DONE!\n");
 }
@@ -2913,68 +2973,7 @@ void release_opencl_context()
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// TEXT FUNCTIONS /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void typeset(text4* text)
-{
-  int      err;
-  int      i;
-  GLfloat* unfolded_glyph_data;                                                 // Text "glyph" data.
-  GLfloat* unfolded_color_data;                                                 // Text "color" data.
-  GLuint   LAYOUT_0;                                                            // "layout = 0" attribute in vertex shader.
-  GLuint   LAYOUT_1;                                                            // "layout = 1" attribute in vertex shader.
 
-  printf("Action: initializing OpenGL text... ");
-
-  LAYOUT_0 = 0;
-  LAYOUT_1 = 1;
-
-  unfolded_glyph_data = new GLfloat[4*text->size];
-  unfolded_color_data = new GLfloat[4*text->size];
-
-  for (i = 0; i < text->size; i++)
-  {
-    unfolded_glyph_data[4*i + 0] = text->x[i];
-    unfolded_glyph_data[4*i + 1] = text->y[i];
-    unfolded_glyph_data[4*i + 2] = text->z[i];
-    unfolded_glyph_data[4*i + 3] = text->w[i];
-
-    unfolded_color_data[4*i + 0] = text->r[i];
-    unfolded_color_data[4*i + 1] = text->g[i];
-    unfolded_color_data[4*i + 2] = text->b[i];
-    unfolded_color_data[4*i + 3] = text->a[i];
-  }
-
-  // TEXT GLYPHS:
-  glGenVertexArrays(1, &text->glyph_vao);                                       // Generating glyph VAO...
-  glBindVertexArray(text->glyph_vao);                                           // Binding glyph VAO...
-  glGenBuffers(1, &text->glyph_vbo);                                            // Generating glyph VBO...
-
-  glBindBuffer(GL_ARRAY_BUFFER, text->glyph_vbo);                               // Binding glyph VBO...
-  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
-               4*sizeof(GLfloat)*(text->size),
-               unfolded_glyph_data,
-               GL_DYNAMIC_DRAW);
-  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
-  glBindBuffer(GL_ARRAY_BUFFER, text->glyph_vbo);                               // Binding glyph VBO...
-  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
-
-  // TEXT COLORS:
-  glGenVertexArrays(1, &text->color_vao);                                       // Generating color VAO...
-  glBindVertexArray(text->color_vao);                                           // Binding color VAO...
-  glGenBuffers(1, &text->color_vbo);                                            // Generating color VBO...
-  glBindBuffer(GL_ARRAY_BUFFER, text->color_vbo);                               // Binding color VBO...
-  glBufferData(GL_ARRAY_BUFFER,                                                 // Creating and initializing a buffer object's data store...
-               4*sizeof(GLfloat)*(text->size),
-               unfolded_color_data,
-               GL_DYNAMIC_DRAW);
-  glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
-  glBindBuffer(GL_ARRAY_BUFFER, text->color_vbo);                               // Binding color VBO...
-  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
-
-  delete[] unfolded_glyph_data;
-  delete[] unfolded_color_data;
-
-  printf("DONE!\n");
-}
 
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "SAVE" FUNCTIONS ////////////////////////////////
