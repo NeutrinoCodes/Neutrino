@@ -51,6 +51,17 @@
 
   extern  GLFWwindow*				window;                                             // Window handle.
 
+  class window
+  {
+    private:
+
+    public:
+      window();
+      ~window();
+
+      void init();
+  };
+
   class queue
   {
     private:
