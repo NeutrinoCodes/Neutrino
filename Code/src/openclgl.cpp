@@ -1965,22 +1965,6 @@ window::window()
 
 void window::init()
 {
-  ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////// WINDOW INITIALIZATION: ////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  if (glfwInit() != GLFW_TRUE)                                                  // Inititalizing GLFW context...
-	{
-  	printf("Error:  unable to initialize GLFW!\n");
-		glfwTerminate();
-		exit(EXIT_FAILURE);
-	}
-
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);                                // Initializing GLFW hints...
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);                                // Initializing GLFW hints...
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);                          // Initializing GLFW hints...
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);                // Initializing GLFW hints...
-	glfwWindowHint(GLFW_SAMPLES, 4);                                              // Initializing GLFW hints...
-
   // Creating window:
   window = glfwCreateWindow(window_size_x,                                      // Width.
                             window_size_y,                                      // Height.
@@ -1994,6 +1978,7 @@ void window::init()
     exit(EXIT_FAILURE);
   }
 
+  // EZOR 05OCT2018: all callbacks to be tranformed into trampoline functions.
   glfwMakeContextCurrent(window);                                               // Making the context of this window current for the calling thread...
 	glfwSetWindowRefreshCallback(window, window_refresh_callback);                // Setting window callbacks...
   glfwSetKeyCallback(window, key_callback);                                     // Setting window callbacks...
@@ -2388,11 +2373,52 @@ void print(text4* text)
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////// OPENGL CONTEXT FUNCTIONS ///////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void init_opengl_context()
+void init_opengl_context(float gl_ver, int msaa)
 {
-  init_window();                                                                // Initializing window...
-  init_shaders();                                                               // Initializing shaders...
-  init_screen();                                                                // Initializing screen...
+  double gl_ver_int;
+  double gl_ver_frac;
+
+  // Initializing GLFW context:
+  printf("Action: initializing GLFW... ");
+  gl_ver_frac = modf((double)gl_ver, &gl_ver_int);                              // Getting integer and fractional part of OpenGL requested version...
+
+  if (glfwInit() == GLFW_TRUE)                                                  // Inititalizing GLFW context...
+	{
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, (int)gl_ver_int);                // Initializing GLFW hints... EZOR 05OCT2018: (was 4)
+  	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, (int)gl_ver_frac);               // Initializing GLFW hints... EZOR 05OCT2018: (was 1)
+  	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);                        // Initializing GLFW hints...
+  	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);              // Initializing GLFW hints...
+  	glfwWindowHint(GLFW_SAMPLES, msaa);                                         // Initializing GLFW hints... EZOR 05OCT2018: (was 4)
+
+    printf("DONE!\n");
+  }
+
+  else
+  {
+    printf("Error:  unable to initialize GLFW!\n");
+		glfwTerminate();
+		exit(EXIT_FAILURE);
+  }
+
+  // Initializing GLEW context:
+  printf("Action: initializing GLFW... ");
+  glewExperimental = GL_TRUE;                                                   // Ensuring that all extensions with valid entry points will be exposed...
+
+	if (glewInit() == GLEW_OK)
+	{
+
+    printf("DONE!\n");
+  }
+
+  else
+  {
+    printf("Error:  unable to initialize GLEW!\n");
+    exit(EXIT_FAILURE);
+  }
+
+  //init_window();                                                                // Initializing window...
+  //init_shaders();                                                               // Initializing shaders...
+  //init_screen();                                                                // Initializing screen...
 }
 
 void release_opengl_context()
