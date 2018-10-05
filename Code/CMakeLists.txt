@@ -54,7 +54,12 @@ if(LINUX)
   target_link_libraries(neutrino "-lOpenGL" "-lOpenCL" "-lGLEW" "-lglfw" "-lm")
 endif(LINUX)
 
-message("GCC build started!")
+# Type: "make run" to run the executable.
+add_custom_target(run
+    COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/neutrino
+    VERBATIM )
+
+message("DONE configuring GCC!")
 
 message("")
 message("################################################################################")
@@ -73,7 +78,7 @@ if (DOXYGEN_FOUND)
 
     message("Requesting to configure the file...")
     configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-    message("Doxygen build started!")
+    message("DONE configuring Doxygen!")
 
     add_custom_target(doc
         COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
