@@ -849,7 +849,7 @@ cl_context_properties*  properties;
 cl_context              context;
 
 //////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// OPENCL CLASSES /////////////////////////////////
+/////////////////////////////// OPENCL: QUEUE CLASS //////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 queue::queue()
 {
@@ -882,6 +882,9 @@ queue::~queue()
   printf("DONE!\n");
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// OPENCL: KERNEL CLASS //////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 kernel::kernel()
 {
   thekernel = NULL;
@@ -1958,17 +1961,27 @@ void load_text_fragment(char* neutrino_path, const char* filename_fragment)
 	printf("DONE!\n");
 }
 
-window::window()
+object::object()
 {
 
 }
 
-void window::init()
+void object::init()
 {
-  // Creating window:
-  window = glfwCreateWindow(window_size_x,                                      // Width.
-                            window_size_y,                                      // Height.
-                            "Neutrino",                                         // Title.
+
+}
+
+object::~object()
+{
+
+}
+
+void init_window(int width, int height, const char* title)
+{
+  // Creating the window:
+  window = glfwCreateWindow(width,                                              // Width.
+                            height,                                             // Height.
+                            title,                                              // Title.
                             NULL,                                               // Monitor.
                             NULL);                                              // Share.
   if (!window)
@@ -1978,7 +1991,6 @@ void window::init()
     exit(EXIT_FAILURE);
   }
 
-  // EZOR 05OCT2018: all callbacks to be tranformed into trampoline functions.
   glfwMakeContextCurrent(window);                                               // Making the context of this window current for the calling thread...
 	glfwSetWindowRefreshCallback(window, window_refresh_callback);                // Setting window callbacks...
   glfwSetKeyCallback(window, key_callback);                                     // Setting window callbacks...
@@ -1994,11 +2006,6 @@ void window::init()
     printf("Error:  unable to initialize GLEW!\n");
     exit(EXIT_FAILURE);
   }
-}
-
-window::~window()
-{
-
 }
 
 void init_shaders()
@@ -2415,10 +2422,6 @@ void init_opengl_context(float gl_ver, int msaa)
     printf("Error:  unable to initialize GLEW!\n");
     exit(EXIT_FAILURE);
   }
-
-  //init_window();                                                                // Initializing window...
-  //init_shaders();                                                               // Initializing shaders...
-  //init_screen();                                                                // Initializing screen...
 }
 
 void release_opengl_context()

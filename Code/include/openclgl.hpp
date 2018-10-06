@@ -51,13 +51,13 @@
 
   extern  GLFWwindow*				window;                                             // Window handle.
 
-  class window
+  class object
   {
     private:
 
     public:
-      window();
-      ~window();
+      object();
+      ~object();
 
       void init();
   };
