@@ -778,10 +778,149 @@ int font_width[94] = {
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// WINDOW VARIABLES ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-GLFWwindow*				window;                                                       // Window handle.
 int								window_size_x = SIZE_WINDOW_X;                                // Window x-size [px].
 int								window_size_y = SIZE_WINDOW_Y;                                // Window y-size [px].
 float							aspect_ratio = (float)window_size_x/(float)window_size_y;     // Window aspcet-ratio [].
+
+window::window()
+{
+  mouse_x = 0;                                                                  // Initializing mouse x-coordinate [px].
+  mouse_y = 0;                                                                  // Initializing mouse y-coordinate [px].
+  mouse_x_old = 0;                                                              // Initializing mouse x-coordinate backup [px].
+  mouse_y_old = 0;                                                              // Initializing mouse y-coordinate backup [px].
+  scroll_x = 0;                                                                 // Initializing scroll x-coordinate [px].
+  scroll_y = 0;                                                                 // Initializing scroll y-coordinate [px].
+  zoom = 0;                                                                     // Initializing zoom coefficient.
+  arcball_on = false;                                                           // Initializing arcball activation flag.
+
+  q[4]      = {1.0, 0.0, 0.0, 0.0};                                             // Initializing arcball quaternion...
+
+  R[16]     = {1.0, 0.0, 0.0, 0.0,                                              // Initializing rotation matrix...
+               0.0, 1.0, 0.0, 0.0,
+               0.0, 0.0, 1.0, 0.0,
+               0.0, 0.0, 0.0, 1.0};
+
+  R_old[16] = {1.0, 0.0, 0.0, 0.0,                                              // Initializing rotation matrix backup...
+               0.0, 1.0, 0.0, 0.0,
+               0.0, 0.0, 1.0, 0.0,
+               0.0, 0.0, 0.0, 1.0};
+
+  T[16]     = {1.0, 0.0, 0.0, 0.0,                                              // Initializing translation matrix...
+               0.0, 1.0, 0.0, 0.0,
+               0.0, 0.0, 1.0, 0.0,
+               0.0, 0.0, 0.0, 1.0};
+
+  V[16]     = {1.0, 0.0, 0.0, 0.0,                                              // Initializing view matrix...
+               0.0, 1.0, 0.0, 0.0,
+               0.0, 0.0, 1.0, 0.0,
+               0.0, 0.0, 0.0, 1.0};
+
+  P[16]     = {1.0, 0.0, 0.0, 0.0,                                              // Initializing projection matrix...
+               0.0, 1.0, 0.0, 0.0,
+               0.0, 0.0, 1.0, 0.0,
+               0.0, 0.0, 0.0, 1.0};
+}
+
+void window::init()
+{
+  glfw_window = glfwCreateWindow(width,                                         // Width.
+                                 height,                                        // Height.
+                                 title,                                         // Title.
+                                 NULL,                                          // Monitor.
+                                 NULL);                                         // Share.
+  if (!glfw_window)
+	{
+		printf("Error:  unable to create window!\n");
+    glfwTerminate();
+    exit(EXIT_FAILURE);
+  }
+
+  glfwSetWindowUserPointer(glfw_window, this);
+  glfwMakeContextCurrent(glfw_window);                                          // Making the context of this window current for the calling thread...
+
+  glfwSetWindowRefreshCallback(glfw_window, refresh_callback);                  // Setting window callbacks...
+  glfwSetKeyCallback(glfw_window, key_callback);                                // Setting window callbacks...
+	glfwSetMouseButtonCallback(glfw_window, mouse_pressed_callback);              // Setting window callbacks...
+	glfwSetCursorPosCallback(glfw_window, mouse_moved_callback);                  // Setting window callbacks...
+	glfwSetScrollCallback(glfw_window, mouse_scrolled_callback);                  // Setting window callbacks...
+}
+
+auto window::refresh(int key, int scancode, int action, int mods)->void
+{
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
+  glfwSwapBuffers(glfw_window);                                                 // Swapping front and back buffers...
+}
+
+auto window::key_pressed(int key, int scancode, int action, int mods)->void
+{
+  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+  {
+    glfwSetWindowShouldClose(glfw_window, GL_TRUE);
+  }
+}
+
+auto window::mouse_pressed(int key, int scancode, int action, int mods)->void
+{
+  if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && arcball_on == false)
+  {
+    glfwGetCursorPos(glfw_window, &mouse_x, &mouse_y);                          // Getting mouse position...
+    mouse_x_old = mouse_x;																											// Backing up mouse position...
+    mouse_y_old = mouse_y;																											// Backing up mouse position...
+    arcball_on = true;																													// Turning on arcball...
+  }
+
+  else
+  {
+    arcball_on = false;																													// Turning off arcball...
+  }
+
+  if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+  {
+    R_old[0] = R[0]; R_old[4] = R[4]; R_old[8]  = R[8];  R_old[12] = R[12];		  // Backing up Rotation_matrix matrix...
+    R_old[1] = R[1]; R_old[5] = R[5]; R_old[9]  = R[9];  R_old[13] = R[13];			// Backing up Rotation_matrix matrix...
+    R_old[2] = R[2]; R_old[6] = R[6]; R_old[10] = R[10]; R_old[14] = R[14];		  // Backing up Rotation_matrix matrix...
+    R_old[3] = R[3]; R_old[7] = R[7]; R_old[11] = R[11]; R_old[15] = R[15];		  // Backing up Rotation_matrix matrix...
+  }
+}
+
+auto window::mouse_moved(int key, int scancode, int action, int mods)->void
+{
+  if (arcball_on)
+  {
+    mouse_x = xpos;																															// Getting mouse position...
+    mouse_y = ypos;																															// Getting mouse position...
+  }
+}
+
+auto window::mouse_scrolled(int key, int scancode, int action, int mods)->void
+{
+  float translation[3];                                                         // Translation vector.
+
+  scroll_x = xoffset;																														// Getting scroll position...
+  scroll_y = yoffset;																														// Getting scroll position...
+  zoom = T[14];																							                    // Getting z-axis translation...
+
+  if (scroll_y > 0)
+  {
+    zoom *= ZOOM_FACTOR;																												// Zooming-in...
+  }
+
+  if (scroll_y < 0)
+  {
+    zoom /= ZOOM_FACTOR;																												// Zooming-out...
+  }
+
+  translation[0] = 0.0;                                                         // Building translation vector...
+  translation[1] = 0.0;                                                         // Building translation vector...
+  translation[2] = zoom;                                                        // Building translation vector...
+  translate(T, translation);                                                    // Building translation matrix...
+}
+
+window::~window()
+{
+
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// SHADER VARIABLES ////////////////////////////////
@@ -797,45 +936,6 @@ size_t            text_vertex_size;                                             
 char*             text_fragment_source;                                         // Point fragment shader source.
 size_t            text_fragment_size;                                           // Point fragment shader size [characters].
 GLuint 						text_shader;                                                  // Point shader program.
-
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// GUI VARIABLES /////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-double            mouse_x = 0;                                                  // Mouse x-coordinate [px].
-double            mouse_y = 0;                                                  // Mouse y-coordinate [px].
-double            mouse_x_old = 0;                                              // Mouse x-coordinate backup [px].
-double            mouse_y_old = 0;                                              // Mouse y-coordinate backup [px].
-double						scroll_x = 0;                                                 // Scroll x-coordinate [px].
-double						scroll_y = 0;                                                 // Scroll y-coordinate [px].
-double						zoom = 0;                                                     // Zoom coefficient.
-bool 							arcball_on = false;                                           // Arcball activation flag.
-
-float             q[4];                                                         // Arcball quaternion.
-
-float             R[16]     = {1.0, 0.0, 0.0, 0.0,                              // Rotation matrix.
-                               0.0, 1.0, 0.0, 0.0,
-                               0.0, 0.0, 1.0, 0.0,
-                               0.0, 0.0, 0.0, 1.0};
-
-float             R_old[16] = {1.0, 0.0, 0.0, 0.0,                              // Rotation matrix backup.
-                               0.0, 1.0, 0.0, 0.0,
-                               0.0, 0.0, 1.0, 0.0,
-                               0.0, 0.0, 0.0, 1.0};
-
-float             T[16]     = {1.0, 0.0, 0.0, 0.0,                              // Translation matrix.
-                               0.0, 1.0, 0.0, 0.0,
-                               0.0, 0.0, 1.0, 0.0,
-                               0.0, 0.0, 0.0, 1.0};
-
-float             V[16]     = {1.0, 0.0, 0.0, 0.0,                              // View matrix.
-                               0.0, 1.0, 0.0, 0.0,
-                               0.0, 0.0, 1.0, 0.0,
-                               0.0, 0.0, 0.0, 1.0};
-
-float             P[16]     = {1.0, 0.0, 0.0, 0.0,                              // Projection matrix.
-                               0.0, 1.0, 0.0, 0.0,
-                               0.0, 0.0, 1.0, 0.0,
-                               0.0, 0.0, 0.0, 1.0};
 
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// OPENCL VARIABLES ///////////////////////////////
@@ -2170,76 +2270,7 @@ void clear_screen()
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////// WINDOW CALLBACK FUNCTIONS ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-  {
-    glfwSetWindowShouldClose(window, GL_TRUE);
-  }
-}
 
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
-{
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && arcball_on == false)
-	{
-		glfwGetCursorPos(window, &mouse_x, &mouse_y);                               // Getting mouse position...
-		mouse_x_old = mouse_x;																											// Backing up mouse position...
-		mouse_y_old = mouse_y;																											// Backing up mouse position...
-		arcball_on = true;																													// Turning on arcball...
-  }
-
-  else
-  {
-    arcball_on = false;																													// Turning off arcball...
-  }
-
-  if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
-	{
-    R_old[0] = R[0]; R_old[4] = R[4]; R_old[8]  = R[8];  R_old[12] = R[12];		  // Backing up Rotation_matrix matrix...
-    R_old[1] = R[1]; R_old[5] = R[5]; R_old[9]  = R[9];  R_old[13] = R[13];			// Backing up Rotation_matrix matrix...
-    R_old[2] = R[2]; R_old[6] = R[6]; R_old[10] = R[10]; R_old[14] = R[14];		  // Backing up Rotation_matrix matrix...
-    R_old[3] = R[3]; R_old[7] = R[7]; R_old[11] = R[11]; R_old[15] = R[15];		  // Backing up Rotation_matrix matrix...
-  }
-}
-
-void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
-{
-	if (arcball_on)
-	{
-    mouse_x = xpos;																															// Getting mouse position...
-    mouse_y = ypos;																															// Getting mouse position...
-  }
-}
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-  float translation[3];                                                         // Translation vector.
-
-  scroll_x = xoffset;																														// Getting scroll position...
-	scroll_y = yoffset;																														// Getting scroll position...
-	zoom = T[14];																							                    // Getting z-axis translation...
-
-	if (scroll_y > 0)
-	{
-		zoom *= ZOOM_FACTOR;																												// Zooming-in...
-	}
-
-	if (scroll_y < 0)
-	{
-		zoom /= ZOOM_FACTOR;																												// Zooming-out...
-	}
-
-  translation[0] = 0.0;                                                         // Building translation vector...
-  translation[1] = 0.0;                                                         // Building translation vector...
-  translation[2] = zoom;                                                        // Building translation vector...
-  translate(T, translation);                                                    // Building translation matrix...
-}
-
-void window_refresh_callback(GLFWwindow* window)
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
-	glfwSwapBuffers(window);                                                      // Swapping front and back buffers...
-}
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// GUI FUNCTIONS /////////////////////////////////
