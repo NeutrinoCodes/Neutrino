@@ -20,6 +20,7 @@
   #include <stdlib.h>
   #include <string.h>
   #include <math.h>
+  #include <list.h>
   #include <GL/glew.h>
 
   #ifdef __WINDOWS__
@@ -49,18 +50,67 @@
   #include "projective_geometry.hpp"
   #include "utilities.hpp"
 
-  extern  GLFWwindow*				window;                                             // Window handle.
-
-  class object
+  class window
   {
     private:
+      GLFWwindow*			    glfw_window;                                          // Window handle.
+      double              mouse_x_old;                                          // Mouse x-coordinate backup [px].
+      double              mouse_y_old;                                          // Mouse y-coordinate backup [px].
+      bool 			          arcball_on;                                           // Arcball activation flag.
+      float               R_old[16];                                            // Rotation matrix backup.
+
+      inline static auto refresh_callback(GLFWwindow* win)->void
+      {
+        window* thewindow = static_cast<window*>(glfwGetUserPointer(win));
+        window->refresh();
+      }
+
+      inline static auto key_pressed_callback(GLFWwindow* win, int key, int scancode, int action, int mods)->void
+      {
+        window* thewindow = static_cast<window*>(glfwGetUserPointer(win));
+        window->key_pressed(key, scancode, action, mods);
+      }
+
+      inline static auto mouse_pressed_callback(GLFWwindow* win, int button, int action, int mods)->void
+      {
+        window* thewindow = static_cast<window*>(glfwGetUserPointer(win));
+        window->mouse_pressed(button, action, mods);
+      }
+
+      inline static auto mouse_moved_callback(GLFWwindow* win, double xpos, double ypos)->void
+      {
+        window* thewindow = static_cast<window*>(glfwGetUserPointer(win));
+        window->mouse_moved(xpos, ypos);
+      }
+
+      inline static auto mouse_scrolled_callback(GLFWwindow* win, double xoffset, double yoffset)->void
+      {
+        window* thewindow = static_cast<window*>(glfwGetUserPointer(win));
+        window->mouse_scrolled(xoffset, yoffset);
+      }
 
     public:
-      object();
-      ~object();
+      double    mouse_x;                                                        // Mouse x-coordinate [px].
+      double    mouse_y;                                                        // Mouse y-coordinate [px].
+      double		scroll_x;                                                       // Scroll x-coordinate [px].
+      double		scroll_y;                                                       // Scroll y-coordinate [px].
+      double		zoom;                                                           // Zoom coefficient.
 
+      float     q[4];                                                           // Arcball quaternion.
+      float     R[16];                                                          // Rotation matrix.
+      float     T[16];                                                          // Translation matrix.
+      float     V[16];                                                          // View matrix.
+      float     P[16];                                                          // Projection matrix.
+
+      window();
       void init();
-  };
+      auto refresh()->void;
+      auto key_pressed(int key, int scancode, int action, int mods)->void;
+      auto mouse_pressed(int button, int action, int mods)->void;
+      auto mouse_moved(double xpos, double ypos)->void;
+      auto mouse_scrolled(double xoffset, double yoffset)->void;
+      ~window();
+  }
 
   class queue
   {
