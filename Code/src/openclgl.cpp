@@ -775,23 +775,19 @@ int font_width[94] = {
 /* Ascii 126 */24
 };
 
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////// WINDOW VARIABLES ////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-int								window_size_x = SIZE_WINDOW_X;                                // Window x-size [px].
-int								window_size_y = SIZE_WINDOW_Y;                                // Window y-size [px].
-float							aspect_ratio = (float)window_size_x/(float)window_size_y;     // Window aspcet-ratio [].
-
-window::window()
+window::window(int window_size_x, int window_size_y, const char* title)
 {
-  mouse_x = 0;                                                                  // Initializing mouse x-coordinate [px].
-  mouse_y = 0;                                                                  // Initializing mouse y-coordinate [px].
-  mouse_x_old = 0;                                                              // Initializing mouse x-coordinate backup [px].
-  mouse_y_old = 0;                                                              // Initializing mouse y-coordinate backup [px].
-  scroll_x = 0;                                                                 // Initializing scroll x-coordinate [px].
-  scroll_y = 0;                                                                 // Initializing scroll y-coordinate [px].
-  zoom = 0;                                                                     // Initializing zoom coefficient.
-  arcball_on = false;                                                           // Initializing arcball activation flag.
+  size_x = window_size_x;                                                       // Initializing window x-size [px]...
+  size_y = window_size_y;                                                       // Initializing window y-size [px]...
+  aspect_ratio = = (double)window_size_x/(double)window_size_y;                 // Initializing window aspect ration []...
+  mouse_x = 0;                                                                  // Initializing mouse x-coordinate [px]...
+  mouse_y = 0;                                                                  // Initializing mouse y-coordinate [px]...
+  mouse_x_old = 0;                                                              // Initializing mouse x-coordinate backup [px]...
+  mouse_y_old = 0;                                                              // Initializing mouse y-coordinate backup [px]...
+  scroll_x = 0;                                                                 // Initializing scroll x-coordinate [px]...
+  scroll_y = 0;                                                                 // Initializing scroll y-coordinate [px]...
+  zoom = 0;                                                                     // Initializing zoom coefficient...
+  arcball_on = false;                                                           // Initializing arcball activation flag...
 
   q[4]      = {1.0, 0.0, 0.0, 0.0};                                             // Initializing arcball quaternion...
 
@@ -821,6 +817,49 @@ window::window()
                0.0, 0.0, 0.0, 1.0};
 }
 
+// PRIVATE METHODS:
+void window::get_arcball_vector(float* p, int x, int y)
+{
+	float  op_sq;																																	// Center "o" to "p" squared distance.
+
+	glfwGetWindowSize(glfw_window, &window_size_x, &window_size_y);							  // Getting window size...
+  p[0] =   2.0*x/window_size_x - 1.0;                                           // Computing point on unitary ball [x]...
+  p[1] = -(2.0*y/window_size_y - 1.0);                                          // Computing point on unitary ball [y] (axis inverted according to OpenGL)...
+  p[2] =   0.0;                                                                 // Computing point on unitary ball [z]...
+	op_sq = p[0]*p[0] + p[1]*p[1];                                                // Computing "op" squared...
+
+  if (op_sq <= 1.0)																															// Checking p to ball-center distance...
+	{
+    p[2] = sqrt(1.0 - op_sq);  																									// Pythagoras' theorem...
+	}
+
+  else
+	{
+    normalize(p);  																										          // Normalizing if too far...
+	}
+}
+
+void window::arcball()
+{
+	float a[3]; 																															    // Mouse vector, world coordinates.
+	float b[3]; 																															    // Mouse vector, world coordinates.
+	float axis[3];																										   		      // Arcball axis of rotation.
+	float theta;																																	// Arcball angle of rotation.
+
+	if (arcball_on &&((mouse_x != mouse_x_old) || (mouse_y != mouse_y_old)))      // If mouse has been dragged (= left click + move):
+	{
+		get_arcball_vector(a, mouse_x_old, mouse_y_old);							  			      // Building mouse world vector (old)...
+		get_arcball_vector(b, mouse_x, mouse_y);												   					// Building mouse world vector...
+		theta = ROTATION_FACTOR*angle(a, b);                                        // Calculating arcball angle...
+    normalize(a);
+    normalize(b);
+    cross(axis, a, b);									            				                    // Calculating arcball axis of rotation...
+    normalize(axis);
+    rotate(R, R_old, axis, theta);                                              // Calculating rotation matrix...
+	}
+}
+
+// PUBLIC METHODS:
 void window::init()
 {
   glfw_window = glfwCreateWindow(width,                                         // Width.
@@ -1032,9 +1071,9 @@ void kernel::init(char* kernel_source, size_t kernel_size, cl_uint kernel_dimens
 
   printf("Action: creating OpenCL program from kernel source... ");
   program = clCreateProgramWithSource(context,                                  // Creating OpenCL program from its source...
-                                             1,
-                                             (const char**)&source,
-                                             &source_size, &err);
+                                      1,
+                                      (const char**)&source,
+                                      &source_size, &err);
 
   if(err != CL_SUCCESS)
   {
@@ -1191,6 +1230,7 @@ kernel::~kernel()
 
   printf("DONE!\n");
 }
+
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// DATA CLASSES ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
@@ -2061,53 +2101,6 @@ void load_text_fragment(char* neutrino_path, const char* filename_fragment)
 	printf("DONE!\n");
 }
 
-object::object()
-{
-
-}
-
-void object::init()
-{
-
-}
-
-object::~object()
-{
-
-}
-
-void init_window(int width, int height, const char* title)
-{
-  // Creating the window:
-  window = glfwCreateWindow(width,                                              // Width.
-                            height,                                             // Height.
-                            title,                                              // Title.
-                            NULL,                                               // Monitor.
-                            NULL);                                              // Share.
-  if (!window)
-	{
-		printf("Error:  unable to create window!\n");
-    glfwTerminate();
-    exit(EXIT_FAILURE);
-  }
-
-  glfwMakeContextCurrent(window);                                               // Making the context of this window current for the calling thread...
-	glfwSetWindowRefreshCallback(window, window_refresh_callback);                // Setting window callbacks...
-  glfwSetKeyCallback(window, key_callback);                                     // Setting window callbacks...
-	glfwSetMouseButtonCallback(window, mouse_button_callback);                    // Setting window callbacks...
-	glfwSetCursorPosCallback(window, cursor_position_callback);                   // Setting window callbacks...
-	glfwSetScrollCallback(window, scroll_callback);                               // Setting window callbacks...
-
-  // Initializing GLEW context:
-  glewExperimental = GL_TRUE;                                                   // Ensuring that all extensions with valid entry points will be exposed...
-
-	if (glewInit() != GLEW_OK)
-	{
-    printf("Error:  unable to initialize GLEW!\n");
-    exit(EXIT_FAILURE);
-  }
-}
-
 void init_shaders()
 {
   GLuint		point_vertex_shader;                                                // "Point" vertex shader.
@@ -2275,46 +2268,7 @@ void clear_screen()
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// GUI FUNCTIONS /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void get_arcball_vector(float* p, int x, int y)
-{
-	float  op_sq;																																	// Center "o" to "p" squared distance.
 
-	glfwGetWindowSize(window, &window_size_x, &window_size_y);										// Getting window size...
-  p[0] =   2.0*x/window_size_x - 1.0;                                           // Computing point on unitary ball [x]...
-  p[1] = -(2.0*y/window_size_y - 1.0);                                          // Computing point on unitary ball [y] (axis inverted according to OpenGL)...
-  p[2] =   0.0;                                                                 // Computing point on unitary ball [z]...
-	op_sq = p[0]*p[0] + p[1]*p[1];                                                // Computing "op" squared...
-
-  if (op_sq <= 1.0)																															// Checking p to ball-center distance...
-	{
-    p[2] = sqrt(1.0 - op_sq);  																									// Pythagoras' theorem...
-	}
-
-  else
-	{
-    normalize(p);  																										          // Normalizing if too far...
-	}
-}
-
-void arcball()
-{
-	float a[3]; 																															    // Mouse vector, world coordinates.
-	float b[3]; 																															    // Mouse vector, world coordinates.
-	float axis[3];																										   		      // Arcball axis of rotation.
-	float theta;																																	// Arcball angle of rotation.
-
-	if (arcball_on &&((mouse_x != mouse_x_old) || (mouse_y != mouse_y_old)))      // If mouse has been dragged (= left click + move):
-	{
-		get_arcball_vector(a, mouse_x_old, mouse_y_old);							  			      // Building mouse world vector (old)...
-		get_arcball_vector(b, mouse_x, mouse_y);												   					// Building mouse world vector...
-		theta = ROTATION_FACTOR*angle(a, b);                                        // Calculating arcball angle...
-    normalize(a);
-    normalize(b);
-    cross(axis, a, b);									            				                    // Calculating arcball axis of rotation...
-    normalize(axis);
-    rotate(R, R_old, axis, theta);                                              // Calculating rotation matrix...
-	}
-}
 
 void plot(point4* points, color4* colors, plot_style ps)
 {

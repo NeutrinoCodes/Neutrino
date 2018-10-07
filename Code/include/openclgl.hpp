@@ -59,6 +59,9 @@
       bool 			          arcball_on;                                           // Arcball activation flag.
       float               R_old[16];                                            // Rotation matrix backup.
 
+      void get_arcball_vector(float* p, int x, int y);
+      void arcball();
+
       inline static auto refresh_callback(GLFWwindow* win)->void
       {
         window* thewindow = static_cast<window*>(glfwGetUserPointer(win));
@@ -90,6 +93,9 @@
       }
 
     public:
+      int       size_x;                                                         // Window x-size [px].
+      int       size_y;                                                         // Window y-size [px].
+      double    aspect_ratio;                                                   // Window aspect ratio [].
       double    mouse_x;                                                        // Mouse x-coordinate [px].
       double    mouse_y;                                                        // Mouse y-coordinate [px].
       double		scroll_x;                                                       // Scroll x-coordinate [px].
@@ -102,7 +108,7 @@
       float     V[16];                                                          // View matrix.
       float     P[16];                                                          // Projection matrix.
 
-      window();
+      window(int window_size_x, int window_size_y, const char* title);
       void init();
       auto refresh()->void;
       auto key_pressed(int key, int scancode, int action, int mods)->void;
