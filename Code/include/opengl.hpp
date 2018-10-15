@@ -12,6 +12,12 @@
   #define FOV 60.0f                                                             // Field of view [deg].
   #define LINE_WIDTH 3                                                          // Line width [px].
 
+  /// These files are relative to the NEUTRINO_PATH environmental variable:
+  #define POINT_VERTEX_FILE       "/Code/shader/vertex.vert"
+  #define POINT_FRAGMENT_FILE     "/Code/shader/fragment.frag"
+  #define TEXT_VERTEX_FILE        "/Code/shader/text_vertex.vert"
+  #define TEXT_FRAGMENT_FILE      "/Code/shader/text_fragment.frag"
+
   #include <stdio.h>
   #include <stdlib.h>
   #include <string.h>
@@ -45,18 +51,25 @@
   #include "projective_geometry.hpp"
   #include "utilities.hpp"
 
+  typedef enum
+    {
+      VERTEX,
+      FRAGMENT,
+    } shader_type;
+
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// "OPENGL" CLASS ///////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   class opengl
   {
     private:
-
+      GLuint  compile_shader();                                                 // OpenGL shader compilation.
+      GLuint  build_shader();                                                   // OpenGL shader build.
     public:
-            opengl();
-      void  init();                                                             // OpenGL initialization.
-            ~opengl();
-  }
+              opengl();
+      void    init();                                                           // OpenGL initialization.
+              ~opengl();
+  };
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// "WINDOW" CLASS ///////////////////////////////
@@ -70,6 +83,9 @@
       bool 			          arcball_on;                                           // Arcball activation flag.
       float               R_old[16];                                            // Rotation matrix backup.
       float               initial_translation[3];                               // Initial translation vector.
+
+      GLuint 						  point_shader;                                         // Point shader program.
+      GLuint 						  text_shader;                                          // Point shader program.
 
       void grasp(float* p, int x, int y);                                       // Grasp arcball action.
       void arcball();                                                           // Arcball computation.
