@@ -39,11 +39,8 @@
   #include <GLFW/glfw3native.h>
 
   #ifdef __APPLE__
-    #include <OpenCL/opencl.h>
     #include <OpenGL/OpenGL.h>
   #else
-    #include <CL/cl.h>
-    #include <CL/cl_gl.h>
     #include <GL/gl.h>
   #endif
 
@@ -52,10 +49,17 @@
   #include "utilities.hpp"
 
   typedef enum
-    {
-      VERTEX,
-      FRAGMENT,
-    } shader_type;
+  {
+    STYLE_POINT,
+    STYLE_WIREFRAME,
+    STYLE_SHADED
+  } plot_style;
+
+  typedef enum
+  {
+    VERTEX,
+    FRAGMENT
+  } shader_type;
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// "OPENGL" CLASS ///////////////////////////////
