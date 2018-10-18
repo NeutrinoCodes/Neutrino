@@ -1,17 +1,8 @@
 #include "opencl.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// OPENCL VARIABLES ///////////////////////////////
+////////////////////////////// "get_error" FUNCTION //////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-char*                   value;
-
-unsigned int            num_platforms;
-cl_device_id*           device;
-unsigned int            num_devices;
-cl_context_properties*  properties;
-cl_context              context;
-
-
 const char* get_error(cl_int error)
 {
   switch(error)
@@ -91,6 +82,9 @@ const char* get_error(cl_int error)
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////// "INFO" CLASS ////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 info::info(size_t value_size)
 {
   size = value_size;                                                            // Setting value array size...
@@ -99,34 +93,37 @@ info::info(size_t value_size)
 
 info::~info()
 {
-  free value;
+  free value;                                                                   // Freeing value array...
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////// "PLATFORM" CLASS //////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 platform::platform(cl_uint index_platform)
 {
-  theplatform = NULL;
+  info*   profile     = new info(get_info_size(CL_PLATFORM_PROFILE));           // Platform info.
+  info*   version     = new info(get_info_size(CL_PLATFORM_VERSION));           // Platform info.
+  info*   name        = new info(get_info_size(CL_PLATFORM_NAME));              // Platform info.
+  info*   vendor      = new info(get_info_size(CL_PLATFORM_VENDOR));            // Platform info.
+  info*   extensions  = new info(get_info_size(CL_PLATFORM_EXTENSIONS));        // Platform info.
 
-  info*   profile     = new info(get_info_size(CL_PLATFORM_PROFILE));
-  info*   version     = new info(get_info_size(CL_PLATFORM_VERSION));
-  info*   name        = new info(get_info_size(CL_PLATFORM_VERSION));
-  info*   vendor      = new info(get_info_size(CL_PLATFORM_VERSION));
-  info*   extensions  = new info(get_info_size(CL_PLATFORM_VERSION));
+  profile->value    = get_info_value(CL_PLATFORM_PROFILE, profile->size);       // 
+  version->value    = get_info_value(CL_PLATFORM_VERSION, version->size);
+  name->value       = get_info_value(CL_PLATFORM_NAME, name->size);
+  vendor->value     = get_info_value(CL_PLATFORM_VENDOR, vendor->size);
+  extensions->value = get_info_value(CL_PLATFORM_EXTENSIONS, extensions->size);
 
-  profile->value      = get_info_value(CL_PLATFORM_PROFILE, profile->size);
-  profile->version    = get_info_value(CL_PLATFORM_PROFILE, profile->size);
-  profile->name       = get_info_value(CL_PLATFORM_PROFILE, profile->size);
-  profile->vendor     = get_info_value(CL_PLATFORM_PROFILE, profile->size);
-  profile->extensions = get_info_value(CL_PLATFORM_PROFILE, profile->size);
+  theplatform = NULL;                                                           // Initializing theplatform...
 }
 
 // PRIVATE METHODS:
-size_t platform::get_info_size(cl_platform_info name_param)
+size_t platform::get_info_size(cl_platform_info parameter_name)
 {
   cl_int  err;
   size_t  size_value;
 
   err = clGetPlatformInfo(platform[index_platform],                             // Getting platform information...
-                          name_param,
+                          parameter_name,
                           0,
                           NULL,
                           &size_value);
@@ -140,13 +137,13 @@ size_t platform::get_info_size(cl_platform_info name_param)
   return (size_value);
 }
 
-char* platform::get_info_value(cl_platform_info name_param, size_t value_size)
+char* platform::get_info_value(cl_platform_info parameter_name, size_t value_size)
 {
   cl_int  err;
   char*   value;
 
   err = clGetPlatformInfo(platform[index_platform],                             // Getting platform information...
-                          name_param,
+                          parameter_name,
                           size_value,
                           value,
                           NULL);
@@ -160,31 +157,6 @@ char* platform::get_info_value(cl_platform_info name_param, size_t value_size)
   return (value);
 }
 
-/*
-  switch (name_param)
-  {
-    case CL_PLATFORM_PROFILE:
-      printf("        CL_PLATFORM_PROFILE = %s\n", value);
-    break;
-
-    case CL_PLATFORM_VERSION:
-      printf("        CL_PLATFORM_VERSION = %s\n", value);
-    break;
-
-    case CL_PLATFORM_NAME:
-      printf("        CL_PLATFORM_NAME = %s\n", value);
-    break;
-
-    case CL_PLATFORM_VENDOR:
-      printf("        CL_PLATFORM_VENDOR = %s\n", value);
-    break;
-
-    case CL_PLATFORM_EXTENSIONS:
-      printf("        CL_PLATFORM_EXTENSIONS = %s\n", value);
-  }
-
-*/
-
 platform::~platform()
 {
   delete profile;
@@ -192,6 +164,57 @@ platform::~platform()
   delete name;
   delete vendor;
   delete extensions;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// "DEVICE" CLASS ///////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+device::device(cl_uint num_device)
+{
+  thedevice = NULL;
+
+  info*   address_bits              = new info(get_info_size(CL_DEVICE_ADDRESS_BITS));
+  info*   device_available          = new info(get_info_size(CL_DEVICE_AVAILABLE));
+  info*   compiler_available        = new info(get_info_size(CL_DEVICE_COMPILER_AVAILABLE));
+  info*   endian_little             = new info(get_info_size(CL_DEVICE_ENDIAN_LITTLE));
+  info*   error_correction_support  = new info(get_info_size(CL_DEVICE_ERROR_CORRECTION_SUPPORT));
+
+  address_bits->value               = get_info_value(CL_PLATFORM_PROFILE, address_bits->size);
+  device_available->value           = get_info_value(CL_PLATFORM_VERSION, device_available->size);
+  compiler_available->value         = get_info_value(CL_PLATFORM_NAME, compiler_available->size);
+  endian_little->value              = get_info_value(CL_PLATFORM_VENDOR, endian_little->size);
+  error_correction_support->value   = get_info_value(CL_PLATFORM_EXTENSIONS, error_correction_support->size);
+}
+
+// PRIVATE METHODS:
+size_t device::get_info_size(cl_device_info name_param)
+{
+  cl_int err;
+  size_t  size_value;
+
+  err = clGetDeviceInfo(device[index_device],                                   // Getting device information...
+                        name_param,
+                        0,
+                        NULL,
+                        &size_value);
+
+  if(err != CL_SUCCESS)
+  {
+    printf("Error:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  return (size_value);
+}
+
+device::~device()
+{
+  delete address_bits;
+  delete device_available;
+  delete compiler_available;
+  delete endian_little;
+  delete error_correction_support;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -225,15 +248,15 @@ cl_uint opencl::get_num_platforms()
   return num_platforms;                                                         // Returning number of existing platforms...
 }
 
-opencl::get_platforms()
+cl_uint opencl::get_platforms()
 {
   cl_int          err;
   cl_platform_id* pl_id;
   int             i;
 
   num_platforms = get_num_platforms();
-  pl_id = (cl_platform_id*) malloc(sizeof(cl_platform_id) * num_platforms);  // Allocating device array...
-  err = clGetPlatformIDs(num_platforms, pl_id, NULL);                     // Getting OpenCL platform IDs...
+  pl_id = (cl_platform_id*) malloc(sizeof(cl_platform_id) * num_platforms);     // Allocating platform array...
+  err = clGetPlatformIDs(num_platforms, pl_id, NULL);                           // Getting OpenCL platform IDs...
 
   if(err != CL_SUCCESS)
   {
@@ -250,16 +273,18 @@ opencl::get_platforms()
 
   printf("\n        Found %d platform(s)!\n", num_platforms);
   printf("        DONE!\n");
+
+  return(num_platforms);
 }
 
-cl_uint opencl::get_devices(cl_uint index_platform)
+cl_uint device::get_num_devices(int pl_index)
 {
   cl_int err;
   cl_uint num_devices;
 
-  printf("Action: getting OpenCL devices... ");
+  printf("Action: getting number of OpenCL devices... ");
 
-  err = clGetDeviceIDs(platform[index_platform],                               // Getting number of existing OpenCL GPU devices...
+  err = clGetDeviceIDs(platform[index_index]->theplatform,                      // Getting number of existing OpenCL GPU devices...
                        CL_DEVICE_TYPE_GPU,
                        0,
                        NULL,
@@ -271,13 +296,22 @@ cl_uint opencl::get_devices(cl_uint index_platform)
     exit(err);
   }
 
-  device = (cl_device_id*) malloc(sizeof(cl_device_id) * num_devices);         // Allocating device array...
+  printf("\n        Found %d device(s)!\n", num_devices);
+  printf("        DONE!\n");
 
-  err = clGetDeviceIDs(platform[index_platform],                               // Getting OpenCL platform IDs...
-                       CL_DEVICE_TYPE_GPU,
-                       num_devices,
-                       device,
-                       NULL);
+  return num_devices;                                                           // Returning number of existing OpenCL GPU devices...
+}
+
+opencl::get_devices(int pl_index)
+{
+  cl_int          err;
+  cl_uint         num_devices;
+  cl_device_id*   dev_id;
+  int             i;
+
+  num_devices = get_num_devices();
+  dev_id = (cl_device_id*) malloc(sizeof(cl_device_id) * num_devices);          // Allocating device array...
+  err = clGetPlatformIDs(num_platforms, platfomr[pl_index]->theplatform, NULL); // Getting OpenCL device IDs...
 
   if(err != CL_SUCCESS)
   {
@@ -285,246 +319,17 @@ cl_uint opencl::get_devices(cl_uint index_platform)
     exit(err);
   }
 
+  existing_device = new device[num_devices];
+
+  for(i = 0; i < num_devices; i++)
+  {
+    existing_device[i]->thedevice = dev_id[i];
+  }
+
   printf("\n        Found %d device(s)!\n", num_devices);
   printf("        DONE!\n");
 
-  return num_devices;
-}
-
-void opencl::get_device_info(cl_uint index_device, cl_device_info name_param)
-{
-  cl_int err;
-  size_t  size_value;
-
-  err = clGetDeviceInfo(device[index_device],                                  // Getting device information...
-                        name_param,
-                        0,
-                        NULL,
-                        &size_value);
-
-  if(err != CL_SUCCESS)
-  {
-    printf("Error:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  value = (char*) malloc(size_value);                                           // Allocating value array...
-
-  err = clGetDeviceInfo(device[index_device],                                  // Getting device information...
-                        name_param,
-                        size_value,
-                        value,
-                        NULL);
-
-  if(err != CL_SUCCESS)
-  {
-    printf("Error:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  switch (name_param)
-  {
-    case CL_DEVICE_ADDRESS_BITS:
-      printf("        CL_DEVICE_ADDRESS_BITS = %s\n", value);
-    break;
-
-    case CL_DEVICE_AVAILABLE:
-      printf("        CL_DEVICE_AVAILABLE = %s\n", value);
-    break;
-
-    case CL_DEVICE_COMPILER_AVAILABLE:
-      printf("        CL_DEVICE_COMPILER_AVAILABLE = %s\n", value);
-    break;
-
-    case CL_DEVICE_ENDIAN_LITTLE:
-      printf("        CL_DEVICE_ENDIAN_LITTLE = %s\n", value);
-    break;
-
-    case CL_DEVICE_ERROR_CORRECTION_SUPPORT:
-      printf("        CL_DEVICE_ERROR_CORRECTION_SUPPORT = %s\n", value);
-    break;
-
-    case CL_DEVICE_EXECUTION_CAPABILITIES:
-      printf("        CL_DEVICE_EXECUTION_CAPABILITIES = %s\n", value);
-    break;
-
-    case CL_DEVICE_EXTENSIONS:
-      printf("        CL_DEVICE_EXTENSIONS = %s\n", value);
-    break;
-
-    case CL_DEVICE_GLOBAL_MEM_CACHE_SIZE:
-      printf("        CL_DEVICE_GLOBAL_MEM_CACHE_SIZE = %s\n", value);
-    break;
-
-    case CL_DEVICE_GLOBAL_MEM_CACHE_TYPE:
-      printf("        CL_DEVICE_GLOBAL_MEM_CACHE_TYPE = %s\n", value);
-    break;
-
-    case CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE:
-      printf("        CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE = %s\n", value);
-    break;
-
-    case CL_DEVICE_GLOBAL_MEM_SIZE:
-      printf("        CL_DEVICE_GLOBAL_MEM_SIZE = %s\n", value);
-    break;
-
-    case CL_DEVICE_IMAGE_SUPPORT:
-      printf("        CL_DEVICE_IMAGE_SUPPORT = %s\n", value);
-    break;
-
-    case CL_DEVICE_IMAGE2D_MAX_HEIGHT:
-      printf("        CL_DEVICE_IMAGE2D_MAX_HEIGHT = %s\n", value);
-    break;
-
-    case CL_DEVICE_IMAGE2D_MAX_WIDTH:
-      printf("        CL_DEVICE_IMAGE2D_MAX_WIDTH = %s\n", value);
-    break;
-
-    case CL_DEVICE_IMAGE3D_MAX_DEPTH:
-      printf("        CL_DEVICE_IMAGE3D_MAX_DEPTH = %s\n", value);
-    break;
-
-    case CL_DEVICE_IMAGE3D_MAX_HEIGHT:
-      printf("        CL_DEVICE_IMAGE3D_MAX_HEIGHT = %s\n", value);
-    break;
-
-    case CL_DEVICE_IMAGE3D_MAX_WIDTH:
-      printf("        CL_DEVICE_IMAGE3D_MAX_WIDTH = %s\n", value);
-    break;
-
-    case CL_DEVICE_LOCAL_MEM_SIZE:
-      printf("        CL_DEVICE_LOCAL_MEM_SIZE = %s\n", value);
-    break;
-
-    case CL_DEVICE_LOCAL_MEM_TYPE:
-      printf("        CL_DEVICE_LOCAL_MEM_TYPE = %s\n", value);
-    break;
-
-    case CL_DEVICE_MAX_CLOCK_FREQUENCY:
-      printf("        CL_DEVICE_MAX_CLOCK_FREQUENCY = %s\n", value);
-    break;
-
-    case CL_DEVICE_MAX_COMPUTE_UNITS:
-      printf("        CL_DEVICE_MAX_COMPUTE_UNITS = %d\n", (int)*value);
-    break;
-
-    case CL_DEVICE_MAX_CONSTANT_ARGS:
-      printf("        CL_DEVICE_MAX_CONSTANT_ARGS = %s\n", value);
-    break;
-
-    case CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE:
-      printf("        CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE = %s\n", value);
-    break;
-
-    case CL_DEVICE_MAX_MEM_ALLOC_SIZE:
-      printf("        CL_DEVICE_MAX_MEM_ALLOC_SIZE = %s\n", value);
-    break;
-
-    case CL_DEVICE_MAX_PARAMETER_SIZE:
-      printf("        CL_DEVICE_MAX_PARAMETER_SIZE = %s\n", value);
-    break;
-
-    case CL_DEVICE_MAX_READ_IMAGE_ARGS:
-      printf("        CL_DEVICE_MAX_READ_IMAGE_ARGS = %s\n", value);
-    break;
-
-    case CL_DEVICE_MAX_SAMPLERS:
-      printf("        CL_DEVICE_MAX_SAMPLERS = %s\n", value);
-    break;
-
-    case CL_DEVICE_MAX_WORK_GROUP_SIZE:
-      printf("        CL_DEVICE_MAX_WORK_GROUP_SIZE = %s\n", value);
-    break;
-
-    case CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS:
-      printf("        CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS = %s\n", value);
-    break;
-
-    case CL_DEVICE_MAX_WORK_ITEM_SIZES:
-      printf("        CL_DEVICE_MAX_WORK_ITEM_SIZES = %s\n", value);
-    break;
-
-    case CL_DEVICE_MAX_WRITE_IMAGE_ARGS:
-      printf("        CL_DEVICE_MAX_WRITE_IMAGE_ARGS = %s\n", value);
-    break;
-
-    case CL_DEVICE_MEM_BASE_ADDR_ALIGN:
-      printf("        CL_DEVICE_MEM_BASE_ADDR_ALIGN = %s\n", value);
-    break;
-
-    case CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE:
-      printf("        CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE = %s\n", value);
-    break;
-
-    case CL_DEVICE_NAME:
-      printf("        CL_DEVICE_NAME = %s\n", value);
-    break;
-
-    case CL_DEVICE_PLATFORM:
-      printf("        CL_DEVICE_PLATFORM = %s\n", value);
-    break;
-
-    case CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR:
-      printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR = %s\n", value);
-    break;
-
-    case CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE:
-      printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE = %s\n", value);
-    break;
-
-    case CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT:
-      printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT = %s\n", value);
-    break;
-
-    case CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT:
-      printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT = %s\n", value);
-    break;
-
-    case CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG:
-      printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG = %s\n", value);
-    break;
-
-    case CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT:
-      printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT = %s\n", value);
-    break;
-
-    case CL_DEVICE_PROFILE:
-      printf("        CL_DEVICE_PROFILE = %s\n", value);
-    break;
-
-    case CL_DEVICE_PROFILING_TIMER_RESOLUTION:
-      printf("        CL_DEVICE_PROFILING_TIMER_RESOLUTION = %s\n", value);
-    break;
-
-    case CL_DEVICE_QUEUE_PROPERTIES:
-      printf("        CL_DEVICE_QUEUE_PROPERTIES = %s\n", value);
-    break;
-
-    case CL_DEVICE_SINGLE_FP_CONFIG:
-      printf("        CL_DEVICE_SINGLE_FP_CONFIG = %s\n", value);
-    break;
-
-    case CL_DEVICE_TYPE:
-      printf("        CL_DEVICE_TYPE = %s\n", value);
-    break;
-
-    case CL_DEVICE_VENDOR_ID:
-      printf("        CL_DEVICE_VENDOR_ID = %s\n", value);
-    break;
-
-    case CL_DEVICE_VENDOR:
-      printf("        CL_DEVICE_VENDOR = %s\n", value);
-    break;
-
-    case CL_DEVICE_VERSION:
-      printf("        CL_DEVICE_VERSION = %s\n", value);
-    break;
-
-    case CL_DRIVER_VERSION:
-      printf("        CL_DRIVER_VERSION = %s\n", value);
-  }
-
-  free(value);                                                                  // Freeing value array...
+  return(num_devices);
 }
 
 // PUBLIC METHODS:
@@ -538,31 +343,7 @@ opencl::init()
 
   for (i = 0; i < num_platforms; i++)
   {
-    printf("Action: getting OpenCL platform info for platform #%d... \n", i);   // Printing message...
-
-    get_platform_info(i, CL_PLATFORM_NAME);                                     // Getting platform information...
-    get_platform_info(i, CL_PLATFORM_PROFILE);                                  // Getting platform information...
-    get_platform_info(i, CL_PLATFORM_VERSION);                                  // Getting platform information...
-    get_platform_info(i, CL_PLATFORM_VENDOR);                                   // Getting platform information...
-    get_platform_info(i, CL_PLATFORM_EXTENSIONS);                               // Getting platform information...
-
-    printf("        DONE!\n");                                                  // Printing message...
-
     num_devices = get_devices(i);                                               // Getting # of existing devices on a platform [#]...
-
-    for (j = 0; j < num_devices; j++)                                           // Scanning devices...
-    {
-      printf("Action: getting OpenCL device info for device #%d... \n", j);     // Printing message...
-
-      get_device_info(j, CL_DEVICE_NAME);                                       // Getting device information...
-      get_device_info(j, CL_DEVICE_VERSION);                                    // Getting device information...
-      get_device_info(j, CL_DRIVER_VERSION);                                    // Getting device information...
-      get_device_info(j, CL_DEVICE_OPENCL_C_VERSION);                           // Getting device information...
-      get_device_info(j, CL_DEVICE_MAX_COMPUTE_UNITS);                          // Getting device information...
-
-      printf("        DONE!\n");                                                // Printing message...
-    }
-
   }
 
   #ifdef __APPLE__                                                              // Checking for APPLE system...
@@ -604,11 +385,13 @@ opencl::init()
 
   printf("Action: creating OpenCL context for GPU... ");                        // Printing message...
 
-  context = clCreateContextFromType(properties,                                 // Creating OpenCL context...
-                                    CL_DEVICE_TYPE_GPU,
-                                    NULL,
-                                    NULL,
-                                    &err);
+  // Creating OpenCL context:
+  context = clCreateContext(properties,
+                            num_devices,
+                            existing_device,
+                            NULL,
+                            NULL,
+                            &err);
 
   if(err != CL_SUCCESS)                                                         // Checking for error...
   {
@@ -642,14 +425,14 @@ opencl::~opencl()
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// "QUEUE" CLASS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-queue::queue()
+queue::queue(int device_index)
 {
   thequeue = NULL;
 }
 
 void queue::init()
 {
-  thequeue = clCreateCommandQueue(context, device[0], 0, &err);                 // Creating OpenCL queue...
+  thequeue = clCreateCommandQueue(context, existing_device[0]->thedevice, 0, &err);                 // Creating OpenCL queue...
 
   if(err != CL_SUCCESS)
   {
@@ -882,3 +665,236 @@ kernel::~kernel()
 
   printf("DONE!\n");
 }
+
+
+
+
+/*
+  switch (name_param)
+  {
+    case CL_PLATFORM_PROFILE:
+      printf("        CL_PLATFORM_PROFILE = %s\n", value);
+    break;
+
+    case CL_PLATFORM_VERSION:
+      printf("        CL_PLATFORM_VERSION = %s\n", value);
+    break;
+
+    case CL_PLATFORM_NAME:
+      printf("        CL_PLATFORM_NAME = %s\n", value);
+    break;
+
+    case CL_PLATFORM_VENDOR:
+      printf("        CL_PLATFORM_VENDOR = %s\n", value);
+    break;
+
+    case CL_PLATFORM_EXTENSIONS:
+      printf("        CL_PLATFORM_EXTENSIONS = %s\n", value);
+  }
+
+*/
+
+
+
+
+/*
+case CL_DEVICE_ADDRESS_BITS:
+  printf("        CL_DEVICE_ADDRESS_BITS = %s\n", value);
+break;
+
+case CL_DEVICE_AVAILABLE:
+  printf("        CL_DEVICE_AVAILABLE = %s\n", value);
+break;
+
+case CL_DEVICE_COMPILER_AVAILABLE:
+  printf("        CL_DEVICE_COMPILER_AVAILABLE = %s\n", value);
+break;
+
+case CL_DEVICE_ENDIAN_LITTLE:
+  printf("        CL_DEVICE_ENDIAN_LITTLE = %s\n", value);
+break;
+
+case CL_DEVICE_ERROR_CORRECTION_SUPPORT:
+  printf("        CL_DEVICE_ERROR_CORRECTION_SUPPORT = %s\n", value);
+break;
+
+case CL_DEVICE_EXECUTION_CAPABILITIES:
+  printf("        CL_DEVICE_EXECUTION_CAPABILITIES = %s\n", value);
+break;
+
+case CL_DEVICE_EXTENSIONS:
+  printf("        CL_DEVICE_EXTENSIONS = %s\n", value);
+break;
+
+case CL_DEVICE_GLOBAL_MEM_CACHE_SIZE:
+  printf("        CL_DEVICE_GLOBAL_MEM_CACHE_SIZE = %s\n", value);
+break;
+
+case CL_DEVICE_GLOBAL_MEM_CACHE_TYPE:
+  printf("        CL_DEVICE_GLOBAL_MEM_CACHE_TYPE = %s\n", value);
+break;
+
+case CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE:
+  printf("        CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE = %s\n", value);
+break;
+
+case CL_DEVICE_GLOBAL_MEM_SIZE:
+  printf("        CL_DEVICE_GLOBAL_MEM_SIZE = %s\n", value);
+break;
+
+case CL_DEVICE_IMAGE_SUPPORT:
+  printf("        CL_DEVICE_IMAGE_SUPPORT = %s\n", value);
+break;
+
+case CL_DEVICE_IMAGE2D_MAX_HEIGHT:
+  printf("        CL_DEVICE_IMAGE2D_MAX_HEIGHT = %s\n", value);
+break;
+
+case CL_DEVICE_IMAGE2D_MAX_WIDTH:
+  printf("        CL_DEVICE_IMAGE2D_MAX_WIDTH = %s\n", value);
+break;
+
+case CL_DEVICE_IMAGE3D_MAX_DEPTH:
+  printf("        CL_DEVICE_IMAGE3D_MAX_DEPTH = %s\n", value);
+break;
+
+case CL_DEVICE_IMAGE3D_MAX_HEIGHT:
+  printf("        CL_DEVICE_IMAGE3D_MAX_HEIGHT = %s\n", value);
+break;
+
+case CL_DEVICE_IMAGE3D_MAX_WIDTH:
+  printf("        CL_DEVICE_IMAGE3D_MAX_WIDTH = %s\n", value);
+break;
+
+case CL_DEVICE_LOCAL_MEM_SIZE:
+  printf("        CL_DEVICE_LOCAL_MEM_SIZE = %s\n", value);
+break;
+
+case CL_DEVICE_LOCAL_MEM_TYPE:
+  printf("        CL_DEVICE_LOCAL_MEM_TYPE = %s\n", value);
+break;
+
+case CL_DEVICE_MAX_CLOCK_FREQUENCY:
+  printf("        CL_DEVICE_MAX_CLOCK_FREQUENCY = %s\n", value);
+break;
+
+case CL_DEVICE_MAX_COMPUTE_UNITS:
+  printf("        CL_DEVICE_MAX_COMPUTE_UNITS = %d\n", (int)*value);
+break;
+
+case CL_DEVICE_MAX_CONSTANT_ARGS:
+  printf("        CL_DEVICE_MAX_CONSTANT_ARGS = %s\n", value);
+break;
+
+case CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE:
+  printf("        CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE = %s\n", value);
+break;
+
+case CL_DEVICE_MAX_MEM_ALLOC_SIZE:
+  printf("        CL_DEVICE_MAX_MEM_ALLOC_SIZE = %s\n", value);
+break;
+
+case CL_DEVICE_MAX_PARAMETER_SIZE:
+  printf("        CL_DEVICE_MAX_PARAMETER_SIZE = %s\n", value);
+break;
+
+case CL_DEVICE_MAX_READ_IMAGE_ARGS:
+  printf("        CL_DEVICE_MAX_READ_IMAGE_ARGS = %s\n", value);
+break;
+
+case CL_DEVICE_MAX_SAMPLERS:
+  printf("        CL_DEVICE_MAX_SAMPLERS = %s\n", value);
+break;
+
+case CL_DEVICE_MAX_WORK_GROUP_SIZE:
+  printf("        CL_DEVICE_MAX_WORK_GROUP_SIZE = %s\n", value);
+break;
+
+case CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS:
+  printf("        CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS = %s\n", value);
+break;
+
+case CL_DEVICE_MAX_WORK_ITEM_SIZES:
+  printf("        CL_DEVICE_MAX_WORK_ITEM_SIZES = %s\n", value);
+break;
+
+case CL_DEVICE_MAX_WRITE_IMAGE_ARGS:
+  printf("        CL_DEVICE_MAX_WRITE_IMAGE_ARGS = %s\n", value);
+break;
+
+case CL_DEVICE_MEM_BASE_ADDR_ALIGN:
+  printf("        CL_DEVICE_MEM_BASE_ADDR_ALIGN = %s\n", value);
+break;
+
+case CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE:
+  printf("        CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE = %s\n", value);
+break;
+
+case CL_DEVICE_NAME:
+  printf("        CL_DEVICE_NAME = %s\n", value);
+break;
+
+case CL_DEVICE_PLATFORM:
+  printf("        CL_DEVICE_PLATFORM = %s\n", value);
+break;
+
+case CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR:
+  printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR = %s\n", value);
+break;
+
+case CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE:
+  printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE = %s\n", value);
+break;
+
+case CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT:
+  printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT = %s\n", value);
+break;
+
+case CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT:
+  printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT = %s\n", value);
+break;
+
+case CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG:
+  printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG = %s\n", value);
+break;
+
+case CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT:
+  printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT = %s\n", value);
+break;
+
+case CL_DEVICE_PROFILE:
+  printf("        CL_DEVICE_PROFILE = %s\n", value);
+break;
+
+case CL_DEVICE_PROFILING_TIMER_RESOLUTION:
+  printf("        CL_DEVICE_PROFILING_TIMER_RESOLUTION = %s\n", value);
+break;
+
+case CL_DEVICE_QUEUE_PROPERTIES:
+  printf("        CL_DEVICE_QUEUE_PROPERTIES = %s\n", value);
+break;
+
+case CL_DEVICE_SINGLE_FP_CONFIG:
+  printf("        CL_DEVICE_SINGLE_FP_CONFIG = %s\n", value);
+break;
+
+case CL_DEVICE_TYPE:
+  printf("        CL_DEVICE_TYPE = %s\n", value);
+break;
+
+case CL_DEVICE_VENDOR_ID:
+  printf("        CL_DEVICE_VENDOR_ID = %s\n", value);
+break;
+
+case CL_DEVICE_VENDOR:
+  printf("        CL_DEVICE_VENDOR = %s\n", value);
+break;
+
+case CL_DEVICE_VERSION:
+  printf("        CL_DEVICE_VERSION = %s\n", value);
+break;
+
+case CL_DRIVER_VERSION:
+  printf("        CL_DRIVER_VERSION = %s\n", value);
+}
+*/
