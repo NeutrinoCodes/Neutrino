@@ -22,35 +22,50 @@
 
   const char* get_error(cl_int error);
 
-  class info(size_t value_size)
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////// "INFO" CLASS ////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  class info
   {
     private:
 
     public:
-      char*   value;
-      size_t  size;
-  }
+      char*   value;                                                            // Value array.
+      size_t  size;                                                             // Value array size.
+
+      info(size_t value_size);
+      ~info();
+  };
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// "PLATFORM" CLASS /////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  class platform(cl_uint index_platform)
+  class platform
   {
     private:
-      cl_int  err;
-      size_t  info_size;
-
-      void
+      
     public:
-      cl_platform_id*         theplatform;
-      char*                   profile;
-      char*                   version;
-      char*                   name;
-      char*                   vendor;
-      char*                   extensions;
+      cl_platform_id*         theplatform;                                      // OpenCL platform.
+      char*                   profile;                                          // Platform parameter.
+      char*                   version;                                          // Platform parameter.
+      char*                   name;                                             // Platform parameter.
+      char*                   vendor;                                           // Platform parameter.
+      char*                   extensions;                                       // Platform parameter.
 
-      platform();
+      platform(cl_uint index_platform);
       ~platform();
+  };
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////// "DEVICE" CLASS //////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  class device
+  {
+    private:
+      cl_int err;
+    public:
+      device(cl_uint index_device);
+      ~device();
   };
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -106,12 +121,14 @@
       cl_uint get_platforms();
       void get_platform_info(cl_uint index_platform, cl_platform_info name_param);
       cl_uint get_devices(cl_uint index_platform);
-      void get_device_info(cl_uint index_device, cl_device_info name_param)
+      void get_device_info(cl_uint index_device, cl_device_info name_param);
 
     public:
       platform*               existing_platform;
       cl_uint                 num_platforms;
       cl_uint                 num_devices;
+      cl_context_properties*  properties;
+      cl_context              context;
 
       opencl();
       void init();
