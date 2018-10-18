@@ -43,7 +43,7 @@
   class platform
   {
     private:
-      
+
     public:
       cl_platform_id*         theplatform;                                      // OpenCL platform.
       char*                   profile;                                          // Platform parameter.
