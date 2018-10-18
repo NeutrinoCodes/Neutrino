@@ -93,13 +93,13 @@ info::info(size_t value_size)
 
 info::~info()
 {
-  free value;                                                                   // Freeing value array...
+  free(value);                                                                   // Freeing value array...
 }
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "PLATFORM" CLASS //////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-platform::platform(cl_uint index_platform)
+platform::platform(cl_uint pl_index)
 {
   info*   profile     = new info(get_info_size(CL_PLATFORM_PROFILE));           // Platform info.
   info*   version     = new info(get_info_size(CL_PLATFORM_VERSION));           // Platform info.
@@ -107,26 +107,28 @@ platform::platform(cl_uint index_platform)
   info*   vendor      = new info(get_info_size(CL_PLATFORM_VENDOR));            // Platform info.
   info*   extensions  = new info(get_info_size(CL_PLATFORM_EXTENSIONS));        // Platform info.
 
-  profile->value    = get_info_value(CL_PLATFORM_PROFILE, profile->size);       // 
-  version->value    = get_info_value(CL_PLATFORM_VERSION, version->size);
-  name->value       = get_info_value(CL_PLATFORM_NAME, name->size);
-  vendor->value     = get_info_value(CL_PLATFORM_VENDOR, vendor->size);
-  extensions->value = get_info_value(CL_PLATFORM_EXTENSIONS, extensions->size);
+  profile->value    = get_info_value(CL_PLATFORM_PROFILE, profile->size);       // Setting info value...
+  version->value    = get_info_value(CL_PLATFORM_VERSION, version->size);       // Setting info value...
+  name->value       = get_info_value(CL_PLATFORM_NAME, name->size);             // Setting info value...
+  vendor->value     = get_info_value(CL_PLATFORM_VENDOR, vendor->size);         // Setting info value...
+  extensions->value = get_info_value(CL_PLATFORM_EXTENSIONS, extensions->size); // Setting info value...
 
+  platform_index = pl_index;                                                    // Initializing platform index...
   theplatform = NULL;                                                           // Initializing theplatform...
 }
 
 // PRIVATE METHODS:
 size_t platform::get_info_size(cl_platform_info parameter_name)
 {
-  cl_int  err;
-  size_t  size_value;
+  cl_int  err;                                                                  // Error code.
+  size_t  parameter_size;                                                       // Parameter size.
 
-  err = clGetPlatformInfo(platform[index_platform],                             // Getting platform information...
-                          parameter_name,
-                          0,
-                          NULL,
-                          &size_value);
+  // Getting platform information:
+  err = clGetPlatformInfo(platform[platform_index]->theplatform,                // Platform id.
+                          parameter_name,                                       // Parameter name.
+                          0,                                                    // Dummy parameter size: "0" means we ask for the # of parameters, not for a value.
+                          NULL,                                                 // Dummy parameter.
+                          &parameter_size);                                     // Returned parameter size.
 
   if(err != CL_SUCCESS)
   {
@@ -134,19 +136,20 @@ size_t platform::get_info_size(cl_platform_info parameter_name)
     exit(err);
   }
 
-  return (size_value);
+  return (parameter_size);                                                      // Returning parameter size...
 }
 
-char* platform::get_info_value(cl_platform_info parameter_name, size_t value_size)
+char* platform::get_info_value(cl_platform_info parameter_name, size_t parameter_size)
 {
-  cl_int  err;
-  char*   value;
+  cl_int  err;                                                                  // Error code.
+  char*   parameter;                                                            // Parameter.
 
-  err = clGetPlatformInfo(platform[index_platform],                             // Getting platform information...
-                          parameter_name,
-                          size_value,
-                          value,
-                          NULL);
+  // Getting platform information:
+  err = clGetPlatformInfo(platform[index_platform]->theplatform,                // Platform id.
+                          parameter_name,                                       // Parameter name.
+                          parameter_size,                                       // Parameter size.
+                          parameter,                                            // Parameter.
+                          NULL);                                                // Returned parameter size (NULL = ignored).
 
   if(err != CL_SUCCESS)
   {
@@ -154,7 +157,7 @@ char* platform::get_info_value(cl_platform_info parameter_name, size_t value_siz
     exit(err);
   }
 
-  return (value);
+  return (parameter);                                                           // Returning parameter...
 }
 
 platform::~platform()
@@ -166,14 +169,11 @@ platform::~platform()
   delete extensions;
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// "DEVICE" CLASS ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 device::device(cl_uint num_device)
 {
-  thedevice = NULL;
-
   info*   address_bits              = new info(get_info_size(CL_DEVICE_ADDRESS_BITS));
   info*   device_available          = new info(get_info_size(CL_DEVICE_AVAILABLE));
   info*   compiler_available        = new info(get_info_size(CL_DEVICE_COMPILER_AVAILABLE));
@@ -185,15 +185,18 @@ device::device(cl_uint num_device)
   compiler_available->value         = get_info_value(CL_PLATFORM_NAME, compiler_available->size);
   endian_little->value              = get_info_value(CL_PLATFORM_VENDOR, endian_little->size);
   error_correction_support->value   = get_info_value(CL_PLATFORM_EXTENSIONS, error_correction_support->size);
+
+  thedevice = NULL;                                                             // Initializing thedevice...
 }
 
 // PRIVATE METHODS:
-size_t device::get_info_size(cl_device_info name_param)
+size_t device::get_info_size(cl_device_info parameter_name)
 {
-  cl_int err;
-  size_t  size_value;
+  cl_int  err;                                                                  // Error code.
+  size_t  parameter_size;                                                       // Parameter size.
 
-  err = clGetDeviceInfo(device[index_device],                                   // Getting device information...
+  // Getting device information:
+  err = clGetDeviceInfo(device[index_device],
                         name_param,
                         0,
                         NULL,

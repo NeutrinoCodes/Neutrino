@@ -43,6 +43,9 @@
   class platform
   {
     private:
+      cl_uint platform_index;
+      size_t  get_info_size(cl_platform_info parameter_name);
+      char*   get_info_value(cl_platform_info parameter_name, size_t value_size);
 
     public:
       cl_platform_id*         theplatform;                                      // OpenCL platform.
@@ -52,7 +55,7 @@
       char*                   vendor;                                           // Platform parameter.
       char*                   extensions;                                       // Platform parameter.
 
-      platform(cl_uint index_platform);
+      platform(cl_uint pl_index);
       ~platform();
   };
 
