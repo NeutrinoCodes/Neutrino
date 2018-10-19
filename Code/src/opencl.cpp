@@ -126,7 +126,7 @@ size_t platform::get_info_size(cl_platform_info parameter_name)
   // Getting platform information:
   err = clGetPlatformInfo(platform[platform_index]->theplatform,                // Platform id.
                           parameter_name,                                       // Parameter name.
-                          0,                                                    // Dummy parameter size: "0" means we ask for the # of parameters, not for a value.
+                          0,                                                    // Dummy parameter size: "0" means we ask for the # of parameters.
                           NULL,                                                 // Dummy parameter.
                           &parameter_size);                                     // Returned parameter size.
 
@@ -145,7 +145,7 @@ char* platform::get_info_value(cl_platform_info parameter_name, size_t parameter
   char*   parameter;                                                            // Parameter.
 
   // Getting platform information:
-  err = clGetPlatformInfo(platform[index_platform]->theplatform,                // Platform id.
+  err = clGetPlatformInfo(platform[platform_index]->theplatform,                // Platform id.
                           parameter_name,                                       // Parameter name.
                           parameter_size,                                       // Parameter size.
                           parameter,                                            // Parameter.
@@ -172,7 +172,7 @@ platform::~platform()
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// "DEVICE" CLASS ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-device::device(cl_uint num_device)
+device::device(cl_uint dev_index)
 {
   info*   address_bits              = new info(get_info_size(CL_DEVICE_ADDRESS_BITS));
   info*   device_available          = new info(get_info_size(CL_DEVICE_AVAILABLE));
@@ -186,6 +186,7 @@ device::device(cl_uint num_device)
   endian_little->value              = get_info_value(CL_PLATFORM_VENDOR, endian_little->size);
   error_correction_support->value   = get_info_value(CL_PLATFORM_EXTENSIONS, error_correction_support->size);
 
+  device_index = dev_index;                                                     // Initializing device index...
   thedevice = NULL;                                                             // Initializing thedevice...
 }
 
@@ -196,11 +197,11 @@ size_t device::get_info_size(cl_device_info parameter_name)
   size_t  parameter_size;                                                       // Parameter size.
 
   // Getting device information:
-  err = clGetDeviceInfo(device[index_device],
-                        name_param,
-                        0,
-                        NULL,
-                        &size_value);
+  err = clGetDeviceInfo(device[device_index]->thedevice,                        // Device id.
+                        parameter_name,                                         // Parameter name.
+                        0,                                                      // Dummy parameter size: "0" means we ask for the # of parameters.
+                        NULL,                                                   // Dummy parameter.
+                        &parameter_size);                                       // Returned parameter size.
 
   if(err != CL_SUCCESS)
   {
@@ -208,7 +209,28 @@ size_t device::get_info_size(cl_device_info parameter_name)
     exit(err);
   }
 
-  return (size_value);
+  return (parameter_size);
+}
+
+char* device::get_info_value(cl_device_info parameter_name, size_t parameter_size)
+{
+  cl_int  err;                                                                  // Error code.
+  char*   parameter;                                                            // Parameter.
+
+  // Getting platform information:
+  err = clGetDeviceInfo(device[device_index]->thedevice,                        // Device id.
+                        parameter_name,                                         // Parameter name.
+                        parameter_size,                                         // Parameter size.
+                        parameter,                                              // Parameter.
+                        NULL);                                                  // Returned parameter size (NULL = ignored).
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  return (parameter);                                                           // Returning parameter...
 }
 
 device::~device()
@@ -314,7 +336,9 @@ opencl::get_devices(int pl_index)
 
   num_devices = get_num_devices();
   dev_id = (cl_device_id*) malloc(sizeof(cl_device_id) * num_devices);          // Allocating device array...
-  err = clGetPlatformIDs(num_platforms, platfomr[pl_index]->theplatform, NULL); // Getting OpenCL device IDs...
+  err = clGetPlatformIDs(num_platforms,
+                         platfomr[pl_index]->theplatform,
+                         NULL); // Getting OpenCL device IDs...
 
   if(err != CL_SUCCESS)
   {
@@ -386,7 +410,7 @@ opencl::init()
     };
   #endif
 
-  printf("Action: creating OpenCL context for GPU... ");                        // Printing message...
+  printf("Action: creating OpenCL context... ");                                // Printing message...
 
   // Creating OpenCL context:
   context = clCreateContext(properties,
@@ -409,7 +433,7 @@ opencl::~opencl()
 {
   cl_int err;
 
-  printf("Action: releasing the OpenCL context... ");
+  printf("Action: releasing OpenCL context... ");
 
   err = clReleaseContext(context);                                              // Releasing OpenCL context...
 
@@ -419,8 +443,8 @@ opencl::~opencl()
     exit(err);
   }
 
-  free(device);                                                                // Freeing OpenCL devices...
-  free(platform);                                                              // Freeing OpenCL platforms...
+  free(device);                                                                 // Freeing OpenCL devices...
+  free(platform);                                                               // Freeing OpenCL platforms...
 
   printf("DONE!\n");
 }
@@ -428,24 +452,37 @@ opencl::~opencl()
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// "QUEUE" CLASS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-queue::queue(int device_index)
+queue::queue(cl_uint dev_index)
 {
-  thequeue = NULL;
+  device_index = dev_index;                                                     // Initializing device index...
+  thequeue = NULL;                                                              // Initializing thequeue...
 }
 
 void queue::init()
 {
-  thequeue = clCreateCommandQueue(context, existing_device[0]->thedevice, 0, &err);                 // Creating OpenCL queue...
+  cl_int  err;                                                                  // Error code.
+
+  printf("Action: creating OpenCL command queue... ");
+
+  // Creating OpenCL queue:
+  thequeue = clCreateCommandQueue(context,                                      // OpenCL context.
+                                  existing_device[device_index]->thedevice,     // Device id.
+                                  0,                                            // Queue properties (con be used for enabling profiling).
+                                  &err);                                        // Error code.
 
   if(err != CL_SUCCESS)
   {
     printf("\nError:  %s\n", get_error(err));
     exit(err);
   }
+
+  printf("DONE!\n");
 }
 
 queue::~queue()
 {
+  cl_int  err;                                                                  // Error code.
+
   printf("Action: releasing the OpenCL command queue... ");
 
   err = clReleaseCommandQueue(thequeue);                                        // Releasing OpenCL queue...
@@ -464,54 +501,35 @@ queue::~queue()
 //////////////////////////////////////////////////////////////////////////////////
 kernel::kernel()
 {
-  thekernel = NULL;
-  source = NULL;
-  program = NULL;
-  size = 0;
-  dimension = 0;
-  event = NULL;
+  kernel_source       = NULL;
+  program             = NULL;
+  size                = 0;
+  dimension           = 0;
+  event               = NULL;
+  thekernel           = NULL;
 }
 
-void kernel::init(char* kernel_source, size_t kernel_size, cl_uint kernel_dimension)
+void kernel::init(char* neutrino_path, char* kernel_file_name, size_t kernel_size, cl_uint kernel_dimension)
 {
-  FILE* handle;                                                                 // Input file handle.
+  cl_int    err;                                                                // Error code.
+  size_t    kernel_source_size;                                                 // Kernel source size [characters].
+
+  file_name = kernel_filename;
+  size      = kernel_size;
+  dimension = kernel_dimension;
 
   printf("Action: loading OpenCL kernel source from file... ");
 
-  source_file = kernel_source;
-  size = kernel_size;
-  dimension = kernel_dimension;
-
-  handle = fopen(source_file, "rb");                                            // Opening OpenCL kernel source file...
-
-  if(handle == NULL)
-  {
-    printf("\nError:  could not find the file!");
-    exit(1);
-  }
-
-  fseek(handle, 0, SEEK_END);                                                   // Seeking end of file...
-  source_size = (size_t)ftell(handle);                                          // Measuring file size...
-  rewind(handle);                                                               // Rewinding to the beginning of the file...
-  source = (char*)malloc(source_size + 1);                                      // Allocating buffer for reading the file...
-
-  if (!(source))
-  {
-    printf("\nError:  unable to allocate buffer memory!\n");
-    exit(EXIT_FAILURE);
-  }
-
-  fread(source, sizeof(char), source_size, handle);                             // Reading file (OpenCL kernel source)...
-  source[source_size] = '\0';                                                   // Null-terminating buffer...
-  fclose(handle);                                                               // Closing file.
-
-  printf("DONE!\n");
+  load_file(neutrino_path, file_name, &source, &source_size);
 
   printf("Action: creating OpenCL program from kernel source... ");
-  program = clCreateProgramWithSource(context,                                  // Creating OpenCL program from its source...
+
+  // Creating OpenCL program from its source:
+  program = clCreateProgramWithSource(context,
                                       1,
                                       (const char**)&source,
-                                      &source_size, &err);
+                                      &source_size,
+                                      &err);
 
   if(err != CL_SUCCESS)
   {
@@ -523,14 +541,21 @@ void kernel::init(char* kernel_source, size_t kernel_size, cl_uint kernel_dimens
   printf("DONE!\n");
 
   printf("Action: building OpenCL program... ");
-  err = clBuildProgram(program, 1, device, "", NULL, NULL);                     // Building OpenCL program...
 
-  // Checking compiled kernel:
-  if (err != CL_SUCCESS)
+  // Building OpenCL program:
+  err = clBuildProgram(program,
+                       1,
+                       device,
+                       "",
+                       NULL,
+                       NULL);
+
+  if (err != CL_SUCCESS)                                                        // Checking compiled kernel...
   {
     printf("\nError:  %s\n", get_error(err));
 
-    err = clGetProgramBuildInfo(program,                                        // Getting compiler information...
+    // Getting OpenCL compiler information:
+    err = clGetProgramBuildInfo(program,
                                 device[0],
                                 CL_PROGRAM_BUILD_LOG,
                                 0,
@@ -551,7 +576,9 @@ void kernel::init(char* kernel_source, size_t kernel_size, cl_uint kernel_dimens
       exit(EXIT_FAILURE);
     }
 
-    err = clGetProgramBuildInfo(program, device[0],                             // Reading log...
+    // Reading OpenCL compiler error log:
+    err = clGetProgramBuildInfo(program,
+                                device[0],
                                 CL_PROGRAM_BUILD_LOG,
                                 log_size + 1,
                                 log,
@@ -572,7 +599,10 @@ void kernel::init(char* kernel_source, size_t kernel_size, cl_uint kernel_dimens
 
   printf("Action: creating OpenCL kernel object from program... ");
 
-  thekernel = clCreateKernel(program, KERNEL_NAME, &err);                       // Creating OpenCL kernel...
+  // Creating OpenCL kernel:
+  thekernel = clCreateKernel(program,
+                             KERNEL_NAME,
+                             &err);                       
 
   if(err != CL_SUCCESS)
   {
