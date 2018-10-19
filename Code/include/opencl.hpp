@@ -129,10 +129,11 @@
     private:
       cl_int  err;
 
-      cl_uint get_platforms();
-      void get_platform_info(cl_uint index_platform, cl_platform_info name_param);
+      cl_uint get_num_platforms();
+
+      void    get_platform_info(cl_uint index_platform, cl_platform_info name_param);
       cl_uint get_devices(cl_uint index_platform);
-      void get_device_info(cl_uint index_device, cl_device_info name_param);
+      void    get_device_info(cl_uint index_device, cl_device_info name_param);
 
     public:
       platform*               existing_platform;
