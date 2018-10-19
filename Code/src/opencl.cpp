@@ -247,19 +247,25 @@ device::~device()
 //////////////////////////////////////////////////////////////////////////////////
 opencl::opencl()
 {
-  num_platforms = 0;
-  num_devices = 0;
+  existing_platform = NULL;                                                     // Initializing platforms IDs array...
+  num_platforms = 0;                                                            // Initializing # of platforms...
+  num_devices = 0;                                                              // Initializing # of devices...
+  properties = NULL;                                                            // Initializing platforms properties...
+  context = NULL;                                                               // Initializing platforms context...
 }
 
 // PRIVATE METHODS:
 cl_uint opencl::get_num_platforms()
 {
-  cl_int err;
-  cl_uint num_platforms;
+  cl_int err;                                                                   // Error code.
+  cl_uint num_pl;                                                               // # of platforms.
 
   printf("Action: getting number of OpenCL platforms... ");
 
-  err = clGetPlatformIDs(0, NULL, &num_platforms);                              // Getting number of existing OpenCL platforms...
+  // Getting number of existing OpenCL platforms:
+  err = clGetPlatformIDs(0,                                                     // Dummy # of platforms ("0" means we are asking for the # of platfomrs).
+                         NULL,                                                  // DUmmy platfomrs id.
+                         &num_pl);                                              // Returned # of existing platfomrs.
 
   if(err != CL_SUCCESS)
   {
@@ -270,18 +276,23 @@ cl_uint opencl::get_num_platforms()
   printf("\n        Found %d platform(s)!\n", num_platforms);
   printf("        DONE!\n");
 
-  return num_platforms;                                                         // Returning number of existing platforms...
+  return num_pl;                                                                // Returning # of existing platforms...
 }
 
 cl_uint opencl::get_platforms()
 {
-  cl_int          err;
-  cl_platform_id* pl_id;
-  int             i;
+  cl_int          err;                                                          // Error code.
+  cl_platform_id* pl_id;                                                        // Platform ID array.
+  cl_uint         num_pl;                                                       // # of existing platfomrs.
+  int             i;                                                            // Index.
 
-  num_platforms = get_num_platforms();
-  pl_id = (cl_platform_id*) malloc(sizeof(cl_platform_id) * num_platforms);     // Allocating platform array...
-  err = clGetPlatformIDs(num_platforms, pl_id, NULL);                           // Getting OpenCL platform IDs...
+  num_pl = get_num_platforms();                                                 // Getting # of existing platfomrs...
+  pl_id = (cl_platform_id*) malloc(sizeof(cl_platform_id) * num_pl);            // Allocating platform array...
+
+  // Getting OpenCL platform IDs:
+  err = clGetPlatformIDs(num_pl,                                                // # of existing platforms.
+                         pl_id,                                                 // Platform IDs array.
+                         NULL);                                                 // Dummy # of platfomrs.
 
   if(err != CL_SUCCESS)
   {
@@ -289,31 +300,31 @@ cl_uint opencl::get_platforms()
     exit(err);
   }
 
-  existing_platform = new platform[num_platforms];
+  existing_platform = new platform[num_pl];                                     // Platform object array.
 
-  for(i = 0; i < num_platforms; i++)
+  for(i = 0; i < num_pl; i++)
   {
-    existing_platform[i]->theplatform = pl_id[i];
+    existing_platform[i]->theplatform = pl_id[i];                               // Setting platform ID in all platform objects...
   }
 
-  printf("\n        Found %d platform(s)!\n", num_platforms);
+  printf("\n        Found %d platform(s)!\n", num_pl);
   printf("        DONE!\n");
 
-  return(num_platforms);
+  return(num_pl);
 }
 
-cl_uint device::get_num_devices(int pl_index)
+cl_uint opencl::get_num_devices(int pl_index)
 {
-  cl_int err;
-  cl_uint num_devices;
+  cl_int  err;                                                                  // Error code.
+  cl_uint num_dev;                                                              // # of devices.
 
   printf("Action: getting number of OpenCL devices... ");
 
-  err = clGetDeviceIDs(platform[index_index]->theplatform,                      // Getting number of existing OpenCL GPU devices...
+  err = clGetDeviceIDs(existing_platform[pl_index]->theplatform,                // Getting number of existing OpenCL GPU devices...
                        CL_DEVICE_TYPE_GPU,
                        0,
                        NULL,
-                       &num_devices);
+                       &num_dev);
 
   if(err != CL_SUCCESS)
   {
@@ -321,10 +332,10 @@ cl_uint device::get_num_devices(int pl_index)
     exit(err);
   }
 
-  printf("\n        Found %d device(s)!\n", num_devices);
+  printf("\n        Found %d device(s)!\n", num_dev);
   printf("        DONE!\n");
 
-  return num_devices;                                                           // Returning number of existing OpenCL GPU devices...
+  return(num_dev);                                                              // Returning number of existing OpenCL GPU devices...
 }
 
 opencl::get_devices(int pl_index)
@@ -602,7 +613,7 @@ void kernel::init(char* neutrino_path, char* kernel_file_name, size_t kernel_siz
   // Creating OpenCL kernel:
   thekernel = clCreateKernel(program,
                              KERNEL_NAME,
-                             &err);                       
+                             &err);
 
   if(err != CL_SUCCESS)
   {
