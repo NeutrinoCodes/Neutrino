@@ -65,9 +65,19 @@
   class device
   {
     private:
-      cl_int err;
+      cl_uint device_index;
+      size_t  get_info_size(cl_device_info parameter_name);
+      char*   get_info_value(cl_device_info parameter_name, size_t parameter_size);
+
     public:
-      device(cl_uint index_device);
+      cl_device_id*           thedevice;                                        // OpenCL device.
+      char*                   address_bits;
+      char*                   device_available;
+      char*                   compiler_available;
+      char*                   endian_little;
+      char*                   error_correction_support;
+
+      device(cl_uint dev_index);
       ~device();
   };
 
@@ -77,12 +87,12 @@
   class queue
   {
     private:
-      cl_int  err;
+      cl_uint device_index;
 
     public:
       cl_command_queue        thequeue;
 
-      queue();
+      queue(cl_uint dev_index);
       ~queue();
       void init();
   };
@@ -100,11 +110,9 @@
 
     public:
       cl_kernel               thekernel;
-
-      char*                   source_file;
-      size_t                  source_size;
+      char*                   file_name;
       char*                   source;
-
+      size_t                  source_size;                                      // Kernel source size [characters].
       cl_program              program;
       size_t                  size;
       cl_uint                 dimension;
@@ -112,7 +120,7 @@
 
       kernel();
       ~kernel();
-      void init(char* kernel_source, size_t kernel_size, cl_uint kernel_dimension);
+      void init(char* neutrino_path, char* kernel_filename, size_t kernel_size, cl_uint kernel_dimension);
       void execute(queue* q, kernel_event k_ev);
   };
 
