@@ -9,32 +9,20 @@ message("")
 
 # Type: "make" in order to build the project.
 
-message("Setting LINUX variable, according to an existing LINUX (but not APPLE) OS...")
-if(UNIX AND NOT APPLE)
-  set(LINUX TRUE)
-endif()
-
 message("Setting project name...")
 project (neutrino)
 
 message("Creating a SOURCES variable with a link to all cpp files to compile...")
 set(SOURCES
-src/main.cpp
-src/openclgl.cpp
-src/program.cpp
+src/data_types.cpp
+src/font.cpp
 src/linear_algebra.cpp
+src/main.cpp
+src/opencl.cpp
+src/opengl.cpp
+src/program.cpp
 src/projective_geometry.cpp
 src/utilities.cpp)
-
-message("Setting directory for the Mac executable...")
-if(APPLE)
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build/mac)
-endif(APPLE)
-
-message("Setting directory for the Linux executable...")
-if(LINUX)
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build/linux)
-endif(LINUX)
 
 message("Adding an executable with the above sources...")
 add_executable(neutrino ${SOURCES})
@@ -42,15 +30,28 @@ add_executable(neutrino ${SOURCES})
 message("Setting the directories that should be included in the build command...")
 target_include_directories(neutrino PRIVATE ${CMAKE_HOME_DIRECTORY}/include)
 
-message("Setting the Mac libraries that should be linked in the build command...")
+if(UNIX AND NOT APPLE)
+  message("Setting LINUX variable, according to an existing LINUX (but not APPLE) OS...")
+  set(LINUX TRUE)
+endif()
+
 if(APPLE)
-  message("Setting the libraries that should be linked in the build command...")
+  message("Setting directory for the Mac executable...")
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build/mac)
+endif(APPLE)
+
+if(LINUX)
+  message("Setting directory for the Linux executable...")
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build/linux)
+endif(LINUX)
+
+if(APPLE)
+  message("Setting the Mac libraries that should be linked in the build command...")
   target_link_libraries(neutrino "-framework OpenGL" "-framework OpenCL" "-lGLEW" "-lglfw" "-lm")
 endif(APPLE)
 
-message("Setting the Linux libraries that should be linked in the build command...")
 if(LINUX)
-  message("Setting the libraries that should be linked in the build command...")
+  message("Setting the Linux libraries that should be linked in the build command...")
   target_link_libraries(neutrino "-lOpenGL" "-lOpenCL" "-lGLEW" "-lglfw" "-lm")
 endif(LINUX)
 
@@ -69,7 +70,7 @@ message("")
 
 # Type: "make doc" in order to build the Doxygen documentation of the project.
 
-message("Checking if Doxygen is installed...")
+message("Checking whether Doxygen is installed...")
 find_package(Doxygen)
 if (DOXYGEN_FOUND)
     message("Setting input and output files...")
