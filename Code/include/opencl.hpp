@@ -65,11 +65,9 @@
 
     public:
       cl_device_id*           thedevice;                                        // OpenCL device.
-      char*                   address_bits;
-      char*                   device_available;
-      char*                   compiler_available;
-      char*                   endian_little;
-      char*                   error_correction_support;
+      cl_device_type          thedevice_type;                                   // Device type.
+      char*                   device_name;                                      // Device name.
+      char*                   device_platform;                                  // Device platform.
 
       device(cl_uint dev_index);
       ~device();
@@ -93,21 +91,21 @@
       cl_int  err;
 
       cl_uint get_num_platforms();
-
-      void    get_platform_info(cl_uint index_platform, cl_platform_info name_param);
-      cl_uint get_devices(cl_uint index_platform);
-      void    get_device_info(cl_uint index_device, cl_device_info name_param);
+      cl_uint get_platforms();
+      cl_uint get_num_devices(cl_uint pl_index, device_type dev_type);
+      cl_uint get_devices(cl_uint pl_index);
 
     public:
       platform*               existing_platform;
+      device*                 existing_device;
       cl_uint                 num_platforms;
       cl_uint                 num_devices;
       cl_context_properties*  properties;
       cl_context              context;
 
-      opencl();
-      void init();
-      ~opencl();
+            opencl();
+      void  init();
+            ~opencl();
 
   };
 
@@ -122,9 +120,9 @@
     public:
       cl_command_queue        thequeue;
 
-      queue(cl_uint dev_index);
-      ~queue();
-      void init();
+            queue(cl_uint dev_index);
+      void  init();
+            ~queue();
   };
 
 
@@ -154,10 +152,10 @@
       cl_uint                 dimension;
       cl_event                event;
 
-      kernel();
-      ~kernel();
-      void init(char* neutrino_path, char* kernel_filename, size_t kernel_size, cl_uint kernel_dimension);
-      void execute(queue* q, kernel_event k_ev);
+            kernel();
+      void  init(char* neutrino_path, char* kernel_filename, size_t kernel_size, cl_uint kernel_dimension);
+      void  execute(queue* q, kernel_event k_ev);
+            ~kernel();
   };
 
 

@@ -174,17 +174,11 @@ platform::~platform()
 //////////////////////////////////////////////////////////////////////////////////
 device::device(cl_uint dev_index)
 {
-  info*   address_bits              = new info(get_info_size(CL_DEVICE_ADDRESS_BITS));
-  info*   device_available          = new info(get_info_size(CL_DEVICE_AVAILABLE));
-  info*   compiler_available        = new info(get_info_size(CL_DEVICE_COMPILER_AVAILABLE));
-  info*   endian_little             = new info(get_info_size(CL_DEVICE_ENDIAN_LITTLE));
-  info*   error_correction_support  = new info(get_info_size(CL_DEVICE_ERROR_CORRECTION_SUPPORT));
+  info*   device_name               = new info(get_info_size(CL_DEVICE_NAME));
+  info*   device_platform           = new info(get_info_size(CL_DEVICE_PLATFORM));
 
-  address_bits->value               = get_info_value(CL_PLATFORM_PROFILE, address_bits->size);
-  device_available->value           = get_info_value(CL_PLATFORM_VERSION, device_available->size);
-  compiler_available->value         = get_info_value(CL_PLATFORM_NAME, compiler_available->size);
-  endian_little->value              = get_info_value(CL_PLATFORM_VENDOR, endian_little->size);
-  error_correction_support->value   = get_info_value(CL_PLATFORM_EXTENSIONS, error_correction_support->size);
+  device_name->value                = get_info_value(CL_DEVICE_NAME, device_name->size);
+  device_platform->value            = get_info_value(CL_DEVICE_PLATFORM, device_platform->size);
 
   device_index = dev_index;                                                     // Initializing device index...
   thedevice = NULL;                                                             // Initializing thedevice...
@@ -317,7 +311,6 @@ cl_uint opencl::get_num_devices(cl_uint pl_index, device_type dev_type)
 {
   cl_int          err;                                                          // Error code.
   cl_uint         num_dev;                                                      // # of devices.
-  cl_device_type  thedevice_type;                                               // Device type.
 
   printf("Action: getting number of OpenCL devices... ");
 
@@ -366,28 +359,22 @@ cl_uint opencl::get_num_devices(cl_uint pl_index, device_type dev_type)
   return(num_dev);                                                              // Returning number of existing OpenCL GPU devices...
 }
 
-opencl::get_devices(cl_uint pl_index, )
+cl_uint opencl::get_devices(cl_uint pl_index)
 {
   cl_int          err;
   cl_uint         num_devices;
   cl_device_id*   dev_id;
   int             i;
 
-  num_devices = get_num_devices(pl_index, dev_type);                            // Getting # of existing devices...
+  num_devices = get_num_devices(pl_index, thedevice_type);                      // Getting # of existing devices...
   dev_id = (cl_device_id*) malloc(sizeof(cl_device_id) * num_devices);          // Allocating device array...
 
   // Getting OpenCL device IDs...
-  err = clGetDeviceIDs(existing_platform[pl_index]->theplatform,                // Getting number of existing OpenCL GPU devices...
+  err = clGetDeviceIDs(existing_platform[pl_index]->theplatform,                // Platform...
                        thedevice_type,                                          // Device type.
                        0,                                                       // Dummy # of devices ("0" means we are asking for the # of devices).
                        NULL,                                                    // Dummy device.
                        &num_dev);                                               // Returned # of existing devices.
-
-
-
-  err = clGetPlatformIDs(num_platforms,
-                         platfomr[pl_index]->theplatform,
-                         NULL);
 
   if(err != CL_SUCCESS)
   {
@@ -409,17 +396,52 @@ opencl::get_devices(cl_uint pl_index, )
 }
 
 // PUBLIC METHODS:
-opencl::init()
+void opencl::init()
 {
-  cl_uint i;                                                                    // Defining platform number [#]...
-  cl_uint j;                                                                    // Defining device [#]...
-  cl_int  err;                                                                  // Defining error code [#]...
+  cl_uint pl_index;                                                             // Platform index.
+  cl_uint dev_index;                                                            // Device index.
+  cl_uint choosen_platform;                                                     // Choosen platform index.
+  cl_int  err;                                                                  // Error code.
+
+  printf("Action: finding OpenCL platforms...\n");
 
   num_platforms = get_platforms();                                              // Getting number of existing platforms [#]...
 
-  for (i = 0; i < num_platforms; i++)
+  for (pl_index = 0; pl_index < num_platforms; pl_index++)
   {
-    num_devices = get_devices(i);                                               // Getting # of existing devices on a platform [#]...
+    printf("        PLATFORM #%d:\n", pl_index + 1);
+    printf("        --> profile: %s\n", existing_platform[pl_index]->profile->value);
+    printf("        --> version: %s\n", existing_platform[pl_index]->version->value);
+    printf("        --> name:    %s\n", existing_platform[pl_index]->name->value);
+    printf("        --> vendor:  %s\n", existing_platform[pl_index]->vendor->value);
+    printf("\n");
+  }
+
+  printf("DONE!\n");
+
+  if (num_platforms > 1)
+  {
+    printf("Action: please choose a platform [1...%d", pl_index);
+    choosen_platform = query_numeric(" + enter]: ", 1, num_platforms) - 1;
+  }
+
+  else
+  {
+    choosen_platform = 0;
+  }
+
+  printf("DONE!\n");
+
+  printf("Action: finding OpenCL GPU devices...\n");
+
+  num_devices = get_devices(choosen_platform);                                  // Getting # of existing GPU devices on choosen platform [#]...
+
+  for (dev_index = 0, dev_index < num_devices; dev_index++)
+  {
+    printf("        DEVICE #%d:\n", dev_index);
+    printf("        --> device name: %s\n", existing_device[dev_index]->device_name->value);
+    printf("        --> device platform: %s\n", existing_device[dev_index]->device_platform->value);
+    printf("\n");
   }
 
   #ifdef __APPLE__                                                              // Checking for APPLE system...
@@ -442,7 +464,7 @@ opencl::init()
     {
       CL_GL_CONTEXT_KHR, (cl_context_properties)glfwGetGLXContext(window),
       CL_GLX_DISPLAY_KHR, (cl_context_properties)glfwGetX11Display(),
-      CL_CONTEXT_PLATFORM, (cl_context_properties)platform[0],
+      CL_CONTEXT_PLATFORM, (cl_context_properties)platform[choosen_platform],
       0
     };
   #endif
@@ -454,7 +476,7 @@ opencl::init()
     {
       CL_GL_CONTEXT_KHR, (cl_context_properties)glfwGetWGLContext(window),
       CL_WGL_HDC_KHR, (cl_context_properties)GetDC(glfwGetWin32Window(window)),
-      CL_CONTEXT_PLATFORM, (cl_context_properties)platform[0],
+      CL_CONTEXT_PLATFORM, (cl_context_properties)platform[choosen_platform],
       0
     };
   #endif
@@ -462,12 +484,12 @@ opencl::init()
   printf("Action: creating OpenCL context... ");                                // Printing message...
 
   // Creating OpenCL context:
-  context = clCreateContext(properties,
-                            num_devices,
-                            existing_device,
-                            NULL,
-                            NULL,
-                            &err);
+  context = clCreateContext(properties,                                         // Context properties.
+                            1,                                                  // # of devices on choosen platform.
+                            existing_device,                                    // List of existing devices on choosen platform.
+                            NULL,                                               // Context error report callback function.
+                            NULL,                                               // Context error report callback function argument.
+                            &err);                                              // Error code.
 
   if(err != CL_SUCCESS)                                                         // Checking for error...
   {

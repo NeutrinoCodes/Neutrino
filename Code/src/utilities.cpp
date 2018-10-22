@@ -177,23 +177,35 @@ void free_file(char* buffer)
   free(buffer);                                                                                                               ///< Freeing buffer...
 }
 
-int query_int(char* question)
+int query_numeric(char* caption, int min, int max)
 {
-  char  buffer[128];
-  char* end;
-  int   numeric;
+  char  buffer[128];                                                            // Input buffer.
+  int   numeric;                                                                // Numeric value.
+  bool  valid_choice = false;                                                   // User's choice.
 
-  printf("Question: %s");
+  printf("%s", caption);                                                        // Printing caption...
 
-  fgets(user_input, 128, stdin);
-  numeric = strtol(user_input, NULL, 10);
-
-  if (errno == ERANGE)
+  while (!valid_choice)                                                         // Checking choice validity...
   {
-    printf("\nError:  invalid input!\n");                                       // Printing message...
-    errno = 0;
+    fgets(user_input, 128, stdin);                                              // Reading string from stdin...
+    numeric = strtol(user_input, NULL, 10);                                     // Parsing stdin...
+
+    if ((min <= numeric) && (numeric <= max) && (errno != ERANGE))
+    {
+      valid_choice = true;                                                    // Setting flag...
+    }
+
+    else
+    {
+      printf("\nError:  invalid input! Please, try again!\n");                  // Printing message...
+      printf("\n");                                                             // Printing message...
+      printf("%s", caption);                                                    // Printing question...
+
+      errno = 0;
+    }
   }
-  printf("")
+
+  return(numeric);                                                              // Returning numeric choice...
 }
 
 void ascii_spin(const char* text, double tic, double toc)

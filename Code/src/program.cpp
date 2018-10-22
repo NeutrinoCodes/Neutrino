@@ -14,6 +14,7 @@
 #define DT              0.005
 #define KERNEL_FILE     "/Code/kernel/thekernel.cl"                             // Example of kernel. See note in setup().
 
+/*
 queue*  q1                = new queue();                                        // OpenCL queue.
 
 kernel* k1                = new kernel();
@@ -45,9 +46,11 @@ float4* freedom           = new float4(NUM_POINTS);                             
 text4*  text              = new text4("neutrino!", 1.0f, 1.0f, 1.0f, 1.0f);
 
 float tick;
+*/
 
 void setup()
 {
+  /*
   int i;
   int j;
   float x;
@@ -283,10 +286,12 @@ void setup()
   index_PL->set(k2, 13);                                                        // Setting kernel argument #13...
   index_PD->set(k2, 14);                                                        // Setting kernel argument #14...
   freedom->set(k2, 15);                                                         // Setting kernel argument #15...
+  */
 }
 
 void loop()
 {
+  /*
   position->push(q1, k1, 0);                                                     // Pushing kernel argument #0...
   color->push(q1, k1, 1);                                                        // Pushing kernel argument #1...
   position_old->push(q1, k1, 2);                                                 // Pushing kernel argument #2...
@@ -361,10 +366,12 @@ void loop()
 
   plot(position, color, STYLE_POINT);                                           // Plotting points...
   print(text);                                                                  // Printing text...
+  */
 }
 
 void terminate()
 {
+  /*
   delete position;
   delete color;
   delete velocity;
@@ -388,5 +395,6 @@ void terminate()
   delete k2;
   delete text;
 
+  */
   printf("All done!\n");
 }
