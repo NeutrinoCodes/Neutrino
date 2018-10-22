@@ -19,11 +19,9 @@
     #error "Unable to define getCPUTime() for an unknown OS."
   #endif
 
-  extern char*   NEUTRINO_PATH;                                                 // Neutrino path variable...
   extern int     ascii_spin_phase;
   extern int     n_old;
 
-  void    get_neutrino_path();
   double  getCPUTime();
   void    load_file(char* neutrino_path, const char* file_name, char** file_buffer, size_t* file_size);
   void    write_file(const char* file_name, char* file_buffer);
