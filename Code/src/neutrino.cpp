@@ -1,0 +1,18 @@
+/// @file
+
+#include "neutrino.hpp"
+
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////// "NEUTRINO" CLASS ///////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+neutrino::neutrino()
+{
+  opengl* theopengl = new opengl();                                             // The OpenGL object.
+  opencl* theopencl = new opencl();                                             // The OpenCL object.
+}
+
+neutrino::~neutrino()
+{
+  delete opengl;
+  delete opencl;
+}
