@@ -1,3 +1,5 @@
+/// @file
+
 #include "font.hpp"
 
 font::font()

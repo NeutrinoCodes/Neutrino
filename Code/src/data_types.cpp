@@ -1,3 +1,7 @@
+/// @file
+
+#include "data_types.hpp"
+
 float1::float1(int num_data)
 {
   x = new cl_float[num_data];                                                   // "x" data array.

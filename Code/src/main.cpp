@@ -1,15 +1,17 @@
 /// @file
 
-#include "openclgl.hpp"
+#include "opengl.hpp"
+#include "opencl.hpp"
 #include "utilities.hpp"
 #include "program.hpp"
 
 int main()
 {
-  double  tic;                                                                  // Initial loop time [us]...
-  double  toc;                                                                  // Final loop time [us]...
-
+  double  tic;                                                                  // Initial loop time [us].
+  double  toc;                                                                  // Final loop time [us].
+  
   get_neutrino_path();                                                          // Getting Neutrino installation path...
+
   setup();                                                                      // Executing Neutrino "setup" function...
 
   while (!glfwWindowShouldClose(window))                                        // Opening window...
