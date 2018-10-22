@@ -14,12 +14,6 @@
     #include <CL/cl_gl.h>
   #endif
 
-  typedef enum
-  {
-    WAIT,
-    DONT_WAIT
-  } kernel_event;
-
   const char* get_error(cl_int error);
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -82,47 +76,16 @@
   };
 
   ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////// "QUEUE" CLASS ///////////////////////////////
+  ////////////////////////////////// "OPENCL" CLASS //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  class queue
+  typedef enum
   {
-    private:
-      cl_uint device_index;
-
-    public:
-      cl_command_queue        thequeue;
-
-      queue(cl_uint dev_index);
-      ~queue();
-      void init();
-  };
-
-
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////// "KERNEL" CLASS //////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  class kernel
-  {
-    private:
-      cl_int  err;
-      size_t  log_size;
-      char*   log;
-
-    public:
-      cl_kernel               thekernel;
-      char*                   file_name;
-      char*                   source;
-      size_t                  source_size;                                      // Kernel source size [characters].
-      cl_program              program;
-      size_t                  size;
-      cl_uint                 dimension;
-      cl_event                event;
-
-      kernel();
-      ~kernel();
-      void init(char* neutrino_path, char* kernel_filename, size_t kernel_size, cl_uint kernel_dimension);
-      void execute(queue* q, kernel_event k_ev);
-  };
+    CPU,
+    GPU,
+    ACCELERATOR,
+    DEFAULT,
+    ALL
+  } device_type;
 
   class opencl
   {
@@ -147,5 +110,56 @@
       ~opencl();
 
   };
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////// "QUEUE" CLASS ///////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  class queue
+  {
+    private:
+      cl_uint device_index;
+
+    public:
+      cl_command_queue        thequeue;
+
+      queue(cl_uint dev_index);
+      ~queue();
+      void init();
+  };
+
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////// "KERNEL" CLASS //////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  typedef enum
+  {
+    WAIT,
+    DONT_WAIT
+  } kernel_event;
+
+  class kernel
+  {
+    private:
+      cl_int  err;
+      size_t  log_size;
+      char*   log;
+
+    public:
+      cl_kernel               thekernel;
+      char*                   file_name;
+      char*                   source;
+      size_t                  source_size;                                      // Kernel source size [characters].
+      cl_program              program;
+      size_t                  size;
+      cl_uint                 dimension;
+      cl_event                event;
+
+      kernel();
+      ~kernel();
+      void init(char* neutrino_path, char* kernel_filename, size_t kernel_size, cl_uint kernel_dimension);
+      void execute(queue* q, kernel_event k_ev);
+  };
+
+
 
 #endif
