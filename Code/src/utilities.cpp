@@ -177,6 +177,25 @@ void free_file(char* buffer)
   free(buffer);                                                                                                               ///< Freeing buffer...
 }
 
+int query_int(char* question)
+{
+  char  buffer[128];
+  char* end;
+  int   numeric;
+
+  printf("Question: %s");
+
+  fgets(user_input, 128, stdin);
+  numeric = strtol(user_input, NULL, 10);
+
+  if (errno == ERANGE)
+  {
+    printf("\nError:  invalid input!\n");                                       // Printing message...
+    errno = 0;
+  }
+  printf("")
+}
+
 void ascii_spin(const char* text, double tic, double toc)
 {
   int loop_time;

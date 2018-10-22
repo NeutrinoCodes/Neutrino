@@ -5,6 +5,7 @@
 
   #include <stdio.h>
   #include <stdlib.h>
+  #include <errno.h>
   #include <math.h>
 
   #if defined(__WINDOWS__)

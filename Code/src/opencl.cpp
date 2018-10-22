@@ -264,7 +264,7 @@ cl_uint opencl::get_num_platforms()
 
   // Getting number of existing OpenCL platforms:
   err = clGetPlatformIDs(0,                                                     // Dummy # of platforms ("0" means we are asking for the # of platfomrs).
-                         NULL,                                                  // DUmmy platfomrs id.
+                         NULL,                                                  // Dummy platfomrs id.
                          &num_pl);                                              // Returned # of existing platfomrs.
 
   if(err != CL_SUCCESS)
@@ -313,18 +313,46 @@ cl_uint opencl::get_platforms()
   return(num_pl);
 }
 
-cl_uint opencl::get_num_devices(int pl_index)
+cl_uint opencl::get_num_devices(cl_uint pl_index, device_type dev_type)
 {
-  cl_int  err;                                                                  // Error code.
-  cl_uint num_dev;                                                              // # of devices.
+  cl_int          err;                                                          // Error code.
+  cl_uint         num_dev;                                                      // # of devices.
+  cl_device_type  thedevice_type;                                               // Device type.
 
   printf("Action: getting number of OpenCL devices... ");
 
+  switch (dev_type)
+  {
+    case CPU:
+      thedevice_type = CL_DEVICE_TYPE_CPU;
+    break;
+
+    case GPU:
+      thedevice_type = CL_DEVICE_TYPE_GPU;
+    break;
+
+    case ACCELERATOR:
+      thedevice_type = CL_DEVICE_TYPE_ACCELERATOR;
+    break;
+
+    case DEFAULT:
+      thedevice_type = CL_DEVICE_TYPE_DEFAULT;
+    break;
+
+    case ALL:
+      thedevice_type = CL_DEVICE_TYPE_ALL;
+    break;
+
+    default:
+      thedevice_type = CL_DEVICE_TYPE_DEFAULT;
+    break;
+  }
+
   err = clGetDeviceIDs(existing_platform[pl_index]->theplatform,                // Getting number of existing OpenCL GPU devices...
-                       CL_DEVICE_TYPE_GPU,
-                       0,
-                       NULL,
-                       &num_dev);
+                       thedevice_type,                                          // Device type.
+                       0,                                                       // Dummy # of devices ("0" means we are asking for the # of devices).
+                       NULL,                                                    // Dummy device.
+                       &num_dev);                                               // Returned # of existing devices.
 
   if(err != CL_SUCCESS)
   {
@@ -338,18 +366,28 @@ cl_uint opencl::get_num_devices(int pl_index)
   return(num_dev);                                                              // Returning number of existing OpenCL GPU devices...
 }
 
-opencl::get_devices(int pl_index)
+opencl::get_devices(cl_uint pl_index, )
 {
   cl_int          err;
   cl_uint         num_devices;
   cl_device_id*   dev_id;
   int             i;
 
-  num_devices = get_num_devices();
+  num_devices = get_num_devices(pl_index, dev_type);                            // Getting # of existing devices...
   dev_id = (cl_device_id*) malloc(sizeof(cl_device_id) * num_devices);          // Allocating device array...
+
+  // Getting OpenCL device IDs...
+  err = clGetDeviceIDs(existing_platform[pl_index]->theplatform,                // Getting number of existing OpenCL GPU devices...
+                       thedevice_type,                                          // Device type.
+                       0,                                                       // Dummy # of devices ("0" means we are asking for the # of devices).
+                       NULL,                                                    // Dummy device.
+                       &num_dev);                                               // Returned # of existing devices.
+
+
+
   err = clGetPlatformIDs(num_platforms,
                          platfomr[pl_index]->theplatform,
-                         NULL); // Getting OpenCL device IDs...
+                         NULL);
 
   if(err != CL_SUCCESS)
   {
