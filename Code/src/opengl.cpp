@@ -253,6 +253,11 @@ auto window::init()                                                             
   perspective(P, FOV*M_PI/180.0, aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);        // Setting Projection_matrix matrix...
 }
 
+bool window::closed()
+{
+  return(glfwWindowShouldClose(glfw_window));
+}
+
 auto window::clear()                                                            // Window clearance.
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...

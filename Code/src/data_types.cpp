@@ -2,7 +2,7 @@
 
 #include "data_types.hpp"
 
-float1::float1(int num_data)
+float1::float1(cl_context thecontext, int num_data)
 {
   x = new cl_float[num_data];                                                   // "x" data array.
 
@@ -10,7 +10,8 @@ float1::float1(int num_data)
   vao = 0;                                                                      // OpenGL data VAO.
   vbo = 0;                                                                      // OpenGL data VBO.
   buffer = NULL;                                                                // OpenCL data buffer.
-  LAYOUT_0 = 0;                                                                 // Setting layout = 0;
+  LAYOUT_0 = 0;                                                                 // Setting layout = 0...
+  context = thecontext;                                                         // Getting OpenCL context...
 
   for (i = 0; i < num_data; i++)                                                // Filling arrays with default data:
   {
@@ -92,7 +93,7 @@ float1::~float1()
   printf("DONE!\n");
 }
 
-int1::int1(int num_data)
+int1::int1(cl_context thecontext, int num_data)
 {
   x = new cl_int[num_data];                                                     // "x" data array.
 
@@ -101,6 +102,7 @@ int1::int1(int num_data)
   vbo = 0;                                                                      // OpenGL data VBO.
   buffer = NULL;                                                                // OpenCL data buffer.
   LAYOUT_0 = 0;                                                                 // Setting layout = 0;
+  context = thecontext;                                                         // Getting OpenCL context...
 
   for (i = 0; i < num_data; i++)                                                // Filling arrays with default data:
   {
@@ -182,7 +184,7 @@ int1::~int1()
   printf("DONE!\n");
 }
 
-float4::float4(int num_data)
+float4::float4(cl_context thecontext, int num_data)
 {
   x = new cl_float[num_data];                                                   // "x" data array.
   y = new cl_float[num_data];                                                   // "y" data array.
@@ -194,6 +196,7 @@ float4::float4(int num_data)
   vbo = 0;                                                                      // OpenGL data VBO.
   buffer = NULL;                                                                // OpenCL data buffer.
   LAYOUT_0 = 0;                                                                 // Setting layout = 0;
+  context = thecontext;                                                         // Getting OpenCL context...
 
   for (i = 0; i < num_data; i++)                                                // Filling arrays with default data...
   {
@@ -294,10 +297,8 @@ float4::~float4()
   printf("DONE!\n");
 }
 
-int4::int4(int num_data)
+int4::int4(cl_context thecontext, int num_data)
 {
-  LAYOUT_0 = 0;                                                                 // Setting layout = 0;
-
   x = new cl_int[num_data];                                                     // "x" data array.
   y = new cl_int[num_data];                                                     // "y" data array.
   z = new cl_int[num_data];                                                     // "z" data array.
@@ -307,6 +308,8 @@ int4::int4(int num_data)
   vao = 0;                                                                      // OpenGL data VAO.
   vbo = 0;                                                                      // OpenGL data VBO.
   buffer = NULL;                                                                // OpenCL data buffer.
+  LAYOUT_0 = 0;                                                                 // Setting layout = 0;
+  context = thecontext;                                                         // Getting OpenCL context...
 
   for (i = 0; i < num_data; i++)                                                // Filling arrays with default data...
   {
@@ -407,10 +410,8 @@ int4::~int4()
   printf("DONE!\n");
 }
 
-point4::point4(int num_data)
+point4::point4(cl_context thecontext, int num_data)
 {
-  LAYOUT_0 = 0;                                                                 // Setting layout = 0;
-
   x = new GLfloat[num_data];                                                    // "x" data array.
   y = new GLfloat[num_data];                                                    // "y" data array.
   z = new GLfloat[num_data];                                                    // "z" data array.
@@ -420,6 +421,8 @@ point4::point4(int num_data)
   vao = 0;                                                                      // OpenGL data VAO.
   vbo = 0;                                                                      // OpenGL data VBO.
   buffer = NULL;                                                                // OpenCL data buffer.
+  LAYOUT_0 = 0;                                                                 // Setting layout = 0;
+  context = thecontext;                                                         // Getting OpenCL context...
 
   for (i = 0; i < num_data; i++)                                                // Filling arrays with default data...
   {
@@ -520,10 +523,8 @@ point4::~point4()
   printf("DONE!\n");
 }
 
-color4::color4(int num_data)
+color4::color4(cl_context thecontext, int num_data)
 {
-  LAYOUT_1 = 1;                                                                 // Setting layout = 1;
-
   r = new GLfloat[num_data];                                                    // "r" data array.
   g = new GLfloat[num_data];                                                    // "g" data array.
   b = new GLfloat[num_data];                                                    // "b" data array.
@@ -533,6 +534,8 @@ color4::color4(int num_data)
   vao = 0;                                                                      // OpenGL data VAO.
   vbo = 0;                                                                      // OpenGL data VBO.
   buffer = NULL;                                                                // OpenCL data buffer.
+  LAYOUT_1 = 1;                                                                 // Setting layout = 1;
+  context = thecontext;                                                         // Getting OpenCL context...
 
   for (i = 0; i < num_data; i++)                                                // Filling arrays with default data...
   {
@@ -633,7 +636,7 @@ color4::~color4()
   printf("DONE!\n");
 }
 
-text4::text4(const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A)
+text4::text4(cl_context thecontext, const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A)
 {
   num_char = strlen(text);                                                      // Total # of characters in input string.
   num_data = 0;                                                                 // Total # of font data in input string.
@@ -646,6 +649,8 @@ text4::text4(const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A)
   char_numpoints    = new int[num_char];                                        // # of font points for each character in input string.
   char_numstrokes   = new int[num_char];                                        // # of font strokes for each character in input string.
   char_kern         = new int[num_char];                                        // Kern spacing for each character in input string.
+
+  context = thecontext;                                                         // Getting OpenCL context...
 
   for (i = 0; i < num_char; i++)                                                // Looping on all characters in input string...
   {

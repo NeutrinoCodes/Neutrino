@@ -1,39 +1,8 @@
 #ifndef data_types_hpp
 #define deta_types_hpp
 
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <string.h>
-  #include <math.h>
-  #include <GL/glew.h>
-
-  #ifdef __WINDOWS__
-    #define GLFW_EXPOSE_NATIVE_WIN32
-    #define GLFW_EXPOSE_NATIVE_WGL
-  #endif
-
-  #ifdef __linux__
-    #define GLFW_EXPOSE_NATIVE_X11
-    #define GLFW_EXPOSE_NATIVE_GLX
-  #endif
-
-  #include <GLFW/glfw3.h>
-  #include <GLFW/glfw3native.h>
-
-  #ifdef __APPLE__
-    #include <OpenGL/OpenGL.h>
-  #else
-    #include <GL/gl.h>
-  #endif
-
-  #ifdef __APPLE__
-    #include <OpenCL/opencl.h>
-  #else
-    #include <CL/cl.h>
-    #include <CL/cl_gl.h>
-  #endif
-
-  #include "opencl.hpp"
+  #include "neutrino.hpp"
+  #include "font.hpp"
 
   /// **Declaration of "float1" data class:**
   /// "float1" is an array of "num_data" elements.
@@ -44,9 +13,10 @@
       unsigned int      i;                                                      // Declaring "i" index...
       // NOTE: There is no need for "unfolded-data" because these data are 1xN.
       GLuint            LAYOUT_0;                                               // "layout = 0" attribute in vertex shader.
+      cl_context        context;                                                // OpenCL context.
 
     public:
-      float1(int num_data);
+      float1(cl_context thecontext, int num_data);
       ~float1();
 
       cl_float*    x;                                                           // Declaring "x" data...
@@ -71,9 +41,10 @@
       unsigned int      i;
       // NOTE: There is no need for "unfolded-data" because these data are 1xN.
       GLuint            LAYOUT_0;                                               // "layout = 0" attribute in vertex shader.
+      cl_context        context;                                                // OpenCL context.
 
     public:
-      int1(int num_data);
+      int1(cl_context thecontext, int num_data);
       ~int1();
 
       cl_int*      x;
@@ -100,9 +71,10 @@
       unsigned int      i;                                                      // Declaring "i" index...
       GLfloat*          data;                                                   // Declaring unfolded data array...
       GLuint            LAYOUT_0;                                               // "layout = 0" attribute in vertex shader.
+      cl_context        context;                                                // OpenCL context.
 
     public:
-      float4(int num_data);
+      float4(cl_context thecontext, int num_data);
       ~float4();
 
       cl_float*    x;                                                           // Declaring "x" data...
@@ -132,9 +104,10 @@
       unsigned int      i;
       GLint*            data;                                                   // Declaring unfolded data array...
       GLuint            LAYOUT_0;                                               // "layout = 0" attribute in vertex shader.
+      cl_context        context;                                                // OpenCL context.
 
     public:
-      int4(int num_data);
+      int4(cl_context thecontext, int num_data);
       ~int4();
 
       cl_int*      x;
@@ -165,9 +138,10 @@
       unsigned int      i;
       GLfloat*          data;
       GLuint            LAYOUT_0;                                               // "layout = 0" attribute in vertex shader.
+      cl_context        context;                                                // OpenCL context.
 
     public:
-      point4(int num_data);
+      point4(cl_context thecontext, int num_data);
       ~point4();
 
       GLfloat*  x;
@@ -198,9 +172,10 @@
       unsigned int      i;
       GLfloat*          data;
       GLuint            LAYOUT_1;                                               // "layout = 1" attribute in vertex shader.
+      cl_context        context;                                                // OpenCL context.
 
     public:
-      color4(int num_data);
+      color4(cl_context thecontext, int num_data);
       ~color4();
 
       GLfloat*  r;
@@ -258,8 +233,10 @@
       GLuint   LAYOUT_0;                                                        // "layout = 0" attribute in vertex shader.
       GLuint   LAYOUT_1;                                                        // "layout = 1" attribute in vertex shader.
 
+      cl_context        context;                                                // OpenCL context.
+
     public:
-      text4(const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A);
+      text4(cl_context thecontext, const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A);
       ~text4();
 
       GLfloat*  x;

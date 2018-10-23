@@ -73,7 +73,7 @@ int query_numeric(char* caption, int min, int max)
 
     if ((min <= numeric) && (numeric <= max) && (errno != ERANGE))
     {
-      valid_choice = true;                                                    // Setting flag...
+      valid_choice = true;                                                      // Setting flag...
     }
 
     else

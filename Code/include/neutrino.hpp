@@ -3,7 +3,6 @@
 
   #include "opengl.hpp"
   #include "opencl.hpp"
-  #include "data_types.hpp"
   #include "utilities.hpp"
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -22,8 +21,9 @@
 
     public:
       char*   neutrino_path;                                                    // NEUTRINO_PATH environmental variable.
-      opengl  theopengl;                                                        // The OpenGL object.
-      opencl  theopencl;                                                        // The OpenCL object.
+      opengl* theopengl;                                                        // The OpenGL object.
+      opencl* theopencl;                                                        // The OpenCL object.
+      window* thewindow;                                                        // The window object.
       double  tic;                                                              // Tic time [ms].
       double  toc;                                                              // Toc time [ms].
       double  loop_time;                                                        // Loop time [ms].

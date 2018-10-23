@@ -247,7 +247,7 @@ opencl::opencl()
   num_platforms = 0;                                                            // Initializing # of platforms...
   num_devices = 0;                                                              // Initializing # of devices...
   properties = NULL;                                                            // Initializing platforms properties...
-  context = NULL;                                                               // Initializing platforms context...
+  thecontext = NULL;                                                            // Initializing platforms context...
 }
 
 // PRIVATE METHODS:
@@ -486,7 +486,7 @@ void opencl::init()
   printf("Action: creating OpenCL context... ");                                // Printing message...
 
   // Creating OpenCL context:
-  context = clCreateContext(properties,                                         // Context properties.
+  thecontext = clCreateContext(properties,                                      // Context properties.
                             1,                                                  // # of devices on choosen platform.
                             existing_device,                                    // List of existing devices on choosen platform.
                             NULL,                                               // Context error report callback function.
@@ -508,7 +508,7 @@ opencl::~opencl()
 
   printf("Action: releasing OpenCL context... ");
 
-  err = clReleaseContext(context);                                              // Releasing OpenCL context...
+  err = clReleaseContext(thecontext);                                           // Releasing OpenCL context...
 
   if(err != CL_SUCCESS)
   {
@@ -525,10 +525,11 @@ opencl::~opencl()
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// "QUEUE" CLASS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-queue::queue(cl_uint dev_index)
+queue::queue(cl_context thecontext, cl_uint dev_index)
 {
   device_index = dev_index;                                                     // Initializing device index...
   thequeue = NULL;                                                              // Initializing thequeue...
+  context = thecontext;                                                         // Initializing context...
 }
 
 void queue::init()
@@ -572,7 +573,7 @@ queue::~queue()
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "KERNEL" CLASS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-kernel::kernel()
+kernel::kernel(cl_context thecontext)
 {
   kernel_source       = NULL;
   program             = NULL;
@@ -580,6 +581,7 @@ kernel::kernel()
   dimension           = 0;
   event               = NULL;
   thekernel           = NULL;
+  context             = thecontext;                                             // Initializing context...
 }
 
 void kernel::init(char* neutrino_path, char* kernel_file_name, size_t kernel_size, cl_uint kernel_dimension)

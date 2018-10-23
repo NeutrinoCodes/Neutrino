@@ -101,7 +101,7 @@
       cl_uint                 num_platforms;
       cl_uint                 num_devices;
       cl_context_properties*  properties;
-      cl_context              context;
+      cl_context              thecontext;
 
             opencl();
       void  init();
@@ -115,12 +115,13 @@
   class queue
   {
     private:
-      cl_uint device_index;
+      cl_uint           device_index;                                           // OpenCL device index.
+      cl_context        context;                                                // OpenCL context.
 
     public:
-      cl_command_queue        thequeue;
+      cl_command_queue  thequeue;                                               // OpenCL queue.
 
-            queue(cl_uint dev_index);
+            queue(cl_context thecontext, cl_uint dev_index);
       void  init();
             ~queue();
   };
@@ -138,26 +139,25 @@
   class kernel
   {
     private:
-      cl_int  err;
-      size_t  log_size;
-      char*   log;
+      cl_int            err;
+      size_t            log_size;
+      char*             log;
+      cl_context        context;                                                // OpenCL context.
 
     public:
-      cl_kernel               thekernel;
-      char*                   file_name;
-      char*                   source;
-      size_t                  source_size;                                      // Kernel source size [characters].
-      cl_program              program;
-      size_t                  size;
-      cl_uint                 dimension;
-      cl_event                event;
+      cl_kernel         thekernel;
+      char*             file_name;
+      char*             source;
+      size_t            source_size;                                            // Kernel source size [characters].
+      cl_program        program;
+      size_t            size;
+      cl_uint           dimension;
+      cl_event          event;
 
-            kernel();
+            kernel(cl_context thecontext);
       void  init(char* neutrino_path, char* kernel_filename, size_t kernel_size, cl_uint kernel_dimension);
       void  execute(queue* q, kernel_event k_ev);
             ~kernel();
   };
-
-
 
 #endif
