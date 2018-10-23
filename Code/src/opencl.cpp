@@ -101,22 +101,9 @@ info::~info()
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "PLATFORM" CLASS //////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-platform::platform(cl_uint pl_index)
+platform::platform()
 {
-  info*   profile     = new info(get_info_size(CL_PLATFORM_PROFILE));           // Platform info.
-  info*   version     = new info(get_info_size(CL_PLATFORM_VERSION));           // Platform info.
-  info*   name        = new info(get_info_size(CL_PLATFORM_NAME));              // Platform info.
-  info*   vendor      = new info(get_info_size(CL_PLATFORM_VENDOR));            // Platform info.
-  info*   extensions  = new info(get_info_size(CL_PLATFORM_EXTENSIONS));        // Platform info.
 
-  profile->value    = get_info_value(CL_PLATFORM_PROFILE, profile->size);       // Setting info value...
-  version->value    = get_info_value(CL_PLATFORM_VERSION, version->size);       // Setting info value...
-  name->value       = get_info_value(CL_PLATFORM_NAME, name->size);             // Setting info value...
-  vendor->value     = get_info_value(CL_PLATFORM_VENDOR, vendor->size);         // Setting info value...
-  extensions->value = get_info_value(CL_PLATFORM_EXTENSIONS, extensions->size); // Setting info value...
-
-  platform_index = pl_index;                                                    // Initializing platform index...
-  theplatform = NULL;                                                           // Initializing theplatform...
 }
 
 // PRIVATE METHODS:
@@ -126,7 +113,7 @@ size_t platform::get_info_size(cl_platform_info parameter_name)
   size_t  parameter_size;                                                       // Parameter size.
 
   // Getting platform information:
-  err = clGetPlatformInfo(platform[platform_index]->theplatform,                // Platform id.
+  err = clGetPlatformInfo(theplatform,                                          // Platform id.
                           parameter_name,                                       // Parameter name.
                           0,                                                    // Dummy parameter size: "0" means we ask for the # of parameters.
                           NULL,                                                 // Dummy parameter.
@@ -147,7 +134,7 @@ char* platform::get_info_value(cl_platform_info parameter_name, size_t parameter
   char*   parameter;                                                            // Parameter.
 
   // Getting platform information:
-  err = clGetPlatformInfo(platform[platform_index]->theplatform,                // Platform id.
+  err = clGetPlatformInfo(theplatform,                                          // Platform id.
                           parameter_name,                                       // Parameter name.
                           parameter_size,                                       // Parameter size.
                           parameter,                                            // Parameter.
@@ -162,6 +149,24 @@ char* platform::get_info_value(cl_platform_info parameter_name, size_t parameter
   return (parameter);                                                           // Returning parameter...
 }
 
+// PUBLIC METHODS:
+void platform::init(cl_platform_id pl_id)
+{
+  info*   profile     = new info(get_info_size(CL_PLATFORM_PROFILE));           // Platform info.
+  info*   version     = new info(get_info_size(CL_PLATFORM_VERSION));           // Platform info.
+  info*   name        = new info(get_info_size(CL_PLATFORM_NAME));              // Platform info.
+  info*   vendor      = new info(get_info_size(CL_PLATFORM_VENDOR));            // Platform info.
+  info*   extensions  = new info(get_info_size(CL_PLATFORM_EXTENSIONS));        // Platform info.
+
+  profile->value    = get_info_value(CL_PLATFORM_PROFILE, profile->size);       // Setting info value...
+  version->value    = get_info_value(CL_PLATFORM_VERSION, version->size);       // Setting info value...
+  name->value       = get_info_value(CL_PLATFORM_NAME, name->size);             // Setting info value...
+  vendor->value     = get_info_value(CL_PLATFORM_VENDOR, vendor->size);         // Setting info value...
+  extensions->value = get_info_value(CL_PLATFORM_EXTENSIONS, extensions->size); // Setting info value...
+
+  theplatform = pl_id;                                                          // Initializing theplatform...
+}
+
 platform::~platform()
 {
   delete profile;
@@ -174,16 +179,9 @@ platform::~platform()
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// "DEVICE" CLASS ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-device::device(cl_uint dev_index)
+device::device()
 {
-  info*   device_name               = new info(get_info_size(CL_DEVICE_NAME));
-  info*   device_platform           = new info(get_info_size(CL_DEVICE_PLATFORM));
 
-  device_name->value                = get_info_value(CL_DEVICE_NAME, device_name->size);
-  device_platform->value            = get_info_value(CL_DEVICE_PLATFORM, device_platform->size);
-
-  device_index = dev_index;                                                     // Initializing device index...
-  thedevice = NULL;                                                             // Initializing thedevice...
 }
 
 // PRIVATE METHODS:
@@ -193,7 +191,7 @@ size_t device::get_info_size(cl_device_info parameter_name)
   size_t  parameter_size;                                                       // Parameter size.
 
   // Getting device information:
-  err = clGetDeviceInfo(device[device_index]->thedevice,                        // Device id.
+  err = clGetDeviceInfo(thedevice,                                              // Device id.
                         parameter_name,                                         // Parameter name.
                         0,                                                      // Dummy parameter size: "0" means we ask for the # of parameters.
                         NULL,                                                   // Dummy parameter.
@@ -214,7 +212,7 @@ char* device::get_info_value(cl_device_info parameter_name, size_t parameter_siz
   char*   parameter;                                                            // Parameter.
 
   // Getting platform information:
-  err = clGetDeviceInfo(device[device_index]->thedevice,                        // Device id.
+  err = clGetDeviceInfo(thedevice,                                              // Device id.
                         parameter_name,                                         // Parameter name.
                         parameter_size,                                         // Parameter size.
                         parameter,                                              // Parameter.
@@ -229,13 +227,22 @@ char* device::get_info_value(cl_device_info parameter_name, size_t parameter_siz
   return (parameter);                                                           // Returning parameter...
 }
 
+// PUBLIC METHODS:
+void device::init(cl_device_id dev_id)
+{
+  info*   device_name               = new info(get_info_size(CL_DEVICE_NAME));
+  info*   device_platform           = new info(get_info_size(CL_DEVICE_PLATFORM));
+
+  device_name->value                = get_info_value(CL_DEVICE_NAME, device_name->size);
+  device_platform->value            = get_info_value(CL_DEVICE_PLATFORM, device_platform->size);
+
+  thedevice = dev_id;                                                           // Initializing thedevice...
+}
+
 device::~device()
 {
-  delete address_bits;
-  delete device_available;
-  delete compiler_available;
-  delete endian_little;
-  delete error_correction_support;
+  delete device_name;
+  delete device_platform;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -248,6 +255,7 @@ opencl::opencl()
   num_devices = 0;                                                              // Initializing # of devices...
   properties = NULL;                                                            // Initializing platforms properties...
   thecontext = NULL;                                                            // Initializing platforms context...
+  thedevice_type = DEFAULT;                                                     // Initializing device type...
 }
 
 // PRIVATE METHODS:
@@ -296,11 +304,11 @@ cl_uint opencl::get_platforms()
     exit(err);
   }
 
-  existing_platform = new platform[num_pl];                                     // Platform object array.
+  *existing_platform = new platform[num_pl];                                    // Platform object array.
 
   for(i = 0; i < num_pl; i++)
   {
-    existing_platform[i]->theplatform = pl_id[i];                               // Setting platform ID in all platform objects...
+    existing_platform[i]->init(pl_id[i]);                                       // Initializing platform objects...
   }
 
   printf("\n        Found %d platform(s)!\n", num_pl);
@@ -309,14 +317,77 @@ cl_uint opencl::get_platforms()
   return(num_pl);
 }
 
-cl_uint opencl::get_num_devices(cl_uint pl_index, device_type dev_type)
+cl_uint opencl::get_num_devices(cl_uint pl_index)
 {
   cl_int          err;                                                          // Error code.
-  cl_uint         num_dev;                                                      // # of devices.
+  cl_uint         num_devices;                                                  // # of devices.
 
   printf("Action: getting number of OpenCL devices... ");
 
-  switch (dev_type)
+  err = clGetDeviceIDs(existing_platform[pl_index]->theplatform,                // Getting number of existing OpenCL GPU devices...
+                       thedevice_type,                                          // Device type.
+                       0,                                                       // Dummy # of devices ("0" means we are asking for the # of devices).
+                       NULL,                                                    // Dummy device.
+                       &num_devices);                                           // Returned # of existing devices.
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  printf("\n        Found %d device(s)!\n", num_devices);
+  printf("        DONE!\n");
+
+  return(num_devices);                                                          // Returning number of existing OpenCL GPU devices...
+}
+
+cl_device_id* opencl::get_devices(cl_uint pl_index)
+{
+  cl_int          err;
+  cl_uint         num_devices;
+  cl_device_id*   dev_id;
+  int             i;
+
+  num_devices = get_num_devices(pl_index);                                      // Getting # of existing devices...
+  dev_id = (cl_device_id*) malloc(sizeof(cl_device_id) * num_devices);          // Allocating device array...
+
+  // Getting OpenCL device IDs...
+  err = clGetDeviceIDs(existing_platform[pl_index]->theplatform,                // Platform...
+                       thedevice_type,                                          // Device type.
+                       num_devices,                                             // # of devices.
+                       dev_id,                                                  // Device array.
+                       NULL);                                                   // Dummy # of existing devices.
+
+  if(err != CL_SUCCESS)
+  {
+    printf("\nError:  %s\n", get_error(err));
+    exit(err);
+  }
+
+  *existing_device = new device[num_devices];
+
+  for(i = 0; i < num_devices; i++)
+  {
+    existing_device[i]->init(dev_id[i]);                                        // Initializing existing devices...
+  }
+
+  printf("\n        Found %d device(s)!\n", num_devices);
+  printf("        DONE!\n");
+
+  return(dev_id);
+}
+
+// PUBLIC METHODS:
+void opencl::init(GLFWwindow* thewindow, device_type dev_type)
+{
+  cl_uint pl_index;                                                             // Platform index.
+  cl_uint dev_index;                                                            // Device index.
+  cl_int  err;                                                                  // Error code.
+
+  printf("Action: finding OpenCL platforms...\n");
+
+  switch (dev_type)                                                             // Setting device type...
   {
     case CPU:
       thedevice_type = CL_DEVICE_TYPE_CPU;
@@ -342,70 +413,6 @@ cl_uint opencl::get_num_devices(cl_uint pl_index, device_type dev_type)
       thedevice_type = CL_DEVICE_TYPE_DEFAULT;
     break;
   }
-
-  err = clGetDeviceIDs(existing_platform[pl_index]->theplatform,                // Getting number of existing OpenCL GPU devices...
-                       thedevice_type,                                          // Device type.
-                       0,                                                       // Dummy # of devices ("0" means we are asking for the # of devices).
-                       NULL,                                                    // Dummy device.
-                       &num_dev);                                               // Returned # of existing devices.
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  printf("\n        Found %d device(s)!\n", num_dev);
-  printf("        DONE!\n");
-
-  return(num_dev);                                                              // Returning number of existing OpenCL GPU devices...
-}
-
-cl_uint opencl::get_devices(cl_uint pl_index)
-{
-  cl_int          err;
-  cl_uint         num_devices;
-  cl_device_id*   dev_id;
-  int             i;
-
-  num_devices = get_num_devices(pl_index, thedevice_type);                      // Getting # of existing devices...
-  dev_id = (cl_device_id*) malloc(sizeof(cl_device_id) * num_devices);          // Allocating device array...
-
-  // Getting OpenCL device IDs...
-  err = clGetDeviceIDs(existing_platform[pl_index]->theplatform,                // Platform...
-                       thedevice_type,                                          // Device type.
-                       0,                                                       // Dummy # of devices ("0" means we are asking for the # of devices).
-                       NULL,                                                    // Dummy device.
-                       &num_dev);                                               // Returned # of existing devices.
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  existing_device = new device[num_devices];
-
-  for(i = 0; i < num_devices; i++)
-  {
-    existing_device[i]->thedevice = dev_id[i];
-  }
-
-  printf("\n        Found %d device(s)!\n", num_devices);
-  printf("        DONE!\n");
-
-  return(num_devices);
-}
-
-// PUBLIC METHODS:
-void opencl::init()
-{
-  cl_uint pl_index;                                                             // Platform index.
-  cl_uint dev_index;                                                            // Device index.
-  cl_uint choosen_platform;                                                     // Choosen platform index.
-  cl_int  err;                                                                  // Error code.
-
-  printf("Action: finding OpenCL platforms...\n");
 
   num_platforms = get_platforms();                                              // Getting number of existing platforms [#]...
 
@@ -438,13 +445,15 @@ void opencl::init()
 
   num_devices = get_devices(choosen_platform);                                  // Getting # of existing GPU devices on choosen platform [#]...
 
-  for (dev_index = 0, dev_index < num_devices; dev_index++)
+  for (dev_index = 0; dev_index < num_devices; dev_index++)
   {
     printf("        DEVICE #%d:\n", dev_index);
     printf("        --> device name: %s\n", existing_device[dev_index]->device_name->value);
     printf("        --> device platform: %s\n", existing_device[dev_index]->device_platform->value);
     printf("\n");
   }
+
+  window = thewindow;
 
   #ifdef __APPLE__                                                              // Checking for APPLE system...
     printf("Found APPLE system!\n");                                            // Printing message...
@@ -466,7 +475,7 @@ void opencl::init()
     {
       CL_GL_CONTEXT_KHR, (cl_context_properties)glfwGetGLXContext(window),
       CL_GLX_DISPLAY_KHR, (cl_context_properties)glfwGetX11Display(),
-      CL_CONTEXT_PLATFORM, (cl_context_properties)platform[choosen_platform],
+      CL_CONTEXT_PLATFORM, (cl_context_properties)existing_platform[choosen_platform],
       0
     };
   #endif
@@ -478,7 +487,7 @@ void opencl::init()
     {
       CL_GL_CONTEXT_KHR, (cl_context_properties)glfwGetWGLContext(window),
       CL_WGL_HDC_KHR, (cl_context_properties)GetDC(glfwGetWin32Window(window)),
-      CL_CONTEXT_PLATFORM, (cl_context_properties)platform[choosen_platform],
+      CL_CONTEXT_PLATFORM, (cl_context_properties)existing_platform[choosen_platform],
       0
     };
   #endif
@@ -487,11 +496,11 @@ void opencl::init()
 
   // Creating OpenCL context:
   thecontext = clCreateContext(properties,                                      // Context properties.
-                            1,                                                  // # of devices on choosen platform.
-                            existing_device,                                    // List of existing devices on choosen platform.
-                            NULL,                                               // Context error report callback function.
-                            NULL,                                               // Context error report callback function argument.
-                            &err);                                              // Error code.
+                              1,                                                // # of devices on choosen platform.
+                              existing_device,                                  // List of existing devices on choosen platform.
+                              NULL,                                             // Context error report callback function.
+                              NULL,                                             // Context error report callback function argument.
+                              &err);                                            // Error code.
 
   if(err != CL_SUCCESS)                                                         // Checking for error...
   {
