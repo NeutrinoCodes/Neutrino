@@ -22,7 +22,6 @@
   #include <stdlib.h>
   #include <string.h>
   #include <math.h>
-  #include <list.h>
   #include <GL/glew.h>
 
   #ifdef __WINDOWS__
@@ -97,28 +96,28 @@
       // Key-pressed callback:
       inline static auto key_pressed_callback(GLFWwindow* win, int key, int scancode, int action, int mods)->void
       {
-        window* thewindow = static_cast<window*>(glfwGetUserPointer(win));
+        window* thewindow = static_cast<window*>(glfwGetWindowUserPointer(win));
         window->key_pressed(key, scancode, action, mods);
       }
 
       // Mouse-pressed callback:
       inline static auto mouse_pressed_callback(GLFWwindow* win, int button, int action, int mods)->void
       {
-        window* thewindow = static_cast<window*>(glfwGetUserPointer(win));
+        window* thewindow = static_cast<window*>(glfwGetWindowUserPointer(win));
         window->mouse_pressed(button, action, mods);
       }
 
       // Mouse-moved callback:
       inline static auto mouse_moved_callback(GLFWwindow* win, double xpos, double ypos)->void
       {
-        window* thewindow = static_cast<window*>(glfwGetUserPointer(win));
+        window* thewindow = static_cast<window*>(glfwGetWindowUserPointer(win));
         window->mouse_moved(xpos, ypos);
       }
 
       // Mouse-scrolled callback:
       inline static auto mouse_scrolled_callback(GLFWwindow* win, double xoffset, double yoffset)->void
       {
-        window* thewindow = static_cast<window*>(glfwGetUserPointer(win));
+        window* thewindow = static_cast<window*>(glfwGetWindowUserPointer(win));
         window->mouse_scrolled(xoffset, yoffset);
       }
 
@@ -140,6 +139,7 @@
 
             window(int window_size_x, int window_size_y, const char* title);
       void  init();                                                             // Window initialization.
+      bool  closed();
       void  clear();                                                            // Window clearance.
       void  refresh();                                                          // Window refresh.
       auto  key_pressed(int key, int scancode, int action, int mods)->void;     // Key-pressed trampoline.

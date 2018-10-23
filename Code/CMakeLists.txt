@@ -62,8 +62,9 @@ add_custom_target(run
     VERBATIM )
 
 message("Limiting number of reported gcc errors...[# = 20]")
-set(GCC_MAX_ERRORS "-fmax-errors=50")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_MAX_ERRORS}")
+set(GCC_MAX_ERRORS "-fmax-errors=20")
+set(GCC_C11 "-std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_MAX_ERRORS} ${GCC_C11}")
 
 message("DONE configuring GCC!")
 
