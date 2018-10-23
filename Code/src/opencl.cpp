@@ -314,6 +314,7 @@ cl_uint opencl::get_platforms()
   printf("\n        Found %d platform(s)!\n", num_pl);
   printf("        DONE!\n");
 
+
   return(num_pl);
 }
 
