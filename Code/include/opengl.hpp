@@ -80,7 +80,6 @@
   class window
   {
     private:
-      GLFWwindow*			    glfw_window;                                          // Window handle.
       double              mouse_x_old;                                          // Mouse x-coordinate backup [px].
       double              mouse_y_old;                                          // Mouse y-coordinate backup [px].
       bool 			          arcball_on;                                           // Arcball activation flag.
@@ -122,20 +121,21 @@
       }
 
     public:
-      int       window_sx;                                                      // Window x-size [px].
-      int       window_sy;                                                      // Window y-size [px].
-      double    aspect_ratio;                                                   // Window aspect ratio [].
-      double    mouse_x;                                                        // Mouse x-coordinate [px].
-      double    mouse_y;                                                        // Mouse y-coordinate [px].
-      double		scroll_x;                                                       // Scroll x-coordinate [px].
-      double		scroll_y;                                                       // Scroll y-coordinate [px].
-      double		zoom;                                                           // Zoom coefficient.
+      GLFWwindow* glfw_window;                                                  // Window handle.
+      int         window_sx;                                                    // Window x-size [px].
+      int         window_sy;                                                    // Window y-size [px].
+      double      aspect_ratio;                                                 // Window aspect ratio [].
+      double      mouse_x;                                                      // Mouse x-coordinate [px].
+      double      mouse_y;                                                      // Mouse y-coordinate [px].
+      double		  scroll_x;                                                     // Scroll x-coordinate [px].
+      double		  scroll_y;                                                     // Scroll y-coordinate [px].
+      double		  zoom;                                                         // Zoom coefficient.
 
-      float     q[4];                                                           // Arcball quaternion.
-      float     R[16];                                                          // Rotation matrix.
-      float     T[16];                                                          // Translation matrix.
-      float     V[16];                                                          // View matrix.
-      float     P[16];                                                          // Projection matrix.
+      float       q[4];                                                         // Arcball quaternion.
+      float       R[16];                                                        // Rotation matrix.
+      float       T[16];                                                        // Translation matrix.
+      float       V[16];                                                        // View matrix.
+      float       P[16];                                                        // Projection matrix.
 
             window(int window_size_x, int window_size_y, const char* title);
       void  init();                                                             // Window initialization.

@@ -7,6 +7,33 @@
   #define KERNEL_NAME             "thekernel"
   #define SIZE_TEXT_MAX 128                                                     // Maximum number of characters in a text string.
 
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <math.h>
+  #include "utilities.hpp"
+
+  #include <GL/glew.h>
+
+  #ifdef __WINDOWS__
+    #define GLFW_EXPOSE_NATIVE_WIN32
+    #define GLFW_EXPOSE_NATIVE_WGL
+  #endif
+
+  #ifdef __linux__
+    #define GLFW_EXPOSE_NATIVE_X11
+    #define GLFW_EXPOSE_NATIVE_GLX
+  #endif
+
+  #include <GLFW/glfw3.h>
+  #include <GLFW/glfw3native.h>
+
+  #ifdef __APPLE__
+    #include <OpenGL/OpenGL.h>
+  #else
+    #include <GL/gl.h>
+  #endif
+
   #ifdef __APPLE__
     #include <OpenCL/opencl.h>
   #else
@@ -37,20 +64,20 @@
   class platform
   {
     private:
-      cl_uint platform_index;
       size_t  get_info_size(cl_platform_info parameter_name);
-      char*   get_info_value(cl_platform_info parameter_name, size_t value_size);
+      char*   get_info_value(cl_platform_info parameter_name, size_t parameter_size);
 
     public:
-      cl_platform_id*         theplatform;                                      // OpenCL platform.
-      char*                   profile;                                          // Platform parameter.
-      char*                   version;                                          // Platform parameter.
-      char*                   name;                                             // Platform parameter.
-      char*                   vendor;                                           // Platform parameter.
-      char*                   extensions;                                       // Platform parameter.
+      cl_platform_id          theplatform;                                      // OpenCL platform.
+      info*                   profile;                                          // Platform parameter.
+      info*                   version;                                          // Platform parameter.
+      info*                   name;                                             // Platform parameter.
+      info*                   vendor;                                           // Platform parameter.
+      info*                   extensions;                                       // Platform parameter.
 
-      platform(cl_uint pl_index);
-      ~platform();
+            platform();
+      void  init(cl_platform_id pl_id);
+            ~platform();
   };
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -59,18 +86,17 @@
   class device
   {
     private:
-      cl_uint device_index;
       size_t  get_info_size(cl_device_info parameter_name);
       char*   get_info_value(cl_device_info parameter_name, size_t parameter_size);
 
     public:
-      cl_device_id*           thedevice;                                        // OpenCL device.
-      cl_device_type          thedevice_type;                                   // Device type.
-      char*                   device_name;                                      // Device name.
-      char*                   device_platform;                                  // Device platform.
+      cl_device_id            thedevice;                                        // OpenCL device.
+      info*                   device_name;                                      // Device name.
+      info*                   device_platform;                                  // Device platform.
 
-      device(cl_uint dev_index);
-      ~device();
+            device();
+      void  init(cl_device_id dev_id);
+            ~device();
   };
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -88,23 +114,27 @@
   class opencl
   {
     private:
-      cl_int  err;
+      cl_int          err;
+      GLFWwindow*     window;
+      cl_device_type  thedevice_type;
 
-      cl_uint get_num_platforms();
-      cl_uint get_platforms();
-      cl_uint get_num_devices(cl_uint pl_index, device_type dev_type);
-      cl_uint get_devices(cl_uint pl_index);
+      cl_uint         get_num_platforms();
+      cl_uint         get_platforms();
+      cl_uint         get_num_devices(cl_uint pl_index);
+      cl_device_id*   get_devices(cl_uint pl_index);
+
 
     public:
-      platform*               existing_platform;
-      device*                 existing_device;
+      platform**              existing_platform;
+      cl_uint                 choosen_platform;                                 // Choosen platform index.
+      device**                existing_device;
       cl_uint                 num_platforms;
       cl_uint                 num_devices;
       cl_context_properties*  properties;
       cl_context              thecontext;
 
             opencl();
-      void  init();
+      void  init(GLFWwindow* thewindow, device_type dev_type);
             ~opencl();
 
   };

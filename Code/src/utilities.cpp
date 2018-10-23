@@ -58,7 +58,7 @@ void free_file(char* buffer)
   free(buffer);                                                                                                               ///< Freeing buffer...
 }
 
-int query_numeric(char* caption, int min, int max)
+int query_numeric(const char* caption, int min, int max)
 {
   char  buffer[128];                                                            // Input buffer.
   int   numeric;                                                                // Numeric value.
