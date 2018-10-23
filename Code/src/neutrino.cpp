@@ -10,6 +10,7 @@ neutrino::neutrino()
   opengl* theopengl = new opengl();                                             // The OpenGL object.
   opencl* theopencl = new opencl();                                             // The OpenCL object.
   window* thewindow = new window();                                             // The window object.
+  font*   thefont   = new font();                                               // The font object.
 
   ascii_spin_phase = 0;                                                         // Initializing ascii_spin_phase...
   ascii_spin_n_old = 0;                                                         // Initializing ascii_spin_n_old...
@@ -18,6 +19,7 @@ neutrino::neutrino()
   theopengl->init();                                                            // Initializing OpenGL...
   theopencl->init();                                                            // Initializing OpenCL...
   thewindow->init();                                                            // Initializing window...
+  thefont->init();                                                              // Initializing font...
 }
 
 void neutrino::get_neutrino_path()
@@ -232,6 +234,8 @@ neutrino::~neutrino()
 {
   ascii_spin_stop();
 
-  delete opengl;
-  delete opencl;
+  delete theopengl;
+  delete theopencl;
+  delete thewindow;
+  delete thefont;
 }
