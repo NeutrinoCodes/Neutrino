@@ -1,8 +1,6 @@
 /// @file
 
-#include "opengl.hpp"
-#include "opencl.hpp"
-#include "utilities.hpp"
+#include "neutrino.hpp"
 #include "program.hpp"
 
 int main()
@@ -11,7 +9,7 @@ int main()
 
   setup();                                                                      // Executing Neutrino "setup" function...
 
-  while (!theneutrino->window->closed())                                        // Opening window...
+  while (!theneutrino->thewindow->closed())                                     // Opening window...
   {
     theneutrino->get_tic();                                                     // Getting "tic" [us]...
     loop();                                                                     // Executing Neutrino "loop" function...

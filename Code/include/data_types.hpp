@@ -2,7 +2,6 @@
 #define deta_types_hpp
 
   #include "neutrino.hpp"
-  #include "font.hpp"
 
   /// **Declaration of "float1" data class:**
   /// "float1" is an array of "num_data" elements.
@@ -234,9 +233,10 @@
       GLuint   LAYOUT_1;                                                        // "layout = 1" attribute in vertex shader.
 
       cl_context        context;                                                // OpenCL context.
+      font*             hershey;
 
     public:
-      text4(cl_context thecontext, const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A);
+      text4(cl_context thecontext, font* thefont, const char* text, GLfloat R, GLfloat G, GLfloat B, GLfloat A);
       ~text4();
 
       GLfloat*  x;

@@ -97,28 +97,28 @@
       inline static auto key_pressed_callback(GLFWwindow* win, int key, int scancode, int action, int mods)->void
       {
         window* thewindow = static_cast<window*>(glfwGetWindowUserPointer(win));
-        window->key_pressed(key, scancode, action, mods);
+        thewindow->key_pressed(key, scancode, action, mods);
       }
 
       // Mouse-pressed callback:
       inline static auto mouse_pressed_callback(GLFWwindow* win, int button, int action, int mods)->void
       {
         window* thewindow = static_cast<window*>(glfwGetWindowUserPointer(win));
-        window->mouse_pressed(button, action, mods);
+        thewindow->mouse_pressed(button, action, mods);
       }
 
       // Mouse-moved callback:
       inline static auto mouse_moved_callback(GLFWwindow* win, double xpos, double ypos)->void
       {
         window* thewindow = static_cast<window*>(glfwGetWindowUserPointer(win));
-        window->mouse_moved(xpos, ypos);
+        thewindow->mouse_moved(xpos, ypos);
       }
 
       // Mouse-scrolled callback:
       inline static auto mouse_scrolled_callback(GLFWwindow* win, double xoffset, double yoffset)->void
       {
         window* thewindow = static_cast<window*>(glfwGetWindowUserPointer(win));
-        window->mouse_scrolled(xoffset, yoffset);
+        thewindow->mouse_scrolled(xoffset, yoffset);
       }
 
     public:
