@@ -343,7 +343,7 @@ cl_uint opencl::get_num_devices(cl_uint pl_index)
   return(num_devices);                                                          // Returning number of existing OpenCL GPU devices...
 }
 
-cl_device_id* opencl::get_devices(cl_uint pl_index)
+cl_uint opencl::get_devices(cl_uint pl_index)
 {
   cl_int          err;
   cl_uint         num_devices;
@@ -376,15 +376,16 @@ cl_device_id* opencl::get_devices(cl_uint pl_index)
   printf("\n        Found %d device(s)!\n", num_devices);
   printf("        DONE!\n");
 
-  return(dev_id);
+  return(num_devices);
 }
 
 // PUBLIC METHODS:
 void opencl::init(GLFWwindow* thewindow, device_type dev_type)
 {
-  cl_uint pl_index;                                                             // Platform index.
-  cl_uint dev_index;                                                            // Device index.
-  cl_int  err;                                                                  // Error code.
+  cl_uint       pl_index;                                                       // Platform index.
+  cl_uint       dev_index;                                                      // Device index.
+  cl_int        err;                                                            // Error code.
+  int           i;                                                              // Index.
 
   printf("Action: finding OpenCL platforms...\n");
 
@@ -496,9 +497,16 @@ void opencl::init(GLFWwindow* thewindow, device_type dev_type)
   printf("Action: creating OpenCL context... ");                                // Printing message...
 
   // Creating OpenCL context:
+  existing_device_id = (cl_device_id*) malloc(num_devices);
+
+  for(i = 0; i < num_devices; i++)
+  {
+    existing_device_id[i] = existing_device[i]->thedevice;                      // Initializing existing devices...
+  }
+
   thecontext = clCreateContext(properties,                                      // Context properties.
                               1,                                                // # of devices on choosen platform.
-                              existing_device,                                  // List of existing devices on choosen platform.
+                              existing_device_id,                               // List of existing devices on choosen platform.
                               NULL,                                             // Context error report callback function.
                               NULL,                                             // Context error report callback function argument.
                               &err);                                            // Error code.
@@ -526,8 +534,7 @@ opencl::~opencl()
     exit(err);
   }
 
-  free(device);                                                                 // Freeing OpenCL devices...
-  free(platform);                                                               // Freeing OpenCL platforms...
+  free(existing_device_id);                                                     // Freeing existing device ids...
 
   printf("DONE!\n");
 }
@@ -535,11 +542,11 @@ opencl::~opencl()
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// "QUEUE" CLASS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-queue::queue(cl_context thecontext, cl_uint dev_index)
+queue::queue(cl_context thecontext, cl_device_id dev_id)
 {
-  device_index = dev_index;                                                     // Initializing device index...
   thequeue = NULL;                                                              // Initializing thequeue...
   context = thecontext;                                                         // Initializing context...
+  thedevice_id = dev_id;                                                        // Initializing thedevice_id...
 }
 
 void queue::init()
@@ -550,7 +557,7 @@ void queue::init()
 
   // Creating OpenCL queue:
   thequeue = clCreateCommandQueue(context,                                      // OpenCL context.
-                                  existing_device[device_index]->thedevice,     // Device id.
+                                  thedevice_id,                                 // Device id.
                                   0,                                            // Queue properties (con be used for enabling profiling).
                                   &err);                                        // Error code.
 
@@ -583,18 +590,19 @@ queue::~queue()
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "KERNEL" CLASS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-kernel::kernel(cl_context thecontext)
+kernel::kernel(cl_context thecontext, cl_device_id* existing_dev_id)
 {
-  kernel_source       = NULL;
+  source              = NULL;
   program             = NULL;
   size                = 0;
   dimension           = 0;
   event               = NULL;
   thekernel           = NULL;
   context             = thecontext;                                             // Initializing context...
+  existing_device_id  = existing_dev_id;                                        // Initializing thedevice_id...
 }
 
-void kernel::init(char* neutrino_path, char* kernel_file_name, size_t kernel_size, cl_uint kernel_dimension)
+void kernel::init(char* neutrino_path, char* kernel_filename, size_t kernel_size, cl_uint kernel_dimension)
 {
   cl_int    err;                                                                // Error code.
   size_t    kernel_source_size;                                                 // Kernel source size [characters].
@@ -630,7 +638,7 @@ void kernel::init(char* neutrino_path, char* kernel_file_name, size_t kernel_siz
   // Building OpenCL program:
   err = clBuildProgram(program,
                        1,
-                       device,
+                       existing_device_id,
                        "",
                        NULL,
                        NULL);
@@ -641,7 +649,7 @@ void kernel::init(char* neutrino_path, char* kernel_file_name, size_t kernel_siz
 
     // Getting OpenCL compiler information:
     err = clGetProgramBuildInfo(program,
-                                device[0],
+                                existing_device_id[0],                          // EZOR 25OCT2018: to be generalized...
                                 CL_PROGRAM_BUILD_LOG,
                                 0,
                                 NULL,
@@ -663,7 +671,7 @@ void kernel::init(char* neutrino_path, char* kernel_file_name, size_t kernel_siz
 
     // Reading OpenCL compiler error log:
     err = clGetProgramBuildInfo(program,
-                                device[0],
+                                existing_device_id[0],                          // EZOR 25OCT2018: to be generalized...
                                 CL_PROGRAM_BUILD_LOG,
                                 log_size + 1,
                                 log,

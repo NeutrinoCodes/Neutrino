@@ -70,6 +70,8 @@
       GLuint  build_shader();                                                   // OpenGL shader build.
     public:
               opengl();
+      GLuint  compile_shader(const char* shader_filename, shader_type st);
+      GLuint  build_shader(const char* filename_vertex, const char* filename_fragment);
       void    init();                                                           // OpenGL initialization.
               ~opengl();
   };
