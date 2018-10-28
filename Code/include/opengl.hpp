@@ -68,11 +68,12 @@
     private:
       GLuint  compile_shader();                                                 // OpenGL shader compilation.
       GLuint  build_shader();                                                   // OpenGL shader build.
+      char*   theneutrino_path;                                                 // Neutrino path.
     public:
               opengl();
       GLuint  compile_shader(const char* shader_filename, shader_type st);
       GLuint  build_shader(const char* filename_vertex, const char* filename_fragment);
-      void    init();                                                           // OpenGL initialization.
+      void    init(char* neutrino_path, int ver_major, int ver_minor, int msaa);// OpenGL initialization.
               ~opengl();
   };
 
@@ -148,6 +149,9 @@
       auto  mouse_pressed(int button, int action, int mods)->void;              // Mouse-pressed retpoline
       auto  mouse_moved(double xpos, double ypos)->void;                        // Mouse-moved retpoline.
       auto  mouse_scrolled(double xoffset, double yoffset)->void;               // Mouse-scrolled retpoline.
+      void  plot(point4* points, color4* colors, plot_style ps);
+      void  print(text4* text);
+
             ~window();
   };
 

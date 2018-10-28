@@ -20,11 +20,11 @@ GLuint opengl::compile_shader(const char* shader_filename, shader_type st)
   GLchar*		log;                                                                // Buffer for OpenGL error log.
   GLsizei 	log_size;                                                           // Size of OpenGL error log.
 
-  load_file(neutrino_path, shader_filename, &shader_source, &shader_size);      // Loading shader from file...
+  load_file(theneutrino_path, shader_filename, &shader_source, &shader_size);   // Loading shader from file...
 
   switch(st)
   {
-    case SHADER:
+    case VERTEX:
       shader = glCreateShader(GL_VERTEX_SHADER);                                // Creating shader...
     break;
 
@@ -76,8 +76,15 @@ GLuint opengl::build_shader(const char* filename_vertex, const char* filename_fr
 }
 
 // PUBLIC METHODS:
-void opengl::init(int ver_major, int ver_minor, int msaa)                       // OpenGL initialization.
+void opengl::init(char* neutrino_path, int ver_major, int ver_minor, int msaa)  // OpenGL initialization.
 {
+  size_t neutrino_path_length;                                                  // neutrino_path length.
+
+  // Getting neutrino_path:
+  neutrino_path_length = strlen(neutrino_path) + 1;                             // Getting neutrino_path_length...
+  theneutrino_path = (char*) malloc(neutrino_path_length);                      // Allocating memory for neutrino_path...
+  strncpy(theneutrino_path, neutrino_path, neutrino_path_length);               // Getting neutrino_path...
+
   // Initializing GLFW context:
   printf("Action: initializing GLFW... ");
 
@@ -126,6 +133,7 @@ opengl::~opengl()
 {
   glfwDestroyWindow(window);                                                    // Destroying window...
   glfwTerminate();                                                              // Terminating GLFW...
+  free(theneutrino_path);                                                       // Freeing theneutrino_path...
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -335,7 +343,7 @@ auto window::mouse_scrolled(int key, int scancode, int action, int mods)->void  
   translate(T, translation);                                                    // Building translation matrix...
 }
 
-void plot(point4* points, color4* colors, plot_style ps)
+void window::plot(point4* points, color4* colors, plot_style ps)
 {
   GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
   GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
@@ -393,7 +401,7 @@ void plot(point4* points, color4* colors, plot_style ps)
   glDisableVertexAttribArray(LAYOUT_1);                                         // Unbinding "colors" array...
 }
 
-void print(text4* text)
+void window::print(text4* text)
 {
   GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
   GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.

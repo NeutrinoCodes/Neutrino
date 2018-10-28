@@ -22,10 +22,10 @@
 
     public:
       char*   neutrino_path;                                                    // NEUTRINO_PATH environmental variable.
-      opengl* theopengl;                                                        // The OpenGL object.
-      opencl* theopencl;                                                        // The OpenCL object.
-      window* thewindow;                                                        // The window object.
-      font*   thefont;                                                          // The font object.
+      opengl* opengl_context;                                                   // The OpenGL context object.
+      opencl* opencl_context;                                                   // The OpenCL contxet object.
+      window* gui_window;                                                       // The gui window object.
+      font*   gui_font;                                                         // The gui font object.
       double  tic;                                                              // Tic time [ms].
       double  toc;                                                              // Toc time [ms].
       double  loop_time;                                                        // Loop time [ms].
