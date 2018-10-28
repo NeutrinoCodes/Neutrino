@@ -187,7 +187,7 @@
       cl_uint           dimension;
       cl_event          event;
 
-            kernel(cl_context thecontext, cl_device_id* device_ids);
+            kernel(cl_context thecontext, cl_device_id* existing_dev_id);
       void  init(char* neutrino_path, char* kernel_filename, size_t kernel_size, cl_uint kernel_dimension);
       void  execute(queue* q, kernel_event k_ev);
             ~kernel();

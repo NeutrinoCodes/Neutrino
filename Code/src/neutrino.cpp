@@ -7,19 +7,19 @@
 //////////////////////////////////////////////////////////////////////////////////
 neutrino::neutrino()
 {
-  opengl* theopengl = new opengl();                                             // The OpenGL object.
-  opencl* theopencl = new opencl();                                             // The OpenCL object.
-  window* thewindow = new window();                                             // The window object.
-  font*   thefont   = new font();                                               // The font object.
+  opengl* opengl_context = new opengl();                                        // The OpenGL context object.
+  opencl* opencl_context = new opencl();                                        // The OpenCL context object.
+  window* gui_window     = new window();                                        // The gui window object.
+  font*   gui_font       = new font();                                          // The gui font object.
 
   ascii_spin_phase = 0;                                                         // Initializing ascii_spin_phase...
   ascii_spin_n_old = 0;                                                         // Initializing ascii_spin_n_old...
   get_neutrino_path();                                                          // Getting NEUTRINO_PATH environmental variable...
 
-  theopengl->init();                                                            // Initializing OpenGL...
-  thewindow->init();                                                            // Initializing window...
-  theopencl->init(GPU, thewindow->window);                                      // Initializing OpenCL...
-  thefont->init();                                                              // Initializing font...
+  opengl_context->init(neutrino_path, 4, 1);                                    // Initializing OpenGL context...
+  gui_window->init();                                                           // Initializing gui window...
+  gui_font->init();                                                             // Initializing gui font...
+  opencl_context->init(neutrino_path, GPU, thewindow->window);                  // Initializing OpenCL context...
 }
 
 void neutrino::get_neutrino_path()
@@ -234,8 +234,8 @@ neutrino::~neutrino()
 {
   ascii_spin_stop();
 
-  delete theopengl;
-  delete theopencl;
-  delete thewindow;
-  delete thefont;
+  delete opengl_context;
+  delete opencl_context;
+  delete gui_window;
+  delete gui_font;
 }
