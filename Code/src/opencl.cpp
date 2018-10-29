@@ -280,7 +280,7 @@ cl_uint opencl::get_num_platforms()
   printf("\n        Found %d platform(s)!\n", loc_platforms_number);
   printf("        DONE!\n");
 
-  return loc_platforms_number;                                                   // Returning local # of existing platforms...
+  return loc_platforms_number;                                                  // Returning local # of existing platforms...
 }
 
 cl_uint opencl::get_platforms()
@@ -455,6 +455,21 @@ void opencl::init(GLFWwindow* loc_glfw_window, compute_device_type loc_device_ty
     printf("\n");
   }
 
+  printf("DONE!\n");
+
+  if(devices_number > 1)
+  {
+    printf("Action: please choose a device [1...%d", loc_device_index);
+    choosen_device = query_numeric(" + enter]: ", 1, devices_number) - 1;
+  }
+
+  else
+  {
+    choosen_device = 0;
+  }
+
+  printf("DONE!\n");
+
   #ifdef __APPLE__                                                              // Checking for APPLE system...
     printf("Found APPLE system!\n");                                            // Printing message...
 
@@ -537,265 +552,6 @@ opencl::~opencl()
   printf("DONE!\n");
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////// "QUEUE" CLASS ////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-queue::queue(cl_context loc_context_id, cl_device_id loc_device_id)
-{
-  queue_id = NULL;                                                              // Initializing thequeue...
-  context_id = loc_context_id;                                                  // Initializing context...
-  device_id = loc_device_id;                                                    // Initializing thedevice_id...
-}
-
-void queue::init()
-{
-  cl_int  loc_err;                                                              // Local error code.
-
-  printf("Action: creating OpenCL command queue... ");
-
-  // Creating OpenCL queue:
-  queue_id = clCreateCommandQueue(context_id,                                   // OpenCL context.
-                                  device_id,                                    // Device id.
-                                  0,                                            // Queue properties (con be used for enabling profiling).
-                                  &loc_err);                                    // Local error code.
-
-  if(loc_err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(loc_err));
-    exit(loc_err);
-  }
-
-  printf("DONE!\n");
-}
-
-queue::~queue()
-{
-  cl_int  loc_err;                                                              // Local error code.
-
-  printf("Action: releasing the OpenCL command queue... ");
-
-  loc_err = clReleaseCommandQueue(queue_id);                                    // Releasing OpenCL queue...
-
-  if(loc_err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(loc_err));
-    exit(loc_err);
-  }
-
-  printf("DONE!\n");
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// "KERNEL" CLASS ////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-kernel::kernel(cl_context loc_context_id, cl_device_id* loc_existing_device_id)
-{
-  source              = NULL;                                                   // Initializing kernel source...
-  program             = NULL;                                                   // Initializing kernel program...
-  size                = 0;                                                      // Initializing kernel size...
-  dimension           = 0;                                                      // Initializing kernel dimension..
-  event               = NULL;                                                   // Initializing kernel event...
-  kernel_id           = NULL;                                                   // Initializing kernel id...
-  context_id          = loc_context_id;                                         // Initializing opencl context id...
-  existing_device_id  = existing_dev_id;                                        // Initializing thedevice_id...
-}
-
-void kernel::init(char* neutrino_path, char* kernel_filename, size_t kernel_size, cl_uint kernel_dimension)
-{
-  cl_int    err;                                                                // Error code.
-  size_t    kernel_source_size;                                                 // Kernel source size [characters].
-
-  file_name = kernel_filename;
-  size      = kernel_size;
-  dimension = kernel_dimension;
-
-  printf("Action: loading OpenCL kernel source from file... ");
-
-  load_file(neutrino_path, file_name, &source, &source_size);
-
-  printf("Action: creating OpenCL program from kernel source... ");
-
-  // Creating OpenCL program from its source:
-  program = clCreateProgramWithSource(context_id,
-                                      1,
-                                      (const char**)&source,
-                                      &source_size,
-                                      &err);
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  free(source);                                                                 // Freeing OpenCL kernel buffer...
-  printf("DONE!\n");
-
-  printf("Action: building OpenCL program... ");
-
-  loc_existing_device_id = (cl_device_id*) malloc(devices_number);
-
-  for(i = 0; i < devices_number; i++)
-  {
-    loc_existing_device_id[i] = existing_device[i]->device_id;                  // Initializing existing devices...
-  }
-
-  // Building OpenCL program:
-  err = clBuildProgram(program,
-                       1,
-                       existing_device_id,
-                       "",
-                       NULL,
-                       NULL);
-
-  if (err != CL_SUCCESS)                                                        // Checking compiled kernel...
-  {
-    printf("\nError:  %s\n", get_error(err));
-
-    // Getting OpenCL compiler information:
-    err = clGetProgramBuildInfo(program,
-                                existing_device_id[0],                          // EZOR 25OCT2018: to be generalized...
-                                CL_PROGRAM_BUILD_LOG,
-                                0,
-                                NULL,
-                                &log_size);
-
-    if(err != CL_SUCCESS)
-    {
-      printf("\nError:  %s\n", get_error(err));
-      exit(err);
-    }
-
-    log = (char*) calloc(log_size + 1, sizeof(char));                           // Allocating log buffer...
-
-    if (!log)
-    {
-      printf("\nError:  unable to allocate buffer memory log!\n");
-      exit(EXIT_FAILURE);
-    }
-
-    // Reading OpenCL compiler error log:
-    err = clGetProgramBuildInfo(program,
-                                existing_device_id[0],                          // EZOR 25OCT2018: to be generalized...
-                                CL_PROGRAM_BUILD_LOG,
-                                log_size + 1,
-                                log,
-                                NULL);
-
-    if(err != CL_SUCCESS)
-    {
-      printf("\nError:  %s\n", get_error(err));
-      exit(err);
-    }
-
-    printf("%s\n", log);                                                        // Displaying log...
-    free(log);                                                                  // Freeing log...
-    exit(err);                                                                  // Exiting...
-  }
-
-  printf("DONE!\n");
-
-  printf("Action: creating OpenCL kernel object from program... ");
-
-  // Creating OpenCL kernel:
-  kernel_id = clCreateKernel(program,
-                             KERNEL_NAME,
-                             &err);
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  printf("DONE!\n");
-}
-
-void kernel::execute(queue* q, kernel_event k_ev)
-{
-  err = clEnqueueNDRangeKernel(q->thequeue,                                     // Enqueueing OpenCL kernel (as a single task)...
-                               thekernel,
-                               dimension,
-                               NULL,
-                               &size,
-                               NULL,
-                               0,
-                               NULL,
-                               &event);
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  switch(k_ev)
-  {
-    case WAIT:
-      err = clWaitForEvents(1, &event);                                         // Waiting for kernel execution to be completed (host blocking)...
-
-      if(err != CL_SUCCESS)
-      {
-        printf("\nError:  %s\n", get_error(err));
-        exit(err);
-      }
-    break;
-
-    case DONT_WAIT:
-                                                                                // Doing nothing!
-    break;
-
-    default:
-      err = clWaitForEvents(1, &event);                                         // Waiting for kernel execution to be completed (host blocking)...
-
-      if(err != CL_SUCCESS)
-      {
-        printf("\nError:  %s\n", get_error(err));
-        exit(err);
-      }
-    break;
-  }
-
-
-}
-
-kernel::~kernel()
-{
-  printf("Action: releasing OpenCL kernel... ");
-
-  err = clReleaseKernel(thekernel);                                             // Releasing OpenCL kernel...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  printf("DONE!\n");
-
-  printf("Action: releasing OpenCL kernel event... ");
-  err = clReleaseEvent(event);                                                  // Releasing OpenCL event...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  printf("DONE!\n");
-
-  printf("Action: releasing OpenCL program... ");
-
-  err = clReleaseProgram(program);                                              // Releasing OpenCL program...
-
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
-
-  printf("DONE!\n");
-}
 
 
 

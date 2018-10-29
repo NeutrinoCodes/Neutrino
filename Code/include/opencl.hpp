@@ -120,11 +120,14 @@
       cl_uint         get_devices(cl_uint plat_index);
 
     public:
-      platform**              existing_platform;
+      platform**              existing_platform;                                // Existing OpenCL platform array.
+      cl_uint                 platforms_number;                                 // Existing OpenCL platforms number.
       cl_uint                 choosen_platform;                                 // Choosen platform index.
-      device**                existing_device;
-      cl_uint                 platforms_number;
-      cl_uint                 devices_number;
+
+      device**                existing_device;                                  // Existing OpenCL device array.
+      cl_uint                 devices_number;                                   // Existing OpenCL device number.
+      cl_uint                 choosen_device;                                   // Choosen device index.
+      
       cl_context_properties*  properties;
       cl_context              context_id;
 
@@ -132,58 +135,6 @@
       void  init(GLFWwindow* loc_glfw_window, compute_device_type loc_device_type);
             ~opencl();
 
-  };
-
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////// "QUEUE" CLASS ///////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  class queue
-  {
-    private:
-
-    public:
-      cl_command_queue  queue_id;                                               // OpenCL queue.
-      cl_context        context_id;                                             // OpenCL context.
-      cl_device_id      device_id;                                              // OpenCL device id.
-
-            queue(cl_context loc_context_id, cl_device_id loc_device_id);
-      void  init();
-            ~queue();
-  };
-
-
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////// "KERNEL" CLASS //////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  typedef enum
-  {
-    WAIT,
-    DONT_WAIT
-  } kernel_event;
-
-  class kernel
-  {
-    private:
-      cl_int            err;
-      size_t            log_size;
-      char*             log;
-      cl_context        context_id;                                             // OpenCL context.
-      cl_device_id*     existing_device_id;                                     // Existing device id array.
-
-    public:
-      cl_kernel         kernel_id;
-      char*             file_name;
-      char*             source;
-      size_t            source_size;                                            // Kernel source size [characters].
-      cl_program        program;
-      size_t            size;
-      cl_uint           dimension;
-      cl_event          event;
-
-            kernel(cl_context loc_context_id, cl_device_id* loc_existing_device_id);
-      void  init(char* neutrino_path, char* kernel_filename, size_t kernel_size, cl_uint kernel_dimension);
-      void  execute(queue* q, kernel_event k_ev);
-            ~kernel();
   };
 
 #endif
