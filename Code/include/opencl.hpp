@@ -114,11 +114,6 @@
   class opencl
   {
     private:
-      cl_int          err;
-      GLFWwindow*     window;
-      cl_device_type  device_type;
-      cl_device_id*   existing_device_id;                                       // Existing device id array.
-
       cl_uint         get_num_platforms();
       cl_uint         get_platforms();
       cl_uint         get_num_devices(cl_uint plat_index);
@@ -134,7 +129,7 @@
       cl_context              context_id;
 
             opencl();
-      void  init(GLFWwindow* win, compute_device_type dev_type);
+      void  init(GLFWwindow* loc_glfw_window, compute_device_type loc_device_type);
             ~opencl();
 
   };
@@ -145,14 +140,13 @@
   class queue
   {
     private:
-      cl_uint           device_index;                                           // OpenCL device index.
-      cl_context        opencl_context;                                         // OpenCL context.
-      cl_device_id      device_id;                                              // OpenCL device id.
 
     public:
       cl_command_queue  queue_id;                                               // OpenCL queue.
+      cl_context        context_id;                                             // OpenCL context.
+      cl_device_id      device_id;                                              // OpenCL device id.
 
-            queue(cl_context ctx_id, cl_device_id dev_id);
+            queue(cl_context loc_context_id, cl_device_id loc_device_id);
       void  init();
             ~queue();
   };
@@ -186,7 +180,7 @@
       cl_uint           dimension;
       cl_event          event;
 
-            kernel(cl_context ctx_id, cl_device_id* existing_dev_id);
+            kernel(cl_context loc_context_id, cl_device_id* loc_existing_device_id);
       void  init(char* neutrino_path, char* kernel_filename, size_t kernel_size, cl_uint kernel_dimension);
       void  execute(queue* q, kernel_event k_ev);
             ~kernel();
