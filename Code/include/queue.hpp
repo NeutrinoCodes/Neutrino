@@ -12,6 +12,7 @@
   #include <string.h>
   #include <math.h>
   #include "utilities.hpp"
+  #include "neutrino.hpp"
 
   #include <GL/glew.h>
 
@@ -53,8 +54,8 @@
       cl_context        context_id;                                             // OpenCL context.
       cl_device_id      device_id;                                              // OpenCL device id.
 
-            queue(cl_context loc_context_id, cl_device_id loc_device_id);
-      void  init();
+            queue();
+      void  init(neutrino* loc_neutrino);
             ~queue();
   };
 

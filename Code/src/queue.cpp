@@ -3,18 +3,21 @@
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// "QUEUE" CLASS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-queue::queue(cl_context loc_context_id, cl_device_id loc_device_id)
+queue::queue()
 {
-  queue_id = NULL;                                                              // Initializing thequeue...
-  context_id = loc_context_id;                                                  // Initializing context...
-  device_id = loc_device_id;                                                    // Initializing thedevice_id...
+  queue_id = NULL;                                                              // Initializing queue id...
+  context_id = NULL;                                                            // Initializing context id...
+  device_id = NULL;                                                             // Initializing device id...
 }
 
-void queue::init()
+void queue::init(neutrino* loc_neutrino)
 {
   cl_int  loc_err;                                                              // Local error code.
 
   printf("Action: creating OpenCL command queue... ");
+
+  context_id = loc_neutrino->opencl_context->context_id;                        // Initializing context id...
+  device_id = loc_neutrino->opencl_context->existing_device[choosen_device];    // Initializing device id...
 
   // Creating OpenCL queue:
   queue_id = clCreateCommandQueue(context_id,                                   // OpenCL context.
