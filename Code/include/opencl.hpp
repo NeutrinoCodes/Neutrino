@@ -11,6 +11,7 @@
   #include <stdlib.h>
   #include <string.h>
   #include <math.h>
+  #include "info.hpp"
   #include "utilities.hpp"
 
   #include <GL/glew.h>
@@ -44,62 +45,6 @@
   const char* get_error(cl_int error);
 
   ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////// "INFO" CLASS ////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  class info
-  {
-    private:
-
-    public:
-      char*   value;                                                            // Value array.
-      size_t  size;                                                             // Value array size.
-
-      info(size_t value_size);
-      ~info();
-  };
-
-  ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////// "PLATFORM" CLASS /////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  class platform
-  {
-    private:
-      size_t  get_info_size(cl_platform_info loc_parameter_name);
-      char*   get_info_value(cl_platform_info loc_parameter_name, size_t loc_parameter_size);
-
-    public:
-      cl_platform_id          platform_id;                                      // OpenCL platform id.
-      info*                   profile;                                          // Platform parameter.
-      info*                   version;                                          // Platform parameter.
-      info*                   name;                                             // Platform parameter.
-      info*                   vendor;                                           // Platform parameter.
-      info*                   extensions;                                       // Platform parameter.
-
-            platform();
-      void  init(cl_platform_id loc_platform_id);
-            ~platform();
-  };
-
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////// "DEVICE" CLASS //////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  class device
-  {
-    private:
-      size_t  get_info_size(cl_device_info loc_parameter_name);
-      char*   get_info_value(cl_device_info loc_parameter_name, size_t loc_parameter_size);
-
-    public:
-      cl_device_id            device_id;                                        // OpenCL device id.
-      info*                   device_name;                                      // Device name.
-      info*                   device_platform;                                  // Device platform.
-
-            device();
-      void  init(cl_device_id loc_device_id);
-            ~device();
-  };
-
-  ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// "OPENCL" CLASS //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   typedef enum
@@ -116,8 +61,8 @@
     private:
       cl_uint         get_num_platforms();
       cl_uint         get_platforms();
-      cl_uint         get_num_devices(cl_uint plat_index);
-      cl_uint         get_devices(cl_uint plat_index);
+      cl_uint         get_num_devices(cl_uint loc_platform_index);
+      cl_uint         get_devices(cl_uint loc_platform_index);
 
     public:
       platform**              existing_platform;                                // Existing OpenCL platform array.
@@ -127,7 +72,7 @@
       device**                existing_device;                                  // Existing OpenCL device array.
       cl_uint                 devices_number;                                   // Existing OpenCL device number.
       cl_uint                 choosen_device;                                   // Choosen device index.
-      
+
       cl_context_properties*  properties;
       cl_context              context_id;
 

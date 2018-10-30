@@ -46,6 +46,7 @@
   #include "linear_algebra.hpp"
   #include "projective_geometry.hpp"
   #include "utilities.hpp"
+  #include "path.hpp"
 
   typedef enum
   {
@@ -68,12 +69,22 @@
     private:
       GLuint  compile_shader();                                                 // OpenGL shader compilation.
       GLuint  build_shader();                                                   // OpenGL shader build.
-      char*   theneutrino_path;                                                 // Neutrino path.
+      path*   neutrino_path;                                                    // Neutrino path.
+
     public:
               opengl();
-      GLuint  compile_shader(const char* shader_filename, shader_type st);
-      GLuint  build_shader(const char* filename_vertex, const char* filename_fragment);
-      void    init(char* neutrino_path, int ver_major, int ver_minor, int msaa);// OpenGL initialization.
+
+      GLuint  compile_shader  (
+                                const char* loc_shader_filename,
+                                shader_type loc_shader_type
+                              );
+
+      GLuint  build_shader    (
+                                const char* loc_filename_vertex,
+                                const char* loc_filename_fragment
+                              );
+
+      void    init(path* loc_neutrino_path);                                    // OpenGL initialization.
               ~opengl();
   };
 

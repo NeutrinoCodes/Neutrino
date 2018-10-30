@@ -16,13 +16,16 @@ message("Creating a SOURCES variable with a link to all cpp files to compile..."
 set(SOURCES
 src/data_types.cpp
 src/font.cpp
+src/kernel.cpp
 src/linear_algebra.cpp
 src/main.cpp
+src/neutrino.cpp
 src/opencl.cpp
 src/opengl.cpp
 src/program.cpp
 src/projective_geometry.cpp
-src/utilities.cpp)
+src/utilities.cpp
+src/queue.cpp)
 
 message("Adding an executable with the above sources...")
 add_executable(neutrino ${SOURCES})
