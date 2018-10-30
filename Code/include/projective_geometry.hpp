@@ -3,6 +3,8 @@
 #ifndef projgeom_hpp
 #define projgeom_hpp
 
+  #include <stdio.h>
+
   #include "linear_algebra.hpp"
 
   void frustum(float F[16], float left, float right, float bottom,

@@ -3,13 +3,24 @@
 #include "opencl.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// "get_error" FUNCTION //////////////////////////////
+////////////////////////////////// "OPENCL" CLASS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-const char* get_error(cl_int error)
+opencl::opencl()
 {
-  switch(error)
+  existing_platform = NULL;                                                     // Initializing platforms IDs array...
+  platforms_number = 0;                                                         // Initializing # of platforms...
+  devices_number = 0;                                                           // Initializing # of devices...
+  properties = NULL;                                                            // Initializing platforms' properties...
+  context_id = NULL;                                                            // Initializing platforms' context...
+  device_type = DEFAULT;                                                        // Initializing device type...
+}
+
+// PRIVATE METHODS:
+const char* opencl::get_error(cl_int loc_error)
+{
+  switch(loc_error)
   {
-    // run-time and JIT compiler errors
+    // Run-time and JIT compiler errors:
     case      0: return "CL_SUCCESS";
     case     -1: return "CL_DEVICE_NOT_FOUND";
     case     -2: return "CL_DEVICE_NOT_AVAILABLE";
@@ -31,7 +42,7 @@ const char* get_error(cl_int error)
     case    -18: return "CL_DEVICE_PARTITION_FAILED";
     case    -19: return "CL_KERNEL_ARG_INFO_NOT_AVAILABLE";
 
-    // compile-time errors
+    // Compile-time errors:
     case    -30: return "CL_INVALID_VALUE";
     case    -31: return "CL_INVALID_DEVICE_TYPE";
     case    -32: return "CL_INVALID_PLATFORM";
@@ -72,7 +83,7 @@ const char* get_error(cl_int error)
     case    -67: return "CL_INVALID_LINKER_OPTIONS";
     case    -68: return "CL_INVALID_DEVICE_PARTITION_COUNT";
 
-    // extension errors
+    // Extension errors:
     case  -1000: return "CL_INVALID_GL_SHAREGROUP_REFERENCE_KHR";
     case  -1001: return "CL_PLATFORM_NOT_FOUND_KHR";
     case  -1002: return "CL_INVALID_D3D10_DEVICE_KHR";
@@ -84,20 +95,6 @@ const char* get_error(cl_int error)
   }
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// "OPENCL" CLASS ////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-opencl::opencl()
-{
-  existing_platform = NULL;                                                     // Initializing platforms IDs array...
-  platforms_number = 0;                                                         // Initializing # of platforms...
-  devices_number = 0;                                                           // Initializing # of devices...
-  properties = NULL;                                                            // Initializing platforms' properties...
-  context_id = NULL;                                                            // Initializing platforms' context...
-  device_type = DEFAULT;                                                        // Initializing device type...
-}
-
-// PRIVATE METHODS:
 cl_uint opencl::get_num_platforms()
 {
   cl_int loc_err;                                                               // Local error code.

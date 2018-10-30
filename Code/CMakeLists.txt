@@ -15,17 +15,22 @@ project (neutrino)
 message("Creating a SOURCES variable with a link to all cpp files to compile...")
 set(SOURCES
 src/data_types.cpp
+src/device.cpp
 src/font.cpp
+src/info.cpp
 src/kernel.cpp
 src/linear_algebra.cpp
 src/main.cpp
 src/neutrino.cpp
 src/opencl.cpp
 src/opengl.cpp
+src/path.cpp
+src/platform.cpp
 src/program.cpp
 src/projective_geometry.cpp
 src/utilities.cpp
-src/queue.cpp)
+src/queue.cpp
+src/window.cpp)
 
 message("Adding an executable with the above sources...")
 add_executable(neutrino ${SOURCES})

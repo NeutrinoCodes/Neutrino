@@ -1,6 +1,11 @@
 #ifndef data_types_hpp
 #define deta_types_hpp
 
+  #define LAYOUT_0 0
+  #define LAYOUT_1 1
+
+  #include <stdio.h>
+
   #include "neutrino.hpp"
 
   /// **Declaration of "float1" data class:**
@@ -8,10 +13,7 @@
   class float1
   {
     private:
-      int               err;                                                    // Declaring "error" code...
-      unsigned int      i;                                                      // Declaring "i" index...
-      // NOTE: There is no need for "unfolded-data" because these data are 1xN.
-      GLuint            LAYOUT_0;                                               // "layout = 0" attribute in vertex shader.
+      
       cl_context        context;                                                // OpenCL context.
 
     public:

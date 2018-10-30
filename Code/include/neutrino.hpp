@@ -1,10 +1,14 @@
 #ifndef neutrino_hpp
 #define neutrino_hpp
 
+  #include <stdio.h>
+
   #include "opengl.hpp"
   #include "opencl.hpp"
+  #include "window.hpp"
   #include "font.hpp"
   #include "path.hpp"
+
   #include "utilities.hpp"
 
   ////////////////////////////////////////////////////////////////////////////////
