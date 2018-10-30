@@ -4,6 +4,7 @@
   #include "opengl.hpp"
   #include "opencl.hpp"
   #include "font.hpp"
+  #include "path.hpp"
   #include "utilities.hpp"
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +22,7 @@
       void    ascii_spin_stop();
 
     public:
-      char*   neutrino_path;                                                    // NEUTRINO_PATH environmental variable.
+      path*   neutrino_path;                                                    // NEUTRINO_PATH environmental variable.
       opengl* opengl_context;                                                   // The OpenGL context object.
       opencl* opencl_context;                                                   // The OpenCL contxet object.
       window* gui_window;                                                       // The gui window object.

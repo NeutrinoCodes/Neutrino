@@ -11,7 +11,7 @@ opengl::opengl()
 }
 
 // PRIVATE METHODS:
-GLuint opengl::compile_shader(const char* shader_filename, shader_type st)
+GLuint opengl::compile_shader(const char* loc_shader_filename, shader_type loc_shader_type)
 {
   GLuint    shader;                                                             // Shader.
   char*     shader_source;                                                      // Shader source.
@@ -20,9 +20,15 @@ GLuint opengl::compile_shader(const char* shader_filename, shader_type st)
   GLchar*		log;                                                                // Buffer for OpenGL error log.
   GLsizei 	log_size;                                                           // Size of OpenGL error log.
 
-  load_file(theneutrino_path, shader_filename, &shader_source, &shader_size);   // Loading shader from file...
+  // Loading shader from file:
+  load_file (
+              neutrino_path->value,
+              shader_filename,
+              &shader_source,
+              &shader_size
+            );
 
-  switch(st)
+  switch(loc_shader_type)
   {
     case VERTEX:
       shader = glCreateShader(GL_VERTEX_SHADER);                                // Creating shader...
@@ -76,14 +82,15 @@ GLuint opengl::build_shader(const char* filename_vertex, const char* filename_fr
 }
 
 // PUBLIC METHODS:
-void opengl::init(char* neutrino_path, int ver_major, int ver_minor, int msaa)  // OpenGL initialization.
+void opengl::init(path* loc_neutrino_path)                                      // OpenGL initialization.
 {
-  size_t neutrino_path_length;                                                  // neutrino_path length.
+  int opengl_ver_major;                                                         // OpenGL version major number.
+  int opengl_ver_minor;                                                         // OpenGL version minor number.
+  int opengl_msaa;                                                              // OpenGL multisampling antialiasing factor.
+  path* neutrino_path = new path();
 
-  // Getting neutrino_path:
-  neutrino_path_length = strlen(neutrino_path) + 1;                             // Getting neutrino_path_length...
-  theneutrino_path = (char*) malloc(neutrino_path_length);                      // Allocating memory for neutrino_path...
-  strncpy(theneutrino_path, neutrino_path, neutrino_path_length);               // Getting neutrino_path...
+  neutrino_path->value = loc_neutrino_path->value;
+  neutrino_path->size = loc_neutrino_path->size;
 
   // Initializing GLFW context:
   printf("Action: initializing GLFW... ");

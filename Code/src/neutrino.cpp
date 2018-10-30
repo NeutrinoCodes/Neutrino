@@ -11,6 +11,7 @@ neutrino::neutrino()
   opencl* opencl_context = new opencl();                                        // The OpenCL context object.
   window* gui_window     = new window();                                        // The gui window object.
   font*   gui_font       = new font();                                          // The gui font object.
+  path*   neutrino_path  = new path();                                          // The neutrino_path environmental variable.
 
   ascii_spin_phase = 0;                                                         // Initializing ascii_spin_phase...
   ascii_spin_n_old = 0;                                                         // Initializing ascii_spin_n_old...
@@ -24,9 +25,10 @@ neutrino::neutrino()
 
 void neutrino::get_neutrino_path()
 {
-  neutrino_path = getenv("NEUTRINO_PATH");
+  neutrino_path->value = getenv("NEUTRINO_PATH");                               // Getting neutrino path...
+  neutrino_path->size = strlen(neutrino_path->value) + 1;                       // Getting neutrino path length...
 
-  if (neutrino_path != NULL)
+  if (neutrino_path->value != NULL)
   {
     printf("Action: loading NEUTRINO_PATH environmental variable...\n");
   }
