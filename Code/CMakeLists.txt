@@ -14,10 +14,14 @@ project (neutrino)
 
 message("Creating a SOURCES variable with a link to all cpp files to compile...")
 set(SOURCES
-src/data_types.cpp
+src/color4.cpp
 src/device.cpp
+src/float1.cpp
+src/float4.cpp
 src/font.cpp
 src/info.cpp
+src/int1.cpp
+src/int4.cpp
 src/kernel.cpp
 src/linear_algebra.cpp
 src/main.cpp
@@ -26,10 +30,12 @@ src/opencl.cpp
 src/opengl.cpp
 src/path.cpp
 src/platform.cpp
+src/point4.cpp
 src/program.cpp
 src/projective_geometry.cpp
-src/utilities.cpp
 src/queue.cpp
+src/text4.cpp
+src/utilities.cpp
 src/window.cpp)
 
 message("Adding an executable with the above sources...")
