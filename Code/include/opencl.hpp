@@ -11,9 +11,6 @@
   #include <stdlib.h>
   #include <string.h>
   #include <math.h>
-  #include "info.hpp"
-  #include "utilities.hpp"
-
   #include <GL/glew.h>
 
   #ifdef __WINDOWS__
@@ -42,6 +39,11 @@
     #include <CL/cl_gl.h>
   #endif
 
+  #include "info.hpp"
+  #include "platform.hpp"
+  #include "device.hpp"
+  #include "utilities.hpp"
+
   const char* get_error(cl_int error);
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -59,6 +61,7 @@
   class opencl
   {
     private:
+      const char*     get_error(cl_int loc_error);
       cl_uint         get_num_platforms();
       cl_uint         get_platforms();
       cl_uint         get_num_devices(cl_uint loc_platform_index);

@@ -11,8 +11,10 @@
   #include <stdlib.h>
   #include <string.h>
   #include <math.h>
-  #include "utilities.hpp"
+
   #include "neutrino.hpp"
+
+  #include "utilities.hpp"
 
   #include <GL/glew.h>
 
