@@ -58,7 +58,7 @@
       int               size;                                                   // Data size [#].
       GLuint            vao;                                                    // OpenGL Vertex Array Object.
       GLuint            vbo;                                                    // OpenGL Vertex Buffer Object.
-      cl_mem            buffer;                                                 // Declaring OpenCL memory buffer...
+      cl_mem            buffer;                                                 // OpenCL memory buffer.
 
                         float1();
 
