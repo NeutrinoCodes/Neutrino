@@ -49,28 +49,49 @@
   class point4
   {
     private:
-      const char*     get_error(cl_int loc_error);
+      const char*       get_error(cl_int loc_error);
       GLfloat*          data;
       cl_context        context;                                                // OpenCL context.
 
     public:
-      point4(cl_context loc_opencl_context, int loc_data_number);
-      ~point4();
 
-      GLfloat*  x;
-      GLfloat*  y;
-      GLfloat*  z;
-      GLfloat*  w;
 
-      int size;
-      GLuint    vao;
-      GLuint    vbo;
-      cl_mem    buffer;
 
-      void      init();
-      void      set(kernel* k, int kernel_arg);
-      void      push(queue* q, kernel* k, int kernel_arg);
-      void      pop(queue* q, kernel* k, int kernel_arg);
+      GLfloat*          x;
+      GLfloat*          y;
+      GLfloat*          z;
+      GLfloat*          w;
+
+      int               size;
+      GLuint            vao;
+      GLuint            vbo;
+      cl_mem            buffer;
+
+                        point4();
+
+      void              init  (
+                                cl_context loc_opencl_context,
+                                int loc_data_number
+                              );
+
+      void              set   (
+                                kernel* loc_kernel,
+                                int loc_kernel_arg
+                              );
+
+      void              push  (
+                                queue* loc_queue,
+                                kernel* loc_kernel,
+                                int loc_kernel_arg
+                              );
+
+      void              pop   (
+                                queue* loc_queue,
+                                kernel* loc_kernel,
+                                int loc_kernel_arg
+                              );
+
+                        ~point4();
   };
 
 #endif
