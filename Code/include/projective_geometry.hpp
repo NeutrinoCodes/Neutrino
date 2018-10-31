@@ -1,15 +1,7 @@
 /// @file
 
-#ifndef projgeom_hpp
-#define projgeom_hpp
-
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <string.h>
-  #include <math.h>
-  #include <errno.h>
-
-  #include "linear_algebra.hpp"
+#ifndef projective_geometry_hpp
+#define projective_geometry_hpp
 
   void frustum(float F[16], float left, float right, float bottom,
                   float top, float z_near, float z_far);

@@ -1,4 +1,4 @@
-#include "float4.hpp"
+#include "neutrino.hpp"
 
 float4::float4(cl_context thecontext, int num_data)
 {
