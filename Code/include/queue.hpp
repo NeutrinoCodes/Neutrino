@@ -11,10 +11,7 @@
   #include <stdlib.h>
   #include <string.h>
   #include <math.h>
-
-  #include "neutrino.hpp"
-
-  #include "utilities.hpp"
+  #include <errno.h>
 
   #include <GL/glew.h>
 
@@ -44,6 +41,10 @@
     #include <CL/cl_gl.h>
   #endif
 
+  #include "opencl.hpp"
+
+  #include "utilities.hpp"
+
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// "QUEUE" CLASS ///////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +58,7 @@
       cl_device_id      device_id;                                              // OpenCL device id.
 
             queue();
-      void  init(neutrino* loc_neutrino);
+      void  init(opencl* loc_opencl_context);
             ~queue();
   };
 

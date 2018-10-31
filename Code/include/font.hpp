@@ -30,6 +30,10 @@
   #define ASCII_SPACE_BIG 16
 
   #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <math.h>
+  #include <errno.h>
 
   class font
   {

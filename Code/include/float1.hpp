@@ -10,6 +10,8 @@
   #include <stdlib.h>
   #include <string.h>
   #include <math.h>
+  #include <errno.h>
+
   #include <GL/glew.h>
 
   #ifdef __WINDOWS__
@@ -38,30 +40,51 @@
     #include <CL/cl_gl.h>
   #endif
 
+  #include "kernel.hpp"
+  #include "queue.hpp"
+
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// "FLOAT1" CLASS ///////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   class float1
   {
     private:
-      const char*     get_error(cl_int loc_error);
+      const char*       get_error(cl_int loc_error);
       cl_context        context;                                                // OpenCL context.
 
     public:
-      float1(cl_context thecontext, int num_data);
-      ~float1();
+      cl_float*         x;                                                      // "x" data.
 
-      cl_float*    x;                                                           // Declaring "x" data...
+      int               size;                                                   // Data size [#].
+      GLuint            vao;                                                    // OpenGL Vertex Array Object.
+      GLuint            vbo;                                                    // OpenGL Vertex Buffer Object.
+      cl_mem            buffer;                                                 // Declaring OpenCL memory buffer...
 
-      int       size;                                                           // Declaring "size" [#]...
-      GLuint    vao;
-      GLuint    vbo;
-      cl_mem    buffer;                                                         // Declaring OpenCL memory buffer...
+                        float1();
 
-      void      init();
-      void      set(kernel* k, int kernel_arg);
-      void      push(queue* q, kernel* k, int kernel_arg);
-      void      pop(queue* q, kernel* k, int kernel_arg);
+      void              init  (
+                                cl_context loc_opencl_context,
+                                int loc_data_number
+                              );
+
+      void              set   (
+                                kernel* loc_kernel,
+                                int loc_kernel_arg
+                              );
+
+      void              push  (
+                                queue* loc_queue,
+                                kernel* loc_kernel,
+                                int loc_kernel_arg
+                              );
+
+      void              pop   (
+                                queue* loc_queue,
+                                kernel* loc_kernel,
+                                int loc_kernel_arg
+                              );
+
+                        ~float1();
   };
 
 #endif

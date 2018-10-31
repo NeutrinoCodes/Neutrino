@@ -10,6 +10,8 @@
   #include <stdlib.h>
   #include <string.h>
   #include <math.h>
+  #include <errno.h>
+  
   #include <GL/glew.h>
 
   #ifdef __WINDOWS__
@@ -37,6 +39,9 @@
     #include <CL/cl.h>
     #include <CL/cl_gl.h>
   #endif
+
+  #include "kernel.hpp"
+  #include "queue.hpp"
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// "FLOAT4" CLASS ///////////////////////////////

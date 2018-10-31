@@ -10,6 +10,8 @@
   #include <stdlib.h>
   #include <string.h>
   #include <math.h>
+  #include <errno.h>
+
   #include <GL/glew.h>
 
   #ifdef __WINDOWS__
@@ -38,6 +40,9 @@
     #include <CL/cl_gl.h>
   #endif
 
+  #include "kernel.hpp"
+  #include "queue.hpp"
+
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// "POINT4" CLASS ///////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
@@ -45,13 +50,11 @@
   {
     private:
       const char*     get_error(cl_int loc_error);
-      int               err;
-      unsigned int      i;
       GLfloat*          data;
       cl_context        context;                                                // OpenCL context.
 
     public:
-      point4(cl_context thecontext, int num_data);
+      point4(cl_context loc_opencl_context, int loc_data_number);
       ~point4();
 
       GLfloat*  x;
