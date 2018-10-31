@@ -1,6 +1,6 @@
 /// @file
 
-#include "linear_algebra.hpp"
+#include "neutrino.hpp"
 
 float dot(float a[3], float b[3])
 {

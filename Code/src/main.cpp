@@ -1,7 +1,6 @@
 /// @file
 
 #include "neutrino.hpp"
-#include "program.hpp"
 
 int main()
 {

@@ -23,18 +23,6 @@
   /// The "font_width" array contains the width of each Ascii character in the
   /// font.
 
-  #define ASCII_33 33
-  #define ASCII_126 126
-  #define ASCII_SCALE 0.01
-  #define ASCII_SPACE_LITTLE 4
-  #define ASCII_SPACE_BIG 16
-
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <string.h>
-  #include <math.h>
-  #include <errno.h>
-
   class font
   {
     private:
