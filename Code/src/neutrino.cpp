@@ -7,28 +7,18 @@
 //////////////////////////////////////////////////////////////////////////////////
 neutrino::neutrino()
 {
-  opengl* opengl_context = new opengl();                                        // The OpenGL context object.
-  opencl* opencl_context = new opencl();                                        // The OpenCL context object.
-  window* gui_window     = new window();                                        // The gui window object.
-  font*   gui_font       = new font();                                          // The gui font object.
-  path*   neutrino_path  = new path();                                          // The neutrino_path environmental variable.
 
-  ascii_spin_phase = 0;                                                         // Initializing ascii_spin_phase...
-  ascii_spin_n_old = 0;                                                         // Initializing ascii_spin_n_old...
-  get_neutrino_path();                                                          // Getting NEUTRINO_PATH environmental variable...
-
-  opengl_context->init(neutrino_path, 4, 1);                                    // Initializing OpenGL context...
-  gui_window->init();                                                           // Initializing gui window...
-  gui_font->init();                                                             // Initializing gui font...
-  opencl_context->init(neutrino_path, GPU, gui_window->window);                 // Initializing OpenCL context...
 }
 
-void neutrino::get_neutrino_path()
+// PRIVATE METHODS:
+path* neutrino::get_neutrino_path()
 {
-  neutrino_path->value = getenv("NEUTRINO_PATH");                               // Getting neutrino path...
-  neutrino_path->size = strlen(neutrino_path->value) + 1;                       // Getting neutrino path length...
+  path* loc_neutrino_path = new path();
 
-  if (neutrino_path->value != NULL)
+  loc_neutrino_path->value = getenv("NEUTRINO_PATH");                           // Getting neutrino path...
+  loc_neutrino_path->size = strlen(loc_neutrino_path->value) + 1;               // Getting neutrino path length...
+
+  if (loc_neutrino_path->value != NULL)
   {
     printf("Action: loading NEUTRINO_PATH environmental variable...\n");
   }
@@ -37,6 +27,8 @@ void neutrino::get_neutrino_path()
     printf("Error:  NEUTRINO_PATH environmental variable not defined!\n");
     exit(1);
   }
+
+  return(loc_neutrino_path);
 }
 
 double neutrino::get_cpu_time()
@@ -137,6 +129,25 @@ double neutrino::get_cpu_time()
   #endif
 
   return -1.0;
+}
+
+// PUBLIC METHODS:
+void neutrino::init();
+{
+  opengl* opengl_context = new opengl();                                        // The OpenGL context object.
+  window* gui_window     = new window();                                        // The gui window object.
+  font*   gui_font       = new font();                                          // The gui font object.
+  opencl* opencl_context = new opencl();                                        // The OpenCL context object.
+
+  path*   neutrino_path  = new path();                                          // The neutrino_path environmental variable.
+  ascii_spin_phase = 0;                                                         // Initializing ascii_spin_phase...
+  ascii_spin_n_old = 0;                                                         // Initializing ascii_spin_n_old...
+  neutrino_path = get_neutrino_path();                                          // Getting NEUTRINO_PATH environmental variable...
+
+  opengl_context->init(neutrino_path);                                          // Initializing OpenGL context...
+  gui_window->init(800, 600, "neutrino");                                       // Initializing gui window...
+  gui_font->init();                                                             // Initializing gui font...
+  opencl_context->init(gui_window->glfw_window, GPU);                           // Initializing OpenCL context...
 }
 
 void neutrino::tic()
@@ -240,4 +251,5 @@ neutrino::~neutrino()
   delete opencl_context;
   delete gui_window;
   delete gui_font;
+  delete loc_neutrino_path;
 }

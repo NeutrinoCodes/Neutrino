@@ -11,6 +11,8 @@
   #include <stdlib.h>
   #include <string.h>
   #include <math.h>
+  #include <errno.h>
+
   #include <GL/glew.h>
 
   #ifdef __WINDOWS__
@@ -42,6 +44,7 @@
   #include "info.hpp"
   #include "platform.hpp"
   #include "device.hpp"
+  
   #include "utilities.hpp"
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -59,11 +62,13 @@
   class opencl
   {
     private:
-      const char*     get_error(cl_int loc_error);
-      cl_uint         get_num_platforms();
-      cl_uint         get_platforms();
-      cl_uint         get_num_devices(cl_uint loc_platform_index);
-      cl_uint         get_devices(cl_uint loc_platform_index);
+      cl_device_type          device_type;
+
+      const char*             get_error(cl_int loc_error);
+      cl_uint                 get_num_platforms();
+      cl_uint                 get_platforms();
+      cl_uint                 get_num_devices(cl_uint loc_platform_index);
+      cl_uint                 get_devices(cl_uint loc_platform_index);
 
     public:
       platform**              existing_platform;                                // Existing OpenCL platform array.

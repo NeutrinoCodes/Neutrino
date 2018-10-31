@@ -11,11 +11,7 @@
   #include <stdlib.h>
   #include <string.h>
   #include <math.h>
-
-  #include "neutrino.hpp"
-  #include "queue.hpp"
-
-  #include "utilities.hpp"
+  #include <errno.h>
 
   #include <GL/glew.h>
 
@@ -44,6 +40,11 @@
     #include <CL/cl.h>
     #include <CL/cl_gl.h>
   #endif
+
+  //#include "neutrino.hpp"
+  #include "queue.hpp"
+
+  #include "utilities.hpp"
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// "KERNEL" CLASS //////////////////////////////

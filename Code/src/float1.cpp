@@ -1,22 +1,8 @@
 #include "float1.hpp"
 
-float1::float1(cl_context loc_opencl_context, int loc_data_number)
+float1::float1()
 {
-  int               loc_err;                                                    // Local error code.
-  unsigned int      i;                                                          // index.
 
-  opencl_context = loc_opencl_context;                                          // Getting OpenCL context...
-  size = loc_data_number;                                                       // Getting data array size...
-  x = new cl_float[loc_data_number];                                            // Initializing "x" data array...
-
-  vao = 0;                                                                      // OpenGL data VAO.
-  vbo = 0;                                                                      // OpenGL data VBO.
-  buffer = NULL;                                                                // OpenCL data buffer.
-
-  for (i = 0; i < loc_data_number; i++)                                         // Filling arrays with default data:
-  {
-    x[i] = 0.0f;                                                                // Setting "x" data...
-  }
 }
 
 // PRIVATE METHODS:
@@ -99,8 +85,24 @@ const char* float1::get_error(cl_int loc_error)
   }
 }
 
-void float1::init()
+void float1::init(cl_context loc_opencl_context, int loc_data_number)
 {
+  cl_int            loc_err;                                                    // Local error code.
+  unsigned int      i;                                                          // index.
+
+  opencl_context = loc_opencl_context;                                          // Getting OpenCL context...
+  size = loc_data_number;                                                       // Getting data array size...
+  x = new cl_float[loc_data_number];                                            // Initializing "x" data array...
+
+  vao = 0;                                                                      // OpenGL data VAO.
+  vbo = 0;                                                                      // OpenGL data VBO.
+  buffer = NULL;                                                                // OpenCL data buffer.
+
+  for (i = 0; i < loc_data_number; i++)                                         // Filling arrays with default data:
+  {
+    x[i] = 0.0f;                                                                // Setting "x" data...
+  }
+
   glGenVertexArrays(1, &vao);                                                   // Generating VAO...
   glBindVertexArray(vao);                                                       // Binding VAO...
   glGenBuffers(1, &vbo);                                                        // Generating VBO...
@@ -109,60 +111,68 @@ void float1::init()
   glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
   glBindBuffer(GL_ARRAY_BUFFER, vbo);                                           // Binding VBO...
   glVertexAttribPointer(LAYOUT_0, 1, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
-  buffer = clCreateFromGLBuffer(openc_context, CL_MEM_READ_WRITE, vbo, &err);   // Creating OpenCL buffer from OpenGL buffer...
+  buffer = clCreateFromGLBuffer(loc_opencl_context, CL_MEM_READ_WRITE, vbo, &loc_err);   // Creating OpenCL buffer from OpenGL buffer...
 
-  if(err < 0)
+  if(loc_err < 0)
   {
-    printf("\nError:  %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(loc_err));
     exit(EXIT_FAILURE);
   }
 }
 
-void float1::set(kernel* k, int kernel_arg)
+void float1::set(kernel* loc_kernel, int loc_kernel_arg)
 {
-  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &buffer);      // Setting buffer as OpenCL kernel argument...
+  cl_int            loc_err;                                                    // Local error code.
 
-  if(err < 0)
+  loc_err = clSetKernelArg(loc_kernel->kernel_id, loc_kernel_arg, sizeof(cl_mem), &buffer);      // Setting buffer as OpenCL kernel argument...
+
+  if(loc_err < 0)
   {
-    printf("\nError:  %s\n", get_error(err));
+    printf("\nError:  %s\n", get_error(loc_err));
     exit(EXIT_FAILURE);
   }
 }
 
 void float1::push(queue* q, kernel* k, int kernel_arg)
 {
-  err = clEnqueueAcquireGLObjects(q->thequeue, 1, &buffer, 0, NULL, NULL);      // Passing "points" to OpenCL kernel...
+  cl_int            loc_err;                                                    // Local error code.
 
-  if(err != CL_SUCCESS)
+  loc_err = clEnqueueAcquireGLObjects(loc_queue->queue_id, 1, &buffer, 0, NULL, NULL);      // Passing "points" to OpenCL kernel...
+
+  if(loc_err != CL_SUCCESS)
   {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
+    printf("\nError:  %s\n", get_error(loc_err));
+    exit(loc_err);
   }
 }
 
 void float1::pop(queue* q, kernel* k, int kernel_arg)
 {
-  err = clEnqueueReleaseGLObjects(q->thequeue, 1, &buffer, 0, NULL, NULL);      // Releasing "points" from OpenCL kernel...
+  cl_int            loc_err;                                                    // Local error code.
 
-  if(err != CL_SUCCESS)
+  loc_err = clEnqueueReleaseGLObjects(loc_queue->queue_id, 1, &buffer, 0, NULL, NULL);      // Releasing "points" from OpenCL kernel...
+
+  if(loc_err != CL_SUCCESS)
   {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
+    printf("\nError:  %s\n", get_error(loc_err));
+    exit(loc_err);
   }
 }
 
 float1::~float1()
 {
+  cl_int            loc_err;                                                    // Local error code.
+
   printf("Action: releasing \"float1\" object... ");
 
   if(buffer != NULL)
   {
-    err = clReleaseMemObject(buffer);                                           // Releasing OpenCL buffer object...
+    loc_err = clReleaseMemObject(buffer);                                           // Releasing OpenCL buffer object...
 
-    if(err != CL_SUCCESS)
+    if(loc_err != CL_SUCCESS)
     {
-      printf("\nError:  %s\n", get_error(err));
-      exit(err);
+      printf("\nError:  %s\n", get_error(loc_err));
+      exit(loc_err);
     }
   }
 

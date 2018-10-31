@@ -4,6 +4,10 @@
 #define platform_hpp
 
   #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <math.h>
+  #include <errno.h>
 
   #ifdef __APPLE__
     #include <OpenCL/opencl.h>

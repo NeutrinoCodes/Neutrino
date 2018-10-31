@@ -22,6 +22,8 @@
   #include <stdlib.h>
   #include <string.h>
   #include <math.h>
+  #include <errno.h>
+
   #include <GL/glew.h>
 
   #ifdef __WINDOWS__
@@ -45,8 +47,9 @@
 
   #include "linear_algebra.hpp"
   #include "projective_geometry.hpp"
-  #include "utilities.hpp"
   #include "path.hpp"
+
+  #include "utilities.hpp"
 
   typedef enum
   {
@@ -67,25 +70,27 @@
   class opengl
   {
     private:
-      GLuint  compile_shader();                                                 // OpenGL shader compilation.
-      GLuint  build_shader();                                                   // OpenGL shader build.
-      path*   neutrino_path;                                                    // Neutrino path.
+      GLuint        compile_shader();                                                 // OpenGL shader compilation.
+      GLuint        build_shader();                                                   // OpenGL shader build.
+      path*         neutrino_path;                                                    // Neutrino path.
 
     public:
-              opengl();
+                    opengl();
 
-      GLuint  compile_shader  (
-                                const char* loc_shader_filename,
-                                shader_type loc_shader_type
-                              );
+      void          init(path* loc_neutrino_path);                                    // OpenGL initialization.
 
-      GLuint  build_shader    (
-                                const char* loc_filename_vertex,
-                                const char* loc_filename_fragment
-                              );
+      GLuint        compile_shader  (
+                                      const char* loc_shader_filename,
+                                      shader_type loc_shader_type
+                                    );
 
-      void    init(path* loc_neutrino_path);                                    // OpenGL initialization.
-              ~opengl();
+      GLuint        build_shader    (
+                                      const char* loc_filename_vertex,
+                                      const char* loc_filename_fragment
+                                    );
+
+
+                    ~opengl();
   };
 
 #endif
