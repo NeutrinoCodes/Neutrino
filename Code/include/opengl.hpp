@@ -3,6 +3,25 @@
 #ifndef opengl_hpp
 #define opengl_hpp
 
+  /// These files are relative to the NEUTRINO_PATH environmental variable:
+  #define POINT_VERTEX_FILE       "/Code/shader/vertex.vert"
+  #define POINT_FRAGMENT_FILE     "/Code/shader/fragment.frag"
+  #define TEXT_VERTEX_FILE        "/Code/shader/text_vertex.vert"
+  #define TEXT_FRAGMENT_FILE      "/Code/shader/text_fragment.frag"
+
+  typedef enum
+  {
+    STYLE_POINT,
+    STYLE_WIREFRAME,
+    STYLE_SHADED
+  } plot_style;
+
+  typedef enum
+  {
+    VERTEX,
+    FRAGMENT
+  } shader_type;
+
   #include "neutrino.hpp"
 
   ////////////////////////////////////////////////////////////////////////////////

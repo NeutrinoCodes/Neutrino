@@ -1,9 +1,9 @@
-#include "neutrino.hpp"
+#include "kernel.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "KERNEL" CLASS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-kernel::kernel(cl_context loc_context_id, cl_device_id* loc_existing_device_id)
+kernel::kernel()
 {
   source              = NULL;                                                   // Initializing kernel source...
   program             = NULL;                                                   // Initializing kernel program...
@@ -13,7 +13,14 @@ kernel::kernel(cl_context loc_context_id, cl_device_id* loc_existing_device_id)
   kernel_id           = NULL;                                                   // Initializing kernel id...
 }
 
-void kernel::init(char* neutrino_path, char* kernel_filename, size_t* kernel_size, cl_uint kernel_dimension)
+void kernel::init (
+                    path* loc_neutrino_path,
+                    char* loc_kernel_filename,
+                    size_t* loc_kernel_size,
+                    cl_uint loc_kernel_dimension,
+                    cl_context loc_context_id,
+                    cl_device_id* loc_existing_device_id
+                  )
 {
   cl_int        loc_err;                                                        // Local error code.
   cl_device_id* loc_existing_device_id;                                         // Local existing device id array.

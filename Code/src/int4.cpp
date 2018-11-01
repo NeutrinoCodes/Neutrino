@@ -1,4 +1,4 @@
-#include "neutrino.hpp"
+#include "int4.hpp"
 
 int4::int4(cl_context thecontext, int num_data)
 {
