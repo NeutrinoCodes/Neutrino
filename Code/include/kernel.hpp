@@ -3,6 +3,12 @@
 #ifndef kernel_hpp
 #define kernel_hpp
 
+  typedef enum
+  {
+    WAIT,
+    DONT_WAIT
+  } blocking_mode;
+
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// "KERNEL" CLASS //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +31,7 @@
             kernel();
 
       void  init      (
-                        neutrino*     loc_neutrino,
+                        path*         loc_neutrino_path,
                         char*         loc_kernel_filename,
                         size_t*       loc_kernel_size,
                         cl_uint       loc_kernel_dimension
