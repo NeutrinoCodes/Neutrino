@@ -7,7 +7,10 @@
   {
     WAIT,
     DONT_WAIT
-  } blocking_mode;
+  } kernel_mode;
+
+  #include "neutrino.hpp"
+  #include "queue.hpp"
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// "KERNEL" CLASS //////////////////////////////
@@ -31,7 +34,7 @@
             kernel();
 
       void  init      (
-                        path*         loc_neutrino_path,
+                        neutrino*     loc_neutrino,
                         char*         loc_kernel_filename,
                         size_t*       loc_kernel_size,
                         cl_uint       loc_kernel_dimension
@@ -39,7 +42,7 @@
 
       void  execute   (
                         queue*        loc_queue,
-                        blocking_mode loc_blocking_mode
+                        kernel_mode   loc_kernel_mode
                       );
 
             ~kernel();

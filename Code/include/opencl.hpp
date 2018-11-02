@@ -3,12 +3,6 @@
 #ifndef opencl_hpp
 #define opencl_hpp
 
-  #define LAYOUT_0 0
-  #define LAYOUT_1 1
-
-  #define KERNEL_NAME             "thekernel"
-  #define SIZE_TEXT_MAX 128                                                     // Maximum number of characters in a text string.
-
   typedef enum
   {
     CPU,

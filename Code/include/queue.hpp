@@ -3,6 +3,8 @@
 #ifndef queue_hpp
 #define queue_hpp
 
+  #include "neutrino.hpp"
+
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// "QUEUE" CLASS ///////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
@@ -16,7 +18,7 @@
       cl_device_id      device_id;                                              // OpenCL device id.
 
             queue();
-      void  init(opencl* loc_opencl_context);
+      void  init(neutrino* loc_neutrino);
             ~queue();
   };
 
