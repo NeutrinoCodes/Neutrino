@@ -14,12 +14,10 @@ kernel::kernel()
 }
 
 void kernel::init (
-                    path* loc_neutrino_path,
+                    neutrino* loc_neutrino,
                     char* loc_kernel_filename,
                     size_t* loc_kernel_size,
                     cl_uint loc_kernel_dimension,
-                    cl_context loc_context_id,
-                    cl_device_id* loc_existing_device_id
                   )
 {
   cl_int        loc_err;                                                        // Local error code.
@@ -38,7 +36,7 @@ void kernel::init (
   printf("Action: creating OpenCL program from kernel source... ");
 
   // Creating OpenCL program from its source:
-  program = clCreateProgramWithSource(loc_neutrino->opencl_context->context_id,
+  program = clCreateProgramWithSource(loc_neutrino->context_id,
                                       1,
                                       (const char**)&source,
                                       &source_size,
@@ -55,12 +53,18 @@ void kernel::init (
 
   printf("Action: building OpenCL program... ");
 
+  /*
   loc_existing_device_id = (cl_device_id*) malloc(loc_neutrino->opencl_context->devices_number);
 
   for(i = 0; i < loc_neutrino->opencl_context->devices_number; i++)
   {
     loc_existing_device_id[i] = loc_neutrino->opencl_context->existing_device[i]->device_id;                  // Initializing existing devices...
   }
+  */
+
+  // EZOR: 02NOV2018. For the moment we create a context made of only 1 device (choosen device).
+  loc_existing_device_id = (cl_device_id*) malloc(1);
+  loc_existing_device_id[0] = loc_neutrino->device_id;
 
   // Building OpenCL program:
   loc_err = clBuildProgram(program,
@@ -76,7 +80,7 @@ void kernel::init (
 
     // Getting OpenCL compiler information:
     loc_err = clGetProgramBuildInfo(program,
-                                    loc_existing_device_id[loc_neutrino->opencl_context->choosen_device],                      // EZOR 25OCT2018: to be generalized...
+                                    loc_existing_device_id[0],                  // EZOR 25OCT2018: to be generalized...
                                     CL_PROGRAM_BUILD_LOG,
                                     0,
                                     NULL,
@@ -98,7 +102,7 @@ void kernel::init (
 
     // Reading OpenCL compiler error log:
     loc_err = clGetProgramBuildInfo(program,
-                                    existing_device_id[loc_neutrino->opencl_context],                          // EZOR 25OCT2018: to be generalized...
+                                    loc_existing_device_id[0],                  // EZOR 25OCT2018: to be generalized...
                                     CL_PROGRAM_BUILD_LOG,
                                     log_size + 1,
                                     log,
@@ -133,10 +137,10 @@ void kernel::init (
   printf("DONE!\n");
 }
 
-void kernel::execute(queue* q, kernel_event k_ev)
+void kernel::execute(queue* loc_queue_id, kernel_mode loc_kernel_mode)
 {
-  err = clEnqueueNDRangeKernel(q->thequeue,                                     // Enqueueing OpenCL kernel (as a single task)...
-                               thekernel,
+  err = clEnqueueNDRangeKernel(loc_queue_id->queue_id,                             // Enqueueing OpenCL kernel (as a single task)...
+                               kernel_id,
                                dimension,
                                NULL,
                                &size,
@@ -151,7 +155,7 @@ void kernel::execute(queue* q, kernel_event k_ev)
     exit(err);
   }
 
-  switch(k_ev)
+  switch(loc_kernel_mode)
   {
     case WAIT:
       err = clWaitForEvents(1, &event);                                         // Waiting for kernel execution to be completed (host blocking)...
@@ -177,15 +181,13 @@ void kernel::execute(queue* q, kernel_event k_ev)
       }
     break;
   }
-
-
 }
 
 kernel::~kernel()
 {
   printf("Action: releasing OpenCL kernel... ");
 
-  err = clReleaseKernel(thekernel);                                             // Releasing OpenCL kernel...
+  err = clReleaseKernel(kernel_id);                                             // Releasing OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {

@@ -348,12 +348,18 @@ void opencl::init(GLFWwindow* loc_glfw_window, compute_device_type loc_device_ty
   printf("Action: creating OpenCL context... ");                                // Printing message...
 
   // Creating OpenCL context:
+  /*
   loc_existing_device_id = (cl_device_id*) malloc(devices_number);
 
   for(i = 0; i < devices_number; i++)
   {
     loc_existing_device_id[i] = existing_device[i]->device_id;                  // Initializing existing devices...
   }
+  */
+
+  // EZOR: 02NOV2018. For the moment we create a context made of only 1 device (choosen device).
+  loc_existing_device_id = (cl_device_id*) malloc(1);
+  loc_existing_device_id[0] = existing_device[choosen_device]->device_id;
 
   context_id = clCreateContext(properties,                                      // Context properties.
                                1,                                               // # of devices on choosen platform.

@@ -1,25 +1,8 @@
 #include "color4.hpp"
 
-color4::color4(cl_context thecontext, int num_data)
+color4::color4()
 {
-  r = new GLfloat[num_data];                                                    // "r" data array.
-  g = new GLfloat[num_data];                                                    // "g" data array.
-  b = new GLfloat[num_data];                                                    // "b" data array.
-  a = new GLfloat[num_data];                                                    // "a" data array.
 
-  size = num_data;                                                              // Array size (the same for all of them).
-  vao = 0;                                                                      // OpenGL data VAO.
-  vbo = 0;                                                                      // OpenGL data VBO.
-  buffer = NULL;                                                                // OpenCL data buffer.
-  context = thecontext;                                                         // Getting OpenCL context...
-
-  for (i = 0; i < num_data; i++)                                                // Filling arrays with default data...
-  {
-    r[i] = 0.0f;                                                                // Setting "r" data...
-    g[i] = 0.0f;                                                                // Setting "g" data...
-    b[i] = 0.0f;                                                                // Setting "b" data...
-    a[i] = 1.0f;                                                                // Setting "a" data...
-  }
 }
 
 // PRIVATE METHODS:
@@ -102,8 +85,27 @@ const char* color4::get_error(cl_int loc_error)
   }
 }
 
-void color4::init()
+void color4::init(neutrino* loc_neutrino, int loc_data_number)
 {
+  r = new GLfloat[loc_data_number];                                             // "r" data array.
+  g = new GLfloat[loc_data_number];                                             // "g" data array.
+  b = new GLfloat[loc_data_number];                                             // "b" data array.
+  a = new GLfloat[loc_data_number];                                             // "a" data array.
+
+  size = loc_data_number;                                                       // Array size (the same for all of them).
+  vao = 0;                                                                      // OpenGL data VAO.
+  vbo = 0;                                                                      // OpenGL data VBO.
+  buffer = NULL;                                                                // OpenCL data buffer.
+  opencl_context = loc_neutrino->context_id;                                    // Getting OpenCL context...
+
+  for (i = 0; i < loc_data_number; i++)                                         // Filling arrays with default data...
+  {
+    r[i] = 0.0f;                                                                // Setting "r" data...
+    g[i] = 0.0f;                                                                // Setting "g" data...
+    b[i] = 0.0f;                                                                // Setting "b" data...
+    a[i] = 1.0f;                                                                // Setting "a" data...
+  }
+
   data = new GLfloat[4*size];                                                   // Creating array for unfolded data...
 
   for (i = 0; i < size; i++)                                                    // Filling unfolded data array...
@@ -122,7 +124,7 @@ void color4::init()
   glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
   glBindBuffer(GL_ARRAY_BUFFER, vbo);                                           // Binding VBO...
   glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
-  buffer = clCreateFromGLBuffer(context, CL_MEM_READ_WRITE, vbo, &err);         // Creating OpenCL buffer from OpenGL buffer...
+  buffer = clCreateFromGLBuffer(opencl_context, CL_MEM_READ_WRITE, vbo, &err);  // Creating OpenCL buffer from OpenGL buffer...
 
   delete[] data;                                                                // Deleting array for unfolded data...
 
@@ -133,9 +135,9 @@ void color4::init()
   }
 }
 
-void color4::set(kernel* k, int kernel_arg)
+void color4::set(kernel* loc_kernel, int loc_kernel_arg)
 {
-  err = clSetKernelArg(k->thekernel, kernel_arg, sizeof(cl_mem), &buffer);      // Setting buffer as OpenCL kernel argument...
+  err = clSetKernelArg(loc_kernel->kernel_id, loc_kernel_arg, sizeof(cl_mem), &buffer);      // Setting buffer as OpenCL kernel argument...
 
   if(err < 0)
   {
@@ -144,9 +146,9 @@ void color4::set(kernel* k, int kernel_arg)
   }
 }
 
-void color4::push(queue* q, kernel* k, int kernel_arg)
+void color4::push(queue* loc_queue, kernel* loc_kernel, int loc_kernel_arg)
 {
-  err = clEnqueueAcquireGLObjects(q->thequeue, 1, &buffer, 0, NULL, NULL);      // Passing "points" to OpenCL kernel...
+  err = clEnqueueAcquireGLObjects(loc_queue->queue_id, 1, &buffer, 0, NULL, NULL);      // Passing "points" to OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {
@@ -155,9 +157,9 @@ void color4::push(queue* q, kernel* k, int kernel_arg)
   }
 }
 
-void color4::pop(queue* q, kernel* k, int kernel_arg)
+void color4::pop(queue* loc_queue, kernel* loc_kernel, int loc_kernel_arg)
 {
-  err = clEnqueueReleaseGLObjects(q->thequeue, 1, &buffer, 0, NULL, NULL);      // Releasing "points" from OpenCL kernel...
+  err = clEnqueueReleaseGLObjects(loc_queue->queue_id, 1, &buffer, 0, NULL, NULL);      // Releasing "points" from OpenCL kernel...
 
   if(err != CL_SUCCESS)
   {

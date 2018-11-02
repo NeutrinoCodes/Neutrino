@@ -10,14 +10,14 @@ queue::queue()
   device_id = NULL;                                                             // Initializing device id...
 }
 
-void queue::init(opencl* loc_opencl_context)
+void queue::init(neutrino* loc_neutrino)
 {
   cl_int  loc_err;                                                              // Local error code.
 
   printf("Action: creating OpenCL command queue... ");
 
-  context_id = loc_opencl_context->context_id;                                  // Initializing context id...
-  device_id = loc_opencl_context->existing_device[choosen_device];              // Initializing device id...
+  context_id = loc_neutrino->context_id;                                        // Initializing context id...
+  device_id = loc_neutrino->device_id;                                          // Initializing device id...
 
   // Creating OpenCL queue:
   queue_id = clCreateCommandQueue(context_id,                                   // OpenCL context.

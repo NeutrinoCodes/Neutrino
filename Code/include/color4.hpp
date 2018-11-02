@@ -4,6 +4,8 @@
 #define color4_hpp
 
   #include "neutrino.hpp"
+  #include "kernel.hpp"
+  #include "queue.hpp"
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// "COLOR4" CLASS ///////////////////////////////
@@ -15,7 +17,7 @@
       int             err;
       unsigned int    i;
       GLfloat*        data;
-      cl_context      context;                                                // OpenCL context.
+      cl_context      opencl_context;                                           // OpenCL context.
 
     public:
       GLfloat*        r;
@@ -29,10 +31,10 @@
       cl_mem          buffer;
 
                       color4();
-      void            init(int num_data);
-      void            set(kernel* k, int kernel_arg);
-      void            push(queue* q, kernel* k, int kernel_arg);
-      void            pop(queue* q, kernel* k, int kernel_arg);
+      void            init(neutrino* loc_neutrino, int loc_data_number);
+      void            set(kernel* loc_kernel, int loc_kernel_arg);
+      void            push(queue* loc_queue, kernel* loc_kernel, int loc_kernel_arg);
+      void            pop(queue* loc_queue, kernel* loc_kernel, int loc_kernel_arg);
                       ~color4();
   };
 

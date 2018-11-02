@@ -13,6 +13,13 @@
     #define GLFW_EXPOSE_NATIVE_GLX
   #endif
 
+  #define LAYOUT_0 0
+  #define LAYOUT_1 1
+
+  #define KERNEL_NAME             "thekernel"
+  #define SIZE_TEXT_MAX 128                                                     // Maximum number of characters in a text string.
+
+
   //////////////////////////////////////////////////////////////////////////
   //////////////////////// Standard C header files /////////////////////////
   //////////////////////////////////////////////////////////////////////////
@@ -83,19 +90,22 @@
   class neutrino
   {
     private:
-      int     ascii_spin_phase;
-      int     ascii_spin_n_old;
+      int               ascii_spin_phase;
+      int               ascii_spin_n_old;
 
-      path*   get_neutrino_path();
-      double  get_cpu_time();
-      void    ascii_spin();
-      void    ascii_spin_stop();
+      path*             get_neutrino_path();
+      double            get_cpu_time();
+      void              ascii_spin();
+      void              ascii_spin_stop();
 
     public:
-      path*   neutrino_path;                                                    // NEUTRINO_PATH environmental variable.
-      double  tic;                                                              // Tic time [ms].
-      double  toc;                                                              // Toc time [ms].
-      double  loop_time;                                                        // Loop time [ms].
+      path*             neutrino_path;                                          // NEUTRINO_PATH environmental variable.
+      double            tic;                                                    // Tic time [ms].
+      double            toc;                                                    // Toc time [ms].
+      double            loop_time;                                              // Loop time [ms].
+
+      cl_context        context_id;                                             // OpenCL context id.
+      cl_device_id      device_id;                                              // OpenCL device id.
 
               neutrino();
       void    init();

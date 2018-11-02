@@ -7,7 +7,16 @@
 //////////////////////////////////////////////////////////////////////////////////
 neutrino::neutrino()
 {
+  ascii_spin_phase = 0;
+  ascii_spin_n_old = 0;
 
+  neutrino_path = NULL;                                                         // NEUTRINO_PATH environmental variable.
+  tic = 0.0;                                                                    // Tic time [ms].
+  toc = 0.0;                                                                    // Toc time [ms].
+  loop_time = 0.0;                                                              // Loop time [ms].
+
+  context_id = NULL;                                                            // OpenCL context id.
+  device_id = NULL;                                                             // OpenCL device id.
 }
 
 // PRIVATE METHODS:
