@@ -82,15 +82,15 @@ GLuint opengl::build_shader(const char* filename_vertex, const char* filename_fr
 }
 
 // PUBLIC METHODS:
-void opengl::init(path* loc_neutrino_path)                                      // OpenGL initialization.
+void opengl::init(neutrino* loc_neutrino)                                       // OpenGL initialization.
 {
   int opengl_ver_major;                                                         // OpenGL version major number.
   int opengl_ver_minor;                                                         // OpenGL version minor number.
   int opengl_msaa;                                                              // OpenGL multisampling antialiasing factor.
   path* neutrino_path = new path();
 
-  neutrino_path->value = loc_neutrino_path->value;
-  neutrino_path->size = loc_neutrino_path->size;
+  neutrino_path->value = loc_neutrino->neutrino_path->value;
+  neutrino_path->size = loc_neutrino->neutrino_path->size;
 
   // Initializing GLFW context:
   printf("Action: initializing GLFW... ");
@@ -138,6 +138,5 @@ void opengl::init(path* loc_neutrino_path)                                      
 
 opengl::~opengl()
 {
-  glfwDestroyWindow(window);                                                    // Destroying window...
   glfwTerminate();                                                              // Terminating GLFW...
 }
