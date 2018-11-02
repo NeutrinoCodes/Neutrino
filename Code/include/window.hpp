@@ -3,8 +3,6 @@
 #ifndef window_hpp
 #define window_hpp
 
-  #define SIZE_WINDOW_X 800                                               // Window x-size [px].
-  #define SIZE_WINDOW_Y 600                                               // Window y-size [px].
   #define ZOOM_FACTOR 1.05f                                               // Zoom factor [> 1.0].
   #define ROTATION_FACTOR 2.0f                                            // Rotation factor [].
   #define NEAR_Z_CLIP 0.1f                                                // Near z-clipping distance [> 0.0].

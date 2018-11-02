@@ -30,14 +30,14 @@
   class opengl
   {
     private:
-      GLuint        compile_shader();                                                 // OpenGL shader compilation.
-      GLuint        build_shader();                                                   // OpenGL shader build.
-      path*         neutrino_path;                                                    // Neutrino path.
+      GLuint        compile_shader();                                           // OpenGL shader compilation.
+      GLuint        build_shader();                                             // OpenGL shader build.
+      path*         neutrino_path;                                              // Neutrino path.
 
     public:
                     opengl();
 
-      void          init(path* loc_neutrino_path);                                    // OpenGL initialization.
+      void          init(neutrino* loc_neutrino);                               // OpenGL initialization.
 
       GLuint        compile_shader  (
                                       const char* loc_shader_filename,

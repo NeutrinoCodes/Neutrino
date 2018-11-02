@@ -1,25 +1,70 @@
 #ifndef neutrino_hpp
 #define neutrino_hpp
 
-  
+  #define CL_USE_DEPRECATED_OPENCL_1_2_APIS
 
-  /*
-  #include "opengl.hpp"
-  #include "opencl.hpp"
+  #ifdef __WINDOWS__
+    #define GLFW_EXPOSE_NATIVE_WIN32
+    #define GLFW_EXPOSE_NATIVE_WGL
+  #endif
 
-  #include "window.hpp"
-  #include "platform.hpp"
-  #include "device.hpp"
-  #include "queue.hpp"
-  #include "kernel.hpp"
+  #ifdef __linux__
+    #define GLFW_EXPOSE_NATIVE_X11
+    #define GLFW_EXPOSE_NATIVE_GLX
+  #endif
 
-  #include "int1.hpp"
-  #include "int4.hpp"
-  #include "float1.hpp"
-  #include "float4.hpp"
-  #include "point4.hpp"
-  #include "color4.hpp"
-  #include "text4.hpp"
+  //////////////////////////////////////////////////////////////////////////
+  //////////////////////// Standard C header files /////////////////////////
+  //////////////////////////////////////////////////////////////////////////
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <math.h>
+  #include <errno.h>
+
+  //////////////////////////////////////////////////////////////////////////
+  ////////////////////////// Timing C header files /////////////////////////
+  //////////////////////////////////////////////////////////////////////////
+  #if defined(__WINDOWS__)
+    #include <Windows.h>
+  #elif defined(__linux__) || defined(__APPLE__)
+    #include <unistd.h>
+    #include <sys/resource.h>
+    #include <sys/times.h>
+    #include <time.h>
+  #else
+    #error "Unable to define getCPUTime() for an unknown OS."
+  #endif
+
+  //////////////////////////////////////////////////////////////////////////
+  //////////////////////////// GLEW header files ///////////////////////////
+  //////////////////////////////////////////////////////////////////////////
+  #include <GL/glew.h>
+
+  //////////////////////////////////////////////////////////////////////////
+  //////////////////////////// GLFW header files ///////////////////////////
+  //////////////////////////////////////////////////////////////////////////
+  #include <GLFW/glfw3.h>
+  #include <GLFW/glfw3native.h>
+
+  //////////////////////////////////////////////////////////////////////////
+  /////////////////////////// OpenGL header files //////////////////////////
+  //////////////////////////////////////////////////////////////////////////
+  #ifdef __APPLE__
+    #include <OpenGL/OpenGL.h>
+  #else
+    #include <GL/gl.h>
+  #endif
+
+  //////////////////////////////////////////////////////////////////////////
+  /////////////////////////// OpenCL header files //////////////////////////
+  //////////////////////////////////////////////////////////////////////////
+  #ifdef __APPLE__
+    #include <OpenCL/opencl.h>
+  #else
+    #include <CL/cl.h>
+    #include <CL/cl_gl.h>
+  #endif
 
   #include "path.hpp"
   #include "info.hpp"
@@ -31,8 +76,6 @@
   #include "utilities.hpp"
 
   #include "program.hpp"
-  */
-
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////// "NEUTRINO" CLASS //////////////////////////////
@@ -49,11 +92,6 @@
       void    ascii_spin_stop();
 
     public:
-      opengl* opengl_context;                                                   // The OpenGL context object.
-      window* gui_window;                                                       // The gui window object.
-      font*   gui_font;                                                         // The gui font object.
-      opencl* opencl_context;                                                   // The OpenCL contxet object.
-
       path*   neutrino_path;                                                    // NEUTRINO_PATH environmental variable.
       double  tic;                                                              // Tic time [ms].
       double  toc;                                                              // Toc time [ms].
