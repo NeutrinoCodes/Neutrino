@@ -85,8 +85,22 @@ const char* color4::get_error(cl_int loc_error)
   }
 }
 
-void color4::init(neutrino* loc_neutrino, int loc_data_number)
+void color4::check_error(cl_int loc_error)
 {
+  if(loc_error != CL_SUCCESS)                                                   // Checking local error code...
+  {
+    printf("\nError:  %s\n", get_error(loc_error));                             // Printing error message...
+    exit(EXIT_FAILURE);                                                         // Exiting...
+  }
+}
+
+void color4::init(neutrino* loc_neutrino, cl_ulong loc_data_number)
+{
+  cl_int    loc_error;                                                          // Local error code.
+  cl_ulong  i;                                                                  // Index.
+
+  printf("Action: initializing \"color4\" object... ");                         // Printing message...
+
   r = new GLfloat[loc_data_number];                                             // "r" data array.
   g = new GLfloat[loc_data_number];                                             // "g" data array.
   b = new GLfloat[loc_data_number];                                             // "b" data array.
@@ -116,71 +130,133 @@ void color4::init(neutrino* loc_neutrino, int loc_data_number)
     data[4*i + 3] = a[i];                                                       // Filling "w"...
   }
 
-  glGenVertexArrays(1, &vao);                                                   // Generating VAO...
-  glBindVertexArray(vao);                                                       // Binding VAO...
-  glGenBuffers(1, &vbo);                                                        // Generating VBO...
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);                                           // Binding VBO...
-  glBufferData(GL_ARRAY_BUFFER, 4*sizeof(GLfloat)*(size), data, GL_DYNAMIC_DRAW); // Creating and initializing a buffer object's data store...
-  glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);                                           // Binding VBO...
-  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
-  buffer = clCreateFromGLBuffer(opencl_context, CL_MEM_READ_WRITE, vbo, &err);  // Creating OpenCL buffer from OpenGL buffer...
+  // Generating VAO:
+  glGenVertexArrays             (
+                                  1,                                            // # of VAOs to generate.
+                                  &vao                                          // VAOs array.
+                                );
+
+  // Binding VAO:
+  glBindVertexArray             (
+                                  vao                                           // VAO to bind.
+                                );
+
+  // Generating VBO:
+  glGenBuffers                  (
+                                  1,                                            // # of VBOs to generate.
+                                  &vbo                                          // VBOs array.
+                                );
+
+  // Binding VBO:
+  glBindBuffer                  (
+                                  GL_ARRAY_BUFFER,                              // VBO target.
+                                  vbo                                           // VBO to bind.
+                                );
+
+  // Creating and initializing a buffer object's data store:
+  glBufferData                  (
+                                  GL_ARRAY_BUFFER,                              // VBO target.
+                                  4*sizeof(GLfloat)*(size),                     // VBO size.
+                                  data,                                         // VBO data.
+                                  GL_DYNAMIC_DRAW                               // VBO usage.
+                                );
+
+  // Enabling "layout = 1" attribute in vertex shader:
+  glEnableVertexAttribArray     (
+                                  LAYOUT_1                                      // VAO index.
+                                );
+
+  // Binding VBO:
+  glBindBuffer                  (
+                                  GL_ARRAY_BUFFER,                              // VBO target.
+                                  vbo                                           // VBO to bind.
+                                );
+
+  // Specifying the format for "layout = 1" attribute in vertex shader:
+  glVertexAttribPointer         (
+                                  LAYOUT_1,                                     // VAO index.
+                                  4,                                            // VAO's # of components.
+                                  GL_FLOAT,                                     // Data type.
+                                  GL_FALSE,                                     // Not using normalized numbers.
+                                  0,                                            // Data stride.
+                                  0                                             // Data offset.
+                                );
+
+  // Creating OpenCL buffer from OpenGL buffer:
+  buffer = clCreateFromGLBuffer (
+                                  opencl_context,                               // OpenCL context.
+                                  CL_MEM_READ_WRITE,                            // Memory flags.
+                                  vbo,                                          // VBO.
+                                  &loc_error                                    // Returned error.
+                                );
 
   delete[] data;                                                                // Deleting array for unfolded data...
 
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
+  check_error(loc_error);                                                       // Checking returned error code...
+
+  printf("DONE!\n");                                                            // Printing message...
 }
 
-void color4::set(kernel* loc_kernel, int loc_kernel_arg)
+void color4::set(kernel* loc_kernel, cl_ulong loc_kernel_arg)
 {
-  err = clSetKernelArg(loc_kernel->kernel_id, loc_kernel_arg, sizeof(cl_mem), &buffer);      // Setting buffer as OpenCL kernel argument...
+  cl_int  loc_error;                                                            // Local error code.
 
-  if(err < 0)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(EXIT_FAILURE);
-  }
+  // Setting buffer as OpenCL kernel argument:
+  loc_error = clSetKernelArg      (
+                                    loc_kernel->kernel_id,                      // Kernel.
+                                    loc_kernel_arg,                             // Kernel argument index.
+                                    sizeof(cl_mem),                             // Kernel argument size.
+                                    &buffer                                     // Kernel argument value.
+                                  );
+
+  check_error(loc_error);                                                       // Checking returned error code...
 }
 
-void color4::push(queue* loc_queue, kernel* loc_kernel, int loc_kernel_arg)
+void color4::push(queue* loc_queue, kernel* loc_kernel, cl_ulong loc_kernel_arg)
 {
-  err = clEnqueueAcquireGLObjects(loc_queue->queue_id, 1, &buffer, 0, NULL, NULL);      // Passing "points" to OpenCL kernel...
+  cl_int  loc_error;                                                            // Local error code.
 
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
+  // Passing "points" to OpenCL kernel:
+  loc_error = clEnqueueAcquireGLObjects (
+                                          loc_queue->queue_id,                  // Queue.
+                                          1,                                    // # of memory objects.
+                                          &buffer,                              // Memory object array.
+                                          0,                                    // # of events in event list.
+                                          NULL,                                 // Event list.
+                                          NULL                                  // Event.
+                                        );
+
+  check_error(loc_error);                                                       // Checking returned error code...
 }
 
-void color4::pop(queue* loc_queue, kernel* loc_kernel, int loc_kernel_arg)
+void color4::pop(queue* loc_queue, kernel* loc_kernel, cl_ulong loc_kernel_arg)
 {
-  err = clEnqueueReleaseGLObjects(loc_queue->queue_id, 1, &buffer, 0, NULL, NULL);      // Releasing "points" from OpenCL kernel...
+  cl_int  loc_error;                                                            // Local error code.
 
-  if(err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(err));
-    exit(err);
-  }
+  // Releasing "points" from OpenCL kernel:
+  loc_error = clEnqueueReleaseGLObjects (
+                                          loc_queue->queue_id,                  // Queue.
+                                          1,                                    // # of memory objects.
+                                          &buffer,                              // Memory object array.
+                                          0,                                    // # of events in event list.
+                                          NULL,                                 // Event list.
+                                          NULL                                  // Event.
+                                        );
+
+  check_error(loc_error);                                                       // Checking returned error code...
 }
 
 color4::~color4()
 {
-  printf("Action: releasing \"float1\" object... ");
+  cl_int  loc_error;                                                            // Local error code.
 
-  if(buffer != NULL)
+  printf("Action: releasing \"color4\" object... ");                            // Printing message...
+
+  if(buffer != NULL)                                                            // Checking buffer..
   {
-    err = clReleaseMemObject(buffer);                                           // Releasing OpenCL buffer object...
+    loc_error = clReleaseMemObject(buffer);                                     // Releasing OpenCL buffer object...
 
-    if(err != CL_SUCCESS)
-    {
-      printf("\nError:  %s\n", get_error(err));
-      exit(err);
-    }
+    check_error(loc_error);                                                     // Checking returned error code...
   }
 
   glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
@@ -191,5 +267,5 @@ color4::~color4()
   delete[] b;                                                                   // Releasing "b" data...
   delete[] a;                                                                   // Releasing "a" data...
 
-  printf("DONE!\n");
+  printf("DONE!\n");                                                            // Printing message...
 }
