@@ -1,12 +1,17 @@
 #include "color4.hpp"
 
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////// "COLOR4" CLASS ////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 color4::color4()
 {
 
 }
 
-// PRIVATE METHODS:
-const char* color4::get_error(cl_int loc_error)
+// OpenCL error get function:
+const char* color4::get_error     (
+                                    cl_int loc_error                            // Local error code.
+                                  )
 {
   switch(loc_error)
   {
@@ -85,7 +90,10 @@ const char* color4::get_error(cl_int loc_error)
   }
 }
 
-void color4::check_error(cl_int loc_error)
+// OpenCL error check function:
+void color4::check_error        (
+                                  cl_int loc_error                              // Error code.
+                                )
 {
   if(loc_error != CL_SUCCESS)                                                   // Checking local error code...
   {
@@ -94,9 +102,13 @@ void color4::check_error(cl_int loc_error)
   }
 }
 
-void color4::init(neutrino* loc_neutrino, cl_ulong loc_data_number)
+// Initialization:
+void color4::init               (
+                                  neutrino* loc_neutrino,                       // Neutrino baseline.
+                                  cl_ulong loc_data_number                      // Data number.
+                                )
 {
-  cl_int    loc_error;                                                          // Local error code.
+  cl_int    loc_error;                                                          // Error code.
   cl_ulong  i;                                                                  // Index.
 
   printf("Action: initializing \"color4\" object... ");                         // Printing message...
@@ -197,7 +209,11 @@ void color4::init(neutrino* loc_neutrino, cl_ulong loc_data_number)
   printf("DONE!\n");                                                            // Printing message...
 }
 
-void color4::set(kernel* loc_kernel, cl_ulong loc_kernel_arg)
+// Set kernel argument:
+void color4::set                (
+                                  kernel* loc_kernel,                           // Kernel.
+                                  cl_ulong loc_kernel_arg                       // Kernel argument index.
+                                )
 {
   cl_int  loc_error;                                                            // Local error code.
 
@@ -212,7 +228,12 @@ void color4::set(kernel* loc_kernel, cl_ulong loc_kernel_arg)
   check_error(loc_error);                                                       // Checking returned error code...
 }
 
-void color4::push(queue* loc_queue, kernel* loc_kernel, cl_ulong loc_kernel_arg)
+// Push kernel argument:
+void color4::push               (
+                                  queue* loc_queue,                             // Queue.
+                                  kernel* loc_kernel,                           // Kernel.
+                                  cl_ulong loc_kernel_arg                       // Kernel argument index.
+                                )
 {
   cl_int  loc_error;                                                            // Local error code.
 
@@ -229,7 +250,12 @@ void color4::push(queue* loc_queue, kernel* loc_kernel, cl_ulong loc_kernel_arg)
   check_error(loc_error);                                                       // Checking returned error code...
 }
 
-void color4::pop(queue* loc_queue, kernel* loc_kernel, cl_ulong loc_kernel_arg)
+// Pop kernel argument:
+void color4::pop                (
+                                  queue* loc_queue,                             // Queue.
+                                  kernel* loc_kernel,                           // Kernel.
+                                  cl_ulong loc_kernel_arg                       // Kernel argument index.
+                                )
 {
   cl_int  loc_error;                                                            // Local error code.
 
