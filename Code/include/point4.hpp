@@ -14,15 +14,12 @@
       cl_context        context;                                                // OpenCL context.
 
     public:
-
-
-
       GLfloat*          x;
       GLfloat*          y;
       GLfloat*          z;
       GLfloat*          w;
 
-      int               size;
+      size_t            size;
       GLuint            vao;
       GLuint            vbo;
       cl_mem            buffer;
@@ -30,25 +27,25 @@
                         point4();
 
       void              init  (
-                                cl_context loc_opencl_context,
-                                int loc_data_number
+                                cl_context  loc_opencl_context,
+                                size_t      loc_data_number
                               );
 
       void              set   (
-                                kernel* loc_kernel,
-                                int loc_kernel_arg
+                                kernel*     loc_kernel,
+                                size_t      loc_kernel_arg
                               );
 
       void              push  (
-                                queue* loc_queue,
-                                kernel* loc_kernel,
-                                int loc_kernel_arg
+                                queue*      loc_queue,
+                                kernel*     loc_kernel,
+                                size_t      loc_kernel_arg
                               );
 
       void              pop   (
-                                queue* loc_queue,
-                                kernel* loc_kernel,
-                                int loc_kernel_arg
+                                queue*      loc_queue,
+                                kernel*     loc_kernel,
+                                size_t      loc_kernel_arg
                               );
 
                         ~point4();

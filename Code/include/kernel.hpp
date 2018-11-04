@@ -18,6 +18,15 @@
   class kernel
   {
     private:
+      // OpenCL error get function:
+      const char*       get_error   (
+                                      cl_int loc_error                          // Error code.
+                                    );
+
+      // OpenCL error check function:
+      void              check_error (
+                                      cl_int loc_error                          // Error code.
+                                    );
 
     public:
       cl_kernel         kernel_id;                                              // Kernel id.
