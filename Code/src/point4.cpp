@@ -85,7 +85,10 @@ const char* point4::get_error(cl_int loc_error)
   }
 }
 
-void point4::init(cl_context loc_context, int loc_data_number)
+void point4::init (
+                    cl_context  loc_context,
+                    size_t      loc_data_number
+                  )
 {
   cl_int loc_err;                                                               // Local error.
   int i;                                                                        // Index.
@@ -138,7 +141,10 @@ void point4::init(cl_context loc_context, int loc_data_number)
   }
 }
 
-void point4::set(kernel* loc_kernel, int loc_kernel_arg)
+void point4::set  (
+                    kernel* loc_kernel,
+                    size_t  loc_kernel_arg
+                  )
 {
   cl_int loc_err;                                                               // Local error.
 
@@ -151,7 +157,11 @@ void point4::set(kernel* loc_kernel, int loc_kernel_arg)
   }
 }
 
-void point4::push(queue* loc_queue, kernel* loc_kernel, int loc_kernel_arg)
+void point4::push (
+                    queue* loc_queue,
+                    kernel* loc_kernel,
+                    size_t loc_kernel_arg
+                  )
 {
   cl_int loc_err;                                                               // Local error.
 
@@ -164,7 +174,11 @@ void point4::push(queue* loc_queue, kernel* loc_kernel, int loc_kernel_arg)
   }
 }
 
-void point4::pop(queue* loc_queue, kernel* loc_kernel, int loc_kernel_arg)
+void point4::pop  (
+                    queue* loc_queue,
+                    kernel* loc_kernel,
+                    size_t loc_kernel_arg
+                  )
 {
   cl_int loc_err;                                                               // Local error.
 

@@ -80,8 +80,6 @@
   #include "linear_algebra.hpp"
   #include "projective_geometry.hpp"
 
-  #include "utilities.hpp"
-
   #include "program.hpp"
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -108,32 +106,41 @@
       cl_device_id      device_id;                                              // OpenCL device id.
 
                         neutrino();
+
+      // Initialization:
       void              init();
+
+      // Get "tic" time:
       void              get_tic();
+
+      // Get "toc" time:
       void              get_toc();
 
+      // Load file:
       void              load_file     (
-                                        char*       neutrino_path,
                                         const char* file_name,
                                         char**      file_buffer,
                                         size_t*     file_size
-                                      )
+                                      );
 
+      // Write file:
       void              write_file    (
                                         const char* file_name,
                                         char*       file_buffer
-                                      )
+                                      );
 
+      // Free file:
       void              free_file     (
                                         char*       buffer
-                                      )
+                                      );
 
+      // Query numeric input from stdin:
       int               query_numeric (
                                         const char* caption,
                                         int         min,
                                         int         max
-                                      )
-                                      
+                                      );
+
                         ~neutrino();
   };
 

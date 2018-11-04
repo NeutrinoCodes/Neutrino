@@ -240,14 +240,11 @@ void neutrino::get_toc()
   ascii_spin();
 }
 
-void neutrino::load_file(char* neutrino_path, const char* file_name, char** file_buffer, size_t* file_size)
+void neutrino::load_file(const char* file_name, char** file_buffer, size_t* file_size)
 {
 	FILE* handle;
-  char full_name[32768];
 
-  snprintf(full_name, sizeof full_name, "%s%s", neutrino_path, file_name);
-
-  handle = fopen(full_name, "rb");
+  handle = fopen(file_name, "rb");
 
   if(handle == NULL)
   {

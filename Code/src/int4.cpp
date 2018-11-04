@@ -91,7 +91,7 @@ const char* int4::get_error     (
 }
 
 // OpenCL error check function:
-void int4::check_error        (
+void int4::check_error          (
                                   cl_int loc_error                              // Error code.
                                 )
 {
@@ -103,13 +103,13 @@ void int4::check_error        (
 }
 
 // Initialization:
-void int4::init               (
+void int4::init                 (
                                   neutrino* loc_neutrino,                       // Neutrino baseline.
-                                  cl_ulong loc_data_number                      // Data number.
+                                  size_t    loc_data_number                     // Data number.
                                 )
 {
   cl_int    loc_error;                                                          // Error code.
-  cl_ulong  i;                                                                  // Index.
+  size_t    i;                                                                  // Index.
 
   printf("Action: initializing \"float4\" object... ");                         // Printing message...
 
@@ -210,9 +210,9 @@ void int4::init               (
 }
 
 // Set kernel argument:
-void int4::set                (
+void int4::set                  (
                                   kernel* loc_kernel,                           // Kernel.
-                                  cl_ulong loc_kernel_arg                       // Kernel argument index.
+                                  size_t   loc_kernel_arg                       // Kernel argument index.
                                 )
 {
   cl_int  loc_error;                                                            // Local error code.
@@ -229,10 +229,10 @@ void int4::set                (
 }
 
 // Push kernel argument:
-void int4::push               (
-                                  queue* loc_queue,                             // Queue.
+void int4::push                 (
+                                  queue*  loc_queue,                            // Queue.
                                   kernel* loc_kernel,                           // Kernel.
-                                  cl_ulong loc_kernel_arg                       // Kernel argument index.
+                                  size_t  loc_kernel_arg                        // Kernel argument index.
                                 )
 {
   cl_int  loc_error;                                                            // Local error code.
@@ -251,10 +251,10 @@ void int4::push               (
 }
 
 // Pop kernel argument:
-void int4::pop                (
-                                  queue* loc_queue,                             // Queue.
+void int4::pop                  (
+                                  queue*  loc_queue,                            // Queue.
                                   kernel* loc_kernel,                           // Kernel.
-                                  cl_ulong loc_kernel_arg                       // Kernel argument index.
+                                  size_t  loc_kernel_arg                        // Kernel argument index.
                                 )
 {
   cl_int  loc_error;                                                            // Local error code.

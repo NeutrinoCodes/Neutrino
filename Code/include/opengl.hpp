@@ -40,6 +40,7 @@
       void          init(neutrino* loc_neutrino);                               // OpenGL initialization.
 
       GLuint        compile_shader  (
+                                      neutrino*   loc_neutrino,
                                       const char* loc_shader_filename,
                                       shader_type loc_shader_type
                                     );

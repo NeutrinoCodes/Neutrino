@@ -105,11 +105,11 @@ void color4::check_error        (
 // Initialization:
 void color4::init               (
                                   neutrino* loc_neutrino,                       // Neutrino baseline.
-                                  cl_ulong loc_data_number                      // Data number.
+                                  size_t    loc_data_number                     // Data number.
                                 )
 {
   cl_int    loc_error;                                                          // Error code.
-  cl_ulong  i;                                                                  // Index.
+  size_t    i;                                                                  // Index.
 
   printf("Action: initializing \"color4\" object... ");                         // Printing message...
 
@@ -212,7 +212,7 @@ void color4::init               (
 // Set kernel argument:
 void color4::set                (
                                   kernel* loc_kernel,                           // Kernel.
-                                  cl_ulong loc_kernel_arg                       // Kernel argument index.
+                                  size_t  loc_kernel_arg                        // Kernel argument index.
                                 )
 {
   cl_int  loc_error;                                                            // Local error code.
@@ -230,9 +230,9 @@ void color4::set                (
 
 // Push kernel argument:
 void color4::push               (
-                                  queue* loc_queue,                             // Queue.
+                                  queue*  loc_queue,                            // Queue.
                                   kernel* loc_kernel,                           // Kernel.
-                                  cl_ulong loc_kernel_arg                       // Kernel argument index.
+                                  size_t  loc_kernel_arg                        // Kernel argument index.
                                 )
 {
   cl_int  loc_error;                                                            // Local error code.
@@ -252,9 +252,9 @@ void color4::push               (
 
 // Pop kernel argument:
 void color4::pop                (
-                                  queue* loc_queue,                             // Queue.
+                                  queue*  loc_queue,                            // Queue.
                                   kernel* loc_kernel,                           // Kernel.
-                                  cl_ulong loc_kernel_arg                       // Kernel argument index.
+                                  size_t  loc_kernel_arg                        // Kernel argument index.
                                 )
 {
   cl_int  loc_error;                                                            // Local error code.

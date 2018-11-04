@@ -11,7 +11,7 @@ opengl::opengl()
 }
 
 // PRIVATE METHODS:
-GLuint opengl::compile_shader(const char* loc_shader_filename, shader_type loc_shader_type)
+GLuint opengl::compile_shader(neutrino* loc_neutrino, const char* loc_shader_filename, shader_type loc_shader_type)
 {
   GLuint    shader;                                                             // Shader.
   char*     shader_source;                                                      // Shader source.
@@ -19,14 +19,23 @@ GLuint opengl::compile_shader(const char* loc_shader_filename, shader_type loc_s
   GLint 		success;                                                            // "GL_COMPILE_STATUS" flag.
   GLchar*		log;                                                                // Buffer for OpenGL error log.
   GLsizei 	log_size;                                                           // Size of OpenGL error log.
+  char      shader_fullname[32768];                                             // Shader full file name.
+
+  // Adding NEUTRINO_PATH to relative path file name:
+  snprintf  (
+              shader_fullname,                                                  // Destination string.
+              sizeof shader_fullname,                                           // Size of destination string.
+              "%s%s",                                                           // Merging two strings.
+              loc_neutrino->neutrino_path,                                      // Source string 1 (NEUTRINO_PATH).
+              loc_shader_filename                                               // Source string 2 (relative path).
+            );
 
   // Loading shader from file:
-  load_file (
-              neutrino_path->value,
-              shader_filename,
-              &shader_source,
-              &shader_size
-            );
+  loc_neutrino->load_file (
+                            shader_fullname,                                    // Shader file.
+                            &shader_source,                                     // Shader buffer.
+                            &shader_size                                        // Shader buffer size.
+                          );
 
   switch(loc_shader_type)
   {
@@ -58,7 +67,7 @@ GLuint opengl::compile_shader(const char* loc_shader_filename, shader_type loc_s
     exit(1);                                                                    // Exiting...
   }
 
-  free_file(shader_source);                                                     // Freeing shader source file...
+  loc_neutrino->free_file(shader_source);                                       // Freeing shader source file...
 
   return (shader);
 }
