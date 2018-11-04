@@ -107,11 +107,34 @@
       cl_context        context_id;                                             // OpenCL context id.
       cl_device_id      device_id;                                              // OpenCL device id.
 
-              neutrino();
-      void    init();
-      void    get_tic();
-      void    get_toc();
-              ~neutrino();
+                        neutrino();
+      void              init();
+      void              get_tic();
+      void              get_toc();
+
+      void              load_file     (
+                                        char*       neutrino_path,
+                                        const char* file_name,
+                                        char**      file_buffer,
+                                        size_t*     file_size
+                                      )
+
+      void              write_file    (
+                                        const char* file_name,
+                                        char*       file_buffer
+                                      )
+
+      void              free_file     (
+                                        char*       buffer
+                                      )
+
+      int               query_numeric (
+                                        const char* caption,
+                                        int         min,
+                                        int         max
+                                      )
+                                      
+                        ~neutrino();
   };
 
 #endif
