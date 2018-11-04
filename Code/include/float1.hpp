@@ -4,6 +4,8 @@
 #define float1_hpp
 
   #include "neutrino.hpp"
+  #include "kernel.hpp"
+  #include "queue.hpp"
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// "FLOAT1" CLASS ///////////////////////////////
@@ -11,42 +13,55 @@
   class float1
   {
     private:
-      const char*       get_error(cl_int loc_error);
-      cl_context        context;                                                // OpenCL context.
+      // OpenCL error get function:
+      const char*         get_error     (
+                                          cl_int      loc_error                 // Local error code.
+                                        );
+
+      // OpenCL error check function:
+      void                check_error   (
+                                          cl_int      loc_error                 // Local error code.
+                                        );
+
+      cl_context          opencl_context;                                       // OpenCL context.
 
     public:
-      cl_float*         x;                                                      // "x" data.
+      GLfloat*            x;                                                    // "x" data.
 
-      int               size;                                                   // Data size [#].
-      GLuint            vao;                                                    // OpenGL Vertex Array Object.
-      GLuint            vbo;                                                    // OpenGL Vertex Buffer Object.
-      cl_mem            buffer;                                                 // OpenCL memory buffer.
+      cl_ulong            size;                                                 // Data size.
+      GLuint              vao;                                                  // OpenGL data VAO.
+      GLuint              vbo;                                                  // OpenGL data VBO.
+      cl_mem              buffer;                                               // OpenGL data memory buffer.
 
-                        float1();
+                          float1();
 
-      void              init  (
-                                cl_context loc_opencl_context,
-                                int loc_data_number
-                              );
+      // Initialization:
+      void                init          (
+                                          neutrino*   loc_neutrino,             // Neutrino baseline.
+                                          cl_ulong    loc_data_number           // Data size.
+                                        );
 
-      void              set   (
-                                kernel* loc_kernel,
-                                int loc_kernel_arg
-                              );
+      // Set kernel argument:
+      void                set           (
+                                          kernel*     loc_kernel,               // OpenCL kernel.
+                                          cl_ulong    loc_kernel_arg            // OpenCL kernel argument index.
+                                        );
 
-      void              push  (
-                                queue* loc_queue,
-                                kernel* loc_kernel,
-                                int loc_kernel_arg
-                              );
+      // Push kernel argument:
+      void                push          (
+                                          queue*      loc_queue,                // OpenCL queue.
+                                          kernel*     loc_kernel,               // OpenCL kernel.
+                                          cl_ulong    loc_kernel_arg            // OpenCL kernel argument index.
+                                        );
 
-      void              pop   (
-                                queue* loc_queue,
-                                kernel* loc_kernel,
-                                int loc_kernel_arg
-                              );
+      // Pop kernel argument:
+      void                pop           (
+                                          queue*      loc_queue,                // OpenCL queue.
+                                          kernel*     loc_kernel,               // OpenCL kernel.
+                                          cl_ulong    loc_kernel_arg            // OpenCL kernel argument index.
+                                        );
 
-                        ~float1();
+                          ~float1();
   };
 
 #endif

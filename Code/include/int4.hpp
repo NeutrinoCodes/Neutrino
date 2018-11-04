@@ -3,36 +3,69 @@
 #ifndef int4_hpp
 #define int4_hpp
 
+  #include "neutrino.hpp"
+  #include "kernel.hpp"
+  #include "queue.hpp"
+
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// "INT4" CLASS ////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   class int4
   {
     private:
-      const char*     get_error(cl_int loc_error);
-      int               err;
-      unsigned int      i;
-      GLint*            data;                                                   // Declaring unfolded data array...
-      cl_context        context;                                                // OpenCL context.
+      // OpenCL error get function:
+      const char*         get_error     (
+                                          cl_int      loc_error                 // Local error code.
+                                        );
+
+      // OpenCL error check function:
+      void                check_error   (
+                                          cl_int      loc_error                 // Local error code.
+                                        );
+
+      cl_long*            data;                                                 // Wrapped data.
+      cl_context          opencl_context;                                       // OpenCL context.
 
     public:
-      int4(cl_context thecontext, int num_data);
-      ~int4();
+      cl_long*            x;                                                    // "x" data.
+      cl_long*            y;                                                    // "y" data.
+      cl_long*            z;                                                    // "z" data.
+      cl_long*            w;                                                    // "w" data.
 
-      cl_int*      x;
-      cl_int*      y;
-      cl_int*      z;
-      cl_int*      w;
+      cl_ulong            size;                                                 // Data size.
+      GLuint              vao;                                                  // OpenGL data VAO.
+      GLuint              vbo;                                                  // OpenGL data VBO.
+      cl_mem              buffer;                                               // OpenGL data memory buffer.
 
-      int       size;
-      GLuint    vao;
-      GLuint    vbo;
-      cl_mem    buffer;
+                          int4();
 
-      void      init();
-      void      set(kernel* k, int kernel_arg);
-      void      push(queue* q, kernel* k, int kernel_arg);
-      void      pop(queue* q, kernel* k, int kernel_arg);
+      // Initialization:
+      void                init          (
+                                          neutrino*   loc_neutrino,             // Neutrino baseline.
+                                          cl_ulong    loc_data_number           // Data size.
+                                        );
+
+      // Set kernel argument:
+      void                set           (
+                                          kernel*     loc_kernel,               // OpenCL kernel.
+                                          cl_ulong    loc_kernel_arg            // OpenCL kernel argument index.
+                                        );
+
+      // Push kernel argument:
+      void                push          (
+                                          queue*      loc_queue,                // OpenCL queue.
+                                          kernel*     loc_kernel,               // OpenCL kernel.
+                                          cl_ulong    loc_kernel_arg            // OpenCL kernel argument index.
+                                        );
+
+      // Pop kernel argument:
+      void                pop           (
+                                          queue*      loc_queue,                // OpenCL queue.
+                                          kernel*     loc_kernel,               // OpenCL kernel.
+                                          cl_ulong    loc_kernel_arg            // OpenCL kernel argument index.
+                                        );
+
+                          ~int4();
   };
 
 #endif

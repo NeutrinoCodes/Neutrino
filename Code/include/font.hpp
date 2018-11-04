@@ -3,6 +3,8 @@
 #ifndef font_hpp
 #define font_hpp
 
+  #include "neutrino.hpp"
+
   #define ASCII_33 33
   #define ASCII_126 126
   #define ASCII_SCALE 0.01

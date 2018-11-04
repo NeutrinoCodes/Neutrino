@@ -3,32 +3,65 @@
 #ifndef int1_hpp
 #define int1_hpp
 
+  #include "neutrino.hpp"
+  #include "kernel.hpp"
+  #include "queue.hpp"
+
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// "INT1" CLASS ////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   class int1
   {
     private:
-      const char*     get_error(cl_int loc_error);
-      int               err;
-      unsigned int      i;
-      cl_context        context;                                                // OpenCL context.
+      // OpenCL error get function:
+      const char*         get_error     (
+                                          cl_int      loc_error                 // Local error code.
+                                        );
+
+      // OpenCL error check function:
+      void                check_error   (
+                                          cl_int      loc_error                 // Local error code.
+                                        );
+
+      cl_context          opencl_context;                                       // OpenCL context.
 
     public:
-      int1(cl_context thecontext, int num_data);
-      ~int1();
+      cl_long*            x;                                                    // "x" data.
 
-      cl_int*      x;
+      cl_ulong            size;                                                 // Data size.
+      GLuint              vao;                                                  // OpenGL data VAO.
+      GLuint              vbo;                                                  // OpenGL data VBO.
+      cl_mem              buffer;                                               // OpenGL data memory buffer.
 
-      int       size;
-      GLuint    vao;
-      GLuint    vbo;
-      cl_mem    buffer;
+                          int1();
 
-      void      init();
-      void      set(kernel* k, int kernel_arg);
-      void      push(queue* q, kernel* k, int kernel_arg);
-      void      pop(queue* q, kernel* k, int kernel_arg);
+      // Initialization:
+      void                init          (
+                                          neutrino*   loc_neutrino,             // Neutrino baseline.
+                                          cl_ulong    loc_data_number           // Data size.
+                                        );
+
+      // Set kernel argument:
+      void                set           (
+                                          kernel*     loc_kernel,               // OpenCL kernel.
+                                          cl_ulong    loc_kernel_arg            // OpenCL kernel argument index.
+                                        );
+
+      // Push kernel argument:
+      void                push          (
+                                          queue*      loc_queue,                // OpenCL queue.
+                                          kernel*     loc_kernel,               // OpenCL kernel.
+                                          cl_ulong    loc_kernel_arg            // OpenCL kernel argument index.
+                                        );
+
+      // Pop kernel argument:
+      void                pop           (
+                                          queue*      loc_queue,                // OpenCL queue.
+                                          kernel*     loc_kernel,               // OpenCL kernel.
+                                          cl_ulong    loc_kernel_arg            // OpenCL kernel argument index.
+                                        );
+
+                          ~int1();
   };
 
 #endif
