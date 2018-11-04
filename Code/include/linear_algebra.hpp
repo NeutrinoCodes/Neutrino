@@ -3,6 +3,15 @@
 #ifndef linear_algebra_hpp
 #define linear_algebra_hpp
 
+  //////////////////////////////////////////////////////////////////////////
+  //////////////////////// Standard C header files /////////////////////////
+  //////////////////////////////////////////////////////////////////////////
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <math.h>
+  #include <errno.h>
+
   /// **Dot product of two 3D vectors:**
   float   dot(float a[3], float b[3]);
 
