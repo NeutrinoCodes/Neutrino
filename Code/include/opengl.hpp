@@ -34,6 +34,9 @@
       GLuint        build_shader();                                             // OpenGL shader build.
 
     public:
+      GLuint        point_shader;                                               // OpenGL "point" shader.
+      GLuint        text_shader;                                                // OpenGL "text" shader.
+
                     opengl();
 
       void          init            (
