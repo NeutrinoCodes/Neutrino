@@ -20,6 +20,10 @@ int main()
   font*     gui_font        = new font();                                       // The gui font object.
   opencl*   opencl_context  = new opencl();                                     // The OpenCL context object.
 
+  queue*    q1              = new queue();                                      // OpenCL queue.
+  kernel*   k1              = new kernel();                                     // OpenCL kernel.
+  kernel*   k2              = new kernel();                                     // OpenCL kernel.
+
   baseline->init();                                                             // Initializing neutrino...
   opengl_context->init(baseline);                                               // Initializing OpenGL context...
   gui_window->init(baseline, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);        // Initializing gui window...
@@ -30,10 +34,6 @@ int main()
   baseline->device_id = opencl_context->existing_device[opencl_context->choosen_device]->device_id;
 
   // SETUP:
-  queue*    q1               = new queue();                                     // OpenCL queue.
-  kernel*   k1               = new kernel();                                    // OpenCL kernel.
-  kernel*   k2               = new kernel();                                    // OpenCL kernel.
-
   q1->init(baseline);
 
   while (!baseline->gui_window->closed())                                       // Opening window...
