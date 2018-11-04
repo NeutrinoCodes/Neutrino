@@ -17,7 +17,7 @@ void kernel::init (
                     neutrino* loc_neutrino,
                     char* loc_kernel_filename,
                     size_t* loc_kernel_size,
-                    cl_uint loc_kernel_dimension,
+                    cl_uint loc_kernel_dimension
                   )
 {
   cl_int        loc_err;                                                        // Local error code.
@@ -25,9 +25,9 @@ void kernel::init (
   size_t        loc_kernel_source_size;                                         // Local kernel source size [characters].
   int           i;                                                              // Index.
 
-  file_name = kernel_filename;
-  size      = kernel_size;
-  dimension = kernel_dimension;
+  file_name = loc_kernel_filename;
+  size      = loc_kernel_size;
+  dimension = loc_kernel_dimension;
 
   printf("Action: loading OpenCL kernel source from file... ");
 
