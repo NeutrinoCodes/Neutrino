@@ -43,7 +43,7 @@
       cl_context              context_id;
 
             opencl();
-      void  init(GLFWwindow* loc_glfw_window, compute_device_type loc_device_type);
+      void  init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_device_type loc_device_type);
             ~opencl();
 
   };

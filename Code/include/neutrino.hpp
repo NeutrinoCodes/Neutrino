@@ -89,6 +89,7 @@
     private:
       int               ascii_spin_phase;
       int               ascii_spin_n_old;
+      path*             temp_neutrino_path;
 
       path*             get_neutrino_path();
       double            get_cpu_time();

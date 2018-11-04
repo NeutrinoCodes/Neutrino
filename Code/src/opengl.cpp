@@ -26,7 +26,7 @@ GLuint opengl::compile_shader(neutrino* loc_neutrino, const char* loc_shader_fil
               shader_fullname,                                                  // Destination string.
               sizeof shader_fullname,                                           // Size of destination string.
               "%s%s",                                                           // Merging two strings.
-              loc_neutrino->neutrino_path,                                      // Source string 1 (NEUTRINO_PATH).
+              loc_neutrino->neutrino_path->value,                               // Source string 1 (NEUTRINO_PATH).
               loc_shader_filename                                               // Source string 2 (relative path).
             );
 
@@ -72,14 +72,14 @@ GLuint opengl::compile_shader(neutrino* loc_neutrino, const char* loc_shader_fil
   return (shader);
 }
 
-GLuint opengl::build_shader(const char* filename_vertex, const char* filename_fragment)
+GLuint opengl::build_shader(neutrino* loc_neutrino, const char* filename_vertex, const char* filename_fragment)
 {
   GLuint vertex;                                                                // Vertex shader.
   GLuint fragment;                                                              // Fragment shader.
   GLuint program;                                                               // Shader program.
 
-  vertex = compile_shader(POINT_VERTEX_FILE, VERTEX);                           // Compiling vertex shader...
-  fragment = compile_shader(POINT_FRAGMENT_FILE, FRAGMENT);                     // Compiling fragment shader...
+  vertex = compile_shader(loc_neutrino, POINT_VERTEX_FILE, VERTEX);             // Compiling vertex shader...
+  fragment = compile_shader(loc_neutrino, POINT_FRAGMENT_FILE, FRAGMENT);       // Compiling fragment shader...
   program = glCreateProgram();                                                  // Creating program...
   glBindAttribLocation(program, 0, "point");                                    // Binding "point" to "layout = 0" shader attribute...
   glBindAttribLocation(program, 1, "color");                                    // Binding "color" to "layout = 1" shader attribute...
@@ -96,21 +96,21 @@ void opengl::init(neutrino* loc_neutrino)                                       
   int opengl_ver_major;                                                         // OpenGL version major number.
   int opengl_ver_minor;                                                         // OpenGL version minor number.
   int opengl_msaa;                                                              // OpenGL multisampling antialiasing factor.
-  path* neutrino_path = new path();
 
-  neutrino_path->value = loc_neutrino->neutrino_path->value;
-  neutrino_path->size = loc_neutrino->neutrino_path->size;
+  opengl_ver_major = 4;                                                         // EZOR 04NOV2018: to be generalized by iterative search.
+  opengl_ver_minor = 1;                                                         // EZOR 04NOV2018: to be generalized by iterative search.
+  opengl_msaa = 4;                                                              // EZOR: 3 or 4 sample is good due to the general oversampling-decimation method.
 
   // Initializing GLFW context:
   printf("Action: initializing GLFW... ");
 
   if (glfwInit() == GLFW_TRUE)                                                  // Inititalizing GLFW context...
 	{
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver_major);                      // Initializing GLFW hints... EZOR 05OCT2018: (was 4)
-  	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver_minor);                      // Initializing GLFW hints... EZOR 05OCT2018: (was 1)
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, opengl_ver_major);               // Initializing GLFW hints... EZOR 05OCT2018: (was 4)
+  	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, opengl_ver_minor);               // Initializing GLFW hints... EZOR 05OCT2018: (was 1)
   	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);                        // Initializing GLFW hints...
   	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);              // Initializing GLFW hints...
-  	glfwWindowHint(GLFW_SAMPLES, msaa);                                         // Initializing GLFW hints... EZOR 05OCT2018: (was 4)
+  	glfwWindowHint(GLFW_SAMPLES, opengl_msaa);                                  // Initializing GLFW hints... EZOR 05OCT2018: (was 4)
 
     printf("DONE!\n");
   }
@@ -140,8 +140,8 @@ void opengl::init(neutrino* loc_neutrino)                                       
 
   // Initializing shaders:
   printf("Action: initializing GLSL shaders... ");
-  point_shader = build_shader(POINT_VERTEX_FILE, POINT_FRAGMENT_FILE);
-  text_shader = build_shader(TEXT_VERTEX_FILE, TEXT_FRAGMENT_FILE);
+  point_shader = build_shader(loc_neutrino, POINT_VERTEX_FILE, POINT_FRAGMENT_FILE);
+  text_shader = build_shader(loc_neutrino, TEXT_VERTEX_FILE, TEXT_FRAGMENT_FILE);
   printf("DONE!\n");
 }
 

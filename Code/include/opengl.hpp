@@ -32,24 +32,25 @@
     private:
       GLuint        compile_shader();                                           // OpenGL shader compilation.
       GLuint        build_shader();                                             // OpenGL shader build.
-      path*         neutrino_path;                                              // Neutrino path.
 
     public:
                     opengl();
 
-      void          init(neutrino* loc_neutrino);                               // OpenGL initialization.
+      void          init            (
+                                      neutrino* loc_neutrino
+                                    );                                          // OpenGL initialization.
 
       GLuint        compile_shader  (
-                                      neutrino*   loc_neutrino,
+                                      neutrino* loc_neutrino,
                                       const char* loc_shader_filename,
                                       shader_type loc_shader_type
                                     );
 
       GLuint        build_shader    (
+                                      neutrino* loc_neutrino,
                                       const char* loc_filename_vertex,
                                       const char* loc_filename_fragment
                                     );
-
 
                     ~opengl();
   };

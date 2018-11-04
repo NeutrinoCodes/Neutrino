@@ -22,12 +22,12 @@ neutrino::neutrino()
 // PRIVATE METHODS:
 path* neutrino::get_neutrino_path()
 {
-  path* loc_neutrino_path = new path();
+  path* temp_neutrino_path = new path;
 
-  loc_neutrino_path->value = getenv("NEUTRINO_PATH");                           // Getting neutrino path...
-  loc_neutrino_path->size = strlen(loc_neutrino_path->value) + 1;               // Getting neutrino path length...
+  temp_neutrino_path->value = getenv("NEUTRINO_PATH");                          // Getting neutrino path...
+  temp_neutrino_path->size = strlen(temp_neutrino_path->value) + 1;             // Getting neutrino path length...
 
-  if (loc_neutrino_path->value != NULL)
+  if (temp_neutrino_path->value != NULL)
   {
     printf("Action: loading NEUTRINO_PATH environmental variable...\n");
   }
@@ -37,7 +37,7 @@ path* neutrino::get_neutrino_path()
     exit(1);
   }
 
-  return(loc_neutrino_path);
+  return(temp_neutrino_path);
 }
 
 double neutrino::get_cpu_time()
@@ -161,7 +161,7 @@ void neutrino::ascii_spin()
   switch (ascii_spin_phase)
   {
     case 0:
-      printf("Action: running OpenCL program... %d us", text, loop_time);
+      printf("Action: running OpenCL program... %d us", loop_time);
       fflush(stdout);
       ascii_spin_n_old = n;
       break;
@@ -222,7 +222,7 @@ void neutrino::ascii_spin_stop()
 }
 
 // PUBLIC METHODS:
-void neutrino::init();
+void neutrino::init()
 {
   ascii_spin_phase = 0;                                                         // Initializing ascii_spin_phase...
   ascii_spin_n_old = 0;                                                         // Initializing ascii_spin_n_old...
@@ -303,8 +303,8 @@ int neutrino::query_numeric(const char* caption, int min, int max)
 
   while (!valid_choice)                                                         // Checking choice validity...
   {
-    fgets(user_input, 128, stdin);                                              // Reading string from stdin...
-    numeric = strtol(user_input, NULL, 10);                                     // Parsing stdin...
+    fgets(buffer, 128, stdin);                                                  // Reading string from stdin...
+    numeric = strtol(buffer, NULL, 10);                                         // Parsing stdin...
 
     if ((min <= numeric) && (numeric <= max) && (errno != ERANGE))
     {
@@ -328,9 +328,5 @@ neutrino::~neutrino()
 {
   ascii_spin_stop();
 
-  delete opengl_context;
-  delete opencl_context;
-  delete gui_window;
-  delete gui_font;
-  delete loc_neutrino_path;
+  delete temp_neutrino_path;
 }
