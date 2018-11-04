@@ -86,7 +86,7 @@ const char* point4::get_error(cl_int loc_error)
 }
 
 void point4::init (
-                    cl_context  loc_context,
+                    cl_context  loc_opencl_context,
                     size_t      loc_data_number
                   )
 {
