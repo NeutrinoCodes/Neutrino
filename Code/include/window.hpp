@@ -21,9 +21,9 @@
   class window
   {
     private:
-      double            mouse_x_old;                                                  // Mouse x-coordinate backup [px].
-      double            mouse_y_old;                                                  // Mouse y-coordinate backup [px].
-      bool 			        arcball_on;                                                   // Arcball activation flag.
+      double            mouse_x_old;                                            // Mouse x-coordinate backup [px].
+      double            mouse_y_old;                                            // Mouse y-coordinate backup [px].
+      bool 			        arcball_on;                                             // Arcball activation flag.
 
       // Rotation matrix backup:
       float             R_old[16] = {1.0, 0.0, 0.0, 0.0,

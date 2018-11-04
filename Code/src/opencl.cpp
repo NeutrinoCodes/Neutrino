@@ -172,16 +172,16 @@ cl_uint opencl::get_num_devices(cl_uint loc_platform_index)
     exit(loc_err);
   }
 
-  printf("\n        Found %d device(s)!\n", loc_device_number);
+  printf("\n        Found %d device(s)!\n", loc_devices_number);
   printf("        DONE!\n");
 
-  return(loc_device_number);                                                    // Returning local number of existing OpenCL GPU devices...
+  return(loc_devices_number);                                                   // Returning local number of existing OpenCL GPU devices...
 }
 
 cl_uint opencl::get_devices(cl_uint loc_platform_index)
 {
   cl_int          loc_err;
-  cl_uint         loc_device_number;
+  cl_uint         loc_devices_number;
   cl_device_id*   loc_device_id;
   int             i;
 
@@ -215,7 +215,7 @@ cl_uint opencl::get_devices(cl_uint loc_platform_index)
 }
 
 // PUBLIC METHODS:
-void opencl::init(GLFWwindow* loc_glfw_window, compute_device_type loc_device_type)
+void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_device_type loc_device_type)
 {
   cl_int        loc_err;                                                        // Local error code.
   cl_uint       loc_platform_index;                                             // Local platform index.
@@ -254,13 +254,13 @@ void opencl::init(GLFWwindow* loc_glfw_window, compute_device_type loc_device_ty
 
   platforms_number = get_platforms();                                           // Getting number of existing platforms [#]...
 
-  for(loc_platform_index = 0; loc_platform_index < platforms_number; loc_plat_index++)
+  for(loc_platform_index = 0; loc_platform_index < platforms_number; loc_platform_index++)
   {
-    printf("        PLATFORM #%d:\n", plat_index + 1);
-    printf("        --> profile: %s\n", existing_platform[plat_index]->profile->value);
-    printf("        --> version: %s\n", existing_platform[plat_index]->version->value);
-    printf("        --> name:    %s\n", existing_platform[plat_index]->name->value);
-    printf("        --> vendor:  %s\n", existing_platform[plat_index]->vendor->value);
+    printf("        PLATFORM #%d:\n", loc_platform_index + 1);
+    printf("        --> profile: %s\n", existing_platform[loc_platform_index]->profile->value);
+    printf("        --> version: %s\n", existing_platform[loc_platform_index]->version->value);
+    printf("        --> name:    %s\n", existing_platform[loc_platform_index]->name->value);
+    printf("        --> vendor:  %s\n", existing_platform[loc_platform_index]->vendor->value);
     printf("\n");
   }
 
@@ -269,7 +269,7 @@ void opencl::init(GLFWwindow* loc_glfw_window, compute_device_type loc_device_ty
   if(platforms_number > 1)
   {
     printf("Action: please choose a platform [1...%d", loc_platform_index);
-    choosen_platform = query_numeric(" + enter]: ", 1, platforms_number) - 1;
+    choosen_platform = loc_neutrino->query_numeric(" + enter]: ", 1, platforms_number) - 1;
   }
 
   else
@@ -296,7 +296,7 @@ void opencl::init(GLFWwindow* loc_glfw_window, compute_device_type loc_device_ty
   if(devices_number > 1)
   {
     printf("Action: please choose a device [1...%d", loc_device_index);
-    choosen_device = query_numeric(" + enter]: ", 1, devices_number) - 1;
+    choosen_device = loc_neutrino->query_numeric(" + enter]: ", 1, devices_number) - 1;
   }
 
   else
@@ -374,6 +374,8 @@ void opencl::init(GLFWwindow* loc_glfw_window, compute_device_type loc_device_ty
     exit(loc_err);
   }
 
+  free(loc_existing_device_id);                                                 // Freeing local existing device ids...
+
   printf("DONE!\n");                                                            // Printing message...
 }
 
@@ -390,8 +392,6 @@ opencl::~opencl()
     printf("\nError:  %s\n", get_error(loc_err));
     exit(loc_err);
   }
-
-  free(loc_existing_device_id);                                                 // Freeing local existing device ids...
 
   printf("DONE!\n");
 }
