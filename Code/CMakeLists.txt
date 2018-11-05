@@ -31,11 +31,9 @@ src/opengl.cpp
 src/path.cpp
 src/platform.cpp
 src/point4.cpp
-src/program.cpp
 src/projective_geometry.cpp
 src/queue.cpp
 src/text4.cpp
-src/utilities.cpp
 src/window.cpp)
 
 message("Adding an executable with the above sources...")
