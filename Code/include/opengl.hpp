@@ -9,19 +9,6 @@
   #define TEXT_VERTEX_FILE        "/Code/shader/text_vertex.vert"
   #define TEXT_FRAGMENT_FILE      "/Code/shader/text_fragment.frag"
 
-  typedef enum
-  {
-    STYLE_POINT,
-    STYLE_WIREFRAME,
-    STYLE_SHADED
-  } plot_style;
-
-  typedef enum
-  {
-    VERTEX,
-    FRAGMENT
-  } shader_type;
-
   #include "neutrino.hpp"
 
   ////////////////////////////////////////////////////////////////////////////////

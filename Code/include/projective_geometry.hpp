@@ -3,14 +3,8 @@
 #ifndef projective_geometry_hpp
 #define projective_geometry_hpp
 
-  //////////////////////////////////////////////////////////////////////////
-  //////////////////////// Standard C header files /////////////////////////
-  //////////////////////////////////////////////////////////////////////////
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <string.h>
-  #include <math.h>
-  #include <errno.h>
+  #include "neutrino.hpp"
+  #include "linear_algebra.hpp"
 
   void frustum(float F[16], float left, float right, float bottom,
                   float top, float z_near, float z_far);
