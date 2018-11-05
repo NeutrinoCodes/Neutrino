@@ -68,15 +68,16 @@
       }
 
     public:
-      GLFWwindow*       glfw_window;                                                  // Window handle.
-      int               window_sx;                                                    // Window x-size [px].
-      int               window_sy;                                                    // Window y-size [px].
-      double            aspect_ratio;                                                 // Window aspect ratio [].
-      double            mouse_x;                                                      // Mouse x-coordinate [px].
-      double            mouse_y;                                                      // Mouse y-coordinate [px].
-      double		        scroll_x;                                                     // Scroll x-coordinate [px].
-      double		        scroll_y;                                                     // Scroll y-coordinate [px].
-      double		        zoom;                                                         // Zoom coefficient.
+      GLFWwindow*       glfw_window;                                            // Window handle.
+      const char*       title;                                                  // Window title.
+      int               window_size_x;                                          // Window x-size [px].
+      int               window_size_y;                                          // Window y-size [px].
+      double            aspect_ratio;                                           // Window aspect ratio [].
+      double            mouse_x;                                                // Mouse x-coordinate [px].
+      double            mouse_y;                                                // Mouse y-coordinate [px].
+      double		        scroll_x;                                               // Scroll x-coordinate [px].
+      double		        scroll_y;                                               // Scroll y-coordinate [px].
+      double		        zoom;                                                   // Zoom coefficient.
 
       // Arcball quaternion:
       float             q[4]      = {1.0, 0.0, 0.0, 0.0};
@@ -107,45 +108,57 @@
 
                         window();
 
+      // Window initialization:
       void              init            (
-                                          int window_size_x,
-                                          int window_size_y,
-                                          const char* title
-                                        );                                            // Window initialization.
+                                          int         loc_window_size_x,        // Window x-size [px].
+                                          int         loc_window_size_y,        // Window y-size [px].
+                                          const char* loc_title
+                                        );
 
-      bool              closed();                                                     // Window closure.
-      void              clear();                                                      // Window clearance.
-      void              refresh();                                                    // Window refresh.
+      // Window "closed" function:
+      bool              closed();
 
+      // Window "clear" function:
+      void              clear();
+
+       // Window "refresh" function:
+      void              refresh();
+
+       // Key-pressed retpoline:
       auto              key_pressed     (
                                           int key,
                                           int scancode,
                                           int action,
                                           int mods
-                                        )->void;                                      // Key-pressed trampoline.
+                                        )->void;
 
+      // Mouse-pressed retpoline:
       auto              mouse_pressed   (
                                           int button,
                                           int action,
                                           int mods
-                                        )->void;                                      // Mouse-pressed retpoline
+                                        )->void;
 
+      // Mouse-moved retpoline:
       auto              mouse_moved     (
                                           double xpos,
                                           double ypos
-                                        )->void;                                      // Mouse-moved retpoline.
+                                        )->void;
 
+      // Mouse-scrolled retpoline:
       auto              mouse_scrolled  (
                                           double xoffset,
                                           double yoffset
-                                        )->void;                                      // Mouse-scrolled retpoline.
+                                        )->void;
 
+      // Window "plot" function:
       void              plot            (
                                           point4* points,
                                           color4* colors,
                                           plot_style ps
                                         );
 
+      // Window "print" function:
       void              print           (
                                           text4* text
                                         );
