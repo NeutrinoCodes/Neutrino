@@ -8,8 +8,12 @@ window::window()
 
 }
 
-// PRIVATE METHODS:
-void window::grasp(float* p, int x, int y)                                      // Grasp arcball action.
+// Grasp arcball action:
+void window::grasp			(
+													float* p,
+													int x,
+													int y
+												)
 {
 	float  op_sq;																																	// Center "o" to "p" squared distance.
 
@@ -30,7 +34,8 @@ void window::grasp(float* p, int x, int y)                                      
 	}
 }
 
-void window::arcball()                                                          // Arcball computation.
+// Arcball computation:
+void window::arcball()
 {
 	float a[3]; 																															    // Mouse vector, world coordinates.
 	float b[3]; 																															    // Mouse vector, world coordinates.
@@ -50,11 +55,16 @@ void window::arcball()                                                          
 	}
 }
 
-// PUBLIC METHODS:
-auto window::init(int window_size_x, int window_size_y, const char* title)      // Window initialization.
+ // Window initialization:
+auto window::init				(
+													int loc_window_size_x,
+													int loc_window_size_y,
+													const char* loc_title
+												)
 {
-  window_sx = window_size_x;                                                    // Initializing window x-size [px]...
-  window_sy = window_size_y;                                                    // Initializing window y-size [px]...
+  window_size_x = loc_window_size_x;                                            // Initializing window x-size [px]...
+  window_size_y = loc_window_size_y;                                            // Initializing window y-size [px]...
+	title = loc_title;																														// Initializing window title...
   aspect_ratio = = (double)window_size_x/(double)window_size_y;                 // Initializing window aspect ration []...
   mouse_x = 0;                                                                  // Initializing mouse x-coordinate [px]...
   mouse_y = 0;                                                                  // Initializing mouse y-coordinate [px]...
@@ -65,11 +75,13 @@ auto window::init(int window_size_x, int window_size_y, const char* title)      
   zoom = 0;                                                                     // Initializing zoom coefficient...
   arcball_on = false;                                                           // Initializing arcball activation flag...
 
-  glfw_window = glfwCreateWindow(width,                                         // Width.
-                                 height,                                        // Height.
-                                 title,                                         // Title.
-                                 NULL,                                          // Monitor.
-                                 NULL);                                         // Share.
+  glfw_window = glfwCreateWindow	(
+																		window_size_x,                              // Width.
+                                 		window_size_y,                              // Height.
+                                 		title,                                      // Title.
+                                 		NULL,                                       // Monitor.
+                                 		NULL																				// Share.
+																	);
   if (!glfw_window)
 	{
 		printf("Error:  unable to create window!\n");
