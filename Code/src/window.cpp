@@ -192,9 +192,6 @@ auto window::mouse_scrolled(int key, int scancode, int action, int mods)->void  
 
 void window::plot(point4* points, color4* colors, plot_style ps)
 {
-  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
-  GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
-
   multiplicate(V, T, R);                                                        // Setting View_matrix matrix...
 
   switch(ps)
@@ -250,9 +247,6 @@ void window::plot(point4* points, color4* colors, plot_style ps)
 
 void window::print(text4* text)
 {
-  GLuint LAYOUT_0 = 0;                                                          // "layout = 0" attribute in vertex shader.
-  GLuint LAYOUT_1 = 1;                                                          // "layout = 1" attribute in vertex shader.
-
   multiplicate(V, T, R);                                                        // Setting View_matrix matrix...
   glUseProgram(text_shader);                                                    // Using shader...
   glUniformMatrix4fv(glGetUniformLocation(text_shader, "View_matrix"),          // Setting View_matrix matrix on shader...
