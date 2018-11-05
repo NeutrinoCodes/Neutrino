@@ -3,15 +3,6 @@
 #ifndef opencl_hpp
 #define opencl_hpp
 
-  typedef enum
-  {
-    CPU,
-    GPU,
-    ACCELERATOR,
-    DEFAULT,
-    ALL
-  } compute_device_type;
-
   #include "neutrino.hpp"
   #include "platform.hpp"
   #include "device.hpp"

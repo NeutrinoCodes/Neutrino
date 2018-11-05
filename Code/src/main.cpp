@@ -4,19 +4,6 @@
 #define SIZE_WINDOW_Y 600                                                       // Window y-size [px].
 #define WINDOW_NAME "neutrino"                                                  // Window name.
 
-typedef enum
-{
-  STYLE_POINT,
-  STYLE_WIREFRAME,
-  STYLE_SHADED
-} plot_style;
-
-typedef enum
-{
-  VERTEX,
-  FRAGMENT
-} shader_type;
-
 #include "neutrino.hpp"
 #include "opengl.hpp"
 #include "window.hpp"
