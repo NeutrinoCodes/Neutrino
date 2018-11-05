@@ -19,6 +19,34 @@
   #define KERNEL_NAME             "thekernel"
   #define SIZE_TEXT_MAX 128                                                     // Maximum number of characters in a text string.
 
+  typedef enum
+  {
+    STYLE_POINT,
+    STYLE_WIREFRAME,
+    STYLE_SHADED
+  } plot_style;
+
+  typedef enum
+  {
+    VERTEX,
+    FRAGMENT
+  } shader_type;
+
+  typedef enum
+  {
+    WAIT,
+    DONT_WAIT
+  } kernel_mode;
+
+  typedef enum
+  {
+    CPU,
+    GPU,
+    ACCELERATOR,
+    DEFAULT,
+    ALL
+  } compute_device_type;
+
   //////////////////////////////////////////////////////////////////////////
   //////////////////////// Standard C header files /////////////////////////
   //////////////////////////////////////////////////////////////////////////

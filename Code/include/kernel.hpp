@@ -3,12 +3,6 @@
 #ifndef kernel_hpp
 #define kernel_hpp
 
-  typedef enum
-  {
-    WAIT,
-    DONT_WAIT
-  } kernel_mode;
-
   #include "neutrino.hpp"
   #include "queue.hpp"
 
