@@ -13,46 +13,55 @@
   class point4
   {
     private:
-      const char*       get_error(cl_int loc_error);
-      GLfloat*          data;
-      cl_context        context;                                                // OpenCL context.
+      // OpenCL error get function:
+      const char*         get_error     (
+                                          cl_int      loc_error                 // Error code.
+                                        );
+
+      // OpenCL error check function:
+      void                check_error   (
+                                          cl_int      loc_error                 // Error code.
+                                        );
+
+      GLfloat*            data;                                                 // Wrapped data.
+      cl_context          opencl_context;                                       // OpenCL context.
 
     public:
-      GLfloat*          x;
-      GLfloat*          y;
-      GLfloat*          z;
-      GLfloat*          w;
+      GLfloat*            x;                                                    // "x" data.
+      GLfloat*            y;                                                    // "y" data.
+      GLfloat*            z;                                                    // "z" data.
+      GLfloat*            w;                                                    // "w" data.
 
-      size_t            size;
-      GLuint            vao;
-      GLuint            vbo;
-      cl_mem            buffer;
+      size_t              size;                                                 // Data size.
+      GLuint              vao;                                                  // OpenGL data VAO.
+      GLuint              vbo;                                                  // OpenGL data VBO.
+      cl_mem              buffer;                                               // OpenGL data memory buffer.
 
-                        point4();
+                          point4();
 
-      void              init  (
-                                cl_context  loc_opencl_context,
-                                size_t      loc_data_number
-                              );
+      void                init          (
+                                          neutrino*   loc_neutrino,             // Neutrino baseline.
+                                          size_t      loc_data_number           // Data size.
+                                        );
 
-      void              set   (
-                                kernel*     loc_kernel,
-                                size_t      loc_kernel_arg
-                              );
+      void                set           (
+                                          kernel*     loc_kernel,               // OpenCL kernel.
+                                          size_t      loc_kernel_arg            // OpenCL kernel argument index.
+                                        );
 
-      void              push  (
-                                queue*      loc_queue,
-                                kernel*     loc_kernel,
-                                size_t      loc_kernel_arg
-                              );
+      void                push          (
+                                          queue*      loc_queue,                // OpenCL queue.
+                                          kernel*     loc_kernel,               // OpenCL kernel.
+                                          size_t      loc_kernel_arg            // OpenCL kernel argument index.
+                                        );
 
-      void              pop   (
-                                queue*      loc_queue,
-                                kernel*     loc_kernel,
-                                size_t      loc_kernel_arg
-                              );
+      void                pop           (
+                                          queue*      loc_queue,                // OpenCL queue.
+                                          kernel*     loc_kernel,               // OpenCL kernel.
+                                          size_t      loc_kernel_arg            // OpenCL kernel argument index.
+                                        );
 
-                        ~point4();
+                          ~point4();
   };
 
 #endif
