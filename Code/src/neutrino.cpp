@@ -226,6 +226,8 @@ void neutrino::init()
 {
   ascii_spin_phase = 0;                                                         // Initializing ascii_spin_phase...
   ascii_spin_n_old = 0;                                                         // Initializing ascii_spin_n_old...
+
+  neutrino_path = get_neutrino_path();
 }
 
 void neutrino::get_tic()
