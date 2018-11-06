@@ -98,6 +98,22 @@ void window::init				(
 	glfwSetCursorPosCallback(glfw_window, mouse_moved_callback);                  // Setting window callbacks...
 	glfwSetScrollCallback(glfw_window, mouse_scrolled_callback);                  // Setting window callbacks...
 
+	// Initializing GLEW context:
+  printf("Action: initializing GLEW... ");
+  glewExperimental = GL_TRUE;                                                   // Ensuring that all extensions with valid entry points will be exposed...
+
+	if (glewInit() == GLEW_OK)
+	{
+
+    printf("DONE!\n");
+  }
+
+  else
+  {
+    printf("Error:  unable to initialize GLEW!\n");
+    exit(EXIT_FAILURE);
+  }
+
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);                                         // Setting color for clearing window...
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
   glEnable(GL_DEPTH_TEST);                                                      // Enabling depth test...

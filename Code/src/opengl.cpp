@@ -37,6 +37,7 @@ GLuint opengl::compile_shader(neutrino* loc_neutrino, const char* loc_shader_fil
                             &shader_size                                        // Shader buffer size.
                           );
 
+
   switch(loc_shader_type)
   {
     case VERTEX:
@@ -122,27 +123,11 @@ void opengl::init(neutrino* loc_neutrino)                                       
 		exit(EXIT_FAILURE);
   }
 
-  // Initializing GLEW context:
-  printf("Action: initializing GLEW... ");
-  glewExperimental = GL_TRUE;                                                   // Ensuring that all extensions with valid entry points will be exposed...
-
-	if (glewInit() == GLEW_OK)
-	{
-
-    printf("DONE!\n");
-  }
-
-  else
-  {
-    printf("Error:  unable to initialize GLEW!\n");
-    exit(EXIT_FAILURE);
-  }
-
   // Initializing shaders:
-  printf("Action: initializing GLSL shaders... ");
-  point_shader = build_shader(loc_neutrino, POINT_VERTEX_FILE, POINT_FRAGMENT_FILE);
-  text_shader = build_shader(loc_neutrino, TEXT_VERTEX_FILE, TEXT_FRAGMENT_FILE);
-  printf("DONE!\n");
+  //printf("Action: initializing GLSL shaders... ");
+  //point_shader = build_shader(loc_neutrino, POINT_VERTEX_FILE, POINT_FRAGMENT_FILE);
+  //text_shader = build_shader(loc_neutrino, TEXT_VERTEX_FILE, TEXT_FRAGMENT_FILE);
+  //printf("DONE!\n");
 }
 
 opengl::~opengl()
