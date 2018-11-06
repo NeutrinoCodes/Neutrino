@@ -93,7 +93,7 @@ void window::init				(
   glfwMakeContextCurrent(glfw_window);                                          // Making the context of this window current for the calling thread...
 
   glfwSetWindowRefreshCallback(glfw_window, refresh_callback);                  // Setting window callbacks...
-  glfwSetKeyCallback(glfw_window, key_callback);                                // Setting window callbacks...
+  glfwSetKeyCallback(glfw_window, key_pressed_callback);                        // Setting window callbacks...
 	glfwSetMouseButtonCallback(glfw_window, mouse_pressed_callback);              // Setting window callbacks...
 	glfwSetCursorPosCallback(glfw_window, mouse_moved_callback);                  // Setting window callbacks...
 	glfwSetScrollCallback(glfw_window, mouse_scrolled_callback);                  // Setting window callbacks...
@@ -133,7 +133,7 @@ auto window::key_pressed(int key, int scancode, int action, int mods)->void     
   }
 }
 
-auto window::mouse_pressed(int key, int scancode, int action, int mods)->void   // Mouse-pressed retpoline.
+auto window::mouse_pressed(int button, int action, int mods)->void   						// Mouse-pressed retpoline.
 {
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && arcball_on == false)
   {
@@ -157,7 +157,7 @@ auto window::mouse_pressed(int key, int scancode, int action, int mods)->void   
   }
 }
 
-auto window::mouse_moved(int key, int scancode, int action, int mods)->void     // Mouse-moved retpoline.
+auto window::mouse_moved(double xpos, double ypos)->void     										// Mouse-moved retpoline.
 {
   if (arcball_on)
   {
@@ -166,7 +166,7 @@ auto window::mouse_moved(int key, int scancode, int action, int mods)->void     
   }
 }
 
-auto window::mouse_scrolled(int key, int scancode, int action, int mods)->void  // Mmouse-scrolled retpoline.
+auto window::mouse_scrolled(double xoffset, double yoffset)->void  							// Mmouse-scrolled retpoline.
 {
   float translation[3];                                                         // Translation vector.
 
