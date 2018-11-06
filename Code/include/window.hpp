@@ -31,13 +31,27 @@
                                      0.0, 0.0, 1.0, 0.0,
                                      0.0, 0.0, 0.0, 1.0};
 
-      float             initial_translation[3] = {0.0, 0.0 , -3.0};                   // Initial translation vector.
+      float             initial_translation[3] = {0.0, 0.0 , -3.0};             // Initial translation vector.
 
-      GLuint 						point_shader;                                                 // Point shader program.
-      GLuint 						text_shader;                                                  // Point shader program.
+      GLuint 						point_shader;                                           // Point shader program.
+      GLuint 						text_shader;                                            // Point shader program.
 
-      void grasp(float* p, int x, int y);                                             // Grasp arcball action.
-      void arcball();                                                                 // Arcball computation.
+      // OpenGL shader compilation:
+      GLuint            compile_shader  (
+                                          neutrino* loc_neutrino,
+                                          const char* loc_shader_filename,
+                                          shader_type loc_shader_type
+                                        );
+
+      // OpenGL shader build:
+      GLuint            build_shader    (
+                                          neutrino* loc_neutrino,
+                                          const char* filename_vertex,
+                                          const char* filename_fragment
+                                        );
+
+      void              grasp(float* p, int x, int y);                          // Grasp arcball action.
+      void              arcball();                                              // Arcball computation.
 
       // Key-pressed callback:
       inline static auto refresh_callback(GLFWwindow* win)->void

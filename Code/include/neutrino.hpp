@@ -1,6 +1,12 @@
 #ifndef neutrino_hpp
 #define neutrino_hpp
 
+  /// These files are relative to the NEUTRINO_PATH environmental variable:
+  #define POINT_VERTEX_FILE       "/Code/shader/vertex.vert"
+  #define POINT_FRAGMENT_FILE     "/Code/shader/fragment.frag"
+  #define TEXT_VERTEX_FILE        "/Code/shader/text_vertex.vert"
+  #define TEXT_FRAGMENT_FILE      "/Code/shader/text_fragment.frag"
+
   #define CL_USE_DEPRECATED_OPENCL_1_2_APIS
 
   #ifdef __WINDOWS__
