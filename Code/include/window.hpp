@@ -40,6 +40,13 @@
       void arcball();                                                                 // Arcball computation.
 
       // Key-pressed callback:
+      inline static auto refresh_callback(GLFWwindow* win)->void
+      {
+        window* thewindow = static_cast<window*>(glfwGetWindowUserPointer(win));
+        thewindow->refresh();
+      }
+
+      // Key-pressed callback:
       inline static auto key_pressed_callback(GLFWwindow* win, int key, int scancode, int action, int mods)->void
       {
         window* thewindow = static_cast<window*>(glfwGetWindowUserPointer(win));
