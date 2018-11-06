@@ -131,6 +131,7 @@
 
       // Window initialization:
       void              init            (
+                                          neutrino* 	loc_neutrino,
                                           int         loc_window_size_x,        // Window x-size [px].
                                           int         loc_window_size_y,        // Window y-size [px].
                                           const char* loc_title

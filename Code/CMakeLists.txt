@@ -27,7 +27,6 @@ src/linear_algebra.cpp
 src/main.cpp
 src/neutrino.cpp
 src/opencl.cpp
-src/opengl.cpp
 src/path.cpp
 src/platform.cpp
 src/point4.cpp

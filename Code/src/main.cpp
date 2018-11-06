@@ -5,7 +5,6 @@
 #define WINDOW_NAME "neutrino"                                                  // Window name.
 
 #include "neutrino.hpp"
-#include "opengl.hpp"
 #include "window.hpp"
 #include "font.hpp"
 #include "opencl.hpp"
@@ -15,7 +14,6 @@
 int main()
 {
   neutrino* baseline        = new neutrino();                                   // The Neutrino object.
-  opengl*   opengl_context  = new opengl();                                     // The OpenGL context object.
   window*   gui_window      = new window();                                     // The gui window object.
   font*     gui_font        = new font();                                       // The gui font object.
   opencl*   opencl_context  = new opencl();                                     // The OpenCL context object.
@@ -25,8 +23,7 @@ int main()
   kernel*   k2              = new kernel();                                     // OpenCL kernel.
 
   baseline->init();                                                             // Initializing neutrino...
-  opengl_context->init(baseline);                                               // Initializing OpenGL context...
-  gui_window->init(SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);                  // Initializing gui window...
+  gui_window->init(baseline, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);                  // Initializing gui window...
   gui_font->init();                                                             // Initializing gui font...
   //opencl_context->init(baseline, gui_window->glfw_window, GPU);                 // Initializing OpenCL context...
 
