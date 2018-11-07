@@ -9,10 +9,10 @@
   #include "text4.hpp"
   #include "font.hpp"
 
-  #define ZOOM_FACTOR 1.05f                                                     // Zoom factor [> 1.0].
-  #define ROTATION_FACTOR 2.0f                                                  // Rotation factor [].
-  #define NEAR_Z_CLIP 0.1f                                                      // Near z-clipping distance [> 0.0].
-  #define FAR_Z_CLIP 100.0f                                                     // Far z-clipping distance [< +inf].
+  #define ZOOM_FACTOR 1.05f                                                     // Mouse wheel zoom factor [> 1.0].
+  #define ROTATION_FACTOR 2.0f                                                  // Mouse arcball rotation factor [].
+  #define NEAR_Z_CLIP 0.1f                                                      // Near z-clipping distance [small, but > 0.0].
+  #define FAR_Z_CLIP 100.0f                                                     // Far z-clipping distance [big, but < +inf].
   #define FOV 60.0f                                                             // Field of view [deg].
   #define LINE_WIDTH 3                                                          // Line width [px].
 
@@ -32,27 +32,35 @@
                                      0.0, 0.0, 1.0, 0.0,
                                      0.0, 0.0, 0.0, 1.0};
 
-      float             initial_translation[3] = {0.0, 0.0 , -3.0};             // Initial translation vector.
+      // Initial translation vector:
+      float             initial_translation[3] = {0.0, 0.0 , -3.0};
 
       GLuint 						point_shader;                                           // Point shader program.
       GLuint 						text_shader;                                            // Point shader program.
 
       // OpenGL shader compilation:
       GLuint            compile_shader  (
-                                          neutrino* loc_neutrino,
-                                          const char* loc_shader_filename,
-                                          shader_type loc_shader_type
+                                          neutrino*   loc_neutrino,             // Neutrino baseline.
+                                          const char* loc_shader_filename,      // Shader file name.
+                                          shader_type loc_shader_type           // Shader type.
                                         );
 
       // OpenGL shader build:
       GLuint            build_shader    (
-                                          neutrino* loc_neutrino,
-                                          const char* filename_vertex,
-                                          const char* filename_fragment
+                                          neutrino*   loc_neutrino,             // Neutrino baseline.
+                                          const char* loc_vertex_filename,      // Shader file name.
+            															const char* loc_fragment_filename     // Shader type.
                                         );
 
-      void              grasp(float* p, int x, int y);                          // Grasp arcball action.
-      void              arcball();                                              // Arcball computation.
+      // Grasp arcball action:
+      void              grasp           (
+                                          float*      p,
+                                          int         x,
+                                          int         y
+                                        );
+
+      // Arcball computation:
+      void              arcball();
 
       ////////////////////////////////////////////////////////////////////////////
       //////////////////////////////// CALLBACKS /////////////////////////////////
