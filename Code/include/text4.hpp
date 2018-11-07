@@ -39,7 +39,6 @@
       GLfloat*        glyph_data;                                               // Text "glyph" data.
       GLfloat*        color_data;                                               // Text "color" data.
 
-      cl_context      context;                                                  // OpenCL context.
       font*           hershey;
 
     public:
@@ -63,7 +62,6 @@
       GLuint          color_vbo;
 
       void            init      (
-                                  cl_context loc_opencl_context,
                                   font* loc_font,
                                   const char* loc_text,
                                   GLfloat loc_R,

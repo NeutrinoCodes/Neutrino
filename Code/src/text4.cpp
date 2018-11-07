@@ -86,7 +86,6 @@ const char* text4::get_error(cl_int loc_error)
 }
 
 void text4::init  (
-                    cl_context loc_opencl_context,
                     font* loc_font,
                     const char* loc_text,
                     GLfloat loc_R,
@@ -109,7 +108,6 @@ void text4::init  (
   char_numstrokes   = new int[num_char];                                        // # of font strokes for each character in input string.
   char_kern         = new int[num_char];                                        // Kern spacing for each character in input string.
 
-  context = loc_opencl_context;                                                 // Getting OpenCL context...
   hershey = loc_font;                                                           // Getting font...
 
   for (i = 0; i < num_char; i++)                                                // Looping on all characters in input string...
