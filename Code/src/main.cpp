@@ -2,11 +2,10 @@
 
 #define SIZE_WINDOW_X 800                                                       // Window x-size [px].
 #define SIZE_WINDOW_Y 600                                                       // Window y-size [px].
-#define WINDOW_NAME "neutrino"                                                  // Window name.
+#define WINDOW_NAME   "neutrino"                                                // Window name.
 
 #include "neutrino.hpp"
 #include "window.hpp"
-#include "font.hpp"
 #include "opencl.hpp"
 #include "queue.hpp"
 #include "kernel.hpp"
@@ -14,8 +13,7 @@
 int main()
 {
   neutrino* baseline        = new neutrino();                                   // The Neutrino object.
-  window*   gui_window      = new window();                                     // The gui window object.
-  font*     gui_font        = new font();                                       // The gui font object.
+  window*   gui             = new window();                                     // The gui window object.
   opencl*   opencl_context  = new opencl();                                     // The OpenCL context object.
 
   queue*    q1              = new queue();                                      // OpenCL queue.
@@ -23,8 +21,8 @@ int main()
   kernel*   k2              = new kernel();                                     // OpenCL kernel.
 
   baseline->init();                                                             // Initializing neutrino...
-  gui_window->init(baseline, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);                  // Initializing gui window...
-  gui_font->init();                                                             // Initializing gui font...
+  gui->init(baseline, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);               // Initializing gui window...
+
   //opencl_context->init(baseline, gui_window->glfw_window, GPU);                 // Initializing OpenCL context...
 
   //baseline->context_id = opencl_context->context_id;
@@ -33,11 +31,11 @@ int main()
   // SETUP:
   //q1->init(baseline);
 
-  while (!gui_window->closed())                                                 // Opening window...
+  while (!gui->closed())                                                        // Opening window...
   {
-    baseline->get_tic();                                                        // Getting "tic" [us]...
+    //baseline->get_tic();                                                        // Getting "tic" [us]...
     // Doing stuff...
-    baseline->get_toc();                                                        // Getting "toc" [us]...
+    //baseline->get_toc();                                                        // Getting "toc" [us]...
   }
 
   return 0;

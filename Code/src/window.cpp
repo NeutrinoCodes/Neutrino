@@ -167,6 +167,8 @@ void window::init				(
   opengl_ver_minor = 1;                                                         // EZOR 04NOV2018: to be generalized by iterative search.
   opengl_msaa = 4;                                                              // EZOR: 3 or 4 sample is good due to the general oversampling-decimation method.
 
+	font*     gui_font        = new font();                                       // The gui font object.
+
   // Initializing GLFW context:
   printf("Action: initializing GLFW... ");
 
@@ -226,6 +228,11 @@ void window::init				(
     printf("Error:  unable to initialize GLEW!\n");
     exit(EXIT_FAILURE);
   }
+
+	// Initializing font:
+  printf("Action: initializing Hershey vector font... ");
+	gui_font->init();                                                             // Initializing gui font...
+	printf("DONE!\n");
 
 	// Initializing shaders:
   printf("Action: initializing GLSL shaders... ");
