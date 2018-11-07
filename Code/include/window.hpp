@@ -54,9 +54,9 @@
 
       // Grasp arcball action:
       void              grasp           (
-                                          float*      p,
-                                          int         x,
-                                          int         y
+                                          float*      p,                        // Point on unitary ball.
+                                          int         x,                        // "Near clipping-plane" x-coordinate.
+                                          int         y                         // "Near clipping-plane" y-coordinate.
                                         );
 
       // Arcball computation:
@@ -67,38 +67,38 @@
       ////////////////////////////////////////////////////////////////////////////
       // Refresh callback:
       static void       refresh_callback        (
-      																				    GLFWwindow* loc_window
+      																				    GLFWwindow* loc_window        // Window.
       														              );
 
       // Key-pressed callback:
       static void       key_pressed_callback    (
-                                                  GLFWwindow* loc_window,
-                                                  int         loc_key,
-                                                  int         loc_scancode,
-                                                  int         loc_action,
-                                                  int         loc_mods
+                                                  GLFWwindow* loc_window,       // Window.
+                                                  int         loc_key,          // Key.
+                                                  int         loc_scancode,     // Scancode.
+                                                  int         loc_action,       // Action.
+                                                  int         loc_mods          // Mods.
                                                 );
 
       // Mouse-pressed callback:
       static void       mouse_pressed_callback  (
-                                              		GLFWwindow* loc_window,
-              																		int 				loc_button,
-                                              		int 				loc_action,
-              																		int 				loc_mods
+                                              		GLFWwindow* loc_window,       // Window.
+              																		int 				loc_button,       // Button.
+                                              		int 				loc_action,       // Action.
+              																		int 				loc_mods          // Mods.
               																	);
 
       // Mouse-moved callback:
       static void       mouse_moved_callback		(
-                                                	GLFWwindow* loc_window,
-                                                	double 			loc_xpos,
-                                                	double 			loc_ypos
+                                                	GLFWwindow* loc_window,       // Window.
+                                                	double 			loc_xpos,         // Mouse x-position [px].
+                                                	double 			loc_ypos          // Mouse y-position [px].
                                                 );
 
       // Mouse-scrolled callback:
       static void       mouse_scrolled_callback	(
-                                                  GLFWwindow*	loc_window,
-                                                	double 			loc_xoffset,
-                                                	double 			loc_yoffset
+                                                  GLFWwindow*	loc_window,       // Window.
+                                                	double 			loc_xoffset,      // Mouse scroll x-offset [px].
+                                                	double 			loc_yoffset       // Mouse scroll y-offset [px].
                                                 );
 
       ////////////////////////////////////////////////////////////////////////////
@@ -109,29 +109,29 @@
 
       // Key-pressed retpoline:
       void              key_pressed           (
-                                                int           loc_key,
-                                                int           loc_scancode,
-                                                int           loc_action,
-                                                int           loc_mods
+                                                int           loc_key,          // Key.
+                                                int           loc_scancode,     // Scancode.
+                                                int           loc_action,       // Action.
+                                                int           loc_mods          // Mods.
                                               );
 
       // Mouse-pressed retpoline:
       void              mouse_pressed				  (
-                                                int           button,
-                                              	int           action,
-                                              	int           mods
+                                                int           loc_button,       // Button.
+                                              	int           loc_action,       // Action.
+                                              	int           loc_mods          // Mods.
                                               );
 
       // Mouse-moved retpoline:
       void              mouse_moved						(
-                                              	double        xpos,
-                                              	double        ypos
+                                              	double        loc_xpos,         // Mouse x-position [px].
+                                              	double        loc_ypos          // Mouse y-position [px].
                                               );
 
       // Mmouse-scrolled retpoline:
       void              mouse_scrolled				(
-                                              	double        xoffset,
-                                              	double        yoffset
+                                              	double        loc_xoffset,      // Mouse scroll x-offset [px].
+                                              	double        loc_yoffset       // Mouse scroll y-offset [px].
                                               );
 
     public:
