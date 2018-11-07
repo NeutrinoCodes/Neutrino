@@ -13,9 +13,9 @@ window::window()
 //////////////////////////////////////////////////////////////////////////////////
 // Grasp arcball action:
 void window::grasp			(
-													float* 	p,
-													int 		x,
-													int 		y
+													float* 	p,																						// Point on unitary ball.
+													int 		x,																						// "Near clipping-plane" x-coordinate.
+													int 		y																							// "Near clipping-plane" y-coordinate.
 												)
 {
 	float  op_sq;																																	// Center "o" to "p" squared distance.
@@ -373,16 +373,16 @@ void window::key_pressed					(
 
 // Mouse-pressed retpoline:
 void window::mouse_pressed				(
-																		int button,																	// Button.
-																		int action,																	// Action.
-																		int mods																		// MOds.
+																		int loc_button,															// Button.
+																		int loc_action,															// Action.
+																		int loc_mods																// Mods.
 																	)
 {
 	// Checking mouse button pressed:
   if  (
-				button 			== GLFW_MOUSE_BUTTON_LEFT &&
-				action 			== GLFW_PRESS &&
-				arcball_on 	== false
+				loc_button 			== GLFW_MOUSE_BUTTON_LEFT &&
+				loc_action 			== GLFW_PRESS &&
+				arcball_on 			== false
 			)
   {
     glfwGetCursorPos(glfw_window, &mouse_x, &mouse_y);                          // Getting mouse position...
@@ -398,8 +398,8 @@ void window::mouse_pressed				(
 
 	// Checking mouse button pressed:
   if 	(
-				button == GLFW_MOUSE_BUTTON_LEFT &&
-				action == GLFW_RELEASE)
+				loc_button == GLFW_MOUSE_BUTTON_LEFT &&
+				loc_action == GLFW_RELEASE)
   {
     R_old[0] = R[0]; R_old[4] = R[4]; R_old[8]  = R[8];  R_old[12] = R[12];		  // Backing up Rotation_matrix matrix...
     R_old[1] = R[1]; R_old[5] = R[5]; R_old[9]  = R[9];  R_old[13] = R[13];			// Backing up Rotation_matrix matrix...
@@ -410,28 +410,28 @@ void window::mouse_pressed				(
 
 // Mouse-moved retpoline:
 void window::mouse_moved						(
-																			double xpos,															// Mouse position [px].
-																			double ypos																// Mouse position [px].
+																			double loc_xpos,													// Mouse position [px].
+																			double loc_ypos														// Mouse position [px].
 																		)
 {
 	// Checking arcball "on" flag:
   if (arcball_on)
   {
-    mouse_x = xpos;																															// Getting mouse position...
-    mouse_y = ypos;																															// Getting mouse position...
+    mouse_x = loc_xpos;																													// Getting mouse position...
+    mouse_y = loc_ypos;																													// Getting mouse position...
   }
 }
 
 // Mmouse-scrolled retpoline:
 void window::mouse_scrolled					(
-																			double xoffset,													 	// Mouse scrolled x-position [px].
-																			double yoffset														// Mouse scrolled y-position [px].
+																			double loc_xoffset,												// Mouse scrolled x-position [px].
+																			double loc_yoffset												// Mouse scrolled y-position [px].
 																		)
 {
   float translation[3];                                                         // Translation vector.
 
-  scroll_x = xoffset;																														// Getting scroll position...
-  scroll_y = yoffset;																														// Getting scroll position...
+  scroll_x = loc_xoffset;																												// Getting scroll position...
+  scroll_y = loc_yoffset;																												// Getting scroll position...
   zoom = T[14];																							                    // Getting z-axis translation...
 
 	// Checking y-position:
@@ -440,7 +440,7 @@ void window::mouse_scrolled					(
     zoom *= ZOOM_FACTOR;																												// Zooming-in...
   }
 
-		// Checking y-position:
+	// Checking y-position:
   if (scroll_y < 0)
   {
     zoom /= ZOOM_FACTOR;																												// Zooming-out...
@@ -464,32 +464,54 @@ void window::plot(point4* points, color4* colors, plot_style ps)
   {
     case STYLE_POINT:
       glUseProgram(point_shader);                                               // Using shader...
-      glUniformMatrix4fv(glGetUniformLocation(point_shader,
-                                              "View_matrix"),                   // Setting View_matrix matrix on shader...
-                         1,                                                     // # of matrices to be modified.
-                         GL_FALSE,                                              // FALSE = column major.
-                         &V[0]);                                                // View matrix.
 
-      glUniformMatrix4fv(glGetUniformLocation(point_shader,
-                                              "Projection_matrix"),             // Setting Projection_matrix matrix on shader...
-                         1,                                                     // # of matrices to be modified.
-                         GL_FALSE,                                              // FALSE = column major.
-                         &P[0]);                                                // Projection matrix.
+			// Setting View_matrix matrix on shader:
+      glUniformMatrix4fv	(	// Getting variable's uniform location:
+														glGetUniformLocation	(
+																										point_shader,								// Program.
+																										"View_matrix"								// Variable.
+																									),
+                         		1,                                                  // # of matrices to be modified.
+                         		GL_FALSE,                                           // FALSE = column major.
+                         		&V[0]																								// View matrix.
+													);
+
+			// Setting Projection_matrix matrix on shader:
+      glUniformMatrix4fv	(	// Getting variable's uniform location:
+														glGetUniformLocation	(
+																										point_shader,								// Program.
+																										"Projection_matrix"					// Variable.
+																									),
+                         		1,                                                  // # of matrices to be modified.
+                         		GL_FALSE,                                           // FALSE = column major.
+                         		&P[0]																								// Projection matrix.
+													);
       break;
 
     default:
-    glUseProgram(point_shader);                                               // Using shader...
-    glUniformMatrix4fv(glGetUniformLocation(point_shader,
-                                            "View_matrix"),                   // Setting View_matrix matrix on shader...
-                       1,                                                     // # of matrices to be modified.
-                       GL_FALSE,                                              // FALSE = column major.
-                       &V[0]);                                                // View matrix.
+    glUseProgram(point_shader);                                               	// Using shader...
 
-    glUniformMatrix4fv(glGetUniformLocation(point_shader,
-                                            "Projection_matrix"),             // Setting Projection_matrix matrix on shader...
-                       1,                                                     // # of matrices to be modified.
-                       GL_FALSE,                                              // FALSE = column major.
-                       &P[0]);                                                // Projection matrix.
+		// Setting View_matrix matrix on shader:
+		glUniformMatrix4fv		(	// Getting variable's uniform location:
+														glGetUniformLocation	(
+																										point_shader,								// Program.
+                                            				"View_matrix"								// Variable.
+																									),
+                       			1,                                     	            // # of matrices to be modified.
+                       			GL_FALSE,                                	          // FALSE = column major.
+                       			&V[0]																								// View matrix.
+													);
+
+		// Setting Projection_matrix matrix on shader:
+    glUniformMatrix4fv		(	// Getting variable's uniform location:
+														glGetUniformLocation	(
+																										point_shader,								// Program.
+																										"Projection_matrix"					// Variable.
+																									),
+                       			1,                                                  // # of matrices to be modified.
+                       			GL_FALSE,                                           // FALSE = column major.
+                       			&P[0]																								// Projection matrix.
+													);
     break;
   }
 
@@ -516,14 +538,28 @@ void window::print(text4* text)
 {
   multiplicate(V, T, R);                                                        // Setting View_matrix matrix...
   glUseProgram(text_shader);                                                    // Using shader...
-  glUniformMatrix4fv(glGetUniformLocation(text_shader, "View_matrix"),          // Setting View_matrix matrix on shader...
-                     1,
-                     GL_FALSE,
-                     &V[0]);
-  glUniformMatrix4fv(glGetUniformLocation(text_shader, "Projection_matrix"),    // Setting Projection_matrix matrix on shader...
-                     1,
-                     GL_FALSE,
-                     &P[0]);
+
+	// Setting View_matrix matrix on shader:
+	glUniformMatrix4fv		(	// Getting variable's uniform location:
+													glGetUniformLocation	(
+																									text_shader,									// Program.
+																									"View_matrix"									// Variable.
+																								),
+                     			1,																										// # of matrices to be modified.
+                     			GL_FALSE,																							// FALSE = column major.
+                     			&V[0]																									// View matrix.
+												);
+
+	// Setting Projection_matrix matrix on shader:
+  glUniformMatrix4fv		(	// Getting variable's uniform location:
+													glGetUniformLocation	(
+																									text_shader,									// Program.
+																									"Projection_matrix"						// Variable.
+																								),
+                     			1,																										// # of matrices to be modified.
+                     			GL_FALSE,																							// FALSE = column major.
+                     			&P[0]																									// Projection matrix.
+												);
 
   // Binding "glyph" array:
   glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
@@ -532,7 +568,7 @@ void window::print(text4* text)
 
   // Binding "color" array:
   glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
-  glBindBuffer(GL_ARRAY_BUFFER, text->color_vbo);                                // Binding color VBO...
+  glBindBuffer(GL_ARRAY_BUFFER, text->color_vbo);                               // Binding color VBO...
   glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
 
   // Drawing:
