@@ -13,9 +13,9 @@ window::window()
 //////////////////////////////////////////////////////////////////////////////////
 // Grasp arcball action:
 void window::grasp			(
-													float* p,
-													int x,
-													int y
+													float* 	p,
+													int 		x,
+													int 		y
 												)
 {
 	float  op_sq;																																	// Center "o" to "p" squared distance.
@@ -59,7 +59,11 @@ void window::arcball()
 }
 
 // Shader compilation:
-GLuint window::compile_shader(neutrino* loc_neutrino, const char* loc_shader_filename, shader_type loc_shader_type)
+GLuint window::compile_shader	(
+																neutrino* loc_neutrino,
+																const char* loc_shader_filename,
+																shader_type loc_shader_type
+															)
 {
   GLuint    shader;                                                             // Shader.
   char*     shader_source;                                                      // Shader source.
@@ -118,18 +122,22 @@ GLuint window::compile_shader(neutrino* loc_neutrino, const char* loc_shader_fil
 
   loc_neutrino->free_file(shader_source);                                       // Freeing shader source file...
 
-  return (shader);
+  return (shader);																															// Returning shader...
 }
 
 // Shader build:
-GLuint window::build_shader(neutrino* loc_neutrino, const char* filename_vertex, const char* filename_fragment)
+GLuint window::build_shader	(
+															neutrino* 	loc_neutrino,													// Neutrino baseline.
+															const char* loc_vertex_filename,									// Vertex shader file name.
+															const char* loc_fragment_filename									// Fragment shader file name.
+														)
 {
   GLuint vertex;                                                                // Vertex shader.
   GLuint fragment;                                                              // Fragment shader.
   GLuint program;                                                               // Shader program.
 
-  vertex = compile_shader(loc_neutrino, POINT_VERTEX_FILE, VERTEX);             // Compiling vertex shader...
-  fragment = compile_shader(loc_neutrino, POINT_FRAGMENT_FILE, FRAGMENT);       // Compiling fragment shader...
+  vertex = compile_shader(loc_neutrino, loc_vertex_filename, VERTEX);           // Compiling vertex shader...
+  fragment = compile_shader(loc_neutrino, loc_fragment_filename, FRAGMENT);     // Compiling fragment shader...
   program = glCreateProgram();                                                  // Creating program...
   glBindAttribLocation(program, 0, "point");                                    // Binding "point" to "layout = 0" shader attribute...
   glBindAttribLocation(program, 1, "color");                                    // Binding "color" to "layout = 1" shader attribute...
@@ -142,10 +150,10 @@ GLuint window::build_shader(neutrino* loc_neutrino, const char* filename_vertex,
 
  // Window initialization:
 void window::init				(
-													neutrino* 	loc_neutrino,
-													int 				loc_window_size_x,
-													int 				loc_window_size_y,
-													const char*	loc_title
+													neutrino* 	loc_neutrino,															// Neutrino baseline.
+													int 				loc_window_size_x,												// Window x-size [px].
+													int 				loc_window_size_y,												// Window y-size [px].
+													const char*	loc_title																	// Window title.
 												)
 {
   window_size_x = loc_window_size_x;                                            // Initializing window x-size [px]...
@@ -172,7 +180,7 @@ void window::init				(
 	font*     gui_font        = new font();                                       // The gui font object.
 
   // Initializing GLFW context:
-  printf("Action: initializing GLFW... ");
+  printf("Action: initializing GLFW... ");																			// Printing message...
 
   if (glfwInit() == GLFW_TRUE)                                                  // Inititalizing GLFW context...
 	{
@@ -182,65 +190,75 @@ void window::init				(
   	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);              // Initializing GLFW hints...
   	glfwWindowHint(GLFW_SAMPLES, opengl_msaa);                                  // Initializing GLFW hints... EZOR 05OCT2018: (was 4)
 
-    printf("DONE!\n");
+    printf("DONE!\n");																													// Printing message...
   }
 
   else
   {
-    printf("Error:  unable to initialize GLFW!\n");
-		glfwTerminate();
-		exit(EXIT_FAILURE);
+    printf("Error:  unable to initialize GLFW!\n");															// Printing message...
+		glfwTerminate();																														// Terminating GLFW context...
+		exit(EXIT_FAILURE);																													// Exiting...
   }
 
   glfw_window = glfwCreateWindow	(
-																		window_size_x,                              // Width.
-                                 		window_size_y,                              // Height.
-                                 		title,                                      // Title.
+																		window_size_x,                              // Window x-size [px].
+                                 		window_size_y,                              // Window y-size [px].
+                                 		title,                                      // Window title.
                                  		NULL,                                       // Monitor.
                                  		NULL																				// Share.
 																	);
   if (!glfw_window)
 	{
-		printf("Error:  unable to create window!\n");
-    glfwTerminate();
-    exit(EXIT_FAILURE);
+		printf("Error:  unable to create window!\n");																// Printing message...
+    glfwTerminate();																														// Terminating GLFW context...
+    exit(EXIT_FAILURE);																													// Exiting...
   }
 
-  glfwSetWindowUserPointer(glfw_window, this);
+  glfwSetWindowUserPointer(glfw_window, this);																	// Getting window pointer...
   glfwMakeContextCurrent(glfw_window);                                          // Making the context of this window current for the calling thread...
 
-  glfwSetWindowRefreshCallback(glfw_window, refresh_callback);                  // Setting window callbacks...
-  glfwSetKeyCallback(glfw_window, key_pressed_callback);                        // Setting window callbacks...
-	glfwSetMouseButtonCallback(glfw_window, mouse_pressed_callback);              // Setting window callbacks...
-	glfwSetCursorPosCallback(glfw_window, mouse_moved_callback);                  // Setting window callbacks...
-	glfwSetScrollCallback(glfw_window, mouse_scrolled_callback);                  // Setting window callbacks...
+  glfwSetWindowRefreshCallback(glfw_window, refresh_callback);                  // Setting refresh callback...
+  glfwSetKeyCallback(glfw_window, key_pressed_callback);                        // Setting key pressed callback...
+	glfwSetMouseButtonCallback(glfw_window, mouse_pressed_callback);              // Setting mouse pressed callback...
+	glfwSetCursorPosCallback(glfw_window, mouse_moved_callback);                  // Setting mouse moved callback...
+	glfwSetScrollCallback(glfw_window, mouse_scrolled_callback);                  // Setting mouse scrolled callback...
 
 	// Initializing GLEW context:
-  printf("Action: initializing GLEW... ");
+  printf("Action: initializing GLEW... ");																			// Printing message...
+
   glewExperimental = GL_TRUE;                                                   // Ensuring that all extensions with valid entry points will be exposed...
 
-	if (glewInit() == GLEW_OK)
+	if (glewInit() == GLEW_OK)																										// Checking GLEW initialization...
 	{
 
-    printf("DONE!\n");
+    printf("DONE!\n");																													// Printing message...
   }
 
   else
   {
-    printf("Error:  unable to initialize GLEW!\n");
-    exit(EXIT_FAILURE);
+    printf("Error:  unable to initialize GLEW!\n");															// Printing message...
+    exit(EXIT_FAILURE);																													// Exiting...
   }
 
 	// Initializing font:
-  printf("Action: initializing Hershey vector font... ");
+  printf("Action: initializing Hershey vector font... ");												// Printing message...
 	gui_font->init();                                                             // Initializing gui font...
-	printf("DONE!\n");
+	printf("DONE!\n");																														// Printing message...
 
 	// Initializing shaders:
-  printf("Action: initializing GLSL shaders... ");
-  point_shader = build_shader(loc_neutrino, POINT_VERTEX_FILE, POINT_FRAGMENT_FILE);
-  text_shader = build_shader(loc_neutrino, TEXT_VERTEX_FILE, TEXT_FRAGMENT_FILE);
-  printf("DONE!\n");
+  printf("Action: initializing GLSL shaders... ");															// Printing message...
+  point_shader = build_shader	(
+																loc_neutrino,																		// Neutrino baseline.
+																POINT_VERTEX_FILE,															// Vertex shader file name.
+																POINT_FRAGMENT_FILE															// Fragment shader file name.
+															);
+
+  text_shader = build_shader	(
+																loc_neutrino,																		// Neutrino baseline.
+																TEXT_VERTEX_FILE,																// Vertex shader file name.
+																TEXT_FRAGMENT_FILE															// Fragment shader file name.
+															);
+  printf("DONE!\n");																														// Printing message...
 
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);                                         // Setting color for clearing window...
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
@@ -257,7 +275,7 @@ void window::init				(
 
 bool window::closed()
 {
-  return(glfwWindowShouldClose(glfw_window));
+  return(glfwWindowShouldClose(glfw_window));																		// Returning window closure status...
 }
 
 void window::clear()                                                            // Window clearance.
@@ -270,58 +288,58 @@ void window::clear()                                                            
 //////////////////////////////////////////////////////////////////////////////////
 // Refresh callback:
 void window::refresh_callback					(
-																				GLFWwindow* loc_window
+																				GLFWwindow* loc_window									// Window.
 																			)
 {
-	window* win = (window*) glfwGetWindowUserPointer(loc_window);
-	win->refresh();
+	window* win = (window*) glfwGetWindowUserPointer(loc_window);									// Getting window pointer...
+	win->refresh();																																// Calling refresh retpoline...
 }
 
 // Key-pressed callback:
 void window::key_pressed_callback			(
-																				GLFWwindow* loc_window,
-																				int 				loc_key,
-																				int 				loc_scancode,
-																				int 				loc_action,
-																				int 				loc_mods
+																				GLFWwindow* loc_window,									// Window.
+																				int 				loc_key,										// Key.
+																				int 				loc_scancode,								// Scancode.
+																				int 				loc_action,									// Action.
+																				int 				loc_mods										// Mods.
 																			)
 {
-	window* win = (window*) glfwGetWindowUserPointer(loc_window);
-	win->key_pressed(loc_key, loc_scancode, loc_action, loc_mods);
+	window* win = (window*) glfwGetWindowUserPointer(loc_window);									// Getting window pointer...
+	win->key_pressed(loc_key, loc_scancode, loc_action, loc_mods);								// Calling key pressed retpoline...
 }
 
 // Mouse-pressed callback:
 void window::mouse_pressed_callback		(
-																				GLFWwindow* loc_window,
-																				int 				loc_button,
-																				int 				loc_action,
-																				int 				loc_mods
+																				GLFWwindow* loc_window,									// Window.
+																				int 				loc_button,									// Button.
+																				int 				loc_action,									// Action.
+																				int 				loc_mods										// Mods.
 																			)
 {
-	window* win = (window*) glfwGetWindowUserPointer(loc_window);
-	win->mouse_pressed(loc_button, loc_action, loc_mods);
+	window* win = (window*) glfwGetWindowUserPointer(loc_window);									// Getting window pointer...
+	win->mouse_pressed(loc_button, loc_action, loc_mods);													// Calling mouse pressed retpoline...
 }
 
 // Mouse-moved callback:
 void window::mouse_moved_callback			(
-																				GLFWwindow* loc_window,
-																				double 			loc_xpos,
-																				double 			loc_ypos
+																				GLFWwindow* loc_window,									// Window.
+																				double 			loc_xpos,										// Mouse x-position [px].
+																				double 			loc_ypos										// Mouse y-position [px].
 																			)
 {
-	window* win = (window*) glfwGetWindowUserPointer(loc_window);
-	win->mouse_moved(loc_xpos, loc_ypos);
+	window* win = (window*) glfwGetWindowUserPointer(loc_window);									// Getting window pointer...
+	win->mouse_moved(loc_xpos, loc_ypos);																					// Calling mouse moved retpoline...
 }
 
 // Mouse-scrolled callback:
 void window::mouse_scrolled_callback	(
-																				GLFWwindow*	loc_window,
-																				double 			loc_xoffset,
-																				double 			loc_yoffset
+																				GLFWwindow*	loc_window,									// Window.
+																				double 			loc_xoffset,								// Mouse scroll x-offset [px].
+																				double 			loc_yoffset									// Mouse scroll y-offset [px].
 																			)
 {
-	window* win = (window*) glfwGetWindowUserPointer(loc_window);
-	win->mouse_scrolled(loc_xoffset, loc_yoffset);
+	window* win = (window*) glfwGetWindowUserPointer(loc_window);									// Getting window pointer...
+	win->mouse_scrolled(loc_xoffset, loc_yoffset);																// Calling mouse scrolled retpoline...
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -337,25 +355,30 @@ void window::refresh()
 
 // Key-pressed retpoline:
 void window::key_pressed					(
-																		int loc_key,
-																		int loc_scancode,
-																		int loc_action,
-																		int loc_mods
+																		int loc_key,																// Key.
+																		int loc_scancode,														// Scancode.
+																		int loc_action,															// Action.
+																		int loc_mods																// Mods.
 																	)
 {
-  if (loc_key == GLFW_KEY_ESCAPE && loc_action == GLFW_PRESS)
+	// Checking key pressed:
+  if 	(
+				loc_key 		== GLFW_KEY_ESCAPE &&
+				loc_action 	== GLFW_PRESS
+			)
   {
-    glfwSetWindowShouldClose(glfw_window, GL_TRUE);
+    glfwSetWindowShouldClose(glfw_window, GL_TRUE);															// Setting window "closed" flag...
   }
 }
 
 // Mouse-pressed retpoline:
 void window::mouse_pressed				(
-																		int button,
-																		int action,
-																		int mods
+																		int button,																	// Button.
+																		int action,																	// Action.
+																		int mods																		// MOds.
 																	)
 {
+	// Checking mouse button pressed:
   if  (
 				button 			== GLFW_MOUSE_BUTTON_LEFT &&
 				action 			== GLFW_PRESS &&
@@ -373,7 +396,10 @@ void window::mouse_pressed				(
     arcball_on = false;																													// Turning off arcball...
   }
 
-  if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+	// Checking mouse button pressed:
+  if 	(
+				button == GLFW_MOUSE_BUTTON_LEFT &&
+				action == GLFW_RELEASE)
   {
     R_old[0] = R[0]; R_old[4] = R[4]; R_old[8]  = R[8];  R_old[12] = R[12];		  // Backing up Rotation_matrix matrix...
     R_old[1] = R[1]; R_old[5] = R[5]; R_old[9]  = R[9];  R_old[13] = R[13];			// Backing up Rotation_matrix matrix...
@@ -384,10 +410,11 @@ void window::mouse_pressed				(
 
 // Mouse-moved retpoline:
 void window::mouse_moved						(
-																			double xpos,
-																			double ypos
+																			double xpos,															// Mouse position [px].
+																			double ypos																// Mouse position [px].
 																		)
 {
+	// Checking arcball "on" flag:
   if (arcball_on)
   {
     mouse_x = xpos;																															// Getting mouse position...
@@ -397,8 +424,8 @@ void window::mouse_moved						(
 
 // Mmouse-scrolled retpoline:
 void window::mouse_scrolled					(
-																			double xoffset,
-																			double yoffset
+																			double xoffset,													 	// Mouse scrolled x-position [px].
+																			double yoffset														// Mouse scrolled y-position [px].
 																		)
 {
   float translation[3];                                                         // Translation vector.
@@ -407,11 +434,13 @@ void window::mouse_scrolled					(
   scroll_y = yoffset;																														// Getting scroll position...
   zoom = T[14];																							                    // Getting z-axis translation...
 
+	// Checking y-position:
   if (scroll_y > 0)
   {
     zoom *= ZOOM_FACTOR;																												// Zooming-in...
   }
 
+		// Checking y-position:
   if (scroll_y < 0)
   {
     zoom /= ZOOM_FACTOR;																												// Zooming-out...
