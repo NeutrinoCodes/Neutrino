@@ -8,6 +8,9 @@ window::window()
 
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////// PRIVATE METHODS ////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 // Grasp arcball action:
 void window::grasp			(
 													float* p,
@@ -55,9 +58,7 @@ void window::arcball()
 	}
 }
 
-
-
-
+// Shader compilation:
 GLuint window::compile_shader(neutrino* loc_neutrino, const char* loc_shader_filename, shader_type loc_shader_type)
 {
   GLuint    shader;                                                             // Shader.
@@ -120,6 +121,7 @@ GLuint window::compile_shader(neutrino* loc_neutrino, const char* loc_shader_fil
   return (shader);
 }
 
+// Shader build:
 GLuint window::build_shader(neutrino* loc_neutrino, const char* filename_vertex, const char* filename_fragment)
 {
   GLuint vertex;                                                                // Vertex shader.
@@ -207,11 +209,11 @@ void window::init				(
   glfwSetWindowUserPointer(glfw_window, this);
   glfwMakeContextCurrent(glfw_window);                                          // Making the context of this window current for the calling thread...
 
-  //glfwSetWindowRefreshCallback(glfw_window, refresh_callback);                  // Setting window callbacks...
+  glfwSetWindowRefreshCallback(glfw_window, refresh_callback);                  // Setting window callbacks...
   glfwSetKeyCallback(glfw_window, key_pressed_callback);                        // Setting window callbacks...
-	//glfwSetMouseButtonCallback(glfw_window, mouse_pressed_callback);              // Setting window callbacks...
-	//glfwSetCursorPosCallback(glfw_window, mouse_moved_callback);                  // Setting window callbacks...
-	//glfwSetScrollCallback(glfw_window, mouse_scrolled_callback);                  // Setting window callbacks...
+	glfwSetMouseButtonCallback(glfw_window, mouse_pressed_callback);              // Setting window callbacks...
+	glfwSetCursorPosCallback(glfw_window, mouse_moved_callback);                  // Setting window callbacks...
+	glfwSetScrollCallback(glfw_window, mouse_scrolled_callback);                  // Setting window callbacks...
 
 	// Initializing GLEW context:
   printf("Action: initializing GLEW... ");
@@ -263,33 +265,102 @@ void window::clear()                                                            
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
 }
 
-auto window::refresh()->void                                                    // Window refresh.
+//////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// CALLBACKS ////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+// Refresh callback:
+void window::refresh_callback					(
+																				GLFWwindow* loc_window
+																			)
+{
+	window* win = (window*) glfwGetWindowUserPointer(loc_window);
+	win->refresh();
+}
+
+// Key-pressed callback:
+void window::key_pressed_callback			(
+																				GLFWwindow* loc_window,
+																				int 				loc_key,
+																				int 				loc_scancode,
+																				int 				loc_action,
+																				int 				loc_mods
+																			)
+{
+	window* win = (window*) glfwGetWindowUserPointer(loc_window);
+	win->key_pressed(loc_key, loc_scancode, loc_action, loc_mods);
+}
+
+// Mouse-pressed callback:
+void window::mouse_pressed_callback		(
+																				GLFWwindow* loc_window,
+																				int 				loc_button,
+																				int 				loc_action,
+																				int 				loc_mods
+																			)
+{
+	window* win = (window*) glfwGetWindowUserPointer(loc_window);
+	win->mouse_pressed(loc_button, loc_action, loc_mods);
+}
+
+// Mouse-moved callback:
+void window::mouse_moved_callback			(
+																				GLFWwindow* loc_window,
+																				double 			loc_xpos,
+																				double 			loc_ypos
+																			)
+{
+	window* win = (window*) glfwGetWindowUserPointer(loc_window);
+	win->mouse_moved(loc_xpos, loc_ypos);
+}
+
+// Mouse-scrolled callback:
+void window::mouse_scrolled_callback	(
+																				GLFWwindow*	loc_window,
+																				double 			loc_xoffset,
+																				double 			loc_yoffset
+																			)
+{
+	window* win = (window*) glfwGetWindowUserPointer(loc_window);
+	win->mouse_scrolled(loc_xoffset, loc_yoffset);
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////// RETPOLINES /////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+// Window refresh retpoline:
+void window::refresh()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
   glfwSwapBuffers(glfw_window);                                                 // Swapping front and back buffers...
   glfwPollEvents();                                                             // Polling GLFW events...
 }
 
-void window::key_pressed_callback(GLFWwindow* win, int key, int scancode, int action, int mods)
+// Key-pressed retpoline:
+void window::key_pressed					(
+																		int loc_key,
+																		int loc_scancode,
+																		int loc_action,
+																		int loc_mods
+																	)
 {
-	window* loc_window = (window*) glfwGetWindowUserPointer(win);
-	loc_window->key_pressed(key, scancode, action, mods);
-}
-
-void window::key_pressed(int key, int scancode, int action, int mods)			      // Key-pressed retpoline.
-{
-	printf("pippo\n");
-  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+  if (loc_key == GLFW_KEY_ESCAPE && loc_action == GLFW_PRESS)
   {
     glfwSetWindowShouldClose(glfw_window, GL_TRUE);
   }
-
 }
 
-/*
-auto window::mouse_pressed(int button, int action, int mods)->void   						// Mouse-pressed retpoline.
+// Mouse-pressed retpoline:
+void window::mouse_pressed				(
+																		int button,
+																		int action,
+																		int mods
+																	)
 {
-  if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && arcball_on == false)
+  if  (
+				button 			== GLFW_MOUSE_BUTTON_LEFT &&
+				action 			== GLFW_PRESS &&
+				arcball_on 	== false
+			)
   {
     glfwGetCursorPos(glfw_window, &mouse_x, &mouse_y);                          // Getting mouse position...
     mouse_x_old = mouse_x;																											// Backing up mouse position...
@@ -311,7 +382,11 @@ auto window::mouse_pressed(int button, int action, int mods)->void   						// Mo
   }
 }
 
-auto window::mouse_moved(double xpos, double ypos)->void     										// Mouse-moved retpoline.
+// Mouse-moved retpoline:
+void window::mouse_moved						(
+																			double xpos,
+																			double ypos
+																		)
 {
   if (arcball_on)
   {
@@ -320,7 +395,11 @@ auto window::mouse_moved(double xpos, double ypos)->void     										// Mouse-
   }
 }
 
-auto window::mouse_scrolled(double xoffset, double yoffset)->void  							// Mmouse-scrolled retpoline.
+// Mmouse-scrolled retpoline:
+void window::mouse_scrolled					(
+																			double xoffset,
+																			double yoffset
+																		)
 {
   float translation[3];                                                         // Translation vector.
 
@@ -343,7 +422,11 @@ auto window::mouse_scrolled(double xoffset, double yoffset)->void  							// Mmo
   translation[2] = zoom;                                                        // Building translation vector...
   translate(T, translation);                                                    // Building translation matrix...
 }
-*/
+
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////// PUBLIC METHODS ////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+// Plot function:
 void window::plot(point4* points, color4* colors, plot_style ps)
 {
   multiplicate(V, T, R);                                                        // Setting View_matrix matrix...
@@ -399,6 +482,7 @@ void window::plot(point4* points, color4* colors, plot_style ps)
   glDisableVertexAttribArray(LAYOUT_1);                                         // Unbinding "colors" array...
 }
 
+// Print function:
 void window::print(text4* text)
 {
   multiplicate(V, T, R);                                                        // Setting View_matrix matrix...

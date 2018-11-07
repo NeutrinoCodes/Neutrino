@@ -74,8 +74,7 @@ add_custom_target(run
 
 message("Limiting number of reported gcc errors...[# = 20]")
 set(GCC_MAX_ERRORS "-fmax-errors=20")
-set(GCC_C14 "-std=c++14")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_MAX_ERRORS} ${GCC_C14}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_MAX_ERRORS}")
 
 message("DONE configuring GCC!")
 
