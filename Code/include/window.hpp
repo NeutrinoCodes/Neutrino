@@ -7,6 +7,7 @@
   #include "point4.hpp"
   #include "color4.hpp"
   #include "text4.hpp"
+  #include "font.hpp"
 
   #define ZOOM_FACTOR 1.05f                                                     // Zoom factor [> 1.0].
   #define ROTATION_FACTOR 2.0f                                                  // Rotation factor [].
