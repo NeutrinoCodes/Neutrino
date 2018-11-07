@@ -54,20 +54,26 @@
       void              grasp(float* p, int x, int y);                          // Grasp arcball action.
       void              arcball();                                              // Arcball computation.
 
+      /*
       // Key-pressed callback:
       inline static auto refresh_callback(GLFWwindow* win)->void
       {
         window* thewindow = static_cast<window*>(glfwGetWindowUserPointer(win));
         thewindow->refresh();
-      }
+      }*/
 
       // Key-pressed callback:
-      inline static auto key_pressed_callback(GLFWwindow* win, int key, int scancode, int action, int mods)->void
-      {
-        window* thewindow = static_cast<window*>(glfwGetWindowUserPointer(win));
-        thewindow->key_pressed(key, scancode, action, mods);
-      }
+      static void key_pressed_callback(GLFWwindow* win, int key, int scancode, int action, int mods);
 
+      // Key-pressed retpoline:
+      void        key_pressed     (
+                                    int key,
+                                    int scancode,
+                                    int action,
+                                    int mods
+                                  );
+
+      /*
       // Mouse-pressed callback:
       inline static auto mouse_pressed_callback(GLFWwindow* win, int button, int action, int mods)->void
       {
@@ -87,7 +93,7 @@
       {
         window* thewindow = static_cast<window*>(glfwGetWindowUserPointer(win));
         thewindow->mouse_scrolled(xoffset, yoffset);
-      }
+      }*/
 
     public:
       GLFWwindow*       glfw_window;                                            // Window handle.
@@ -147,14 +153,7 @@
        // Window "refresh" function:
       void              refresh();
 
-       // Key-pressed retpoline:
-      auto              key_pressed     (
-                                          int key,
-                                          int scancode,
-                                          int action,
-                                          int mods
-                                        )->void;
-
+      /*
       // Mouse-pressed retpoline:
       auto              mouse_pressed   (
                                           int button,
@@ -173,7 +172,8 @@
                                           double xoffset,
                                           double yoffset
                                         )->void;
-
+      */
+      
       // Window "plot" function:
       void              plot            (
                                           point4* points,

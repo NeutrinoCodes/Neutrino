@@ -207,11 +207,11 @@ void window::init				(
   glfwSetWindowUserPointer(glfw_window, this);
   glfwMakeContextCurrent(glfw_window);                                          // Making the context of this window current for the calling thread...
 
-  glfwSetWindowRefreshCallback(glfw_window, refresh_callback);                  // Setting window callbacks...
+  //glfwSetWindowRefreshCallback(glfw_window, refresh_callback);                  // Setting window callbacks...
   glfwSetKeyCallback(glfw_window, key_pressed_callback);                        // Setting window callbacks...
-	glfwSetMouseButtonCallback(glfw_window, mouse_pressed_callback);              // Setting window callbacks...
-	glfwSetCursorPosCallback(glfw_window, mouse_moved_callback);                  // Setting window callbacks...
-	glfwSetScrollCallback(glfw_window, mouse_scrolled_callback);                  // Setting window callbacks...
+	//glfwSetMouseButtonCallback(glfw_window, mouse_pressed_callback);              // Setting window callbacks...
+	//glfwSetCursorPosCallback(glfw_window, mouse_moved_callback);                  // Setting window callbacks...
+	//glfwSetScrollCallback(glfw_window, mouse_scrolled_callback);                  // Setting window callbacks...
 
 	// Initializing GLEW context:
   printf("Action: initializing GLEW... ");
@@ -270,15 +270,24 @@ auto window::refresh()->void                                                    
   glfwPollEvents();                                                             // Polling GLFW events...
 }
 
-auto window::key_pressed(int key, int scancode, int action, int mods)->void     // Key-pressed retpoline.
+void window::key_pressed_callback(GLFWwindow* win, int key, int scancode, int action, int mods)
 {
-	printf("pippo\n");
+	printf("puppo\n");
+	window* loc_window = (window*) glfwGetWindowUserPointer(win);
+	loc_window->key_pressed(key, scancode, action, mods);
+}
+
+void window::key_pressed(int key, int scancode, int action, int mods)			      // Key-pressed retpoline.
+{
+	printf("pippo");
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
   {
     glfwSetWindowShouldClose(glfw_window, GL_TRUE);
   }
+	
 }
 
+/*
 auto window::mouse_pressed(int button, int action, int mods)->void   						// Mouse-pressed retpoline.
 {
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && arcball_on == false)
@@ -335,7 +344,7 @@ auto window::mouse_scrolled(double xoffset, double yoffset)->void  							// Mmo
   translation[2] = zoom;                                                        // Building translation vector...
   translate(T, translation);                                                    // Building translation matrix...
 }
-
+*/
 void window::plot(point4* points, color4* colors, plot_style ps)
 {
   multiplicate(V, T, R);                                                        // Setting View_matrix matrix...
