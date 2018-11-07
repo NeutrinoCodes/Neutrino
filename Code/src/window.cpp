@@ -272,19 +272,18 @@ auto window::refresh()->void                                                    
 
 void window::key_pressed_callback(GLFWwindow* win, int key, int scancode, int action, int mods)
 {
-	printf("puppo\n");
 	window* loc_window = (window*) glfwGetWindowUserPointer(win);
 	loc_window->key_pressed(key, scancode, action, mods);
 }
 
 void window::key_pressed(int key, int scancode, int action, int mods)			      // Key-pressed retpoline.
 {
-	printf("pippo");
+	printf("pippo\n");
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
   {
     glfwSetWindowShouldClose(glfw_window, GL_TRUE);
   }
-	
+
 }
 
 /*
