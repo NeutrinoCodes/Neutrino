@@ -248,6 +248,9 @@ void window::init				(
 
   translate(T, initial_translation);                                            // Setting initial Translation_matrix matrix...
   perspective(P, FOV*M_PI/180.0, aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);        // Setting Projection_matrix matrix...
+
+	glfwSwapBuffers(glfw_window);                                                 // Swapping front and back buffers...
+  glfwPollEvents();                                                             // Polling GLFW events...
 }
 
 bool window::closed()
@@ -269,6 +272,7 @@ auto window::refresh()->void                                                    
 
 auto window::key_pressed(int key, int scancode, int action, int mods)->void     // Key-pressed retpoline.
 {
+	printf("pippo\n");
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
   {
     glfwSetWindowShouldClose(glfw_window, GL_TRUE);

@@ -15,6 +15,7 @@ int main()
   neutrino* baseline        = new neutrino();                                   // The Neutrino object.
   window*   gui             = new window();                                     // The gui window object.
   opencl*   opencl_context  = new opencl();                                     // The OpenCL context object.
+  text4*    message         = new text4();
 
   queue*    q1              = new queue();                                      // OpenCL queue.
   kernel*   k1              = new kernel();                                     // OpenCL kernel.
