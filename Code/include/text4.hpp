@@ -62,7 +62,7 @@
       GLuint          color_vbo;
 
       void            init      (
-                                  font* loc_font,
+                                  neutrino* loc_neutrino,
                                   const char* loc_text,
                                   GLfloat loc_R,
                                   GLfloat loc_G,

@@ -86,7 +86,7 @@ const char* text4::get_error(cl_int loc_error)
 }
 
 void text4::init  (
-                    font* loc_font,
+                    neutrino* loc_neutrino,
                     const char* loc_text,
                     GLfloat loc_R,
                     GLfloat loc_G,
@@ -108,7 +108,7 @@ void text4::init  (
   char_numstrokes   = new int[num_char];                                        // # of font strokes for each character in input string.
   char_kern         = new int[num_char];                                        // Kern spacing for each character in input string.
 
-  hershey = loc_font;                                                           // Getting font...
+  hershey = loc_neutrino->neutrino_font;                                        // Getting font...
 
   for (i = 0; i < num_char; i++)                                                // Looping on all characters in input string...
   {
