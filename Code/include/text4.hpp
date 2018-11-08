@@ -39,11 +39,7 @@
       GLfloat*        glyph_data;                                               // Text "glyph" data.
       GLfloat*        color_data;                                               // Text "color" data.
 
-      font*           hershey;
-
     public:
-                      text4();
-
       GLfloat*        x;
       GLfloat*        y;
       GLfloat*        z;
@@ -61,13 +57,15 @@
       GLuint          glyph_vbo;
       GLuint          color_vbo;
 
+                      text4();
+
       void            init      (
-                                  neutrino* loc_neutrino,
+                                  neutrino*   loc_neutrino,
                                   const char* loc_text,
-                                  GLfloat loc_R,
-                                  GLfloat loc_G,
-                                  GLfloat loc_B,
-                                  GLfloat loc_A
+                                  GLfloat     loc_R,
+                                  GLfloat     loc_G,
+                                  GLfloat     loc_B,
+                                  GLfloat     loc_A
                                 );
 
                       ~text4();
