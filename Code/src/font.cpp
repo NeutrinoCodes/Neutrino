@@ -8,11 +8,6 @@ font::font()
 
 }
 
-void font::init()
-{
-  printf("puppa\n");
-}
-
 font::~font()
 {
 
