@@ -122,18 +122,20 @@
       int               ascii_spin_phase;
       int               ascii_spin_n_old;
       path*             temp_neutrino_path;
+      font*             temp_neutrino_font;
 
       path*             get_neutrino_path();
+      font*             get_neutrino_font();
       double            get_cpu_time();
       void              ascii_spin();
       void              ascii_spin_stop();
 
     public:
       path*             neutrino_path;                                          // NEUTRINO_PATH environmental variable.
+      font*             neutrino_font;                                          // Font object.
       double            tic;                                                    // Tic time [ms].
       double            toc;                                                    // Toc time [ms].
       double            loop_time;                                              // Loop time [ms].
-      font*             neutrino_font;                                          // Font object.
 
       cl_context        context_id;                                             // OpenCL context id.
       cl_device_id      device_id;                                              // OpenCL device id.

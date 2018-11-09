@@ -786,7 +786,6 @@
       };
 
             font();
-      void  init();                                                             // Font initialization.
             ~font();
   };
 

@@ -116,6 +116,7 @@ void text4::init  (
     {
       char_item[i] = char_code[i] - ASCII_33;                                   // Computing font character position for character in input string...
       printf("char code = %d\n", char_item[i]);
+      printf("path = %s\n", loc_neutrino->neutrino_path->value);
       printf("char = %d\n", loc_neutrino->neutrino_font->font_vertex[0]);
       char_numdata[i] = loc_neutrino->neutrino_font->font_numdata[char_item[i]];                    // Computing # of data for character in input string...
       printf("pippo\n");

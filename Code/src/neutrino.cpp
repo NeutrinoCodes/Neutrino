@@ -40,6 +40,13 @@ path* neutrino::get_neutrino_path()
   return(temp_neutrino_path);
 }
 
+font* neutrino::get_neutrino_font()
+{
+  font* temp_neutrino_font = new font;
+
+  return(temp_neutrino_font);
+}
+
 double neutrino::get_cpu_time()
 {
   double time;
@@ -228,12 +235,11 @@ void neutrino::init()
   ascii_spin_n_old = 0;                                                         // Initializing ascii_spin_n_old...
 
   neutrino_path = get_neutrino_path();
-  //font*     neutrino_font        = new font();                                  // Font object.
+  font*     neutrino_font        = new font();                                  // Font object.
 
   // Initializing font:
   printf("Action: initializing font... ");												              // Printing message...
-  neutrino_font->init();                                                        // Initializing gui font...
-  printf("char = %d\n", neutrino_font->font_index[0]);
+  printf("char = %d\n", neutrino_font->font_index[1]);
 	printf("DONE!\n");																														// Printing message...
 }
 
@@ -338,4 +344,5 @@ neutrino::~neutrino()
   ascii_spin_stop();
 
   delete temp_neutrino_path;
+  delete temp_neutrino_font;
 }
