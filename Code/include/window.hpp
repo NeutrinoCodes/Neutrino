@@ -132,7 +132,7 @@
                                               	double        loc_xoffset,      // Mouse scroll x-offset [px].
                                               	double        loc_yoffset       // Mouse scroll y-offset [px].
                                               );
-
+                                              
     public:
       GLFWwindow*       glfw_window;                                            // Window handle.
       const char*       title;                                                  // Window title.
