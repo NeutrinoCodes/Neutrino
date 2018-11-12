@@ -219,10 +219,8 @@ void text4::init  (
     color_data[4*i + 3] = a[i];
   }
 
-  printf("pippo\n");
   // TEXT GLYPHS:
   glGenVertexArrays(1, &glyph_vao);                                             // Generating glyph VAO...
-  printf("pippo\n");
   glBindVertexArray(glyph_vao);                                                 // Binding glyph VAO...
   glGenBuffers(1, &glyph_vbo);                                                  // Generating glyph VBO...
 
