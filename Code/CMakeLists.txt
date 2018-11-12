@@ -9,6 +9,11 @@ message("")
 
 # Type: "make" in order to build the project.
 
+if(UNIX AND NOT APPLE)
+  message("Setting LINUX variable, according to an existing LINUX (but not APPLE) OS...")
+  set(LINUX TRUE)
+endif()
+
 message("Setting project name...")
 project (neutrino)
 
@@ -35,17 +40,6 @@ src/queue.cpp
 src/text4.cpp
 src/window.cpp)
 
-message("Adding an executable with the above sources...")
-add_executable(neutrino ${SOURCES})
-
-message("Setting the directories that should be included in the build command...")
-target_include_directories(neutrino PRIVATE ${CMAKE_HOME_DIRECTORY}/include)
-
-if(UNIX AND NOT APPLE)
-  message("Setting LINUX variable, according to an existing LINUX (but not APPLE) OS...")
-  set(LINUX TRUE)
-endif()
-
 if(APPLE)
   message("Setting directory for the Mac executable...")
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build/mac)
@@ -55,6 +49,12 @@ if(LINUX)
   message("Setting directory for the Linux executable...")
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build/linux)
 endif(LINUX)
+
+message("Adding an executable with the above sources...")
+add_executable(neutrino ${SOURCES})
+
+message("Setting the directories that should be included in the build command...")
+target_include_directories(neutrino PRIVATE ${CMAKE_HOME_DIRECTORY}/include)
 
 if(APPLE)
   message("Setting the Mac libraries that should be linked in the build command...")
@@ -68,7 +68,8 @@ endif(LINUX)
 
 # Type: "make run" to run the executable.
 add_custom_target(run
-    COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/neutrino
+    WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    COMMAND neutrino
     VERBATIM )
 
 message("Limiting number of reported gcc errors...[# = 20]")
