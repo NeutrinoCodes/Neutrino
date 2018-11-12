@@ -28,14 +28,11 @@ path* neutrino::get_neutrino_path()
   temp_neutrino_path->value = getenv("NEUTRINO_PATH");                          // Getting neutrino path...
   temp_neutrino_path->size = strlen(temp_neutrino_path->value) + 1;             // Getting neutrino path length...
 
-  if (temp_neutrino_path->value != NULL)
-  {
-    printf("Action: loading NEUTRINO_PATH environmental variable...\n");
-  }
-  else
+  if (temp_neutrino_path->value == NULL)
   {
     printf("Error:  NEUTRINO_PATH environmental variable not defined!\n");
     exit(1);
+
   }
 
   return(temp_neutrino_path);
@@ -235,12 +232,14 @@ void neutrino::init()
   ascii_spin_phase = 0;                                                         // Initializing ascii_spin_phase...
   ascii_spin_n_old = 0;                                                         // Initializing ascii_spin_n_old...
 
+  // Initializing NEUTRINO_PATH:
+  printf("Action: initializing neutrino path... ");												      // Printing message...
   neutrino_path = get_neutrino_path();
-  neutrino_font = get_neutrino_font();                                          // Font object.
+  printf("DONE!\n");																														// Printing message...
 
   // Initializing font:
-  printf("Action: initializing font... ");												              // Printing message...
-  printf("char = %d\n", neutrino_font->font_index[1]);
+  printf("Action: initializing neutrino font... ");												      // Printing message...
+  neutrino_font = get_neutrino_font();                                          // Font object.
 	printf("DONE!\n");																														// Printing message...
 }
 

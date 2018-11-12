@@ -35,7 +35,7 @@
 
     public:
       // Font vertex coordinates:
-      int font_vertex[3646] = {
+      static const int font_vertex[3646] = {
       /* Ascii 33 */
          5,  21,   5,   7,   5,   2,   4,   1,   4,   1,   5,   0,   5,   0,   6,   1,
          6,   1,   5,   2,
@@ -492,7 +492,7 @@
       };
 
       // Font vertex indexes:
-      int font_index[94] = {
+      static const int font_index[94] = {
       /* Ascii 33 */	0,
       /* Ascii 34 */	20,
       /* Ascii 35 */	28,
@@ -590,7 +590,7 @@
       };
 
       // Font vertex # of data:
-      int font_numdata[94] = {
+      static const int font_numdata[94] = {
       /* Ascii 33 */20,
       /* Ascii 34 */8,
       /* Ascii 35 */16,
@@ -688,7 +688,7 @@
       };
 
       // Font glyph width:
-      int font_width[94] = {
+      static const int font_width[94] = {
       /* Ascii 33 */10,
       /* Ascii 34 */16,
       /* Ascii 35 */21,
