@@ -11,6 +11,7 @@ neutrino::neutrino()
   ascii_spin_n_old = 0;
 
   neutrino_path = NULL;                                                         // NEUTRINO_PATH environmental variable.
+  neutrino_font = NULL;                                                         // Neutrino font.
   tic = 0.0;                                                                    // Tic time [ms].
   toc = 0.0;                                                                    // Toc time [ms].
   loop_time = 0.0;                                                              // Loop time [ms].
@@ -235,7 +236,7 @@ void neutrino::init()
   ascii_spin_n_old = 0;                                                         // Initializing ascii_spin_n_old...
 
   neutrino_path = get_neutrino_path();
-  font*     neutrino_font        = new font();                                  // Font object.
+  neutrino_font = get_neutrino_font();                                          // Font object.
 
   // Initializing font:
   printf("Action: initializing font... ");												              // Printing message...
