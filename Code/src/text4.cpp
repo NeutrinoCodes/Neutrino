@@ -119,6 +119,7 @@ void text4::init  (
       printf("path = %s\n", loc_neutrino->neutrino_path->value);
       printf("char = %d\n", loc_neutrino->neutrino_font->font_vertex[0]);
       char_numdata[i] = loc_neutrino->neutrino_font->font_numdata[char_item[i]];                    // Computing # of data for character in input string...
+
       printf("pippo\n");
       char_kern[i]  = ASCII_SPACE_LITTLE;                                       // Setting kern spacing for character in input string...
 
