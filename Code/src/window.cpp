@@ -445,7 +445,11 @@ void window::clear()
 void window::refresh()
 {
   glfwSwapBuffers(glfw_window);                                                 // Swapping front and back buffers...
-  glfwPollEvents();                                                             // Polling GLFW events...
+}
+
+void window::poll_events()
+{
+	glfwPollEvents();                                                             // Polling GLFW events...
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -574,7 +578,6 @@ void window::print(text4* text)
   // Finishing:
   glDisableVertexAttribArray(LAYOUT_0);                                         // Unbinding "glyph" array...
   glDisableVertexAttribArray(LAYOUT_1);                                         // Unbinding "color" array...
-
 }
 
 window::~window()
