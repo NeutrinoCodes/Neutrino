@@ -166,7 +166,7 @@ void neutrino::ascii_spin()
   switch (ascii_spin_phase)
   {
     case 0:
-      printf("Action: running OpenCL program... %d us", loop_time);
+      printf("Action: running      OpenCL program... %d us", loop_time);
       fflush(stdout);
       ascii_spin_n_old = n;
       break;
@@ -233,12 +233,12 @@ void neutrino::init()
   ascii_spin_n_old = 0;                                                         // Initializing ascii_spin_n_old...
 
   // Initializing NEUTRINO_PATH:
-  printf("Action: initializing neutrino path... ");												      // Printing message...
+  printf("Action: initializing neutrino path...  ");											      // Printing message...
   neutrino_path = get_neutrino_path();
   printf("DONE!\n");																														// Printing message...
 
   // Initializing font:
-  printf("Action: initializing neutrino font... ");												      // Printing message...
+  printf("Action: initializing neutrino font...  ");                            // Printing message...
   neutrino_font = get_neutrino_font();                                          // Font object.
 	printf("DONE!\n");																														// Printing message...
 }
