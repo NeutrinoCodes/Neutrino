@@ -8,13 +8,6 @@
   #include "color4.hpp"
   #include "text4.hpp"
 
-  #define ZOOM_FACTOR 1.05f                                                     // Mouse wheel zoom factor [> 1.0].
-  #define ROTATION_FACTOR 2.0f                                                  // Mouse arcball rotation factor [].
-  #define NEAR_Z_CLIP 0.1f                                                      // Near z-clipping distance [small, but > 0.0].
-  #define FAR_Z_CLIP 100.0f                                                     // Far z-clipping distance [big, but < +inf].
-  #define FOV 60.0f                                                             // Field of view [deg].
-  #define LINE_WIDTH 3                                                          // Line width [px].
-
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// "WINDOW" CLASS ///////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////

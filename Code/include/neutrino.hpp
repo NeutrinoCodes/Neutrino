@@ -7,7 +7,7 @@
   #define TEXT_VERTEX_FILE        "/Code/shader/text_vertex.vert"
   #define TEXT_FRAGMENT_FILE      "/Code/shader/text_fragment.frag"
 
-  #define CL_USE_DEPRECATED_OPENCL_1_2_APIS
+  #define CL_USE_DEPRECATED_OPENCL_1_2_APIS                                     // Allows the usage of "OpenCL 1.2" functions in newer versions.
 
   #ifdef __WINDOWS__
     #define GLFW_EXPOSE_NATIVE_WIN32
@@ -19,12 +19,30 @@
     #define GLFW_EXPOSE_NATIVE_GLX
   #endif
 
-  #define LAYOUT_0 0
-  #define LAYOUT_1 1
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////// FONT PARAMETERS ///////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  #define ASCII_33            33                                                // 1st printable ascii character ("!"), [DEC].
+  #define ASCII_126           126                                               // Last printable ascii character ("~"), [DEC].
+  #define ASCII_SCALE         0.01                                              // Ascii character scale factor [].
+  #define ASCII_SPACE_LITTLE  4                                                 // Hershey's vector font little space [pt].
+  #define ASCII_SPACE_BIG     16                                                // Hershy's vecotr font big space [pt].
 
-  #define KERNEL_NAME             "thekernel"
-  #define SIZE_TEXT_MAX 128                                                     // Maximum number of characters in a text string.
+  ////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////// WINDOW PARAMETERS //////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  #define LAYOUT_0            0                                                 // 1st variable ("location = 0") in vertex shader.
+  #define LAYOUT_1            1                                                 // 2nd variable ("location = 1") in vertex shader.
+  #define ZOOM_FACTOR         1.05f                                             // Mouse wheel zoom factor [> 1.0].
+  #define ROTATION_FACTOR     2.0f                                              // Mouse arcball rotation factor [].
+  #define NEAR_Z_CLIP         0.1f                                              // Near z-clipping distance [small, but > 0.0].
+  #define FAR_Z_CLIP          100.0f                                            // Far z-clipping distance [big, but < +inf].
+  #define FOV                 60.0f                                             // Field of view [deg].
+  #define LINE_WIDTH          3                                                 // Line width [px].
+  #define KERNEL_NAME         "thekernel"                                       // OpenCL kernel function name.
+  #define SIZE_TEXT_MAX       128                                               // Maximum number of characters in a text string.
 
+  // Plot styles:
   typedef enum
   {
     STYLE_POINT,
@@ -32,18 +50,21 @@
     STYLE_SHADED
   } plot_style;
 
+  // Shader types:
   typedef enum
   {
     VERTEX,
     FRAGMENT
   } shader_type;
 
+  // Kernel modes:
   typedef enum
   {
     WAIT,
     DONT_WAIT
   } kernel_mode;
 
+  // Compute device types:
   typedef enum
   {
     CPU,
@@ -53,18 +74,18 @@
     ALL
   } compute_device_type;
 
-  //////////////////////////////////////////////////////////////////////////
-  //////////////////////// Standard C header files /////////////////////////
-  //////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////// Standard C header files ///////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   #include <stdio.h>
   #include <stdlib.h>
   #include <string.h>
   #include <math.h>
   #include <errno.h>
 
-  //////////////////////////////////////////////////////////////////////////
-  ////////////////////////// Timing C header files /////////////////////////
-  //////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////// Timing C header files ////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   #if defined(__WINDOWS__)
     #include <Windows.h>
   #elif defined(__linux__) || defined(__APPLE__)
@@ -76,29 +97,29 @@
     #error "Unable to define getCPUTime() for an unknown OS."
   #endif
 
-  //////////////////////////////////////////////////////////////////////////
-  //////////////////////////// GLEW header files ///////////////////////////
-  //////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////// GLEW header files //////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   #include <GL/glew.h>
 
-  //////////////////////////////////////////////////////////////////////////
-  //////////////////////////// GLFW header files ///////////////////////////
-  //////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////// GLFW header files //////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   #include <GLFW/glfw3.h>
   #include <GLFW/glfw3native.h>
 
-  //////////////////////////////////////////////////////////////////////////
-  /////////////////////////// OpenGL header files //////////////////////////
-  //////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////// OpenGL header files /////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   #ifdef __APPLE__
     #include <OpenGL/OpenGL.h>
   #else
     #include <GL/gl.h>
   #endif
 
-  //////////////////////////////////////////////////////////////////////////
-  /////////////////////////// OpenCL header files //////////////////////////
-  //////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////// OpenCL header files /////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   #ifdef __APPLE__
     #include <OpenCL/opencl.h>
   #else
@@ -124,18 +145,18 @@
       path*             temp_neutrino_path;
       font*             temp_neutrino_font;
 
-      path*             get_neutrino_path();
-      font*             get_neutrino_font();
-      double            get_cpu_time();
+      path*             get_neutrino_path();                                    // Gets NEUTRINO_PATH envinromentatl variable.
+      font*             get_neutrino_font();                                    // Gets neutrino font.
+      double            get_cpu_time();                                         // Gets CPU time [us].
       void              ascii_spin();
       void              ascii_spin_stop();
 
     public:
       path*             neutrino_path;                                          // NEUTRINO_PATH environmental variable.
       font*             neutrino_font;                                          // Font object.
-      double            tic;                                                    // Tic time [ms].
-      double            toc;                                                    // Toc time [ms].
-      double            loop_time;                                              // Loop time [ms].
+      double            tic;                                                    // Tic time [us].
+      double            toc;                                                    // Toc time [us].
+      double            loop_time;                                              // Loop time [us].
 
       cl_context        context_id;                                             // OpenCL context id.
       cl_device_id      device_id;                                              // OpenCL device id.
