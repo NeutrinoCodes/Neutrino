@@ -101,11 +101,8 @@
                                                 );
 
       ////////////////////////////////////////////////////////////////////////////
-      //////////////////////////////// RETPOLINES ////////////////////////////////
+      //////////////////////////// PRIVATE RETPOLINES ////////////////////////////
       ////////////////////////////////////////////////////////////////////////////
-      // Refresh retpoline:
-      void              refresh();
-
       // Key-pressed retpoline:
       void              key_pressed           (
                                                 int           loc_key,          // Key.
@@ -127,12 +124,12 @@
                                               	double        loc_ypos          // Mouse y-position [px].
                                               );
 
-      // Mmouse-scrolled retpoline:
+      // Mouse-scrolled retpoline:
       void              mouse_scrolled				(
                                               	double        loc_xoffset,      // Mouse scroll x-offset [px].
                                               	double        loc_yoffset       // Mouse scroll y-offset [px].
                                               );
-                                              
+
     public:
       GLFWwindow*       glfw_window;                                            // Window handle.
       const char*       title;                                                  // Window title.
@@ -172,6 +169,18 @@
                                      0.0, 0.0, 1.0, 0.0,
                                      0.0, 0.0, 0.0, 1.0};
 
+      ////////////////////////////////////////////////////////////////////////////
+      ///////////////////////////// PUBLIC RETPOLINES ////////////////////////////
+      ////////////////////////////////////////////////////////////////////////////
+      // Clear retpoline:
+      void              clear();
+
+      // Refresh retpoline:
+      void              refresh();
+
+      ////////////////////////////////////////////////////////////////////////////
+      /////////////////////////////// PUBLIC METHODS /////////////////////////////
+      ////////////////////////////////////////////////////////////////////////////
                         window();
 
       // Window initialization:
@@ -184,9 +193,6 @@
 
       // Window "closed" function:
       bool              closed();
-
-      // Window "clear" function:
-      void              clear();
 
       // Window "plot" function:
       void              plot            (

@@ -271,11 +271,6 @@ bool window::closed()
   return(glfwWindowShouldClose(glfw_window));																		// Returning window closure status...
 }
 
-void window::clear()                                                            // Window clearance.
-{
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
-}
-
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// CALLBACKS ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
@@ -336,16 +331,8 @@ void window::mouse_scrolled_callback	(
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// RETPOLINES /////////////////////////////////////
+///////////////////////////// PRIVATE RETPOLINES /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-// Window refresh retpoline:
-void window::refresh()
-{
-  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
-  glfwSwapBuffers(glfw_window);                                                 // Swapping front and back buffers...
-  glfwPollEvents();                                                             // Polling GLFW events...
-}
-
 // Key-pressed retpoline:
 void window::key_pressed					(
 																		int loc_key,																// Key.
@@ -443,6 +430,22 @@ void window::mouse_scrolled					(
   translation[1] = 0.0;                                                         // Building translation vector...
   translation[2] = zoom;                                                        // Building translation vector...
   translate(T, translation);                                                    // Building translation matrix...
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// PUBLIC RETPOLINES /////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+// Window clearance retpoline:
+void window::clear()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...
+}
+
+// Window refresh retpoline:
+void window::refresh()
+{
+  glfwSwapBuffers(glfw_window);                                                 // Swapping front and back buffers...
+  glfwPollEvents();                                                             // Polling GLFW events...
 }
 
 //////////////////////////////////////////////////////////////////////////////////
