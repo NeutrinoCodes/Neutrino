@@ -39,9 +39,12 @@ int main()
   {
                                                       // Polling GLFW events...
     //baseline->get_tic();                                                        // Getting "tic" [us]...
+
     gui->clear();
+    gui->poll_events();
     gui->print(message);
     gui->refresh();
+
     //baseline->get_toc();                                                        // Getting "toc" [us]...
   }
 
