@@ -94,7 +94,7 @@ void text4::init  (
                     GLfloat loc_A
                   )
 {
-  //printf("Action: initializing OpenGL text... ");
+  printf("Action: initializing OpenGL text... ");
 
   num_char = strlen(loc_text);                                                  // Total # of characters in input string.
   num_data = 0;                                                                 // Total # of font data in input string.

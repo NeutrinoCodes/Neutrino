@@ -569,7 +569,7 @@ void window::print(text4* text)
 
   // Drawing:
   glDrawArrays(GL_LINES, 0, text->size);                                        // Drawing "glyphs"...
-	refresh();
+	//refresh();
 
   // Finishing:
   glDisableVertexAttribArray(LAYOUT_0);                                         // Unbinding "glyph" array...
