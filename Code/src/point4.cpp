@@ -107,7 +107,7 @@ void point4::init               (
   cl_int loc_error;                                                             // Error code.
   int i;                                                                        // Index.
 
-  printf("Action: initializing \"color4\" object... ");                         // Printing message...
+  printf("Action: initializing \"point4\" object... ");                         // Printing message...
 
   x = new GLfloat[loc_data_number];                                             // "x" data array.
   y = new GLfloat[loc_data_number];                                             // "y" data array.
