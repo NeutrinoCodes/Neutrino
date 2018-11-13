@@ -358,7 +358,7 @@ void window::mouse_pressed				(
 																		int loc_mods																// Mods.
 																	)
 {
-	// Checking mouse button pressed:
+	// Checking whether mouse button has been pressed:
   if  (
 				loc_button 			== GLFW_MOUSE_BUTTON_LEFT &&
 				loc_action 			== GLFW_PRESS &&
@@ -376,7 +376,7 @@ void window::mouse_pressed				(
     arcball_on = false;																													// Turning off arcball...
   }
 
-	// Checking mouse button pressed:
+	// Checking whether mouse button released:
   if 	(
 				loc_button == GLFW_MOUSE_BUTTON_LEFT &&
 				loc_action == GLFW_RELEASE)
@@ -399,6 +399,7 @@ void window::mouse_moved						(
   {
     mouse_x = loc_xpos;																													// Getting mouse position...
     mouse_y = loc_ypos;																													// Getting mouse position...
+		printf("x = %lf, y = %lf\n", mouse_x, mouse_y);
   }
 }
 
