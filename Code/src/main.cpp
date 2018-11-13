@@ -41,6 +41,7 @@ int main()
     //baseline->get_tic();                                                        // Getting "tic" [us]...
 
     gui->clear();
+    gui->arcball();
     gui->poll_events();
     gui->print(message);
     gui->refresh();
