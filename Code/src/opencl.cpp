@@ -383,7 +383,7 @@ opencl::~opencl()
 {
   cl_int loc_err;                                                               // Local error code.
 
-  printf("Action: releasing OpenCL context... ");
+  printf("Action: releasing    OpenCL context... ");
 
   loc_err = clReleaseContext(context_id);                                       // Releasing OpenCL context...
 
