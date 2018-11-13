@@ -58,7 +58,8 @@
                                           int         y                         // "Near clipping-plane" y-coordinate.
                                         );
 
-
+      // Arcball computation:
+      void              arcball();
 
       ////////////////////////////////////////////////////////////////////////////
       //////////////////////////////// CALLBACKS /////////////////////////////////
@@ -179,9 +180,6 @@
 
       // Event polling retpoline:
       void              poll_events();
-
-      // Arcball computation:
-      void              arcball();
 
       ////////////////////////////////////////////////////////////////////////////
       /////////////////////////////// PUBLIC METHODS /////////////////////////////
