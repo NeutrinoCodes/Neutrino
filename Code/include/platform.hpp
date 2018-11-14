@@ -21,8 +21,8 @@
                                             cl_int loc_error                    // Error code.
                                           );
 
-      size_t  get_info_size(cl_platform_info loc_parameter_name);
-      char*   get_info_value(cl_platform_info loc_parameter_name, size_t loc_parameter_size);
+      size_t  get_info_size(cl_platform_id loc_platform_id, cl_platform_info loc_parameter_name);
+      char*   get_info_value(cl_platform_id loc_platform_id, cl_platform_info loc_parameter_name, size_t loc_parameter_size);
 
     public:
       cl_platform_id          platform_id;                                      // OpenCL platform id.
@@ -33,7 +33,7 @@
       info*                   extensions;                                       // Platform parameter.
 
                               platform  ();
-                              
+
       void                    init      (
                                           cl_platform_id loc_platform_id
                                         );

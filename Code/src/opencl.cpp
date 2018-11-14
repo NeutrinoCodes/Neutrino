@@ -103,9 +103,11 @@ cl_uint opencl::get_num_platforms()
   printf("Action: getting number of OpenCL platforms... ");
 
   // Getting number of existing OpenCL platforms:
-  loc_err = clGetPlatformIDs(0,                                                 // Dummy # of platforms ("0" means we are asking for the # of platfomrs).
-                            NULL,                                               // Dummy platfomrs id.
-                            &loc_platforms_number);                             // Returned local # of existing platforms.
+  loc_err = clGetPlatformIDs(
+                              0,                                                // Dummy # of platforms ("0" means we are asking for the # of platfomrs).
+                              NULL,                                             // Dummy platfomrs id.
+                              &loc_platforms_number                             // Returned local # of existing platforms.
+                            );
 
   if(loc_err != CL_SUCCESS)
   {
@@ -127,7 +129,8 @@ cl_uint opencl::get_platforms()
   int             i;                                                            // Index.
 
   loc_platforms_number = get_num_platforms();                                   // Getting # of existing platfomrs...
-  loc_platform_id = (cl_platform_id*) malloc(sizeof(cl_platform_id) * loc_platforms_number);     // Allocating platform array...
+  //loc_platform_id = (cl_platform_id*) malloc(sizeof(cl_platform_id) * loc_platforms_number);     // Allocating platform array...
+  loc_platform_id = new cl_platform_id[loc_platforms_number];
 
   // Getting OpenCL platform IDs:
   loc_err = clGetPlatformIDs(loc_platforms_number,                              // Local # of existing platforms.
@@ -140,16 +143,18 @@ cl_uint opencl::get_platforms()
     exit(loc_err);
   }
 
-  *existing_platform = new platform[loc_platforms_number];                      // Local platform object array.
+  existing_platform = new platform*[loc_platforms_number];                      // Local platform object array.
 
   for(i = 0; i < loc_platforms_number; i++)
   {
+    existing_platform[i] = new platform;
     existing_platform[i]->init(loc_platform_id[i]);                             // Initializing platform objects...
   }
-
+  printf("pippo\n");
   printf("\n        Found %d platform(s)!\n", loc_platforms_number);
   printf("        DONE!\n");
 
+  delete loc_platform_id;
   return(loc_platforms_number);
 }
 

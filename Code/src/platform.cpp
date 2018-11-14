@@ -104,14 +104,14 @@ void platform::check_error      (
   }
 }
 
-size_t platform::get_info_size(cl_platform_info loc_parameter_name)
+size_t platform::get_info_size(cl_platform_id loc_platform_id, cl_platform_info loc_parameter_name)
 {
   cl_int  loc_error;                                                            // Error code.
   size_t  loc_parameter_size;                                                   // Parameter size.
 
   // Getting platform information:
   loc_error = clGetPlatformInfo (
-                                  platform_id,                                  // Platform id.
+                                  loc_platform_id,                              // Platform id.
                                   loc_parameter_name,                           // Parameter name.
                                   0,                                            // Dummy parameter size: "0" means we ask for the # of parameters.
                                   NULL,                                         // Dummy parameter.
@@ -123,14 +123,14 @@ size_t platform::get_info_size(cl_platform_info loc_parameter_name)
   return (loc_parameter_size);                                                  // Returning local parameter size...
 }
 
-char* platform::get_info_value(cl_platform_info loc_parameter_name, size_t loc_parameter_size)
+char* platform::get_info_value(cl_platform_id loc_platform_id, cl_platform_info loc_parameter_name, size_t loc_parameter_size)
 {
   cl_int  loc_error;                                                            // Error code.
   char*   loc_parameter_value;                                                  // Parameter value.
 
   // Getting platform information:
   loc_error = clGetPlatformInfo (
-                                  platform_id,                                  // Platform id.
+                                  loc_platform_id,                              // Platform id.
                                   loc_parameter_name,                           // Parameter name.
                                   loc_parameter_size,                           // Parameter size.
                                   loc_parameter_value,                          // Returned parameter value.
@@ -145,19 +145,42 @@ char* platform::get_info_value(cl_platform_info loc_parameter_name, size_t loc_p
 // PUBLIC METHODS:
 void platform::init(cl_platform_id loc_platform_id)
 {
-  info*   profile     = new info(get_info_size(CL_PLATFORM_PROFILE));           // Platform info.
-  info*   version     = new info(get_info_size(CL_PLATFORM_VERSION));           // Platform info.
-  info*   name        = new info(get_info_size(CL_PLATFORM_NAME));              // Platform info.
-  info*   vendor      = new info(get_info_size(CL_PLATFORM_VENDOR));            // Platform info.
-  info*   extensions  = new info(get_info_size(CL_PLATFORM_EXTENSIONS));        // Platform info.
+  size_t  parameter_size;
+  char*   parameter_value;
 
-  profile->value    = get_info_value(CL_PLATFORM_PROFILE, profile->size);       // Setting info value...
-  version->value    = get_info_value(CL_PLATFORM_VERSION, version->size);       // Setting info value...
-  name->value       = get_info_value(CL_PLATFORM_NAME, name->size);             // Setting info value...
-  vendor->value     = get_info_value(CL_PLATFORM_VENDOR, vendor->size);         // Setting info value...
-  extensions->value = get_info_value(CL_PLATFORM_EXTENSIONS, extensions->size); // Setting info value...
+  profile           = new info();                                               // Platform info.
+  version           = new info();                                               // Platform info.
+  name              = new info();                                               // Platform info.
+  vendor            = new info();                                               // Platform info.
+  extensions        = new info();                                               // Platform info.
 
-  platform_id = loc_platform_id;                                                // Initializing theplatform...
+  parameter_size    = get_info_size(loc_platform_id, CL_PLATFORM_PROFILE);
+  //printf("puppo\n");
+  parameter_value   = get_info_value(loc_platform_id, CL_PLATFORM_PROFILE, parameter_size);
+  //printf("puppo\n");
+  profile           ->init(parameter_size, parameter_value);
+  printf("peppo\n");
+  parameter_size    = get_info_size(loc_platform_id, CL_PLATFORM_VERSION);
+  parameter_value   = get_info_value(loc_platform_id, CL_PLATFORM_VERSION, parameter_size);
+  version           ->init(parameter_size, parameter_value);
+  printf("puppo\n");
+  parameter_size    = get_info_size(loc_platform_id, CL_PLATFORM_NAME);
+  parameter_value   = get_info_value(loc_platform_id, CL_PLATFORM_NAME, parameter_size);
+  name              ->init(parameter_size, parameter_value);
+
+  parameter_size    = get_info_size(loc_platform_id, CL_PLATFORM_VENDOR);
+  parameter_value   = get_info_value(loc_platform_id, CL_PLATFORM_VENDOR, parameter_size);
+  vendor            ->init(parameter_size, parameter_value);
+
+  parameter_size    = get_info_size(loc_platform_id, CL_PLATFORM_EXTENSIONS);
+  parameter_value   = get_info_value(loc_platform_id, CL_PLATFORM_EXTENSIONS, parameter_size);
+  extensions        ->init(parameter_size, parameter_value);
+
+  printf("poppo\n");
+  printf("name = %s\n", get_info_value(loc_platform_id, CL_PLATFORM_VERSION, version->size));
+  printf("name = %s\n", name->value);
+
+  platform_id = loc_platform_id;                                                // Initializing platform id...
 }
 
 platform::~platform()
