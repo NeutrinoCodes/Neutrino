@@ -14,15 +14,23 @@
   {
     private:
       cl_device_type          device_type;
-
-      const char*             get_error(cl_int loc_error);
       cl_uint                 get_num_platforms();
-      cl_uint                 get_platforms();
+      cl_platform_id          get_platform_id(cl_uint loc_platforms_number, cl_uint loc_platform_index);
       cl_uint                 get_num_devices(cl_uint loc_platform_index);
       cl_uint                 get_devices(cl_uint loc_platform_index);
 
+      // OpenCL error get function:
+      const char*             get_error     (
+                                              cl_int      loc_error             // Local error code.
+                                        )   ;
+
+      // OpenCL error check function:
+      void                    check_error   (
+                                              cl_int      loc_error             // Local error code.
+                                            );
+
     public:
-      platform**              existing_platform;                                // Existing OpenCL platform array.
+      platform*               opencl_platform;                                  // OpenCL platform.
       cl_uint                 platforms_number;                                 // Existing OpenCL platforms number.
       cl_uint                 choosen_platform;                                 // Choosen platform index.
 
