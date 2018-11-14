@@ -133,13 +133,20 @@ char* device::get_info_value(cl_device_info loc_parameter_name, size_t loc_param
 // PUBLIC METHODS:
 void device::init(cl_device_id loc_device_id)
 {
-  info*   device_name               = new info(get_info_size(CL_DEVICE_NAME));
-  info*   device_platform           = new info(get_info_size(CL_DEVICE_PLATFORM));
+  size_t            parameter_size;
+  char*             parameter_value;
+  device_name       = new info();
+  device_platform   = new info();
 
-  device_name->value                = get_info_value(CL_DEVICE_NAME, device_name->size);
-  device_platform->value            = get_info_value(CL_DEVICE_PLATFORM, device_platform->size);
+  parameter_size    = get_info_size(CL_DEVICE_NAME);
+  parameter_value   = get_info_value(CL_DEVICE_NAME, parameter_size);
+  device_name       ->init(parameter_size, parameter_value);
 
-  device_id = loc_device_id;                                                    // Initializing device_id...
+  parameter_size    = get_info_size(CL_DEVICE_PLATFORM);
+  parameter_value   = get_info_value(CL_DEVICE_PLATFORM, parameter_size);
+  device_platform   ->init(parameter_size, parameter_value);
+
+  device_id         = loc_device_id;                                            // Initializing device_id...
 }
 
 device::~device()
