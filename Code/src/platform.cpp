@@ -3,9 +3,78 @@
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "PLATFORM" CLASS //////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-platform::platform()
+platform::platform(cl_platform_id loc_platform_id)
 {
+  // Profile info:
+  profile           = new info(
+                                get_info_size   (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_PROFILE
+                                                )
+                              );
 
+  profile->value    =           get_info_value  (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_PROFILE,
+                                                  profile->size
+                                                );
+
+  // Version info:
+  version           = new info(
+                                get_info_size   (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_VERSION
+                                                )
+                              );
+
+  version->value    =           get_info_value  (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_VERSION,
+                                                  version->size)
+                                                );
+
+  // Name info:
+  name              = new info(
+                                get_info_size   (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_NAME
+                                                )
+                              );
+
+  name->value       =           get_info_value  (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_NAME,
+                                                  name->size
+                                                );
+
+  // Vendor info:
+  vendor            = new info(
+                                get_info_size   (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_VENDOR
+                                                );
+
+  vendor->value     =           get_info_value  (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_VENDOR,
+                                                  vendor->size
+                                                );
+
+  // Vendor info:
+  extensions        = new info(
+                                get_info_size   (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_EXTENSIONS
+                                                )
+                              );
+
+  extensions->value =           get_info_value  (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_EXTENSIONS,
+                                                  extensions->size
+                                                );
+
+  platform_id = loc_platform_id;                                                // Initializing platform id...
 }
 
 // PRIVATE METHODS:
@@ -119,6 +188,7 @@ size_t platform::get_info_size(cl_platform_id loc_platform_id, cl_platform_info 
                                 );
 
   check_error(loc_error);
+  printf("parameter size = %d\n", loc_parameter_size);
 
   return (loc_parameter_size);                                                  // Returning local parameter size...
 }
@@ -140,47 +210,6 @@ char* platform::get_info_value(cl_platform_id loc_platform_id, cl_platform_info 
   check_error(loc_error);
 
   return (loc_parameter_value);                                                 // Returning local parameter value...
-}
-
-// PUBLIC METHODS:
-void platform::init(cl_platform_id loc_platform_id)
-{
-  size_t  parameter_size;
-  char*   parameter_value;
-
-  profile           = new info();                                               // Platform info.
-  version           = new info();                                               // Platform info.
-  name              = new info();                                               // Platform info.
-  vendor            = new info();                                               // Platform info.
-  extensions        = new info();                                               // Platform info.
-
-  parameter_size    = get_info_size(loc_platform_id, CL_PLATFORM_PROFILE);
-  //printf("puppo\n");
-  parameter_value   = get_info_value(loc_platform_id, CL_PLATFORM_PROFILE, parameter_size);
-  //printf("puppo\n");
-  profile           ->init(parameter_size, parameter_value);
-  printf("peppo\n");
-  parameter_size    = get_info_size(loc_platform_id, CL_PLATFORM_VERSION);
-  parameter_value   = get_info_value(loc_platform_id, CL_PLATFORM_VERSION, parameter_size);
-  version           ->init(parameter_size, parameter_value);
-  printf("puppo\n");
-  parameter_size    = get_info_size(loc_platform_id, CL_PLATFORM_NAME);
-  parameter_value   = get_info_value(loc_platform_id, CL_PLATFORM_NAME, parameter_size);
-  name              ->init(parameter_size, parameter_value);
-
-  parameter_size    = get_info_size(loc_platform_id, CL_PLATFORM_VENDOR);
-  parameter_value   = get_info_value(loc_platform_id, CL_PLATFORM_VENDOR, parameter_size);
-  vendor            ->init(parameter_size, parameter_value);
-
-  parameter_size    = get_info_size(loc_platform_id, CL_PLATFORM_EXTENSIONS);
-  parameter_value   = get_info_value(loc_platform_id, CL_PLATFORM_EXTENSIONS, parameter_size);
-  extensions        ->init(parameter_size, parameter_value);
-
-  printf("poppo\n");
-  printf("name = %s\n", get_info_value(loc_platform_id, CL_PLATFORM_VERSION, version->size));
-  printf("name = %s\n", name->value);
-
-  platform_id = loc_platform_id;                                                // Initializing platform id...
 }
 
 platform::~platform()

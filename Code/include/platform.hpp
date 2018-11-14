@@ -32,12 +32,7 @@
       info*                   vendor;                                           // Platform parameter.
       info*                   extensions;                                       // Platform parameter.
 
-                              platform  ();
-
-      void                    init      (
-                                          cl_platform_id loc_platform_id
-                                        );
-
+                              platform  (cl_platform_id loc_platform_id);
                               ~platform ();
   };
 
