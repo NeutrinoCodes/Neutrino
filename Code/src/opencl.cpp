@@ -95,25 +95,33 @@ const char* opencl::get_error(cl_int loc_error)
   }
 }
 
+// OpenCL error check function:
+void opencl::check_error          (
+                                    cl_int loc_error                            // Error code.
+                                  )
+{
+  if(loc_error != CL_SUCCESS)                                                   // Checking local error code...
+  {
+    printf("\nError:  %s\n", get_error(loc_error));                             // Printing error message...
+    exit(EXIT_FAILURE);                                                         // Exiting...
+  }
+}
+
 cl_uint opencl::get_num_platforms()
 {
-  cl_int loc_err;                                                               // Local error code.
-  cl_uint loc_platforms_number;                                                 // Local # of platforms.
+  cl_int  loc_error;                                                            // Error code.
+  cl_uint loc_platforms_number;                                                 // # of platforms.
 
-  printf("Action: getting number of OpenCL platforms... ");
+  printf("Action: getting number of OpenCL platforms... ");                     // Printing message...
 
   // Getting number of existing OpenCL platforms:
-  loc_err = clGetPlatformIDs(
-                              0,                                                // Dummy # of platforms ("0" means we are asking for the # of platfomrs).
-                              NULL,                                             // Dummy platfomrs id.
-                              &loc_platforms_number                             // Returned local # of existing platforms.
-                            );
+  loc_error = clGetPlatformIDs(
+                                0,                                              // Dummy # of platforms ("0" means we are asking for the # of platfomrs).
+                                NULL,                                           // Dummy platfomrs id.
+                                &loc_platforms_number                           // Returned local # of existing platforms.
+                              );
 
-  if(loc_err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(loc_err));
-    exit(loc_err);
-  }
+  check_error(loc_error);                                                       // Checking returned error code...
 
   printf("\n        Found %d platform(s)!\n", loc_platforms_number);
   printf("        DONE!\n");
@@ -121,41 +129,31 @@ cl_uint opencl::get_num_platforms()
   return loc_platforms_number;                                                  // Returning local # of existing platforms...
 }
 
-cl_uint opencl::get_platforms()
+cl_platform_id opencl::get_platform_id(cl_uint loc_platforms_number, cl_uint loc_platform_index)
 {
-  cl_int          loc_err;                                                      // Local error code.
-  cl_platform_id* loc_platform_id;                                              // Local platform ID array.
-  cl_uint         loc_platforms_number;                                         // Local # of existing platfomrs.
-  int             i;                                                            // Index.
+  cl_int          loc_error;                                                    // Error code.
+  cl_platform_id* loc_platform_id;                                              // Platform IDs array.
+  cl_platform_id  loc_selected_platform_id;
 
-  loc_platforms_number = get_num_platforms();                                   // Getting # of existing platfomrs...
-  //loc_platform_id = (cl_platform_id*) malloc(sizeof(cl_platform_id) * loc_platforms_number);     // Allocating platform array...
-  loc_platform_id = new cl_platform_id[loc_platforms_number];
+  printf("Action: getting OpenCL platform... ");                                // Printing message...
+
+  loc_platform_id = new cl_platform_id[loc_platforms_number];                   // Allocating platform array...
 
   // Getting OpenCL platform IDs:
-  loc_err = clGetPlatformIDs(loc_platforms_number,                              // Local # of existing platforms.
-                             loc_platform_id,                                   // Local platform IDs array.
-                             NULL);                                             // Dummy # of platfomrs.
+  loc_error = clGetPlatformIDs(
+                                loc_platforms_number,                           // # of existing platforms.
+                                loc_platform_id,                                // Platform IDs array.
+                                NULL                                            // Dummy # of platforms.
+                              );
 
-  if(loc_err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(loc_err));
-    exit(loc_err);
-  }
+  check_error(loc_error);                                                       // Checking returned error code...
 
-  existing_platform = new platform*[loc_platforms_number];                      // Local platform object array.
+  loc_selected_platform_id = loc_platform_id[loc_platform_index];               // Setting id of selected platform...
+  delete loc_platform_id;                                                       // Deleting platform IDs array...
 
-  for(i = 0; i < loc_platforms_number; i++)
-  {
-    existing_platform[i] = new platform;
-    existing_platform[i]->init(loc_platform_id[i]);                             // Initializing platform objects...
-  }
-  printf("pippo\n");
-  printf("\n        Found %d platform(s)!\n", loc_platforms_number);
-  printf("        DONE!\n");
+  printf("        DONE!\n");                                                    // Printing message...
 
-  delete loc_platform_id;
-  return(loc_platforms_number);
+  return(loc_selected_platform_id);                                             // Returning platform...
 }
 
 cl_uint opencl::get_num_devices(cl_uint loc_platform_index)
@@ -222,11 +220,12 @@ cl_uint opencl::get_devices(cl_uint loc_platform_index)
 // PUBLIC METHODS:
 void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_device_type loc_device_type)
 {
-  cl_int        loc_err;                                                        // Local error code.
-  cl_uint       loc_platform_index;                                             // Local platform index.
-  cl_uint       loc_device_index;                                               // Local device index.
-  cl_device_id* loc_existing_device_id;                                         // Local existing device_id array.
-  int           i;                                                              // Index.
+  cl_int            loc_error;                                                  // Error code.
+  cl_platform_id    loc_platform_id;                                            // Platform ID.
+  opencl_platform   = new platform();
+
+  cl_device_id*     loc_existing_device_id;                                     // Local existing device_id array.
+  cl_int            i;                                                          // Index.
 
   printf("Action: finding OpenCL platforms...\n");
 
@@ -257,15 +256,18 @@ void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_d
     break;
   }
 
-  platforms_number = get_platforms();                                           // Getting number of existing platforms [#]...
+  platforms_number = get_num_platforms();                                       // Getting number of existing platforms [#]...
 
-  for(loc_platform_index = 0; loc_platform_index < platforms_number; loc_platform_index++)
+  for(i = 0; i < platforms_number; i++)
   {
+    loc_platform_id = get_platform_id(platforms_number, i);                     // Getting platform ID...
+    opencl_platform->init(loc_platform_id);                                     // Initializing platform...
+
     printf("        PLATFORM #%d:\n", loc_platform_index + 1);
-    printf("        --> profile: %s\n", existing_platform[loc_platform_index]->profile->value);
-    printf("        --> version: %s\n", existing_platform[loc_platform_index]->version->value);
-    printf("        --> name:    %s\n", existing_platform[loc_platform_index]->name->value);
-    printf("        --> vendor:  %s\n", existing_platform[loc_platform_index]->vendor->value);
+    printf("        --> profile: %s\n", opencl_platform->profile->value);
+    printf("        --> version: %s\n", opencl_platform->version->value);
+    printf("        --> name:    %s\n", opencl_platform->name->value);
+    printf("        --> vendor:  %s\n", opencl_platform->vendor->value);
     printf("\n");
   }
 
@@ -386,17 +388,13 @@ void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_d
 
 opencl::~opencl()
 {
-  cl_int loc_err;                                                               // Local error code.
+  cl_int loc_error;                                                             // Error code.
 
   printf("Action: releasing    OpenCL context... ");
 
-  loc_err = clReleaseContext(context_id);                                       // Releasing OpenCL context...
+  loc_error = clReleaseContext(context_id);                                     // Releasing OpenCL context...
 
-  if(loc_err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(loc_err));
-    exit(loc_err);
-  }
+  check_error(loc_error);                                                       // Checking returned error code...
 
   printf("DONE!\n");
 }
