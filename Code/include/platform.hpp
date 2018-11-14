@@ -12,17 +12,27 @@
   {
     private:
       // OpenCL error get function:
-      const char*             get_error   (
-                                            cl_int loc_error                    // Local error code.
-                                          );
+      const char*         get_error     (
+                                          cl_int            loc_error           // Local error code.
+                                        );
 
       // OpenCL error check function:
-      void                    check_error (
-                                            cl_int loc_error                    // Error code.
-                                          );
+      void                check_error   (
+                                          cl_int            loc_error           // Error code.
+                                        );
 
-      size_t  get_info_size(cl_platform_id loc_platform_id, cl_platform_info loc_parameter_name);
-      char*   get_info_value(cl_platform_id loc_platform_id, cl_platform_info loc_parameter_name, size_t loc_parameter_size);
+      // Gets size information:
+      size_t              get_info_size (
+                                          cl_platform_id    loc_platform_id,    // Platform ID.
+                                          cl_platform_info  loc_parameter_name  // Paramenter name.
+                                        );
+
+      // Gets size information:
+      char*               get_info_value(
+                                          cl_platform_id    loc_platform_id,    // Platform ID.
+                                          cl_platform_info  loc_parameter_name, // Paramenter name.
+                                          size_t            loc_parameter_size  // Parameter size.
+                                        );
 
     public:
       cl_platform_id          platform_id;                                      // OpenCL platform id.
@@ -32,7 +42,10 @@
       info*                   vendor;                                           // Platform parameter.
       info*                   extensions;                                       // Platform parameter.
 
-                              platform  (cl_platform_id loc_platform_id);
+                              platform  (
+                                          cl_platform_id    loc_platform_id     // Platform ID.
+                                        );
+
                               ~platform ();
   };
 
