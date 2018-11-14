@@ -23,9 +23,8 @@
       char*   value;                                                            // Value array.
       size_t  size;                                                             // Value array size.
 
-            info();
-      void  init(size_t loc_parameter_size, char* loc_parameter_value);
-            ~info();
+              info(size_t loc_size);
+              ~info();
   };
 
 #endif

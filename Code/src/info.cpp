@@ -3,18 +3,13 @@
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// "INFO" CLASS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-info::info()
+info::info(size_t loc_size)
 {
-
-}
-
-void info::init(size_t loc_parameter_size, char* loc_parameter_value)
-{
-  size  = loc_parameter_size;                                                   // Setting value array size...
-  value = loc_parameter_value;                                                  // Assigning value...
+  size      = loc_size;
+  value     = new char[loc_size];
 }
 
 info::~info()
 {
-
+  delete value;
 }
