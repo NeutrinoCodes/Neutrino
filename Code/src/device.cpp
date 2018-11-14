@@ -3,9 +3,37 @@
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// "DEVICE" CLASS ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-device::device()
+device::device(cl_device_id loc_device_id)
 {
+  // Device name info:
+  device_name             = new info(
+                                      get_info_size   (
+                                                        loc_device_id,
+                                                        CL_DEVICE_NAME
+                                                      )
+                                    );
 
+  device_name->value      =           get_info_value  (
+                                                        loc_device_id,
+                                                        CL_DEVICE_NAME,
+                                                        device_name->size
+                                                      );
+
+  // Device platform info:
+  device_platform         = new info(
+                                      get_info_size   (
+                                                        loc_device_id,
+                                                        CL_PLATFORM_PROFILE
+                                                      )
+                                    );
+
+  device_platform->value  =           get_info_value  (
+                                                        loc_device_id,
+                                                        CL_PLATFORM_PROFILE,
+                                                        device_name->size
+                                                      );
+
+  device_id         = loc_device_id;                                            // Initializing device_id...
 }
 
 // PRIVATE METHODS:
@@ -88,83 +116,43 @@ const char* device::get_error(cl_int loc_error)
   }
 }
 
-size_t device::get_info_size(cl_device_info loc_parameter_name)
+size_t device::get_info_size(cl_device_id loc_device_id, cl_device_info loc_parameter_name)
 {
-  cl_int  loc_err;                                                              // Local error code.
-  size_t  loc_parameter_size;                                                   // Local parameter size.
-
-  // Getting device information:
-  loc_err = clGetDeviceInfo(device_id,                                          // Device id.
-                            loc_parameter_name,                                 // Local parameter name.
-                            0,                                                  // Dummy parameter size: "0" means we ask for the # of parameters.
-                            NULL,                                               // Dummy parameter.
-                            &loc_parameter_size);                               // Returned local parameter size.
-
-  if(loc_err != CL_SUCCESS)
-  {
-    printf("Error:  %s\n", get_error(loc_err));
-    exit(loc_err);
-  }
-
-  return (loc_parameter_size);
-}
-
-char* device::get_info_value(cl_device_info loc_parameter_name, size_t loc_parameter_size)
-{
-  cl_int  loc_err;                                                              // Local error code.
-  char*   loc_parameter_value;                                                  // Local parameter value.
+  cl_int  loc_error;                                                            // Error code.
+  size_t  loc_parameter_size;                                                   // Parameter size.
 
   // Getting platform information:
-  loc_err = clGetDeviceInfo(device_id,                                          // Device id.
-                            loc_parameter_name,                                 // Parameter name.
-                            loc_parameter_size,                                 // Parameter size.
-                            loc_parameter_value,                                // Parameter.
-                            NULL);                                              // Returned parameter size (NULL = ignored).
+  loc_error = clGetDeviceInfo   (
+                                  loc_device_id,                                // Device ID.
+                                  loc_parameter_name,                           // Parameter name.
+                                  0,                                            // Dummy parameter size: "0" means we ask for the # of parameters.
+                                  NULL,                                         // Dummy parameter.
+                                  &loc_parameter_size                           // Returned parameter size.
+                                );
 
-  if(loc_err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(loc_err));
-    exit(loc_err);
-  }
+  check_error(loc_error);
+  printf("parameter size = %d\n", loc_parameter_size);
 
-  return (loc_parameter_value);                                                 // Returning local parameter value...
+  return (loc_parameter_size);                                                  // Returning parameter size...
 }
 
-// PUBLIC METHODS:
-void device::init(cl_device_id loc_device_id)
+char* device::get_info_value(cl_device_id loc_device_id, cl_device_info loc_parameter_name, size_t loc_parameter_size)
 {
-  device_name             = new info();
-  device_platform         = new info();
+  cl_int  loc_error;                                                            // Error code.
+  char*   loc_parameter_value;                                                  // Parameter value.
 
-  // Device name info:
-  device_name             = new info(
-                                      get_info_size   (
-                                                        loc_device_id,
-                                                        CL_DEVICE_NAME
-                                                      )
-                                    );
+  // Getting platform information:
+  loc_error = clGetDeviceInfo   (
+                                  loc_device_id,                                // Device ID.
+                                  loc_parameter_name,                           // Parameter name.
+                                  loc_parameter_size,                           // Parameter size.
+                                  loc_parameter_value,                          // Returned parameter value.
+                                  NULL                                          // Returned parameter size (NULL = ignored).
+                                );
 
-  device_name->value      =           get_info_value  (
-                                                        loc_device_id,
-                                                        CL_DEVICE_NAME,
-                                                        device_name->size
-                                                      );
+  check_error(loc_error);
 
-  // Device platform info:
-  device_platform         = new info(
-                                      get_info_size   (
-                                                        loc_device_id,
-                                                        CL_PLATFORM_PROFILE
-                                                      )
-                                    );
-
-  device_platform->value  =           get_info_value  (
-                                                        loc_device_id,
-                                                        CL_PLATFORM_PROFILE,
-                                                        device_name->size
-                                                      );
-
-  device_id         = loc_device_id;                                            // Initializing device_id...
+  return (loc_parameter_value);                                                 // Returning local parameter value...
 }
 
 device::~device()
