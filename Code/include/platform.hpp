@@ -35,7 +35,7 @@
                                         );
 
     public:
-      cl_platform_id          platform_id;                                      // OpenCL platform id.
+      cl_platform_id          id;                                               // OpenCL platform id.
       info*                   profile;                                          // Platform parameter.
       info*                   version;                                          // Platform parameter.
       info*                   name;                                             // Platform parameter.
