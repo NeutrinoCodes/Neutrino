@@ -401,6 +401,8 @@ void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_d
                                NULL,                                            // Context error report callback function argument.
                                &loc_error);                                     // Error code.
   */
+
+  // EZOR: 15NOV2018 - TO BE TESTED:
   context_id = clCreateContext  (
                                   properties,                                   // Context properties.
                                   1,                                            // # of devices on selected platform.
