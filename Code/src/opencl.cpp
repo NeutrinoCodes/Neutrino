@@ -183,22 +183,36 @@ cl_uint opencl::get_num_devices(cl_platform_id loc_platform_id)
   return(loc_devices_number);                                                   // Returning local number of existing OpenCL GPU devices...
 }
 
-cl_uint opencl::get_devices(cl_uint loc_platform_index)
+cl_uint opencl::get_device_id(cl_uint loc_devices_number, cl_uint loc_device_index, cl_uint loc_platform_index)
 {
-  cl_int          loc_err;
-  cl_uint         loc_devices_number;
+  cl_int          loc_error;
   cl_device_id*   loc_device_id;
-  int             i;
+  cl_device_id    loc_selected_device_id;
+
+  printf("Action: getting OpenCL device ID... ");                               // Printing message...
+
+  loc_device_id = new cl_device_id[loc_devices_number];                   // Allocating platform array...
+
+  // Getting OpenCL platform IDs:
+  loc_error = clGetDeviceIDs(
+                                loc_platforms_number,                           // # of existing platforms.
+                                loc_platform_id,                                // Platform IDs array.
+                                NULL                                            // Dummy # of platforms.
+                              );
+
+  check_error(loc_error);                                                       // Checking returned error code...
 
   loc_devices_number = get_num_devices(loc_platform_index);                     // Getting # of existing devices...
   loc_device_id = (cl_device_id*) malloc(sizeof(cl_device_id) * loc_devices_number);           // Allocating device array...
 
   // Getting OpenCL device IDs...
-  loc_err = clGetDeviceIDs(opencl_platform->platform_id,    // Platform...
-                           device_type,                                         // Device type.
-                           loc_devices_number,                                  // Local # of devices.
-                           loc_device_id,                                       // Local device_id array.
-                           NULL);                                               // Dummy # of existing devices.
+  loc_err = clGetDeviceIDs  (
+                              opencl_platform->id,                              // Platform...
+                              device_type,                                      // Device type.
+                              loc_devices_number,                               // Local # of devices.
+                              loc_device_id,                                    // Local device_id array.
+                              NULL                                              // Dummy # of existing devices.
+                            );
 
   if(loc_err != CL_SUCCESS)
   {
@@ -261,9 +275,9 @@ void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_d
 
   for(i = 0; i < platforms_number; i++)
   {
-    loc_platform_id = get_platform_id(platforms_number, i);               // Getting platform ID...
+    loc_platform_id = get_platform_id(platforms_number, i);                     // Getting platform ID...
     printf("pippo\n");
-    opencl_platform = new platform(loc_platform_id);                      // Initializing platform...
+    opencl_platform = new platform(loc_platform_id);                            // Initializing platform...
 
     printf("pippo\n");
     printf("        PLATFORM #%d:\n", i + 1);
@@ -280,29 +294,32 @@ void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_d
 
   if(platforms_number > 1)
   {
-    printf("Action: please choose a platform [1...%d", platforms_number);
-    choosen_platform = loc_neutrino->query_numeric(" + enter]: ", 1, platforms_number) - 1;
+    printf("Action: please select a platform [1...%d", platforms_number);
+    selected_platform = loc_neutrino->query_numeric(" + enter]: ", 1, platforms_number) - 1;
   }
 
   else
   {
-    choosen_platform = 0;
+    selected_platform = 0;
   }
 
-  loc_platform_id = get_platform_id(platforms_number, choosen_platform);        // Getting choosen platform ID...
-  opencl_platform = new platform(loc_platform_id);                        // Initializing platform...
+  loc_platform_id = get_platform_id(platforms_number, selected_platform);       // Getting choosen platform ID...
+  opencl_platform = new platform(loc_platform_id);                              // Initializing platform...
 
   printf("DONE!\n");
 
   printf("Action: finding OpenCL GPU devices...\n");
 
-  devices_number = get_devices(choosen_platform);                               // Getting # of existing GPU devices on choosen platform [#]...
+  devices_number = get_device_number(loc_platform_id);                               // Getting # of existing GPU devices on choosen platform [#]...
 
   for(i = 0; i < devices_number; i++)
   {
+    loc_device_id = get_device_id(platforms_number, i);                         // Getting device ID...
+    opencl_device = new device(loc_platform_id);                                // Initializing platform...
+
     printf("        DEVICE #%d:\n", i);
-    printf("        --> device name: %s\n", existing_device[i]->device_name->value);
-    printf("        --> device platform: %s\n", existing_device[i]->device_platform->value);
+    printf("        --> device name:     %s\n", opencl_device->name->value);
+    printf("        --> device platform: %s\n", opencl_device->profile->value);
     printf("\n");
   }
 
@@ -310,13 +327,13 @@ void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_d
 
   if(devices_number > 1)
   {
-    printf("Action: please choose a device [1...%d", devices_number);
-    choosen_device = loc_neutrino->query_numeric(" + enter]: ", 1, devices_number) - 1;
+    printf("Action: please select a device [1...%d", devices_number);
+    selected_device = loc_neutrino->query_numeric(" + enter]: ", 1, devices_number) - 1;
   }
 
   else
   {
-    choosen_device = 0;
+    selected_device = 0;
   }
 
   printf("DONE!\n");
@@ -373,15 +390,25 @@ void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_d
   */
 
   // EZOR: 02NOV2018. For the moment we create a context made of only 1 device (choosen device).
-  loc_existing_device_id = (cl_device_id*) malloc(1);
-  loc_existing_device_id[0] = existing_device[choosen_device]->device_id;
+  //loc_existing_device_id = (cl_device_id*) malloc(1);
+  //loc_existing_device_id[0] = opencl_device->id;
 
+  /*
   context_id = clCreateContext(properties,                                      // Context properties.
                                1,                                               // # of devices on choosen platform.
                                loc_existing_device_id,                          // Local list of existing devices on choosen platform.
                                NULL,                                            // Context error report callback function.
                                NULL,                                            // Context error report callback function argument.
                                &loc_error);                                     // Error code.
+  */
+  context_id = clCreateContext  (
+                                  properties,                                   // Context properties.
+                                  1,                                            // # of devices on selected platform.
+                                  &opencl_device->id,                           // Pointer to the selecet devices on selected platform.
+                                  NULL,                                         // Context error report callback function.
+                                  NULL,                                         // Context error report callback function argument.
+                                  &loc_error                                    // Error code.
+                                );
 
   check_error(loc_error);                                                       // Checking returned error code...
 
@@ -403,237 +430,3 @@ opencl::~opencl()
 
   printf("DONE!\n");
 }
-
-
-
-
-
-/*
-  switch (name_param)
-  {
-    case CL_PLATFORM_PROFILE:
-      printf("        CL_PLATFORM_PROFILE = %s\n", value);
-    break;
-
-    case CL_PLATFORM_VERSION:
-      printf("        CL_PLATFORM_VERSION = %s\n", value);
-    break;
-
-    case CL_PLATFORM_NAME:
-      printf("        CL_PLATFORM_NAME = %s\n", value);
-    break;
-
-    case CL_PLATFORM_VENDOR:
-      printf("        CL_PLATFORM_VENDOR = %s\n", value);
-    break;
-
-    case CL_PLATFORM_EXTENSIONS:
-      printf("        CL_PLATFORM_EXTENSIONS = %s\n", value);
-  }
-
-*/
-
-
-
-
-/*
-case CL_DEVICE_ADDRESS_BITS:
-  printf("        CL_DEVICE_ADDRESS_BITS = %s\n", value);
-break;
-
-case CL_DEVICE_AVAILABLE:
-  printf("        CL_DEVICE_AVAILABLE = %s\n", value);
-break;
-
-case CL_DEVICE_COMPILER_AVAILABLE:
-  printf("        CL_DEVICE_COMPILER_AVAILABLE = %s\n", value);
-break;
-
-case CL_DEVICE_ENDIAN_LITTLE:
-  printf("        CL_DEVICE_ENDIAN_LITTLE = %s\n", value);
-break;
-
-case CL_DEVICE_ERROR_CORRECTION_SUPPORT:
-  printf("        CL_DEVICE_ERROR_CORRECTION_SUPPORT = %s\n", value);
-break;
-
-case CL_DEVICE_EXECUTION_CAPABILITIES:
-  printf("        CL_DEVICE_EXECUTION_CAPABILITIES = %s\n", value);
-break;
-
-case CL_DEVICE_EXTENSIONS:
-  printf("        CL_DEVICE_EXTENSIONS = %s\n", value);
-break;
-
-case CL_DEVICE_GLOBAL_MEM_CACHE_SIZE:
-  printf("        CL_DEVICE_GLOBAL_MEM_CACHE_SIZE = %s\n", value);
-break;
-
-case CL_DEVICE_GLOBAL_MEM_CACHE_TYPE:
-  printf("        CL_DEVICE_GLOBAL_MEM_CACHE_TYPE = %s\n", value);
-break;
-
-case CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE:
-  printf("        CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE = %s\n", value);
-break;
-
-case CL_DEVICE_GLOBAL_MEM_SIZE:
-  printf("        CL_DEVICE_GLOBAL_MEM_SIZE = %s\n", value);
-break;
-
-case CL_DEVICE_IMAGE_SUPPORT:
-  printf("        CL_DEVICE_IMAGE_SUPPORT = %s\n", value);
-break;
-
-case CL_DEVICE_IMAGE2D_MAX_HEIGHT:
-  printf("        CL_DEVICE_IMAGE2D_MAX_HEIGHT = %s\n", value);
-break;
-
-case CL_DEVICE_IMAGE2D_MAX_WIDTH:
-  printf("        CL_DEVICE_IMAGE2D_MAX_WIDTH = %s\n", value);
-break;
-
-case CL_DEVICE_IMAGE3D_MAX_DEPTH:
-  printf("        CL_DEVICE_IMAGE3D_MAX_DEPTH = %s\n", value);
-break;
-
-case CL_DEVICE_IMAGE3D_MAX_HEIGHT:
-  printf("        CL_DEVICE_IMAGE3D_MAX_HEIGHT = %s\n", value);
-break;
-
-case CL_DEVICE_IMAGE3D_MAX_WIDTH:
-  printf("        CL_DEVICE_IMAGE3D_MAX_WIDTH = %s\n", value);
-break;
-
-case CL_DEVICE_LOCAL_MEM_SIZE:
-  printf("        CL_DEVICE_LOCAL_MEM_SIZE = %s\n", value);
-break;
-
-case CL_DEVICE_LOCAL_MEM_TYPE:
-  printf("        CL_DEVICE_LOCAL_MEM_TYPE = %s\n", value);
-break;
-
-case CL_DEVICE_MAX_CLOCK_FREQUENCY:
-  printf("        CL_DEVICE_MAX_CLOCK_FREQUENCY = %s\n", value);
-break;
-
-case CL_DEVICE_MAX_COMPUTE_UNITS:
-  printf("        CL_DEVICE_MAX_COMPUTE_UNITS = %d\n", (int)*value);
-break;
-
-case CL_DEVICE_MAX_CONSTANT_ARGS:
-  printf("        CL_DEVICE_MAX_CONSTANT_ARGS = %s\n", value);
-break;
-
-case CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE:
-  printf("        CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE = %s\n", value);
-break;
-
-case CL_DEVICE_MAX_MEM_ALLOC_SIZE:
-  printf("        CL_DEVICE_MAX_MEM_ALLOC_SIZE = %s\n", value);
-break;
-
-case CL_DEVICE_MAX_PARAMETER_SIZE:
-  printf("        CL_DEVICE_MAX_PARAMETER_SIZE = %s\n", value);
-break;
-
-case CL_DEVICE_MAX_READ_IMAGE_ARGS:
-  printf("        CL_DEVICE_MAX_READ_IMAGE_ARGS = %s\n", value);
-break;
-
-case CL_DEVICE_MAX_SAMPLERS:
-  printf("        CL_DEVICE_MAX_SAMPLERS = %s\n", value);
-break;
-
-case CL_DEVICE_MAX_WORK_GROUP_SIZE:
-  printf("        CL_DEVICE_MAX_WORK_GROUP_SIZE = %s\n", value);
-break;
-
-case CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS:
-  printf("        CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS = %s\n", value);
-break;
-
-case CL_DEVICE_MAX_WORK_ITEM_SIZES:
-  printf("        CL_DEVICE_MAX_WORK_ITEM_SIZES = %s\n", value);
-break;
-
-case CL_DEVICE_MAX_WRITE_IMAGE_ARGS:
-  printf("        CL_DEVICE_MAX_WRITE_IMAGE_ARGS = %s\n", value);
-break;
-
-case CL_DEVICE_MEM_BASE_ADDR_ALIGN:
-  printf("        CL_DEVICE_MEM_BASE_ADDR_ALIGN = %s\n", value);
-break;
-
-case CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE:
-  printf("        CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE = %s\n", value);
-break;
-
-case CL_DEVICE_NAME:
-  printf("        CL_DEVICE_NAME = %s\n", value);
-break;
-
-case CL_DEVICE_PLATFORM:
-  printf("        CL_DEVICE_PLATFORM = %s\n", value);
-break;
-
-case CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR:
-  printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR = %s\n", value);
-break;
-
-case CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE:
-  printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE = %s\n", value);
-break;
-
-case CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT:
-  printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT = %s\n", value);
-break;
-
-case CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT:
-  printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT = %s\n", value);
-break;
-
-case CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG:
-  printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG = %s\n", value);
-break;
-
-case CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT:
-  printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT = %s\n", value);
-break;
-
-case CL_DEVICE_PROFILE:
-  printf("        CL_DEVICE_PROFILE = %s\n", value);
-break;
-
-case CL_DEVICE_PROFILING_TIMER_RESOLUTION:
-  printf("        CL_DEVICE_PROFILING_TIMER_RESOLUTION = %s\n", value);
-break;
-
-case CL_DEVICE_QUEUE_PROPERTIES:
-  printf("        CL_DEVICE_QUEUE_PROPERTIES = %s\n", value);
-break;
-
-case CL_DEVICE_SINGLE_FP_CONFIG:
-  printf("        CL_DEVICE_SINGLE_FP_CONFIG = %s\n", value);
-break;
-
-case CL_DEVICE_TYPE:
-  printf("        CL_DEVICE_TYPE = %s\n", value);
-break;
-
-case CL_DEVICE_VENDOR_ID:
-  printf("        CL_DEVICE_VENDOR_ID = %s\n", value);
-break;
-
-case CL_DEVICE_VENDOR:
-  printf("        CL_DEVICE_VENDOR = %s\n", value);
-break;
-
-case CL_DEVICE_VERSION:
-  printf("        CL_DEVICE_VERSION = %s\n", value);
-break;
-
-case CL_DRIVER_VERSION:
-  printf("        CL_DRIVER_VERSION = %s\n", value);
-}
-*/

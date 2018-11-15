@@ -13,25 +13,227 @@ device::device(cl_device_id loc_device_id)
                                                       )
                                     );
 
-  device_name->value      =           get_info_value  (
+  name->value             =           get_info_value  (
                                                         loc_device_id,
                                                         CL_DEVICE_NAME,
                                                         device_name->size
                                                       );
 
   // Device platform info:
-  device_platform         = new info(
+  profile                 = new info(
                                       get_info_size   (
                                                         loc_device_id,
-                                                        CL_PLATFORM_PROFILE
+                                                        CL_DEVICE_PROFILE
                                                       )
                                     );
 
-  device_platform->value  =           get_info_value  (
+  profile->value          =           get_info_value  (
                                                         loc_device_id,
-                                                        CL_PLATFORM_PROFILE,
+                                                        CL_DEVICE_PROFILE,
                                                         device_name->size
                                                       );
+
+    /*
+    case CL_DEVICE_ADDRESS_BITS:
+    printf("        CL_DEVICE_ADDRESS_BITS = %s\n", value);
+    break;
+
+    case CL_DEVICE_AVAILABLE:
+    printf("        CL_DEVICE_AVAILABLE = %s\n", value);
+    break;
+
+    case CL_DEVICE_COMPILER_AVAILABLE:
+    printf("        CL_DEVICE_COMPILER_AVAILABLE = %s\n", value);
+    break;
+
+    case CL_DEVICE_ENDIAN_LITTLE:
+    printf("        CL_DEVICE_ENDIAN_LITTLE = %s\n", value);
+    break;
+
+    case CL_DEVICE_ERROR_CORRECTION_SUPPORT:
+    printf("        CL_DEVICE_ERROR_CORRECTION_SUPPORT = %s\n", value);
+    break;
+
+    case CL_DEVICE_EXECUTION_CAPABILITIES:
+    printf("        CL_DEVICE_EXECUTION_CAPABILITIES = %s\n", value);
+    break;
+
+    case CL_DEVICE_EXTENSIONS:
+    printf("        CL_DEVICE_EXTENSIONS = %s\n", value);
+    break;
+
+    case CL_DEVICE_GLOBAL_MEM_CACHE_SIZE:
+    printf("        CL_DEVICE_GLOBAL_MEM_CACHE_SIZE = %s\n", value);
+    break;
+
+    case CL_DEVICE_GLOBAL_MEM_CACHE_TYPE:
+    printf("        CL_DEVICE_GLOBAL_MEM_CACHE_TYPE = %s\n", value);
+    break;
+
+    case CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE:
+    printf("        CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE = %s\n", value);
+    break;
+
+    case CL_DEVICE_GLOBAL_MEM_SIZE:
+    printf("        CL_DEVICE_GLOBAL_MEM_SIZE = %s\n", value);
+    break;
+
+    case CL_DEVICE_IMAGE_SUPPORT:
+    printf("        CL_DEVICE_IMAGE_SUPPORT = %s\n", value);
+    break;
+
+    case CL_DEVICE_IMAGE2D_MAX_HEIGHT:
+    printf("        CL_DEVICE_IMAGE2D_MAX_HEIGHT = %s\n", value);
+    break;
+
+    case CL_DEVICE_IMAGE2D_MAX_WIDTH:
+    printf("        CL_DEVICE_IMAGE2D_MAX_WIDTH = %s\n", value);
+    break;
+
+    case CL_DEVICE_IMAGE3D_MAX_DEPTH:
+    printf("        CL_DEVICE_IMAGE3D_MAX_DEPTH = %s\n", value);
+    break;
+
+    case CL_DEVICE_IMAGE3D_MAX_HEIGHT:
+    printf("        CL_DEVICE_IMAGE3D_MAX_HEIGHT = %s\n", value);
+    break;
+
+    case CL_DEVICE_IMAGE3D_MAX_WIDTH:
+    printf("        CL_DEVICE_IMAGE3D_MAX_WIDTH = %s\n", value);
+    break;
+
+    case CL_DEVICE_LOCAL_MEM_SIZE:
+    printf("        CL_DEVICE_LOCAL_MEM_SIZE = %s\n", value);
+    break;
+
+    case CL_DEVICE_LOCAL_MEM_TYPE:
+    printf("        CL_DEVICE_LOCAL_MEM_TYPE = %s\n", value);
+    break;
+
+    case CL_DEVICE_MAX_CLOCK_FREQUENCY:
+    printf("        CL_DEVICE_MAX_CLOCK_FREQUENCY = %s\n", value);
+    break;
+
+    case CL_DEVICE_MAX_COMPUTE_UNITS:
+    printf("        CL_DEVICE_MAX_COMPUTE_UNITS = %d\n", (int)*value);
+    break;
+
+    case CL_DEVICE_MAX_CONSTANT_ARGS:
+    printf("        CL_DEVICE_MAX_CONSTANT_ARGS = %s\n", value);
+    break;
+
+    case CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE:
+    printf("        CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE = %s\n", value);
+    break;
+
+    case CL_DEVICE_MAX_MEM_ALLOC_SIZE:
+    printf("        CL_DEVICE_MAX_MEM_ALLOC_SIZE = %s\n", value);
+    break;
+
+    case CL_DEVICE_MAX_PARAMETER_SIZE:
+    printf("        CL_DEVICE_MAX_PARAMETER_SIZE = %s\n", value);
+    break;
+
+    case CL_DEVICE_MAX_READ_IMAGE_ARGS:
+    printf("        CL_DEVICE_MAX_READ_IMAGE_ARGS = %s\n", value);
+    break;
+
+    case CL_DEVICE_MAX_SAMPLERS:
+    printf("        CL_DEVICE_MAX_SAMPLERS = %s\n", value);
+    break;
+
+    case CL_DEVICE_MAX_WORK_GROUP_SIZE:
+    printf("        CL_DEVICE_MAX_WORK_GROUP_SIZE = %s\n", value);
+    break;
+
+    case CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS:
+    printf("        CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS = %s\n", value);
+    break;
+
+    case CL_DEVICE_MAX_WORK_ITEM_SIZES:
+    printf("        CL_DEVICE_MAX_WORK_ITEM_SIZES = %s\n", value);
+    break;
+
+    case CL_DEVICE_MAX_WRITE_IMAGE_ARGS:
+    printf("        CL_DEVICE_MAX_WRITE_IMAGE_ARGS = %s\n", value);
+    break;
+
+    case CL_DEVICE_MEM_BASE_ADDR_ALIGN:
+    printf("        CL_DEVICE_MEM_BASE_ADDR_ALIGN = %s\n", value);
+    break;
+
+    case CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE:
+    printf("        CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE = %s\n", value);
+    break;
+
+    case CL_DEVICE_NAME:
+    printf("        CL_DEVICE_NAME = %s\n", value);
+    break;
+
+    case CL_DEVICE_PLATFORM:
+    printf("        CL_DEVICE_PLATFORM = %s\n", value);
+    break;
+
+    case CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR:
+    printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR = %s\n", value);
+    break;
+
+    case CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE:
+    printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE = %s\n", value);
+    break;
+
+    case CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT:
+    printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT = %s\n", value);
+    break;
+
+    case CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT:
+    printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT = %s\n", value);
+    break;
+
+    case CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG:
+    printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG = %s\n", value);
+    break;
+
+    case CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT:
+    printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT = %s\n", value);
+    break;
+
+    case CL_DEVICE_PROFILE:
+    printf("        CL_DEVICE_PROFILE = %s\n", value);
+    break;
+
+    case CL_DEVICE_PROFILING_TIMER_RESOLUTION:
+    printf("        CL_DEVICE_PROFILING_TIMER_RESOLUTION = %s\n", value);
+    break;
+
+    case CL_DEVICE_QUEUE_PROPERTIES:
+    printf("        CL_DEVICE_QUEUE_PROPERTIES = %s\n", value);
+    break;
+
+    case CL_DEVICE_SINGLE_FP_CONFIG:
+    printf("        CL_DEVICE_SINGLE_FP_CONFIG = %s\n", value);
+    break;
+
+    case CL_DEVICE_TYPE:
+    printf("        CL_DEVICE_TYPE = %s\n", value);
+    break;
+
+    case CL_DEVICE_VENDOR_ID:
+    printf("        CL_DEVICE_VENDOR_ID = %s\n", value);
+    break;
+
+    case CL_DEVICE_VENDOR:
+    printf("        CL_DEVICE_VENDOR = %s\n", value);
+    break;
+
+    case CL_DEVICE_VERSION:
+    printf("        CL_DEVICE_VERSION = %s\n", value);
+    break;
+
+    case CL_DRIVER_VERSION:
+    printf("        CL_DRIVER_VERSION = %s\n", value);
+  }
+  */
 
   device_id         = loc_device_id;                                            // Initializing device_id...
 }
