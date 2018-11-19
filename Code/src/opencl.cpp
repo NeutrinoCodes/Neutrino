@@ -239,68 +239,90 @@ void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_d
   cl_platform_id    loc_platform_id;                                            // Platform ID.
   cl_device_id*     loc_existing_device_id;                                     // Local existing device_id array.
   cl_int            i;                                                          // Index.
+  char*             loc_device_type_text = new char[SIZE_TEXT_MAX];             // Device type text [string].
 
-  printf("Action: finding OpenCL platforms...\n");
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////// SETTING TARGET DEVICE TYPE //////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  printf("Action: setting target device type = ");                              // Printing message...
 
-  switch(loc_device_type)                                                       // Setting device type...
+  switch(loc_device_type)                                                       // Selecting device type...
   {
     case CPU:
-      device_type = CL_DEVICE_TYPE_CPU;
+      device_type = CL_DEVICE_TYPE_CPU;                                         // Setting device type = CPU...
+      loc_device_type_text = "CPU";                                             // Printing message...
     break;
 
     case GPU:
-      device_type = CL_DEVICE_TYPE_GPU;
+      device_type = CL_DEVICE_TYPE_GPU;                                         // Setting device type = GPU...
+      loc_device_type_text = "GPU";                                             // Printing message...
     break;
 
     case ACCELERATOR:
-      device_type = CL_DEVICE_TYPE_ACCELERATOR;
+      device_type = CL_DEVICE_TYPE_ACCELERATOR;                                 // Setting device type = ACCELERATOR...
+      loc_device_type_text = "ACCELERATOR";                                     // Printing message...
     break;
 
     case DEFAULT:
-      device_type = CL_DEVICE_TYPE_DEFAULT;
+      device_type = CL_DEVICE_TYPE_DEFAULT;                                     // Setting device type = DEFAULT...
+      loc_device_type_text = "DEFAULT";                                         // Printing message...
     break;
 
     case ALL:
-      device_type = CL_DEVICE_TYPE_ALL;
+      device_type = CL_DEVICE_TYPE_ALL;                                         // Setting device type = ALL...
+      loc_device_type_text = "ALL";                                             // Printing message...
     break;
 
     default:
-      device_type = CL_DEVICE_TYPE_DEFAULT;
+      device_type = CL_DEVICE_TYPE_DEFAULT;                                     // Setting device type = DEFAULT...
+      loc_device_type_text = "DEFAULT";                                         // Printing message...
     break;
   }
 
+  printf("%s...\n", loc_device_type_text);                                      // Printing message...
   device_type = loc_device_type;                                                // Setting device type...
 
+  printf("DONE!\n");                                                            // Printing message...
 
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////// SETTING OPENCL PLATFORM ///////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  printf("Action: finding OpenCL platforms...\n");                              // Printing message...
 
   platforms_number = get_platforms_number();                                    // Getting # of existing platforms [#]...
 
-  for(i = 0; i < platforms_number; i++)
+  for(i = 0; i < platforms_number; i++)                                         // Checking all platforms:
   {
     loc_platform_id = get_platform_id(i);                                       // Getting platform ID...
     opencl_platform = new platform(loc_platform_id);                            // Initializing platform...
 
-    printf("        PLATFORM #%d:\n", i + 1);
-    printf("        --> profile: %s\n", opencl_platform->profile->value);
-    printf("        --> version: %s\n", opencl_platform->version->value);
-    printf("        --> name:    %s\n", opencl_platform->name->value);
-    printf("        --> vendor:  %s\n", opencl_platform->vendor->value);
+    printf("        PLATFORM #%d:\n", i + 1);                                   // Printing message...
+    printf("        --> profile: %s\n", opencl_platform->profile->value);       // Printing message...
+    printf("        --> version: %s\n", opencl_platform->version->value);       // Printing message...
+    printf("        --> name:    %s\n", opencl_platform->name->value);          // Printing message...
+    printf("        --> vendor:  %s\n", opencl_platform->vendor->value);        // Printing message...
     printf("\n");
 
-    delete opencl_platform;
+    delete opencl_platform;                                                     // Deleting platform...
   }
 
-  printf("DONE!\n");
+  printf("DONE!\n");                                                            // Printing message...
 
-  if(platforms_number > 1)
+  if(platforms_number > 1)                                                      // Asking to select a platform, in case many have been found...
   {
-    printf("Action: please select a platform [1...%d", platforms_number);
-    selected_platform = loc_neutrino->query_numeric(" + enter]: ", 1, platforms_number) - 1;
+    printf("Action: please select a platform [1...%d", platforms_number);       // Formulating query...
+    selected_platform = (
+                          loc_neutrino->query_numeric (
+                                                        " + enter]: ",          // Query text.
+                                                        1,                      // Minimum numeric choice in query answer.
+                                                        platforms_number        // Maximum numeric choice in query answer.
+                                                      )
+                        ) - 1;                                                  // Setting selected platform index [0...platforms_number - 1]...
   }
 
   else
   {
-    selected_platform = 0;
+    selected_platform = 0;                                                      // Setting 1st platform, in case it is the only found one...
   }
 
   loc_platform_id = get_platform_id(selected_platform);                         // Getting selected platform ID...
@@ -308,42 +330,54 @@ void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_d
 
   printf("DONE!\n");
 
-  printf("Action: finding OpenCL GPU devices...\n");
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////// SETTING OPENCL DEVICE ////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  printf("Action: finding OpenCL %s devices...\n", loc_device_type_text);       // Printing message...
 
   devices_number = get_devices_number();                                        // Getting # of existing GPU devices on selected platform [#]...
 
-  for(i = 0; i < devices_number; i++)
+  for(i = 0; i < devices_number; i++)                                           // Checking all devices:
   {
     loc_device_id = get_device_id(i);                                           // Getting device ID...
     opencl_device = new device(loc_device_id);                                  // Initializing platform...
 
-    printf("        DEVICE #%d:\n", i);
-    printf("        --> device name:     %s\n", opencl_device->name->value);
-    printf("        --> device platform: %s\n", opencl_device->profile->value);
-    printf("\n");
+    printf("        DEVICE #%d:\n", i);                                         // Printing message...
+    printf("        --> device name:     %s\n", opencl_device->name->value);    // Printing message...
+    printf("        --> device platform: %s\n", opencl_device->profile->value); // Printing message...
+    printf("\n");                                                               // Printing message...
 
-    delete opencl_device;
+    delete opencl_device;                                                       // Deleting device...
   }
 
-  printf("DONE!\n");
+  printf("DONE!\n");                                                            // Printing message...
 
-  if(devices_number > 1)
+  if(devices_number > 1)                                                        // Asking to select a platform, in case many have been found...
   {
-    printf("Action: please select a device [1...%d", devices_number);
-    selected_device = loc_neutrino->query_numeric(" + enter]: ", 1, devices_number) - 1;
+    printf("Action: please select a device [1...%d", devices_number);           // Formulating query...
+    selected_device = (
+                        loc_neutrino->query_numeric (
+                                                      " + enter]: ",            // Query text.
+                                                      1,                        // Minimum numeric choice in query answer.
+                                                      devices_number            // Maximum numeric choice in query answer.
+                                                    )
+                      ) - 1;                                                    // Setting selected device index [0...platforms_number - 1]...
   }
 
   else
   {
-    selected_device = 0;
+    selected_device = 0;                                                        // Setting 1st device, in case it is the only found one...
   }
 
   loc_device_id = get_device_id(selected_device);                               // Getting selected device ID...
   opencl_device = new device(loc_device_id);                                    // Initializing device...
 
-  printf("DONE!\n");
+  printf("DONE!\n");                                                            // Printing message...
 
-  printf("Action: identifying operative system... ");
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////// IDENTIFYING OS //////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  printf("Action: identifying operating system... ");                           // Printing message...
 
   #ifdef __APPLE__                                                              // Checking for APPLE system...
     printf("found APPLE!\n");                                                   // Printing message...
@@ -382,6 +416,9 @@ void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_d
     };
   #endif
 
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////// CREATING OPENCL CONTEXT ///////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   printf("Action: creating OpenCL context... ");                                // Printing message...
 
   // Creating OpenCL context:
@@ -431,6 +468,8 @@ opencl::~opencl()
   printf("Action: releasing    OpenCL context... ");
 
   delete opencl_platform;
+  delete opencl_device;
+  delete loc_device_type_text;
   loc_error = clReleaseContext(context_id);                                     // Releasing OpenCL context...
 
   check_error(loc_error);                                                       // Checking returned error code...
