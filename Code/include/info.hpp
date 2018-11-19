@@ -20,9 +20,9 @@
     private:
 
     public:
-      char*   value;                                                            // Value array.
       size_t  size;                                                             // Value array size.
-
+      char*   value;                                                            // Value array.
+      
               info(size_t loc_size);
               ~info();
   };
