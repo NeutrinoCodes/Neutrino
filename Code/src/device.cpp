@@ -6,7 +6,7 @@
 device::device(cl_device_id loc_device_id)
 {
   // Device name info:
-  device_name             = new info(
+  name                    = new info(
                                       get_info_size   (
                                                         loc_device_id,
                                                         CL_DEVICE_NAME
@@ -16,7 +16,7 @@ device::device(cl_device_id loc_device_id)
   name->value             =           get_info_value  (
                                                         loc_device_id,
                                                         CL_DEVICE_NAME,
-                                                        device_name->size
+                                                        name->size
                                                       );
 
   // Device platform info:
@@ -30,7 +30,7 @@ device::device(cl_device_id loc_device_id)
   profile->value          =           get_info_value  (
                                                         loc_device_id,
                                                         CL_DEVICE_PROFILE,
-                                                        device_name->size
+                                                        profile->size
                                                       );
 
     /*
@@ -235,7 +235,7 @@ device::device(cl_device_id loc_device_id)
   }
   */
 
-  device_id         = loc_device_id;                                            // Initializing device_id...
+  id = loc_device_id;                                                           // Initializing device_id...
 }
 
 // PRIVATE METHODS:
@@ -318,6 +318,18 @@ const char* device::get_error(cl_int loc_error)
   }
 }
 
+// OpenCL error check function:
+void device::check_error        (
+                                  cl_int loc_error                              // Error code.
+                                )
+{
+  if(loc_error != CL_SUCCESS)                                                   // Checking local error code...
+  {
+    printf("\nError:  %s\n", get_error(loc_error));                             // Printing error message...
+    exit(EXIT_FAILURE);                                                         // Exiting...
+  }
+}
+
 size_t device::get_info_size(cl_device_id loc_device_id, cl_device_info loc_parameter_name)
 {
   cl_int  loc_error;                                                            // Error code.
@@ -359,6 +371,6 @@ char* device::get_info_value(cl_device_id loc_device_id, cl_device_info loc_para
 
 device::~device()
 {
-  delete device_name;
-  delete device_platform;
+  delete name;
+  delete profile;
 }
