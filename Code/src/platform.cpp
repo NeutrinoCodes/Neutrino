@@ -30,7 +30,7 @@ platform::platform(cl_platform_id loc_platform_id)
   version->value    =           get_info_value  (
                                                   loc_platform_id,
                                                   CL_PLATFORM_VERSION,
-                                                  version->size)
+                                                  version->size
                                                 );
 
   // Name info:
@@ -52,7 +52,8 @@ platform::platform(cl_platform_id loc_platform_id)
                                 get_info_size   (
                                                   loc_platform_id,
                                                   CL_PLATFORM_VENDOR
-                                                );
+                                                )
+                              );
 
   vendor->value     =           get_info_value  (
                                                   loc_platform_id,
@@ -74,7 +75,7 @@ platform::platform(cl_platform_id loc_platform_id)
                                                   extensions->size
                                                 );
 
-  platform_id = loc_platform_id;                                                // Initializing platform id...
+  id = loc_platform_id;                                                         // Initializing platform id...
 }
 
 // PRIVATE METHODS:

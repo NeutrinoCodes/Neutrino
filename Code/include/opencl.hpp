@@ -14,10 +14,11 @@
   {
     private:
       cl_device_type          device_type;
-      cl_uint                 get_num_platforms();
-      cl_platform_id          get_platform_id(cl_uint loc_platforms_number, cl_uint loc_platform_index);
-      cl_uint                 get_num_devices(cl_uint loc_platform_index);
-      cl_uint                 get_devices(cl_uint loc_platform_index);
+      char*                   device_type_text;
+      cl_uint                 get_platforms_number();
+      cl_platform_id          get_platform_id(cl_uint loc_platform_index);
+      cl_uint                 get_devices_number();
+      cl_device_id            get_device_id(cl_uint loc_platform_index);
 
       // OpenCL error get function:
       const char*             get_error     (
@@ -30,13 +31,13 @@
                                             );
 
     public:
-      platform*               opencl_platform;                                  // OpenCL platform.
       cl_uint                 platforms_number;                                 // Existing OpenCL platforms number.
-      cl_uint                 choosen_platform;                                 // Choosen platform index.
+      cl_uint                 selected_platform;                                // Selected platform index.
+      platform*               opencl_platform;                                  // OpenCL platform.
 
-      device**                existing_device;                                  // Existing OpenCL device array.
       cl_uint                 devices_number;                                   // Existing OpenCL device number.
-      cl_uint                 choosen_device;                                   // Choosen device index.
+      cl_uint                 selected_device;                                  // Selected device index.
+      device*                 opencl_device;                                    // Existing OpenCL device array.
 
       cl_context_properties*  properties;
       cl_context              context_id;

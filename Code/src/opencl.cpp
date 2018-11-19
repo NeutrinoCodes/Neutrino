@@ -126,7 +126,7 @@ cl_uint opencl::get_platforms_number()
   printf("\n        Found %d platform(s)!\n", loc_platforms_number);
   printf("        DONE!\n");
 
-  return loc_platforms_number;                                                  // Returning local # of existing platforms...
+  return loc_platforms_number;                                                  // Returning # of existing platforms...
 }
 
 cl_platform_id opencl::get_platform_id(cl_uint loc_platform_index)
@@ -137,7 +137,7 @@ cl_platform_id opencl::get_platform_id(cl_uint loc_platform_index)
 
   printf("Action: getting OpenCL platform ID... ");                             // Printing message...
 
-  loc_platform_id = new cl_platform_id[loc_platforms_number];                   // Allocating platform array...
+  loc_platform_id = new cl_platform_id[platforms_number];                       // Allocating platform array...
 
   // Getting OpenCL platform IDs:
   loc_error = clGetPlatformIDs(
@@ -153,7 +153,7 @@ cl_platform_id opencl::get_platform_id(cl_uint loc_platform_index)
 
   printf("        DONE!\n");                                                    // Printing message...
 
-  return(loc_selected_platform_id);                                             // Returning platform...
+  return(loc_selected_platform_id);                                             // Returning selected platform ID...
 }
 
 cl_uint opencl::get_devices_number()
@@ -163,7 +163,7 @@ cl_uint opencl::get_devices_number()
 
   printf("Action: getting number of OpenCL devices... ");
 
-  // Getting number of existing OpenCL GPU devices:
+  // Getting number of existing OpenCL devices:
   loc_error = clGetDeviceIDs  (
                                 opencl_platform->id,                            // Platform ID.
                                 device_type,                                    // Device type.
@@ -177,10 +177,10 @@ cl_uint opencl::get_devices_number()
   printf("\n        Found %d device(s)!\n", loc_devices_number);
   printf("        DONE!\n");
 
-  return(loc_devices_number);                                                   // Returning local number of existing OpenCL GPU devices...
+  return(loc_devices_number);                                                   // Returning # of existing devices...
 }
 
-cl_uint opencl::get_device_id(cl_uint loc_device_index)
+cl_device_id opencl::get_device_id(cl_uint loc_device_index)
 {
   cl_int          loc_error;
   cl_device_id*   loc_device_id;
@@ -188,7 +188,8 @@ cl_uint opencl::get_device_id(cl_uint loc_device_index)
 
   printf("Action: getting OpenCL device ID... ");                               // Printing message...
 
-  loc_device_id = new cl_device_id[loc_devices_number];                         // Allocating platform array...
+  devices_number = get_devices_number();                                        // Getting # of existing devices...
+  loc_device_id = new cl_device_id[devices_number];                             // Allocating platform array...
 
   // Getting OpenCL device IDs:
   loc_error = clGetDeviceIDs  (
@@ -201,35 +202,12 @@ cl_uint opencl::get_device_id(cl_uint loc_device_index)
 
   check_error(loc_error);                                                       // Checking returned error code...
 
-  loc_devices_number = get_devices_number();                                    // Getting # of existing devices...
-  loc_device_id = (cl_device_id*) malloc(sizeof(cl_device_id) * loc_devices_number);           // Allocating device array...
+  loc_selected_device_id = loc_device_id[loc_device_index];                     // Setting ID of selected device...
+  delete loc_device_id;                                                         // Deleting device IDs array...
 
-  // Getting OpenCL device IDs...
-  loc_err = clGetDeviceIDs  (
-                              opencl_platform->id,                              // Platform...
-                              device_type,                                      // Device type.
-                              loc_devices_number,                               // Local # of devices.
-                              loc_device_id,                                    // Local device_id array.
-                              NULL                                              // Dummy # of existing devices.
-                            );
+  printf("        DONE!\n");                                                    // Printing message...
 
-  if(loc_err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(loc_err));
-    exit(loc_err);
-  }
-
-  *existing_device = new device[loc_devices_number];
-
-  for(i = 0; i < loc_devices_number; i++)
-  {
-    existing_device[i]->init(loc_device_id[i]);                                 // Initializing existing devices...
-  }
-
-  printf("\n        Found %d device(s)!\n", loc_devices_number);
-  printf("        DONE!\n");
-
-  return(loc_devices_number);
+  return(loc_selected_device_id);                                               // Returning selected device ID...
 }
 
 // PUBLIC METHODS:
@@ -237,9 +215,10 @@ void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_d
 {
   cl_int            loc_error;                                                  // Error code.
   cl_platform_id    loc_platform_id;                                            // Platform ID.
-  cl_device_id*     loc_existing_device_id;                                     // Local existing device_id array.
+  cl_device_id      loc_device_id;                                              // Device ID.
   cl_int            i;                                                          // Index.
-  char*             loc_device_type_text = new char[SIZE_TEXT_MAX];             // Device type text [string].
+
+  device_type_text  = new char[SIZE_TEXT_MAX];                                  // Device type text [string].
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// SETTING TARGET DEVICE TYPE //////////////////////////
@@ -250,37 +229,36 @@ void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_d
   {
     case CPU:
       device_type = CL_DEVICE_TYPE_CPU;                                         // Setting device type = CPU...
-      loc_device_type_text = "CPU";                                             // Printing message...
+      device_type_text = (char*) "CPU";                                         // Printing message...
     break;
 
     case GPU:
       device_type = CL_DEVICE_TYPE_GPU;                                         // Setting device type = GPU...
-      loc_device_type_text = "GPU";                                             // Printing message...
+      device_type_text = (char*) "GPU";                                         // Printing message...
     break;
 
     case ACCELERATOR:
       device_type = CL_DEVICE_TYPE_ACCELERATOR;                                 // Setting device type = ACCELERATOR...
-      loc_device_type_text = "ACCELERATOR";                                     // Printing message...
+      device_type_text = (char*) "ACCELERATOR";                                 // Printing message...
     break;
 
     case DEFAULT:
       device_type = CL_DEVICE_TYPE_DEFAULT;                                     // Setting device type = DEFAULT...
-      loc_device_type_text = "DEFAULT";                                         // Printing message...
+      device_type_text = (char*) "DEFAULT";                                     // Printing message...
     break;
 
     case ALL:
       device_type = CL_DEVICE_TYPE_ALL;                                         // Setting device type = ALL...
-      loc_device_type_text = "ALL";                                             // Printing message...
+      device_type_text = (char*) "ALL";                                         // Printing message...
     break;
 
     default:
       device_type = CL_DEVICE_TYPE_DEFAULT;                                     // Setting device type = DEFAULT...
-      loc_device_type_text = "DEFAULT";                                         // Printing message...
+      device_type_text = (char*) "DEFAULT";                                     // Printing message...
     break;
   }
 
-  printf("%s...\n", loc_device_type_text);                                      // Printing message...
-  device_type = loc_device_type;                                                // Setting device type...
+  printf("%s...\n", device_type_text);                                          // Printing message...
 
   printf("DONE!\n");                                                            // Printing message...
 
@@ -333,7 +311,7 @@ void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_d
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////// SETTING OPENCL DEVICE ////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  printf("Action: finding OpenCL %s devices...\n", loc_device_type_text);       // Printing message...
+  printf("Action: finding OpenCL %s devices...\n", device_type_text);           // Printing message...
 
   devices_number = get_devices_number();                                        // Getting # of existing GPU devices on selected platform [#]...
 
@@ -421,30 +399,6 @@ void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_d
   ////////////////////////////////////////////////////////////////////////////////
   printf("Action: creating OpenCL context... ");                                // Printing message...
 
-  // Creating OpenCL context:
-  /*
-  loc_existing_device_id = (cl_device_id*) malloc(devices_number);
-
-  for(i = 0; i < devices_number; i++)
-  {
-    loc_existing_device_id[i] = existing_device[i]->device_id;                  // Initializing existing devices...
-  }
-  */
-
-  // EZOR: 02NOV2018. For the moment we create a context made of only 1 device (choosen device).
-  //loc_existing_device_id = (cl_device_id*) malloc(1);
-  //loc_existing_device_id[0] = opencl_device->id;
-
-  /*
-  context_id = clCreateContext(properties,                                      // Context properties.
-                               1,                                               // # of devices on choosen platform.
-                               loc_existing_device_id,                          // Local list of existing devices on choosen platform.
-                               NULL,                                            // Context error report callback function.
-                               NULL,                                            // Context error report callback function argument.
-                               &loc_error);                                     // Error code.
-  */
-
-  // EZOR: 15NOV2018 - TO BE TESTED:
   context_id = clCreateContext  (
                                   properties,                                   // Context properties.
                                   1,                                            // # of devices on selected platform.
@@ -455,8 +409,6 @@ void opencl::init(neutrino* loc_neutrino, GLFWwindow* loc_glfw_window, compute_d
                                 );
 
   check_error(loc_error);                                                       // Checking returned error code...
-
-  free(loc_existing_device_id);                                                 // Freeing local existing device ids...
 
   printf("DONE!\n");                                                            // Printing message...
 }
@@ -469,7 +421,7 @@ opencl::~opencl()
 
   delete opencl_platform;
   delete opencl_device;
-  delete loc_device_type_text;
+  delete device_type_text;
   loc_error = clReleaseContext(context_id);                                     // Releasing OpenCL context...
 
   check_error(loc_error);                                                       // Checking returned error code...

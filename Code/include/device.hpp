@@ -37,7 +37,7 @@
     public:
       cl_device_id        id;                                                   // OpenCL device id.
       info*               name;                                                 // Device name.
-      info*               platform;                                             // Device platform.
+      info*               profile;                                              // Device profile.
 
                           device        (
                                           cl_device_id      loc_device_id       // Device ID.
