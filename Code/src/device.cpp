@@ -345,7 +345,6 @@ size_t device::get_info_size(cl_device_id loc_device_id, cl_device_info loc_para
                                 );
 
   check_error(loc_error);
-  printf("parameter size = %d\n", loc_parameter_size);
 
   return (loc_parameter_size);                                                  // Returning parameter size...
 }
@@ -353,7 +352,7 @@ size_t device::get_info_size(cl_device_id loc_device_id, cl_device_info loc_para
 char* device::get_info_value(cl_device_id loc_device_id, cl_device_info loc_parameter_name, size_t loc_parameter_size)
 {
   cl_int  loc_error;                                                            // Error code.
-  char*   loc_parameter_value;                                                  // Parameter value.
+  char*   loc_parameter_value = new char[loc_parameter_size];                   // Parameter value.
 
   // Getting platform information:
   loc_error = clGetDeviceInfo   (
