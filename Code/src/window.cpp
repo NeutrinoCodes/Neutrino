@@ -71,7 +71,7 @@ GLuint window::compile_shader	(
   GLint 		success;                                                            // "GL_COMPILE_STATUS" flag.
   GLchar*		log;                                                                // Buffer for OpenGL error log.
   GLsizei 	log_size;                                                           // Size of OpenGL error log.
-  char      shader_fullname[32768];                                             // Shader full file name.
+  char      shader_fullname[MAX_PATH_SIZE];                                     // Shader full file name.
 
   // Adding NEUTRINO_PATH to relative path file name:
   snprintf  (
