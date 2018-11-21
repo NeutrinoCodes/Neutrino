@@ -311,7 +311,7 @@ void neutrino::free_file(char* buffer)
 
 int neutrino::query_numeric(const char* caption, int min, int max)
 {
-  char  buffer[128];                                                            // Input buffer.
+  char  buffer[MAX_TEXT_SIZE];                                                  // Input buffer.
   int   numeric;                                                                // Numeric value.
   bool  valid_choice = false;                                                   // User's choice.
 
@@ -319,7 +319,7 @@ int neutrino::query_numeric(const char* caption, int min, int max)
 
   while (!valid_choice)                                                         // Checking choice validity...
   {
-    fgets(buffer, 128, stdin);                                                  // Reading string from stdin...
+    fgets(buffer, MAX_TEXT_SIZE, stdin);                                        // Reading string from stdin...
     numeric = strtol(buffer, NULL, 10);                                         // Parsing stdin...
 
     if ((min <= numeric) && (numeric <= max) && (errno != ERANGE))
@@ -338,6 +338,80 @@ int neutrino::query_numeric(const char* caption, int min, int max)
   }
 
   return(numeric);                                                              // Returning numeric choice...
+}
+
+void neutrino::action (
+                        const char* loc_text,
+                        size_t      loc_max_text_size
+                      )
+{
+  char      buffer[MAX_TEXT_SIZE];                                              // Text buffer.
+  size_t    padding;
+  size_t    i;
+
+  padding = sizeof(loc_max_text_size) - sizeof(loc_text);
+
+  // Compiling message string:
+  snprintf  (
+              buffer,                                                           // Destination string.
+              sizeof buffer,                                                    // Size of destination string.
+              "%sAction:%s %s",                                                 // Compiled string.
+              COLOR_CYAN,                                                       // Red color.
+              COLOR_NORMAL,                                                     // Normal color.
+              loc_text                                                          // Source string.
+            );
+
+  printf("%s", buffer);
+
+  if(padding >= 0)
+  {
+    for(i = 0; i < padding; i++)
+    {
+      printf(" ");
+    }
+  }
+
+  else
+  {
+    printf("Error: string too big!\n");
+    exit(1);
+  }
+}
+
+void neutrino::error  (
+                        const char* loc_text,
+                        size_t      loc_max_text_size
+                      )
+{
+  char      buffer[MAX_TEXT_SIZE];                                              // Text buffer.
+
+  // Compiling message string:
+  snprintf  (
+              buffer,                                                           // Destination string.
+              sizeof buffer,                                                    // Size of destination string.
+              "%sError:%s  %s",                                                 // Compiled string.
+              COLOR_RED,                                                        // Red color.
+              COLOR_NORMAL,                                                     // Normal color.
+              loc_text                                                          // Source string.
+            );
+
+  printf("%s\n", buffer);
+}
+
+void neutrino::done()
+{
+  char      buffer[MAX_TEXT_SIZE];                                              // Text buffer.
+
+  // Compiling message string:
+  snprintf  (
+              buffer,                                                           // Destination string.
+              sizeof buffer,                                                    // Size of destination string.
+              "%sDONE!%s",                                                      // Compiled string.
+              COLOR_GREEN,                                                      // Green color.
+              COLOR_NORMAL                                                      // Normal color.
+            );
+
+  printf("%s\n", buffer);
 }
 
 neutrino::~neutrino()

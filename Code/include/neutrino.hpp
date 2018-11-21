@@ -52,7 +52,8 @@
   #define FOV                 60.0f                                             // Field of view [deg].
   #define LINE_WIDTH          3                                                 // Line width [px].
   #define KERNEL_NAME         "thekernel"                                       // OpenCL kernel function name.
-  #define SIZE_TEXT_MAX       128                                               // Maximum number of characters in a text string.
+  #define MAX_TEXT_SIZE       128                                               // Maximum # of characters in a text string.
+  #define MAX_PATH_SIZE       32768                                             // Maximum # of characters in a text file path.
 
   // Plot styles:
   typedef enum
@@ -209,6 +210,18 @@
                                         int         min,
                                         int         max
                                       );
+
+      void              action        (
+                                        const char* loc_text,
+                                        size_t      loc_max_text_size
+                                      );
+
+      void              error         (
+                                        const char* loc_text,
+                                        size_t      loc_max_text_size
+                                      );
+
+      void              done();
 
                         ~neutrino();
   };
