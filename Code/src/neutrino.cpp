@@ -16,8 +16,9 @@ neutrino::neutrino()
   toc = 0.0;                                                                    // Toc time [ms].
   loop_time = 0.0;                                                              // Loop time [ms].
 
-  context_id = NULL;                                                            // OpenCL context id.
-  device_id = NULL;                                                             // OpenCL device id.
+  context_id = NULL;                                                            // OpenCL context ID.
+  platform_id = NULL;                                                           // OpenCL platfomr ID.
+  device_id = NULL;                                                             // OpenCL device ID.
 }
 
 // PRIVATE METHODS:

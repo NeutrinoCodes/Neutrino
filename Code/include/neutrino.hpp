@@ -171,6 +171,7 @@
       double            loop_time;                                              // Loop time [us].
 
       cl_context        context_id;                                             // OpenCL context id.
+      cl_platform_id    platform_id;                                            // OpenCL platform ID.
       cl_device_id      device_id;                                              // OpenCL device id.
 
                         neutrino();
