@@ -13,6 +13,9 @@
   class color4
   {
     private:
+      // Neutrino baseline:
+      neutrino*           baseline;
+
       // OpenCL error get function:
       const char*         get_error     (
                                           cl_int      loc_error                 // Local error code.
@@ -41,7 +44,7 @@
 
       // Initialization:
       void                init          (
-                                          neutrino*   loc_neutrino,             // Neutrino baseline.
+                                          neutrino*   loc_baseline,             // Neutrino baseline.
                                           size_t      loc_data_number           // Data size.
                                         );
 

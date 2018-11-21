@@ -32,14 +32,14 @@
 
       // OpenGL shader compilation:
       GLuint            compile_shader  (
-                                          neutrino*   loc_neutrino,             // Neutrino baseline.
+                                          neutrino*   loc_baseline,             // Neutrino baseline.
                                           const char* loc_shader_filename,      // Shader file name.
                                           shader_type loc_shader_type           // Shader type.
                                         );
 
       // OpenGL shader build:
       GLuint            build_shader    (
-                                          neutrino*   loc_neutrino,             // Neutrino baseline.
+                                          neutrino*   loc_baseline,             // Neutrino baseline.
                                           const char* loc_vertex_filename,      // Shader file name.
             															const char* loc_fragment_filename     // Shader type.
                                         );
@@ -181,7 +181,7 @@
 
       // Window initialization:
       void              init            (
-                                          neutrino* 	loc_neutrino,
+                                          neutrino* 	loc_baseline,
                                           int         loc_window_size_x,        // Window x-size [px].
                                           int         loc_window_size_y,        // Window y-size [px].
                                           const char* loc_title

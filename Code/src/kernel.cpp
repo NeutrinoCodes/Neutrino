@@ -108,7 +108,7 @@ void kernel::check_error        (
 }
 
 void kernel::init (
-                    neutrino* loc_neutrino,
+                    neutrino* loc_baseline,
                     char* loc_kernel_filename,
                     size_t* loc_kernel_size,
                     cl_uint loc_kernel_dimension
@@ -123,14 +123,22 @@ void kernel::init (
   size      = loc_kernel_size;
   dimension = loc_kernel_dimension;
 
-  printf("Action: loading OpenCL kernel source from file... ");
+  // Printing action message:
+  loc_baseline->action  (
+                          "loading OpenCL kernel source from file...",
+                          MAX_MESSAGE_SIZE
+                        );
 
-  loc_neutrino->load_file(file_name, &source, &source_size);
+  loc_baseline->load_file(file_name, &source, &source_size);
 
-  printf("Action: creating OpenCL program from kernel source... ");
+  // Printing action message:
+  loc_baseline->action  (
+                          "creating OpenCL program from kernel source...",
+                          MAX_MESSAGE_SIZE
+                        );
 
   // Creating OpenCL program from its source:
-  program = clCreateProgramWithSource(loc_neutrino->context_id,
+  program = clCreateProgramWithSource(loc_baseline->context_id,
                                       1,
                                       (const char**)&source,
                                       &source_size,
@@ -138,24 +146,28 @@ void kernel::init (
 
   check_error(loc_error);
 
-  loc_neutrino->free_file(source);                                              // Freeing OpenCL kernel buffer...
+  loc_baseline->free_file(source);                                              // Freeing OpenCL kernel buffer...
 
-  printf("DONE!\n");
+  loc_baseline->done();
 
-  printf("Action: building OpenCL program... ");
+  // Printing action message:
+  loc_baseline->action  (
+                          "building OpenCL program......",
+                          MAX_MESSAGE_SIZE
+                        );
 
   /*
-  loc_existing_device_id = (cl_device_id*) malloc(loc_neutrino->opencl_context->devices_number);
+  loc_existing_device_id = (cl_device_id*) malloc(loc_baseline->opencl_context->devices_number);
 
-  for(i = 0; i < loc_neutrino->opencl_context->devices_number; i++)
+  for(i = 0; i < loc_baseline->opencl_context->devices_number; i++)
   {
-    loc_existing_device_id[i] = loc_neutrino->opencl_context->existing_device[i]->device_id;                  // Initializing existing devices...
+    loc_existing_device_id[i] = loc_baseline->opencl_context->existing_device[i]->device_id;                  // Initializing existing devices...
   }
   */
 
   // EZOR: 02NOV2018. For the moment we create a context made of only 1 device (choosen device).
   loc_existing_device_id = (cl_device_id*) malloc(1);
-  loc_existing_device_id[0] = loc_neutrino->device_id;
+  loc_existing_device_id[0] = loc_baseline->device_id;
 
   // Building OpenCL program:
   loc_error = clBuildProgram  (
@@ -208,9 +220,13 @@ void kernel::init (
     exit(loc_error);                                                            // Exiting...
   }
 
-  printf("DONE!\n");
+  loc_baseline->done();
 
-  printf("Action: creating OpenCL kernel object from program... ");
+  // Printing action message:
+  loc_baseline->action  (
+                          "creating OpenCL kernel object from program...",
+                          MAX_MESSAGE_SIZE
+                        );
 
   // Creating OpenCL kernel:
   kernel_id = clCreateKernel(program,
@@ -219,7 +235,7 @@ void kernel::init (
 
   check_error(loc_error);
 
-  printf("DONE!\n");
+  loc_baseline->done();
 }
 
 void kernel::execute(queue* loc_queue_id, kernel_mode loc_kernel_mode)
@@ -262,24 +278,36 @@ kernel::~kernel()
 {
   cl_int        loc_error;                                                      // Error code.
 
-  printf("Action: releasing OpenCL kernel... ");
+  // Printing action message:
+  loc_baseline->action  (
+                          "releasing OpenCL kernel...",
+                          MAX_MESSAGE_SIZE
+                        );
 
   loc_error = clReleaseKernel(kernel_id);                                       // Releasing OpenCL kernel...
   check_error(loc_error);
 
-  printf("DONE!\n");
+  loc_baseline->done();
 
-  printf("Action: releasing OpenCL kernel event... ");
+  // Printing action message:
+  loc_baseline->action  (
+                          "releasing OpenCL kernel event...",
+                          MAX_MESSAGE_SIZE
+                        );
 
   loc_error = clReleaseEvent(event);                                            // Releasing OpenCL event...
   check_error(loc_error);
 
-  printf("DONE!\n");
+  loc_baseline->done();
 
-  printf("Action: releasing OpenCL program... ");
+  // Printing action message:
+  loc_baseline->action  (
+                          "releasing OpenCL program...",
+                          MAX_MESSAGE_SIZE
+                        );
 
   loc_error = clReleaseProgram(program);                                        // Releasing OpenCL program...
   check_error(loc_error);
 
-  printf("DONE!\n");
+  loc_baseline->done();
 }

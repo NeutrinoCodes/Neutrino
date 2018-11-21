@@ -60,7 +60,7 @@ void window::arcball()
 
 // Shader compilation:
 GLuint window::compile_shader	(
-																neutrino* loc_neutrino,
+																neutrino* loc_baseline,
 																const char* loc_shader_filename,
 																shader_type loc_shader_type
 															)
@@ -78,12 +78,12 @@ GLuint window::compile_shader	(
               shader_fullname,                                                  // Destination string.
               sizeof shader_fullname,                                           // Size of destination string.
               "%s%s",                                                           // Merging two strings.
-              loc_neutrino->neutrino_path->value,                               // Source string 1 (NEUTRINO_PATH).
+              loc_baseline->neutrino_path->value,                               // Source string 1 (NEUTRINO_PATH).
               loc_shader_filename                                               // Source string 2 (relative path).
             );
 
   // Loading shader from file:
-  loc_neutrino->load_file (
+  loc_baseline->load_file (
                             shader_fullname,                                    // Shader file.
                             &shader_source,                                     // Shader buffer.
                             &shader_size                                        // Shader buffer size.
@@ -120,14 +120,14 @@ GLuint window::compile_shader	(
     exit(1);                                                                    // Exiting...
   }
 
-  loc_neutrino->free_file(shader_source);                                       // Freeing shader source file...
+  loc_baseline->free_file(shader_source);                                       // Freeing shader source file...
 
   return (shader);																															// Returning shader...
 }
 
 // Shader build:
 GLuint window::build_shader	(
-															neutrino* 	loc_neutrino,													// Neutrino baseline.
+															neutrino* 	loc_baseline,													// Neutrino baseline.
 															const char* loc_vertex_filename,									// Vertex shader file name.
 															const char* loc_fragment_filename									// Fragment shader file name.
 														)
@@ -136,8 +136,8 @@ GLuint window::build_shader	(
   GLuint fragment;                                                              // Fragment shader.
   GLuint program;                                                               // Shader program.
 
-  vertex = compile_shader(loc_neutrino, loc_vertex_filename, VERTEX);           // Compiling vertex shader...
-  fragment = compile_shader(loc_neutrino, loc_fragment_filename, FRAGMENT);     // Compiling fragment shader...
+  vertex = compile_shader(loc_baseline, loc_vertex_filename, VERTEX);           // Compiling vertex shader...
+  fragment = compile_shader(loc_baseline, loc_fragment_filename, FRAGMENT);     // Compiling fragment shader...
   program = glCreateProgram();                                                  // Creating program...
   glBindAttribLocation(program, 0, "point");                                    // Binding "point" to "layout = 0" shader attribute...
   glBindAttribLocation(program, 1, "color");                                    // Binding "color" to "layout = 1" shader attribute...
@@ -150,7 +150,7 @@ GLuint window::build_shader	(
 
  // Window initialization:
 void window::init				(
-													neutrino* 	loc_neutrino,															// Neutrino baseline.
+													neutrino* 	loc_baseline,															// Neutrino baseline.
 													int 				loc_window_size_x,												// Window x-size [px].
 													int 				loc_window_size_y,												// Window y-size [px].
 													const char*	loc_title																	// Window title.
@@ -178,7 +178,10 @@ void window::init				(
   opengl_msaa = 4;                                                              // EZOR: 3 or 4 sample is good due to the general oversampling-decimation method.
 
   // Initializing GLFW context:
-  printf("Action: initializing GLFW...           ");														// Printing message...
+  loc_baseline->action  (
+                          "initializing GLFW...",
+                          MAX_MESSAGE_SIZE
+                        );
 
   if (glfwInit() == GLFW_TRUE)                                                  // Inititalizing GLFW context...
 	{
@@ -188,7 +191,7 @@ void window::init				(
   	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);              // Initializing GLFW hints...
   	glfwWindowHint(GLFW_SAMPLES, opengl_msaa);                                  // Initializing GLFW hints... EZOR 05OCT2018: (was 4)
 
-    printf("DONE!\n");																													// Printing message...
+    loc_baseline->done();																													// Printing message...
   }
 
   else
@@ -222,14 +225,17 @@ void window::init				(
 	glfwSetScrollCallback(glfw_window, mouse_scrolled_callback);                  // Setting mouse scrolled callback...
 
 	// Initializing GLEW context:
-  printf("Action: initializing GLEW...           ");														// Printing message...
+  loc_baseline->action  (
+                          "initializing GLEW...",
+                          MAX_MESSAGE_SIZE
+                        );
 
   glewExperimental = GL_TRUE;                                                   // Ensuring that all extensions with valid entry points will be exposed...
 
 	if (glewInit() == GLEW_OK)																										// Checking GLEW initialization...
 	{
 
-    printf("DONE!\n");																													// Printing message...
+    loc_baseline->done();																													// Printing message...
   }
 
   else
@@ -239,19 +245,23 @@ void window::init				(
   }
 
 	// Initializing shaders:
-  printf("Action: initializing GLSL shaders...   ");														// Printing message...
-  point_shader = build_shader	(
-																loc_neutrino,																		// Neutrino baseline.
+  loc_baseline->action  (
+                          "initializing GLSL shaders...",
+                          MAX_MESSAGE_SIZE
+                        );
+
+	point_shader = build_shader	(
+																loc_baseline,																		// Neutrino baseline.
 																POINT_VERTEX_FILE,															// Vertex shader file name.
 																POINT_FRAGMENT_FILE															// Fragment shader file name.
 															);
 
   text_shader = build_shader	(
-																loc_neutrino,																		// Neutrino baseline.
+																loc_baseline,																		// Neutrino baseline.
 																TEXT_VERTEX_FILE,																// Vertex shader file name.
 																TEXT_FRAGMENT_FILE															// Fragment shader file name.
 															);
-  printf("DONE!\n");																														// Printing message...
+  loc_baseline->done();																														// Printing message...
 
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);                                         // Setting color for clearing window...
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...

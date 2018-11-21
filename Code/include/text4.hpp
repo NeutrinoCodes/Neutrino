@@ -60,7 +60,7 @@
                       text4();
 
       void            init      (
-                                  neutrino*   loc_neutrino,
+                                  neutrino*   loc_baseline,
                                   const char* loc_text,
                                   GLfloat     loc_R,
                                   GLfloat     loc_G,

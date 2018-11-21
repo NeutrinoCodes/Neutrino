@@ -104,14 +104,18 @@ void queue::check_error         (
   }
 }
 
-void queue::init(neutrino* loc_neutrino)
+void queue::init(neutrino* loc_baseline)
 {
   cl_int  loc_err;                                                              // Local error code.
 
-  printf("Action: creating OpenCL command queue... ");
+  // Printing action message:
+  loc_baseline->action  (
+                          "creating OpenCL command queue...",
+                          MAX_MESSAGE_SIZE
+                        );
 
-  context_id = loc_neutrino->context_id;                                        // Initializing context id...
-  device_id = loc_neutrino->device_id;                                          // Initializing device id...
+  context_id = loc_baseline->context_id;                                        // Initializing context id...
+  device_id = loc_baseline->device_id;                                          // Initializing device id...
 
   // Creating OpenCL queue:
   queue_id = clCreateCommandQueue(context_id,                                   // OpenCL context.
@@ -125,14 +129,18 @@ void queue::init(neutrino* loc_neutrino)
     exit(loc_err);
   }
 
-  printf("DONE!\n");
+  loc_baseline->done();
 }
 
 queue::~queue()
 {
   cl_int  loc_err;                                                              // Local error code.
 
-  printf("Action: releasing the OpenCL command queue... ");
+  // Printing action message:
+  loc_baseline->action  (
+                          "releasing the OpenCL command queue...",
+                          MAX_MESSAGE_SIZE
+                        );
 
   loc_err = clReleaseCommandQueue(queue_id);                                    // Releasing OpenCL queue...
 
@@ -142,5 +150,5 @@ queue::~queue()
     exit(loc_err);
   }
 
-  printf("DONE!\n");
+  loc_baseline->done();
 }

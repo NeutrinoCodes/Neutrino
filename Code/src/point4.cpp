@@ -100,14 +100,18 @@ void point4::check_error        (
 }
 
 void point4::init               (
-                                  neutrino* loc_neutrino,                       // Neutrino baseline.
+                                  neutrino* loc_baseline,                       // Neutrino baseline.
                                   size_t      loc_data_number                   // Data number.
                                 )
 {
   cl_int loc_error;                                                             // Error code.
   int i;                                                                        // Index.
 
-  printf("Action: initializing \"point4\" object... ");                         // Printing message...
+  // Printing action message:
+  loc_baseline->action  (
+                          "initializing \"point4\" object...",
+                          MAX_MESSAGE_SIZE
+                        );
 
   x = new GLfloat[loc_data_number];                                             // "x" data array.
   y = new GLfloat[loc_data_number];                                             // "y" data array.
@@ -118,7 +122,7 @@ void point4::init               (
   vao = 0;                                                                      // OpenGL data VAO.
   vbo = 0;                                                                      // OpenGL data VBO.
   buffer = NULL;                                                                // OpenCL data buffer.
-  opencl_context = loc_neutrino->context_id;                                    // Getting OpenCL context...
+  opencl_context = loc_baseline->context_id;                                    // Getting OpenCL context...
 
   for (i = 0; i < loc_data_number; i++)                                         // Filling arrays with default data...
   {
@@ -202,7 +206,7 @@ void point4::init               (
 
   check_error(loc_error);                                                       // Checking returned error code...
 
-  printf("DONE!\n");                                                            // Printing message...
+  loc_baseline->done();                                                            // Printing message...
 }
 
 void point4::set                (
@@ -271,7 +275,11 @@ point4::~point4()
 {
   cl_int loc_error;                                                             // Local error.
 
-  printf("Action: releasing \"float1\" object... ");
+  // Printing action message:
+  loc_baseline->action  (
+                          "releasing \"float1\" object...",
+                          MAX_MESSAGE_SIZE
+                        );
 
   if(buffer != NULL)
   {
@@ -288,5 +296,5 @@ point4::~point4()
   delete[] z;                                                                   // Releasing "z" data...
   delete[] w;                                                                   // Releasing "w" data...
 
-  printf("DONE!\n");
+  loc_baseline->done();
 }

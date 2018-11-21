@@ -104,14 +104,18 @@ void int4::check_error          (
 
 // Initialization:
 void int4::init                 (
-                                  neutrino* loc_neutrino,                       // Neutrino baseline.
+                                  neutrino* loc_baseline,                       // Neutrino baseline.
                                   size_t    loc_data_number                     // Data number.
                                 )
 {
   cl_int    loc_error;                                                          // Error code.
   size_t    i;                                                                  // Index.
 
-  printf("Action: initializing \"float4\" object... ");                         // Printing message...
+  // Printing action message:
+  loc_baseline->action  (
+                          "initializing \"float4\" object...",
+                          MAX_MESSAGE_SIZE
+                        );
 
   x = new cl_long[loc_data_number];                                             // "x" data array.
   y = new cl_long[loc_data_number];                                             // "y" data array.
@@ -122,7 +126,7 @@ void int4::init                 (
   vao = 0;                                                                      // OpenGL data VAO.
   vbo = 0;                                                                      // OpenGL data VBO.
   buffer = NULL;                                                                // OpenCL data buffer.
-  opencl_context = loc_neutrino->context_id;                                    // Getting OpenCL context...
+  opencl_context = loc_baseline->context_id;                                    // Getting OpenCL context...
 
   for (i = 0; i < loc_data_number; i++)                                         // Filling arrays with default data...
   {
@@ -206,7 +210,7 @@ void int4::init                 (
 
   check_error(loc_error);                                                       // Checking returned error code...
 
-  printf("DONE!\n");                                                            // Printing message...
+  loc_baseline->done();                                                            // Printing message...
 }
 
 // Set kernel argument:
@@ -276,7 +280,11 @@ int4::~int4()
 {
   cl_int  loc_error;                                                            // Local error code.
 
-  printf("Action: releasing \"float4\" object... ");                            // Printing message...
+  // Printing action message:
+  loc_baseline->action  (
+                          "releasing \"float4\" object...",
+                          MAX_MESSAGE_SIZE
+                        );
 
   if(buffer != NULL)                                                            // Checking buffer..
   {
@@ -293,5 +301,5 @@ int4::~int4()
   delete[] z;                                                                   // Releasing "z" data...
   delete[] w;                                                                   // Releasing "w" data...
 
-  printf("DONE!\n");                                                            // Printing message...
+  loc_baseline->done();                                                            // Printing message...
 }

@@ -53,6 +53,7 @@
   #define LINE_WIDTH          3                                                 // Line width [px].
   #define KERNEL_NAME         "thekernel"                                       // OpenCL kernel function name.
   #define MAX_TEXT_SIZE       128                                               // Maximum # of characters in a text string.
+  #define MAX_MESSAGE_SIZE    64                                                // Maximum # of characters in a text message.
   #define MAX_PATH_SIZE       32768                                             // Maximum # of characters in a text file path.
 
   // Plot styles:
