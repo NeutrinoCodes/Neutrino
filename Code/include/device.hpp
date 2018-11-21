@@ -11,6 +11,8 @@
   class device
   {
     private:
+      char*               parameter_value;                                      // Parameter value.
+
       // OpenCL error get function:
       const char*         get_error     (
                                           cl_int            loc_error           // Local error code.
