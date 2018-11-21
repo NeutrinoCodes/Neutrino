@@ -37,7 +37,7 @@
             kernel();
 
       void  init      (
-                        neutrino*     loc_neutrino,
+                        neutrino*     loc_baseline,
                         char*         loc_kernel_filename,
                         size_t*       loc_kernel_size,
                         cl_uint       loc_kernel_dimension

@@ -27,7 +27,7 @@
       cl_device_id      device_id;                                              // OpenCL device id.
 
             queue();
-      void  init(neutrino* loc_neutrino);
+      void  init(neutrino* loc_baseline);
             ~queue();
   };
 

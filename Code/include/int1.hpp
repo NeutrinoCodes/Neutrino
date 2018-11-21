@@ -37,7 +37,7 @@
 
       // Initialization:
       void                init          (
-                                          neutrino*   loc_neutrino,             // Neutrino baseline.
+                                          neutrino*   loc_baseline,             // Neutrino baseline.
                                           size_t      loc_data_number           // Data size.
                                         );
 

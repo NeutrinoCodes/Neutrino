@@ -104,14 +104,18 @@ void color4::check_error        (
 
 // Initialization:
 void color4::init               (
-                                  neutrino* loc_neutrino,                       // Neutrino baseline.
+                                  neutrino* loc_baseline,                       // Neutrino baseline.
                                   size_t    loc_data_number                     // Data number.
                                 )
 {
   cl_int    loc_error;                                                          // Error code.
   size_t    i;                                                                  // Index.
 
-  printf("Action: initializing \"color4\" object... ");                         // Printing message...
+  // Printing action message:
+  loc_baseline->action  (
+                          "initializing \"color4\" object...",
+                          MAX_MESSAGE_SIZE
+                        );
 
   r = new GLfloat[loc_data_number];                                             // "r" data array.
   g = new GLfloat[loc_data_number];                                             // "g" data array.
@@ -122,7 +126,7 @@ void color4::init               (
   vao = 0;                                                                      // OpenGL data VAO.
   vbo = 0;                                                                      // OpenGL data VBO.
   buffer = NULL;                                                                // OpenCL data buffer.
-  opencl_context = loc_neutrino->context_id;                                    // Getting OpenCL context...
+  opencl_context = loc_baseline->context_id;                                    // Getting OpenCL context...
 
   for (i = 0; i < loc_data_number; i++)                                         // Filling arrays with default data...
   {
@@ -206,7 +210,7 @@ void color4::init               (
 
   check_error(loc_error);                                                       // Checking returned error code...
 
-  printf("DONE!\n");                                                            // Printing message...
+  loc_baseline->done();                                                            // Printing message...
 }
 
 // Set kernel argument:
@@ -276,7 +280,11 @@ color4::~color4()
 {
   cl_int  loc_error;                                                            // Local error code.
 
-  printf("Action: releasing \"color4\" object... ");                            // Printing message...
+  // Printing action message:
+  loc_baseline->action  (
+                          "releasing \"color4\" object...",
+                          MAX_MESSAGE_SIZE
+                        );
 
   if(buffer != NULL)                                                            // Checking buffer..
   {
@@ -293,5 +301,5 @@ color4::~color4()
   delete[] b;                                                                   // Releasing "b" data...
   delete[] a;                                                                   // Releasing "a" data...
 
-  printf("DONE!\n");                                                            // Printing message...
+  loc_baseline->done();                                                            // Printing message...
 }
