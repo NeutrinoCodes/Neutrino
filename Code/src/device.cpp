@@ -352,24 +352,25 @@ size_t device::get_info_size(cl_device_id loc_device_id, cl_device_info loc_para
 char* device::get_info_value(cl_device_id loc_device_id, cl_device_info loc_parameter_name, size_t loc_parameter_size)
 {
   cl_int  loc_error;                                                            // Error code.
-  char*   loc_parameter_value = new char[loc_parameter_size];                   // Parameter value.
+  parameter_value = new char[loc_parameter_size];                               // Parameter value.
 
   // Getting platform information:
   loc_error = clGetDeviceInfo   (
                                   loc_device_id,                                // Device ID.
                                   loc_parameter_name,                           // Parameter name.
                                   loc_parameter_size,                           // Parameter size.
-                                  loc_parameter_value,                          // Returned parameter value.
+                                  parameter_value,                              // Returned parameter value.
                                   NULL                                          // Returned parameter size (NULL = ignored).
                                 );
 
   check_error(loc_error);
 
-  return (loc_parameter_value);                                                 // Returning local parameter value...
+  return (parameter_value);                                                     // Returning parameter value...
 }
 
 device::~device()
 {
   delete name;
   delete profile;
+  delete parameter_value;
 }

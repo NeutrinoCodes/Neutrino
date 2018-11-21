@@ -196,20 +196,20 @@ size_t platform::get_info_size(cl_platform_id loc_platform_id, cl_platform_info 
 char* platform::get_info_value(cl_platform_id loc_platform_id, cl_platform_info loc_parameter_name, size_t loc_parameter_size)
 {
   cl_int  loc_error;                                                            // Error code.
-  char*   loc_parameter_value = new char[loc_parameter_size];                   // Parameter value.
+  parameter_value = new char[loc_parameter_size];                               // Parameter value.
 
   // Getting platform information:
   loc_error = clGetPlatformInfo (
                                   loc_platform_id,                              // Platform id.
                                   loc_parameter_name,                           // Parameter name.
                                   loc_parameter_size,                           // Parameter size.
-                                  loc_parameter_value,                          // Returned parameter value.
+                                  parameter_value,                              // Returned parameter value.
                                   NULL                                          // Returned parameter size (NULL = ignored).
                                 );
 
   check_error(loc_error);
 
-  return (loc_parameter_value);                                                 // Returning local parameter value...
+  return (parameter_value);                                                     // Returning local parameter value...
 }
 
 platform::~platform()
@@ -219,4 +219,5 @@ platform::~platform()
   delete name;
   delete vendor;
   delete extensions;
+  delete parameter_value;
 }

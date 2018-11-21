@@ -24,7 +24,7 @@ neutrino::neutrino()
 // PRIVATE METHODS:
 path* neutrino::get_neutrino_path()
 {
-  path* temp_neutrino_path = new path;
+  temp_neutrino_path = new path;
 
   temp_neutrino_path->value = getenv("NEUTRINO_PATH");                          // Getting neutrino path...
   temp_neutrino_path->size = strlen(temp_neutrino_path->value) + 1;             // Getting neutrino path length...
@@ -41,7 +41,7 @@ path* neutrino::get_neutrino_path()
 
 font* neutrino::get_neutrino_font()
 {
-  font* temp_neutrino_font = new font;
+  temp_neutrino_font = new font;
 
   return(temp_neutrino_font);
 }

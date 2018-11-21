@@ -11,5 +11,5 @@ info::info(size_t loc_size)
 
 info::~info()
 {
-  delete value;
+  delete[] value;
 }
