@@ -14,6 +14,7 @@
   class window
   {
     private:
+      neutrino*         baseline;                                               // Neutrino baseline.
       double            mouse_x_old;                                            // Mouse x-coordinate backup [px].
       double            mouse_y_old;                                            // Mouse y-coordinate backup [px].
       bool 			        arcball_on;                                             // Arcball activation flag.

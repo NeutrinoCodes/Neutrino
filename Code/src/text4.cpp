@@ -95,7 +95,7 @@ void text4::init  (
                   )
 {
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "initializing OpenGL text...",
                           MAX_MESSAGE_SIZE
                         );
@@ -253,7 +253,7 @@ void text4::init  (
   delete[] glyph_data;
   delete[] color_data;
 
-  loc_baseline->done();
+  baseline->done();
 }
 
 text4::~text4()

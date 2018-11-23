@@ -11,6 +11,7 @@
   class text4
   {
     private:
+      neutrino*       baseline;                                                 // Neutrino baseline.
       const char*     get_error(cl_int loc_error);
       int             err;
       int             i;

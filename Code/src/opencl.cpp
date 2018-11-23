@@ -113,7 +113,7 @@ cl_uint opencl::get_platforms_number()
   cl_uint loc_platforms_number;                                                 // # of platforms.
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "getting number of OpenCL platforms...",
                           MAX_MESSAGE_SIZE
                         );
@@ -127,8 +127,7 @@ cl_uint opencl::get_platforms_number()
 
   check_error(loc_error);                                                       // Checking returned error code...
 
-  printf("\n        Found %d platform(s)!\n", loc_platforms_number);
-  printf("        DONE!\n");
+  baseline->done();
 
   return loc_platforms_number;                                                  // Returning # of existing platforms...
 }
@@ -140,7 +139,7 @@ cl_platform_id opencl::get_platform_id(cl_uint loc_platform_index)
   cl_platform_id  loc_selected_platform_id;
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "getting OpenCL platform ID...",
                           MAX_MESSAGE_SIZE
                         );
@@ -159,7 +158,7 @@ cl_platform_id opencl::get_platform_id(cl_uint loc_platform_index)
   loc_selected_platform_id = loc_platform_id[loc_platform_index];               // Setting id of selected platform...
   delete[] loc_platform_id;                                                     // Deleting platform IDs array...
 
-  printf("        DONE!\n");                                                    // Printing message...
+  baseline->done();                                                             // Printing message...
 
   return(loc_selected_platform_id);                                             // Returning selected platform ID...
 }
@@ -170,7 +169,7 @@ cl_uint opencl::get_devices_number()
   cl_uint         loc_devices_number;                                           // # of devices.
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "getting number of OpenCL devices...",
                           MAX_MESSAGE_SIZE
                         );
@@ -186,8 +185,7 @@ cl_uint opencl::get_devices_number()
 
   check_error(loc_error);                                                       // Checking returned error code...
 
-  printf("\n        Found %d device(s)!\n", loc_devices_number);
-  printf("        DONE!\n");
+  baseline->done();
 
   return(loc_devices_number);                                                   // Returning # of existing devices...
 }
@@ -198,14 +196,14 @@ cl_device_id opencl::get_device_id(cl_uint loc_device_index)
   cl_device_id*   loc_device_id;
   cl_device_id    loc_selected_device_id;
 
+  devices_number = get_devices_number();                                        // Getting # of existing devices...
+  loc_device_id = new cl_device_id[devices_number];                             // Allocating platform array...
+
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "getting OpenCL device ID...",
                           MAX_MESSAGE_SIZE
                         );
-
-  devices_number = get_devices_number();                                        // Getting # of existing devices...
-  loc_device_id = new cl_device_id[devices_number];                             // Allocating platform array...
 
   // Getting OpenCL device IDs:
   loc_error = clGetDeviceIDs  (
@@ -221,7 +219,7 @@ cl_device_id opencl::get_device_id(cl_uint loc_device_index)
   loc_selected_device_id = loc_device_id[loc_device_index];                     // Setting ID of selected device...
   delete[] loc_device_id;                                                       // Deleting device IDs array...
 
-  printf("        DONE!\n");                                                    // Printing message...
+  baseline->done();                                                              // Printing message...
 
   return(loc_selected_device_id);                                               // Returning selected device ID...
 }
@@ -239,7 +237,11 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// SETTING TARGET DEVICE TYPE //////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  printf("Action: setting target device type = ");                              // Printing message...
+  // Printing message:
+  baseline->action      (
+                          "setting target device type...",
+                          MAX_MESSAGE_SIZE
+                        );
 
   switch(loc_device_type)                                                       // Selecting device type...
   {
@@ -274,19 +276,11 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
     break;
   }
 
-  printf("%s...", device_type_text);                                            // Printing message...
-
-  printf("   DONE!\n");                                                         // Printing message...
+  baseline->done();                                                             // Printing message...
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////// SETTING OPENCL PLATFORM ///////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  // Printing action message:
-  loc_baseline->action  (
-                          "finding OpenCL platforms...\n",
-                          MAX_MESSAGE_SIZE
-                        );
-
   platforms_number = get_platforms_number();                                    // Getting # of existing platforms [#]...
 
   for(i = 0; i < platforms_number; i++)                                         // Checking all platforms:
@@ -302,8 +296,6 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
 
     //delete opencl_platform;                                                     // Deleting platform...
   }
-
-  loc_baseline->done();                                                            // Printing message...
 
   if(platforms_number > 1)                                                      // Asking to select a platform, in case many have been found...
   {
@@ -326,12 +318,10 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
   loc_baseline->platform_id = loc_platform_id;                                  // Setting neutrino OpenCL platform ID...
   opencl_platform = new platform(loc_platform_id);                              // Initializing platform...
 
-  loc_baseline->done();
-
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////// SETTING OPENCL DEVICE ////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  printf("Action: finding OpenCL %s devices...\n", device_type_text);           // Printing message...
+  //printf("Action: finding OpenCL %s devices...\n", device_type_text);           // Printing message...
 
   devices_number = get_devices_number();                                        // Getting # of existing GPU devices on selected platform [#]...
 
@@ -347,8 +337,6 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
 
     //delete opencl_device;                                                       // Deleting device...
   }
-
-  loc_baseline->done();                                                            // Printing message...
 
   if(devices_number > 1)                                                        // Asking to select a platform, in case many have been found...
   {
@@ -371,19 +359,18 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
   loc_baseline->device_id = loc_device_id;                                      // Setting neutrino OpenCL device ID...
   opencl_device = new device(loc_device_id);                                    // Initializing device...
 
-  loc_baseline->done();                                                            // Printing message...
-
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// IDENTIFYING OS //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "identifying operating system...",
                           MAX_MESSAGE_SIZE
                         );
 
   #ifdef __APPLE__                                                              // Checking for APPLE system...
-    printf("found APPLE!\n");                                                   // Printing message...
+    baseline->done();
+    printf("        --> OS: APPLE\n");                                                   // Printing message...
 
     CGLContextObj     kCGLContext     = CGLGetCurrentContext();                 // Setting APPLE OpenCL context properties...
     CGLShareGroupObj  kCGLShareGroup  = CGLGetShareGroup(kCGLContext);          // Setting APPLE OpenCL context properties...
@@ -396,7 +383,8 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
   #endif
 
   #ifdef __linux__                                                              // Checking for LINUX system...
-    printf("found LINUX!\n");                                                   // Printing message...
+    baseline->done();
+    printf("        --> OS: LINUX\n");                                                   // Printing message...
 
     cl_context_properties properties[] =                                        // Setting LINUX OpenCL context properties...
     {
@@ -408,7 +396,8 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
   #endif
 
   #ifdef __WINDOWS__                                                            // Checking for WINDOWS system...
-    printf("found WINDOWS!\n");                                                 // Printing message...
+    baseline->done();
+    printf("        --> OS: WINDOWS\n");                                                 // Printing message...
 
     cl_context_properties properties[] =                                        // Setting WINDOWS OpenCL context properties...
     {
@@ -423,7 +412,7 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
   //////////////////////////// CREATING OPENCL CONTEXT ///////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "creating OpenCL context...",
                           MAX_MESSAGE_SIZE
                         );
@@ -440,10 +429,7 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
   check_error(loc_error);                                                       // Checking returned error code...
   loc_baseline->context_id = context_id;                                        // Setting neutrino OpenCL context ID...
 
-  loc_baseline->done();                                                            // Printing message...
-  loc_baseline->action("test...", MAX_MESSAGE_SIZE);
-  loc_baseline->done();
-  loc_baseline->error("this is a test error!", MAX_MESSAGE_SIZE);
+  baseline->done();                                                             // Printing message...
 }
 
 opencl::~opencl()
@@ -451,17 +437,17 @@ opencl::~opencl()
   cl_int loc_error;                                                             // Error code.
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "releasing    OpenCL context...",
                           MAX_MESSAGE_SIZE
                         );
 
-  delete opencl_platform;
-  delete opencl_device;
-  delete device_type_text;
+  //delete opencl_platform;
+  //delete opencl_device;
+  //delete device_type_text;
   loc_error = clReleaseContext(context_id);                                     // Releasing OpenCL context...
 
   check_error(loc_error);                                                       // Checking returned error code...
 
-  loc_baseline->done();
+  baseline->done();
 }

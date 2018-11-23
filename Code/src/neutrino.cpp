@@ -224,7 +224,7 @@ void neutrino::ascii_spin_stop()
     printf("\b");
   }
 
-  loc_baseline->done();
+  done();
 }
 
 // PUBLIC METHODS:
@@ -234,22 +234,22 @@ void neutrino::init()
   ascii_spin_n_old = 0;                                                         // Initializing ascii_spin_n_old...
 
   // Initializing NEUTRINO_PATH:
-  loc_baseline->action  (
-                          "initializing neutrino path...",
-                          MAX_MESSAGE_SIZE
-                        );
+  action      (
+                "initializing neutrino path...",
+                MAX_MESSAGE_SIZE
+              );
 
   neutrino_path = get_neutrino_path();
-  loc_baseline->done();																														// Printing message...
+  done();           																														// Printing message...
 
   // Initializing font:
-  loc_baseline->action  (
-                          "initializing neutrino font...",
-                          MAX_MESSAGE_SIZE
-                        );
+  action      (
+                "initializing neutrino font...",
+                MAX_MESSAGE_SIZE
+              );
 
   neutrino_font = get_neutrino_font();                                          // Font object.
-	loc_baseline->done();																														// Printing message...
+	done();	             																													// Printing message...
 }
 
 void neutrino::get_tic()
