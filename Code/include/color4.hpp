@@ -13,8 +13,7 @@
   class color4
   {
     private:
-      // Neutrino baseline:
-      neutrino*           baseline;
+      neutrino*           baseline;                                             // Neutrino baseline.
 
       // OpenCL error get function:
       const char*         get_error     (

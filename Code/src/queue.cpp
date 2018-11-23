@@ -109,7 +109,7 @@ void queue::init(neutrino* loc_baseline)
   cl_int  loc_err;                                                              // Local error code.
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "creating OpenCL command queue...",
                           MAX_MESSAGE_SIZE
                         );
@@ -129,7 +129,7 @@ void queue::init(neutrino* loc_baseline)
     exit(loc_err);
   }
 
-  loc_baseline->done();
+  baseline->done();
 }
 
 queue::~queue()
@@ -137,7 +137,7 @@ queue::~queue()
   cl_int  loc_err;                                                              // Local error code.
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "releasing the OpenCL command queue...",
                           MAX_MESSAGE_SIZE
                         );
@@ -150,5 +150,5 @@ queue::~queue()
     exit(loc_err);
   }
 
-  loc_baseline->done();
+  baseline->done();
 }

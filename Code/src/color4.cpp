@@ -111,8 +111,10 @@ void color4::init               (
   cl_int    loc_error;                                                          // Error code.
   size_t    i;                                                                  // Index.
 
+  baseline = loc_baseline;                                                      // Setting neutrino baseline...
+
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "initializing \"color4\" object...",
                           MAX_MESSAGE_SIZE
                         );
@@ -210,7 +212,7 @@ void color4::init               (
 
   check_error(loc_error);                                                       // Checking returned error code...
 
-  loc_baseline->done();                                                            // Printing message...
+  baseline->done();                                                            // Printing message...
 }
 
 // Set kernel argument:
@@ -281,7 +283,7 @@ color4::~color4()
   cl_int  loc_error;                                                            // Local error code.
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "releasing \"color4\" object...",
                           MAX_MESSAGE_SIZE
                         );
@@ -301,5 +303,5 @@ color4::~color4()
   delete[] b;                                                                   // Releasing "b" data...
   delete[] a;                                                                   // Releasing "a" data...
 
-  loc_baseline->done();                                                            // Printing message...
+  baseline->done();                                                             // Printing message...
 }

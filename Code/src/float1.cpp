@@ -112,7 +112,7 @@ void float1::init               (
   size_t    i;                                                                  // Index.
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "initializing \"float1\" object...",
                           MAX_MESSAGE_SIZE
                         );
@@ -192,7 +192,7 @@ void float1::init               (
 
   check_error(loc_error);                                                       // Checking returned error code...
 
-  loc_baseline->done();                                                            // Printing message...
+  baseline->done();                                                            // Printing message...
 }
 
 // Set kernel argument:
@@ -263,7 +263,7 @@ float1::~float1()
   cl_int  loc_error;                                                            // Local error code.
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "releasing \"float1\" object...",
                           MAX_MESSAGE_SIZE
                         );
@@ -280,5 +280,5 @@ float1::~float1()
 
   delete[] x;                                                                   // Releasing "x" data...
 
-  loc_baseline->done();                                                            // Printing message...
+  baseline->done();                                                            // Printing message...
 }

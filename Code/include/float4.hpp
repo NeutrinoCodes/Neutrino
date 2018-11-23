@@ -13,6 +13,8 @@
   class float4
   {
     private:
+      neutrino*           baseline;                                             // Neutrino baseline.
+
       // OpenCL error get function:
       const char*         get_error     (
                                           cl_int      loc_error                 // Local error code.

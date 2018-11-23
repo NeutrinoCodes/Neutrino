@@ -108,7 +108,7 @@ void point4::init               (
   int i;                                                                        // Index.
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "initializing \"point4\" object...",
                           MAX_MESSAGE_SIZE
                         );
@@ -206,7 +206,7 @@ void point4::init               (
 
   check_error(loc_error);                                                       // Checking returned error code...
 
-  loc_baseline->done();                                                            // Printing message...
+  baseline->done();                                                            // Printing message...
 }
 
 void point4::set                (
@@ -276,7 +276,7 @@ point4::~point4()
   cl_int loc_error;                                                             // Local error.
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "releasing \"float1\" object...",
                           MAX_MESSAGE_SIZE
                         );
@@ -296,5 +296,5 @@ point4::~point4()
   delete[] z;                                                                   // Releasing "z" data...
   delete[] w;                                                                   // Releasing "w" data...
 
-  loc_baseline->done();
+  baseline->done();
 }

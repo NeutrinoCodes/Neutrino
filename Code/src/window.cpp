@@ -178,7 +178,7 @@ void window::init				(
   opengl_msaa = 4;                                                              // EZOR: 3 or 4 sample is good due to the general oversampling-decimation method.
 
   // Initializing GLFW context:
-  loc_baseline->action  (
+  baseline->action      (
                           "initializing GLFW...",
                           MAX_MESSAGE_SIZE
                         );
@@ -191,7 +191,7 @@ void window::init				(
   	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);              // Initializing GLFW hints...
   	glfwWindowHint(GLFW_SAMPLES, opengl_msaa);                                  // Initializing GLFW hints... EZOR 05OCT2018: (was 4)
 
-    loc_baseline->done();																													// Printing message...
+    baseline->done();																													// Printing message...
   }
 
   else
@@ -225,7 +225,7 @@ void window::init				(
 	glfwSetScrollCallback(glfw_window, mouse_scrolled_callback);                  // Setting mouse scrolled callback...
 
 	// Initializing GLEW context:
-  loc_baseline->action  (
+  baseline->action      (
                           "initializing GLEW...",
                           MAX_MESSAGE_SIZE
                         );
@@ -235,7 +235,7 @@ void window::init				(
 	if (glewInit() == GLEW_OK)																										// Checking GLEW initialization...
 	{
 
-    loc_baseline->done();																													// Printing message...
+    baseline->done();																													// Printing message...
   }
 
   else
@@ -245,7 +245,7 @@ void window::init				(
   }
 
 	// Initializing shaders:
-  loc_baseline->action  (
+  baseline->action      (
                           "initializing GLSL shaders...",
                           MAX_MESSAGE_SIZE
                         );
@@ -261,7 +261,7 @@ void window::init				(
 																TEXT_VERTEX_FILE,																// Vertex shader file name.
 																TEXT_FRAGMENT_FILE															// Fragment shader file name.
 															);
-  loc_baseline->done();																														// Printing message...
+  baseline->done();																														// Printing message...
 
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);                                         // Setting color for clearing window...
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                           // Clearing window...

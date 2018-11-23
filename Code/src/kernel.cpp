@@ -124,15 +124,17 @@ void kernel::init (
   dimension = loc_kernel_dimension;
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "loading OpenCL kernel source from file...",
                           MAX_MESSAGE_SIZE
                         );
 
-  loc_baseline->load_file(file_name, &source, &source_size);
+  baseline->load_file(file_name, &source, &source_size);
+
+  baseline->done();
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "creating OpenCL program from kernel source...",
                           MAX_MESSAGE_SIZE
                         );
@@ -148,10 +150,10 @@ void kernel::init (
 
   loc_baseline->free_file(source);                                              // Freeing OpenCL kernel buffer...
 
-  loc_baseline->done();
+  baseline->done();
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "building OpenCL program......",
                           MAX_MESSAGE_SIZE
                         );
@@ -220,10 +222,10 @@ void kernel::init (
     exit(loc_error);                                                            // Exiting...
   }
 
-  loc_baseline->done();
+  baseline->done();
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "creating OpenCL kernel object from program...",
                           MAX_MESSAGE_SIZE
                         );
@@ -235,7 +237,7 @@ void kernel::init (
 
   check_error(loc_error);
 
-  loc_baseline->done();
+  baseline->done();
 }
 
 void kernel::execute(queue* loc_queue_id, kernel_mode loc_kernel_mode)
@@ -279,7 +281,7 @@ kernel::~kernel()
   cl_int        loc_error;                                                      // Error code.
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "releasing OpenCL kernel...",
                           MAX_MESSAGE_SIZE
                         );
@@ -287,10 +289,10 @@ kernel::~kernel()
   loc_error = clReleaseKernel(kernel_id);                                       // Releasing OpenCL kernel...
   check_error(loc_error);
 
-  loc_baseline->done();
+  baseline->done();
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "releasing OpenCL kernel event...",
                           MAX_MESSAGE_SIZE
                         );
@@ -298,10 +300,10 @@ kernel::~kernel()
   loc_error = clReleaseEvent(event);                                            // Releasing OpenCL event...
   check_error(loc_error);
 
-  loc_baseline->done();
+  baseline->done();
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "releasing OpenCL program...",
                           MAX_MESSAGE_SIZE
                         );
@@ -309,5 +311,5 @@ kernel::~kernel()
   loc_error = clReleaseProgram(program);                                        // Releasing OpenCL program...
   check_error(loc_error);
 
-  loc_baseline->done();
+  baseline->done();
 }

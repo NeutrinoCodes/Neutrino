@@ -11,6 +11,7 @@
   class device
   {
     private:
+      neutrino*           baseline;                                             // Neutrino baseline.
       char*               parameter_value;                                      // Parameter value.
 
       // OpenCL error get function:

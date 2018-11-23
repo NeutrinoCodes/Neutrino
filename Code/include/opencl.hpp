@@ -13,6 +13,7 @@
   class opencl
   {
     private:
+      neutrino*               baseline;                                         // Neutrino baseline.
       cl_device_type          device_type;
       char*                   device_type_text;
       cl_uint                 get_platforms_number();

@@ -112,7 +112,7 @@ void float4::init               (
   size_t    i;                                                                  // Index.
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "initializing \"float4\" object...",
                           MAX_MESSAGE_SIZE
                         );
@@ -210,7 +210,7 @@ void float4::init               (
 
   check_error(loc_error);                                                       // Checking returned error code...
 
-  loc_baseline->done();                                                            // Printing message...
+  baseline->done();                                                            // Printing message...
 }
 
 // Set kernel argument:
@@ -281,7 +281,7 @@ float4::~float4()
   cl_int  loc_error;                                                            // Local error code.
 
   // Printing action message:
-  loc_baseline->action  (
+  baseline->action      (
                           "releasing \"float4\" object...",
                           MAX_MESSAGE_SIZE
                         );
@@ -301,5 +301,5 @@ float4::~float4()
   delete[] z;                                                                   // Releasing "z" data...
   delete[] w;                                                                   // Releasing "w" data...
 
-  loc_baseline->done();                                                            // Printing message...
+  baseline->done();                                                            // Printing message...
 }
