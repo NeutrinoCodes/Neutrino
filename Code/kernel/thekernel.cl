@@ -19,4 +19,9 @@ __kernel void thekernel (
     float4      C   = Colors[gid];                                              // Nodes colors.
 
     barrier(CLK_GLOBAL_MEM_FENCE);
+
+    Positions[gid] = P;
+    Colors[gid] = C;
+
+    barrier(CLK_GLOBAL_MEM_FENCE);
 }
