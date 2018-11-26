@@ -34,7 +34,7 @@
     public:
       cl_uint                 platforms_number;                                 // Existing OpenCL platforms number.
       cl_uint                 selected_platform;                                // Selected platform index.
-      platform*               opencl_platform;                                  // OpenCL platform.
+      platform*               ppp;                                  // OpenCL platform.
 
       cl_uint                 devices_number;                                   // Existing OpenCL device number.
       cl_uint                 selected_device;                                  // Selected device index.
