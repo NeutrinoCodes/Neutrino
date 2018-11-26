@@ -13,6 +13,7 @@
   {
     private:
       neutrino*           baseline;                                             // Neutrino baseline.
+      cl_device_id*       device_id;                                            // Device ID array.
 
       // OpenCL error get function:
       const char*       get_error   (
