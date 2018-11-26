@@ -173,9 +173,9 @@ void point4::init               (
                                   GL_DYNAMIC_DRAW                               // VBO usage.
                                 );
 
-  // Enabling "layout = 1" attribute in vertex shader:
+  // Enabling "layout = 0" attribute in vertex shader:
   glEnableVertexAttribArray     (
-                                  LAYOUT_1                                      // VAO index.
+                                  LAYOUT_0                                      // VAO index.
                                 );
 
   // Binding VBO:
@@ -184,9 +184,9 @@ void point4::init               (
                                   vbo                                           // VBO to bind.
                                 );
 
-  // Specifying the format for "layout = 1" attribute in vertex shader:
+  // Specifying the format for "layout = 0" attribute in vertex shader:
   glVertexAttribPointer         (
-                                  LAYOUT_1,                                     // VAO index.
+                                  LAYOUT_0,                                     // VAO index.
                                   4,                                            // VAO's # of components.
                                   GL_FLOAT,                                     // Data type.
                                   GL_FALSE,                                     // Not using normalized numbers.

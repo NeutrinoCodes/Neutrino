@@ -115,7 +115,6 @@ void kernel::init (
                   )
 {
   cl_int        loc_error;                                                      // Error code.
-  cl_device_id* loc_existing_device_id;                                         // Existing device id array.
   size_t        loc_kernel_source_size;                                         // Kernel source size [characters].
   int           i;                                                              // Index.
 
@@ -158,24 +157,15 @@ void kernel::init (
                           MAX_MESSAGE_SIZE
                         );
 
-  /*
-  loc_existing_device_id = (cl_device_id*) malloc(loc_baseline->opencl_context->devices_number);
-
-  for(i = 0; i < loc_baseline->opencl_context->devices_number; i++)
-  {
-    loc_existing_device_id[i] = loc_baseline->opencl_context->existing_device[i]->device_id;                  // Initializing existing devices...
-  }
-  */
-
-  // EZOR: 02NOV2018. For the moment we create a context made of only 1 device (choosen device).
-  loc_existing_device_id = (cl_device_id*) malloc(1);
-  loc_existing_device_id[0] = loc_baseline->device_id;
+  // Creating device ID list:
+  device_id = new cl_device_id[1];
+  device_id[0] = loc_baseline->device_id;
 
   // Building OpenCL program:
   loc_error = clBuildProgram  (
                                 program,
                                 1,
-                                loc_existing_device_id,
+                                device_id,
                                 "",
                                 NULL,
                                 NULL
@@ -188,7 +178,7 @@ void kernel::init (
     // Getting OpenCL compiler information:
     loc_error = clGetProgramBuildInfo (
                                         program,
-                                        loc_existing_device_id[0],              // EZOR 25OCT2018: to be generalized...
+                                        device_id[0],
                                         CL_PROGRAM_BUILD_LOG,
                                         0,
                                         NULL,
@@ -208,7 +198,7 @@ void kernel::init (
     // Reading OpenCL compiler error log:
     loc_error = clGetProgramBuildInfo (
                                         program,
-                                        loc_existing_device_id[0],              // EZOR 25OCT2018: to be generalized...
+                                        device_id[0],
                                         CL_PROGRAM_BUILD_LOG,
                                         log_size + 1,
                                         log_value,
@@ -310,6 +300,8 @@ kernel::~kernel()
 
   loc_error = clReleaseProgram(program);                                        // Releasing OpenCL program...
   check_error(loc_error);
+
+  delete[] device_id;                                                           // Deleting device ID array...
 
   baseline->done();
 }
