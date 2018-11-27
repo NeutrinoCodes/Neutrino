@@ -45,7 +45,9 @@
       info*                   vendor;                                           // Platform parameter.
       info*                   extensions;                                       // Platform parameter.
 
-                              platform  (
+                              platform  ();
+
+      void                    init      (
                                           cl_platform_id    loc_platform_id     // Platform ID.
                                         );
 

@@ -3,79 +3,13 @@
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "PLATFORM" CLASS //////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-platform::platform(cl_platform_id loc_platform_id)
+platform::platform()
 {
-  // Profile info:
-  profile           = new info(
-                                get_info_size   (
-                                                  loc_platform_id,
-                                                  CL_PLATFORM_PROFILE
-                                                )
-                              );
-
-  profile->value    =           get_info_value  (
-                                                  loc_platform_id,
-                                                  CL_PLATFORM_PROFILE,
-                                                  profile->size
-                                                );
-
-  // Version info:
-  version           = new info(
-                                get_info_size   (
-                                                  loc_platform_id,
-                                                  CL_PLATFORM_VERSION
-                                                )
-                              );
-
-  version->value    =           get_info_value  (
-                                                  loc_platform_id,
-                                                  CL_PLATFORM_VERSION,
-                                                  version->size
-                                                );
-
-  // Name info:
-  name              = new info(
-                                get_info_size   (
-                                                  loc_platform_id,
-                                                  CL_PLATFORM_NAME
-                                                )
-                              );
-
-  name->value       =           get_info_value  (
-                                                  loc_platform_id,
-                                                  CL_PLATFORM_NAME,
-                                                  name->size
-                                                );
-
-  // Vendor info:
-  vendor            = new info(
-                                get_info_size   (
-                                                  loc_platform_id,
-                                                  CL_PLATFORM_VENDOR
-                                                )
-                              );
-
-  vendor->value     =           get_info_value  (
-                                                  loc_platform_id,
-                                                  CL_PLATFORM_VENDOR,
-                                                  vendor->size
-                                                );
-
-  // Vendor info:
-  extensions        = new info(
-                                get_info_size   (
-                                                  loc_platform_id,
-                                                  CL_PLATFORM_EXTENSIONS
-                                                )
-                              );
-
-  extensions->value =           get_info_value  (
-                                                  loc_platform_id,
-                                                  CL_PLATFORM_EXTENSIONS,
-                                                  extensions->size
-                                                );
-
-  id = loc_platform_id;                                                         // Initializing platform id...
+  profile = NULL;
+  version = NULL;
+  name = NULL;
+  vendor = NULL;
+  extensions = NULL;
 }
 
 // PRIVATE METHODS:
@@ -210,6 +144,83 @@ char* platform::get_info_value(cl_platform_id loc_platform_id, cl_platform_info 
   check_error(loc_error);
 
   return (parameter_value);                                                     // Returning local parameter value...
+}
+
+void platform::init       (
+                            cl_platform_id    loc_platform_id                   // Platform ID.
+                          )
+{
+  // Profile info:
+  profile           = new info(
+                                get_info_size   (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_PROFILE
+                                                )
+                              );
+
+  profile->value    =           get_info_value  (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_PROFILE,
+                                                  profile->size
+                                                );
+
+  // Version info:
+  version           = new info(
+                                get_info_size   (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_VERSION
+                                                )
+                              );
+
+  version->value    =           get_info_value  (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_VERSION,
+                                                  version->size
+                                                );
+
+  // Name info:
+  name              = new info(
+                                get_info_size   (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_NAME
+                                                )
+                              );
+
+  name->value       =           get_info_value  (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_NAME,
+                                                  name->size
+                                                );
+
+  // Vendor info:
+  vendor            = new info(
+                                get_info_size   (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_VENDOR
+                                                )
+                              );
+
+  vendor->value     =           get_info_value  (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_VENDOR,
+                                                  vendor->size
+                                                );
+
+  // Vendor info:
+  extensions        = new info(
+                                get_info_size   (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_EXTENSIONS
+                                                )
+                              );
+
+  extensions->value =           get_info_value  (
+                                                  loc_platform_id,
+                                                  CL_PLATFORM_EXTENSIONS,
+                                                  extensions->size
+                                                );
+
+  id = loc_platform_id;                                                         // Initializing platform id...
 }
 
 platform::~platform()
