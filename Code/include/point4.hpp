@@ -34,7 +34,7 @@
       GLfloat*            z;                                                    // "z" data.
       GLfloat*            w;                                                    // "w" data.
 
-      size_t              size;                                                 // Data size.
+      int                 size;                                                 // Data size.
       GLuint              vao;                                                  // OpenGL data VAO.
       GLuint              vbo;                                                  // OpenGL data VBO.
       cl_mem              buffer;                                               // OpenGL data memory buffer.
@@ -43,24 +43,24 @@
 
       void                init          (
                                           neutrino*   loc_baseline,             // Neutrino baseline.
-                                          size_t      loc_data_number           // Data size.
+                                          int         loc_data_number           // Data size.
                                         );
 
       void                set           (
                                           kernel*     loc_kernel,               // OpenCL kernel.
-                                          size_t      loc_kernel_arg            // OpenCL kernel argument index.
+                                          int         loc_kernel_arg            // OpenCL kernel argument index.
                                         );
 
       void                push          (
                                           queue*      loc_queue,                // OpenCL queue.
                                           kernel*     loc_kernel,               // OpenCL kernel.
-                                          size_t      loc_kernel_arg            // OpenCL kernel argument index.
+                                          int         loc_kernel_arg            // OpenCL kernel argument index.
                                         );
 
       void                pop           (
                                           queue*      loc_queue,                // OpenCL queue.
                                           kernel*     loc_kernel,               // OpenCL kernel.
-                                          size_t      loc_kernel_arg            // OpenCL kernel argument index.
+                                          int         loc_kernel_arg            // OpenCL kernel argument index.
                                         );
 
                           ~point4();

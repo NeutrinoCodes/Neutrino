@@ -101,7 +101,7 @@ void point4::check_error        (
 
 void point4::init               (
                                   neutrino* loc_baseline,                       // Neutrino baseline.
-                                  size_t      loc_data_number                   // Data number.
+                                  int         loc_data_number                   // Data number.
                                 )
 {
   cl_int loc_error;                                                             // Error code.
@@ -211,7 +211,7 @@ void point4::init               (
 
 void point4::set                (
                                   kernel* loc_kernel,
-                                  size_t  loc_kernel_arg
+                                  int     loc_kernel_arg
                                 )
 {
   cl_int loc_error;                                                             // Error.
@@ -231,7 +231,7 @@ void point4::set                (
 void point4::push               (
                                   queue*  loc_queue,                            // Queue.
                                   kernel* loc_kernel,                           // Kernel.
-                                  size_t  loc_kernel_arg                        // Kernel argument index.
+                                  int     loc_kernel_arg                        // Kernel argument index.
                                 )
 {
   cl_int  loc_error;                                                            // Local error code.
@@ -253,7 +253,7 @@ void point4::push               (
 void point4::pop                (
                                   queue*  loc_queue,                            // Queue.
                                   kernel* loc_kernel,                           // Kernel.
-                                  size_t  loc_kernel_arg                        // Kernel argument index.
+                                  int     loc_kernel_arg                        // Kernel argument index.
                                 )
 {
   cl_int  loc_error;                                                            // Local error code.
