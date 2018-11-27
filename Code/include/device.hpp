@@ -42,8 +42,10 @@
       info*               name;                                                 // Device name.
       info*               profile;                                              // Device profile.
 
-                          device        (
-                                          cl_device_id      loc_device_id       // Device ID.
+                          device        ();
+
+      void                init          (
+                                          cl_device_id    loc_device_id         // Device ID.
                                         );
 
                           ~device();
