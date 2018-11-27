@@ -19,7 +19,7 @@ __kernel void thekernel (
     float4      C   = Colors[gid];                                              // Nodes colors.
 
     barrier(CLK_GLOBAL_MEM_FENCE);
-    P = float4(1.0f, 0.0f, 0.0f, 1.0f);
+    P = float4(0.1f, 0.0f, 0.0f, 1.0f);
     C = float4(1.0f, 0.0f, 0.0f, 1.0f);
 
     Positions[gid] = P;
