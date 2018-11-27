@@ -1,18 +1,18 @@
 /// @file
 
-#define SIZE_WINDOW_X 800                                                       // Window x-size [px].
-#define SIZE_WINDOW_Y 600                                                       // Window y-size [px].
-#define WINDOW_NAME   "neutrino"                                                // Window name.
+#define SIZE_WINDOW_X  800                                                      // Window x-size [px].
+#define SIZE_WINDOW_Y  600                                                      // Window y-size [px].
+#define WINDOW_NAME    "neutrino"                                               // Window name.
 
-#define KDIM          1
+#define KDIM           1
 
 #define XMIN          -1.0
 #define XMAX           1.0
 #define YMIN          -1.0
 #define YMAX           1.0
-#define NODES         10                                                        // Number of nodes.
-#define DX            (XMAX - XMIN)/(float)NODES
-#define DY            (YMAX - YMIN)/(float)NODES
+#define NODES          10                                                       // Number of nodes.
+#define DX             (XMAX - XMIN)/(float)(NODES - 1)
+#define DY             (YMAX - YMIN)/(float)(NODES - 1)
 
 #include "neutrino.hpp"
 #include "window.hpp"
@@ -41,7 +41,7 @@ int main()
 
   baseline  ->init();                                                           // Initializing neutrino...
   gui       ->init(baseline, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);        // Initializing gui window...
-  message   ->init(baseline, "neutrino 2.0!", 1.0, 1.0, 1.0, 1.0);              // Initializing message...
+  message   ->init(baseline, "neutrino 2.0!", 1.0, 0.0, 0.0, 1.0);              // Initializing message...
   cl        ->init(baseline, gui->glfw_window, GPU);                            // Initializing OpenCL context...
   P         ->init(baseline, NODES);                                            // Initializin points...
   C         ->init(baseline, NODES);                                            // Initializing colors...
@@ -76,7 +76,6 @@ int main()
     k1->execute(q1, WAIT);
     P->pop(q1, k1, 0);
     C->pop(q1, k1, 1);
-
 
     gui->print(message);                                                        // Printing text...
     gui->plot(P, C, STYLE_POINT);
