@@ -37,8 +37,6 @@
       GLfloat*            data;                                                 // Wrapped data.
 
       int                 size;                                                 // Data size.
-      GLuint              vao;                                                  // OpenGL data VAO.
-      GLuint              vbo;                                                  // OpenGL data VBO.
       cl_mem              buffer;                                               // OpenGL data memory buffer.
 
                           float4();

@@ -101,7 +101,9 @@ void point4::check_error        (
 
 void point4::init               (
                                   neutrino* loc_baseline,                       // Neutrino baseline.
-                                  int         loc_data_number                   // Data number.
+                                  kernel*   loc_kernel,                         // OpenCL kernel.
+                                  int       loc_kernel_arg,                     // OpenCL kernel argument #.
+                                  int       loc_data_size                       // Data number.
                                 )
 {
   cl_int loc_error;                                                             // Error code.
@@ -113,33 +115,20 @@ void point4::init               (
                           MAX_MESSAGE_SIZE
                         );
 
-  x = new GLfloat[loc_data_number];                                             // "x" data array.
-  y = new GLfloat[loc_data_number];                                             // "y" data array.
-  z = new GLfloat[loc_data_number];                                             // "z" data array.
-  w = new GLfloat[loc_data_number];                                             // "w" data array.
-
   size = loc_data_number;                                                       // Array size (the same for all of them).
   vao = 0;                                                                      // OpenGL data VAO.
   vbo = 0;                                                                      // OpenGL data VBO.
   buffer = NULL;                                                                // OpenCL data buffer.
   opencl_context = loc_baseline->context_id;                                    // Getting OpenCL context...
 
-  for (i = 0; i < loc_data_number; i++)                                         // Filling arrays with default data...
-  {
-    x[i] = 0.0f;                                                                // Setting "x" data...
-    y[i] = 0.0f;                                                                // Setting "y" data...
-    z[i] = 0.0f;                                                                // Setting "z" data...
-    w[i] = 1.0f;                                                                // Setting "w" data...
-  }
-
   data = new GLfloat[4*size];                                                   // Creating array for unfolded data...
 
   for (i = 0; i < size; i++)                                                    // Filling unfolded data array...
   {
-    data[4*i + 0] = x[i];                                                       // Filling "x"...
-    data[4*i + 1] = y[i];                                                       // Filling "y"...
-    data[4*i + 2] = z[i];                                                       // Filling "z"...
-    data[4*i + 3] = w[i];                                                       // Filling "w"...
+    data[4*i + 0] = 0.0f;                                                       // Filling "x"...
+    data[4*i + 1] = 0.0f;                                                       // Filling "y"...
+    data[4*i + 2] = 0.0f;                                                       // Filling "z"...
+    data[4*i + 3] = 1.0f;                                                       // Filling "w"...
   }
 
   // Generating VAO:
@@ -202,21 +191,9 @@ void point4::init               (
                                   &loc_error                                    // Returned error.
                                 );
 
-  delete[] data;                                                                // Deleting array for unfolded data...
-
   check_error(loc_error);                                                       // Checking returned error code...
 
-  baseline->done();                                                            // Printing message...
-}
-
-void point4::set                (
-                                  kernel* loc_kernel,
-                                  int     loc_kernel_arg
-                                )
-{
-  cl_int loc_error;                                                             // Error.
-
-  // Setting buffer as OpenCL kernel argument:
+  // Setting OpenCL buffer as kernel argument:
   loc_error = clSetKernelArg      (
                                     loc_kernel->kernel_id,                      // Kernel.
                                     loc_kernel_arg,                             // Kernel argument index.
@@ -225,10 +202,68 @@ void point4::set                (
                                   );
 
   check_error(loc_error);                                                       // Checking returned error code...
+
+  baseline->done();                                                             // Printing message...
+}
+
+void point4::set_x(int loc_index, cl_float loc_value)
+{
+  data[4*loc_index + 0] = loc_value;
+}
+
+void point4::set_y(int loc_index, cl_float loc_value)
+{
+  data[4*loc_index + 1] = loc_value;
+}
+
+void point4::set_z(int loc_index, cl_float loc_value)
+{
+  data[4*loc_index + 2] = loc_value;
+}
+
+void point4::set_w(int loc_index, cl_float loc_value)
+{
+  data[4*loc_index + 3] = loc_value;
+}
+
+cl_float point4::get_x(int loc_index)
+{
+  cl_float loc_value;
+
+  loc_value = data[4*loc_index + 0];
+
+  return(loc_value);
+}
+
+cl_float point4::get_y(int loc_index)
+{
+  cl_float loc_value;
+
+  loc_value = data[4*loc_index + 1];
+
+  return(loc_value);
+}
+
+cl_float point4::get_z(int loc_index)
+{
+  cl_float loc_value;
+
+  loc_value = data[4*loc_index + 2];
+
+  return(loc_value);
+}
+
+cl_float point4::get_w(int loc_index)
+{
+  cl_float loc_value;
+
+  loc_value = data[4*loc_index + 3];
+
+  return(loc_value);
 }
 
 // Push kernel argument:
-void point4::push               (
+void point4::enqueue            (
                                   queue*  loc_queue,                            // Queue.
                                   kernel* loc_kernel,                           // Kernel.
                                   int     loc_kernel_arg                        // Kernel argument index.
@@ -250,7 +285,7 @@ void point4::push               (
 }
 
 // Pop kernel argument:
-void point4::pop                (
+void point4::dequeue            (
                                   queue*  loc_queue,                            // Queue.
                                   kernel* loc_kernel,                           // Kernel.
                                   int     loc_kernel_arg                        // Kernel argument index.
@@ -291,10 +326,7 @@ point4::~point4()
   glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
   glDeleteBuffers(1, &vao);                                                     // Releasing OpenGL VAO...
 
-  delete[] x;                                                                   // Releasing "x" data...
-  delete[] y;                                                                   // Releasing "y" data...
-  delete[] z;                                                                   // Releasing "z" data...
-  delete[] w;                                                                   // Releasing "w" data...
+  delete[] data;                                                                // Deleting array for unfolded data...
 
   baseline->done();
 }
