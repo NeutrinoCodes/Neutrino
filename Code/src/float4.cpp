@@ -105,11 +105,11 @@ void float4::check_error        (
 // Initialization:
 void float4::init               (
                                   neutrino* loc_baseline,                       // Neutrino baseline.
-                                  size_t    loc_data_number                     // Data number.
+                                  int    loc_data_number                     // Data number.
                                 )
 {
   cl_int    loc_error;                                                          // Error code.
-  size_t    i;                                                                  // Index.
+  int    i;                                                                  // Index.
 
   // Printing action message:
   baseline->action      (
@@ -130,9 +130,9 @@ void float4::init               (
 
   for (i = 0; i < loc_data_number; i++)                                         // Filling arrays with default data...
   {
-    x[i] = 0.0f;                                                                // Setting "x" data...
-    y[i] = 0.0f;                                                                // Setting "y" data...
-    z[i] = 0.0f;                                                                // Setting "z" data...
+    x[i] = 1.0f;                                                                // Setting "x" data...
+    y[i] = 1.0f;                                                                // Setting "y" data...
+    z[i] = 1.0f;                                                                // Setting "z" data...
     w[i] = 1.0f;                                                                // Setting "w" data...
   }
 
@@ -146,6 +146,7 @@ void float4::init               (
     data[4*i + 3] = w[i];                                                       // Filling "w"...
   }
 
+  /* EZOR: 28NOV2018
   // Generating VAO:
   glGenVertexArrays             (
                                   1,                                            // # of VAOs to generate.
@@ -207,6 +208,11 @@ void float4::init               (
                                 );
 
   delete[] data;                                                                // Deleting array for unfolded data...
+  */
+
+  // EZOR: 28NOV2018
+  //buffer = NULL;
+  buffer = clCreateBuffer(opencl_context, CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR, 4*sizeof(cl_float)*size, data, &loc_error);
 
   check_error(loc_error);                                                       // Checking returned error code...
 
@@ -216,7 +222,7 @@ void float4::init               (
 // Set kernel argument:
 void float4::set                (
                                   kernel* loc_kernel,                           // Kernel.
-                                  size_t  loc_kernel_arg                        // Kernel argument index.
+                                  int  loc_kernel_arg                        // Kernel argument index.
                                 )
 {
   cl_int  loc_error;                                                            // Local error code.
@@ -236,11 +242,12 @@ void float4::set                (
 void float4::push               (
                                   queue*  loc_queue,                            // Queue.
                                   kernel* loc_kernel,                           // Kernel.
-                                  size_t  loc_kernel_arg                        // Kernel argument index.
+                                  int  loc_kernel_arg                        // Kernel argument index.
                                 )
 {
   cl_int  loc_error;                                                            // Local error code.
 
+  /* EZOR: 28NOV2018
   // Passing "points" to OpenCL kernel:
   loc_error = clEnqueueAcquireGLObjects (
                                           loc_queue->queue_id,                  // Queue.
@@ -252,17 +259,33 @@ void float4::push               (
                                         );
 
   check_error(loc_error);                                                       // Checking returned error code...
+  */
+
+  loc_error = clEnqueueWriteBuffer      (
+                                          loc_queue->queue_id,
+                                          buffer,
+                                          CL_TRUE,
+                                          0,
+                                          4*sizeof(cl_float)*size,
+                                          data,
+                                          0,
+                                          NULL,
+                                          NULL
+                                        );
+
+  check_error(loc_error);
 }
 
 // Pop kernel argument:
 void float4::pop                (
                                   queue*  loc_queue,                            // Queue.
                                   kernel* loc_kernel,                           // Kernel.
-                                  size_t  loc_kernel_arg                        // Kernel argument index.
+                                  int  loc_kernel_arg                        // Kernel argument index.
                                 )
 {
   cl_int  loc_error;                                                            // Local error code.
 
+  /* EZOR: 28NOV2018
   // Releasing "points" from OpenCL kernel:
   loc_error = clEnqueueReleaseGLObjects (
                                           loc_queue->queue_id,                  // Queue.
@@ -274,6 +297,21 @@ void float4::pop                (
                                         );
 
   check_error(loc_error);                                                       // Checking returned error code...
+  */
+
+  loc_error = clEnqueueReadBuffer      (
+                                          loc_queue->queue_id,
+                                          buffer,
+                                          CL_TRUE,
+                                          0,
+                                          4*sizeof(cl_float)*size,
+                                          data,
+                                          0,
+                                          NULL,
+                                          NULL
+                                        );
+
+  check_error(loc_error);
 }
 
 float4::~float4()
