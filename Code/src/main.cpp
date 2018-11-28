@@ -28,6 +28,9 @@ int main()
   text4*    message         = new text4();                                      // Text message.
   point4*   P               = new point4();                                     // Point array.
   color4*   C               = new color4();                                     // Color array.
+  float4*   a               = new float4();
+  float4*   b               = new float4();
+  float4*   c               = new float4();
 
   queue*    q1              = new queue();                                      // OpenCL queue.
 
@@ -45,6 +48,9 @@ int main()
   cl        ->init(baseline, gui->glfw_window, GPU);                            // Initializing OpenCL context...
   P         ->init(baseline, NODES);                                            // Initializin points...
   C         ->init(baseline, NODES);                                            // Initializing colors...
+  a         ->init(baseline, NODES);
+  b         ->init(baseline, NODES);
+  c         ->init(baseline, NODES);
   k1        ->init(baseline, "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/kernel/thekernel.cl", k1_size, KDIM);
   q1        ->init(baseline);
 
@@ -59,10 +65,28 @@ int main()
     C->g[i] = 0.0;
     C->b[i] = 0.0;
     C->a[i] = 1.0;
+
+    a->x[i] = 1.0;
+    a->y[i] = 1.0;
+    a->z[i] = 1.0;
+    a->w[i] = 1.0;
+
+    b->x[i] = 1.0;
+    b->y[i] = 1.0;
+    b->z[i] = 1.0;
+    b->w[i] = 1.0;
+
+    c->x[i] = 0.0;
+    c->y[i] = 0.0;
+    c->z[i] = 0.0;
+    c->w[i] = 0.0;
   }
 
-  P->set(k1, 0);
-  C->set(k1, 1);
+  //P->set(k1, 0);
+  //C->set(k1, 1);
+  a->set(k1, 0);
+  b->set(k1, 1);
+  c->set(k1, 2);
 
   while (!gui->closed())                                                        // Opening window...
   {
@@ -71,14 +95,22 @@ int main()
     gui->clear();                                                               // Clearing window...
     gui->poll_events();                                                         // Polling window events...
 
-    P->push(q1, k1, 0);
-    C->push(q1, k1, 1);
+    //P->push(q1, k1, 0);
+    //C->push(q1, k1, 1);
+    a->push(q1, k1, 0);
+    b->push(q1, k1, 1);
+    c->push(q1, k1, 2);
     k1->execute(q1, WAIT);
-    P->pop(q1, k1, 0);
-    C->pop(q1, k1, 1);
+    a->pop(q1, k1, 0);
+    b->pop(q1, k1, 1);
+    c->pop(q1, k1, 2);
+    //P->pop(q1, k1, 0);
+    //C->pop(q1, k1, 1);
+
+    printf("a = %f, b = %f, c = %f\n", a->data[0], b->data[0], c->data[0]);
 
     gui->print(message);                                                        // Printing text...
-    gui->plot(P, C, STYLE_POINT);
+    //gui->plot(P, C, STYLE_POINT);
     gui->refresh();                                                             // Refreshing window...
 
 

@@ -6,6 +6,7 @@
   #include "neutrino.hpp"
   #include "point4.hpp"
   #include "color4.hpp"
+  #include "float4.hpp"
   #include "text4.hpp"
 
   ////////////////////////////////////////////////////////////////////////////////
