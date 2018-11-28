@@ -105,11 +105,13 @@ void float4::check_error        (
 // Initialization:
 void float4::init               (
                                   neutrino* loc_baseline,                       // Neutrino baseline.
-                                  int    loc_data_number                     // Data number.
+                                  kernel*   loc_kernel,                         // OpenCL kernel.
+                                  int       loc_kernel_arg,                     // OpenCL kernel argument #.
+                                  int       loc_data_size                       // Data number.
                                 )
 {
   cl_int    loc_error;                                                          // Error code.
-  int    i;                                                                  // Index.
+  int       i;                                                                  // Index.
 
   // Printing action message:
   baseline->action      (
@@ -117,115 +119,30 @@ void float4::init               (
                           MAX_MESSAGE_SIZE
                         );
 
-  x = new GLfloat[loc_data_number];                                             // "x" data array.
-  y = new GLfloat[loc_data_number];                                             // "y" data array.
-  z = new GLfloat[loc_data_number];                                             // "z" data array.
-  w = new GLfloat[loc_data_number];                                             // "w" data array.
-
-  size = loc_data_number;                                                       // Array size (the same for all of them).
-  vao = 0;                                                                      // OpenGL data VAO.
-  vbo = 0;                                                                      // OpenGL data VBO.
+  size = loc_data_size;                                                         // Data array size.
   buffer = NULL;                                                                // OpenCL data buffer.
   opencl_context = loc_baseline->context_id;                                    // Getting OpenCL context...
 
-  for (i = 0; i < loc_data_number; i++)                                         // Filling arrays with default data...
-  {
-    x[i] = 1.0f;                                                                // Setting "x" data...
-    y[i] = 1.0f;                                                                // Setting "y" data...
-    z[i] = 1.0f;                                                                // Setting "z" data...
-    w[i] = 1.0f;                                                                // Setting "w" data...
-  }
-
-  data = new GLfloat[4*size];                                                   // Creating array for unfolded data...
+  data = new cl_float[4*size];                                                  // Creating array for unfolded data...
 
   for (i = 0; i < size; i++)                                                    // Filling unfolded data array...
   {
-    data[4*i + 0] = x[i];                                                       // Filling "x"...
-    data[4*i + 1] = y[i];                                                       // Filling "y"...
-    data[4*i + 2] = z[i];                                                       // Filling "z"...
-    data[4*i + 3] = w[i];                                                       // Filling "w"...
+    data[4*i + 0] = 0.0f;                                                       // Filling "x"...
+    data[4*i + 1] = 0.0f;                                                       // Filling "y"...
+    data[4*i + 2] = 0.0f;                                                       // Filling "z"...
+    data[4*i + 3] = 1.0f;                                                       // Filling "w"...
   }
 
-  /* EZOR: 28NOV2018
-  // Generating VAO:
-  glGenVertexArrays             (
-                                  1,                                            // # of VAOs to generate.
-                                  &vao                                          // VAOs array.
-                                );
-
-  // Binding VAO:
-  glBindVertexArray             (
-                                  vao                                           // VAO to bind.
-                                );
-
-  // Generating VBO:
-  glGenBuffers                  (
-                                  1,                                            // # of VBOs to generate.
-                                  &vbo                                          // VBOs array.
-                                );
-
-  // Binding VBO:
-  glBindBuffer                  (
-                                  GL_ARRAY_BUFFER,                              // VBO target.
-                                  vbo                                           // VBO to bind.
-                                );
-
-  // Creating and initializing a buffer object's data store:
-  glBufferData                  (
-                                  GL_ARRAY_BUFFER,                              // VBO target.
-                                  4*sizeof(GLfloat)*(size),                     // VBO size.
-                                  data,                                         // VBO data.
-                                  GL_DYNAMIC_DRAW                               // VBO usage.
-                                );
-
-  // Enabling "layout = 1" attribute in vertex shader:
-  glEnableVertexAttribArray     (
-                                  LAYOUT_1                                      // VAO index.
-                                );
-
-  // Binding VBO:
-  glBindBuffer                  (
-                                  GL_ARRAY_BUFFER,                              // VBO target.
-                                  vbo                                           // VBO to bind.
-                                );
-
-  // Specifying the format for "layout = 1" attribute in vertex shader:
-  glVertexAttribPointer         (
-                                  LAYOUT_1,                                     // VAO index.
-                                  4,                                            // VAO's # of components.
-                                  GL_FLOAT,                                     // Data type.
-                                  GL_FALSE,                                     // Not using normalized numbers.
-                                  0,                                            // Data stride.
-                                  0                                             // Data offset.
-                                );
-
-  // Creating OpenCL buffer from OpenGL buffer:
-  buffer = clCreateFromGLBuffer (
-                                  opencl_context,                               // OpenCL context.
-                                  CL_MEM_READ_WRITE,                            // Memory flags.
-                                  vbo,                                          // VBO.
-                                  &loc_error                                    // Returned error.
-                                );
-
-  delete[] data;                                                                // Deleting array for unfolded data...
-  */
-
-  // EZOR: 28NOV2018
-  //buffer = NULL;
-  buffer = clCreateBuffer(opencl_context, CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR, 4*sizeof(cl_float)*size, data, &loc_error);
+  // Creating OpenCL memory buffer:
+  buffer = clCreateBuffer         (
+                                    opencl_context,
+                                    CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR,
+                                    4*sizeof(cl_float)*size,
+                                    data,
+                                    &loc_error
+                                  );
 
   check_error(loc_error);                                                       // Checking returned error code...
-
-  baseline->done();                                                            // Printing message...
-}
-
-// Set kernel argument:
-void float4::set                (
-                                  kernel* loc_kernel,                           // Kernel.
-                                  int  loc_kernel_arg                        // Kernel argument index.
-                                )
-{
-  cl_int  loc_error;                                                            // Local error code.
 
   // Setting buffer as OpenCL kernel argument:
   loc_error = clSetKernelArg      (
@@ -236,30 +153,74 @@ void float4::set                (
                                   );
 
   check_error(loc_error);                                                       // Checking returned error code...
+
+  baseline->done();                                                             // Printing message...
 }
 
-// Push kernel argument:
-void float4::push               (
-                                  queue*  loc_queue,                            // Queue.
-                                  kernel* loc_kernel,                           // Kernel.
-                                  int  loc_kernel_arg                        // Kernel argument index.
-                                )
+void float4::set_x(int loc_index, cl_float loc_value)
+{
+  data[4*loc_index + 0] = loc_value;
+}
+
+void float4::set_y(int loc_index, cl_float loc_value)
+{
+  data[4*loc_index + 1] = loc_value;
+}
+
+void float4::set_z(int loc_index, cl_float loc_value)
+{
+  data[4*loc_index + 2] = loc_value;
+}
+
+void float4::set_w(int loc_index, cl_float loc_value)
+{
+  data[4*loc_index + 3] = loc_value;
+}
+
+cl_float float4::get_x(int loc_index)
+{
+  cl_float loc_value;
+
+  loc_value = data[4*loc_index + 0];
+
+  return(loc_value);
+}
+
+cl_float float4::get_y(int loc_index)
+{
+  cl_float loc_value;
+
+  loc_value = data[4*loc_index + 1];
+
+  return(loc_value);
+}
+
+cl_float float4::get_z(int loc_index)
+{
+  cl_float loc_value;
+
+  loc_value = data[4*loc_index + 2];
+
+  return(loc_value);
+}
+
+cl_float float4::get_w(int loc_index)
+{
+  cl_float loc_value;
+
+  loc_value = data[4*loc_index + 3];
+
+  return(loc_value);
+}
+
+// Enqueue kernel argument:
+void float4::enqueue              (
+                                    queue*  loc_queue,                          // Queue.
+                                    kernel* loc_kernel,                         // Kernel.
+                                    int  loc_kernel_arg                         // Kernel argument index.
+                                  )
 {
   cl_int  loc_error;                                                            // Local error code.
-
-  /* EZOR: 28NOV2018
-  // Passing "points" to OpenCL kernel:
-  loc_error = clEnqueueAcquireGLObjects (
-                                          loc_queue->queue_id,                  // Queue.
-                                          1,                                    // # of memory objects.
-                                          &buffer,                              // Memory object array.
-                                          0,                                    // # of events in event list.
-                                          NULL,                                 // Event list.
-                                          NULL                                  // Event.
-                                        );
-
-  check_error(loc_error);                                                       // Checking returned error code...
-  */
 
   loc_error = clEnqueueWriteBuffer      (
                                           loc_queue->queue_id,
@@ -276,28 +237,14 @@ void float4::push               (
   check_error(loc_error);
 }
 
-// Pop kernel argument:
-void float4::pop                (
-                                  queue*  loc_queue,                            // Queue.
-                                  kernel* loc_kernel,                           // Kernel.
-                                  int  loc_kernel_arg                        // Kernel argument index.
-                                )
+// Dequeue kernel argument:
+void float4::dequeue                    (
+                                          queue*  loc_queue,                    // Queue.
+                                          kernel* loc_kernel,                   // Kernel.
+                                          int  loc_kernel_arg                   // Kernel argument index.
+                                        )
 {
   cl_int  loc_error;                                                            // Local error code.
-
-  /* EZOR: 28NOV2018
-  // Releasing "points" from OpenCL kernel:
-  loc_error = clEnqueueReleaseGLObjects (
-                                          loc_queue->queue_id,                  // Queue.
-                                          1,                                    // # of memory objects.
-                                          &buffer,                              // Memory object array.
-                                          0,                                    // # of events in event list.
-                                          NULL,                                 // Event list.
-                                          NULL                                  // Event.
-                                        );
-
-  check_error(loc_error);                                                       // Checking returned error code...
-  */
 
   loc_error = clEnqueueReadBuffer      (
                                           loc_queue->queue_id,
@@ -331,13 +278,7 @@ float4::~float4()
     check_error(loc_error);                                                     // Checking returned error code...
   }
 
-  glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
-  glDeleteBuffers(1, &vao);                                                     // Releasing OpenGL VAO...
-
-  delete[] x;                                                                   // Releasing "x" data...
-  delete[] y;                                                                   // Releasing "y" data...
-  delete[] z;                                                                   // Releasing "z" data...
-  delete[] w;                                                                   // Releasing "w" data...
+  delete[] data;                                                                // Releasing data...
 
   baseline->done();                                                            // Printing message...
 }

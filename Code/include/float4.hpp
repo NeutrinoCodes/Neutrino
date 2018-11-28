@@ -36,7 +36,7 @@
 
       GLfloat*            data;                                                 // Wrapped data.
 
-      int              size;                                                 // Data size.
+      int                 size;                                                 // Data size.
       GLuint              vao;                                                  // OpenGL data VAO.
       GLuint              vbo;                                                  // OpenGL data VBO.
       cl_mem              buffer;                                               // OpenGL data memory buffer.
@@ -45,28 +45,60 @@
 
       // Initialization:
       void                init          (
-                                          neutrino*   loc_baseline,             // Neutrino baseline.
-                                          int      loc_data_number           // Data size.
+                                          neutrino* loc_baseline,               // Neutrino baseline.
+                                          kernel*   loc_kernel,                 // OpenCL kernel.
+                                          int       loc_kernel_arg,             // OpenCL kernel argument #.
+                                          int       loc_data_size               // Data number.
                                         );
 
-      // Set kernel argument:
-      void                set           (
-                                          kernel*     loc_kernel,               // OpenCL kernel.
-                                          int      loc_kernel_arg            // OpenCL kernel argument index.
+      void                set_x         (
+                                          int       loc_index,                  // Data index.
+                                          cl_float  loc_value                   // Data value.
+                                        );
+
+      void                set_y         (
+                                          int       loc_index,                  // Data index.
+                                          cl_float  loc_value                   // Data value.
+                                        );
+
+      void                set_z         (
+                                          int       loc_index,                  // Data index.
+                                          cl_float  loc_value                   // Data value.
+                                        );
+
+      void                set_w         (
+                                          int       loc_index,                  // Data index.
+                                          cl_float  loc_value                   // Data value.
+                                        );
+
+      cl_float            get_x         (
+                                          int       loc_index                   // Data index.
+                                        );
+
+      cl_float            get_y         (
+                                          int       loc_index                   // Data index.
+                                        );
+
+      cl_float            get_z         (
+                                          int       loc_index                   // Data index.
+                                        );
+
+      cl_float            get_w         (
+                                          int       loc_index                   // Data index.
                                         );
 
       // Push kernel argument:
-      void                push          (
-                                          queue*      loc_queue,                // OpenCL queue.
-                                          kernel*     loc_kernel,               // OpenCL kernel.
-                                          int      loc_kernel_arg            // OpenCL kernel argument index.
+      void                enqueue       (
+                                          queue*    loc_queue,                  // OpenCL queue.
+                                          kernel*   loc_kernel,                 // OpenCL kernel.
+                                          int       loc_kernel_arg              // OpenCL kernel argument index.
                                         );
 
       // Pop kernel argument:
-      void                pop           (
-                                          queue*      loc_queue,                // OpenCL queue.
-                                          kernel*     loc_kernel,               // OpenCL kernel.
-                                          int      loc_kernel_arg            // OpenCL kernel argument index.
+      void                dequeue       (
+                                          queue*    loc_queue,                  // OpenCL queue.
+                                          kernel*   loc_kernel,                 // OpenCL kernel.
+                                          int       loc_kernel_arg              // OpenCL kernel argument index.
                                         );
 
                           ~float4();
