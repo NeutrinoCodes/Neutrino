@@ -144,7 +144,7 @@ void float4::init               (
 
   check_error(loc_error);                                                       // Checking returned error code...
 
-  // Setting buffer as OpenCL kernel argument:
+  // Setting OpenCL buffer as kernel argument:
   loc_error = clSetKernelArg      (
                                     loc_kernel->kernel_id,                      // Kernel.
                                     loc_kernel_arg,                             // Kernel argument index.
