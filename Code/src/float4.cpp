@@ -213,8 +213,8 @@ cl_float float4::get_w(int loc_index)
   return(loc_value);
 }
 
-// Enqueue kernel argument:
-void float4::enqueue              (
+// Writing OpenCL buffer:
+void float4::write                (
                                     queue*  loc_queue,                          // Queue.
                                     kernel* loc_kernel,                         // Kernel.
                                     int  loc_kernel_arg                         // Kernel argument index.
@@ -237,8 +237,8 @@ void float4::enqueue              (
   check_error(loc_error);
 }
 
-// Dequeue kernel argument:
-void float4::dequeue                    (
+// Reading OpenCL buffer:
+void float4::read                       (
                                           queue*  loc_queue,                    // Queue.
                                           kernel* loc_kernel,                   // Kernel.
                                           int  loc_kernel_arg                   // Kernel argument index.

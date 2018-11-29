@@ -115,7 +115,7 @@ void point4::init               (
                           MAX_MESSAGE_SIZE
                         );
 
-  size = loc_data_number;                                                       // Array size (the same for all of them).
+  size = loc_data_size;                                                         // Array size (the same for all of them).
   vao = 0;                                                                      // OpenGL data VAO.
   vbo = 0;                                                                      // OpenGL data VBO.
   buffer = NULL;                                                                // OpenCL data buffer.
@@ -262,8 +262,56 @@ cl_float point4::get_w(int loc_index)
   return(loc_value);
 }
 
+// Writing OpenCL buffer:
+void point4::write                (
+                                    queue*  loc_queue,                          // Queue.
+                                    kernel* loc_kernel,                         // Kernel.
+                                    int  loc_kernel_arg                         // Kernel argument index.
+                                  )
+{
+  cl_int  loc_error;                                                            // Local error code.
+
+  loc_error = clEnqueueWriteBuffer      (
+                                          loc_queue->queue_id,
+                                          buffer,
+                                          CL_TRUE,
+                                          0,
+                                          4*sizeof(cl_float)*size,
+                                          data,
+                                          0,
+                                          NULL,
+                                          NULL
+                                        );
+
+  check_error(loc_error);
+}
+
+// Reading OpenCL buffer:
+void point4::read                       (
+                                          queue*  loc_queue,                    // Queue.
+                                          kernel* loc_kernel,                   // Kernel.
+                                          int  loc_kernel_arg                   // Kernel argument index.
+                                        )
+{
+  cl_int  loc_error;                                                            // Local error code.
+
+  loc_error = clEnqueueReadBuffer      (
+                                          loc_queue->queue_id,
+                                          buffer,
+                                          CL_TRUE,
+                                          0,
+                                          4*sizeof(cl_float)*size,
+                                          data,
+                                          0,
+                                          NULL,
+                                          NULL
+                                        );
+
+  check_error(loc_error);
+}
+
 // Push kernel argument:
-void point4::enqueue            (
+void point4::acquire_gl         (
                                   queue*  loc_queue,                            // Queue.
                                   kernel* loc_kernel,                           // Kernel.
                                   int     loc_kernel_arg                        // Kernel argument index.
@@ -285,7 +333,7 @@ void point4::enqueue            (
 }
 
 // Pop kernel argument:
-void point4::dequeue            (
+void point4::release_gl         (
                                   queue*  loc_queue,                            // Queue.
                                   kernel* loc_kernel,                           // Kernel.
                                   int     loc_kernel_arg                        // Kernel argument index.
