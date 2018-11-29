@@ -1,9 +1,8 @@
 /// @file
 
 __kernel void thekernel (
-                          __global float4*    a,
-                          __global float4*    b,
-                          __global float4*    c
+                          __global float4*    P,
+                          __global float4*    C
                         )
 {
     //////////////////////////////////////////////////////////////////////////////
@@ -11,7 +10,7 @@ __kernel void thekernel (
     //////////////////////////////////////////////////////////////////////////////
     unsigned int gid = get_global_id(0);                                        // Setting global index "gid"...
 
-    c[gid] = a[gid] + b[gid];
+    //c[gid] = a[gid] + b[gid];
     //barrier(CLK_GLOBAL_MEM_FENCE);
 
     //////////////////////////////////////////////////////////////////////////////

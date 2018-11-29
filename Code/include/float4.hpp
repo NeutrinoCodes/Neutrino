@@ -29,11 +29,6 @@
       cl_context          opencl_context;                                       // OpenCL context.
 
     public:
-      GLfloat*            x;                                                    // "x" data.
-      GLfloat*            y;                                                    // "y" data.
-      GLfloat*            z;                                                    // "z" data.
-      GLfloat*            w;                                                    // "w" data.
-
       GLfloat*            data;                                                 // Wrapped data.
 
       int                 size;                                                 // Data size.
@@ -86,14 +81,14 @@
                                         );
 
       // Push kernel argument:
-      void                enqueue       (
+      void                write         (
                                           queue*    loc_queue,                  // OpenCL queue.
                                           kernel*   loc_kernel,                 // OpenCL kernel.
                                           int       loc_kernel_arg              // OpenCL kernel argument index.
                                         );
 
       // Pop kernel argument:
-      void                dequeue       (
+      void                read          (
                                           queue*    loc_queue,                  // OpenCL queue.
                                           kernel*   loc_kernel,                 // OpenCL kernel.
                                           int       loc_kernel_arg              // OpenCL kernel argument index.

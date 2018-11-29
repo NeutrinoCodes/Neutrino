@@ -537,11 +537,6 @@ void window::plot(point4* points, color4* colors, plot_style ps)
   glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
 
   // Drawing:
-	printf("Px = %f\n", points->x[0]);
-	printf("Px = %f\n", points->x[1]);
-	printf("Px = %f\n", points->x[2]);
-	printf("Px = %f\n", points->x[3]);
-
   glDrawArrays(GL_POINTS, 0, points->size);                                     // Drawing "points"...
 
   // Finishing:
