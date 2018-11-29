@@ -44,16 +44,16 @@ int main()
 
   baseline  ->init();                                                           // Initializing neutrino...
   gui       ->init(baseline, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);        // Initializing gui window...
-  message   ->init(baseline, "neutrino 2.0!", 1.0, 0.0, 0.0, 1.0);              // Initializing message...
+  message   ->init(baseline, "neutrino 2.0!", 0.0, 1.0, 0.0, 1.0);              // Initializing message...
   cl        ->init(baseline, gui->glfw_window, GPU);                            // Initializing OpenCL context...
   k1        ->init(baseline, "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/kernel/thekernel.cl", k1_size, KDIM);
   q1        ->init(baseline);
 
   P         ->init(baseline, k1, 0, NODES);                                     // Initializin points...
   C         ->init(baseline, k1, 1, NODES);                                     // Initializing colors...
-  //a         ->init(baseline, k1, 2, NODES);
-  //b         ->init(baseline, k1, 4, NODES);
-  //c         ->init(baseline, k1, 5, NODES);
+  a         ->init(baseline, k1, 2, NODES);
+  b         ->init(baseline, k1, 3, NODES);
+  c         ->init(baseline, k1, 4, NODES);
 
   for(i = 0; i < NODES; i++)
   {
@@ -67,7 +67,6 @@ int main()
     C->set_b(i, 0.0);
     C->set_a(i, 1.0);
 
-    /*
     a->set_x(i, 1.0);
     a->set_y(i, 1.0);
     a->set_z(i, 1.0);
@@ -82,11 +81,13 @@ int main()
     c->set_y(i, 0.0);
     c->set_z(i, 0.0);
     c->set_w(i, 0.0);
-    */
   }
 
   P->write(q1, k1, 0);
   C->write(q1, k1, 1);
+  a->write(q1, k1, 2);
+  b->write(q1, k1, 3);
+  c->write(q1, k1, 4);
 
   while (!gui->closed())                                                        // Opening window...
   {
@@ -97,35 +98,35 @@ int main()
 
     P->acquire_gl(q1, k1, 0);
     C->acquire_gl(q1, k1, 1);
-    //a->enqueue(q1, k1, 0);
-    //b->enqueue(q1, k1, 1);
-    //c->enqueue(q1, k1, 2);
 
     k1->execute(q1, WAIT);
 
-    //a->dequeue(q1, k1, 0);
-    //b->dequeue(q1, k1, 1);
-    //c->dequeue(q1, k1, 2);
     P->release_gl(q1, k1, 0);
     C->release_gl(q1, k1, 1);
-
-    //printf("a = %f, b = %f, c = %f\n", a->get_x(0), b->get_x(0), c->get_x(0));
 
     gui->print(message);                                                        // Printing text...
     gui->plot(P, C, STYLE_POINT);
     gui->refresh();                                                             // Refreshing window...
 
-
-
     baseline->get_toc();                                                        // Getting "toc" [us]...
   }
+
+  a->read(q1, k1, 2);
+  b->read(q1, k1, 3);
+  c->read(q1, k1, 4);
+
+  printf("a = %f, b = %f, c = %f\n", a->get_x(0), b->get_x(0), c->get_x(0));
 
   delete baseline;
   delete gui;
   delete cl;
   delete message;
+
   delete P;
   delete C;
+  delete a;
+  delete b;
+  delete c;
 
   delete q1;
 
