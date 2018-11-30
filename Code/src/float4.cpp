@@ -133,10 +133,11 @@ void float4::init               (
     data[4*i + 3] = 1.0f;                                                       // Filling "w"...
   }
 
+// CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR
   // Creating OpenCL memory buffer:
   buffer = clCreateBuffer         (
                                     opencl_context,
-                                    CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR,
+                                    CL_MEM_READ_WRITE,
                                     4*sizeof(cl_float)*size,
                                     data,
                                     &loc_error
