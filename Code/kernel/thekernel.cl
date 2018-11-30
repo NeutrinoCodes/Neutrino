@@ -1,8 +1,8 @@
 /// @file
 
 __kernel void thekernel (
-                          __global float4*    P,
-                          __global float4*    C,
+                          __global float4*    Positions,
+                          __global float4*    Colors,
                           __global float4*    a,
                           __global float4*    b,
                           __global float4*    c
@@ -19,16 +19,16 @@ __kernel void thekernel (
     //////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////// NODES ////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////
-    //float4      P   = Positions[gid];                                           // Nodes positions.
-    //float4      C   = Colors[gid];                                              // Nodes colors.
+    float4      P   = Positions[gid];                                           // Nodes positions.
+    float4      C   = Colors[gid];                                              // Nodes colors.
 
     //barrier(CLK_GLOBAL_MEM_FENCE);
-    //P = float4(1.0f, 0.0f, 0.0f, 1.0f);
-    //C = float4(1.0f, 0.0f, 0.0f, 1.0f);
+    //P = (float4)(1.0f, 0.0f, 0.0f, 1.0f);
+    //C = (float4)(1.0f, 0.0f, 0.0f, 1.0f);
     //barrier(CLK_GLOBAL_MEM_FENCE);
 
-    //Positions[gid] = P;
-    //Colors[gid] = C;
+    Positions[gid] = P;
+    Colors[gid] = C;
 
-    //barrier(CLK_GLOBAL_MEM_FENCE);
+    barrier(CLK_GLOBAL_MEM_FENCE);
 }

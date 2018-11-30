@@ -292,6 +292,7 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
     printf("        --> version: %s\n", opencl_platform[i]->version->value);    // Printing message...
     printf("        --> name:    %s\n", opencl_platform[i]->name->value);       // Printing message...
     printf("        --> vendor:  %s\n", opencl_platform[i]->vendor->value);     // Printing message...
+    printf("        --> extensions: %s\n", opencl_platform[i]->extensions->value); // Printing message...
     printf("\n");
   }
 
@@ -377,26 +378,26 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
 
   #ifdef __linux__                                                              // Checking for LINUX system...
     baseline->done();
-    printf("        --> OS: LINUX\n");                                                   // Printing message...
+    printf("        --> OS: LINUX\n");                                          // Printing message...
 
     cl_context_properties properties[] =                                        // Setting LINUX OpenCL context properties...
     {
       CL_GL_CONTEXT_KHR, (cl_context_properties)glfwGetGLXContext(loc_glfw_window),
       CL_GLX_DISPLAY_KHR, (cl_context_properties)glfwGetX11Display(),
-      CL_CONTEXT_PLATFORM, (cl_context_properties)opencl_platform,
+      CL_CONTEXT_PLATFORM, (cl_context_properties)loc_baseline->platform_id,
       0
     };
   #endif
 
   #ifdef __WINDOWS__                                                            // Checking for WINDOWS system...
     baseline->done();
-    printf("        --> OS: WINDOWS\n");                                                 // Printing message...
+    printf("        --> OS: WINDOWS\n");                                        // Printing message...
 
     cl_context_properties properties[] =                                        // Setting WINDOWS OpenCL context properties...
     {
       CL_GL_CONTEXT_KHR, (cl_context_properties)glfwGetWGLContext(loc_glfw_window),
       CL_WGL_HDC_KHR, (cl_context_properties)GetDC(glfwGetWin32Window(loc_glfw_window)),
-      CL_CONTEXT_PLATFORM, (cl_context_properties)opencl_platform,
+      CL_CONTEXT_PLATFORM, (cl_context_properties)loc_baseline->platform_id,
       0
     };
   #endif
@@ -410,15 +411,23 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
                           MAX_MESSAGE_SIZE
                         );
 
+
   context_id = clCreateContext  (
                                   properties,                                   // Context properties.
                                   1,                                            // # of devices on selected platform.
-                                  &opencl_device[selected_device]->id,          // Pointer to the selecet devices on selected platform.
+                                  &opencl_device[selected_device]->id,          // Pointer to the selected device on selected platform.
                                   NULL,                                         // Context error report callback function.
                                   NULL,                                         // Context error report callback function argument.
                                   &loc_error                                    // Error code.
                                 );
 
+  /*
+  context_id = clCreateContextFromType(properties,                                 // Creating OpenCL context...
+                                    CL_DEVICE_TYPE_GPU,
+                                    NULL,
+                                    NULL,
+                                    &loc_error);
+  */
   check_error(loc_error);                                                       // Checking returned error code...
   loc_baseline->context_id = context_id;                                        // Setting neutrino OpenCL context ID...
 
