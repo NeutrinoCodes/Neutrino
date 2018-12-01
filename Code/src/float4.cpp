@@ -299,7 +299,7 @@ float4::~float4()
                           MAX_MESSAGE_SIZE                                      // Message size.
                         );
 
-  if(buffer != NULL)                                                            // Checking buffer..
+  if(buffer != NULL)                                                            // Checking buffer...
   {
     loc_error = clReleaseMemObject(buffer);                                     // Releasing OpenCL buffer object...
 

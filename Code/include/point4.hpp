@@ -30,81 +30,90 @@
     public:
       GLfloat*            data;                                                 // Wrapped data.
 
-      int                 size;                                                 // Data size.
+      GLsizeiptr          size;                                                 // Data size.
       cl_mem              buffer;                                               // OpenGL data memory buffer.
-      GLuint              vao;                                                  // OpenGL data VAO.
       GLuint              vbo;                                                  // OpenGL data VBO.
 
                           point4();
 
       // Initialization:
       void                init          (
-                                          neutrino* loc_baseline,               // Neutrino baseline.
-                                          kernel*   loc_kernel,                 // OpenCL kernel.
-                                          int       loc_kernel_arg,             // OpenCL kernel argument #.
-                                          int       loc_data_size               // Data number.
+                                          neutrino*   loc_baseline,             // Neutrino baseline.
+                                          kernel*     loc_kernel,               // OpenCL kernel.
+                                          cl_uint     loc_kernel_arg,           // OpenCL kernel argument #.
+                                          GLsizeiptr  loc_data_size             // Data number.
                                         );
 
+      // "x" set function:
       void                set_x         (
-                                          int       loc_index,                  // Data index.
-                                          cl_float  loc_value                   // Data value.
+                                          GLsizeiptr  loc_index,                // Data index.
+                                          GLfloat     loc_value                 // Data value.
                                         );
 
+      // "y" set function:
       void                set_y         (
-                                          int       loc_index,                  // Data index.
-                                          cl_float  loc_value                   // Data value.
+                                          GLsizeiptr  loc_index,                // Data index.
+                                          GLfloat     loc_value                 // Data value.
                                         );
 
+      // "z" set function:
       void                set_z         (
-                                          int       loc_index,                  // Data index.
-                                          cl_float  loc_value                   // Data value.
+                                          GLsizeiptr  loc_index,                // Data index.
+                                          GLfloat     loc_value                 // Data value.
                                         );
 
+      // "w" set function:
       void                set_w         (
-                                          int       loc_index,                  // Data index.
-                                          cl_float  loc_value                   // Data value.
+                                          GLsizeiptr  loc_index,                // Data index.
+                                          GLfloat     loc_value                 // Data value.
                                         );
 
-      cl_float            get_x         (
-                                          int       loc_index                   // Data index.
+      // "x" get function:
+      GLfloat             get_x         (
+                                          GLsizeiptr  loc_index                 // Data index.
                                         );
 
-      cl_float            get_y         (
-                                          int       loc_index                   // Data index.
+      // "y" get function:
+      GLfloat             get_y         (
+                                          GLsizeiptr  loc_index                 // Data index.
                                         );
 
-      cl_float            get_z         (
-                                          int       loc_index                   // Data index.
+      // "z" get function:
+      GLfloat             get_z         (
+                                          GLsizeiptr  loc_index                 // Data index.
                                         );
 
-      cl_float            get_w         (
-                                          int       loc_index                   // Data index.
+      // "w" get function:
+      GLfloat             get_w         (
+                                          GLsizeiptr  loc_index                 // Data index.
                                         );
 
-      // Push kernel argument:
+      // OpenCL write buffer function:
       void                write         (
                                           queue*    loc_queue,                  // OpenCL queue.
                                           kernel*   loc_kernel,                 // OpenCL kernel.
-                                          int       loc_kernel_arg              // OpenCL kernel argument index.
+                                          cl_uint   loc_kernel_arg              // OpenCL kernel argument index.
                                         );
 
-      // Pop kernel argument:
+      // OpenCL read buffer function:
       void                read          (
                                           queue*    loc_queue,                  // OpenCL queue.
                                           kernel*   loc_kernel,                 // OpenCL kernel.
-                                          int       loc_kernel_arg              // OpenCL kernel argument index.
+                                          cl_uint   loc_kernel_arg              // OpenCL kernel argument index.
                                         );
 
+      // OpenCL acquire buffer function:
       void                acquire_gl    (
                                           queue*  loc_queue,                    // Queue.
                                           kernel* loc_kernel,                   // Kernel.
-                                          int     loc_kernel_arg                // Kernel argument index.
+                                          cl_uint loc_kernel_arg                // Kernel argument index.
                                         );
 
+      // OpenCL release buffer function:
       void                release_gl    (
                                           queue*  loc_queue,                    // Queue.
                                           kernel* loc_kernel,                   // Kernel.
-                                          int     loc_kernel_arg                // Kernel argument index.
+                                          cl_uint loc_kernel_arg                // Kernel argument index.
                                         );
 
                           ~point4();
