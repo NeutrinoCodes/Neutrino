@@ -1,7 +1,7 @@
 #include "float4.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// "FLAOT4" CLASS ////////////////////////////////
+////////////////////////////////// "FLOAT4" CLASS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 float4::float4()
 {
@@ -86,7 +86,7 @@ const char* float4::get_error     (
     case  -1004: return "CL_D3D10_RESOURCE_ALREADY_ACQUIRED_KHR";
     case  -1005: return "CL_D3D10_RESOURCE_NOT_ACQUIRED_KHR";
 
-    default: return "Unknown OpenCL error";
+    default:     return "Unknown OpenCL error";
   }
 }
 
@@ -106,17 +106,17 @@ void float4::check_error        (
 void float4::init               (
                                   neutrino* loc_baseline,                       // Neutrino baseline.
                                   kernel*   loc_kernel,                         // OpenCL kernel.
-                                  int       loc_kernel_arg,                     // OpenCL kernel argument #.
-                                  int       loc_data_size                       // Data number.
+                                  cl_uint   loc_kernel_arg,                     // OpenCL kernel argument #.
+                                  size_t    loc_data_size                       // Data number.
                                 )
 {
   cl_int    loc_error;                                                          // Error code.
-  int       i;                                                                  // Index.
+  size_t    i;                                                                  // Index.
 
   // Printing action message:
   baseline->action      (
-                          "initializing \"float4\" object...",
-                          MAX_MESSAGE_SIZE
+                          "initializing \"float4\" object...",                  // Message.
+                          MAX_MESSAGE_SIZE                                      // Message size.
                         );
 
   size = loc_data_size;                                                         // Data array size.
@@ -133,14 +133,13 @@ void float4::init               (
     data[4*i + 3] = 1.0f;                                                       // Filling "w"...
   }
 
-// CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR
   // Creating OpenCL memory buffer:
   buffer = clCreateBuffer         (
-                                    opencl_context,
-                                    CL_MEM_READ_WRITE  | CL_MEM_COPY_HOST_PTR,
-                                    4*sizeof(cl_float)*size,
-                                    data,
-                                    &loc_error
+                                    opencl_context,                             // OpenCL context.
+                                    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,   // Memory flags.
+                                    4*sizeof(cl_float)*size,                    // Data buffer size.
+                                    data,                                       // Data buffer.
+                                    &loc_error                                  // Error code.
                                   );
 
   check_error(loc_error);                                                       // Checking returned error code...
@@ -158,105 +157,133 @@ void float4::init               (
   baseline->done();                                                             // Printing message...
 }
 
-void float4::set_x(int loc_index, cl_float loc_value)
+// "x" set function:
+void float4::set_x                (
+                                    size_t loc_index,                           // Data index.
+                                    cl_float loc_value                          // Data value.
+                                  )
 {
-  data[4*loc_index + 0] = loc_value;
+  data[4*loc_index + 0] = loc_value;                                            // Setting data value...
 }
 
-void float4::set_y(int loc_index, cl_float loc_value)
+// "y" set function:
+void float4::set_y                (
+                                    size_t loc_index,                           // Data index.
+                                    cl_float loc_value                          // Data value.
+                                  )
 {
-  data[4*loc_index + 1] = loc_value;
+  data[4*loc_index + 1] = loc_value;                                            // Setting data value...
 }
 
-void float4::set_z(int loc_index, cl_float loc_value)
+// "z" setter function:
+void float4::set_z                (
+                                    size_t loc_index,                           // Data index.
+                                    cl_float loc_value                          // Data value.
+                                  )
 {
-  data[4*loc_index + 2] = loc_value;
+  data[4*loc_index + 2] = loc_value;                                            // Setting data value...
 }
 
-void float4::set_w(int loc_index, cl_float loc_value)
+// "w" set function:
+void float4::set_w                (
+                                    size_t loc_index,                           // Data index.
+                                    cl_float loc_value                          // Data value.
+                                  )
 {
-  data[4*loc_index + 3] = loc_value;
+  data[4*loc_index + 3] = loc_value;                                            // Setting data value...
 }
 
-cl_float float4::get_x(int loc_index)
+// "x" get function:
+cl_float float4::get_x            (
+                                    size_t loc_index                            // Data index.
+                                  )
 {
-  cl_float loc_value;
+  cl_float loc_value;                                                           // Value.
 
-  loc_value = data[4*loc_index + 0];
+  loc_value = data[4*loc_index + 0];                                            // Getting data value...
 
-  return(loc_value);
+  return(loc_value);                                                            // Returning data value...
 }
 
-cl_float float4::get_y(int loc_index)
+// "y" get function:
+cl_float float4::get_y            (
+                                    size_t loc_index                            // Data index.
+                                  )
 {
-  cl_float loc_value;
+  cl_float loc_value;                                                           // Value.
 
-  loc_value = data[4*loc_index + 1];
+  loc_value = data[4*loc_index + 1];                                            // Getting data value...
 
-  return(loc_value);
+  return(loc_value);                                                            // Returning data value...
 }
 
-cl_float float4::get_z(int loc_index)
+// "z" get function:
+cl_float float4::get_z            (
+                                    size_t loc_index                            // Data index.
+                                  )
 {
-  cl_float loc_value;
+  cl_float loc_value;                                                           // Value.
 
-  loc_value = data[4*loc_index + 2];
+  loc_value = data[4*loc_index + 2];                                            // Getting data value...
 
-  return(loc_value);
+  return(loc_value);                                                            // Returning data value...
 }
 
-cl_float float4::get_w(int loc_index)
+// "w" get function:
+cl_float float4::get_w            (
+                                    size_t loc_index                            // Data index.
+                                  )
 {
-  cl_float loc_value;
+  cl_float loc_value;                                                           // Value.
 
-  loc_value = data[4*loc_index + 3];
+  loc_value = data[4*loc_index + 3];                                            // Getting data value...
 
-  return(loc_value);
+  return(loc_value);                                                            // Returning data value...
 }
 
-// Writing OpenCL buffer:
+// OpenCL write buffer function:
 void float4::write                (
                                     queue*  loc_queue,                          // Queue.
                                     kernel* loc_kernel,                         // Kernel.
-                                    int  loc_kernel_arg                         // Kernel argument index.
+                                    cl_uint loc_kernel_arg                      // Kernel argument index.
                                   )
 {
   cl_int  loc_error;                                                            // Local error code.
 
   loc_error = clEnqueueWriteBuffer      (
-                                          loc_queue->queue_id,
-                                          buffer,
-                                          CL_TRUE,
-                                          0,
-                                          4*sizeof(cl_float)*size,
-                                          data,
-                                          0,
-                                          NULL,
-                                          NULL
+                                          loc_queue->queue_id,                  // OpenCL queue ID.
+                                          buffer,                               // Data buffer.
+                                          CL_TRUE,                              // Blocking write flag.
+                                          0,                                    // Data buffer offset.
+                                          4*sizeof(cl_float)*size,              // Data buffer size.
+                                          data,                                 // Data buffer.
+                                          0,                                    // Number of events in the list.
+                                          NULL,                                 // Event list.
+                                          NULL                                  // Event.
                                         );
 
   check_error(loc_error);
 }
 
-// Reading OpenCL buffer:
-void float4::read                       (
-                                          queue*  loc_queue,                    // Queue.
-                                          kernel* loc_kernel,                   // Kernel.
-                                          int  loc_kernel_arg                   // Kernel argument index.
-                                        )
+// OpenCL write buffer function:
+void float4::read                 (
+                                    queue*  loc_queue,                          // Queue.
+                                    kernel* loc_kernel,                         // Kernel.
+                                    cl_uint loc_kernel_arg                      // Kernel argument index.
+                                  )
 {
   cl_int  loc_error;                                                            // Local error code.
 
   loc_error = clEnqueueReadBuffer      (
-                                          loc_queue->queue_id,
-                                          buffer,
-                                          CL_TRUE,
-                                          0,
-                                          4*sizeof(cl_float)*size,
-                                          data,
-                                          0,
-                                          NULL,
-                                          NULL
+                                          loc_queue->queue_id,                  // OpenCL queue ID.
+                                          buffer,                               // Data buffer.
+                                          CL_TRUE,                              // Blocking write flag.
+                                          0,                                    // Data buffer offset.
+                                          4*sizeof(cl_float)*size,              // Data buffer size.
+                                          data,                                 // Data buffer.
+                                          0,                                    // Number of events in the list.
+                                          NULL,                                 // Event list.
+                                          NULL                                  // Event.
                                         );
 
   check_error(loc_error);
@@ -268,8 +295,8 @@ float4::~float4()
 
   // Printing action message:
   baseline->action      (
-                          "releasing \"float4\" object...",
-                          MAX_MESSAGE_SIZE
+                          "releasing \"float4\" object...",                     // Message.
+                          MAX_MESSAGE_SIZE                                      // Message size.
                         );
 
   if(buffer != NULL)                                                            // Checking buffer..
@@ -279,7 +306,7 @@ float4::~float4()
     check_error(loc_error);                                                     // Checking returned error code...
   }
 
-  delete[] data;                                                                // Releasing data...
+  delete[] data;                                                                // Releasing data buffer...
 
-  baseline->done();                                                            // Printing message...
+  baseline->done();                                                             // Printing message...
 }

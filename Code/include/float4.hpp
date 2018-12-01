@@ -31,7 +31,7 @@
     public:
       GLfloat*            data;                                                 // Wrapped data.
 
-      int                 size;                                                 // Data size.
+      size_t              size;                                                 // Data size.
       cl_mem              buffer;                                               // OpenGL data memory buffer.
 
                           float4();
@@ -40,58 +40,66 @@
       void                init          (
                                           neutrino* loc_baseline,               // Neutrino baseline.
                                           kernel*   loc_kernel,                 // OpenCL kernel.
-                                          int       loc_kernel_arg,             // OpenCL kernel argument #.
-                                          int       loc_data_size               // Data number.
+                                          cl_uint   loc_kernel_arg,             // OpenCL kernel argument #.
+                                          size_t    loc_data_size               // Data number.
                                         );
 
+      // "x" set function:
       void                set_x         (
-                                          int       loc_index,                  // Data index.
+                                          size_t    loc_index,                  // Data index.
                                           cl_float  loc_value                   // Data value.
                                         );
 
+      // "y" set function:
       void                set_y         (
-                                          int       loc_index,                  // Data index.
+                                          size_t    loc_index,                  // Data index.
                                           cl_float  loc_value                   // Data value.
                                         );
 
+      // "z" set function:
       void                set_z         (
-                                          int       loc_index,                  // Data index.
+                                          size_t    loc_index,                  // Data index.
                                           cl_float  loc_value                   // Data value.
                                         );
 
+      // "w" set function:
       void                set_w         (
-                                          int       loc_index,                  // Data index.
+                                          size_t    loc_index,                  // Data index.
                                           cl_float  loc_value                   // Data value.
                                         );
 
+      // "x" get function:
       cl_float            get_x         (
-                                          int       loc_index                   // Data index.
+                                          size_t    loc_index                   // Data index.
                                         );
 
+      // "y" get function:
       cl_float            get_y         (
-                                          int       loc_index                   // Data index.
+                                          size_t    loc_index                   // Data index.
                                         );
 
+      // "z" get function:
       cl_float            get_z         (
-                                          int       loc_index                   // Data index.
+                                          size_t    loc_index                   // Data index.
                                         );
 
+      // "w" get function:
       cl_float            get_w         (
-                                          int       loc_index                   // Data index.
+                                          size_t    loc_index                   // Data index.
                                         );
 
-      // Push kernel argument:
+      // OpenCL write buffer function:
       void                write         (
                                           queue*    loc_queue,                  // OpenCL queue.
                                           kernel*   loc_kernel,                 // OpenCL kernel.
-                                          int       loc_kernel_arg              // OpenCL kernel argument index.
+                                          cl_uint   loc_kernel_arg              // OpenCL kernel argument index.
                                         );
 
-      // Pop kernel argument:
+      // OpenCL read buffer function:
       void                read          (
                                           queue*    loc_queue,                  // OpenCL queue.
                                           kernel*   loc_kernel,                 // OpenCL kernel.
-                                          int       loc_kernel_arg              // OpenCL kernel argument index.
+                                          cl_uint   loc_kernel_arg              // OpenCL kernel argument index.
                                         );
 
                           ~float4();
