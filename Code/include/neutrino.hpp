@@ -38,7 +38,7 @@
   #define ASCII_126           126                                               // Last printable ascii character ("~"), [DEC].
   #define ASCII_SCALE         0.01                                              // Ascii character scale factor [].
   #define ASCII_SPACE_LITTLE  4                                                 // Hershey's vector font little space [pt].
-  #define ASCII_SPACE_BIG     16                                                // Hershy's vecotr font big space [pt].
+  #define ASCII_SPACE_BIG     16                                                // Hershey's vector font big space [pt].
 
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////// WINDOW PARAMETERS //////////////////////////////
