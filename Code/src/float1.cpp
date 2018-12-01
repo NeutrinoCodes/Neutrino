@@ -1,5 +1,7 @@
 #include "float1.hpp"
 
+#include "float4.hpp"
+
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "FLOAT1" CLASS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +88,7 @@ const char* float1::get_error     (
     case  -1004: return "CL_D3D10_RESOURCE_ALREADY_ACQUIRED_KHR";
     case  -1005: return "CL_D3D10_RESOURCE_NOT_ACQUIRED_KHR";
 
-    default: return "Unknown OpenCL error";
+    default:     return "Unknown OpenCL error";
   }
 }
 
@@ -105,7 +107,9 @@ void float1::check_error        (
 // Initialization:
 void float1::init               (
                                   neutrino* loc_baseline,                       // Neutrino baseline.
-                                  size_t    loc_data_number                     // Data number.
+                                  kernel*   loc_kernel,                         // OpenCL kernel.
+                                  cl_uint   loc_kernel_arg,                     // OpenCL kernel argument #.
+                                  size_t    loc_data_size                       // Data number.
                                 )
 {
   cl_int    loc_error;                                                          // Error code.
@@ -113,97 +117,33 @@ void float1::init               (
 
   // Printing action message:
   baseline->action      (
-                          "initializing \"float1\" object...",
-                          MAX_MESSAGE_SIZE
+                          "initializing \"float1\" object...",                  // Message.
+                          MAX_MESSAGE_SIZE                                      // Message size.
                         );
 
-  x = new GLfloat[loc_data_number];                                             // "x" data array.
-
-  size = loc_data_number;                                                       // Array size (the same for all of them).
-  vao = 0;                                                                      // OpenGL data VAO.
-  vbo = 0;                                                                      // OpenGL data VBO.
+  size = loc_data_size;                                                         // Data array size.
   buffer = NULL;                                                                // OpenCL data buffer.
   opencl_context = loc_baseline->context_id;                                    // Getting OpenCL context...
 
-  for (i = 0; i < loc_data_number; i++)                                         // Filling arrays with default data...
+  data = new cl_float[1*size];                                                  // Creating array for unfolded data...
+
+  for (i = 0; i < size; i++)                                                    // Filling unfolded data array...
   {
-    x[i] = 0.0f;                                                                // Setting "x" data...
+    data[4*i + 0] = 0.0f;                                                       // Filling "x"...
   }
 
-  // Generating VAO:
-  glGenVertexArrays             (
-                                  1,                                            // # of VAOs to generate.
-                                  &vao                                          // VAOs array.
-                                );
-
-  // Binding VAO:
-  glBindVertexArray             (
-                                  vao                                           // VAO to bind.
-                                );
-
-  // Generating VBO:
-  glGenBuffers                  (
-                                  1,                                            // # of VBOs to generate.
-                                  &vbo                                          // VBOs array.
-                                );
-
-  // Binding VBO:
-  glBindBuffer                  (
-                                  GL_ARRAY_BUFFER,                              // VBO target.
-                                  vbo                                           // VBO to bind.
-                                );
-
-  // Creating and initializing a buffer object's data store:
-  glBufferData                  (
-                                  GL_ARRAY_BUFFER,                              // VBO target.
-                                  1*sizeof(GLfloat)*(size),                     // VBO size.
-                                  x,                                            // VBO data.
-                                  GL_DYNAMIC_DRAW                               // VBO usage.
-                                );
-
-  // Enabling "layout = 1" attribute in vertex shader:
-  glEnableVertexAttribArray     (
-                                  LAYOUT_1                                      // VAO index.
-                                );
-
-  // Binding VBO:
-  glBindBuffer                  (
-                                  GL_ARRAY_BUFFER,                              // VBO target.
-                                  vbo                                           // VBO to bind.
-                                );
-
-  // Specifying the format for "layout = 1" attribute in vertex shader:
-  glVertexAttribPointer         (
-                                  LAYOUT_1,                                     // VAO index.
-                                  1,                                            // VAO's # of components.
-                                  GL_FLOAT,                                     // Data type.
-                                  GL_FALSE,                                     // Not using normalized numbers.
-                                  0,                                            // Data stride.
-                                  0                                             // Data offset.
-                                );
-
-  // Creating OpenCL buffer from OpenGL buffer:
-  buffer = clCreateFromGLBuffer (
-                                  opencl_context,                               // OpenCL context.
-                                  CL_MEM_READ_WRITE,                            // Memory flags.
-                                  vbo,                                          // VBO.
-                                  &loc_error                                    // Returned error.
-                                );
+  // Creating OpenCL memory buffer:
+  buffer = clCreateBuffer         (
+                                    opencl_context,                             // OpenCL context.
+                                    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,   // Memory flags.
+                                    1*sizeof(cl_float)*size,                    // Data buffer size.
+                                    data,                                       // Data buffer.
+                                    &loc_error                                  // Error code.
+                                  );
 
   check_error(loc_error);                                                       // Checking returned error code...
 
-  baseline->done();                                                            // Printing message...
-}
-
-// Set kernel argument:
-void float1::set                (
-                                  kernel* loc_kernel,                           // Kernel.
-                                  size_t  loc_kernel_arg                         // Kernel argument index.
-                                )
-{
-  cl_int  loc_error;                                                            // Local error code.
-
-  // Setting buffer as OpenCL kernel argument:
+  // Setting OpenCL buffer as kernel argument:
   loc_error = clSetKernelArg      (
                                     loc_kernel->kernel_id,                      // Kernel.
                                     loc_kernel_arg,                             // Kernel argument index.
@@ -212,50 +152,77 @@ void float1::set                (
                                   );
 
   check_error(loc_error);                                                       // Checking returned error code...
+
+  baseline->done();                                                             // Printing message...
 }
 
-// Push kernel argument:
-void float1::push               (
-                                  queue*  loc_queue,                            // Queue.
-                                  kernel* loc_kernel,                           // Kernel.
-                                  size_t  loc_kernel_arg                        // Kernel argument index.
-                                )
+// "x" set function:
+void float1::set_x                (
+                                    size_t loc_index,                           // Data index.
+                                    cl_float loc_value                          // Data value.
+                                  )
+{
+  data[4*loc_index + 0] = loc_value;                                            // Setting data value...
+}
+
+// "x" get function:
+cl_float float1::get_x            (
+                                    size_t loc_index                            // Data index.
+                                  )
+{
+  cl_float loc_value;                                                           // Value.
+
+  loc_value = data[1*loc_index + 0];                                            // Getting data value...
+
+  return(loc_value);                                                            // Returning data value...
+}
+
+// OpenCL write buffer function:
+void float1::write                (
+                                    queue*  loc_queue,                          // Queue.
+                                    kernel* loc_kernel,                         // Kernel.
+                                    cl_uint loc_kernel_arg                      // Kernel argument index.
+                                  )
 {
   cl_int  loc_error;                                                            // Local error code.
 
-  // Passing "points" to OpenCL kernel:
-  loc_error = clEnqueueAcquireGLObjects (
-                                          loc_queue->queue_id,                  // Queue.
-                                          1,                                    // # of memory objects.
-                                          &buffer,                              // Memory object array.
-                                          0,                                    // # of events in event list.
+  loc_error = clEnqueueWriteBuffer      (
+                                          loc_queue->queue_id,                  // OpenCL queue ID.
+                                          buffer,                               // Data buffer.
+                                          CL_TRUE,                              // Blocking write flag.
+                                          0,                                    // Data buffer offset.
+                                          4*sizeof(cl_float)*size,              // Data buffer size.
+                                          data,                                 // Data buffer.
+                                          0,                                    // Number of events in the list.
                                           NULL,                                 // Event list.
                                           NULL                                  // Event.
                                         );
 
-  check_error(loc_error);                                                       // Checking returned error code...
+  check_error(loc_error);
 }
 
-// Pop kernel argument:
-void float1::pop                (
-                                  queue*  loc_queue,                            // Queue.
-                                  kernel* loc_kernel,                           // Kernel.
-                                  size_t  loc_kernel_arg                        // Kernel argument index.
-                                )
+// OpenCL write buffer function:
+void float1::read                 (
+                                    queue*  loc_queue,                          // Queue.
+                                    kernel* loc_kernel,                         // Kernel.
+                                    cl_uint loc_kernel_arg                      // Kernel argument index.
+                                  )
 {
   cl_int  loc_error;                                                            // Local error code.
 
-  // Releasing "points" from OpenCL kernel:
-  loc_error = clEnqueueReleaseGLObjects (
-                                          loc_queue->queue_id,                  // Queue.
-                                          1,                                    // # of memory objects.
-                                          &buffer,                              // Memory object array.
-                                          0,                                    // # of events in event list.
+  loc_error = clEnqueueReadBuffer      (
+                                          loc_queue->queue_id,                  // OpenCL queue ID.
+                                          buffer,                               // Data buffer.
+                                          CL_TRUE,                              // Blocking write flag.
+                                          0,                                    // Data buffer offset.
+                                          4*sizeof(cl_float)*size,              // Data buffer size.
+                                          data,                                 // Data buffer.
+                                          0,                                    // Number of events in the list.
                                           NULL,                                 // Event list.
                                           NULL                                  // Event.
                                         );
 
-  check_error(loc_error);                                                       // Checking returned error code...
+  check_error(loc_error);
 }
 
 float1::~float1()
@@ -264,8 +231,8 @@ float1::~float1()
 
   // Printing action message:
   baseline->action      (
-                          "releasing \"float1\" object...",
-                          MAX_MESSAGE_SIZE
+                          "releasing \"float1\" object...",                     // Message.
+                          MAX_MESSAGE_SIZE                                      // Message size.
                         );
 
   if(buffer != NULL)                                                            // Checking buffer..
@@ -275,10 +242,7 @@ float1::~float1()
     check_error(loc_error);                                                     // Checking returned error code...
   }
 
-  glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
-  glDeleteBuffers(1, &vao);                                                     // Releasing OpenGL VAO...
+  delete[] data;                                                                // Releasing data buffer...
 
-  delete[] x;                                                                   // Releasing "x" data...
-
-  baseline->done();                                                            // Printing message...
+  baseline->done();                                                             // Printing message...
 }
