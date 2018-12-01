@@ -29,7 +29,7 @@
       cl_context          opencl_context;                                       // OpenCL context.
 
     public:
-      GLfloat*            data;                                                 // Wrapped data.
+      cl_float*           data;                                                 // Wrapped data.
 
       size_t              size;                                                 // Data size.
       cl_mem              buffer;                                               // OpenGL data memory buffer.

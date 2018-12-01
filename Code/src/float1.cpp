@@ -1,7 +1,5 @@
 #include "float1.hpp"
 
-#include "float4.hpp"
-
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "FLOAT1" CLASS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +127,7 @@ void float1::init               (
 
   for (i = 0; i < size; i++)                                                    // Filling unfolded data array...
   {
-    data[4*i + 0] = 0.0f;                                                       // Filling "x"...
+    data[1*i + 0] = 0.0f;                                                       // Filling "x"...
   }
 
   // Creating OpenCL memory buffer:
@@ -162,7 +160,7 @@ void float1::set_x                (
                                     cl_float loc_value                          // Data value.
                                   )
 {
-  data[4*loc_index + 0] = loc_value;                                            // Setting data value...
+  data[1*loc_index + 0] = loc_value;                                            // Setting data value...
 }
 
 // "x" get function:
@@ -191,7 +189,7 @@ void float1::write                (
                                           buffer,                               // Data buffer.
                                           CL_TRUE,                              // Blocking write flag.
                                           0,                                    // Data buffer offset.
-                                          4*sizeof(cl_float)*size,              // Data buffer size.
+                                          1*sizeof(cl_float)*size,              // Data buffer size.
                                           data,                                 // Data buffer.
                                           0,                                    // Number of events in the list.
                                           NULL,                                 // Event list.
@@ -215,7 +213,7 @@ void float1::read                 (
                                           buffer,                               // Data buffer.
                                           CL_TRUE,                              // Blocking write flag.
                                           0,                                    // Data buffer offset.
-                                          4*sizeof(cl_float)*size,              // Data buffer size.
+                                          1*sizeof(cl_float)*size,              // Data buffer size.
                                           data,                                 // Data buffer.
                                           0,                                    // Number of events in the list.
                                           NULL,                                 // Event list.
