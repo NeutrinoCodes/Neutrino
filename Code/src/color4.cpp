@@ -322,6 +322,8 @@ void color4::acquire_gl         (
 {
   cl_int  loc_error;                                                            // Local error code.
 
+  glFinish();                                                                   // Ensuring that all OpenGL routines have completed all operations...
+
   // Passing "points" to OpenCL kernel:
   loc_error = clEnqueueAcquireGLObjects (
                                           loc_queue->queue_id,                  // Queue.
@@ -353,6 +355,8 @@ void color4::release_gl         (
                                           NULL,                                 // Event list.
                                           NULL                                  // Event.
                                         );
+
+  clFinish(loc_queue->queue_id);                                                // Ensuring that all OpenCL routines have completed all operations...
 
   check_error(loc_error);                                                       // Checking returned error code...
 }
