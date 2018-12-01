@@ -8,7 +8,7 @@
   #include "queue.hpp"
 
   ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////// "INT4" CLASS ////////////////////////////////
+  ///////////////////////////////// "INT4" CLASS /////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   class int4
   {
@@ -25,46 +25,81 @@
                                           cl_int      loc_error                 // Local error code.
                                         );
 
-      cl_long*            data;                                                 // Wrapped data.
+
       cl_context          opencl_context;                                       // OpenCL context.
 
     public:
-      cl_long*            x;                                                    // "x" data.
-      cl_long*            y;                                                    // "y" data.
-      cl_long*            z;                                                    // "z" data.
-      cl_long*            w;                                                    // "w" data.
+      cl_long*            data;                                                 // Wrapped data.
 
       size_t              size;                                                 // Data size.
-      GLuint              vao;                                                  // OpenGL data VAO.
-      GLuint              vbo;                                                  // OpenGL data VBO.
       cl_mem              buffer;                                               // OpenGL data memory buffer.
 
                           int4();
 
       // Initialization:
       void                init          (
-                                          neutrino*   loc_baseline,             // Neutrino baseline.
-                                          size_t      loc_data_number           // Data size.
+                                          neutrino* loc_baseline,               // Neutrino baseline.
+                                          kernel*   loc_kernel,                 // OpenCL kernel.
+                                          cl_uint   loc_kernel_arg,             // OpenCL kernel argument #.
+                                          size_t    loc_data_size               // Data number.
                                         );
 
-      // Set kernel argument:
-      void                set           (
-                                          kernel*     loc_kernel,               // OpenCL kernel.
-                                          size_t      loc_kernel_arg            // OpenCL kernel argument index.
+      // "x" set function:
+      void                set_x         (
+                                          size_t    loc_index,                  // Data index.
+                                          cl_long   loc_value                   // Data value.
                                         );
 
-      // Push kernel argument:
-      void                push          (
-                                          queue*      loc_queue,                // OpenCL queue.
-                                          kernel*     loc_kernel,               // OpenCL kernel.
-                                          size_t      loc_kernel_arg            // OpenCL kernel argument index.
+      // "y" set function:
+      void                set_y         (
+                                          size_t    loc_index,                  // Data index.
+                                          cl_long   loc_value                   // Data value.
                                         );
 
-      // Pop kernel argument:
-      void                pop           (
-                                          queue*      loc_queue,                // OpenCL queue.
-                                          kernel*     loc_kernel,               // OpenCL kernel.
-                                          size_t      loc_kernel_arg            // OpenCL kernel argument index.
+      // "z" set function:
+      void                set_z         (
+                                          size_t    loc_index,                  // Data index.
+                                          cl_long   loc_value                   // Data value.
+                                        );
+
+      // "w" set function:
+      void                set_w         (
+                                          size_t    loc_index,                  // Data index.
+                                          cl_long   loc_value                   // Data value.
+                                        );
+
+      // "x" get function:
+      cl_long             get_x         (
+                                          size_t    loc_index                   // Data index.
+                                        );
+
+      // "y" get function:
+      cl_long             get_y         (
+                                          size_t    loc_index                   // Data index.
+                                        );
+
+      // "z" get function:
+      cl_long             get_z         (
+                                          size_t    loc_index                   // Data index.
+                                        );
+
+      // "w" get function:
+      cl_long             get_w         (
+                                          size_t    loc_index                   // Data index.
+                                        );
+
+      // OpenCL write buffer function:
+      void                write         (
+                                          queue*    loc_queue,                  // OpenCL queue.
+                                          kernel*   loc_kernel,                 // OpenCL kernel.
+                                          cl_uint   loc_kernel_arg              // OpenCL kernel argument index.
+                                        );
+
+      // OpenCL read buffer function:
+      void                read          (
+                                          queue*    loc_queue,                  // OpenCL queue.
+                                          kernel*   loc_kernel,                 // OpenCL kernel.
+                                          cl_uint   loc_kernel_arg              // OpenCL kernel argument index.
                                         );
 
                           ~int4();

@@ -1,7 +1,7 @@
 #include "int4.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////// "INT4" CLASS /////////////////////////////////
+////////////////////////////////// "INT4" CLASS //////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 int4::int4()
 {
@@ -9,7 +9,7 @@ int4::int4()
 }
 
 // OpenCL error get function:
-const char* int4::get_error     (
+const char* int4::get_error       (
                                     cl_int loc_error                            // Local error code.
                                   )
 {
@@ -86,7 +86,7 @@ const char* int4::get_error     (
     case  -1004: return "CL_D3D10_RESOURCE_ALREADY_ACQUIRED_KHR";
     case  -1005: return "CL_D3D10_RESOURCE_NOT_ACQUIRED_KHR";
 
-    default: return "Unknown OpenCL error";
+    default:     return "Unknown OpenCL error";
   }
 }
 
@@ -105,7 +105,9 @@ void int4::check_error          (
 // Initialization:
 void int4::init                 (
                                   neutrino* loc_baseline,                       // Neutrino baseline.
-                                  size_t    loc_data_number                     // Data number.
+                                  kernel*   loc_kernel,                         // OpenCL kernel.
+                                  cl_uint   loc_kernel_arg,                     // OpenCL kernel argument #.
+                                  size_t    loc_data_size                       // Data number.
                                 )
 {
   cl_int    loc_error;                                                          // Error code.
@@ -113,115 +115,36 @@ void int4::init                 (
 
   // Printing action message:
   baseline->action      (
-                          "initializing \"float4\" object...",
-                          MAX_MESSAGE_SIZE
+                          "initializing \"int4\" object...",                    // Message.
+                          MAX_MESSAGE_SIZE                                      // Message size.
                         );
 
-  x = new cl_long[loc_data_number];                                             // "x" data array.
-  y = new cl_long[loc_data_number];                                             // "y" data array.
-  z = new cl_long[loc_data_number];                                             // "z" data array.
-  w = new cl_long[loc_data_number];                                             // "w" data array.
-
-  size = loc_data_number;                                                       // Array size (the same for all of them).
-  vao = 0;                                                                      // OpenGL data VAO.
-  vbo = 0;                                                                      // OpenGL data VBO.
+  size = loc_data_size;                                                         // Data array size.
   buffer = NULL;                                                                // OpenCL data buffer.
   opencl_context = loc_baseline->context_id;                                    // Getting OpenCL context...
-
-  for (i = 0; i < loc_data_number; i++)                                         // Filling arrays with default data...
-  {
-    x[i] = 0.0f;                                                                // Setting "x" data...
-    y[i] = 0.0f;                                                                // Setting "y" data...
-    z[i] = 0.0f;                                                                // Setting "z" data...
-    w[i] = 1.0f;                                                                // Setting "w" data...
-  }
 
   data = new cl_long[4*size];                                                   // Creating array for unfolded data...
 
   for (i = 0; i < size; i++)                                                    // Filling unfolded data array...
   {
-    data[4*i + 0] = x[i];                                                       // Filling "x"...
-    data[4*i + 1] = y[i];                                                       // Filling "y"...
-    data[4*i + 2] = z[i];                                                       // Filling "z"...
-    data[4*i + 3] = w[i];                                                       // Filling "w"...
+    data[4*i + 0] = 0.0f;                                                       // Filling "x"...
+    data[4*i + 1] = 0.0f;                                                       // Filling "y"...
+    data[4*i + 2] = 0.0f;                                                       // Filling "z"...
+    data[4*i + 3] = 1.0f;                                                       // Filling "w"...
   }
 
-  // Generating VAO:
-  glGenVertexArrays             (
-                                  1,                                            // # of VAOs to generate.
-                                  &vao                                          // VAOs array.
-                                );
-
-  // Binding VAO:
-  glBindVertexArray             (
-                                  vao                                           // VAO to bind.
-                                );
-
-  // Generating VBO:
-  glGenBuffers                  (
-                                  1,                                            // # of VBOs to generate.
-                                  &vbo                                          // VBOs array.
-                                );
-
-  // Binding VBO:
-  glBindBuffer                  (
-                                  GL_ARRAY_BUFFER,                              // VBO target.
-                                  vbo                                           // VBO to bind.
-                                );
-
-  // Creating and initializing a buffer object's data store:
-  glBufferData                  (
-                                  GL_ARRAY_BUFFER,                              // VBO target.
-                                  4*sizeof(cl_long)*(size),                     // VBO size.
-                                  data,                                         // VBO data.
-                                  GL_DYNAMIC_DRAW                               // VBO usage.
-                                );
-
-  // Enabling "layout = 1" attribute in vertex shader:
-  glEnableVertexAttribArray     (
-                                  LAYOUT_1                                      // VAO index.
-                                );
-
-  // Binding VBO:
-  glBindBuffer                  (
-                                  GL_ARRAY_BUFFER,                              // VBO target.
-                                  vbo                                           // VBO to bind.
-                                );
-
-  // Specifying the format for "layout = 1" attribute in vertex shader:
-  glVertexAttribPointer         (
-                                  LAYOUT_1,                                     // VAO index.
-                                  4,                                            // VAO's # of components.
-                                  GL_FLOAT,                                     // Data type.
-                                  GL_FALSE,                                     // Not using normalized numbers.
-                                  0,                                            // Data stride.
-                                  0                                             // Data offset.
-                                );
-
-  // Creating OpenCL buffer from OpenGL buffer:
-  buffer = clCreateFromGLBuffer (
-                                  opencl_context,                               // OpenCL context.
-                                  CL_MEM_READ_WRITE,                            // Memory flags.
-                                  vbo,                                          // VBO.
-                                  &loc_error                                    // Returned error.
-                                );
-
-  delete[] data;                                                                // Deleting array for unfolded data...
+  // Creating OpenCL memory buffer:
+  buffer = clCreateBuffer         (
+                                    opencl_context,                             // OpenCL context.
+                                    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,   // Memory flags.
+                                    4*sizeof(cl_float)*size,                    // Data buffer size.
+                                    data,                                       // Data buffer.
+                                    &loc_error                                  // Error code.
+                                  );
 
   check_error(loc_error);                                                       // Checking returned error code...
 
-  baseline->done();                                                            // Printing message...
-}
-
-// Set kernel argument:
-void int4::set                  (
-                                  kernel* loc_kernel,                           // Kernel.
-                                  size_t   loc_kernel_arg                       // Kernel argument index.
-                                )
-{
-  cl_int  loc_error;                                                            // Local error code.
-
-  // Setting buffer as OpenCL kernel argument:
+  // Setting OpenCL buffer as kernel argument:
   loc_error = clSetKernelArg      (
                                     loc_kernel->kernel_id,                      // Kernel.
                                     loc_kernel_arg,                             // Kernel argument index.
@@ -230,50 +153,140 @@ void int4::set                  (
                                   );
 
   check_error(loc_error);                                                       // Checking returned error code...
+
+  baseline->done();                                                             // Printing message...
 }
 
-// Push kernel argument:
-void int4::push                 (
-                                  queue*  loc_queue,                            // Queue.
-                                  kernel* loc_kernel,                           // Kernel.
-                                  size_t  loc_kernel_arg                        // Kernel argument index.
-                                )
+// "x" set function:
+void      int4::set_x             (
+                                    size_t  loc_index,                          // Data index.
+                                    cl_long loc_value                           // Data value.
+                                  )
+{
+  data[4*loc_index + 0] = loc_value;                                            // Setting data value...
+}
+
+// "y" set function:
+void      int4::set_y             (
+                                    size_t  loc_index,                          // Data index.
+                                    cl_long loc_value                           // Data value.
+                                  )
+{
+  data[4*loc_index + 1] = loc_value;                                            // Setting data value...
+}
+
+// "z" setter function:
+void      int4::set_z             (
+                                    size_t  loc_index,                          // Data index.
+                                    cl_long loc_value                           // Data value.
+                                  )
+{
+  data[4*loc_index + 2] = loc_value;                                            // Setting data value...
+}
+
+// "w" set function:
+void      int4::set_w             (
+                                    size_t  loc_index,                          // Data index.
+                                    cl_long loc_value                           // Data value.
+                                  )
+{
+  data[4*loc_index + 3] = loc_value;                                            // Setting data value...
+}
+
+// "x" get function:
+cl_long   int4::get_x             (
+                                    size_t loc_index                            // Data index.
+                                  )
+{
+  cl_long loc_value;                                                            // Value.
+
+  loc_value = data[4*loc_index + 0];                                            // Getting data value...
+
+  return(loc_value);                                                            // Returning data value...
+}
+
+// "y" get function:
+cl_long   int4::get_y             (
+                                    size_t loc_index                            // Data index.
+                                  )
+{
+  cl_long loc_value;                                                            // Value.
+
+  loc_value = data[4*loc_index + 1];                                            // Getting data value...
+
+  return(loc_value);                                                            // Returning data value...
+}
+
+// "z" get function:
+cl_long   int4::get_z             (
+                                    size_t loc_index                            // Data index.
+                                  )
+{
+  cl_long loc_value;                                                            // Value.
+
+  loc_value = data[4*loc_index + 2];                                            // Getting data value...
+
+  return(loc_value);                                                            // Returning data value...
+}
+
+// "w" get function:
+cl_long   int4::get_w             (
+                                    size_t loc_index                            // Data index.
+                                  )
+{
+  cl_long loc_value;                                                            // Value.
+
+  loc_value = data[4*loc_index + 3];                                            // Getting data value...
+
+  return(loc_value);                                                            // Returning data value...
+}
+
+// OpenCL write buffer function:
+void int4::write                  (
+                                    queue*  loc_queue,                          // Queue.
+                                    kernel* loc_kernel,                         // Kernel.
+                                    cl_uint loc_kernel_arg                      // Kernel argument index.
+                                  )
 {
   cl_int  loc_error;                                                            // Local error code.
 
-  // Passing "points" to OpenCL kernel:
-  loc_error = clEnqueueAcquireGLObjects (
-                                          loc_queue->queue_id,                  // Queue.
-                                          1,                                    // # of memory objects.
-                                          &buffer,                              // Memory object array.
-                                          0,                                    // # of events in event list.
+  loc_error = clEnqueueWriteBuffer      (
+                                          loc_queue->queue_id,                  // OpenCL queue ID.
+                                          buffer,                               // Data buffer.
+                                          CL_TRUE,                              // Blocking write flag.
+                                          0,                                    // Data buffer offset.
+                                          4*sizeof(cl_float)*size,              // Data buffer size.
+                                          data,                                 // Data buffer.
+                                          0,                                    // Number of events in the list.
                                           NULL,                                 // Event list.
                                           NULL                                  // Event.
                                         );
 
-  check_error(loc_error);                                                       // Checking returned error code...
+  check_error(loc_error);
 }
 
-// Pop kernel argument:
-void int4::pop                  (
-                                  queue*  loc_queue,                            // Queue.
-                                  kernel* loc_kernel,                           // Kernel.
-                                  size_t  loc_kernel_arg                        // Kernel argument index.
-                                )
+// OpenCL write buffer function:
+void int4::read                   (
+                                    queue*  loc_queue,                          // Queue.
+                                    kernel* loc_kernel,                         // Kernel.
+                                    cl_uint loc_kernel_arg                      // Kernel argument index.
+                                  )
 {
   cl_int  loc_error;                                                            // Local error code.
 
-  // Releasing "points" from OpenCL kernel:
-  loc_error = clEnqueueReleaseGLObjects (
-                                          loc_queue->queue_id,                  // Queue.
-                                          1,                                    // # of memory objects.
-                                          &buffer,                              // Memory object array.
-                                          0,                                    // # of events in event list.
+  loc_error = clEnqueueReadBuffer      (
+                                          loc_queue->queue_id,                  // OpenCL queue ID.
+                                          buffer,                               // Data buffer.
+                                          CL_TRUE,                              // Blocking write flag.
+                                          0,                                    // Data buffer offset.
+                                          4*sizeof(cl_float)*size,              // Data buffer size.
+                                          data,                                 // Data buffer.
+                                          0,                                    // Number of events in the list.
                                           NULL,                                 // Event list.
                                           NULL                                  // Event.
                                         );
 
-  check_error(loc_error);                                                       // Checking returned error code...
+  check_error(loc_error);
 }
 
 int4::~int4()
@@ -282,8 +295,8 @@ int4::~int4()
 
   // Printing action message:
   baseline->action      (
-                          "releasing \"float4\" object...",
-                          MAX_MESSAGE_SIZE
+                          "releasing \"int4\" object...",                       // Message.
+                          MAX_MESSAGE_SIZE                                      // Message size.
                         );
 
   if(buffer != NULL)                                                            // Checking buffer..
@@ -293,13 +306,7 @@ int4::~int4()
     check_error(loc_error);                                                     // Checking returned error code...
   }
 
-  glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
-  glDeleteBuffers(1, &vao);                                                     // Releasing OpenGL VAO...
+  delete[] data;                                                                // Releasing data buffer...
 
-  delete[] x;                                                                   // Releasing "x" data...
-  delete[] y;                                                                   // Releasing "y" data...
-  delete[] z;                                                                   // Releasing "z" data...
-  delete[] w;                                                                   // Releasing "w" data...
-
-  baseline->done();                                                            // Printing message...
+  baseline->done();                                                             // Printing message...
 }
