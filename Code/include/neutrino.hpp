@@ -2,34 +2,34 @@
 #define neutrino_hpp
 
   /// These files are relative to the NEUTRINO_PATH environmental variable:
-  #define POINT_VERTEX_FILE       "/Code/shader/vertex.vert"
-  #define POINT_FRAGMENT_FILE     "/Code/shader/fragment.frag"
-  #define TEXT_VERTEX_FILE        "/Code/shader/text_vertex.vert"
-  #define TEXT_FRAGMENT_FILE      "/Code/shader/text_fragment.frag"
+  #define POINT_VERTEX_FILE       "/Code/shader/vertex.vert"                    // Plot style POINT vertex shader.
+  #define POINT_FRAGMENT_FILE     "/Code/shader/fragment.frag"                  // Plot style POINT fragment shader.
+  #define TEXT_VERTEX_FILE        "/Code/shader/text_vertex.vert"               // Print style TEXT vertex shader.
+  #define TEXT_FRAGMENT_FILE      "/Code/shader/text_fragment.frag"             // Print style TEXT fragment shader.
 
   #define CL_USE_DEPRECATED_OPENCL_1_2_APIS                                     // Allows the usage of "OpenCL 1.2" functions in newer versions.
 
   #ifdef __WINDOWS__
-    #define GLFW_EXPOSE_NATIVE_WIN32
-    #define GLFW_EXPOSE_NATIVE_WGL
+    #define GLFW_EXPOSE_NATIVE_WIN32                                            // Enabling Windows native access functions...
+    #define GLFW_EXPOSE_NATIVE_WGL                                              // Enabling Windows native access functions...
   #endif
 
   #ifdef __linux__
-    #define GLFW_EXPOSE_NATIVE_X11
-    #define GLFW_EXPOSE_NATIVE_GLX
+    #define GLFW_EXPOSE_NATIVE_X11                                              // Enabling Linux native access functions...
+    #define GLFW_EXPOSE_NATIVE_GLX                                              // Enabling Linux native access functions...
   #endif
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////// TERMINAL COLORS ///////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  #define COLOR_NORMAL      "\x1B[0m"
-  #define COLOR_RED         "\x1B[31m"
-  #define COLOR_GREEN       "\x1B[32m"
-  #define COLOR_YELLOW      "\x1B[33m"
-  #define COLOR_BLUE        "\x1B[34m"
-  #define COLOR_MAGENTA     "\x1B[35m"
-  #define COLOR_CYAN        "\x1B[36m"
-  #define COLOR_WHITE       "\x1B[37m"
+  #define COLOR_NORMAL      "\x1B[0m"                                           // Default terminal color.
+  #define COLOR_RED         "\x1B[31m"                                          // Red.
+  #define COLOR_GREEN       "\x1B[32m"                                          // Green.
+  #define COLOR_YELLOW      "\x1B[33m"                                          // Yellow.
+  #define COLOR_BLUE        "\x1B[34m"                                          // Blue.
+  #define COLOR_MAGENTA     "\x1B[35m"                                          // Magenta.
+  #define COLOR_CYAN        "\x1B[36m"                                          // Cyan.
+  #define COLOR_WHITE       "\x1B[37m"                                          // White.
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////// FONT PARAMETERS ///////////////////////////////
@@ -59,33 +59,33 @@
   // Plot styles:
   typedef enum
   {
-    STYLE_POINT,
-    STYLE_WIREFRAME,
-    STYLE_SHADED
+    STYLE_POINT,                                                                // Plot style set as points.
+    STYLE_WIREFRAME,                                                            // Plot style set as lines.
+    STYLE_SHADED                                                                // Plot style set as shaded surfaces.
   } plot_style;
 
   // Shader types:
   typedef enum
   {
-    VERTEX,
-    FRAGMENT
+    VERTEX,                                                                     // GLSL shader interpretation set as vertex.
+    FRAGMENT                                                                    // GLSL shader interpretation set as fragment.
   } shader_type;
 
   // Kernel modes:
   typedef enum
   {
-    WAIT,
-    DONT_WAIT
+    WAIT,                                                                       // OpenCL kernel set as blocking mode.
+    DONT_WAIT                                                                   // OpenCL kernel set as non-blocking mode.
   } kernel_mode;
 
   // Compute device types:
   typedef enum
   {
-    CPU,
-    GPU,
-    ACCELERATOR,
-    DEFAULT,
-    ALL
+    CPU,                                                                        // OpenCL CPU device.
+    GPU,                                                                        // OpenCL GPU device.
+    ACCELERATOR,                                                                // OpenCL ACCELERATOR device.
+    DEFAULT,                                                                    // OpenCL DEFAULT device.
+    ALL                                                                         // OpenCL ALL devices.
   } compute_device_type;
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -114,31 +114,31 @@
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////// GLEW header files //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  #include <GL/glew.h>
+  #include <GL/glew.h>                                                          // http://glew.sourceforge.net
 
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////// GLFW header files //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  #include <GLFW/glfw3.h>
-  #include <GLFW/glfw3native.h>
+  #include <GLFW/glfw3.h>                                                       // https://www.glfw.org
+  #include <GLFW/glfw3native.h>                                                 // https://www.glfw.org
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// OpenGL header files /////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   #ifdef __APPLE__
-    #include <OpenGL/OpenGL.h>
+    #include <OpenGL/OpenGL.h>                                                  // Apple deprecated the OpenGL framework in 2018, OS-X 10.14 Mojave.
   #else
-    #include <GL/gl.h>
+    #include <GL/gl.h>                                                          // https://www.opengl.org
   #endif
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// OpenCL header files /////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   #ifdef __APPLE__
-    #include <OpenCL/opencl.h>
+    #include <OpenCL/opencl.h>                                                  // Apple deprecated the OpenCL framework in 2018, OS-X 10.14 Mojave.
   #else
-    #include <CL/cl.h>
-    #include <CL/cl_gl.h>
+    #include <CL/cl.h>                                                          // https://www.opengl.org
+    #include <CL/cl_gl.h>                                                       // https://www.opengl.org
   #endif
 
   #include "path.hpp"
@@ -154,8 +154,6 @@
   class neutrino
   {
     private:
-      int               ascii_spin_phase;
-      int               ascii_spin_n_old;
       path*             temp_neutrino_path;
       font*             temp_neutrino_font;
 
@@ -163,7 +161,6 @@
       font*             get_neutrino_font();                                    // Gets neutrino font.
       double            get_cpu_time();                                         // Gets CPU time [us].
       void              ascii_spin();
-      void              ascii_spin_stop();
 
     public:
       path*             neutrino_path;                                          // NEUTRINO_PATH environmental variable.
@@ -171,6 +168,8 @@
       double            tic;                                                    // Tic time [us].
       double            toc;                                                    // Toc time [us].
       double            loop_time;                                              // Loop time [us].
+      bool              first_run;                                              // First run flag.
+      bool              last_run;                                               // Last run flag.
 
       cl_context        context_id;                                             // OpenCL context id.
       cl_platform_id    platform_id;                                            // OpenCL platform ID.
@@ -189,37 +188,40 @@
 
       // Load file:
       void              load_file     (
-                                        const char* file_name,
-                                        char**      file_buffer,
-                                        size_t*     file_size
+                                        const char* file_name,                  // File name.
+                                        char**      file_buffer,                // File buffer (char array).
+                                        size_t*     file_size                   // File size.
                                       );
 
       // Write file:
       void              write_file    (
-                                        const char* file_name,
-                                        char*       file_buffer
+                                        const char* file_name,                  // File name.
+                                        char*       file_buffer                 // File buffer.
                                       );
 
       // Free file:
       void              free_file     (
-                                        char*       buffer
+                                        char*       buffer                      // File buffer.
                                       );
 
       // Query numeric input from stdin:
       int               query_numeric (
-                                        const char* caption,
-                                        int         min,
-                                        int         max
+                                        const char* caption,                    // Text query caption.
+                                        int         min,                        // Minimum queried numeric value.
+                                        int         max                         // Maximum queried numeric value.
                                       );
 
+      // Current stdout terminal line erase function:
+      void              erase         ();
+
       void              action        (
-                                        const char* loc_text,
-                                        size_t      loc_max_text_size
+                                        const char* loc_text,                   // Message.
+                                        size_t      loc_max_text_size           // Message size.
                                       );
 
       void              error         (
-                                        const char* loc_text,
-                                        size_t      loc_max_text_size
+                                        const char* loc_text,                   // Message.
+                                        size_t      loc_max_text_size           // Message size.
                                       );
 
       void              done();

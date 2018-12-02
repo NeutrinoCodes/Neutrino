@@ -24,13 +24,13 @@
                                           cl_int            loc_error           // Error code.
                                         );
 
-      // Gets size information:
+      // OpenCL get info size function:
       size_t              get_info_size (
                                           cl_device_id      loc_platform_id,    // Platform ID.
                                           cl_device_info    loc_parameter_name  // Paramenter name.
                                         );
 
-      // Gets size information:
+      // OpenCL get info value function:
       char*               get_info_value(
                                           cl_device_id      loc_platform_id,    // Platform ID.
                                           cl_device_info    loc_parameter_name, // Paramenter name.
