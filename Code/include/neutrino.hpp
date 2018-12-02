@@ -156,20 +156,18 @@
     private:
       path*             temp_neutrino_path;
       font*             temp_neutrino_font;
+      size_t            terminal_time;
 
       path*             get_neutrino_path();                                    // Gets NEUTRINO_PATH envinromentatl variable.
       font*             get_neutrino_font();                                    // Gets neutrino font.
       double            get_cpu_time();                                         // Gets CPU time [us].
-      void              ascii_spin();
 
     public:
       path*             neutrino_path;                                          // NEUTRINO_PATH environmental variable.
       font*             neutrino_font;                                          // Font object.
       double            tic;                                                    // Tic time [us].
       double            toc;                                                    // Toc time [us].
-      double            loop_time;                                              // Loop time [us].
-      bool              first_run;                                              // First run flag.
-      bool              last_run;                                               // Last run flag.
+      size_t            loop_time;                                              // Loop time [us].
 
       cl_context        context_id;                                             // OpenCL context id.
       cl_platform_id    platform_id;                                            // OpenCL platform ID.
