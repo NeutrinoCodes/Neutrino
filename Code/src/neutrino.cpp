@@ -146,8 +146,7 @@ double neutrino::get_cpu_time()
 // PUBLIC METHODS:
 void neutrino::init()
 {
-  first_run = true;
-  last_run = false;
+  terminal_time = 0;
 
   // Initializing NEUTRINO_PATH:
   action      (
@@ -181,44 +180,43 @@ void neutrino::get_toc()
   char      text[MAX_TEXT_SIZE];                                                // Text buffer.
 
   toc = get_cpu_time();
-  loop_time = size_t(round(1000000.0*(toc - tic)));                             // Loop execution time [us].
+  loop_time = size_t(round(1000000.0*double(toc - tic)));                       // Loop execution time [us].
+  terminal_time += loop_time;
 
-  printf("\r");
-
-  // Compiling message string:
-  snprintf  (
-              buffer,                                                           // Destination string.
-              MAX_TEXT_SIZE,                                                    // Size of destination string.
-              "%sAction:%s %s%d",                                               // Compiled string.
-              COLOR_CYAN,                                                       // Red color.
-              COLOR_NORMAL,                                                     // Normal color.
-              "running OpenCL program. Host loop time = ",                      // Source string.
-              loop_time
-            );
-
-  printf("%s", buffer);                                                         // Printing buffer...
-  fflush(stdout);                                                               // Flushing stdout...
-
-  if (last_run)
+  if(terminal_time > 20000)
   {
-    padding = MAX_MESSAGE_SIZE - strlen(buffer);                                  // Computing text padding...
+    terminal_time = 0;                                                          // Resetting terminal time.
+    erase();
 
-    if(padding >= 0)                                                              // Checking padding...
+    // Compiling message string:
+    snprintf  (
+                buffer,                                                         // Destination string.
+                MAX_TEXT_SIZE,                                                  // Size of destination string.
+                "%sAction:%s %s%zu us",                                         // Compiled string.
+                COLOR_CYAN,                                                     // Red color.
+                COLOR_NORMAL,                                                   // Normal color.
+                "running host: loop time = ",                                   // Source string.
+                loop_time                                                       // Host loop time [us].
+              );
+
+    printf("%s", buffer);                                                       // Printing buffer...
+
+    padding = MAX_MESSAGE_SIZE - strlen(buffer);                                // Computing text padding...
+
+    if(padding >= 0)                                                            // Checking padding...
     {
-      for(i = 0; i < padding; i++)                                                // Compiling padding...
+      for(i = 0; i < padding; i++)                                              // Compiling padding...
       {
-        printf(" ");                                                              // Printing padding...
-        fflush(stdout);                                                           // Flushing stdout...
+        printf(" ");                                                            // Printing padding...
       }
+      fflush(stdout);
     }
 
-    else                                                                          // Generating error message...
+    else                                                                        // Generating error message...
     {
-      printf("Error: string too big!\n");                                         // Printing message...
-      exit(1);                                                                    // Exiting...
+      printf("Error: string too big!\n");                                       // Printing message...
+      exit(1);                                                                  // Exiting...
     }
-
-    done();
   }
 }
 
@@ -308,19 +306,7 @@ int neutrino::query_numeric(const char* caption, int min, int max)
 
 void neutrino::erase()
 {
-  int i;
-
-  printf("\r");
-  fflush(stdout);
-
-  for(i = 0; i < MAX_MESSAGE_SIZE; i++)
-  {
-    printf(" ");
-  }
-
-  fflush(stdout);
-  printf("\r");
-  fflush(stdout);
+  printf("\33[2K\r");                                                           // Erasing terminal stdout current line....
 }
 
 void neutrino::action (
@@ -331,8 +317,6 @@ void neutrino::action (
   char      buffer[MAX_TEXT_SIZE];                                              // Text buffer.
   size_t    padding;                                                            // Text padding.
   size_t    i;                                                                  // Index.
-
-  padding = loc_max_text_size - strlen(loc_text);                               // Computing text padding...
 
   // Compiling message string:
   snprintf  (
@@ -345,14 +329,15 @@ void neutrino::action (
             );
 
   printf("%s", buffer);                                                         // Printing buffer...
+  padding = loc_max_text_size - strlen(buffer);                                 // Computing text padding...
 
   if(padding >= 0)                                                              // Checking padding...
   {
     for(i = 0; i < padding; i++)                                                // Compiling padding...
     {
       printf(" ");                                                              // Printing padding...
-      fflush(stdout);                                                           // Flushing stdout...
     }
+    fflush(stdout);                                                             // Flushing stdout...
   }
 
   else                                                                          // Generating error message...

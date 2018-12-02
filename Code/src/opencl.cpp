@@ -440,7 +440,7 @@ opencl::~opencl()
 
   // Printing action message:
   baseline->action      (
-                          "releasing    OpenCL context...",
+                          "releasing OpenCL context...",
                           MAX_MESSAGE_SIZE
                         );
 

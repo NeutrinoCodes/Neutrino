@@ -153,7 +153,7 @@ void kernel::init (
 
   // Printing action message:
   baseline->action      (
-                          "building OpenCL program......",
+                          "building OpenCL program...",
                           MAX_MESSAGE_SIZE
                         );
 
