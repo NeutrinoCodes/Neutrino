@@ -39,16 +39,18 @@
 
             kernel();
 
+      // Initialization:
       void  init      (
-                        neutrino*     loc_baseline,
-                        char*         loc_kernel_filename,
-                        size_t*       loc_kernel_size,
-                        cl_uint       loc_kernel_dimension
+                        neutrino*     loc_baseline,                             // Neutrino baseline.
+                        char*         loc_kernel_filename,                      // OpenCL kernel file name.
+                        size_t*       loc_kernel_size,                          // OpenCL kernel size.
+                        cl_uint       loc_kernel_dimension                      // OpenCL kernel dimension.
                       );
 
+      // Kernel execution:
       void  execute   (
-                        queue*        loc_queue,
-                        kernel_mode   loc_kernel_mode
+                        queue*        loc_queue,                                // OpenCL queue.
+                        kernel_mode   loc_kernel_mode                           // OpenCL kernel mode.
                       );
 
             ~kernel();

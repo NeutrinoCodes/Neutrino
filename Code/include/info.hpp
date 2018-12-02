@@ -22,9 +22,12 @@
     public:
       size_t  size;                                                             // Value array size.
       char*   value;                                                            // Value array.
-      
-              info(size_t loc_size);
-              ~info();
+
+              info  (
+                      size_t loc_size                                           // Info size.
+                    );
+
+              ~info ();
   };
 
 #endif

@@ -7,9 +7,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 neutrino::neutrino()
 {
-  ascii_spin_phase = 0;
-  ascii_spin_n_old = 0;
-
   neutrino_path = NULL;                                                         // NEUTRINO_PATH environmental variable.
   neutrino_font = NULL;                                                         // Neutrino font.
   tic = 0.0;                                                                    // Tic time [ms].
@@ -146,92 +143,11 @@ double neutrino::get_cpu_time()
   return -1.0;
 }
 
-void neutrino::ascii_spin()
-{
-  int loop_time;
-  int num;
-  int n;
-  int i;
-
-  loop_time = int(round(1000000*(toc - tic)));                                  // Loop execution time [us].
-
-  num = loop_time;
-  n = 0;
-
-  while (num > 0)
-  {
-    num /= 10;
-    n++;
-  }
-
-  switch (ascii_spin_phase)
-  {
-    case 0:
-      printf("Action: running      OpenCL program... %d us", loop_time);
-      fflush(stdout);
-      ascii_spin_n_old = n;
-      break;
-    case 1:
-      printf("\b");
-      printf(" ");
-      printf("\b");
-      printf("\b");
-      printf(" ");
-      printf("\b");
-      printf("\b");
-      printf(" ");
-      printf("\b");
-
-      for (i = 0; i < ascii_spin_n_old; i++)
-      {
-        printf("\b");
-        printf(" ");
-        printf("\b");
-      }
-
-      printf("%d us", loop_time);
-      fflush(stdout);
-      ascii_spin_n_old = n;
-      break;
-  }
-
-  ascii_spin_phase++;
-
-  if (ascii_spin_phase == 2)
-  {
-    ascii_spin_phase = 1;
-  }
-}
-
-void neutrino::ascii_spin_stop()
-{
-  int i;
-
-  printf("\b");
-  printf(" ");
-  printf("\b");
-  printf("\b");
-  printf(" ");
-  printf("\b");
-  printf("\b");
-  printf(" ");
-  printf("\b");
-
-  for (i = 0; i < ascii_spin_n_old; i++)
-  {
-    printf("\b");
-    printf(" ");
-    printf("\b");
-  }
-
-  done();
-}
-
 // PUBLIC METHODS:
 void neutrino::init()
 {
-  ascii_spin_phase = 0;                                                         // Initializing ascii_spin_phase...
-  ascii_spin_n_old = 0;                                                         // Initializing ascii_spin_n_old...
+  first_run = true;
+  last_run = false;
 
   // Initializing NEUTRINO_PATH:
   action      (
@@ -259,9 +175,51 @@ void neutrino::get_tic()
 
 void neutrino::get_toc()
 {
+  size_t    padding;                                                            // Text padding.
+  size_t    i;                                                                  // Index.
+  char      buffer[MAX_TEXT_SIZE];                                              // Text buffer.
+  char      text[MAX_TEXT_SIZE];                                                // Text buffer.
+
   toc = get_cpu_time();
-  loop_time = toc - tic;
-  ascii_spin();
+  loop_time = size_t(round(1000000.0*(toc - tic)));                             // Loop execution time [us].
+
+  printf("\r");
+
+  // Compiling message string:
+  snprintf  (
+              buffer,                                                           // Destination string.
+              MAX_TEXT_SIZE,                                                    // Size of destination string.
+              "%sAction:%s %s%d",                                               // Compiled string.
+              COLOR_CYAN,                                                       // Red color.
+              COLOR_NORMAL,                                                     // Normal color.
+              "running OpenCL program. Host loop time = ",                      // Source string.
+              loop_time
+            );
+
+  printf("%s", buffer);                                                         // Printing buffer...
+  fflush(stdout);                                                               // Flushing stdout...
+
+  if (last_run)
+  {
+    padding = MAX_MESSAGE_SIZE - strlen(buffer);                                  // Computing text padding...
+
+    if(padding >= 0)                                                              // Checking padding...
+    {
+      for(i = 0; i < padding; i++)                                                // Compiling padding...
+      {
+        printf(" ");                                                              // Printing padding...
+        fflush(stdout);                                                           // Flushing stdout...
+      }
+    }
+
+    else                                                                          // Generating error message...
+    {
+      printf("Error: string too big!\n");                                         // Printing message...
+      exit(1);                                                                    // Exiting...
+    }
+
+    done();
+  }
 }
 
 void neutrino::load_file(const char* file_name, char** file_buffer, size_t* file_size)
@@ -346,6 +304,23 @@ int neutrino::query_numeric(const char* caption, int min, int max)
   }
 
   return(numeric);                                                              // Returning numeric choice...
+}
+
+void neutrino::erase()
+{
+  int i;
+
+  printf("\r");
+  fflush(stdout);
+
+  for(i = 0; i < MAX_MESSAGE_SIZE; i++)
+  {
+    printf(" ");
+  }
+
+  fflush(stdout);
+  printf("\r");
+  fflush(stdout);
 }
 
 void neutrino::action (
@@ -455,8 +430,6 @@ void neutrino::done()
 
 neutrino::~neutrino()
 {
-  ascii_spin_stop();
-
   delete temp_neutrino_path;
   delete temp_neutrino_font;
 }
