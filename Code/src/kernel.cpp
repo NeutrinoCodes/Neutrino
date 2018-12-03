@@ -118,6 +118,7 @@ void kernel::init (
   size_t        loc_kernel_source_size;                                         // Kernel source size [characters].
   int           i;                                                              // Index.
 
+  baseline  = loc_baseline;                                                     // Getting Neutrino baseline...
   file_name = loc_kernel_filename;                                              // Getting OpenCL kernel file name...
   size      = loc_kernel_size;                                                  // Getting OpenCL kernel size...
   dimension = loc_kernel_dimension;                                             // Getting OpenCL kernel dimension...
@@ -132,7 +133,7 @@ void kernel::init (
 
   // Creating OpenCL program from its source:
   program = clCreateProgramWithSource (
-                                        loc_baseline->context_id,               // OpenCL context ID.
+                                        baseline->context_id,                   // OpenCL context ID.
                                         1,                                      // # of program sources.
                                         (const char**)&source,                  // Program source.
                                         &source_size,                           // Source size.
@@ -141,7 +142,7 @@ void kernel::init (
 
   check_error(loc_error);                                                       // Checking error.
 
-  loc_baseline->free_file(source);                                              // Freeing OpenCL kernel buffer...
+  baseline->free_file(source);                                                  // Freeing OpenCL kernel buffer...
 
   baseline->done();                                                             // Printing message...
 
@@ -149,7 +150,7 @@ void kernel::init (
 
   // Creating device ID list:
   device_id = new cl_device_id[1];                                              // OpenCL device ID.
-  device_id[0] = loc_baseline->device_id;                                       // Getting device ID.
+  device_id[0] = baseline->device_id;                                           // Getting device ID.
 
   // Building OpenCL program:
   loc_error = clBuildProgram  (
@@ -163,7 +164,7 @@ void kernel::init (
 
   if (loc_error != CL_SUCCESS)                                                  // Checking compiled kernel...
   {
-    loc_baseline->error(get_error(loc_error));                                  // Printing message...
+    baseline->error(get_error(loc_error));                                      // Printing message...
 
     // Getting OpenCL compiler information:
     loc_error = clGetProgramBuildInfo (
@@ -181,7 +182,7 @@ void kernel::init (
 
     if (!log_value)
     {
-      loc_baseline->error("unable to allocate buffer memory log!");             // Printing message...
+      baseline->error("unable to allocate buffer memory log!");                 // Printing message...
       exit(EXIT_FAILURE);                                                       // Exiting...
     }
 

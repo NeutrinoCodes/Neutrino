@@ -106,41 +106,34 @@ void queue::check_error         (
 
 void queue::init(neutrino* loc_baseline)
 {
-  cl_int  loc_err;                                                              // Local error code.
+  cl_int  loc_error;                                                            // Local error code.
 
+  baseline = loc_baseline;                                                      // Getting Neutrino baseline...
   baseline->action("creating OpenCL command queue...");                         // Printing message...
 
-  context_id = loc_baseline->context_id;                                        // Initializing context id...
-  device_id = loc_baseline->device_id;                                          // Initializing device id...
+  context_id = baseline->context_id;                                            // Initializing context id...
+  device_id = baseline->device_id;                                              // Initializing device id...
 
   // Creating OpenCL queue:
-  queue_id = clCreateCommandQueue(context_id,                                   // OpenCL context.
-                                  device_id,                                    // Device id.
+  queue_id = clCreateCommandQueue(context_id,                                   // OpenCL context ID.
+                                  device_id,                                    // Device ID.
                                   0,                                            // Queue properties (con be used for enabling profiling).
-                                  &loc_err);                                    // Local error code.
+                                  &loc_error);                                  // Error code.
 
-  if(loc_err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(loc_err));
-    exit(loc_err);
-  }
+  check_error(loc_error);                                                       // Checking error...
 
-  baseline->done();
+  baseline->done();                                                             // Printing message...
 }
 
 queue::~queue()
 {
-  cl_int  loc_err;                                                              // Local error code.
+  cl_int  loc_error;                                                            // Local error code.
 
-  baseline->action("releasing the OpenCL command queue...");                    // Printing message...
+  baseline->action("releasing OpenCL command queue...");                        // Printing message...
 
-  loc_err = clReleaseCommandQueue(queue_id);                                    // Releasing OpenCL queue...
+  loc_error = clReleaseCommandQueue(queue_id);                                  // Releasing OpenCL queue...
 
-  if(loc_err != CL_SUCCESS)
-  {
-    printf("\nError:  %s\n", get_error(loc_err));
-    exit(loc_err);
-  }
+  check_error(loc_error);                                                       // Checking error...
 
-  baseline->done();
+  baseline->done();                                                             // Printing message...
 }
