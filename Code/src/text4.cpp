@@ -85,6 +85,18 @@ const char* text4::get_error(cl_int loc_error)
   }
 }
 
+// OpenCL error check function:
+void text4::check_error         (
+                                  cl_int loc_error                              // Error code.
+                                )
+{
+  if(loc_error != CL_SUCCESS)                                                   // Checking local error code...
+  {
+    baseline->error(get_error(loc_error));                                      // Printing error message...
+    exit(EXIT_FAILURE);                                                         // Exiting...
+  }
+}
+
 void text4::init  (
                     neutrino* loc_baseline,
                     const char* loc_text,
