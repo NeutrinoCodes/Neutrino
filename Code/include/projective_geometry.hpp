@@ -6,14 +6,45 @@
   #include "neutrino.hpp"
   #include "linear_algebra.hpp"
 
-  void frustum(float F[16], float left, float right, float bottom,
-                  float top, float z_near, float z_far);
-  void perspective(float P[16], float fov, float aspect_ratio,
-                      float z_near, float z_far);
-  void rotate(float R[16], float R_old[16], float axis[3], float theta);
+  // Perspective frustum computation:
+  void frustum          (
+                          float F[16],                                          // 4x4 frustum matrix.
+                          float left,                                           // Projective screen left side...
+                          float right,                                          // Projective screen right side...
+                          float bottom,                                         // Projective screen bottom side...
+                          float top,                                            // Projective screen top side...
+                          float z_near,                                         // Projective screen near depth...
+                          float z_far                                           // Projective screen far depth...
+                        );
 
-  void translate(float T[16], float translation[3]);
+  // Perspective matrix computation:
+  void perspective      (
+                          float P[16],                                          // 4x4 perspective matrix.
+                          float fov,                                            // Field of view [rad].
+                          float aspect_ratio,                                   // Projective screen aspect ratio.
+                          float z_near,                                         // Projective screen near depth...
+                          float z_far                                           // Projective screen far depth...
+                        );
 
-  void multiplicate(float C[16], float A[16], float B[16]);
+  // Rotation matrix computation:
+  void rotate           (
+                          float R[16],                                          // 4x4 rotation matrix.
+                          float R_old[16],                                      // 4x4 rotation matrix backup.
+                          float axis[3],                                        // 3D rotation axis vector.
+                          float theta                                           // Rotation angle.
+                        );
+
+  // Translation matrix computation:
+  void translate        (
+                          float T[16],                                          // 4x4 translation matrix.
+                          float translation[3]                                  // 3D translation vector.
+                        );
+
+  // Multiplication matrix computation:
+  void multiplicate     (
+                          float C[16],                                          // 4x4 matrix result.
+                          float A[16],                                          // 4x4 matrix.
+                          float B[16]                                           // 4x4 matrix.
+                        );
 
 #endif
