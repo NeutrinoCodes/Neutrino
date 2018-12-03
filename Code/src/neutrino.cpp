@@ -397,6 +397,32 @@ void neutrino::error  (
   printf("%s\n", buffer);                                                       // Printing buffer...
 }
 
+void neutrino::list(char* loc_text, size_t loc_length, char loc_delimiter, size_t loc_tab)
+{
+  char    buffer[loc_length];
+  size_t  i;
+  size_t  j;
+
+  for(i = 0; i < loc_length; i++)
+  {
+    if(loc_text[i] == loc_delimiter)
+    {
+      printf("\n");
+
+      for(j = 0; j < loc_tab; j++)
+      {
+        printf(" ");
+      }
+    }
+
+    else
+    {
+      printf("%c", loc_text[i]);
+    }
+  }
+  printf("\n");
+}
+
 void neutrino::done()
 {
   char      buffer[MAX_TEXT_SIZE];                                              // Text buffer.

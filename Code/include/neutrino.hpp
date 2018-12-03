@@ -222,6 +222,13 @@
                                         size_t      loc_max_text_size           // Message size.
                                       );
 
+      void              list          (
+                                        char*       loc_text,
+                                        size_t      loc_length,
+                                        char        loc_delimiter,
+                                        size_t      loc_tab
+                                      );
+
       void              done();
 
                         ~neutrino();
