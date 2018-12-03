@@ -213,13 +213,11 @@
       void              erase         ();
 
       void              action        (
-                                        const char* loc_text,                   // Message.
-                                        size_t      loc_max_text_size           // Message size.
+                                        const char* loc_text                    // Message.
                                       );
 
       void              error         (
-                                        const char* loc_text,                   // Message.
-                                        size_t      loc_max_text_size           // Message size.
+                                        const char* loc_text                    // Message.
                                       );
 
       void              list          (

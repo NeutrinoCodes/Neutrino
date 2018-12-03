@@ -113,11 +113,7 @@ void float4::init               (
   cl_int    loc_error;                                                          // Error code.
   size_t    i;                                                                  // Index.
 
-  // Printing action message:
-  baseline->action      (
-                          "initializing \"float4\" object...",                  // Message.
-                          MAX_MESSAGE_SIZE                                      // Message size.
-                        );
+  baseline->action("initializing \"float4\" object...");                        // Printing message...
 
   size = loc_data_size;                                                         // Data array size.
   buffer = NULL;                                                                // OpenCL data buffer.
@@ -293,11 +289,7 @@ float4::~float4()
 {
   cl_int  loc_error;                                                            // Local error code.
 
-  // Printing action message:
-  baseline->action      (
-                          "releasing \"float4\" object...",                     // Message.
-                          MAX_MESSAGE_SIZE                                      // Message size.
-                        );
+  baseline->action("releasing \"float4\" object...");                           // Printing message...
 
   if(buffer != NULL)                                                            // Checking buffer...
   {

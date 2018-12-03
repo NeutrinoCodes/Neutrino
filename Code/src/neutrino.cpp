@@ -149,19 +149,13 @@ void neutrino::init()
   terminal_time = 0;
 
   // Initializing NEUTRINO_PATH:
-  action      (
-                "initializing neutrino path...",
-                MAX_MESSAGE_SIZE
-              );
+  action("initializing neutrino path...");                                      // Printing message...
 
   neutrino_path = get_neutrino_path();
   done();           																														// Printing message...
 
   // Initializing font:
-  action      (
-                "initializing neutrino font...",
-                MAX_MESSAGE_SIZE
-              );
+  action("initializing neutrino font...");                                      // Printing message...
 
   neutrino_font = get_neutrino_font();                                          // Font object.
 	done();	             																													// Printing message...
@@ -310,8 +304,7 @@ void neutrino::erase()
 }
 
 void neutrino::action (
-                        const char* loc_text,
-                        size_t      loc_max_text_size
+                        const char* loc_text                                    // Message text.   
                       )
 {
   char      buffer[MAX_TEXT_SIZE];                                              // Text buffer.
@@ -329,7 +322,7 @@ void neutrino::action (
             );
 
   printf("%s", buffer);                                                         // Printing buffer...
-  padding = loc_max_text_size - strlen(buffer);                                 // Computing text padding...
+  padding = MAX_MESSAGE_SIZE - strlen(buffer);                                  // Computing text padding...
 
   if(padding >= 0)                                                              // Checking padding...
   {
@@ -348,15 +341,14 @@ void neutrino::action (
 }
 
 void neutrino::error  (
-                        const char* loc_text,
-                        size_t      loc_max_text_size
+                        const char* loc_text
                       )
 {
   char      buffer[MAX_TEXT_SIZE];                                              // Text buffer.
   size_t    padding;                                                            // Text padding.
   size_t    i;                                                                  // Index.
 
-  padding = loc_max_text_size - strlen(loc_text);                               // Computing text padding...
+  padding = MAX_MESSAGE_SIZE - strlen(loc_text);                                // Computing text padding...
 
   // Compiling message string:
   snprintf  (

@@ -177,10 +177,7 @@ void window::init				(
   opengl_msaa = 4;                                                              // EZOR: 3 or 4 sample is good due to the general oversampling-decimation method.
 
   // Initializing GLFW context:
-  baseline->action  		(
-                          "initializing GLFW...",
-                          MAX_MESSAGE_SIZE
-                        );
+  baseline->action("initializing GLFW...");																			// Printing message...
 
   if (glfwInit() == GLFW_TRUE)                                                  // Inititalizing GLFW context...
 	{
@@ -224,10 +221,7 @@ void window::init				(
 	glfwSetScrollCallback(glfw_window, mouse_scrolled_callback);                  // Setting mouse scrolled callback...
 
 	// Initializing GLEW context:
-  baseline->action  		(
-                          "initializing GLEW...",
-                          MAX_MESSAGE_SIZE
-                        );
+  baseline->action("initializing GLEW...");																			// Printing message...
 
   glewExperimental = GL_TRUE;                                                   // Ensuring that all extensions with valid entry points will be exposed...
 
@@ -244,10 +238,7 @@ void window::init				(
   }
 
 	// Initializing shaders:
-  baseline->action  		(
-                          "initializing GLSL shaders...",
-                          MAX_MESSAGE_SIZE
-                        );
+  baseline->action("initializing GLSL shaders...");															// Printing message...
 
 	point_shader = build_shader	(
 																POINT_VERTEX_FILE,															// Vertex shader file name.
@@ -277,9 +268,9 @@ bool window::closed()
 {
 	if(glfwWindowShouldClose(glfw_window))
 	{
-	   baseline->erase();
-	   baseline->action("finishing OpenCL program...", MAX_MESSAGE_SIZE);
-	   baseline->done();
+	   baseline->erase();																													// Printing message...
+	   baseline->action("finishing OpenCL program...");														// Printing message...
+	   baseline->done();																													// Printing message...
 	}
 
   return(glfwWindowShouldClose(glfw_window));																		// Returning window closure status...
