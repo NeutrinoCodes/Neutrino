@@ -303,8 +303,8 @@ void window::refresh_callback					(
 // Resize callback:
 void window::resize_callback					(
 																				GLFWwindow* loc_window,									// Window.
-																				int 				loc_x_size,									// x-size.
-																				int 				loc_y_size									// y-size.
+																				int 				loc_x_size,									// Window x-size [px].
+																				int 				loc_y_size									// Window y-size [px].
 																			)
 {
 	window* win = (window*) glfwGetWindowUserPointer(loc_window);									// Getting window pointer...
@@ -486,7 +486,6 @@ void window::resize	(
 	window_size_y = loc_y_size;
   aspect_ratio = (double)window_size_x/(double)window_size_y;                 	// Setting window aspect ration []...
 	perspective(P, FOV*M_PI/180.0, aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);        // Setting Projection_matrix matrix...
-	printf("x_size = %d, y_size = %d\n", window_size_x, window_size_y);
 }
 
 void window::poll_events()

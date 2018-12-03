@@ -65,8 +65,8 @@
       // Resize callback:
       static void       resize_callback	        (
                                                   GLFWwindow*	loc_window,       // Window.
-                                                  int         loc_x_size,       // x-size.
-                                                  int         loc_y_size        // y-size.
+                                                  int         loc_x_size,       // Window x-size [px].
+                                                  int         loc_y_size        // Window y-size [px].
                                                 );
 
       // Key-pressed callback:
@@ -180,8 +180,8 @@
 
       // Resize retpoline:
       void              resize                  (
-                                                  int         loc_x_size,       // x-size.
-                                                  int         loc_y_size        // y-size.
+                                                  int         loc_x_size,       // Window x-size [px].
+                                                  int         loc_y_size        // Window y-size [px].
                                                 );
 
       // Event polling retpoline:
