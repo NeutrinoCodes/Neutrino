@@ -128,7 +128,9 @@ cl_uint opencl::get_platforms_number()
   return loc_platforms_number;                                                  // Returning # of existing platforms...
 }
 
-cl_platform_id opencl::get_platform_id(cl_uint loc_platform_index)
+cl_platform_id opencl::get_platform_id(
+                                        cl_uint loc_platform_index              // OpenCL platform index.
+                                      )
 {
   cl_int          loc_error;                                                    // Error code.
   cl_platform_id* loc_platform_id;                                              // Platform IDs array.
@@ -155,7 +157,9 @@ cl_platform_id opencl::get_platform_id(cl_uint loc_platform_index)
   return(loc_selected_platform_id);                                             // Returning selected platform ID...
 }
 
-cl_uint opencl::get_devices_number(cl_uint loc_platform_index)
+cl_uint opencl::get_devices_number(
+                                    cl_uint loc_platform_index                  // OpenCL platform index.
+                                  )
 {
   cl_int          loc_error;                                                    // Error code.
   cl_uint         loc_devices_number;                                           // # of devices.
@@ -178,7 +182,10 @@ cl_uint opencl::get_devices_number(cl_uint loc_platform_index)
   return(loc_devices_number);                                                   // Returning # of existing devices...
 }
 
-cl_device_id opencl::get_device_id(cl_uint loc_device_index, cl_uint loc_platform_index)
+cl_device_id opencl::get_device_id(
+                                    cl_uint loc_device_index,                   // OpenCL platform index.
+                                    cl_uint loc_platform_index                  // OpenCL device index.
+                                  )
 {
   cl_int          loc_error;
   cl_device_id*   loc_device_id;
@@ -191,7 +198,7 @@ cl_device_id opencl::get_device_id(cl_uint loc_device_index, cl_uint loc_platfor
 
   // Getting OpenCL device IDs:
   loc_error = clGetDeviceIDs  (
-                                opencl_platform[loc_platform_index]->id,         // Platform ID.
+                                opencl_platform[loc_platform_index]->id,        // Platform ID.
                                 device_type,                                    // Device type.
                                 platforms_number,                               // # of existing platforms.
                                 loc_device_id,                                  // Device IDs array.
@@ -203,13 +210,17 @@ cl_device_id opencl::get_device_id(cl_uint loc_device_index, cl_uint loc_platfor
   loc_selected_device_id = loc_device_id[loc_device_index];                     // Setting ID of selected device...
   delete[] loc_device_id;                                                       // Deleting device IDs array...
 
-  baseline->done();                                                              // Printing message...
+  baseline->done();                                                             // Printing message...
 
   return(loc_selected_device_id);                                               // Returning selected device ID...
 }
 
 // PUBLIC METHODS:
-void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_device_type loc_device_type)
+void opencl::init (
+                    neutrino*           loc_baseline,                           // Neutrino baseline.
+                    GLFWwindow*         loc_glfw_window,                        // GLFW window.
+                    compute_device_type loc_device_type                         // OpenCL device type.
+                  )
 {
   cl_int            loc_error;                                                  // Error code.
   cl_int            i;                                                          // Index.
@@ -269,17 +280,19 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
     opencl_platform[i]->init(get_platform_id(i));
 
     printf("        PLATFORM #%d:\n", i + 1);                                   // Printing message...
-    printf("        --> profile:    %s\n", opencl_platform[i]->profile->value);    // Printing message...
-    printf("        --> version:    %s\n", opencl_platform[i]->version->value);    // Printing message...
-    printf("        --> name:       %s\n", opencl_platform[i]->name->value);       // Printing message...
-    printf("        --> vendor:     %s\n", opencl_platform[i]->vendor->value);     // Printing message...
+    printf("        --> profile:    %s\n", opencl_platform[i]->profile->value); // Printing message...
+    printf("        --> version:    %s\n", opencl_platform[i]->version->value); // Printing message...
+    printf("        --> name:       %s\n", opencl_platform[i]->name->value);    // Printing message...
+    printf("        --> vendor:     %s\n", opencl_platform[i]->vendor->value);  // Printing message...
 
-    printf("        --> extensions: ");
+    printf("        --> extensions: ");                                         // Printing message (24 characters long)...
+
+    // Listing platform extensions:
     baseline->list      (
-                          opencl_platform[i]->extensions->value,
-                          opencl_platform[i]->extensions->size,
-                          ' ',
-                          24
+                          opencl_platform[i]->extensions->value,                // Extension value.
+                          opencl_platform[i]->extensions->size,                 // Extension size.
+                          ' ',                                                  // Extension delimiter.
+                          24                                                    // Previous text string padding.
                         );
   }
 
@@ -314,7 +327,7 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
     opencl_device[i]->init(get_device_id(i, selected_platform));
 
     printf("        DEVICE #%d:\n", i + 1);                                     // Printing message...
-    printf("        --> device name:     %s\n", opencl_device[i]->name->value);    // Printing message...
+    printf("        --> device name:     %s\n", opencl_device[i]->name->value); // Printing message...
     printf("        --> device platform: %s\n", opencl_device[i]->profile->value); // Printing message...
   }
 
@@ -416,5 +429,5 @@ opencl::~opencl()
 
   check_error(loc_error);                                                       // Checking returned error code...
 
-  baseline->done();
+  baseline->done();                                                             // Printing message...
 }
