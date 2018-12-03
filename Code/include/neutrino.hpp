@@ -178,6 +178,11 @@
       // Initialization:
       void              init();
 
+      // Neutrino path add prefix function:
+      char*             prefix        (
+                                        const char* loc_path                    // Path.
+                                      );
+
       // Get "tic" time:
       void              get_tic();
 

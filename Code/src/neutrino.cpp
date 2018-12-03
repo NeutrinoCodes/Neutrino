@@ -161,6 +161,22 @@ void neutrino::init()
 	done();	             																													// Printing message...
 }
 
+char* neutrino::prefix(const char* loc_path)
+{
+  char buffer[MAX_PATH_SIZE];
+
+  // Compiling message string:
+  snprintf  (
+              buffer,                                                           // Destination string.
+              MAX_PATH_SIZE,                                                    // Size of destination string.
+              "%s/%s",                                                          // Compiled string.
+              get_neutrino_path()->value,                                       // Neutrino path prefix.
+              loc_path                                                          // Path.
+            );
+
+  return(buffer);
+}
+
 void neutrino::get_tic()
 {
   tic = get_cpu_time();
@@ -304,7 +320,7 @@ void neutrino::erase()
 }
 
 void neutrino::action (
-                        const char* loc_text                                    // Message text.   
+                        const char* loc_text                                    // Message text.
                       )
 {
   char      buffer[MAX_TEXT_SIZE];                                              // Text buffer.
