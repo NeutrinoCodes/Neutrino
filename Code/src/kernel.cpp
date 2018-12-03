@@ -108,24 +108,24 @@ void kernel::check_error        (
 }
 
 void kernel::init (
-                    neutrino* loc_baseline,
-                    char* loc_kernel_filename,
-                    size_t* loc_kernel_size,
-                    cl_uint loc_kernel_dimension
+                    neutrino* loc_baseline,                                     // Neutrino baseline.
+                    char*     loc_kernel_filename,                              // OpenCL kernel file name.
+                    size_t*   loc_kernel_size,                                  // OpenCL kernel size.
+                    cl_uint   loc_kernel_dimension                              // OpenCL kernel dimension.
                   )
 {
   cl_int        loc_error;                                                      // Error code.
   size_t        loc_kernel_source_size;                                         // Kernel source size [characters].
   int           i;                                                              // Index.
 
-  file_name = loc_kernel_filename;
-  size      = loc_kernel_size;
-  dimension = loc_kernel_dimension;
+  file_name = loc_kernel_filename;                                              // Getting OpenCL kernel file name...
+  size      = loc_kernel_size;                                                  // Getting OpenCL kernel size...
+  dimension = loc_kernel_dimension;                                             // Getting OpenCL kernel dimension...
 
   // Printing action message:
   baseline->action      (
-                          "loading OpenCL kernel source from file...",
-                          MAX_MESSAGE_SIZE
+                          "loading OpenCL kernel source from file...",          // Message.
+                          MAX_MESSAGE_SIZE                                      // Message size.
                         );
 
   baseline->load_file(file_name, &source, &source_size);
