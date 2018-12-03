@@ -60,8 +60,8 @@ void window::arcball()
 
 // Shader compilation:
 GLuint window::compile_shader	(
-																const char* loc_shader_filename,
-																shader_type loc_shader_type
+																const char* loc_shader_filename,								// GLSL shader file name.
+																shader_type loc_shader_type											// GLSL shader type.
 															)
 {
   GLuint    shader;                                                             // Shader.
@@ -89,6 +89,7 @@ GLuint window::compile_shader	(
                           );
 
 
+	// Selecting shader type:
   switch(loc_shader_type)
   {
     case VERTEX:
@@ -100,12 +101,22 @@ GLuint window::compile_shader	(
     break;
   }
 
-  glShaderSource(shader,                                                        // Attaching source code to shader...
-                 1,
-                 (const char**)&shader_source,
-                 (GLint*)&shader_size);
+	// Attaching source code to shader:
+  glShaderSource				(
+													shader,																								// GLSL shader.
+                 					1,																										// # of shaders.
+                 					(const char**)&shader_source,													// Shader source.
+                 					(GLint*)&shader_size																	// Shader size.
+												);
+
 	glCompileShader(shader);                                                      // Compiling shader...
-  glGetShaderiv(shader, GL_COMPILE_STATUS, &success);                           // Reading "GL_COMPILE_STATUS" flag...
+
+	// Reading "GL_COMPILE_STATUS" flag:
+	glGetShaderiv					(
+													shader,																								// GLSL shader.
+													GL_COMPILE_STATUS,																		// Requested shader parameter.
+													&success																							// Success status flag.
+												);
 
   // Checking compiled shader code:
   if (!success)
