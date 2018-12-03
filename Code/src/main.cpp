@@ -2,7 +2,7 @@
 
 #define SIZE_WINDOW_X  800                                                      // Window x-size [px].
 #define SIZE_WINDOW_Y  600                                                      // Window y-size [px].
-#define WINDOW_NAME    "neutrino"                                               // Window name.
+#define WINDOW_NAME    "neutrino 2.0"                                           // Window name.
 
 #define KDIM           1
 
@@ -10,9 +10,11 @@
 #define XMAX           1.0
 #define YMIN          -1.0
 #define YMAX           1.0
-#define NODES          10                                                       // Number of nodes.
-#define DX             (XMAX - XMIN)/(float)(NODES - 1)
-#define DY             (YMAX - YMIN)/(float)(NODES - 1)
+#define NODES_X        100
+#define NODES_Y        100
+#define NODES          NODES_X*NODES_Y                                          // Number of nodes.
+#define DX             (XMAX - XMIN)/(float)(NODES_X - 1)
+#define DY             (YMAX - YMIN)/(float)(NODES_Y - 1)
 
 #include "neutrino.hpp"
 #include "window.hpp"
@@ -28,9 +30,6 @@ int main()
   text4*    message         = new text4();                                      // Text message.
   point4*   P               = new point4();                                     // Point array.
   color4*   C               = new color4();                                     // Color array.
-  float4*   a               = new float4();
-  float4*   b               = new float4();
-  float4*   c               = new float4();
 
   queue*    q1              = new queue();                                      // OpenCL queue.
 
@@ -43,7 +42,7 @@ int main()
   k1_size[0] = NODES;
 
   baseline  ->init();                                                           // Initializing neutrino...
-  gui       ->init(baseline, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);        // Initializing gui window...
+  gui       ->init(baseline, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);        // Initializing window...
   message   ->init(baseline, "neutrino 2.0!", 0.0, 1.0, 0.0, 1.0);              // Initializing message...
   cl        ->init(baseline, gui->glfw_window, GPU);                            // Initializing OpenCL context...
 
@@ -56,38 +55,23 @@ int main()
 
   q1        ->init(baseline);
 
-  P         ->init(baseline, k1, 0, NODES);                                     // Initializin points...
+  P         ->init(baseline, k1, 0, NODES);                                     // Initializing points...
   C         ->init(baseline, k1, 1, NODES);                                     // Initializing colors...
-  a         ->init(baseline, k1, 2, NODES);
-  b         ->init(baseline, k1, 3, NODES);
-  c         ->init(baseline, k1, 4, NODES);
 
-  for(i = 0; i < NODES; i++)
+  for(j = 0; j < NODES_Y; j++)
   {
-    P->set_x(i, XMIN + i*DX);
-    P->set_y(i, 0.0);
-    P->set_z(i, 0.0);
-    P->set_w(i, 1.0);
+    for(i = 0; i < NODES_X; i++)
+    {
+      P->set_x(j*NODES_Y + i, XMIN + i*DX);
+      P->set_y(j*NODES_Y + i, YMIN + j*DY);
+      P->set_z(j*NODES_Y + i, 0.0);
+      P->set_w(j*NODES_Y + i, 1.0);
 
-    C->set_r(i, 1.0);
-    C->set_g(i, 0.0);
-    C->set_b(i, 0.0);
-    C->set_a(i, 1.0);
-
-    a->set_x(i, 1.0);
-    a->set_y(i, 1.0);
-    a->set_z(i, 1.0);
-    a->set_w(i, 1.0);
-
-    b->set_x(i, 1.0);
-    b->set_y(i, 1.0);
-    b->set_z(i, 1.0);
-    b->set_w(i, 1.0);
-
-    c->set_x(i, 0.0);
-    c->set_y(i, 0.0);
-    c->set_z(i, 0.0);
-    c->set_w(i, 0.0);
+      C->set_r(j*NODES_Y + i, 0.01*(rand() % 100));
+      C->set_g(j*NODES_Y + i, 0.01*(rand() % 100));
+      C->set_b(j*NODES_Y + i, 0.01*(rand() % 100));
+      C->set_a(j*NODES_Y + i, 1.0);
+    }
   }
 
   P->acquire_gl(q1, k1, 0);
@@ -96,9 +80,6 @@ int main()
   C->write(q1, k1, 1);
   P->release_gl(q1, k1, 0);
   C->release_gl(q1, k1, 1);
-  a->write(q1, k1, 2);
-  b->write(q1, k1, 3);
-  c->write(q1, k1, 4);
 
   while (!gui->closed())                                                        // Opening window...
   {
@@ -122,12 +103,6 @@ int main()
     baseline->get_toc();                                                        // Getting "toc" [us]...
   }
 
-  a->read(q1, k1, 2);
-  b->read(q1, k1, 3);
-  c->read(q1, k1, 4);
-
-  printf("a = %f, b = %f, c = %f\n", a->get_x(0), b->get_x(0), c->get_x(0));
-
   delete    baseline;
   delete    gui;
   delete    cl;
@@ -135,9 +110,6 @@ int main()
 
   delete    P;
   delete    C;
-  delete    a;
-  delete    b;
-  delete    c;
 
   delete    q1;
 
