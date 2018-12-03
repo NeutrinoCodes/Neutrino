@@ -94,11 +94,7 @@ void text4::init  (
                     GLfloat loc_A
                   )
 {
-  // Printing action message:
-  baseline->action      (
-                          "initializing OpenGL text...",
-                          MAX_MESSAGE_SIZE
-                        );
+  baseline->action("initializing OpenGL text...");                              // Printing message...
 
   num_char = strlen(loc_text);                                                  // Total # of characters in input string.
   num_data = 0;                                                                 // Total # of font data in input string.

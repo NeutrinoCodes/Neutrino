@@ -109,11 +109,7 @@ void color4::init               (
   cl_int      loc_error;                                                        // Error code.
   GLsizeiptr  i;                                                                // Index.
 
-  // Printing action message:
-  baseline->action      (
-                          "initializing \"color4\" object...",                  // Message.
-                          MAX_MESSAGE_SIZE                                      // Mssage size.
-                        );
+  baseline->action("initializing \"color4\" object...");                        // Printing message...
 
   size = loc_data_size;                                                         // Array size.
   vbo = 0;                                                                      // OpenGL data VBO.
@@ -378,11 +374,7 @@ color4::~color4()
 {
   cl_int loc_error;                                                             // Local error.
 
-  // Printing action message:
-  baseline->action      (
-                          "releasing \"color4\" object...",                     // Message.
-                          MAX_MESSAGE_SIZE                                      // Message size.
-                        );
+  baseline->action("releasing \"color4\" object...");                           // Printing message...
 
   if(buffer != NULL)                                                            // Checking buffer...
   {

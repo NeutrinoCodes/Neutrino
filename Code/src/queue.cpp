@@ -108,11 +108,7 @@ void queue::init(neutrino* loc_baseline)
 {
   cl_int  loc_err;                                                              // Local error code.
 
-  // Printing action message:
-  baseline->action      (
-                          "creating OpenCL command queue...",
-                          MAX_MESSAGE_SIZE
-                        );
+  baseline->action("creating OpenCL command queue...");                         // Printing message...
 
   context_id = loc_baseline->context_id;                                        // Initializing context id...
   device_id = loc_baseline->device_id;                                          // Initializing device id...
@@ -136,11 +132,7 @@ queue::~queue()
 {
   cl_int  loc_err;                                                              // Local error code.
 
-  // Printing action message:
-  baseline->action      (
-                          "releasing the OpenCL command queue...",
-                          MAX_MESSAGE_SIZE
-                        );
+  baseline->action("releasing the OpenCL command queue...");                    // Printing message...
 
   loc_err = clReleaseCommandQueue(queue_id);                                    // Releasing OpenCL queue...
 
