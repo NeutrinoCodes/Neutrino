@@ -46,7 +46,14 @@ int main()
   gui       ->init(baseline, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);        // Initializing gui window...
   message   ->init(baseline, "neutrino 2.0!", 0.0, 1.0, 0.0, 1.0);              // Initializing message...
   cl        ->init(baseline, gui->glfw_window, GPU);                            // Initializing OpenCL context...
-  k1        ->init(baseline, "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/kernel/thekernel.cl", k1_size, KDIM);
+
+  k1        ->init(
+                    baseline,
+                    baseline->prefix("Code/kernel/thekernel.cl"),
+                    k1_size,
+                    KDIM
+                  );
+
   q1        ->init(baseline);
 
   P         ->init(baseline, k1, 0, NODES);                                     // Initializin points...
@@ -121,21 +128,21 @@ int main()
 
   printf("a = %f, b = %f, c = %f\n", a->get_x(0), b->get_x(0), c->get_x(0));
 
-  delete baseline;
-  delete gui;
-  delete cl;
-  delete message;
+  delete    baseline;
+  delete    gui;
+  delete    cl;
+  delete    message;
 
-  delete P;
-  delete C;
-  delete a;
-  delete b;
-  delete c;
+  delete    P;
+  delete    C;
+  delete    a;
+  delete    b;
+  delete    c;
 
-  delete q1;
+  delete    q1;
 
-  delete k1_size;
-  delete k1;
+  delete[]  k1_size;
+  delete    k1;
 
   return 0;
 }
