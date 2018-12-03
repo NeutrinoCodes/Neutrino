@@ -214,6 +214,7 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
   cl_int            loc_error;                                                  // Error code.
   cl_int            i;                                                          // Index.
 
+  baseline = loc_baseline;                                                      // Getting Neutrino baseline...
   device_type_text  = new char[MAX_TEXT_SIZE];                                  // Device type text [string].
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -274,7 +275,7 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
     printf("        --> vendor:     %s\n", opencl_platform[i]->vendor->value);     // Printing message...
 
     printf("        --> extensions: ");
-    loc_baseline->list  (
+    baseline->list      (
                           opencl_platform[i]->extensions->value,
                           opencl_platform[i]->extensions->size,
                           ' ',
@@ -286,11 +287,11 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
   {
     printf("Action: please select a platform [1...%d", platforms_number);       // Formulating query...
     selected_platform = (
-                          loc_baseline->query_numeric (
-                                                        " + enter]: ",          // Query text.
-                                                        1,                      // Minimum numeric choice in query answer.
-                                                        platforms_number        // Maximum numeric choice in query answer.
-                                                      )
+                          baseline->query_numeric (
+                                                    " + enter]: ",              // Query text.
+                                                    1,                          // Minimum numeric choice in query answer.
+                                                    platforms_number            // Maximum numeric choice in query answer.
+                                                  )
                         ) - 1;                                                  // Setting selected platform index [0...platforms_number - 1]...
   }
 
@@ -299,13 +300,11 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
     selected_platform = 0;                                                      // Setting 1st platform, in case it is the only found one...
   }
 
-  loc_baseline->platform_id = opencl_platform[selected_platform]->id;           // Setting neutrino OpenCL platform ID...
+  baseline->platform_id = opencl_platform[selected_platform]->id;               // Setting neutrino OpenCL platform ID...
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////// SETTING OPENCL DEVICE ////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  //printf("Action: finding OpenCL %s devices...\n", device_type_text);           // Printing message...
-
   devices_number = get_devices_number(selected_platform);                       // Getting # of existing GPU devices on selected platform [#]...
   opencl_device = new device*[devices_number];                                  // Initializing platform...
 
@@ -323,11 +322,11 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
   {
     printf("Action: please select a device [1...%d", devices_number);           // Formulating query...
     selected_device = (
-                        loc_baseline->query_numeric (
-                                                      " + enter]: ",            // Query text.
-                                                      1,                        // Minimum numeric choice in query answer.
-                                                      devices_number            // Maximum numeric choice in query answer.
-                                                    )
+                        baseline->query_numeric (
+                                                  " + enter]: ",                // Query text.
+                                                  1,                            // Minimum numeric choice in query answer.
+                                                  devices_number                // Maximum numeric choice in query answer.
+                                                )
                       ) - 1;                                                    // Setting selected device index [0...platforms_number - 1]...
   }
 
@@ -336,7 +335,7 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
     selected_device = 0;                                                        // Setting 1st device, in case it is the only found one...
   }
 
-  loc_baseline->device_id = opencl_device[selected_device]->id;                 // Setting neutrino OpenCL device ID...
+  baseline->device_id = opencl_device[selected_device]->id;                     // Setting neutrino OpenCL device ID...
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// IDENTIFYING OS //////////////////////////////
@@ -365,7 +364,7 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
     {
       CL_GL_CONTEXT_KHR, (cl_context_properties)glfwGetGLXContext(loc_glfw_window),
       CL_GLX_DISPLAY_KHR, (cl_context_properties)glfwGetX11Display(),
-      CL_CONTEXT_PLATFORM, (cl_context_properties)loc_baseline->platform_id,
+      CL_CONTEXT_PLATFORM, (cl_context_properties)baseline->platform_id,
       0
     };
   #endif
@@ -378,7 +377,7 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
     {
       CL_GL_CONTEXT_KHR, (cl_context_properties)glfwGetWGLContext(loc_glfw_window),
       CL_WGL_HDC_KHR, (cl_context_properties)GetDC(glfwGetWin32Window(loc_glfw_window)),
-      CL_CONTEXT_PLATFORM, (cl_context_properties)loc_baseline->platform_id,
+      CL_CONTEXT_PLATFORM, (cl_context_properties)baseline->platform_id,
       0
     };
   #endif
@@ -398,7 +397,7 @@ void opencl::init(neutrino* loc_baseline, GLFWwindow* loc_glfw_window, compute_d
                                 );
 
   check_error(loc_error);                                                       // Checking returned error code...
-  loc_baseline->context_id = context_id;                                        // Setting neutrino OpenCL context ID...
+  baseline->context_id = context_id;                                            // Setting neutrino OpenCL context ID...
 
   baseline->done();                                                             // Printing message...
 }
