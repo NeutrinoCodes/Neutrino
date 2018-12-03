@@ -11,65 +11,75 @@
   class text4
   {
     private:
-      neutrino*       baseline;                                                 // Neutrino baseline.
-      const char*     get_error(cl_int loc_error);
-      int             err;
-      int             i;
-      int             j;
-      int             k;
-      int             shift;
-      int             even;
-      int             odd;
+      neutrino*           baseline;                                             // Neutrino baseline.
 
-      int             num_char;
-      int             num_data;
-      int             num_points;
-      int             num_strokes;
+      // OpenCL error get function:
+      const char*         get_error     (
+                                          cl_int      loc_error                 // Error code.
+                                        );
 
-      int*            char_code;
-      int*            char_item;
-      int*            char_numdata;
-      int*            char_numpoints;
-      int*            char_numstrokes;
-      int*            char_kern;
+      // OpenCL error check function:
+      void                check_error   (
+                                          cl_int      loc_error                 // Error code.
+                                        );
 
-      int*            data_index;
-      int*            kern;
-      int*            offset;
+      int                 err;
+      int                 i;
+      int                 j;
+      int                 k;
+      int                 shift;
+      int                 even;
+      int                 odd;
 
-      GLfloat*        glyph_data;                                               // Text "glyph" data.
-      GLfloat*        color_data;                                               // Text "color" data.
+      int                 num_char;
+      int                 num_data;
+      int                 num_points;
+      int                 num_strokes;
+
+      int*                char_code;
+      int*                char_item;
+      int*                char_numdata;
+      int*                char_numpoints;
+      int*                char_numstrokes;
+      int*                char_kern;
+
+      int*                data_index;
+      int*                kern;
+      int*                offset;
+
+      GLfloat*            glyph_data;                                           // Text "glyph" data.
+      GLfloat*            color_data;                                           // Text "color" data.
 
     public:
-      GLfloat*        x;
-      GLfloat*        y;
-      GLfloat*        z;
-      GLfloat*        w;
+      GLfloat*            x;
+      GLfloat*            y;
+      GLfloat*            z;
+      GLfloat*            w;
 
-      GLfloat*        r;
-      GLfloat*        g;
-      GLfloat*        b;
-      GLfloat*        a;
+      GLfloat*            r;
+      GLfloat*            g;
+      GLfloat*            b;
+      GLfloat*            a;
 
-      int             size;
+      int                 size;
 
-      GLuint          glyph_vao;
-      GLuint          color_vao;
-      GLuint          glyph_vbo;
-      GLuint          color_vbo;
+      GLuint              glyph_vao;
+      GLuint              color_vao;
+      GLuint              glyph_vbo;
+      GLuint              color_vbo;
 
-                      text4();
+                          text4();
 
-      void            init      (
-                                  neutrino*   loc_baseline,
-                                  const char* loc_text,
-                                  GLfloat     loc_R,
-                                  GLfloat     loc_G,
-                                  GLfloat     loc_B,
-                                  GLfloat     loc_A
-                                );
+      void                init          (
+                                          neutrino*   loc_baseline,
+                                          const char* loc_text,
+                                          GLfloat     loc_R,
+                                          GLfloat     loc_G,
+                                          GLfloat     loc_B,
+                                          GLfloat     loc_A
+                                        );
 
-                      ~text4();
+                          ~text4();
   };
 
 #endif
