@@ -100,7 +100,10 @@ void device::check_error        (
   }
 }
 
-size_t device::get_info_size(cl_device_id loc_device_id, cl_device_info loc_parameter_name)
+size_t device::get_info_size    (
+                                  cl_device_id loc_device_id,                   // OpenCL device ID.
+                                  cl_device_info loc_parameter_name             // Device parameter.
+                                )
 {
   cl_int  loc_error;                                                            // Error code.
   size_t  loc_parameter_size;                                                   // Parameter size.
@@ -119,7 +122,11 @@ size_t device::get_info_size(cl_device_id loc_device_id, cl_device_info loc_para
   return (loc_parameter_size);                                                  // Returning parameter size...
 }
 
-char* device::get_info_value(cl_device_id loc_device_id, cl_device_info loc_parameter_name, size_t loc_parameter_size)
+char* device::get_info_value    (
+                                  cl_device_id loc_device_id,                   // OpenCL device ID.
+                                  cl_device_info loc_parameter_name,            // Parameter name.
+                                  size_t loc_parameter_size                     // Parameter size.
+                                )
 {
   cl_int  loc_error;                                                            // Error code.
   parameter_value = new char[loc_parameter_size];                               // Parameter value.
@@ -138,7 +145,9 @@ char* device::get_info_value(cl_device_id loc_device_id, cl_device_info loc_para
   return (parameter_value);                                                     // Returning parameter value...
 }
 
-void device::init(cl_device_id loc_device_id)
+void device::init               (
+                                  cl_device_id loc_device_id                    // OpenCL deivce ID.
+                                )
 {
   // Device name info:
   name                    = new info(
