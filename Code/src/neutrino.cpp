@@ -147,6 +147,7 @@ double neutrino::get_cpu_time()
 void neutrino::init()
 {
   terminal_time = 0;
+  prefix_buffer = new char[MAX_PATH_SIZE];
 
   // Initializing NEUTRINO_PATH:
   action("initializing neutrino path...");                                      // Printing message...
@@ -163,18 +164,16 @@ void neutrino::init()
 
 char* neutrino::prefix(const char* loc_path)
 {
-  char buffer[MAX_PATH_SIZE];
-
   // Compiling message string:
   snprintf  (
-              buffer,                                                           // Destination string.
+              prefix_buffer,                                                    // Destination string.
               MAX_PATH_SIZE,                                                    // Size of destination string.
               "%s/%s",                                                          // Compiled string.
               get_neutrino_path()->value,                                       // Neutrino path prefix.
               loc_path                                                          // Path.
             );
 
-  return(buffer);
+  return(prefix_buffer);
 }
 
 void neutrino::get_tic()
@@ -449,6 +448,7 @@ void neutrino::done()
 
 neutrino::~neutrino()
 {
-  delete temp_neutrino_path;
-  delete temp_neutrino_font;
+  delete    temp_neutrino_path;
+  delete    temp_neutrino_font;
+  delete[]  prefix_buffer;
 }
