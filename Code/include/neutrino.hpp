@@ -162,6 +162,8 @@
       font*             get_neutrino_font();                                    // Gets neutrino font.
       double            get_cpu_time();                                         // Gets CPU time [us].
 
+      char*             prefix_buffer;                                          // Buffer for Neutrino path prefix.
+
     public:
       path*             neutrino_path;                                          // NEUTRINO_PATH environmental variable.
       font*             neutrino_font;                                          // Font object.

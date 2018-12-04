@@ -29,7 +29,7 @@ int main()
   opencl*   cl              = new opencl();                                     // The OpenCL context object.
   text4*    message         = new text4();                                      // Text message.
   point4*   P               = new point4();                                     // Point array.
-  color4*   C               = new color4();                                     // Color array.                                    
+  color4*   C               = new color4();                                     // Color array.
 
   queue*    q1              = new queue();                                      // OpenCL queue.
 
