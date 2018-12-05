@@ -11,6 +11,7 @@ window::window()
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// PRIVATE METHODS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
+<<<<<<< HEAD
 /// # Window grasp function
 /// ### Description:
 /// Builds a 3D world vector from the 2D screen projection of the input device
@@ -20,14 +21,30 @@ void window::grasp (
                     int    x,                                                   // "Near clipping-plane" x-coordinate.
                     int    y                                                    // "Near clipping-plane" y-coordinate.
                    )
+=======
+// Grasp arcball action:
+void window::grasp			(
+													float* 	p,																						// Point on unitary ball.
+													double 	x,																						// "Near clipping-plane" x-coordinate.
+													double 	y																							// "Near clipping-plane" y-coordinate.
+												)
+>>>>>>> 401ec76... Apperently, the angle between a and b is wrong when it is very small.
 {
   float op_sq;                                                                  // Center "o" to "p" squared distance.
 
+<<<<<<< HEAD
   glfwGetWindowSize (glfw_window, &window_size_x, &window_size_y);              // Getting window size...
   p[0]  = 2.0*x/window_size_x - 1.0;                                            // Computing point on unitary ball [x]...
   p[1]  = -(2.0*y/window_size_y - 1.0);                                         // Computing point on unitary ball [y] (axis inverted according to OpenGL)...
   p[2]  = 0.0;                                                                  // Computing point on unitary ball [z]...
   op_sq = p[0]*p[0] + p[1]*p[1];                                                // Computing "op" squared...
+=======
+	glfwGetWindowSize(glfw_window, &window_size_x, &window_size_y);							  // Getting window size...
+  p[0] =   (float)(2.0*floor(x)/(double)window_size_x - 1.0);                             			// Computing point on unitary ball [x]...
+  p[1] = (float)(-(2.0*floor(y)/(double)window_size_y - 1.0));                            			// Computing point on unitary ball [y] (axis inverted according to OpenGL)...
+  p[2] =   0.0;                                                                 // Computing point on unitary ball [z]...
+	op_sq = p[0]*p[0] + p[1]*p[1];                                                // Computing "op" squared...
+>>>>>>> 401ec76... Apperently, the angle between a and b is wrong when it is very small.
 
   if(op_sq <= 1.0)                                                              // Checking p to ball-center distance...
   {
@@ -45,22 +62,29 @@ void window::grasp (
 /// Rotates the view matrix according to an arcball movement.
 void window::arcball ()
 {
-  float a[3];                                                                   // Mouse vector, world coordinates.
-  float b[3];                                                                   // Mouse vector, world coordinates.
-  float axis[3];                                                                // Arcball axis of rotation.
-  float theta;                                                                  // Arcball angle of rotation.
+	float a[3]; 																															    // Mouse vector, world coordinates.
+	float b[3]; 																															    // Mouse vector, world coordinates.
+	float axis[3];																										   		      // Arcball axis of rotation.
+	float theta;																																	// Arcball angle of rotation.
 
-  if(arcball_on && ((mouse_x != mouse_x_old) || (mouse_y != mouse_y_old)))      // If mouse has been dragged (= left click + move):
-  {
-    grasp (a, mouse_x_old, mouse_y_old);                                        // Building mouse world vector (old)...
-    grasp (b, mouse_x, mouse_y);                                                // Building mouse world vector...
-    theta = ROTATION_FACTOR*angle (a, b);                                       // Calculating arcball angle...
-    normalize (a);
-    normalize (b);
-    cross (axis, a, b);                                                         // Calculating arcball axis of rotation...
-    normalize (axis);
-    rotate (R, R_old, axis, theta);                                             // Calculating rotation matrix...
-  }
+	grasp(a, mouse_x_old, mouse_y_old);							  			                    	// Building mouse world vector (old)...
+	grasp(b, mouse_x, mouse_y);												   					              	// Building mouse world vector...
+	theta = ROTATION_FACTOR*angle(a, b);                                        	// Computing arcball angle...
+	//if (arcball_on &&((mouse_x != mouse_x_old) || (mouse_y != mouse_y_old)))      // If mouse has been dragged (= left click + move):
+	if(arcball_on)
+	{
+		printf("t = %f\n", theta);
+		if(theta > 0.05)
+		{
+			normalize(a);																																	// Normalizing vector "a"...
+			normalize(b);																																	// Normalizing vector "b"...
+			cross(axis, a, b);									            				                    	// Computing arcball axis of rotation...
+			normalize(axis);																														// Normalizing rotation 3D axis...
+			quaternion(q, axis, theta);																									// Computing rotation quaternion...
+			rotate(R, R_old, q);                                              					// Computing rotation matrix...
+			euler(&roll, &pitch, &yaw, q);																							// Computing Euler (Tait-Bryan) angles...
+		}
+	}
 }
 
 /// # OpenGL shader compile function
@@ -425,10 +449,18 @@ void window::mouse_pressed (
      arcball_on == false
     )
   {
+<<<<<<< HEAD
     glfwGetCursorPos (glfw_window, &mouse_x, &mouse_y);                         // Getting mouse position...
     mouse_x_old = mouse_x;                                                      // Backing up mouse position...
     mouse_y_old = mouse_y;                                                      // Backing up mouse position...
     arcball_on  = true;                                                         // Turning on arcball...
+=======
+    glfwGetCursorPos(glfw_window, &mouse_x, &mouse_y);                          // Getting mouse position...
+
+		mouse_x_old = mouse_x;																											// Backing up mouse position...
+    mouse_y_old = mouse_y;																											// Backing up mouse position...
+    arcball_on = true;																													// Turning on arcball...
+>>>>>>> 401ec76... Apperently, the angle between a and b is wrong when it is very small.
   }
 
   else
@@ -679,6 +711,94 @@ void window::print (
   // Finishing:
   glDisableVertexAttribArray (LAYOUT_0);                                        // Unbinding "glyph" array...
   glDisableVertexAttribArray (LAYOUT_1);                                        // Unbinding "color" array...
+}
+
+// Cockpit_AI function:
+void window::cockpit_AI(memory_orb* controller)
+{
+	// Rotation matrix:
+	float             R_AI[16]     = {1.0, 0.0, 0.0, 0.0,
+																 0.0, 1.0, 0.0, 0.0,
+																 0.0, 0.0, 1.0, 0.0,
+																 0.0, 0.0, 0.0, 1.0};
+
+	// Translation matrix:
+	float             T_AI[16]     = {1.0, 0.0, 0.0, 0.0,
+																 0.0, 1.0, 0.0, 0.0,
+																 0.0, 0.0, 1.0, 0.0,
+																 0.0, 0.0, 0.0, 1.0};
+
+	// View matrix:
+	float             V_AI[16]     = {1.0, 0.0, 0.0, 0.0,
+																 0.0, 1.0, 0.0, 0.0,
+																 0.0, 0.0, 1.0, 0.0,
+																 0.0, 0.0, 0.0, 1.0};
+
+	// Projection matrix:
+	float             P_AI[16]     = {1.0, 0.0, 0.0, 0.0,
+																 0.0, 1.0, 0.0, 0.0,
+																 0.0, 0.0, 1.0, 0.0,
+																 0.0, 0.0, 0.0, 1.0};
+
+  multiplicate(V_AI, T_AI, R_AI);                                                        // Setting View_matrix matrix...
+  glUseProgram(text_shader);                                                    // Using shader...
+
+	// Setting View_matrix matrix on shader:
+	glUniformMatrix4fv		(	// Getting variable's uniform location:
+													glGetUniformLocation	(
+																									text_shader,									// Program.
+																									"View_matrix"									// Variable.
+																								),
+                     			1,																										// # of matrices to be modified.
+                     			GL_FALSE,																							// FALSE = column major.
+                     			&V_AI[0]																									// View matrix.
+												);
+
+	// Setting Projection_matrix matrix on shader:
+  glUniformMatrix4fv		(	// Getting variable's uniform location:
+													glGetUniformLocation	(
+																									text_shader,									// Program.
+																									"Projection_matrix"						// Variable.
+																								),
+                     			1,																										// # of matrices to be modified.
+                     			GL_FALSE,																							// FALSE = column major.
+                     			&P_AI[0]																									// Projection matrix.
+												);
+
+
+  // Binding "glyph" array:
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, controller->wings_data_vbo);                // Binding glyph VBO...
+  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
+
+  // Binding "color" array:
+  glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, controller->wings_colors_vbo);              // Binding color VBO...
+  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
+
+  // Drawing:
+  glDrawArrays(GL_LINES, 0, controller->wings_points);                 // Drawing "glyphs"...
+
+	/*
+
+	// Binding "glyph" array:
+  glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, controller->pitch_level_data_vbo);                // Binding glyph VBO...
+  glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
+
+  // Binding "color" array:
+  glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
+  glBindBuffer(GL_ARRAY_BUFFER, controller->pitch_level_colors_vbo);              // Binding color VBO...
+  glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
+
+  // Drawing:
+  glDrawArrays(GL_LINES, 0, controller->pitch_level_points);                 // Drawing "glyphs"...
+
+	*/
+
+  // Finishing:
+  glDisableVertexAttribArray(LAYOUT_0);                                         // Unbinding "glyph" array...
+  glDisableVertexAttribArray(LAYOUT_1);                                         // Unbinding "color" array...
 }
 
 window::~window()

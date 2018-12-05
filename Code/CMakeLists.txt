@@ -30,6 +30,7 @@ src/int4.cpp
 src/kernel.cpp
 src/linear_algebra.cpp
 src/main.cpp
+src/memory_orb.cpp
 src/neutrino.cpp
 src/opencl.cpp
 src/path.cpp

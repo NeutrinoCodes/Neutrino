@@ -34,10 +34,25 @@
                             float b[3]                                          // 3D vector.
                           );
 
+  // Conversion from 3D axis and rotation angle to rotation quaternion:
+  void    quaternion      (
+                            float q[4],                                         // Rotation quaternion.
+                            float axis[3],                                      // 3D rotation axis vector.
+                            float theta                                         // Rotation angle [rad].
+                          );
+
   // Associated 3x3 matrix representing the quaternion rotation:
   void    rotation_matrix (
                             float M[9],                                         // 3x3 rotation matrix.
                             float q[4]                                          // Rotation quaternion.
+                          );
+
+  // Conversion from rotation quaternion to Euler (Tait-Bryan) angles:
+  void    euler           (
+                            float*  roll,                                       // Roll angle [rad].
+                            float*  pitch,                                      // Pitch angle [rad].
+                            float*  yaw,                                        // Yaw angle [rad].
+                            float   q[4]                                        // Rotation quaternion.
                           );
 
 #endif

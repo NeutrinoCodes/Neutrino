@@ -30,8 +30,7 @@
   void rotate           (
                           float R[16],                                          // 4x4 rotation matrix.
                           float R_old[16],                                      // 4x4 rotation matrix backup.
-                          float axis[3],                                        // 3D rotation axis vector.
-                          float theta                                           // Rotation angle.
+                          float q[4]                                            // Rotation quaternion.
                         );
 
   // Translation matrix computation:
