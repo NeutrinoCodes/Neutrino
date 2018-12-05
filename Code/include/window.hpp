@@ -8,6 +8,7 @@
   #include "color4.hpp"
   #include "float4.hpp"
   #include "text4.hpp"
+  #include "memory_orb.hpp"
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// "WINDOW" CLASS ///////////////////////////////
@@ -25,6 +26,9 @@
                                      0.0, 1.0, 0.0, 0.0,
                                      0.0, 0.0, 1.0, 0.0,
                                      0.0, 0.0, 0.0, 1.0};
+
+      // Rotation quaternion backup:
+      float             q_old[4]  = {1.0, 0.0, 0.0, 0.0};
 
       // Initial translation vector:
       float             initial_translation[3] = {0.0, 0.0 , -3.0};
@@ -47,8 +51,8 @@
       // Grasp arcball action:
       void              grasp           (
                                           float*      p,                        // Point on unitary ball.
-                                          int         x,                        // "Near clipping-plane" x-coordinate.
-                                          int         y                         // "Near clipping-plane" y-coordinate.
+                                          double      x,                        // "Near clipping-plane" x-coordinate.
+                                          double      y                         // "Near clipping-plane" y-coordinate.
                                         );
 
       // Arcball computation:
@@ -145,6 +149,11 @@
       // Arcball quaternion:
       float             q[4]      = {1.0, 0.0, 0.0, 0.0};
 
+      // Euler (Tait-Byran) angles:
+      float             roll      = 0.0;
+      float             pitch     = 0.0;
+      float             yaw       = 0.0;
+
       // Rotation matrix:
       float             R[16]     = {1.0, 0.0, 0.0, 0.0,
                                      0.0, 1.0, 0.0, 0.0,
@@ -215,7 +224,14 @@
                                           text4* text
                                         );
 
+      // Window "cockpit_AI" function:
+      void              cockpit_AI      (
+                                          memory_orb* controller
+                                        );
+
                         ~window();
+
+
   };
 
 #endif
