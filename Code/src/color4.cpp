@@ -101,8 +101,6 @@ void color4::check_error        (
 
 void color4::init               (
                                   neutrino*   loc_baseline,                     // Neutrino baseline.
-                                  kernel*     loc_kernel,                       // OpenCL kernel.
-                                  cl_uint     loc_kernel_arg,                   // OpenCL kernel argument #.
                                   GLsizeiptr  loc_data_size                     // Data number.
                                 )
 {
@@ -187,14 +185,16 @@ void color4::init               (
 ////////////////////////////// HOST "SET" FUNCTIONS:  ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 // Kernel set function:
-void                set_arg       (
+void color4::set_arg              (
                                     kernel*     loc_kernel,                     // OpenCL kernel.
                                     cl_uint     loc_kernel_arg                  // OpenCL kernel argument #.
                                   )
 {
-  size_t kernel_index;
+  cl_int      loc_error;                                                        // Error code.
+  size_t      kernel_index;
+  size_t      i;
 
-  baseline->action("setting \"point4\" kernel argument...");                    // Printing message...
+  baseline->action("setting \"color4\" kernel argument...");                    // Printing message...
 
   // Getting kernel index:
   for(i = 0; i < baseline->k_num; i++)                                          // Scanning OpenCL kernel id array...
@@ -260,11 +260,13 @@ void color4::set_a      (
 ////////////////////////////// HOST "GET" FUNCTIONS:  ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 // Kernel get function:
-size_t              get_arg       (
+size_t color4::get_arg            (
                                     kernel*     loc_kernel                      // OpenCL kernel.
                                   )
 {
-  size_t kernel_index;
+  cl_int      loc_error;                                                        // Error code.
+  size_t      kernel_index;
+  size_t      i;
 
   // Getting kernel index:
   for(i = 0; i < baseline->k_num; i++)                                          // Scanning OpenCL kernel id array...

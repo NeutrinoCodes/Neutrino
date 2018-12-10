@@ -464,6 +464,6 @@ neutrino::~neutrino()
 {
   delete    temp_neutrino_path;
   delete    temp_neutrino_font;
+  delete[]  kernel_id;
   delete[]  prefix_buffer;
-  delete[]  k_arg;
 }

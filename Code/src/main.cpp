@@ -46,7 +46,7 @@ int main()
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////// INITIALIZING NEUTRINO, OPENGL and OPENCL //////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  baseline  ->init();                                                           // Initializing neutrino...
+  baseline  ->init(QUEUE_NUM, KERNEL_NUM);                                      // Initializing neutrino...
   gui       ->init(baseline, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);        // Initializing window...
   cl        ->init(baseline, gui->glfw_window, GPU);                            // Initializing OpenCL context...
 
@@ -64,7 +64,7 @@ int main()
   ////////////////////////////////////////////////////////////////////////////////
   for(j = 0; j < KERNEL_NUM; j++)                                               // For each OpenCL kernel:
   {
-    K_size[j]               = new size_t[KDIM];                                 // OpenCL kernel dimensions.
+    K_size[j]               = new size_t[KERNEL_DIM];                           // OpenCL kernel dimensions.
 
     for (i = 0; i < KERNEL_DIM; i++)                                            // Setting all kernel sizes...
     {
@@ -76,7 +76,7 @@ int main()
                     baseline,                                                   // Neutrino baseline.
                     baseline->prefix("Code/kernel/thekernel.cl"),               // Kernel file name.
                     K_size[j],                                                  // Kernel dimensions array.
-                    KDIM                                                        // Kernel dimension.
+                    KERNEL_DIM                                                  // Kernel dimension.
                   );
   }
 
@@ -109,8 +109,8 @@ int main()
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////// SETTING OPENCL KERNEL ARGUMENTS ///////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  points    ->set_arg(baseline, K[0], 0);                                       // Setting kernel argument...
-  colors    ->set_arg(baseline, K[0], 1);                                       // Setting kernel argument...
+  points    ->set_arg   (K[0], 0);                                              // Setting kernel argument...
+  colors    ->set_arg   (K[0], 1);                                              // Setting kernel argument...
 
   points    ->acquire_gl(Q[0], 0);
   points    ->push      (Q[0], 0);
