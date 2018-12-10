@@ -39,9 +39,14 @@
       // Initialization:
       void                init          (
                                           neutrino*   loc_baseline,             // Neutrino baseline.
+                                          GLsizeiptr  loc_data_size             // Data number.
+                                        );
+
+      // Kernel set function:
+      void                set_var       (
+                                          neutrino*   loc_baseline,             // Neutrino baseline.
                                           kernel*     loc_kernel,               // OpenCL kernel.
                                           cl_uint     loc_kernel_arg,           // OpenCL kernel argument #.
-                                          GLsizeiptr  loc_data_size             // Data number.
                                         );
 
       // "x" set function:
@@ -89,14 +94,14 @@
                                         );
 
       // OpenCL write buffer function:
-      void                write         (
+      void                push          (
                                           queue*    loc_queue,                  // OpenCL queue.
                                           kernel*   loc_kernel,                 // OpenCL kernel.
                                           cl_uint   loc_kernel_arg              // OpenCL kernel argument index.
                                         );
 
       // OpenCL read buffer function:
-      void                read          (
+      void                pull          (
                                           queue*    loc_queue,                  // OpenCL queue.
                                           kernel*   loc_kernel,                 // OpenCL kernel.
                                           cl_uint   loc_kernel_arg              // OpenCL kernel argument index.

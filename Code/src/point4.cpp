@@ -178,6 +178,18 @@ void point4::init               (
 
   check_error(loc_error);                                                       // Checking returned error code...
 
+  baseline->done();                                                             // Printing message...
+}
+
+// Kernel set function:
+void                set_var       (
+                                    neutrino*   loc_baseline,                   // Neutrino baseline.
+                                    kernel*     loc_kernel,                     // OpenCL kernel.
+                                    cl_uint     loc_kernel_arg,                 // OpenCL kernel argument #.
+                                  )
+{
+  baseline->action("setting \"point4\" kernel argument...");                    // Printing message...
+
   // Setting OpenCL buffer as kernel argument:
   loc_error = clSetKernelArg      (
                                     loc_kernel->kernel_id,                      // Kernel.
@@ -276,7 +288,7 @@ GLfloat point4::get_w   (
 }
 
 // OpenCL write buffer function:
-void point4::write                (
+void point4::push                 (
                                     queue*  loc_queue,                          // Queue.
                                     kernel* loc_kernel,                         // Kernel.
                                     cl_uint loc_kernel_arg                      // Kernel argument index.
@@ -300,7 +312,7 @@ void point4::write                (
 }
 
 // OpenCL read buffer function:
-void point4::read                       (
+void point4::pull                       (
                                           queue*  loc_queue,                    // Queue.
                                           kernel* loc_kernel,                   // Kernel.
                                           cl_uint loc_kernel_arg                // Kernel argument index.
