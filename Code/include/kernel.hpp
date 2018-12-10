@@ -12,8 +12,8 @@
   class kernel
   {
     private:
-      neutrino*           baseline;                                             // Neutrino baseline.
-      cl_device_id*       device_id;                                            // Device ID array.
+      neutrino*         baseline;                                               // Neutrino baseline.
+      cl_device_id*     device_id;                                              // Device ID array.
 
       // OpenCL error get function:
       const char*       get_error   (
@@ -36,6 +36,7 @@
       cl_event          event;                                                  // Kernel event.
       char*             log_value;                                              // OpenCL compiler log value array.
       size_t            log_size;                                               // OpenCL compiler log size array.
+      size_t            arguments;                                              // # of kernel arguments.
 
             kernel();
 
@@ -45,6 +46,7 @@
                         char*         loc_kernel_filename,                      // OpenCL kernel file name.
                         size_t*       loc_kernel_size,                          // OpenCL kernel size.
                         cl_uint       loc_kernel_dimension                      // OpenCL kernel dimension.
+                        size_t        loc_kernel_arguments                      // # of OpenCL kernel arguments.
                       );
 
       // Kernel execution:

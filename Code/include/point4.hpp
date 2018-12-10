@@ -14,6 +14,7 @@
   {
     private:
       neutrino*           baseline;                                             // Neutrino baseline.
+      size_t*             position;                                             // Position of kernel argument in each kernel.
 
       // OpenCL error get function:
       const char*         get_error     (
@@ -43,8 +44,7 @@
                                         );
 
       // Kernel set function:
-      void                set_var       (
-                                          neutrino*   loc_baseline,             // Neutrino baseline.
+      void                set_arg       (
                                           kernel*     loc_kernel,               // OpenCL kernel.
                                           cl_uint     loc_kernel_arg,           // OpenCL kernel argument #.
                                         );
@@ -96,14 +96,12 @@
       // OpenCL write buffer function:
       void                push          (
                                           queue*    loc_queue,                  // OpenCL queue.
-                                          kernel*   loc_kernel,                 // OpenCL kernel.
                                           cl_uint   loc_kernel_arg              // OpenCL kernel argument index.
                                         );
 
       // OpenCL read buffer function:
       void                pull          (
                                           queue*    loc_queue,                  // OpenCL queue.
-                                          kernel*   loc_kernel,                 // OpenCL kernel.
                                           cl_uint   loc_kernel_arg              // OpenCL kernel argument index.
                                         );
 

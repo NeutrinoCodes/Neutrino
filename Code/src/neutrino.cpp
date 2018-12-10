@@ -144,10 +144,24 @@ double neutrino::get_cpu_time()
 }
 
 // PUBLIC METHODS:
-void neutrino::init()
+void neutrino::init(size_t loc_q_num, size_t loc_k_num)
 {
+  q_num = loc_q_num;                                                            // Getting # of OpenCL queues...
+  k_num = loc_k_num;                                                            // Getting # of OpenCL kernels...
+  kernel_id = new cl_kernel[k_num];                                             // Initializing OpenCL kernel ID array...
   terminal_time = 0;
   prefix_buffer = new char[MAX_PATH_SIZE];
+  size_t i;                                                                     // Index.
+
+  // Initializing neutrino object:
+  action("initializing neutrino object...");                                    // Printing message...
+
+  for(i = 0; i < k_num; i++)                                                    // Scanning OpenCL kernel argument array...
+  {
+    kernel_id[i] = NULL;                                                        // Resetting kernel ID array...
+  }
+
+  done();           																														// Printing message...
 
   // Initializing NEUTRINO_PATH:
   action("initializing neutrino path...");                                      // Printing message...
@@ -451,4 +465,5 @@ neutrino::~neutrino()
   delete    temp_neutrino_path;
   delete    temp_neutrino_font;
   delete[]  prefix_buffer;
+  delete[]  k_arg;
 }
