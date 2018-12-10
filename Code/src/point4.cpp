@@ -106,23 +106,11 @@ void point4::init               (
 {
   cl_int      loc_error;                                                        // Error code.
   GLsizeiptr  i;                                                                // Index.
-  cl_uint     k;
-  size_t      loc_max_k_arg;
 
   baseline = loc_baseline;                                                      // Getting Neutrino baseline...
+  position = new size_t[baseline->k_num];                                       // Initializing kernel argument position array...
+
   baseline->action("initializing \"point4\" object...");                        // Printing message...
-
-  kernel_arg = new cl_uint*[baseline->k_num];
-
-  max_k_arg = 0;
-  for(k = 0; k < baseline->k_num; k++)
-  {
-    if(baseline->k_arg[k] > max_k_arg)
-    {
-      max_k_arg =
-    }
-    kernel_arg[k] = new cl_uint[]
-  }
 
   size = loc_data_size;                                                         // Array size.
   vbo = 0;                                                                      // OpenGL data VBO.
@@ -193,13 +181,29 @@ void point4::init               (
   baseline->done();                                                             // Printing message...
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// HOST "SET" FUNCTIONS:  ////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 // Kernel set function:
 void                set_arg       (
                                     kernel*     loc_kernel,                     // OpenCL kernel.
-                                    cl_uint     loc_kernel_arg,                 // OpenCL kernel argument #.
+                                    cl_uint     loc_kernel_arg                  // OpenCL kernel argument #.
                                   )
 {
+  size_t kernel_index;
+
   baseline->action("setting \"point4\" kernel argument...");                    // Printing message...
+
+  // Getting kernel index:
+  for(i = 0; i < baseline->k_num; i++)                                          // Scanning OpenCL kernel id array...
+  {
+    if(baseline->kernel_id[i] == loc_kernel->kernel_id)                         // Finding current kernel id...
+    {
+      kernel_index = i;                                                         // Setting kernel index...
+    }
+  }
+
+  position[i] = loc_kernel_arg;                                                 // Setting kernel argument position in current kernel...
 
   // Setting OpenCL buffer as kernel argument:
   loc_error = clSetKernelArg      (
@@ -250,6 +254,28 @@ void point4::set_w      (
   data[4*loc_index + 3] = loc_value;                                            // Setting data value...
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// HOST "GET" FUNCTIONS:  ////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+// Kernel get function:
+size_t              get_arg       (
+                                    kernel*     loc_kernel,                     // OpenCL kernel.
+                                  )
+{
+  size_t kernel_index;
+
+  // Getting kernel index:
+  for(i = 0; i < baseline->k_num; i++)                                          // Scanning OpenCL kernel id array...
+  {
+    if(baseline->kernel_id[i] == loc_kernel->kernel_id)                         // Finding current kernel id...
+    {
+      kernel_index = i;                                                         // Setting kernel index...
+    }
+  }
+
+  return(position[kernel_index]);                                               // Returning index of current argument in current kernel...
+}
+
 // "x" get function:
 GLfloat point4::get_x   (
                           GLsizeiptr  loc_index                                 // Data index.
@@ -298,6 +324,9 @@ GLfloat point4::get_w   (
   return(loc_value);                                                            // Returning data value...
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////// CLIENT FUNCTIONS:  /////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 // OpenCL write buffer function:
 void point4::push                 (
                                     queue*  loc_queue,                          // Queue.
@@ -408,6 +437,7 @@ point4::~point4()
   glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
 
   delete[] data;                                                                // Deleting array for unfolded data...
+  delete[] position;                                                            // Deleting kernel argument position array...
 
   baseline->done();                                                             // Printing message...
 }

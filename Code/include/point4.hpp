@@ -46,7 +46,7 @@
       // Kernel set function:
       void                set_arg       (
                                           kernel*     loc_kernel,               // OpenCL kernel.
-                                          cl_uint     loc_kernel_arg,           // OpenCL kernel argument #.
+                                          cl_uint     loc_kernel_arg            // OpenCL kernel argument #.
                                         );
 
       // "x" set function:
