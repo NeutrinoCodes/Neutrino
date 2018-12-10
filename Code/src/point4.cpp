@@ -101,16 +101,28 @@ void point4::check_error        (
 
 void point4::init               (
                                   neutrino*   loc_baseline,                     // Neutrino baseline.
-                                  kernel*     loc_kernel,                       // OpenCL kernel.
-                                  cl_uint     loc_kernel_arg,                   // OpenCL kernel argument #.
                                   GLsizeiptr  loc_data_size                     // Data number.
                                 )
 {
   cl_int      loc_error;                                                        // Error code.
   GLsizeiptr  i;                                                                // Index.
+  cl_uint     k;
+  size_t      loc_max_k_arg;
 
   baseline = loc_baseline;                                                      // Getting Neutrino baseline...
   baseline->action("initializing \"point4\" object...");                        // Printing message...
+
+  kernel_arg = new cl_uint*[baseline->k_num];
+
+  max_k_arg = 0;
+  for(k = 0; k < baseline->k_num; k++)
+  {
+    if(baseline->k_arg[k] > max_k_arg)
+    {
+      max_k_arg =
+    }
+    kernel_arg[k] = new cl_uint[]
+  }
 
   size = loc_data_size;                                                         // Array size.
   vbo = 0;                                                                      // OpenGL data VBO.
@@ -182,8 +194,7 @@ void point4::init               (
 }
 
 // Kernel set function:
-void                set_var       (
-                                    neutrino*   loc_baseline,                   // Neutrino baseline.
+void                set_arg       (
                                     kernel*     loc_kernel,                     // OpenCL kernel.
                                     cl_uint     loc_kernel_arg,                 // OpenCL kernel argument #.
                                   )
@@ -290,7 +301,6 @@ GLfloat point4::get_w   (
 // OpenCL write buffer function:
 void point4::push                 (
                                     queue*  loc_queue,                          // Queue.
-                                    kernel* loc_kernel,                         // Kernel.
                                     cl_uint loc_kernel_arg                      // Kernel argument index.
                                   )
 {
@@ -314,7 +324,6 @@ void point4::push                 (
 // OpenCL read buffer function:
 void point4::pull                       (
                                           queue*  loc_queue,                    // Queue.
-                                          kernel* loc_kernel,                   // Kernel.
                                           cl_uint loc_kernel_arg                // Kernel argument index.
                                         )
 {

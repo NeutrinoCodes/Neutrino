@@ -174,11 +174,14 @@
       cl_context        context_id;                                             // OpenCL context id.
       cl_platform_id    platform_id;                                            // OpenCL platform ID.
       cl_device_id      device_id;                                              // OpenCL device id.
+      size_t            q_num;                                                  // # of OpenCL queues.
+      size_t            k_num;                                                  // # of OpenCL kernels.
+      cl_kernel*        kernel_id;                                              // OpenCL kernel ID array.
 
                         neutrino();
 
       // Initialization:
-      void              init();
+      void              init(size_t loc_q_num, size_t loc_k_num);
 
       // Neutrino path add prefix function:
       char*             prefix        (
