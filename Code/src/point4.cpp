@@ -259,7 +259,7 @@ void point4::set_w      (
 //////////////////////////////////////////////////////////////////////////////////
 // Kernel get function:
 size_t              get_arg       (
-                                    kernel*     loc_kernel,                     // OpenCL kernel.
+                                    kernel*     loc_kernel                      // OpenCL kernel.
                                   )
 {
   size_t kernel_index;
@@ -376,7 +376,6 @@ void point4::pull                       (
 // OpenCL acquire buffer function:
 void point4::acquire_gl         (
                                   queue*  loc_queue,                            // Queue.
-                                  kernel* loc_kernel,                           // Kernel.
                                   cl_uint loc_kernel_arg                        // Kernel argument index.
                                 )
 {
@@ -400,7 +399,6 @@ void point4::acquire_gl         (
 // OpenCL release buffer function:
 void point4::release_gl         (
                                   queue*  loc_queue,                            // Queue.
-                                  kernel* loc_kernel,                           // Kernel.
                                   cl_uint loc_kernel_arg                        // Kernel argument index.
                                 )
 {

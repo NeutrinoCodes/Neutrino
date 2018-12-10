@@ -110,6 +110,8 @@ void color4::init               (
   GLsizeiptr  i;                                                                // Index.
 
   baseline = loc_baseline;                                                      // Getting Neutrino baseline...
+  position = new size_t[baseline->k_num];                                       // Initializing kernel argument position array...
+
   baseline->action("initializing \"color4\" object...");                        // Printing message...
 
   size = loc_data_size;                                                         // Array size.
@@ -178,6 +180,33 @@ void color4::init               (
 
   check_error(loc_error);                                                       // Checking returned error code...
 
+  baseline->done();                                                             // Printing message...
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// HOST "SET" FUNCTIONS:  ////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+// Kernel set function:
+void                set_arg       (
+                                    kernel*     loc_kernel,                     // OpenCL kernel.
+                                    cl_uint     loc_kernel_arg                  // OpenCL kernel argument #.
+                                  )
+{
+  size_t kernel_index;
+
+  baseline->action("setting \"point4\" kernel argument...");                    // Printing message...
+
+  // Getting kernel index:
+  for(i = 0; i < baseline->k_num; i++)                                          // Scanning OpenCL kernel id array...
+  {
+    if(baseline->kernel_id[i] == loc_kernel->kernel_id)                         // Finding current kernel id...
+    {
+      kernel_index = i;                                                         // Setting kernel index...
+    }
+  }
+
+  position[i] = loc_kernel_arg;                                                 // Setting kernel argument position in current kernel...
+
   // Setting OpenCL buffer as kernel argument:
   loc_error = clSetKernelArg      (
                                     loc_kernel->kernel_id,                      // Kernel.
@@ -225,6 +254,28 @@ void color4::set_a      (
                         )
 {
   data[4*loc_index + 3] = loc_value;                                            // Setting data value...
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// HOST "GET" FUNCTIONS:  ////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+// Kernel get function:
+size_t              get_arg       (
+                                    kernel*     loc_kernel                      // OpenCL kernel.
+                                  )
+{
+  size_t kernel_index;
+
+  // Getting kernel index:
+  for(i = 0; i < baseline->k_num; i++)                                          // Scanning OpenCL kernel id array...
+  {
+    if(baseline->kernel_id[i] == loc_kernel->kernel_id)                         // Finding current kernel id...
+    {
+      kernel_index = i;                                                         // Setting kernel index...
+    }
+  }
+
+  return(position[kernel_index]);                                               // Returning index of current argument in current kernel...
 }
 
 // "x" get function:
@@ -275,10 +326,12 @@ GLfloat color4::get_a   (
   return(loc_value);                                                            // Returning data value...
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////// CLIENT FUNCTIONS:  /////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 // OpenCL write buffer function:
-void color4::write                (
+void color4::push                 (
                                     queue*  loc_queue,                          // Queue.
-                                    kernel* loc_kernel,                         // Kernel.
                                     cl_uint loc_kernel_arg                      // Kernel argument index.
                                   )
 {
@@ -300,9 +353,8 @@ void color4::write                (
 }
 
 // OpenCL read buffer function:
-void color4::read                       (
+void color4::pull                       (
                                           queue*  loc_queue,                    // Queue.
-                                          kernel* loc_kernel,                   // Kernel.
                                           cl_uint loc_kernel_arg                // Kernel argument index.
                                         )
 {
@@ -326,7 +378,6 @@ void color4::read                       (
 // OpenCL acquire buffer function:
 void color4::acquire_gl         (
                                   queue*  loc_queue,                            // Queue.
-                                  kernel* loc_kernel,                           // Kernel.
                                   cl_uint loc_kernel_arg                        // Kernel argument index.
                                 )
 {
@@ -350,7 +401,6 @@ void color4::acquire_gl         (
 // OpenCL release buffer function:
 void color4::release_gl         (
                                   queue*  loc_queue,                            // Queue.
-                                  kernel* loc_kernel,                           // Kernel.
                                   cl_uint loc_kernel_arg                        // Kernel argument index.
                                 )
 {
@@ -387,6 +437,7 @@ color4::~color4()
   glDeleteBuffers(1, &vbo);                                                     // Releasing OpenGL VBO...
 
   delete[] data;                                                                // Deleting array for unfolded data...
+  delete[] position;                                                            // Deleting kernel argument position array...
 
   baseline->done();                                                             // Printing message...
 }

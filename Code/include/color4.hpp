@@ -14,6 +14,7 @@
   {
     private:
       neutrino*           baseline;                                             // Neutrino baseline.
+      size_t*             position;                                             // Position of kernel argument in each kernel.
 
       // OpenCL error get function:
       const char*         get_error     (
@@ -39,9 +40,16 @@
       // Initialization:
       void                init          (
                                           neutrino*   loc_baseline,             // Neutrino baseline.
-                                          kernel*     loc_kernel,               // OpenCL kernel.
-                                          cl_uint     loc_kernel_arg,           // OpenCL kernel argument #.
                                           GLsizeiptr  loc_data_size             // Data number.
+                                        );
+
+      ////////////////////////////////////////////////////////////////////////////
+      /////////////////////////// HOST "SET" FUNCTIONS:  /////////////////////////
+      ////////////////////////////////////////////////////////////////////////////
+      // Kernel set function:
+      void                set_arg       (
+                                          kernel*     loc_kernel,               // OpenCL kernel.
+                                          cl_uint     loc_kernel_arg            // OpenCL kernel argument #.
                                         );
 
       // "r" set function:
@@ -68,6 +76,14 @@
                                           GLfloat     loc_value                 // Data value.
                                         );
 
+      ////////////////////////////////////////////////////////////////////////////
+      /////////////////////////// HOST "GET" FUNCTIONS:  /////////////////////////
+      ////////////////////////////////////////////////////////////////////////////
+      // Kernel get function:
+      size_t              get_arg       (
+                                          kernel*     loc_kernel                // OpenCL kernel.
+                                        );
+
       // "r" get function:
       GLfloat             get_r         (
                                           GLsizeiptr  loc_index                 // Data index.
@@ -88,31 +104,30 @@
                                           GLsizeiptr  loc_index                 // Data index.
                                         );
 
+      ////////////////////////////////////////////////////////////////////////////
+      ///////////////////////////// CLIENT FUNCTIONS:  ///////////////////////////
+      ////////////////////////////////////////////////////////////////////////////
       // OpenCL write buffer function:
-      void                write         (
+      void                push          (
                                           queue*    loc_queue,                  // OpenCL queue.
-                                          kernel*   loc_kernel,                 // OpenCL kernel.
                                           cl_uint   loc_kernel_arg              // OpenCL kernel argument index.
                                         );
 
       // OpenCL read buffer function:
-      void                read          (
+      void                pull          (
                                           queue*    loc_queue,                  // OpenCL queue.
-                                          kernel*   loc_kernel,                 // OpenCL kernel.
                                           cl_uint   loc_kernel_arg              // OpenCL kernel argument index.
                                         );
 
       // OpenCL acquire buffer function:
       void                acquire_gl    (
                                           queue*  loc_queue,                    // Queue.
-                                          kernel* loc_kernel,                   // Kernel.
                                           cl_uint loc_kernel_arg                // Kernel argument index.
                                         );
 
       // OpenCL release buffer function:
       void                release_gl    (
                                           queue*  loc_queue,                    // Queue.
-                                          kernel* loc_kernel,                   // Kernel.
                                           cl_uint loc_kernel_arg                // Kernel argument index.
                                         );
 
