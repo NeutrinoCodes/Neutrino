@@ -155,7 +155,7 @@ void float4::set_arg              (
   size_t      kernel_index;
   size_t      i;
 
-  baseline->action("setting \"float1\" kernel argument...");                    // Printing message...
+  baseline->action("setting \"float4\" kernel argument...");                    // Printing message...
 
   // Getting kernel index:
   for(i = 0; i < baseline->k_num; i++)                                          // Scanning OpenCL kernel id array...
@@ -305,7 +305,7 @@ void float4::push                 (
                                           buffer,                               // Data buffer.
                                           CL_TRUE,                              // Blocking write flag.
                                           0,                                    // Data buffer offset.
-                                          (size_t)(4*sizeof(GLfloat)*size),     // Data buffer size.
+                                          (size_t)(4*sizeof(cl_float)*size),    // Data buffer size.
                                           data,                                 // Data buffer.
                                           0,                                    // Number of events in the list.
                                           NULL,                                 // Event list.
@@ -328,7 +328,7 @@ void float4::pull                       (
                                           buffer,                               // Data buffer.
                                           CL_TRUE,                              // Blocking write flag.
                                           0,                                    // Data buffer offset.
-                                          (size_t)(4*sizeof(GLfloat)*size),     // Data buffer size.
+                                          (size_t)(4*sizeof(cl_float)*size),    // Data buffer size.
                                           data,                                 // Data buffer.
                                           0,                                    // Number of events in the list.
                                           NULL,                                 // Event list.
