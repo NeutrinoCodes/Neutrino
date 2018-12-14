@@ -153,7 +153,7 @@ int main()
   delete[]  Q;
 
   delete[]  K_size;
-  delete    K;
+  delete[]  K;
 
   return 0;
 }
