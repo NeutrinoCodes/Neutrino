@@ -107,7 +107,6 @@ void int1::init                 (
                                   neutrino*   loc_baseline,                     // Neutrino baseline.
                                   GLsizeiptr  loc_data_size                     // Data number.
                                 )
-
 {
   cl_int    loc_error;                                                          // Error code.
   size_t    i;                                                                  // Index.
@@ -181,8 +180,8 @@ void int1::set_arg                (
 
 // "x" set function:
 void int1::set_x                  (
-                                    size_t loc_index,                           // Data index.
-                                    cl_float loc_value                          // Data value.
+                                    size_t  loc_index,                           // Data index.
+                                    cl_long loc_value                          // Data value.
                                   )
 {
   data[1*loc_index + 0] = loc_value;                                            // Setting data value...
@@ -213,11 +212,11 @@ size_t int1::get_arg              (
 }
 
 // "x" get function:
-cl_float int1::get_x              (
+cl_long int1::get_x               (
                                     size_t loc_index                            // Data index.
                                   )
 {
-  cl_float loc_value;                                                           // Value.
+  cl_long loc_value;                                                            // Value.
 
   loc_value = data[1*loc_index + 0];                                            // Getting data value...
 

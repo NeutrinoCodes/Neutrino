@@ -55,7 +55,7 @@
       // "x" set function:
       void                set_x         (
                                           size_t      loc_index,                // Data index.
-                                          cl_float    loc_value                 // Data value.
+                                          cl_long     loc_value                 // Data value.
                                         );
 
       ////////////////////////////////////////////////////////////////////////////
@@ -67,7 +67,7 @@
                                         );
 
       // "x" get function:
-      cl_float            get_x         (
+      cl_long             get_x         (
                                           size_t      loc_index                 // Data index.
                                         );
 
