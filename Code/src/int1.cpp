@@ -104,11 +104,10 @@ void int1::check_error          (
 
 // Initialization:
 void int1::init                 (
-                                  neutrino* loc_baseline,                       // Neutrino baseline.
-                                  kernel*   loc_kernel,                         // OpenCL kernel.
-                                  cl_uint   loc_kernel_arg,                     // OpenCL kernel argument #.
-                                  size_t    loc_data_size                       // Data number.
+                                  neutrino*   loc_baseline,                     // Neutrino baseline.
+                                  GLsizeiptr  loc_data_size                     // Data number.
                                 )
+
 {
   cl_int    loc_error;                                                          // Error code.
   size_t    i;                                                                  // Index.
@@ -131,12 +130,41 @@ void int1::init                 (
   buffer = clCreateBuffer         (
                                     opencl_context,                             // OpenCL context.
                                     CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,   // Memory flags.
-                                    1*sizeof(cl_float)*size,                    // Data buffer size.
+                                    1*sizeof(cl_long)*size,                     // Data buffer size.
                                     data,                                       // Data buffer.
                                     &loc_error                                  // Error code.
                                   );
 
   check_error(loc_error);                                                       // Checking returned error code...
+
+  baseline->done();                                                             // Printing message...
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// HOST "SET" FUNCTIONS:  ////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+// Kernel set function:
+void int1::set_arg                (
+                                    kernel*     loc_kernel,                     // OpenCL kernel.
+                                    cl_uint     loc_kernel_arg                  // OpenCL kernel argument #.
+                                  )
+{
+  cl_int      loc_error;                                                        // Error code.
+  size_t      kernel_index;
+  size_t      i;
+
+  baseline->action("setting \"float1\" kernel argument...");                    // Printing message...
+
+  // Getting kernel index:
+  for(i = 0; i < baseline->k_num; i++)                                          // Scanning OpenCL kernel id array...
+  {
+    if(baseline->kernel_id[i] == loc_kernel->kernel_id)                         // Finding current kernel id...
+    {
+      kernel_index = i;                                                         // Setting kernel index...
+    }
+  }
+
+  position[i] = loc_kernel_arg;                                                 // Setting kernel argument position in current kernel...
 
   // Setting OpenCL buffer as kernel argument:
   loc_error = clSetKernelArg      (
@@ -152,30 +180,56 @@ void int1::init                 (
 }
 
 // "x" set function:
-void      int1::set_x             (
-                                    size_t  loc_index,                          // Data index.
-                                    cl_long loc_value                           // Data value.
+void int1::set_x                  (
+                                    size_t loc_index,                           // Data index.
+                                    cl_float loc_value                          // Data value.
                                   )
 {
   data[1*loc_index + 0] = loc_value;                                            // Setting data value...
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// HOST "GET" FUNCTIONS:  ////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+// Kernel get function:
+size_t int1::get_arg              (
+                                    kernel*     loc_kernel                      // OpenCL kernel.
+                                  )
+{
+  cl_int      loc_error;                                                        // Error code.
+  size_t      kernel_index;
+  size_t      i;
+
+  // Getting kernel index:
+  for(i = 0; i < baseline->k_num; i++)                                          // Scanning OpenCL kernel id array...
+  {
+    if(baseline->kernel_id[i] == loc_kernel->kernel_id)                         // Finding current kernel id...
+    {
+      kernel_index = i;                                                         // Setting kernel index...
+    }
+  }
+
+  return(position[kernel_index]);                                               // Returning index of current argument in current kernel...
+}
+
 // "x" get function:
-cl_long   int1::get_x             (
+cl_float int1::get_x              (
                                     size_t loc_index                            // Data index.
                                   )
 {
-  cl_long loc_value;                                                            // Value.
+  cl_float loc_value;                                                           // Value.
 
   loc_value = data[1*loc_index + 0];                                            // Getting data value...
 
   return(loc_value);                                                            // Returning data value...
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////// CLIENT FUNCTIONS:  /////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 // OpenCL write buffer function:
-void      int1::write             (
+void int1::push                   (
                                     queue*  loc_queue,                          // Queue.
-                                    kernel* loc_kernel,                         // Kernel.
                                     cl_uint loc_kernel_arg                      // Kernel argument index.
                                   )
 {
@@ -186,7 +240,7 @@ void      int1::write             (
                                           buffer,                               // Data buffer.
                                           CL_TRUE,                              // Blocking write flag.
                                           0,                                    // Data buffer offset.
-                                          1*sizeof(cl_float)*size,              // Data buffer size.
+                                          (size_t)(4*sizeof(cl_long)*size),     // Data buffer size.
                                           data,                                 // Data buffer.
                                           0,                                    // Number of events in the list.
                                           NULL,                                 // Event list.
@@ -196,12 +250,11 @@ void      int1::write             (
   check_error(loc_error);
 }
 
-// OpenCL write buffer function:
-void      int1::read              (
-                                    queue*  loc_queue,                          // Queue.
-                                    kernel* loc_kernel,                         // Kernel.
-                                    cl_uint loc_kernel_arg                      // Kernel argument index.
-                                  )
+// OpenCL read buffer function:
+void int1::pull                         (
+                                          queue*  loc_queue,                    // Queue.
+                                          cl_uint loc_kernel_arg                // Kernel argument index.
+                                        )
 {
   cl_int  loc_error;                                                            // Local error code.
 
@@ -210,7 +263,7 @@ void      int1::read              (
                                           buffer,                               // Data buffer.
                                           CL_TRUE,                              // Blocking write flag.
                                           0,                                    // Data buffer offset.
-                                          1*sizeof(cl_float)*size,              // Data buffer size.
+                                          (size_t)(4*sizeof(cl_long)*size),     // Data buffer size.
                                           data,                                 // Data buffer.
                                           0,                                    // Number of events in the list.
                                           NULL,                                 // Event list.
@@ -224,7 +277,7 @@ int1::~int1()
 {
   cl_int  loc_error;                                                            // Local error code.
 
-  baseline->action("releasing \"float4\" object...");                           // Printing message...
+  baseline->action("releasing \"int1\" object...");                           // Printing message...
 
   if(buffer != NULL)                                                            // Checking buffer..
   {
@@ -234,6 +287,7 @@ int1::~int1()
   }
 
   delete[] data;                                                                // Releasing data buffer...
+  delete[] position;                                                            // Deleting kernel argument position array...
 
   baseline->done();                                                             // Printing message...
 }
