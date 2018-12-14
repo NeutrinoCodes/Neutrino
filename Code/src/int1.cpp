@@ -240,7 +240,7 @@ void int1::push                   (
                                           buffer,                               // Data buffer.
                                           CL_TRUE,                              // Blocking write flag.
                                           0,                                    // Data buffer offset.
-                                          (size_t)(4*sizeof(cl_long)*size),     // Data buffer size.
+                                          (size_t)(1*sizeof(cl_long)*size),     // Data buffer size.
                                           data,                                 // Data buffer.
                                           0,                                    // Number of events in the list.
                                           NULL,                                 // Event list.
@@ -263,7 +263,7 @@ void int1::pull                         (
                                           buffer,                               // Data buffer.
                                           CL_TRUE,                              // Blocking write flag.
                                           0,                                    // Data buffer offset.
-                                          (size_t)(4*sizeof(cl_long)*size),     // Data buffer size.
+                                          (size_t)(1*sizeof(cl_long)*size),     // Data buffer size.
                                           data,                                 // Data buffer.
                                           0,                                    // Number of events in the list.
                                           NULL,                                 // Event list.
