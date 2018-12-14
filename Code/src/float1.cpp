@@ -240,7 +240,7 @@ void float1::push                 (
                                           buffer,                               // Data buffer.
                                           CL_TRUE,                              // Blocking write flag.
                                           0,                                    // Data buffer offset.
-                                          (size_t)(4*sizeof(GLfloat)*size),     // Data buffer size.
+                                          (size_t)(1*sizeof(GLfloat)*size),     // Data buffer size.
                                           data,                                 // Data buffer.
                                           0,                                    // Number of events in the list.
                                           NULL,                                 // Event list.
@@ -263,7 +263,7 @@ void float1::pull                       (
                                           buffer,                               // Data buffer.
                                           CL_TRUE,                              // Blocking write flag.
                                           0,                                    // Data buffer offset.
-                                          (size_t)(4*sizeof(GLfloat)*size),     // Data buffer size.
+                                          (size_t)(1*sizeof(GLfloat)*size),     // Data buffer size.
                                           data,                                 // Data buffer.
                                           0,                                    // Number of events in the list.
                                           NULL,                                 // Event list.
@@ -287,7 +287,7 @@ float1::~float1()
   }
 
   delete[] data;                                                                // Releasing data buffer...
-
+  delete[] position;                                                            // Deleting kernel argument position array...
 
   baseline->done();                                                             // Printing message...
 }
