@@ -127,6 +127,9 @@ void point4::init               (
     data[4*i + 3] = 1.0f;                                                       // Filling "w"...
   }
 
+  glGenVertexArrays(1, &vao);                                                   // Generating glyph VAO...
+  glBindVertexArray(vao);                                                       // Binding glyph VAO...
+
   // Generating VBO:
   glGenBuffers                  (
                                   1,                                            // # of VBOs to generate.

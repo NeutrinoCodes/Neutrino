@@ -41,7 +41,7 @@ int main()
 
   point4*   points          = new point4();                                     // Point array.
   color4*   colors          = new color4();                                     // Color array.
-  text4*    message         = new text4();                                      // Text message.
+  //text4*    message         = new text4();                                      // Text message.
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////// INITIALIZING NEUTRINO, OPENGL and OPENCL //////////////////
@@ -85,7 +85,7 @@ int main()
   ////////////////////////////////////////////////////////////////////////////////
   points    ->init(baseline, NODES);                                            // Initializing points...
   colors    ->init(baseline, NODES);                                            // Initializing colors...
-  message   ->init(baseline, "neutrino 2.0!", 0.0, 1.0, 0.0, 1.0);              // Initializing message...
+  //message   ->init(baseline, "neutrino 2.0!", 0.0, 1.0, 0.0, 1.0);              // Initializing message...
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// SETTING OPENCL DATA OBJECTS /////////////////////////
@@ -135,7 +135,7 @@ int main()
     points  ->release_gl(Q[0], 0);
     colors  ->release_gl(Q[0], 1);
 
-    gui     ->print(message);                                                   // Printing text...
+    //gui     ->print(message);                                                   // Printing text...
     gui     ->plot(points, colors, STYLE_POINT);
     gui     ->refresh();                                                        // Refreshing window...
 
@@ -145,7 +145,7 @@ int main()
   delete    baseline;
   delete    gui;
   delete    cl;
-  delete    message;
+  //delete    message;
 
   delete    points;
   delete    colors;
