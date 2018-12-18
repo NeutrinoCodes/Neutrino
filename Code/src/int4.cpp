@@ -168,7 +168,7 @@ void int4::set_arg                (
     }
   }
 
-  position[i] = loc_kernel_arg;                                                 // Setting kernel argument position in current kernel...
+  position[kernel_index] = loc_kernel_arg;                                      // Setting kernel argument position in current kernel...
 
   // Setting OpenCL buffer as kernel argument:
   loc_error = clSetKernelArg      (

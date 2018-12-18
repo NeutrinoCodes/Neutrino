@@ -114,7 +114,7 @@ void float1::init               (
 
   baseline = loc_baseline;                                                      // Getting Neutrino baseline...
   position = new size_t[baseline->k_num];                                       // Initializing kernel argument position array...
-  
+
   baseline->action("initializing \"float1\" object...");                        // Printing message...
 
   size = loc_data_size;                                                         // Data array size.
@@ -166,7 +166,7 @@ void float1::set_arg              (
     }
   }
 
-  position[i] = loc_kernel_arg;                                                 // Setting kernel argument position in current kernel...
+  position[kernel_index] = loc_kernel_arg;                                      // Setting kernel argument position in current kernel...
 
   // Setting OpenCL buffer as kernel argument:
   loc_error = clSetKernelArg      (
