@@ -33,6 +33,7 @@
 
       GLsizeiptr          size;                                                 // Data size.
       cl_mem              buffer;                                               // OpenGL data memory buffer.
+      GLuint              vao;                                                  // OpenGL data VAO.
       GLuint              vbo;                                                  // OpenGL data VBO.
 
                           color4();
