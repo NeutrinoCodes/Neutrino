@@ -105,7 +105,7 @@ void int1::check_error          (
 // Initialization:
 void int1::init                 (
                                   neutrino*   loc_baseline,                     // Neutrino baseline.
-                                  GLsizeiptr  loc_data_size                     // Data number.
+                                  size_t      loc_data_size                     // Data number.
                                 )
 {
   cl_int    loc_error;                                                          // Error code.
