@@ -41,7 +41,7 @@ int main()
 
   point4*   points          = new point4();                                     // Point array.
   color4*   colors          = new color4();                                     // Color array.
-  //text4*    message         = new text4();                                      // Text message.
+  text4*    message         = new text4();                                      // Text message.
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////// INITIALIZING NEUTRINO, OPENGL and OPENCL //////////////////
@@ -85,7 +85,7 @@ int main()
   ////////////////////////////////////////////////////////////////////////////////
   points    ->init(baseline, NODES);                                            // Initializing points...
   colors    ->init(baseline, NODES);                                            // Initializing colors...
-  //message   ->init(baseline, "neutrino 2.0!", 0.0, 1.0, 0.0, 1.0);              // Initializing message...
+  message   ->init(baseline, "neutrino 2.0!", 0.0, 1.0, 0.0, 1.0);              // Initializing message...
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// SETTING OPENCL DATA OBJECTS /////////////////////////
@@ -94,15 +94,15 @@ int main()
   {
     for(i = 0; i < NODES_X; i++)
     {
-      points->set_x(j*NODES_Y + i, XMIN + i*DX);
-      points->set_y(j*NODES_Y + i, YMIN + j*DY);
-      points->set_z(j*NODES_Y + i, 0.0);
-      points->set_w(j*NODES_Y + i, 1.0);
+      points->set_x(j*NODES_X + i, XMIN + i*DX);
+      points->set_y(j*NODES_X + i, YMIN + j*DY);
+      points->set_z(j*NODES_X + i, 0.0);
+      points->set_w(j*NODES_X + i, 1.0);
 
-      colors->set_r(j*NODES_Y + i, 0.01*(rand() % 100));
-      colors->set_g(j*NODES_Y + i, 0.01*(rand() % 100));
-      colors->set_b(j*NODES_Y + i, 0.01*(rand() % 100));
-      colors->set_a(j*NODES_Y + i, 1.0);
+      colors->set_r(j*NODES_X + i, 0.01*(rand() % 100));
+      colors->set_g(j*NODES_X + i, 0.01*(rand() % 100));
+      colors->set_b(j*NODES_X + i, 0.01*(rand() % 100));
+      colors->set_a(j*NODES_X + i, 1.0);
     }
   }
 
@@ -135,7 +135,7 @@ int main()
     points  ->release_gl(Q[0], 0);
     colors  ->release_gl(Q[0], 1);
 
-    //gui     ->print(message);                                                   // Printing text...
+    gui     ->print(message);                                                   // Printing text...
     gui     ->plot(points, colors, STYLE_POINT);
     gui     ->refresh();                                                        // Refreshing window...
 
@@ -145,7 +145,7 @@ int main()
   delete    baseline;
   delete    gui;
   delete    cl;
-  //delete    message;
+  delete    message;
 
   delete    points;
   delete    colors;

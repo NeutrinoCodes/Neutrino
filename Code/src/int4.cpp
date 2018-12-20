@@ -189,7 +189,7 @@ void      int4::set_x             (
                                     cl_long loc_value                           // Data value.
                                   )
 {
-  data[4*loc_index + 0] = loc_value;                                            // Setting data value...
+  data[4*loc_index + 0] = (cl_long)loc_value;                                   // Setting data value...
 }
 
 // "y" set function:
@@ -198,7 +198,7 @@ void      int4::set_y             (
                                     cl_long loc_value                           // Data value.
                                   )
 {
-  data[4*loc_index + 1] = loc_value;                                            // Setting data value...
+  data[4*loc_index + 1] = (cl_long)loc_value;                                   // Setting data value...
 }
 
 // "z" setter function:
@@ -207,7 +207,7 @@ void      int4::set_z             (
                                     cl_long loc_value                           // Data value.
                                   )
 {
-  data[4*loc_index + 2] = loc_value;                                            // Setting data value...
+  data[4*loc_index + 2] = (cl_long)loc_value;                                   // Setting data value...
 }
 
 // "w" set function:
@@ -216,7 +216,7 @@ void      int4::set_w             (
                                     cl_long loc_value                           // Data value.
                                   )
 {
-  data[4*loc_index + 3] = loc_value;                                            // Setting data value...
+  data[4*loc_index + 3] = (cl_long)loc_value;                                   // Setting data value...
 }
 
 //////////////////////////////////////////////////////////////////////////////////

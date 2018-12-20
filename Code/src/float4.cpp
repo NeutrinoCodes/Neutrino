@@ -189,7 +189,7 @@ void float4::set_x                (
                                     cl_float loc_value                          // Data value.
                                   )
 {
-  data[4*loc_index + 0] = loc_value;                                            // Setting data value...
+  data[4*loc_index + 0] = (cl_float)loc_value;                                  // Setting data value...
 }
 
 // "y" set function:
@@ -198,7 +198,7 @@ void float4::set_y                (
                                     cl_float loc_value                          // Data value.
                                   )
 {
-  data[4*loc_index + 1] = loc_value;                                            // Setting data value...
+  data[4*loc_index + 1] = (cl_float)loc_value;                                  // Setting data value...
 }
 
 // "z" setter function:
@@ -207,7 +207,7 @@ void float4::set_z                (
                                     cl_float loc_value                          // Data value.
                                   )
 {
-  data[4*loc_index + 2] = loc_value;                                            // Setting data value...
+  data[4*loc_index + 2] = (cl_float)loc_value;                                  // Setting data value...
 }
 
 // "w" set function:
@@ -216,7 +216,7 @@ void float4::set_w                (
                                     cl_float loc_value                          // Data value.
                                   )
 {
-  data[4*loc_index + 3] = loc_value;                                            // Setting data value...
+  data[4*loc_index + 3] = (cl_float)loc_value;                                  // Setting data value...
 }
 
 //////////////////////////////////////////////////////////////////////////////////

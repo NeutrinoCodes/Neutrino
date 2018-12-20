@@ -150,6 +150,8 @@ void color4::init               (
                                   GL_DYNAMIC_DRAW                               // VBO usage.
                                 );
 
+  printf("size = %d\n", (GLsizeiptr)(4*sizeof(GLfloat)*(size)));
+
   // Enabling "layout = 0" attribute in vertex shader:
   glEnableVertexAttribArray     (
                                   LAYOUT_1                                      // VAO index.
