@@ -187,7 +187,7 @@ void float1::set_x                (
                                     cl_float loc_value                          // Data value.
                                   )
 {
-  data[1*loc_index + 0] = loc_value;                                            // Setting data value...
+  data[1*loc_index + 0] = (cl_float)loc_value;                                  // Setting data value...
 }
 
 //////////////////////////////////////////////////////////////////////////////////

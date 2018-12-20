@@ -182,11 +182,11 @@ void int1::set_arg                (
 
 // "x" set function:
 void int1::set_x                  (
-                                    size_t  loc_index,                           // Data index.
-                                    cl_long loc_value                          // Data value.
+                                    size_t  loc_index,                          // Data index.
+                                    cl_long loc_value                           // Data value.
                                   )
 {
-  data[1*loc_index + 0] = loc_value;                                            // Setting data value...
+  data[1*loc_index + 0] = (cl_long)loc_value;                                   // Setting data value...
 }
 
 //////////////////////////////////////////////////////////////////////////////////
