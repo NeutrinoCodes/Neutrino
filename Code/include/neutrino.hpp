@@ -158,7 +158,7 @@
       font*             temp_neutrino_font;
       size_t            terminal_time;
 
-      path*             get_neutrino_path();                                    // Gets NEUTRINO_PATH envinromentatl variable.
+      path*             get_neutrino_path();                                    // Gets NEUTRINO_PATH environmental variable.
       font*             get_neutrino_font();                                    // Gets neutrino font.
       double            get_cpu_time();                                         // Gets CPU time [us].
 
@@ -167,6 +167,7 @@
     public:
       path*             neutrino_path;                                          // NEUTRINO_PATH environmental variable.
       font*             neutrino_font;                                          // Font object.
+      bool				use_cl_gl_interop;										// Use OpenCL-OpenGL interop.
       double            tic;                                                    // Tic time [us].
       double            toc;                                                    // Toc time [us].
       size_t            loop_time;                                              // Loop time [us].
@@ -181,7 +182,8 @@
                         neutrino();
 
       // Initialization:
-      void              init(size_t loc_q_num, size_t loc_k_num);
+      void              init(size_t loc_q_num, size_t loc_k_num,
+    		  	  	  	  	 bool loc_use_cl_gl_interop);
 
       // Neutrino path add prefix function:
       char*             prefix        (
