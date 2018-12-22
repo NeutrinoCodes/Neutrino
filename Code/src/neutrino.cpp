@@ -9,7 +9,7 @@ neutrino::neutrino()
 {
   neutrino_path = NULL;                                                         // NEUTRINO_PATH environmental variable.
   neutrino_font = NULL;                                                         // Neutrino font.
-  use_cl_gl_interop = true;														// Use OpenCL-OpenGL interop.
+  use_cl_gl_interop = true;														                          // Use OpenCL-OpenGL interop.
   tic = 0.0;                                                                    // Tic time [ms].
   toc = 0.0;                                                                    // Toc time [ms].
   loop_time = 0.0;                                                              // Loop time [ms].
@@ -150,7 +150,7 @@ void neutrino::init(size_t loc_q_num, size_t loc_k_num, bool loc_use_cl_gl_inter
   q_num = loc_q_num;                                                            // Getting # of OpenCL queues...
   k_num = loc_k_num;                                                            // Getting # of OpenCL kernels...
   kernel_id = new cl_kernel[k_num];                                             // Initializing OpenCL kernel ID array...
-  use_cl_gl_interop = loc_use_cl_gl_interop;									// Setting interop flag...
+  use_cl_gl_interop = loc_use_cl_gl_interop;									                  // Setting interop flag...
   terminal_time = 0;
   prefix_buffer = new char[MAX_PATH_SIZE];
   size_t i;                                                                     // Index.
@@ -295,7 +295,7 @@ void neutrino::write_file(const char* file_name, char* file_buffer)
 
 void neutrino::free_file(char* buffer)
 {
-  free(buffer);                                                                                                               ///< Freeing buffer...
+  free(buffer);                                                                 ///< Freeing buffer...
 }
 
 int neutrino::query_numeric(const char* caption, int min, int max)

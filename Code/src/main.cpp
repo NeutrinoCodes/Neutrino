@@ -1,6 +1,6 @@
 /// @file
 
-#define USE_OPENGL	   0														// Set to 1 to use OpenGL-OpenCL interop.
+#define USE_OPENGL     true  													                          // Set to "true" to use OpenGL-OpenCL interop.
 
 #define SIZE_WINDOW_X  800                                                      // Window x-size [px].
 #define SIZE_WINDOW_Y  600                                                      // Window y-size [px].
@@ -18,8 +18,8 @@
 #define NODES_X        100
 #define NODES_Y        100
 #define NODES          NODES_X*NODES_Y                                          // Number of nodes.
-#define DX             (XMAX - XMIN)/(float)(NODES_X - 1)
-#define DY             (YMAX - YMIN)/(float)(NODES_Y - 1)
+#define DX             (float)((XMAX - XMIN)/(NODES_X - 1))
+#define DY             (float)((YMAX - YMIN)/(NODES_Y - 1))
 
 #include "neutrino.hpp"
 #include "window.hpp"
@@ -35,8 +35,8 @@ int main()
   neutrino* baseline        = new neutrino();                                   // The Neutrino object.
 
   #if USE_OPENGL
-  	  window*   gui         = new window();                                 	// The gui window object.
-  	  text4*    message     = new text4();                                  	// Text message.
+  	  window*   gui         = new window();                                 	  // The gui window object.
+  	  text4*    message     = new text4();                                  	  // Text message.
   #endif
 
   opencl*   cl              = new opencl();                                     // The OpenCL context object.
@@ -57,7 +57,7 @@ int main()
   	  gui       ->init(baseline, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);    // Initializing window...
   	  cl        ->init(baseline, gui->glfw_window, GPU);                        // Initializing OpenCL context with CL-GL interop...
   #else
-  	  cl        ->init(baseline, NULL, GPU);                            		// Initializing OpenCL context without CL-GL interop...
+  	  cl        ->init(baseline, NULL, GPU);                            		    // Initializing OpenCL context without CL-GL interop...
   #endif
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -147,10 +147,10 @@ int main()
   #if USE_OPENGL
   	  while (!gui->closed())                                                    // Opening window...
   	  {
-  		  baseline->get_tic();                                                  // Getting "tic" [us]...
+  		  baseline->get_tic();                                                    // Getting "tic" [us]...
 
-  		  gui     ->clear();                                                    // Clearing window...
-  		  gui     ->poll_events();                                              // Polling window events...
+  		  gui     ->clear();                                                      // Clearing window...
+  		  gui     ->poll_events();                                                // Polling window events...
 
   		  points  ->acquire_gl(Q[0], 0);
   		  colors  ->acquire_gl(Q[0], 1);
@@ -160,11 +160,11 @@ int main()
   		  points  ->release_gl(Q[0], 0);
   		  colors  ->release_gl(Q[0], 1);
 
-  		  gui     ->print(message);                                             // Printing text...
+  		  gui     ->print(message);                                               // Printing text...
   		  gui     ->plot(points, colors, STYLE_POINT);
-  		  gui     ->refresh();                                                  // Refreshing window...
+  		  gui     ->refresh();                                                    // Refreshing window...
 
-  		  baseline->get_toc();                                                  // Getting "toc" [us]...
+  		  baseline->get_toc();                                                    // Getting "toc" [us]...
   	  }
   #else
   	  baseline->get_tic();
