@@ -167,7 +167,7 @@
     public:
       path*             neutrino_path;                                          // NEUTRINO_PATH environmental variable.
       font*             neutrino_font;                                          // Font object.
-      bool				use_cl_gl_interop;										// Use OpenCL-OpenGL interop.
+      bool				      use_cl_gl_interop;										                  // Use OpenCL-OpenGL interop.
       double            tic;                                                    // Tic time [us].
       double            toc;                                                    // Toc time [us].
       size_t            loop_time;                                              // Loop time [us].
