@@ -373,13 +373,24 @@ void opencl::init (
     baseline->done();
     printf("        --> OS: LINUX\n");                                          // Printing message...
 
-    cl_context_properties properties[] =                                        // Setting LINUX OpenCL context properties...
+    if(baseline->use_cl_gl_interop)
     {
-      CL_GL_CONTEXT_KHR, (cl_context_properties)glfwGetGLXContext(loc_glfw_window),
-      CL_GLX_DISPLAY_KHR, (cl_context_properties)glfwGetX11Display(),
-      CL_CONTEXT_PLATFORM, (cl_context_properties)baseline->platform_id,
-      0
-    };
+    	cl_context_properties properties[] =                                        // Setting LINUX OpenCL context properties...
+    	{
+    		CL_GL_CONTEXT_KHR, (cl_context_properties)glfwGetGLXContext(loc_glfw_window),
+    	    CL_GLX_DISPLAY_KHR, (cl_context_properties)glfwGetX11Display(),
+    	    CL_CONTEXT_PLATFORM, (cl_context_properties)baseline->platform_id,
+    	    0
+    	};
+    }
+    else
+    {
+    	cl_context_properties properties[] =                                        // Setting LINUX OpenCL context properties...
+    	{
+    	    CL_CONTEXT_PLATFORM, (cl_context_properties)baseline->platform_id,
+    	    0
+    	};
+    }
   #endif
 
   #ifdef __WINDOWS__                                                            // Checking for WINDOWS system...

@@ -9,12 +9,13 @@ neutrino::neutrino()
 {
   neutrino_path = NULL;                                                         // NEUTRINO_PATH environmental variable.
   neutrino_font = NULL;                                                         // Neutrino font.
+  use_cl_gl_interop = true;														// Use OpenCL-OpenGL interop.
   tic = 0.0;                                                                    // Tic time [ms].
   toc = 0.0;                                                                    // Toc time [ms].
   loop_time = 0.0;                                                              // Loop time [ms].
 
   context_id = NULL;                                                            // OpenCL context ID.
-  platform_id = NULL;                                                           // OpenCL platfomr ID.
+  platform_id = NULL;                                                           // OpenCL platform ID.
   device_id = NULL;                                                             // OpenCL device ID.
 }
 
@@ -144,11 +145,12 @@ double neutrino::get_cpu_time()
 }
 
 // PUBLIC METHODS:
-void neutrino::init(size_t loc_q_num, size_t loc_k_num)
+void neutrino::init(size_t loc_q_num, size_t loc_k_num, bool loc_use_cl_gl_interop)
 {
   q_num = loc_q_num;                                                            // Getting # of OpenCL queues...
   k_num = loc_k_num;                                                            // Getting # of OpenCL kernels...
   kernel_id = new cl_kernel[k_num];                                             // Initializing OpenCL kernel ID array...
+  use_cl_gl_interop = loc_use_cl_gl_interop;									// Setting interop flag...
   terminal_time = 0;
   prefix_buffer = new char[MAX_PATH_SIZE];
   size_t i;                                                                     // Index.
@@ -173,7 +175,7 @@ void neutrino::init(size_t loc_q_num, size_t loc_k_num)
   action("initializing neutrino font...");                                      // Printing message...
 
   neutrino_font = get_neutrino_font();                                          // Font object.
-	done();	             																													// Printing message...
+  done();	             																													// Printing message...
 }
 
 char* neutrino::prefix(const char* loc_path)
