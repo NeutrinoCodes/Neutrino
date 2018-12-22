@@ -371,7 +371,9 @@ void opencl::init (
     }
     else
     {
-      properties[0] = 0;                                                        // Setting APPLE OpenCL context properties without CL-GL interop...
+      properties[0] = CL_CONTEXT_PLATFORM;                                      // Setting APPLE OpenCL context properties without CL-GL interop...
+    	properties[1] = (cl_context_properties)baseline->platform_id;
+    	properties[2] = 0;
     }
   #endif
 
