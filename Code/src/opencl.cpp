@@ -359,23 +359,19 @@ void opencl::init (
     baseline->done();
     printf("        --> OS: APPLE\n");                                          // Printing message...
 
-    if(basline->use_cl_gl_interop)
+    cl_context_properties properties[3];
+
+    if(baseline->use_cl_gl_interop)
     {
       CGLContextObj     kCGLContext     = CGLGetCurrentContext();
       CGLShareGroupObj  kCGLShareGroup  = CGLGetShareGroup(kCGLContext);
-      cl_context_properties properties[] =                                      // Setting APPLE OpenCL context properties with CL-GL interop...
-      {
-        CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE,
-        (cl_context_properties) kCGLShareGroup,
-        0
-      };
+      properties[0] = CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE;             // Setting APPLE OpenCL context properties with CL-GL interop...
+      properties[1] = (cl_context_properties) kCGLShareGroup;
+      properties[2] =  0;
     }
     else
     {
-      cl_context_properties properties[] =                                      // Setting APPLE OpenCL context properties without CL-GL interop...
-      {
-        0
-      };
+      properties[0] = 0;                                                        // Setting APPLE OpenCL context properties without CL-GL interop...
     }
   #endif
 
@@ -383,23 +379,23 @@ void opencl::init (
     baseline->done();
     printf("        --> OS: LINUX\n");                                          // Printing message...
 
+    cl_context_properties properties[7];
+
     if(baseline->use_cl_gl_interop)
     {
-    	cl_context_properties properties[] =                                      // Setting LINUX OpenCL context properties with CL-GL interop...
-    	{
-    		CL_GL_CONTEXT_KHR, (cl_context_properties)glfwGetGLXContext(loc_glfw_window),
-    	  CL_GLX_DISPLAY_KHR, (cl_context_properties)glfwGetX11Display(),
-    	  CL_CONTEXT_PLATFORM, (cl_context_properties)baseline->platform_id,
-    	  0
-    	};
+    	properties[0] =	CL_GL_CONTEXT_KHR;                                        // Setting LINUX OpenCL context properties with CL-GL interop...
+      properties[1] = (cl_context_properties)glfwGetGLXContext(loc_glfw_window);
+      properties[2] = CL_GLX_DISPLAY_KHR;
+      properties[3] = (cl_context_properties)glfwGetX11Display();
+      properties[4] = CL_CONTEXT_PLATFORM;
+      properties[5] = (cl_context_properties)baseline->platform_id;
+    	properties[6] = 0;
     }
     else
     {
-    	cl_context_properties properties[] =                                      // Setting LINUX OpenCL context properties without CL-GL interop...
-    	{
-    	  CL_CONTEXT_PLATFORM, (cl_context_properties)baseline->platform_id,
-    	  0
-    	};
+    	properties[0] = CL_CONTEXT_PLATFORM;                                      // Setting LINUX OpenCL context properties without CL-GL interop...
+    	properties[1] = (cl_context_properties)baseline->platform_id;
+    	properties[2] = 0;
     }
   #endif
 
@@ -407,23 +403,23 @@ void opencl::init (
     baseline->done();
     printf("        --> OS: WINDOWS\n");                                        // Printing message...
 
+    cl_context_properties properties[7];
+
     if(baseline->use_cl_gl_interop)
     {
-      cl_context_properties properties[] =                                      // Setting WINDOWS OpenCL context properties with CL-GL interop...
-      {
-        CL_GL_CONTEXT_KHR, (cl_context_properties)glfwGetWGLContext(loc_glfw_window),
-        CL_WGL_HDC_KHR, (cl_context_properties)GetDC(glfwGetWin32Window(loc_glfw_window)),
-        CL_CONTEXT_PLATFORM, (cl_context_properties)baseline->platform_id,
-        0
-      };
+      properties[0] = CL_GL_CONTEXT_KHR;                                        // Setting WINDOWS OpenCL context properties with CL-GL interop...
+      properties[1] = (cl_context_properties)glfwGetWGLContext(loc_glfw_window);
+      properties[2] = CL_WGL_HDC_KHR;
+      properties[3] = (cl_context_properties)GetDC(glfwGetWin32Window(loc_glfw_window));
+      properties[4] = CL_CONTEXT_PLATFORM;
+      properties[5] = (cl_context_properties)baseline->platform_id;
+      properties[6] = 0;
     }
     else
     {
-      cl_context_properties properties[] =                                      // Setting WINDOWS OpenCL context properties without CL-GL interop...
-      {
-        CL_CONTEXT_PLATFORM, (cl_context_properties)baseline->platform_id,
-        0
-      };
+      properties[0] = CL_CONTEXT_PLATFORM;                                      // Setting WINDOWS OpenCL context properties without CL-GL interop...
+      properties[1] = (cl_context_properties)baseline->platform_id;
+      properties[2] = 0;
     }
   #endif
 
