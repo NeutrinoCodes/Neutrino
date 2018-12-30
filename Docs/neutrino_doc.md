@@ -7,18 +7,25 @@ the [OpenGL](https://en.wikipedia.org/wiki/OpenGL) frameworks.
 The aim of Neutrino is to reduce the code overhead, due to the complexity of
 the GPU-accelerated paradigm, in order to let the users concentrate on the
 implementation of their algorithms.
-The mathematical computation of interest is done by means of a single OpenCL
-*kernel* defined in the thekernel.cl file and running on the OpenCL *client*
-device (GPU). The kernel is invoked by a Neutrino *program* defined by the
-program.cpp file and running on the OpenCL *host* device (CPU), where the client
-is resident (e.g. a CPU-based PC having a GPU card).
+The architecture of this computational paradigm is based on a parallel execution of routines
+running on a OpenCL *client* computing device (e.g. GPU card) and scheduled by a C++ *program* running
+on the *host* device carrying the client (e.g. a PC).
+The mathematical computation of interest is first prepared on the host device
+starting by the `main.cpp` file and then run, by means further code written in so called OpenCL
+*kernel* files, on the client.
 User-defined variables can be exchanged between the program running on the
 host and the kernel running on the client via the OpenCL framework.
 The results of the mathematical computation running on the client can be
-directly rendered in a 3D animated OpenGL *GUI* (Graphical User Interface) via the
-OpenCL/GL *interoperability* modality.
-The host can also directly render some graphics on the OpenGL GUI via the OpenGL
-framework.
+directly plot in a 3D (also animated) OpenGL *GUI* (Graphical User Interface)
+thanks to a modality called OpenCL/GL *interoperability*. The interoperability
+allows the data buffers used for the computation within the OpenCL framework and
+already allocated on the client to be directly shared with the OpenGL framework
+in order to be used for the graphics rendition by the client itself: the advantage
+of this is the usage of the fast GPU memory of the client for both computational and
+graphics purposes, without using the memory space of the host.
+
+Moreover, the host can also directly render some graphics on the OpenGL GUI via the OpenGL
+framework, if necessary.
 
 @dot
 graph neutrino_nutshell
@@ -35,56 +42,49 @@ The Neutrino software is divided into two hierarchical layers:
 - the high level *user* layer.
 - the low level *core* layer.
 
-The user level consists of:
-- the C++ host program, implemented in the program.cpp file, containing:
-  - the setup() function.
-  - the loop() function.
-  - the terminate() function.
-- the OpenCL client kernel, implemented in the thekernel.cl file.
+The user level simply consists of:
+- the C++ host program, implemented starting from the `main.cpp` file of their
+application.
+- the OpenCL client kernels, implemented in one or more `kernel.cl` files.
 
-The core level consists of all the infrastructure that makes the main() function
-able to invoke in sequence the following user level functions:
-  - the setup() function, implementing code run only once at the beginning
-  of the program.
-  - the loop() function, implementing code continuously run in a loop
-  - the terminate() function, implementing code run only once at the end of
-  the program.
-  - several OpenGL *vertex shaders*, implemented in various \*.vert files.
-  - several OpenGL *fragment shaders*, implemented in various \*.frag files.
+The core level instead is made of all the necessary C++/OpenGL/OpenCL infrastructure
+that makes the user able to concentrate only on the two aforementioned aspects.
+More specifically, what it does can be summarised in the following main steps the user
+must do in the host implementation of their application:
+- a `neutrino` object is instantiated. This serves as a common object, later included in
+all others as argument in their initialisation methods, for the exchange of common properties
+they need (e.g. common libraries, common macro definitions, common variables, etc...).
+- a `window` object is instantiated. It's initialisation sets up the OpenGL framework.
+This opens the window where all graphics can be displayed. In case no graphics is needed,
+or the available client does not support the OpenCL/GL interoperability modality, this
+step can be entirely avoided; of course no graphics plot would be possible in this case, but
+the computation can still be performed if at least OpenCL is supported by the client device.
+In the latter minimal situation, the output of the computation might be saved on a file for
+later analysis.
+- an `opencl` object is instantiated. Later on, the initialisation of this object
+will be responsible of setting up the OpenCL framework for the computation.
+- an array of `queue` objects is instantiated. It has to have at least one element.
+The queue is the OpenCL mechanism for scheduling the execution the kernels.
+- an array of `kernel` objects is instantiated. It has to have at least one element.
+Each kernel contains the routines, written in the OpenCL language, the user developed
+in order to solve the mathematical problem of interest.
 
-The vertex and fragment shaders are OpenGL programs written in the [GLSL language](https://en.wikipedia.org/wiki/OpenGL_Shading_Language).
-Both those OpenGL programs are used by the GPU to render the 3D animated GUI.
-
-A Neutrino user is not supposed to need to modify the core level functions, if
-not in order to extend its basic functionalities, in order to solve their problem of
-interest.   
-
-  @dot
-  digraph neutrino_layers
-  {
-    "Neutrino" -> "User layer"
-    "Neutrino" -> "Core layer" [style=dotted]
-    "User layer" -> "program.cpp", "thekernel.cl"
-    "Core layer" -> "main()", "\*.vert", "\*.frag" [style=dotted]
-    "main()" -> "setup()", "loop()", "terminate()" [style=dotted]
-    "program.cpp" -> "setup()"
-    "program.cpp" -> "loop()"
-    "program.cpp" -> "terminate()"
-  }
-  @enddot
+After their instantiation, these object must be initialised in the same sequence, because
+they depend each other in this hierarchy. The number of queues and kernels depends on the
+user's application.
 
 # 3. OpenCL/GL GPU-accelerated parallel computing paradigm {#OpenCL_GL_GPU-accelerated_parallel_computing_paradigm}
-Modern GPUs are not monolithic processors, instead they are organized as an
+Modern GPUs are not made of a single, monolithic, processor. Instead they are organised as an
 array of multiple identical elementary *compute units*.
 OpenCL is a software framework that let the user taking control of all those
 compute units within a *parallel computing* paradigm, taking advantage of the
 underlying GPU's hardware architecture.
-OpenCL abstracts and generalizes the particular hardware implementation of each
+OpenCL abstracts and generalises the particular hardware implementation of each
 different type of GPUs by means of its dedicated drivers, making possible
 to program different GPUs by a same common programming language.
 It is therefore not necessary to know how the hardware architecture is implemented
-at a low level inside the GPU: it is sufficient to know there is an array of
-compute units available to the user. Each of the compute units can be functionally
+at a low level inside the GPU: it is sufficient to know there is an *array of
+compute units* available to the user. Each of the compute units can be functionally
 considered as like as an individual CPU.
 
 @dot
@@ -99,28 +99,28 @@ digraph Modern_GPU
 }
 @enddot
 
-The OpenCL compute units are identified by one or more, usually up to 3 and
-depending on the available hardware, *global indexes*. Within that maximum number
+The OpenCL compute units are identified by one or more, usually up to 3
+(depending on the available hardware), *global indexes*. Within that maximum number
 of available indexes, the user can decide how many indexes use to index the
-compute units, therefore changing their corresponding array organization.
+compute units, therefore changing their corresponding array organisation.
 In case the user chooses to use only one index (i), the array becomes a *vector*,
 in case of two (i, j) it become a *matrix* and in case of three (i, j, k) it
 becomes a *rank-3 tensor* of compute units. The number of indexes chosen to
 index the array is called *kernel dimension*, with respect to the OpenCL client
-kernel. The total number of cells in the array, besides its indexing organization,
+kernel. The total number of cells in the array, besides its indexing organisation,
 is called *kernel global size*.
 
-Why it's like this? It comes with the idea of parallelization.
+Why it's like this? It comes with the idea of parallelisation.
 
 A parallel program is a software made of serial, time sequential, operations
 among a dataset of operands which has been divided among many compute units.
 In parallel computation the dataset of operands is split into an array and sent to
-the compute units array: the two arrays must have the same indexing organization.
+the compute units array: the two arrays must have the same indexing organisation.
 All compute units run *the same* sequence of operations *concurrently*: the
-parallelization occurs because different compute units compute the same thing on
+parallelisation occurs because different compute units compute the same thing on
 different data chunks *independently*. By saying "concurrently"
 it must be noticed this not necessarily imply the exact *simultaneity*: there
-is still the need for some *synchronization*. The latter requirement comes from
+is still the need for some *synchronisation*. The latter requirement comes from
 the *memory sharing* among the compute units array.
 The choice of the type of indexing reflects type of algorithm that can be
 implemented. The goal is to remove serial loops by *unwrapping* them
@@ -180,7 +180,7 @@ there would be a local variable "a_array[N]" and "b_array[N]": this is called
 a *1D-kernel* because only one global index is used.
 A variable *c* is defined for later use.
 The function *barrier(CLK_GLOBAL_MEM_FENCE)* serves as a
-synchronization of this process of instantiation: for reasons depending on both
+synchronisation of this process of instantiation: for reasons depending on both
 the OpenCL software and the GPU underlying hardware it might be that this kind of
 operation *will not occur exactly simultaneously* on all compute units. There
 could be a little *time jitter*, therefore the program *must wait* for all compute
@@ -204,7 +204,7 @@ GPUs. In case a given GPU is too small to comply with a big *N*, OpenCL has got
 methods to split the computation in sequential time slots: it first fills all
 available compute units and performs a first computation, later it continues with
 the remaining part of the dataset. This generates a considerable *memory swapping*
-overhead and must be taken into account in terms of speed optimization.
+overhead and must be taken into account in terms of speed optimisation.
 It is always better to make the dataset matching the maximum capacity of
 available compute units, at the cost of *padding* the dataset: this approach
 remains valid also at a local level inside the OpenCL kernel.
@@ -249,51 +249,36 @@ in an OpenCL kernel all multi-dimensional data have always to be interleaved in 
 one-dimensional array.
 
 # 5. Neutrino's OpenCL client-host system {#Neutrino_OpenCL_client_host_system}
-Neutrino takes advantage of both host CPU and client GPU.
-The CPU is used to prepare the initial dataset (e.g. filling data array, reading data
-from a file, etc...) while the GPU is used for mass computation.
-For this to happen, CPU and GPU need to talk together: this means they must
-share some memory. Memory transfer from the client to the host, and viceversa,
+Neutrino takes advantage of both host and client devices.
+The host is used to prepare the initial dataset (e.g. filling data array, reading data
+from a file, etc...) while the client is used for mass computation.
+For this to happen, host and client need to talk together: this means they must
+share some memory. Memory transfer from the client to the host, and vice-versa,
 is always an overkilling task. Modern GPUs have fast and dedicated separate
-memory, as opposed to ordinary client CPU memory.
+memory, as opposed to ordinary client PC memory.
 
 @dot
 graph client_host_memory
 {
-  "CPU client memory" -- "GPU host memory"
+  "client (e.g. GPU) memory" -- "host (e.g. PC) memory"
 }
 @enddot
 
 The best way of managing this memory exchange is to avoid it as much as possible.
-For instance, if a parallel program have to calculate some heavy computation on
-the GPU, one approach could be the following one:
-- *set* all the *initial data* on the host CPU *only once*. These data are still on the
-  host ordinary memory.
-- *push* the initial data on the client GPU *only once*. Now the data are on its
-  dedicated fast memory.
-- let the GPU elaborate the data (numerous operations, complex algorithms, etc...).
-- *pop* the elaborated data from the client GPU to the host CPU *only once*.
-
-This approach is what is implemented in the program.cpp file running on the host CPU.
-Particularly the general flow chart of program.cpp is:
-
-- in the setup() function all initial setups are supposed to happen.
-  - besides custom user-defined items, this is the place where the *set_\** type
-  of functions have to be used. Each of them prepares, according to its name,
-  a specific type or object data the user needs.
-- in the loop() function data are linked to the client GPU.
-  - the *push_\** functions, matching the *set_\** ones in setup(), upload
-  the corresponding data on the GPU memory.
-  - the execute_kernel() function invokes the OpenCL kernel implemented in the
-    thekernel.cl file: after it returns, the parallel GPU computation is done.
-  - the *pop_\** functions, matching the *push_\** ones, postfix or download the
-  processed data from the client GPU.
-  - a special treatment is reserved for the graphics rendering.
-  The OpenCL/GL interoperability modality allows OpenGL to access the
-  same GPU memory where OpenCL allocates its own. This makes fast 3D animated
-  graphics rendering possible. This is done by Neutrino and the system is
-  implemented in the plot() and print() functions in there if necessary.
-- the terminate() function might seem to be pleonastic, but has been nevertheless
-  implemented for reasons of completeness. The purpose of it is to deallocate
-  previously allocated memory in a clean way, besides all possible needs which
-  might occur between end of the computation and the end of the program.
+In Neutrino, we achieve this as follows:
+- data objects can be initialised once by the host. For instance, in case of a
+time varying simulation application, the initial data can be prepared at this step (e.g. by
+assembling the data arrays, or by loading them from a file). This is done by means of
+the several *set* methods of the data objects.
+- once this has been done, the data prepared on the host can be loaded on the client
+memory by means of the *push* object methods. This also creates, in case the OpenCL/GL
+interoperability is supported by the client, a memory share between the OpenCL and the
+OpenGL frameworks. This means the OpenGL frame buffer would be directly able to render the
+special *point* and *color* data types which have been already allocated on the client
+by the push methods and constantly updated by the results of the execution of the OpenCL kernels.
+More specifically, if something has to be plot, the user is supposed to implement the kernels
+in a ways the point and color data contains such information (e.g. a cloud of points
+representing a 3D object, etc...).
+- in case the output of the computation is needed elsewhere outside the graphics, it can be
+retrieved from the client by the host, and therefore copied in the host's memory, by means of the
+*pop* data object methods. This can be used, for instance, in order to save the results on a file.
