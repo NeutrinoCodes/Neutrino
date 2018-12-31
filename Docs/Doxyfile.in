@@ -53,4 +53,10 @@ INCLUDE_GRAPH           = NO
 USE_MDFILE_AS_MAINPAGE  = main_page.md
 
 # Enabling Latex generation...
-GENERATE_LATEX          = YES
+GENERATE_LATEX          = NO
+
+# Setting MathJax path (relative to the Doxygen output directory)...
+MATHJAX_RELPATH         = ../../MathJax
+
+# Enabling MathJax rendering...
+USE_MATHJAX             = YES

@@ -5,10 +5,12 @@ color4::color4()
 
 }
 
-// OpenCL error get function:
-const char* color4::get_error     (
-                                    cl_int loc_error                            // Local error code.
-                                  )
+/// # OpenCL error get function
+/// ### Operations:
+/// - translation of an OpenCL numeric error code into a human-readable string.
+const char* color4::get_error (
+                               cl_int loc_error                                 // Local error code.
+                              )
 {
   switch(loc_error)
   {
@@ -87,149 +89,162 @@ const char* color4::get_error     (
   }
 }
 
-// OpenCL error check function:
-void color4::check_error        (
-                                  cl_int loc_error                              // Error code.
-                                )
+/// # OpenCL error check function
+/// ### Operations:
+/// - check for an OpenCL error code and printout if found.
+void color4::check_error (
+                          cl_int loc_error                                      // Error code.
+                         )
 {
   if(loc_error != CL_SUCCESS)                                                   // Checking local error code...
   {
-    baseline->error(get_error(loc_error));                                      // Printing error message...
-    exit(EXIT_FAILURE);                                                         // Exiting...
+    baseline -> error (get_error (loc_error));                                  // Printing error message...
+    exit (EXIT_FAILURE);                                                        // Exiting...
   }
 }
 
-void color4::init               (
-                                  neutrino*   loc_baseline,                     // Neutrino baseline.
-                                  GLsizeiptr  loc_data_size                     // Data number.
-                                )
+/// # Initialization function
+/// ### Operations:
+/// - preparation of a contiguous (unfolded) array to be used as data buffer
+/// allocated on the client memory space.
+/// - creation of an OpenCL buffer (interoperability buffer) from the OpenGL
+/// buffer, in case the `use_cl_gl_interop` flag is set to `true`.
+/// - creation of an OpenCL buffer (not shared with OpenGL), in case the
+/// `use_cl_gl_interop` flag is set to `false`.
+void color4::init (
+                   neutrino*  loc_baseline,                                     // Neutrino baseline.
+                   GLsizeiptr loc_data_size                                     // Data number.
+                  )
 {
-  cl_int      loc_error;                                                        // Error code.
-  GLsizeiptr  i;                                                                // Index.
+  cl_int     loc_error;                                                         // Error code.
+  GLsizeiptr i;                                                                 // Index.
 
-  baseline = loc_baseline;                                                      // Getting Neutrino baseline...
-  position = new size_t[baseline->k_num];                                       // Initializing kernel argument position array...
+  baseline       = loc_baseline;                                                // Getting Neutrino baseline...
+  position       = new size_t[baseline -> k_num];                               // Initializing kernel argument position array...
 
-  baseline->action("initializing \"color4\" object...");                        // Printing message...
+  baseline -> action ("initializing \"color4\" object...");                     // Printing message...
 
-  size = loc_data_size;                                                         // Array size.
-  buffer = NULL;                                                                // OpenCL data buffer.
-  opencl_context = baseline->context_id;                                        // Getting OpenCL context...
+  size           = loc_data_size;                                               // Array size.
+  buffer         = NULL;                                                        // OpenCL data buffer.
+  opencl_context = baseline -> context_id;                                      // Getting OpenCL context...
 
-  if (baseline->use_cl_gl_interop)
+  if(baseline -> use_cl_gl_interop)
   {
-	  vbo = 0;                                                                    // OpenGL data VBO.
-	  data = new GLfloat[4*size];                                                 // Creating array for unfolded data...
+    vbo  = 0;                                                                   // OpenGL data VBO.
+    data = new GLfloat[4*size];                                                 // Creating array for unfolded data...
 
-	  for (i = 0; i < size; i++)                                                  // Filling unfolded data array...
-	  {
-	    data[4*i + 0] = 0.0f;                                                     // Filling "r"...
-	    data[4*i + 1] = 0.0f;                                                     // Filling "g"...
-	    data[4*i + 2] = 0.0f;                                                     // Filling "b"...
-	    data[4*i + 3] = 1.0f;                                                     // Filling "a"...
-	  }
+    for(i = 0; i < size; i++)                                                   // Filling unfolded data array...
+    {
+      data[4*i + 0] = 0.0f;                                                     // Filling "r"...
+      data[4*i + 1] = 0.0f;                                                     // Filling "g"...
+      data[4*i + 2] = 0.0f;                                                     // Filling "b"...
+      data[4*i + 3] = 1.0f;                                                     // Filling "a"...
+    }
 
-	  glGenVertexArrays(1, &vao);                                                 // Generating glyph VAO...
-	  glBindVertexArray(vao);                                                     // Binding glyph VAO...
+    glGenVertexArrays (1, &vao);                                                // Generating glyph VAO...
+    glBindVertexArray (vao);                                                    // Binding glyph VAO...
 
-	  // Generating VBO:
-	  glGenBuffers                  (
-	                                  1,                                          // # of VBOs to generate.
-	                                  &vbo                                        // VBOs array.
-	                                );
+    // Generating VBO:
+    glGenBuffers (
+                  1,                                                            // # of VBOs to generate.
+                  &vbo                                                          // VBOs array.
+                 );
 
-	  // Binding VBO:
-	  glBindBuffer                  (
-	                                  GL_ARRAY_BUFFER,                            // VBO target.
-	                                  vbo                                         // VBO to bind.
-	                                );
+    // Binding VBO:
+    glBindBuffer (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  vbo                                                           // VBO to bind.
+                 );
 
-	  // Creating and initializing a buffer object's data store:
-	  glBufferData                  (
-	                                  GL_ARRAY_BUFFER,                            // VBO target.
-	                                  (GLsizeiptr)(4*sizeof(GLfloat)*(size)),     // VBO size.
-	                                  data,                                       // VBO data.
-	                                  GL_DYNAMIC_DRAW                             // VBO usage.
-	                                );
+    // Creating and initializing a buffer object's data store:
+    glBufferData (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  (GLsizeiptr)(4*sizeof(GLfloat)*(size)),                       // VBO size.
+                  data,                                                         // VBO data.
+                  GL_DYNAMIC_DRAW                                               // VBO usage.
+                 );
 
-	  printf("size = %d\n", (GLsizeiptr)(4*sizeof(GLfloat)*(size)));
+    printf ("size = %d\n", (GLsizeiptr)(4*sizeof(GLfloat)*(size)));
 
-	  // Enabling "layout = 0" attribute in vertex shader:
-	  glEnableVertexAttribArray     (
-	                                  LAYOUT_1                                    // VAO index.
-	                                );
+    // Enabling "layout = 0" attribute in vertex shader:
+    glEnableVertexAttribArray (
+                               LAYOUT_1                                         // VAO index.
+                              );
 
-	  // Binding VBO:
-	  glBindBuffer                  (
-	                                  GL_ARRAY_BUFFER,                            // VBO target.
-	                                  vbo                                         // VBO to bind.
-	                                );
+    // Binding VBO:
+    glBindBuffer (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  vbo                                                           // VBO to bind.
+                 );
 
-	  // Specifying the format for "layout = 0" attribute in vertex shader:
-	  glVertexAttribPointer         (
-	                                  LAYOUT_1,                                   // VAO index.
-	                                  4,                                          // VAO's # of components.
-	                                  GL_FLOAT,                                   // Data type.
-	                                  GL_FALSE,                                   // Not using normalized numbers.
-	                                  0,                                          // Data stride.
-	                                  0                                           // Data offset.
-	                                );
+    // Specifying the format for "layout = 0" attribute in vertex shader:
+    glVertexAttribPointer (
+                           LAYOUT_1,                                            // VAO index.
+                           4,                                                   // VAO's # of components.
+                           GL_FLOAT,                                            // Data type.
+                           GL_FALSE,                                            // Not using normalized numbers.
+                           0,                                                   // Data stride.
+                           0                                                    // Data offset.
+                          );
 
-	  // Creating OpenCL buffer from OpenGL buffer:
-	  buffer = clCreateFromGLBuffer (
-	                                  opencl_context,                             // OpenCL context.
-	                                  CL_MEM_READ_WRITE,                          // Memory flags.
-	                                  vbo,                                        // VBO.
-	                                  &loc_error                                  // Returned error.
-	                                );
+    // Creating OpenCL buffer from OpenGL buffer:
+    buffer = clCreateFromGLBuffer (
+                                   opencl_context,                              // OpenCL context.
+                                   CL_MEM_READ_WRITE,                           // Memory flags.
+                                   vbo,                                         // VBO.
+                                   &loc_error                                   // Returned error.
+                                  );
 
   }
   else
   {
-	 data = new cl_float[4*size];                                                 // Creating array for unfolded data...
+    data   = new cl_float[4*size];                                              // Creating array for unfolded data...
 
-	 for (i = 0; i < size; i++)                                                   // Filling unfolded data array...
-	 {
-		 data[4*i + 0] = 0.0f;                                                      // Filling "x"...
-	     data[4*i + 1] = 0.0f;                                                    // Filling "y"...
-	     data[4*i + 2] = 0.0f;                                                    // Filling "z"...
-	     data[4*i + 3] = 1.0f;                                                    // Filling "w"...
-	 }
+    for(i = 0; i < size; i++)                                                   // Filling unfolded data array...
+    {
+      data[4*i + 0] = 0.0f;                                                     // Filling "x"...
+      data[4*i + 1] = 0.0f;                                                     // Filling "y"...
+      data[4*i + 2] = 0.0f;                                                     // Filling "z"...
+      data[4*i + 3] = 1.0f;                                                     // Filling "w"...
+    }
 
-	 // Creating OpenCL memory buffer:
-	 buffer = clCreateBuffer        (
-	                                  opencl_context,                             // OpenCL context.
-	                                  CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,   // Memory flags.
-	                                  4*sizeof(cl_float)*size,                    // Data buffer size.
-	                                  data,                                       // Data buffer.
-	                                  &loc_error                                  // Error code.
-	                                );
+    // Creating OpenCL memory buffer:
+    buffer = clCreateBuffer (
+                             opencl_context,                                    // OpenCL context.
+                             CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,          // Memory flags.
+                             4*sizeof(cl_float)*size,                           // Data buffer size.
+                             data,                                              // Data buffer.
+                             &loc_error                                         // Error code.
+                            );
   }
 
-  check_error(loc_error);                                                       // Checking returned error code...
+  check_error (loc_error);                                                      // Checking returned error code...
 
-  baseline->done();                                                             // Printing message...
+  baseline -> done ();                                                          // Printing message...
 }
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// HOST "SET" FUNCTIONS:  ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-// Kernel set function:
-void color4::set_arg              (
-                                    kernel*     loc_kernel,                     // OpenCL kernel.
-                                    cl_uint     loc_kernel_arg                  // OpenCL kernel argument #.
-                                  )
+/// # Kernel set function
+/// ### Operations:
+/// - for a given kernel, setting of a kernel argument at a specified index
+/// position.
+void color4::set_arg (
+                      kernel* loc_kernel,                                       // OpenCL kernel.
+                      cl_uint loc_kernel_arg                                    // OpenCL kernel argument #.
+                     )
 {
-  cl_int      loc_error;                                                        // Error code.
-  size_t      kernel_index;
-  size_t      i;
+  cl_int loc_error;                                                             // Error code.
+  size_t kernel_index;
+  size_t i;
 
-  baseline->action("setting \"color4\" kernel argument...");                    // Printing message...
+  baseline -> action ("setting \"color4\" kernel argument...");                 // Printing message...
 
   // Getting kernel index:
-  for(i = 0; i < baseline->k_num; i++)                                          // Scanning OpenCL kernel id array...
+  for(i = 0; i < baseline -> k_num; i++)                                        // Scanning OpenCL kernel id array...
   {
-    if(baseline->kernel_id[i] == loc_kernel->kernel_id)                         // Finding current kernel id...
+    if(baseline -> kernel_id[i] == loc_kernel -> kernel_id)                     // Finding current kernel id...
     {
       kernel_index = i;                                                         // Setting kernel index...
     }
@@ -238,50 +253,58 @@ void color4::set_arg              (
   position[kernel_index] = loc_kernel_arg;                                      // Setting kernel argument position in current kernel...
 
   // Setting OpenCL buffer as kernel argument:
-  loc_error = clSetKernelArg      (
-                                    loc_kernel->kernel_id,                      // Kernel.
-                                    loc_kernel_arg,                             // Kernel argument index.
-                                    sizeof(cl_mem),                             // Kernel argument size.
-                                    &buffer                                     // Kernel argument value.
-                                  );
+  loc_error              = clSetKernelArg (
+                                           loc_kernel -> kernel_id,             // Kernel.
+                                           loc_kernel_arg,                      // Kernel argument index.
+                                           sizeof(cl_mem),                      // Kernel argument size.
+                                           &buffer                              // Kernel argument value.
+                                          );
 
-  check_error(loc_error);                                                       // Checking returned error code...
+  check_error (loc_error);                                                      // Checking returned error code...
 
-  baseline->done();                                                             // Printing message...
+  baseline -> done ();                                                          // Printing message...
 }
 
-// "x" set function:
-void color4::set_r      (
-                          GLsizeiptr  loc_index,                                // Data index.
-                          GLfloat     loc_value                                 // Data value.
-                        )
+/// # "r" set function
+/// ### Operations:
+/// - setting of "r" color channel (red) data value in color data array.
+void color4::set_r (
+                    GLsizeiptr loc_index,                                       // Data index.
+                    GLfloat    loc_value                                        // Data value.
+                   )
 {
   data[4*loc_index + 0] = loc_value;                                            // Setting data value...
 }
 
-// "y" set function:
-void color4::set_g      (
-                          GLsizeiptr  loc_index,                                // Data index.
-                          GLfloat     loc_value                                 // Data value.
-                        )
+/// # "g" set function
+/// ### Operations:
+/// - setting of "g" color channel (green) data value in color data array.
+void color4::set_g (
+                    GLsizeiptr loc_index,                                       // Data index.
+                    GLfloat    loc_value                                        // Data value.
+                   )
 {
   data[4*loc_index + 1] = loc_value;                                            // Setting data value...
 }
 
-// "z" set function:
-void color4::set_b      (
-                          GLsizeiptr  loc_index,                                // Data index.
-                          GLfloat     loc_value                                 // Data value.
-                        )
+/// # "b" set function
+/// ### Operations:
+/// - setting of "b" color channel (blue) data value in color data array.
+void color4::set_b (
+                    GLsizeiptr loc_index,                                       // Data index.
+                    GLfloat    loc_value                                        // Data value.
+                   )
 {
   data[4*loc_index + 2] = loc_value;                                            // Setting data value...
 }
 
-// "w" set function:
-void color4::set_a      (
-                          GLsizeiptr  loc_index,                                // Data index.
-                          GLfloat     loc_value                                 // Data value.
-                        )
+/// # "a" set function
+/// ### Operations:
+/// - setting of "a" color channel (alpha) data value in color data array.
+void color4::set_a (
+                    GLsizeiptr loc_index,                                       // Data index.
+                    GLfloat    loc_value                                        // Data value.
+                   )
 {
   data[4*loc_index + 3] = loc_value;                                            // Setting data value...
 }
@@ -290,18 +313,18 @@ void color4::set_a      (
 ////////////////////////////// HOST "GET" FUNCTIONS:  ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 // Kernel get function:
-size_t color4::get_arg            (
-                                    kernel*     loc_kernel                      // OpenCL kernel.
-                                  )
+size_t color4::get_arg (
+                        kernel* loc_kernel                                      // OpenCL kernel.
+                       )
 {
-  cl_int      loc_error;                                                        // Error code.
-  size_t      kernel_index;
-  size_t      i;
+  cl_int loc_error;                                                             // Error code.
+  size_t kernel_index;
+  size_t i;
 
   // Getting kernel index:
-  for(i = 0; i < baseline->k_num; i++)                                          // Scanning OpenCL kernel id array...
+  for(i = 0; i < baseline -> k_num; i++)                                        // Scanning OpenCL kernel id array...
   {
-    if(baseline->kernel_id[i] == loc_kernel->kernel_id)                         // Finding current kernel id...
+    if(baseline -> kernel_id[i] == loc_kernel -> kernel_id)                     // Finding current kernel id...
     {
       kernel_index = i;                                                         // Setting kernel index...
     }
@@ -311,9 +334,9 @@ size_t color4::get_arg            (
 }
 
 // "x" get function:
-GLfloat color4::get_r   (
-                          GLsizeiptr  loc_index                                 // Data index.
-                        )
+GLfloat color4::get_r (
+                       GLsizeiptr loc_index                                     // Data index.
+                      )
 {
   GLfloat loc_value;                                                            // Value.
 
@@ -323,9 +346,9 @@ GLfloat color4::get_r   (
 }
 
 // "y" get function:
-GLfloat color4::get_g   (
-                          GLsizeiptr  loc_index                                 // Data index.
-                        )
+GLfloat color4::get_g (
+                       GLsizeiptr loc_index                                     // Data index.
+                      )
 {
   GLfloat loc_value;                                                            // Value.
 
@@ -335,9 +358,9 @@ GLfloat color4::get_g   (
 }
 
 // "z" get function:
-GLfloat color4::get_b   (
-                          GLsizeiptr  loc_index                                 // Data index.
-                        )
+GLfloat color4::get_b (
+                       GLsizeiptr loc_index                                     // Data index.
+                      )
 {
   GLfloat loc_value;                                                            // Value.
 
@@ -347,9 +370,9 @@ GLfloat color4::get_b   (
 }
 
 // "w" get function:
-GLfloat color4::get_a   (
-                          GLsizeiptr  loc_index                                 // Data index.
-                        )
+GLfloat color4::get_a (
+                       GLsizeiptr loc_index                                     // Data index.
+                      )
 {
   GLfloat loc_value;                                                            // Value.
 
@@ -362,117 +385,117 @@ GLfloat color4::get_a   (
 ///////////////////////////////// CLIENT FUNCTIONS:  /////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 // OpenCL write buffer function:
-void color4::push                 (
-                                    queue*  loc_queue,                          // Queue.
-                                    cl_uint loc_kernel_arg                      // Kernel argument index.
-                                  )
+void color4::push (
+                   queue*  loc_queue,                                           // Queue.
+                   cl_uint loc_kernel_arg                                       // Kernel argument index.
+                  )
 {
-  cl_int  loc_error;                                                            // Local error code.
+  cl_int loc_error;                                                             // Local error code.
 
-  loc_error = clEnqueueWriteBuffer      (
-                                          loc_queue->queue_id,                  // OpenCL queue ID.
-                                          buffer,                               // Data buffer.
-                                          CL_TRUE,                              // Blocking write flag.
-                                          0,                                    // Data buffer offset.
-                                          (size_t)(4*sizeof(GLfloat)*size),     // Data buffer size.
-                                          data,                                 // Data buffer.
-                                          0,                                    // Number of events in the list.
-                                          NULL,                                 // Event list.
-                                          NULL                                  // Event.
-                                        );
+  loc_error = clEnqueueWriteBuffer (
+                                    loc_queue -> queue_id,                      // OpenCL queue ID.
+                                    buffer,                                     // Data buffer.
+                                    CL_TRUE,                                    // Blocking write flag.
+                                    0,                                          // Data buffer offset.
+                                    (size_t)(4*sizeof(GLfloat)*size),           // Data buffer size.
+                                    data,                                       // Data buffer.
+                                    0,                                          // Number of events in the list.
+                                    NULL,                                       // Event list.
+                                    NULL                                        // Event.
+                                   );
 
-  check_error(loc_error);
+  check_error (loc_error);
 }
 
 // OpenCL read buffer function:
-void color4::pull                       (
-                                          queue*  loc_queue,                    // Queue.
-                                          cl_uint loc_kernel_arg                // Kernel argument index.
-                                        )
+void color4::pull (
+                   queue*  loc_queue,                                           // Queue.
+                   cl_uint loc_kernel_arg                                       // Kernel argument index.
+                  )
 {
-  cl_int  loc_error;                                                            // Local error code.
+  cl_int loc_error;                                                             // Local error code.
 
-  loc_error = clEnqueueReadBuffer      (
-                                          loc_queue->queue_id,                  // OpenCL queue ID.
-                                          buffer,                               // Data buffer.
-                                          CL_TRUE,                              // Blocking write flag.
-                                          0,                                    // Data buffer offset.
-                                          (size_t)(4*sizeof(GLfloat)*size),     // Data buffer size.
-                                          data,                                 // Data buffer.
-                                          0,                                    // Number of events in the list.
-                                          NULL,                                 // Event list.
-                                          NULL                                  // Event.
-                                        );
+  loc_error = clEnqueueReadBuffer (
+                                   loc_queue -> queue_id,                       // OpenCL queue ID.
+                                   buffer,                                      // Data buffer.
+                                   CL_TRUE,                                     // Blocking write flag.
+                                   0,                                           // Data buffer offset.
+                                   (size_t)(4*sizeof(GLfloat)*size),            // Data buffer size.
+                                   data,                                        // Data buffer.
+                                   0,                                           // Number of events in the list.
+                                   NULL,                                        // Event list.
+                                   NULL                                         // Event.
+                                  );
 
-  check_error(loc_error);
+  check_error (loc_error);
 }
 
 // OpenCL acquire buffer function:
-void color4::acquire_gl         (
-                                  queue*  loc_queue,                            // Queue.
-                                  cl_uint loc_kernel_arg                        // Kernel argument index.
-                                )
+void color4::acquire_gl (
+                         queue*  loc_queue,                                     // Queue.
+                         cl_uint loc_kernel_arg                                 // Kernel argument index.
+                        )
 {
-  cl_int  loc_error;                                                            // Local error code.
+  cl_int loc_error;                                                             // Local error code.
 
-  glFinish();                                                                   // Ensuring that all OpenGL routines have completed all operations...
+  glFinish ();                                                                  // Ensuring that all OpenGL routines have completed all operations...
 
   // Passing buffer to OpenCL kernel:
   loc_error = clEnqueueAcquireGLObjects (
-                                          loc_queue->queue_id,                  // Queue.
-                                          1,                                    // # of memory objects.
-                                          &buffer,                              // Memory object array.
-                                          0,                                    // # of events in event list.
-                                          NULL,                                 // Event list.
-                                          NULL                                  // Event.
+                                         loc_queue -> queue_id,                 // Queue.
+                                         1,                                     // # of memory objects.
+                                         &buffer,                               // Memory object array.
+                                         0,                                     // # of events in event list.
+                                         NULL,                                  // Event list.
+                                         NULL                                   // Event.
                                         );
 
-  check_error(loc_error);                                                       // Checking returned error code...
+  check_error (loc_error);                                                      // Checking returned error code...
 }
 
 // OpenCL release buffer function:
-void color4::release_gl         (
-                                  queue*  loc_queue,                            // Queue.
-                                  cl_uint loc_kernel_arg                        // Kernel argument index.
-                                )
+void color4::release_gl (
+                         queue*  loc_queue,                                     // Queue.
+                         cl_uint loc_kernel_arg                                 // Kernel argument index.
+                        )
 {
-  cl_int  loc_error;                                                            // Local error code.
+  cl_int loc_error;                                                             // Local error code.
 
   // Releasing buffer from OpenCL kernel:
   loc_error = clEnqueueReleaseGLObjects (
-                                          loc_queue->queue_id,                  // Queue.
-                                          1,                                    // # of memory objects.
-                                          &buffer,                              // Memory object array.
-                                          0,                                    // # of events in event list.
-                                          NULL,                                 // Event list.
-                                          NULL                                  // Event.
+                                         loc_queue -> queue_id,                 // Queue.
+                                         1,                                     // # of memory objects.
+                                         &buffer,                               // Memory object array.
+                                         0,                                     // # of events in event list.
+                                         NULL,                                  // Event list.
+                                         NULL                                   // Event.
                                         );
 
-  clFinish(loc_queue->queue_id);                                                // Ensuring that all OpenCL routines have completed all operations...
+  clFinish (loc_queue -> queue_id);                                             // Ensuring that all OpenCL routines have completed all operations...
 
-  check_error(loc_error);                                                       // Checking returned error code...
+  check_error (loc_error);                                                      // Checking returned error code...
 }
 
 color4::~color4()
 {
   cl_int loc_error;                                                             // Local error.
 
-  baseline->action("releasing \"color4\" object...");                           // Printing message...
+  baseline -> action ("releasing \"color4\" object...");                        // Printing message...
 
   if(buffer != NULL)                                                            // Checking buffer...
   {
-    loc_error = clReleaseMemObject(buffer);                                     // Releasing OpenCL buffer object...
+    loc_error = clReleaseMemObject (buffer);                                    // Releasing OpenCL buffer object...
 
-    check_error(loc_error);                                                     // Checking returned error code...
+    check_error (loc_error);                                                    // Checking returned error code...
   }
 
-  if (baseline->use_cl_gl_interop)
+  if(baseline -> use_cl_gl_interop)
   {
-	  glDeleteBuffers(1, &vbo);                                                   // Releasing OpenGL VBO...
+    glDeleteBuffers (1, &vbo);                                                  // Releasing OpenGL VBO...
   }
 
   delete[] data;                                                                // Deleting array for unfolded data...
   delete[] position;                                                            // Deleting kernel argument position array...
 
-  baseline->done();                                                             // Printing message...
+  baseline -> done ();                                                          // Printing message...
 }
