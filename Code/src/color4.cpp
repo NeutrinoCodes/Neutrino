@@ -91,7 +91,7 @@ const char* color4::get_error (
 
 /// # OpenCL error check function
 /// ### Operations:
-/// - check for an OpenCL error code and printout if found.
+/// - check for an OpenCL error code and printout, if found.
 void color4::check_error (
                           cl_int loc_error                                      // Error code.
                          )
@@ -228,8 +228,7 @@ void color4::init (
 //////////////////////////////////////////////////////////////////////////////////
 /// # Kernel set function
 /// ### Operations:
-/// - for a given kernel, setting of a kernel argument at a specified index
-/// position.
+/// - setting of a kernel argument at a specified index position.
 void color4::set_arg (
                       kernel* loc_kernel,                                       // OpenCL kernel.
                       cl_uint loc_kernel_arg                                    // OpenCL kernel argument #.
@@ -312,7 +311,9 @@ void color4::set_a (
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// HOST "GET" FUNCTIONS:  ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-// Kernel get function:
+/// # Kernel get function:
+/// ### Operations:
+/// - reading of the index position of a kernel argument.
 size_t color4::get_arg (
                         kernel* loc_kernel                                      // OpenCL kernel.
                        )
@@ -333,7 +334,9 @@ size_t color4::get_arg (
   return(position[kernel_index]);                                               // Returning index of current argument in current kernel...
 }
 
-// "x" get function:
+/// # "r" get function
+/// ### Operations:
+/// - reading of the "r" color channel (alpha) data value in color data array.
 GLfloat color4::get_r (
                        GLsizeiptr loc_index                                     // Data index.
                       )
@@ -345,7 +348,9 @@ GLfloat color4::get_r (
   return(loc_value);                                                            // Returning data value...
 }
 
-// "y" get function:
+/// # "g" get function
+/// ### Operations:
+/// - reading of the "g" color channel (alpha) data value in color data array.
 GLfloat color4::get_g (
                        GLsizeiptr loc_index                                     // Data index.
                       )
@@ -357,7 +362,9 @@ GLfloat color4::get_g (
   return(loc_value);                                                            // Returning data value...
 }
 
-// "z" get function:
+/// # "b" get function
+/// ### Operations:
+/// - reading of the "b" color channel (alpha) data value in color data array.
 GLfloat color4::get_b (
                        GLsizeiptr loc_index                                     // Data index.
                       )
@@ -369,7 +376,9 @@ GLfloat color4::get_b (
   return(loc_value);                                                            // Returning data value...
 }
 
-// "w" get function:
+/// # "a" get function
+/// ### Operations:
+/// - reading of the "a" color channel (alpha) data value in color data array.
 GLfloat color4::get_a (
                        GLsizeiptr loc_index                                     // Data index.
                       )
@@ -384,7 +393,9 @@ GLfloat color4::get_a (
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// CLIENT FUNCTIONS:  /////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-// OpenCL write buffer function:
+/// # OpenCL write buffer function
+/// ### Operations:
+/// - Enqueueing of commands to write to a buffer object from host memory.
 void color4::push (
                    queue*  loc_queue,                                           // Queue.
                    cl_uint loc_kernel_arg                                       // Kernel argument index.
@@ -407,7 +418,9 @@ void color4::push (
   check_error (loc_error);
 }
 
-// OpenCL read buffer function:
+/// # OpenCL read buffer function:
+/// ### Operations:
+/// - Enqueueing of commands to read from a buffer object to host memory.
 void color4::pull (
                    queue*  loc_queue,                                           // Queue.
                    cl_uint loc_kernel_arg                                       // Kernel argument index.
@@ -430,7 +443,10 @@ void color4::pull (
   check_error (loc_error);
 }
 
-// OpenCL acquire buffer function:
+/// # OpenCL acquire buffer function
+/// ### Operations:
+/// - Acquisition of OpenCL memory objects that have been created from OpenGL
+/// objects.
 void color4::acquire_gl (
                          queue*  loc_queue,                                     // Queue.
                          cl_uint loc_kernel_arg                                 // Kernel argument index.
@@ -453,7 +469,10 @@ void color4::acquire_gl (
   check_error (loc_error);                                                      // Checking returned error code...
 }
 
-// OpenCL release buffer function:
+/// # OpenCL release buffer function:
+/// ### Operations:
+/// - Releasing of OpenCL memory objects that have been created from OpenGL
+/// objects.
 void color4::release_gl (
                          queue*  loc_queue,                                     // Queue.
                          cl_uint loc_kernel_arg                                 // Kernel argument index.
