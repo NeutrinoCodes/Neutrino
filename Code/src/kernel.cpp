@@ -5,18 +5,20 @@
 //////////////////////////////////////////////////////////////////////////////////
 kernel::kernel()
 {
-  source              = NULL;                                                   // Initializing kernel source...
-  program             = NULL;                                                   // Initializing kernel program...
-  size                = 0;                                                      // Initializing kernel size...
-  dimension           = 0;                                                      // Initializing kernel dimension..
-  event               = NULL;                                                   // Initializing kernel event...
-  kernel_id           = NULL;                                                   // Initializing kernel id...
+  source    = NULL;                                                             // Initializing kernel source...
+  program   = NULL;                                                             // Initializing kernel program...
+  size      = 0;                                                                // Initializing kernel size...
+  dimension = 0;                                                                // Initializing kernel dimension..
+  event     = NULL;                                                             // Initializing kernel event...
+  kernel_id = NULL;                                                             // Initializing kernel id...
 }
 
-// OpenCL error get function:
-const char* kernel::get_error     (
-                                    cl_int loc_error                            // Local error code.
-                                  )
+/// # OpenCL error get function
+/// ### Operations:
+/// - translation of an OpenCL numeric error code into a human-readable string.
+const char* kernel::get_error (
+                               cl_int loc_error                                 // Local error code.
+                              )
 {
   switch(loc_error)
   {
@@ -95,206 +97,221 @@ const char* kernel::get_error     (
   }
 }
 
-// OpenCL error check function:
-void kernel::check_error        (
-                                  cl_int loc_error                              // Error code.
-                                )
+/// # OpenCL error check function
+/// ### Operations:
+/// - check for an OpenCL error code and printout, if found.
+void kernel::check_error (
+                          cl_int loc_error                                      // Error code.
+                         )
 {
   if(loc_error != CL_SUCCESS)                                                   // Checking local error code...
   {
-    baseline->error(get_error(loc_error));                                      // Printing error message...
-    exit(EXIT_FAILURE);                                                         // Exiting...
+    baseline -> error (get_error (loc_error));                                  // Printing error message...
+    exit (EXIT_FAILURE);                                                        // Exiting...
   }
 }
 
+/// # Initialization function
+/// ### Operations:
+/// - creation of the OpenCL program from its source.
+/// - creation of the device ID list.
+/// - building of the OpenCL program.
+/// - creation of the OpenCL kernel.
 void kernel::init (
-                    neutrino* loc_baseline,                                     // Neutrino baseline.
-                    char*     loc_kernel_filename,                              // OpenCL kernel file name.
-                    size_t*   loc_kernel_size,                                  // OpenCL kernel size.
-                    cl_uint   loc_kernel_dimension                              // OpenCL kernel dimension.
+                   neutrino* loc_baseline,                                      // Neutrino baseline.
+                   char*     loc_kernel_filename,                               // OpenCL kernel file name.
+                   size_t*   loc_kernel_size,                                   // OpenCL kernel size.
+                   cl_uint   loc_kernel_dimension                               // OpenCL kernel dimension.
                   )
 {
-  cl_int        loc_error;                                                      // Error code.
-  size_t        loc_kernel_source_size;                                         // Kernel source size [characters].
-  size_t        i;                                                              // Index.
+  cl_int loc_error;                                                             // Error code.
+  size_t loc_kernel_source_size;                                                // Kernel source size [characters].
+  size_t i;                                                                     // Index.
 
   baseline  = loc_baseline;                                                     // Getting Neutrino baseline...
   file_name = loc_kernel_filename;                                              // Getting OpenCL kernel file name...
   size      = loc_kernel_size;                                                  // Getting OpenCL kernel size...
   dimension = loc_kernel_dimension;                                             // Getting OpenCL kernel dimension...
 
-  baseline->action("loading OpenCL kernel source from file...");                // Printing message...
+  baseline -> action ("loading OpenCL kernel source from file...");             // Printing message...
 
-  baseline->load_file(file_name, &source, &source_size);                        // Loading file...
+  baseline -> load_file (file_name, &source, &source_size);                     // Loading file...
 
-  baseline->done();                                                             // Printing message...
+  baseline -> done ();                                                          // Printing message...
 
-  baseline->action("creating OpenCL program from kernel source...");            // Printing message...
+  baseline -> action ("creating OpenCL program from kernel source...");         // Printing message...
 
   // Creating OpenCL program from its source:
   program = clCreateProgramWithSource (
-                                        baseline->context_id,                   // OpenCL context ID.
-                                        1,                                      // # of program sources.
-                                        (const char**)&source,                  // Program source.
-                                        &source_size,                           // Source size.
-                                        &loc_error                              // Error code.
+                                       baseline -> context_id,                  // OpenCL context ID.
+                                       1,                                       // # of program sources.
+                                       (const char**)&source,                   // Program source.
+                                       &source_size,                            // Source size.
+                                       &loc_error                               // Error code.
                                       );
 
-  check_error(loc_error);                                                       // Checking error.
+  check_error (loc_error);                                                      // Checking error.
 
-  baseline->free_file(source);                                                  // Freeing OpenCL kernel buffer...
+  baseline -> free_file (source);                                               // Freeing OpenCL kernel buffer...
 
-  baseline->done();                                                             // Printing message...
+  baseline -> done ();                                                          // Printing message...
 
-  baseline->action("building OpenCL program...");                               // Printing message...
+  baseline -> action ("building OpenCL program...");                            // Printing message...
 
   // Creating device ID list:
-  device_id = new cl_device_id[1];                                              // OpenCL device ID.
-  device_id[0] = baseline->device_id;                                           // Getting device ID.
+  device_id    = new cl_device_id[1];                                           // OpenCL device ID.
+  device_id[0] = baseline -> device_id;                                         // Getting device ID.
 
   // Building OpenCL program:
-  loc_error = clBuildProgram  (
-                                program,                                        // Program.
-                                1,                                              // # of devices.
-                                device_id,                                      // Device ID.
-                                "",                                             // Options.
-                                NULL,                                           // Notification routine.
-                                NULL                                            // Notification argument.
-                              );
+  loc_error    = clBuildProgram (
+                                 program,                                       // Program.
+                                 1,                                             // # of devices.
+                                 device_id,                                     // Device ID.
+                                 "",                                            // Options.
+                                 NULL,                                          // Notification routine.
+                                 NULL                                           // Notification argument.
+                                );
 
-  if (loc_error != CL_SUCCESS)                                                  // Checking compiled kernel...
+  if(loc_error != CL_SUCCESS)                                                   // Checking compiled kernel...
   {
-    baseline->error(get_error(loc_error));                                      // Printing message...
+    baseline -> error (get_error (loc_error));                                  // Printing message...
 
     // Getting OpenCL compiler information:
     loc_error = clGetProgramBuildInfo (
-                                        program,
-                                        device_id[0],
-                                        CL_PROGRAM_BUILD_LOG,
-                                        0,
-                                        NULL,
-                                        &log_size
+                                       program,
+                                       device_id[0],
+                                       CL_PROGRAM_BUILD_LOG,
+                                       0,
+                                       NULL,
+                                       &log_size
                                       );
 
-    check_error(loc_error);
+    check_error (loc_error);
 
-    log_value = (char*) calloc(log_size + 1, sizeof(char));                     // Allocating log buffer...
+    log_value = (char*) calloc (log_size + 1, sizeof(char));                    // Allocating log buffer...
 
-    if (!log_value)
+    if(!log_value)
     {
-      baseline->error("unable to allocate buffer memory log!");                 // Printing message...
-      exit(EXIT_FAILURE);                                                       // Exiting...
+      baseline -> error ("unable to allocate buffer memory log!");              // Printing message...
+      exit (EXIT_FAILURE);                                                      // Exiting...
     }
 
     // Reading OpenCL compiler error log:
     loc_error = clGetProgramBuildInfo (
-                                        program,
-                                        device_id[0],
-                                        CL_PROGRAM_BUILD_LOG,
-                                        log_size + 1,
-                                        log_value,
-                                        NULL
+                                       program,
+                                       device_id[0],
+                                       CL_PROGRAM_BUILD_LOG,
+                                       log_size + 1,
+                                       log_value,
+                                       NULL
                                       );
 
-    check_error(loc_error);                                                     // Checking error...
+    check_error (loc_error);                                                    // Checking error...
 
-    printf("%s\n", log_value);                                                  // Displaying log...
-    free(log_value);                                                            // Freeing log...
-    exit(loc_error);                                                            // Exiting...
+    printf ("%s\n", log_value);                                                 // Displaying log...
+    free (log_value);                                                           // Freeing log...
+    exit (loc_error);                                                           // Exiting...
   }
 
-  baseline->done();                                                             // Printing message...
+  baseline -> done ();                                                          // Printing message...
 
-  baseline->action("creating OpenCL kernel object from program...");            // Printing message...
+  baseline -> action ("creating OpenCL kernel object from program...");         // Printing message...
 
   // Creating OpenCL kernel:
-  kernel_id = clCreateKernel          (
-                                        program,                                // OpenCL kernel program.
-                                        KERNEL_NAME,                            // Kernel name.
-                                        &loc_error                              // Error code.
-                                      );
+  kernel_id = clCreateKernel (
+                              program,                                          // OpenCL kernel program.
+                              KERNEL_NAME,                                      // Kernel name.
+                              &loc_error                                        // Error code.
+                             );
 
-  check_error(loc_error);                                                       // Checking error...
+  check_error (loc_error);                                                      // Checking error...
 
-  baseline->done();                                                             // Printing message...
+  baseline -> done ();                                                          // Printing message...
 
   // Initializing kernel object:
-  baseline->action("initializing \"kernel\" object...");
+  baseline -> action ("initializing \"kernel\" object...");
 
-  for(i = 0; i < baseline->k_num; i++)                                          // Scanning OpenCL kernel argument array...
+  for(i = 0; i < baseline -> k_num; i++)                                        // Scanning OpenCL kernel argument array...
   {
-    if(baseline->kernel_id[i] == NULL)                                          // Looking for 1st non-assigned OpenCL kernel ID...
+    if(baseline -> kernel_id[i] == NULL)                                        // Looking for 1st non-assigned OpenCL kernel ID...
     {
-      baseline->kernel_id[i] = kernel_id;                                       // Assigning value to 1st non-assigned OpenCL kernel ID...
+      baseline -> kernel_id[i] = kernel_id;                                     // Assigning value to 1st non-assigned OpenCL kernel ID...
       break;                                                                    // Exiting loop...
     }
   }
 
-  baseline->done();                                                             // Printing message...
+  baseline -> done ();                                                          // Printing message...
 }
 
-void kernel::execute(queue* loc_queue_id, kernel_mode loc_kernel_mode)
+/// # OpenCL kernel execute function
+/// ### Operations:
+/// - enqueueing of OpenCL kernel (as a single task).
+/// - selection of kernel mode.
+void kernel::execute (
+                      queue*      loc_queue_id,
+                      kernel_mode loc_kernel_mode
+                     )
 {
-  cl_int        loc_error;                                                      // Error code.
+  cl_int loc_error;                                                             // Error code.
 
   // Enqueueing OpenCL kernel (as a single task):
-  loc_error = clEnqueueNDRangeKernel  (
-                                        loc_queue_id->queue_id,                 // Queue ID.
-                                        kernel_id,                              // Kernel ID.
-                                        dimension,                              // Kernel dimension.
-                                        NULL,                                   // Global work offset.
-                                        size,                                   // Global work size.
-                                        NULL,                                   // Local work size.
-                                        0,                                      // # of events.
-                                        NULL,                                   // Event list.
-                                        &event                                  // Event.
-                                      );
+  loc_error = clEnqueueNDRangeKernel (
+                                      loc_queue_id -> queue_id,                 // Queue ID.
+                                      kernel_id,                                // Kernel ID.
+                                      dimension,                                // Kernel dimension.
+                                      NULL,                                     // Global work offset.
+                                      size,                                     // Global work size.
+                                      NULL,                                     // Local work size.
+                                      0,                                        // # of events.
+                                      NULL,                                     // Event list.
+                                      &event                                    // Event.
+                                     );
 
-  check_error(loc_error);                                                       // Checking error...
+  check_error (loc_error);                                                      // Checking error...
 
   // Selecting kernel mode:
   switch(loc_kernel_mode)
   {
     case WAIT:
-      loc_error = clWaitForEvents(1, &event);                                   // Waiting for kernel execution to be completed (host blocking)...
-      check_error(loc_error);                                                   // Checking error...
-    break;
+      loc_error = clWaitForEvents (1, &event);                                  // Waiting for kernel execution to be completed (host blocking)...
+      check_error (loc_error);                                                  // Checking error...
+      break;
 
     case DONT_WAIT:
-                                                                                // Doing nothing, without waiting!
-    break;
+      // Doing nothing, without waiting!
+      break;
 
     default:
-      loc_error = clWaitForEvents(1, &event);                                   // Waiting for kernel execution to be completed (host blocking)...
-      check_error(loc_error);                                                   // Checking error...
-    break;
+      loc_error = clWaitForEvents (1, &event);                                  // Waiting for kernel execution to be completed (host blocking)...
+      check_error (loc_error);                                                  // Checking error...
+      break;
   }
 }
 
 kernel::~kernel()
 {
-  cl_int        loc_error;                                                      // Error code.
+  cl_int loc_error;                                                             // Error code.
 
-  baseline->action("releasing OpenCL kernel...");                               // Printing message...
+  baseline -> action ("releasing OpenCL kernel...");                            // Printing message...
 
-  loc_error = clReleaseKernel(kernel_id);                                       // Releasing OpenCL kernel...
-  check_error(loc_error);
+  loc_error = clReleaseKernel (kernel_id);                                      // Releasing OpenCL kernel...
+  check_error (loc_error);
 
-  baseline->done();
+  baseline -> done ();
 
-  baseline->action("releasing OpenCL kernel event...");                         // Printing message...
+  baseline -> action ("releasing OpenCL kernel event...");                      // Printing message...
 
-  loc_error = clReleaseEvent(event);                                            // Releasing OpenCL event...
-  check_error(loc_error);
+  loc_error = clReleaseEvent (event);                                           // Releasing OpenCL event...
+  check_error (loc_error);
 
-  baseline->done();
+  baseline -> done ();
 
-  baseline->action("releasing OpenCL program...");                              // Printing message...
+  baseline -> action ("releasing OpenCL program...");                           // Printing message...
 
-  loc_error = clReleaseProgram(program);                                        // Releasing OpenCL program...
-  check_error(loc_error);
+  loc_error = clReleaseProgram (program);                                       // Releasing OpenCL program...
+  check_error (loc_error);
 
   delete[] device_id;                                                           // Deleting device ID array...
 
-  baseline->done();
+  baseline -> done ();
 }
