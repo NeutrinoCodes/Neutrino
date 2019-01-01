@@ -8,10 +8,12 @@ int1::int1()
 
 }
 
-// OpenCL error get function:
-const char* int1::get_error       (
-                                    cl_int loc_error                            // Local error code.
-                                  )
+/// # OpenCL error get function
+/// ### Operations:
+/// - translation of an OpenCL numeric error code into a human-readable string.
+const char* int1::get_error (
+                             cl_int loc_error                                   // Local error code.
+                            )
 {
   switch(loc_error)
   {
@@ -90,76 +92,83 @@ const char* int1::get_error       (
   }
 }
 
-// OpenCL error check function:
-void int1::check_error          (
-                                  cl_int loc_error                              // Error code.
-                                )
+/// # OpenCL error check function
+/// ### Operations:
+/// - check for an OpenCL error code and printout, if found.
+void int1::check_error (
+                        cl_int loc_error                                        // Error code.
+                       )
 {
   if(loc_error != CL_SUCCESS)                                                   // Checking local error code...
   {
-    baseline->error(get_error(loc_error));                                      // Printing error message...
-    exit(EXIT_FAILURE);                                                         // Exiting...
+    baseline -> error (get_error (loc_error));                                  // Printing error message...
+    exit (EXIT_FAILURE);                                                        // Exiting...
   }
 }
 
-// Initialization:
-void int1::init                 (
-                                  neutrino*   loc_baseline,                     // Neutrino baseline.
-                                  size_t      loc_data_size                     // Data number.
-                                )
+/// # Initialization function
+/// ### Operations:
+/// - preparation of a contiguous (unfolded) array to be used as data buffer
+/// allocated on the client memory space.
+void int1::init (
+                 neutrino* loc_baseline,                                        // Neutrino baseline.
+                 size_t    loc_data_size                                        // Data number.
+                )
 {
-  cl_int    loc_error;                                                          // Error code.
-  size_t    i;                                                                  // Index.
+  cl_int loc_error;                                                             // Error code.
+  size_t i;                                                                     // Index.
 
-  baseline = loc_baseline;                                                      // Getting Neutrino baseline...
-  position = new size_t[baseline->k_num];                                       // Initializing kernel argument position array...
+  baseline       = loc_baseline;                                                // Getting Neutrino baseline...
+  position       = new size_t[baseline -> k_num];                               // Initializing kernel argument position array...
 
-  baseline->action("initializing \"int1\" object...");                          // Printing message...
+  baseline -> action ("initializing \"int1\" object...");                       // Printing message...
 
-  size = loc_data_size;                                                         // Data array size.
-  buffer = NULL;                                                                // OpenCL data buffer.
-  opencl_context = baseline->context_id;                                        // Getting OpenCL context...
+  size           = loc_data_size;                                               // Data array size.
+  buffer         = NULL;                                                        // OpenCL data buffer.
+  opencl_context = baseline -> context_id;                                      // Getting OpenCL context...
 
-  data = new cl_long[1*size];                                                   // Creating array for unfolded data...
+  data           = new cl_long[1*size];                                         // Creating array for unfolded data...
 
-  for (i = 0; i < size; i++)                                                    // Filling unfolded data array...
+  for(i = 0; i < size; i++)                                                     // Filling unfolded data array...
   {
     data[1*i + 0] = 0.0f;                                                       // Filling "x"...
   }
 
   // Creating OpenCL memory buffer:
-  buffer = clCreateBuffer         (
-                                    opencl_context,                             // OpenCL context.
-                                    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,   // Memory flags.
-                                    1*sizeof(cl_long)*size,                     // Data buffer size.
-                                    data,                                       // Data buffer.
-                                    &loc_error                                  // Error code.
+  buffer         = clCreateBuffer (
+                                   opencl_context,                              // OpenCL context.
+                                   CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,    // Memory flags.
+                                   1*sizeof(cl_long)*size,                      // Data buffer size.
+                                   data,                                        // Data buffer.
+                                   &loc_error                                   // Error code.
                                   );
 
-  check_error(loc_error);                                                       // Checking returned error code...
+  check_error (loc_error);                                                      // Checking returned error code...
 
-  baseline->done();                                                             // Printing message...
+  baseline -> done ();                                                          // Printing message...
 }
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// HOST "SET" FUNCTIONS:  ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-// Kernel set function:
-void int1::set_arg                (
-                                    kernel*     loc_kernel,                     // OpenCL kernel.
-                                    cl_uint     loc_kernel_arg                  // OpenCL kernel argument #.
-                                  )
+/// # Kernel set function
+/// ### Operations:
+/// - setting of a kernel argument at a specified index position.
+void int1::set_arg (
+                    kernel* loc_kernel,                                         // OpenCL kernel.
+                    cl_uint loc_kernel_arg                                      // OpenCL kernel argument #.
+                   )
 {
-  cl_int      loc_error;                                                        // Error code.
-  size_t      kernel_index;
-  size_t      i;
+  cl_int loc_error;                                                             // Error code.
+  size_t kernel_index;
+  size_t i;
 
-  baseline->action("setting \"int1\" kernel argument...");                      // Printing message...
+  baseline -> action ("setting \"int1\" kernel argument...");                   // Printing message...
 
   // Getting kernel index:
-  for(i = 0; i < baseline->k_num; i++)                                          // Scanning OpenCL kernel id array...
+  for(i = 0; i < baseline -> k_num; i++)                                        // Scanning OpenCL kernel id array...
   {
-    if(baseline->kernel_id[i] == loc_kernel->kernel_id)                         // Finding current kernel id...
+    if(baseline -> kernel_id[i] == loc_kernel -> kernel_id)                     // Finding current kernel id...
     {
       kernel_index = i;                                                         // Setting kernel index...
     }
@@ -168,23 +177,25 @@ void int1::set_arg                (
   position[kernel_index] = loc_kernel_arg;                                      // Setting kernel argument position in current kernel...
 
   // Setting OpenCL buffer as kernel argument:
-  loc_error = clSetKernelArg      (
-                                    loc_kernel->kernel_id,                      // Kernel.
-                                    loc_kernel_arg,                             // Kernel argument index.
-                                    sizeof(cl_mem),                             // Kernel argument size.
-                                    &buffer                                     // Kernel argument value.
-                                  );
+  loc_error              = clSetKernelArg (
+                                           loc_kernel -> kernel_id,             // Kernel.
+                                           loc_kernel_arg,                      // Kernel argument index.
+                                           sizeof(cl_mem),                      // Kernel argument size.
+                                           &buffer                              // Kernel argument value.
+                                          );
 
-  check_error(loc_error);                                                       // Checking returned error code...
+  check_error (loc_error);                                                      // Checking returned error code...
 
-  baseline->done();                                                             // Printing message...
+  baseline -> done ();                                                          // Printing message...
 }
 
-// "x" set function:
-void int1::set_x                  (
-                                    size_t  loc_index,                          // Data index.
-                                    cl_long loc_value                           // Data value.
-                                  )
+/// # "x" set function
+/// ### Operations:
+/// - setting of "x" data value in data array.
+void int1::set_x (
+                  size_t  loc_index,                                            // Data index.
+                  cl_long loc_value                                             // Data value.
+                 )
 {
   data[1*loc_index + 0] = (cl_long)loc_value;                                   // Setting data value...
 }
@@ -192,19 +203,21 @@ void int1::set_x                  (
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// HOST "GET" FUNCTIONS:  ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-// Kernel get function:
-size_t int1::get_arg              (
-                                    kernel*     loc_kernel                      // OpenCL kernel.
-                                  )
+/// # Kernel get function:
+/// ### Operations:
+/// - reading of the index position of a kernel argument.
+size_t int1::get_arg (
+                      kernel* loc_kernel                                        // OpenCL kernel.
+                     )
 {
-  cl_int      loc_error;                                                        // Error code.
-  size_t      kernel_index;
-  size_t      i;
+  cl_int loc_error;                                                             // Error code.
+  size_t kernel_index;
+  size_t i;
 
   // Getting kernel index:
-  for(i = 0; i < baseline->k_num; i++)                                          // Scanning OpenCL kernel id array...
+  for(i = 0; i < baseline -> k_num; i++)                                        // Scanning OpenCL kernel id array...
   {
-    if(baseline->kernel_id[i] == loc_kernel->kernel_id)                         // Finding current kernel id...
+    if(baseline -> kernel_id[i] == loc_kernel -> kernel_id)                     // Finding current kernel id...
     {
       kernel_index = i;                                                         // Setting kernel index...
     }
@@ -213,10 +226,12 @@ size_t int1::get_arg              (
   return(position[kernel_index]);                                               // Returning index of current argument in current kernel...
 }
 
-// "x" get function:
-cl_long int1::get_x               (
-                                    size_t loc_index                            // Data index.
-                                  )
+/// # "x" get function
+/// ### Operations:
+/// - reading of the "x" data value in data array.
+cl_long int1::get_x (
+                     size_t loc_index                                           // Data index.
+                    )
 {
   cl_long loc_value;                                                            // Value.
 
@@ -228,67 +243,71 @@ cl_long int1::get_x               (
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// CLIENT FUNCTIONS:  /////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-// OpenCL write buffer function:
-void int1::push                   (
-                                    queue*  loc_queue,                          // Queue.
-                                    cl_uint loc_kernel_arg                      // Kernel argument index.
-                                  )
+/// # OpenCL write buffer function
+/// ### Operations:
+/// - Enqueueing of commands to write to a buffer object from host memory.
+void int1::push (
+                 queue*  loc_queue,                                             // Queue.
+                 cl_uint loc_kernel_arg                                         // Kernel argument index.
+                )
 {
-  cl_int  loc_error;                                                            // Local error code.
+  cl_int loc_error;                                                             // Local error code.
 
-  loc_error = clEnqueueWriteBuffer      (
-                                          loc_queue->queue_id,                  // OpenCL queue ID.
-                                          buffer,                               // Data buffer.
-                                          CL_TRUE,                              // Blocking write flag.
-                                          0,                                    // Data buffer offset.
-                                          (size_t)(1*sizeof(cl_long)*size),     // Data buffer size.
-                                          data,                                 // Data buffer.
-                                          0,                                    // Number of events in the list.
-                                          NULL,                                 // Event list.
-                                          NULL                                  // Event.
-                                        );
+  loc_error = clEnqueueWriteBuffer (
+                                    loc_queue -> queue_id,                      // OpenCL queue ID.
+                                    buffer,                                     // Data buffer.
+                                    CL_TRUE,                                    // Blocking write flag.
+                                    0,                                          // Data buffer offset.
+                                    (size_t)(1*sizeof(cl_long)*size),           // Data buffer size.
+                                    data,                                       // Data buffer.
+                                    0,                                          // Number of events in the list.
+                                    NULL,                                       // Event list.
+                                    NULL                                        // Event.
+                                   );
 
-  check_error(loc_error);
+  check_error (loc_error);
 }
 
-// OpenCL read buffer function:
-void int1::pull                         (
-                                          queue*  loc_queue,                    // Queue.
-                                          cl_uint loc_kernel_arg                // Kernel argument index.
-                                        )
+/// # OpenCL read buffer function:
+/// ### Operations:
+/// - Enqueueing of commands to read from a buffer object to host memory.
+void int1::pull (
+                 queue*  loc_queue,                                             // Queue.
+                 cl_uint loc_kernel_arg                                         // Kernel argument index.
+                )
 {
-  cl_int  loc_error;                                                            // Local error code.
+  cl_int loc_error;                                                             // Local error code.
 
-  loc_error = clEnqueueReadBuffer      (
-                                          loc_queue->queue_id,                  // OpenCL queue ID.
-                                          buffer,                               // Data buffer.
-                                          CL_TRUE,                              // Blocking write flag.
-                                          0,                                    // Data buffer offset.
-                                          (size_t)(1*sizeof(cl_long)*size),     // Data buffer size.
-                                          data,                                 // Data buffer.
-                                          0,                                    // Number of events in the list.
-                                          NULL,                                 // Event list.
-                                          NULL                                  // Event.
-                                        );
+  loc_error = clEnqueueReadBuffer (
+                                   loc_queue -> queue_id,                       // OpenCL queue ID.
+                                   buffer,                                      // Data buffer.
+                                   CL_TRUE,                                     // Blocking write flag.
+                                   0,                                           // Data buffer offset.
+                                   (size_t)(1*sizeof(cl_long)*size),            // Data buffer size.
+                                   data,                                        // Data buffer.
+                                   0,                                           // Number of events in the list.
+                                   NULL,                                        // Event list.
+                                   NULL                                         // Event.
+                                  );
 
-  check_error(loc_error);
+  check_error (loc_error);
 }
 
 int1::~int1()
 {
-  cl_int  loc_error;                                                            // Local error code.
+  cl_int loc_error;                                                             // Local error code.
 
-  baseline->action("releasing \"int1\" object...");                           // Printing message...
+  baseline -> action ("releasing \"int1\" object...");                          // Printing message...
 
   if(buffer != NULL)                                                            // Checking buffer..
   {
-    loc_error = clReleaseMemObject(buffer);                                     // Releasing OpenCL buffer object...
+    loc_error = clReleaseMemObject (buffer);                                    // Releasing OpenCL buffer object...
 
-    check_error(loc_error);                                                     // Checking returned error code...
+    check_error (loc_error);                                                    // Checking returned error code...
   }
 
   delete[] data;                                                                // Releasing data buffer...
   delete[] position;                                                            // Deleting kernel argument position array...
 
-  baseline->done();                                                             // Printing message...
+  baseline -> done ();                                                          // Printing message...
 }
