@@ -9,8 +9,8 @@ device::device()
 }
 
 /// # OpenCL error get function
-/// ### Operations:
-/// - translation of an OpenCL numeric error code into a human-readable string.
+/// ### Description:
+/// Translates an OpenCL numeric error code into a human-readable string.
 const char* device::get_error (
                                cl_int loc_error
                               )
@@ -93,8 +93,8 @@ const char* device::get_error (
 }
 
 /// # OpenCL error check function
-/// ### Operations:
-/// - check for an OpenCL error code and printout, if found.
+/// ### Description:
+/// Checks for an OpenCL error code and print it to stdout.
 void device::check_error (
                           cl_int loc_error                                      // Error code.
                          )
@@ -107,8 +107,8 @@ void device::check_error (
 }
 
 /// # Device get information size function
-/// ### Operations:
-/// - reading of size of device information.
+/// ### Description:
+/// Gets the size of a device information.
 size_t device::get_info_size (
                               cl_device_id   loc_device_id,                     // OpenCL device ID.
                               cl_device_info loc_parameter_name                 // Device parameter.
@@ -132,8 +132,8 @@ size_t device::get_info_size (
 }
 
 /// # Device get information value function
-/// ### Operations:
-/// - reading of value of device information.
+/// ### Description:
+/// Gets the value of a device information.
 char* device::get_info_value (
                               cl_device_id   loc_device_id,                     // OpenCL device ID.
                               cl_device_info loc_parameter_name,                // Parameter name.
@@ -158,8 +158,8 @@ char* device::get_info_value (
 }
 
 /// # Initialization function
-/// ### Operations:
-/// - reading of all device information.
+/// ### Description:
+/// Gets all the device information.
 void device::init (
                    cl_device_id loc_device_id                                   // OpenCL deivce ID.
                   )

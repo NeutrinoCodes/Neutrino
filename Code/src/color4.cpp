@@ -6,8 +6,8 @@ color4::color4()
 }
 
 /// # OpenCL error get function
-/// ### Operations:
-/// - translation of an OpenCL numeric error code into a human-readable string.
+/// ### Description:
+/// Translates an OpenCL numeric error code into a human-readable string.
 const char* color4::get_error (
                                cl_int loc_error                                 // Local error code.
                               )
@@ -90,8 +90,8 @@ const char* color4::get_error (
 }
 
 /// # OpenCL error check function
-/// ### Operations:
-/// - check for an OpenCL error code and printout, if found.
+/// ### Description:
+/// Checks for an OpenCL error code and print it to stdout.
 void color4::check_error (
                           cl_int loc_error                                      // Error code.
                          )
@@ -104,13 +104,13 @@ void color4::check_error (
 }
 
 /// # Initialization function
-/// ### Operations:
-/// - preparation of a contiguous (unfolded) array to be used as data buffer
-/// allocated on the client memory space.
-/// - creation of an OpenCL buffer (interoperability buffer) from the OpenGL
-/// buffer, in case the `use_cl_gl_interop` flag is set to `true`.
-/// - creation of an OpenCL buffer (not shared with OpenGL), in case the
-/// `use_cl_gl_interop` flag is set to `false`.
+/// ### Description:
+/// Prepares a contiguous (unfolded) array to be used as data buffer
+/// allocated on the client memory space. Creates an OpenCL buffer
+/// (interoperability buffer) from the OpenGL buffer, in case the
+/// use_cl_gl_interop` flag is set to `true`.
+/// Creates an OpenCL buffer (not shared with OpenGL), in case the
+/// use_cl_gl_interop` flag is set to `false`.
 void color4::init (
                    neutrino*  loc_baseline,                                     // Neutrino baseline.
                    GLsizeiptr loc_data_size                                     // Data number.
@@ -227,8 +227,8 @@ void color4::init (
 ////////////////////////////// HOST "SET" FUNCTIONS:  ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 /// # Kernel set function
-/// ### Operations:
-/// - setting of a kernel argument at a specified index position.
+/// ### Description:
+/// Sets a kernel argument at a specified index position.
 void color4::set_arg (
                       kernel* loc_kernel,                                       // OpenCL kernel.
                       cl_uint loc_kernel_arg                                    // OpenCL kernel argument #.
@@ -265,8 +265,8 @@ void color4::set_arg (
 }
 
 /// # "r" set function
-/// ### Operations:
-/// - setting of "r" color channel (red) data value in color data array.
+/// ### Description:
+/// Sets the "r" color channel (red) data value in color data array.
 void color4::set_r (
                     GLsizeiptr loc_index,                                       // Data index.
                     GLfloat    loc_value                                        // Data value.
@@ -276,8 +276,8 @@ void color4::set_r (
 }
 
 /// # "g" set function
-/// ### Operations:
-/// - setting of "g" color channel (green) data value in color data array.
+/// ### Description:
+/// Sets the "g" color channel (green) data value in color data array.
 void color4::set_g (
                     GLsizeiptr loc_index,                                       // Data index.
                     GLfloat    loc_value                                        // Data value.
@@ -287,8 +287,8 @@ void color4::set_g (
 }
 
 /// # "b" set function
-/// ### Operations:
-/// - setting of "b" color channel (blue) data value in color data array.
+/// ### Description:
+/// Sets the "b" color channel (blue) data value in color data array.
 void color4::set_b (
                     GLsizeiptr loc_index,                                       // Data index.
                     GLfloat    loc_value                                        // Data value.
@@ -298,8 +298,8 @@ void color4::set_b (
 }
 
 /// # "a" set function
-/// ### Operations:
-/// - setting of "a" color channel (alpha) data value in color data array.
+/// ### Description:
+/// Sets the "a" color channel (alpha) data value in color data array.
 void color4::set_a (
                     GLsizeiptr loc_index,                                       // Data index.
                     GLfloat    loc_value                                        // Data value.
@@ -312,8 +312,8 @@ void color4::set_a (
 ////////////////////////////// HOST "GET" FUNCTIONS:  ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 /// # Kernel get function:
-/// ### Operations:
-/// - reading of the index position of a kernel argument.
+/// ### Description:
+/// Gets the index position of a kernel argument.
 size_t color4::get_arg (
                         kernel* loc_kernel                                      // OpenCL kernel.
                        )
@@ -335,8 +335,8 @@ size_t color4::get_arg (
 }
 
 /// # "r" get function
-/// ### Operations:
-/// - reading of the "r" color channel (alpha) data value in color data array.
+/// ### Description:
+/// Gets the "r" color channel (red) data value in color data array.
 GLfloat color4::get_r (
                        GLsizeiptr loc_index                                     // Data index.
                       )
@@ -349,8 +349,8 @@ GLfloat color4::get_r (
 }
 
 /// # "g" get function
-/// ### Operations:
-/// - reading of the "g" color channel (alpha) data value in color data array.
+/// ### Description:
+/// Gets the "g" color channel (green) data value in color data array.
 GLfloat color4::get_g (
                        GLsizeiptr loc_index                                     // Data index.
                       )
@@ -363,8 +363,8 @@ GLfloat color4::get_g (
 }
 
 /// # "b" get function
-/// ### Operations:
-/// - reading of the "b" color channel (alpha) data value in color data array.
+/// ### Description:
+/// Gets the "b" color channel (blue) data value in color data array.
 GLfloat color4::get_b (
                        GLsizeiptr loc_index                                     // Data index.
                       )
@@ -377,8 +377,8 @@ GLfloat color4::get_b (
 }
 
 /// # "a" get function
-/// ### Operations:
-/// - reading of the "a" color channel (alpha) data value in color data array.
+/// ### Description:
+/// Gets the "a" color channel (alpha) data value in color data array.
 GLfloat color4::get_a (
                        GLsizeiptr loc_index                                     // Data index.
                       )
@@ -394,8 +394,8 @@ GLfloat color4::get_a (
 ///////////////////////////////// CLIENT FUNCTIONS:  /////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 /// # OpenCL write buffer function
-/// ### Operations:
-/// - Enqueueing of commands to write to a buffer object from host memory.
+/// ### Description:
+/// Enqueues commands to write to a buffer object from host memory.
 void color4::push (
                    queue*  loc_queue,                                           // Queue.
                    cl_uint loc_kernel_arg                                       // Kernel argument index.
@@ -419,8 +419,8 @@ void color4::push (
 }
 
 /// # OpenCL read buffer function:
-/// ### Operations:
-/// - Enqueueing of commands to read from a buffer object to host memory.
+/// ### Description:
+/// Enqueues commands to read from a buffer object to host memory.
 void color4::pull (
                    queue*  loc_queue,                                           // Queue.
                    cl_uint loc_kernel_arg                                       // Kernel argument index.
@@ -444,9 +444,8 @@ void color4::pull (
 }
 
 /// # OpenCL acquire buffer function
-/// ### Operations:
-/// - Acquisition of OpenCL memory objects that have been created from OpenGL
-/// objects.
+/// ### Description:
+/// Acquires OpenCL memory objects that have been created from OpenGL objects.
 void color4::acquire_gl (
                          queue*  loc_queue,                                     // Queue.
                          cl_uint loc_kernel_arg                                 // Kernel argument index.
@@ -470,9 +469,8 @@ void color4::acquire_gl (
 }
 
 /// # OpenCL release buffer function:
-/// ### Operations:
-/// - Releasing of OpenCL memory objects that have been created from OpenGL
-/// objects.
+/// ### Description:
+/// Releases OpenCL memory objects that have been created from OpenGL objects.
 void color4::release_gl (
                          queue*  loc_queue,                                     // Queue.
                          cl_uint loc_kernel_arg                                 // Kernel argument index.

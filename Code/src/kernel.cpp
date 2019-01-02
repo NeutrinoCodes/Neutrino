@@ -14,7 +14,7 @@ kernel::kernel()
 }
 
 /// # OpenCL error get function
-/// ### Operations:
+/// ### Description:
 /// - translation of an OpenCL numeric error code into a human-readable string.
 const char* kernel::get_error (
                                cl_int loc_error                                 // Local error code.
@@ -98,7 +98,7 @@ const char* kernel::get_error (
 }
 
 /// # OpenCL error check function
-/// ### Operations:
+/// ### Description:
 /// - check for an OpenCL error code and printout, if found.
 void kernel::check_error (
                           cl_int loc_error                                      // Error code.
@@ -112,7 +112,7 @@ void kernel::check_error (
 }
 
 /// # Initialization function
-/// ### Operations:
+/// ### Description:
 /// - creation of the OpenCL program from its source.
 /// - creation of the device ID list.
 /// - building of the OpenCL program.
@@ -244,7 +244,7 @@ void kernel::init (
 }
 
 /// # OpenCL kernel execute function
-/// ### Operations:
+/// ### Description:
 /// - enqueueing of OpenCL kernel (as a single task).
 /// - selection of kernel mode.
 void kernel::execute (

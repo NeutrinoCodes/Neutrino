@@ -9,8 +9,8 @@ float1::float1()
 }
 
 /// # OpenCL error get function
-/// ### Operations:
-/// - translation of an OpenCL numeric error code into a human-readable string.
+/// ### Description:
+/// Translates an OpenCL numeric error code into a human-readable string.
 const char* float1::get_error (
                                cl_int loc_error                                 // Local error code.
                               )
@@ -93,8 +93,8 @@ const char* float1::get_error (
 }
 
 /// # OpenCL error check function
-/// ### Operations:
-/// - check for an OpenCL error code and printout, if found.
+/// ### Description:
+/// Checks for an OpenCL error code and print it so stdout.
 void float1::check_error (
                           cl_int loc_error                                      // Error code.
                          )
@@ -107,8 +107,8 @@ void float1::check_error (
 }
 
 /// # Initialization function
-/// ### Operations:
-/// - preparation of a contiguous (unfolded) array to be used as data buffer
+/// ### Description:
+/// Prepares a contiguous (unfolded) array to be used as data buffer
 /// allocated on the client memory space.
 void float1::init (
                    neutrino* loc_baseline,                                      // Neutrino baseline.
@@ -153,8 +153,8 @@ void float1::init (
 ////////////////////////////// HOST "SET" FUNCTIONS:  ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 /// # Kernel set function
-/// ### Operations:
-/// - setting of a kernel argument at a specified index position.
+/// ### Description:
+/// Sets a kernel argument at a specified index position.
 void float1::set_arg (
                       kernel* loc_kernel,                                       // OpenCL kernel.
                       cl_uint loc_kernel_arg                                    // OpenCL kernel argument #.
@@ -191,8 +191,8 @@ void float1::set_arg (
 }
 
 /// # "x" set function
-/// ### Operations:
-/// - setting of "x" data value in data array.
+/// ### Description:
+/// Sets the "x" point data value in point data array.
 void float1::set_x (
                     size_t   loc_index,                                         // Data index.
                     cl_float loc_value                                          // Data value.
@@ -205,8 +205,8 @@ void float1::set_x (
 ////////////////////////////// HOST "GET" FUNCTIONS:  ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 /// # Kernel get function:
-/// ### Operations:
-/// - reading of the index position of a kernel argument.
+/// ### Description:
+/// Gets the index position of a kernel argument.
 size_t float1::get_arg (
                         kernel* loc_kernel                                      // OpenCL kernel.
                        )
@@ -228,8 +228,8 @@ size_t float1::get_arg (
 }
 
 /// # "x" get function
-/// ### Operations:
-/// - reading of the "x" data value in data array.
+/// ### Description:
+/// Gets the "x" point data value in point data array.
 cl_float float1::get_x (
                         size_t loc_index                                        // Data index.
                        )
@@ -245,8 +245,8 @@ cl_float float1::get_x (
 ///////////////////////////////// CLIENT FUNCTIONS:  /////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 /// # OpenCL write buffer function
-/// ### Operations:
-/// - Enqueueing of commands to write to a buffer object from host memory.
+/// ### Description:
+/// Enqueues commands to write to a buffer object from host memory.
 void float1::push (
                    queue*  loc_queue,                                           // Queue.
                    cl_uint loc_kernel_arg                                       // Kernel argument index.
@@ -269,9 +269,9 @@ void float1::push (
   check_error (loc_error);
 }
 
-/// # OpenCL read buffer function:
-/// ### Operations:
-/// - Enqueueing of commands to read from a buffer object to host memory.
+/// # OpenCL read buffer function
+/// ### Description:
+/// Enqueues commands to read from a buffer object to host memory.
 void float1::pull (
                    queue*  loc_queue,                                           // Queue.
                    cl_uint loc_kernel_arg                                       // Kernel argument index.
