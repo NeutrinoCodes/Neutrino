@@ -15,7 +15,7 @@ kernel::kernel()
 
 /// # OpenCL error get function
 /// ### Description:
-/// - translation of an OpenCL numeric error code into a human-readable string.
+/// Translates an OpenCL numeric error code into a human-readable string.
 const char* kernel::get_error (
                                cl_int loc_error                                 // Local error code.
                               )
@@ -99,7 +99,7 @@ const char* kernel::get_error (
 
 /// # OpenCL error check function
 /// ### Description:
-/// - check for an OpenCL error code and printout, if found.
+/// Checks for an OpenCL error code and print it to stdout.
 void kernel::check_error (
                           cl_int loc_error                                      // Error code.
                          )
@@ -113,10 +113,8 @@ void kernel::check_error (
 
 /// # Initialization function
 /// ### Description:
-/// - creation of the OpenCL program from its source.
-/// - creation of the device ID list.
-/// - building of the OpenCL program.
-/// - creation of the OpenCL kernel.
+/// Creates the OpenCL program from its source. Creates the device ID list.
+/// Builds the OpenCL program. Creates the OpenCL kernel.
 void kernel::init (
                    neutrino* loc_baseline,                                      // Neutrino baseline.
                    char*     loc_kernel_filename,                               // OpenCL kernel file name.
@@ -245,8 +243,7 @@ void kernel::init (
 
 /// # OpenCL kernel execute function
 /// ### Description:
-/// - enqueueing of OpenCL kernel (as a single task).
-/// - selection of kernel mode.
+/// Enqueues the OpenCL kernel (as a single task). Selects the kernel mode.
 void kernel::execute (
                       queue*      loc_queue_id,
                       kernel_mode loc_kernel_mode
