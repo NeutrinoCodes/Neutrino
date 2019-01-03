@@ -13,8 +13,10 @@ INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/main_page.md \
                           @CMAKE_CURRENT_SOURCE_DIR@/include/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/kernel/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/shader/ \
-                          @CMAKE_CURRENT_SOURCE_DIR@/../Docs/neutrino_doc.md \
-                          @CMAKE_CURRENT_SOURCE_DIR@/../Docs/theory.md
+                          @CMAKE_CURRENT_SOURCE_DIR@/../Docs/neutrino_doc.md
+# Others doc files: e.g.  @CMAKE_CURRENT_SOURCE_DIR@/../Docs/some_documentation.md
+# 1. Remember to put "\" before adding a file in this list.
+# 2. Latex code in mardown files in Doxygen is accepted between "\f...latex...\f". 
 
 # Defining valid file types to be considered in Doxygen...
 FILE_PATTERNS           = *.cpp *.hpp *.cl *.frag *.vert
