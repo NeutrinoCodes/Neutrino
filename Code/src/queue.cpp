@@ -10,7 +10,9 @@ queue::queue()
   device_id = NULL;                                                             // Initializing device id...
 }
 
-// OpenCL error get function:
+/// # OpenCL error get function
+/// ### Description:
+/// Translates an OpenCL numeric error code into a human-readable string.
 const char* queue::get_error      (
                                     cl_int loc_error                            // Local error code.
                                   )
@@ -92,7 +94,9 @@ const char* queue::get_error      (
   }
 }
 
-// OpenCL error check function:
+/// # OpenCL error check function
+/// ### Description:
+/// Checks for an OpenCL error code and print it to stdout.
 void queue::check_error         (
                                   cl_int loc_error                              // Error code.
                                 )
@@ -104,6 +108,9 @@ void queue::check_error         (
   }
 }
 
+/// # Initialisation function
+/// ### Description:
+/// Creates the OpenCL command queue.
 void queue::init(neutrino* loc_baseline)
 {
   cl_int  loc_error;                                                            // Local error code.

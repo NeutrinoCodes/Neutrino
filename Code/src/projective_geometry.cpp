@@ -2,7 +2,9 @@
 
 #include "projective_geometry.hpp"
 
-// Perspective frustum computation:
+/// # Perspective frustum function
+/// ### Description:
+/// Computes the perspective frustum given the projective screen boudaries.
 void frustum (
               float F[16],                                                      // 4x4 frustum matrix.
               float left,                                                       // Projective screen left side...
@@ -26,7 +28,9 @@ void frustum (
   F[3] = 0.0;   F[7] = 0.0;  F[11] = -1.0;   F[15] = 0.0;                       // Setting frustum matrix...
 }
 
-// Perspective matrix computation:
+/// # Perspective matrix function
+/// ### Description:
+/// Computes the perspective matrix given the projective screen boundaries.
 void perspective (
                   float P[16],                                                  // 4x4 perspective matrix.
                   float fov,                                                    // Field of view [rad].
@@ -53,7 +57,9 @@ void perspective (
           );
 }
 
-// Rotation matrix computation:
+/// # Rotation matrix function
+/// ### Description:
+/// Computes the rotation matrix.
 void rotate (
              float R[16],                                                       // 4x4 rotation matrix.
              float R_old[16],                                                   // 4x4 rotation matrix backup.
@@ -122,7 +128,9 @@ void rotate (
   R[15]          = q41*r14 + q42*r24 + q43*r34 + q44*r44;                       // Computing rotation matrix...
 }
 
-// Translation matrix computation:
+/// # Translation matrix function
+/// ### Description:
+/// Computes the translation matrix.
 void translate (
                 float T[16],                                                    // 4x4 translation matrix.
                 float translation[3]                                            // 3D translation vector.
@@ -134,7 +142,9 @@ void translate (
   T[3] = 0.0; T[7] = 0.0; T[11] = 0.0; T[15] = 1.0;                             // Computing translation matrix.
 }
 
-// Multiplication matrix computation:
+/// # Multiplication matrix function
+/// ### Description:
+/// Computes the multiplication of two matrices.
 void multiplicate (
                    float C[16],                                                 // 4x4 matrix result.
                    float A[16],                                                 // 4x4 matrix.

@@ -5,7 +5,9 @@ text4::text4()
 
 }
 
-// PRIVATE METHODS:
+/// # OpenCL error get function
+/// ### Description:
+/// Translates an OpenCL numeric error code into a human-readable string.
 const char* text4::get_error(cl_int loc_error)
 {
   switch(loc_error)
@@ -85,7 +87,9 @@ const char* text4::get_error(cl_int loc_error)
   }
 }
 
-// OpenCL error check function:
+/// # OpenCL error check function
+/// ### Description:
+/// Checks for an OpenCL error code and print it to stdout.
 void text4::check_error         (
                                   cl_int loc_error                              // Error code.
                                 )
@@ -97,6 +101,11 @@ void text4::check_error         (
   }
 }
 
+/// # Initialisation function
+/// ### Description:
+/// Parses the input text string and assembles an array of strokes for the
+/// glyphs representing the characters in the string. Sets an array for the
+/// colors of the strokes. Creates a point and color buffer for the OpenGL.
 void text4::init  (
                     neutrino* loc_baseline,
                     const char* loc_text,
