@@ -5,81 +5,78 @@
 
   #include "neutrino.hpp"
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////// "TEXT4" CLASS ///////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  class text4
-  {
-    private:
-      neutrino*           baseline;                                             // Neutrino baseline.
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////// "TEXT4" CLASS ///////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+class text4
+{
+private:
+  neutrino* baseline;                                                           // Neutrino baseline.
+  // OpenCL error get function:
+  const char* get_error (
+                         cl_int loc_error                                       // Error code.
+                        );
+  // OpenCL error check function:
+  void        check_error (
+                           cl_int loc_error                                     // Error code.
+                          );
 
-      // OpenCL error get function:
-      const char*         get_error     (
-                                          cl_int      loc_error                 // Error code.
-                                        );
+  int       err;
+  int       i;
+  int       j;
+  int       k;
+  int       shift;
+  int       even;
+  int       odd;
 
-      // OpenCL error check function:
-      void                check_error   (
-                                          cl_int      loc_error                 // Error code.
-                                        );
+  int       num_char;
+  int       num_data;
+  int       num_points;
+  int       num_strokes;
 
-      int                 err;
-      int                 i;
-      int                 j;
-      int                 k;
-      int                 shift;
-      int                 even;
-      int                 odd;
+  int*      char_code;
+  int*      char_item;
+  int*      char_numdata;
+  int*      char_numpoints;
+  int*      char_numstrokes;
+  int*      char_kern;
 
-      int                 num_char;
-      int                 num_data;
-      int                 num_points;
-      int                 num_strokes;
+  int*      data_index;
+  int*      kern;
+  int*      offset;
 
-      int*                char_code;
-      int*                char_item;
-      int*                char_numdata;
-      int*                char_numpoints;
-      int*                char_numstrokes;
-      int*                char_kern;
+  GLfloat*  glyph_data;                                                         // Text "glyph" data.
+  GLfloat*  color_data;                                                         // Text "color" data.
 
-      int*                data_index;
-      int*                kern;
-      int*                offset;
+public:
+  GLfloat*  x;
+  GLfloat*  y;
+  GLfloat*  z;
+  GLfloat*  w;
 
-      GLfloat*            glyph_data;                                           // Text "glyph" data.
-      GLfloat*            color_data;                                           // Text "color" data.
+  GLfloat*  r;
+  GLfloat*  g;
+  GLfloat*  b;
+  GLfloat*  a;
 
-    public:
-      GLfloat*            x;
-      GLfloat*            y;
-      GLfloat*            z;
-      GLfloat*            w;
+  int       size;
 
-      GLfloat*            r;
-      GLfloat*            g;
-      GLfloat*            b;
-      GLfloat*            a;
+  GLuint    glyph_vao;
+  GLuint    color_vao;
+  GLuint    glyph_vbo;
+  GLuint    color_vbo;
 
-      int                 size;
+  text4();
+  void init (
+             neutrino*   loc_baseline,
+             const char* loc_text,
+             GLfloat     loc_R,
+             GLfloat     loc_G,
+             GLfloat     loc_B,
+             GLfloat     loc_A
+            );
 
-      GLuint              glyph_vao;
-      GLuint              color_vao;
-      GLuint              glyph_vbo;
-      GLuint              color_vbo;
-
-                          text4();
-
-      void                init          (
-                                          neutrino*   loc_baseline,
-                                          const char* loc_text,
-                                          GLfloat     loc_R,
-                                          GLfloat     loc_G,
-                                          GLfloat     loc_B,
-                                          GLfloat     loc_A
-                                        );
-
-                          ~text4();
-  };
+  ~text4();
+};
 
 #endif
