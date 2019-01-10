@@ -48,8 +48,8 @@ private:
   // Grasp arcball action:
   void        grasp (
                      float* p,                                                  // Point on unitary ball.
-                     int    x,                                                  // "Near clipping-plane" x-coordinate.
-                     int    y                                                   // "Near clipping-plane" y-coordinate.
+                     double x,                                                  // "Near clipping-plane" x-coordinate.
+                     double y                                                   // "Near clipping-plane" y-coordinate.
                     );
   // Arcball computation:
   void        arcball ();

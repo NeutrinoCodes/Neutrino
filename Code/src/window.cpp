@@ -17,15 +17,15 @@ window::window()
 /// coordinates during a grasp action on the screen space.
 void window::grasp (
                     float* p,                                                   // Point on unitary ball.
-                    int    x,                                                   // "Near clipping-plane" x-coordinate.
-                    int    y                                                    // "Near clipping-plane" y-coordinate.
+                    double x,                                                   // "Near clipping-plane" x-coordinate.
+                    double y                                                    // "Near clipping-plane" y-coordinate.
                    )
 {
   float op_sq;                                                                  // Center "o" to "p" squared distance.
 
   glfwGetWindowSize (glfw_window, &window_size_x, &window_size_y);              // Getting window size...
-  p[0]  = 2.0*x/window_size_x - 1.0;                                            // Computing point on unitary ball [x]...
-  p[1]  = -(2.0*y/window_size_y - 1.0);                                         // Computing point on unitary ball [y] (axis inverted according to OpenGL)...
+  p[0]  = 2.0*floor (x)/(float)window_size_x - 1.0;                             // Computing point on unitary ball [x]...
+  p[1]  = -(2.0*floor (y)/(float)window_size_y - 1.0);                          // Computing point on unitary ball [y] (axis inverted according to OpenGL)...
   p[2]  = 0.0;                                                                  // Computing point on unitary ball [z]...
   op_sq = p[0]*p[0] + p[1]*p[1];                                                // Computing "op" squared...
 
@@ -56,7 +56,13 @@ void window::arcball ()
 
   if(arcball_on && (theta > 0.0))                                               // If mouse has been dragged (= left click + move):
   {
-    printf ("t = %f\n", theta);
+    printf (
+            "mx = %f, my = %f, mxo = %f, myo = %f\n",
+            mouse_x,
+            mouse_y,
+            mouse_x_old,
+            mouse_y_old
+           );
     //normalize (a);                                                              // Normalizing vector "a"...
     //normalize (b);                                                              // Normalizing vector "b"...
     cross (axis, a, b);                                                         // Computing arcball axis of rotation...
