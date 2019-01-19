@@ -60,12 +60,18 @@ private:
   static void refresh_callback (
                                 GLFWwindow* loc_window                          // Window.
                                );
-  // Resize callback:
-  static void resize_callback (
-                               GLFWwindow* loc_window,                          // Window.
-                               int         loc_x_size,                          // Window x-size [px].
-                               int         loc_y_size                           // Window y-size [px].
-                              );
+  // Window resize callback:
+  static void window_resize_callback (
+                                      GLFWwindow* loc_window,                   // Window.
+                                      int         loc_x_size,                   // Window x-size [screen coordinates].
+                                      int         loc_y_size                    // Window y-size [screen coordinates].
+                                     );
+  // Framebuffer resize callback:
+  static void framebuffer_size_callback (
+                                         GLFWwindow* loc_window,                // Window.
+                                         int         loc_x_size,                // Framebuffer x-size [px].
+                                         int         loc_y_size                 // Framebuffer y-size [px].
+                                        );
   // Key-pressed callback:
   static void key_pressed_callback (
                                     GLFWwindow* loc_window,                     // Window.
@@ -170,11 +176,16 @@ public:
   void clear ();
   // Refresh retpoline:
   void refresh ();
-  // Resize retpoline:
-  void resize (
-               int loc_x_size,                                                  // Window x-size [px].
-               int loc_y_size                                                   // Window y-size [px].
-              );
+  // Window resize retpoline:
+  void window_resize (
+                      int loc_x_size,                                           // Window x-size [screen coordinates].
+                      int loc_y_size                                            // Window y-size [screen coordinates].
+                     );
+  // Framebuffer resize retpoline:
+  void framebuffer_resize (
+                           int loc_x_size,                                      // Framebuffer x-size [px].
+                           int loc_y_size                                       // Framebuffer y-size [px].
+                          );
   // Event polling retpoline:
   void poll_events ();
 
