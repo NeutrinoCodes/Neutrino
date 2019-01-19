@@ -57,11 +57,9 @@ void window::arcball ()
   if(arcball_on && (theta > 0.0))                                               // If mouse has been dragged (= left click + move):
   {
     printf (
-            "mx = %f, my = %f, mxo = %f, myo = %f\n",
+            "mx = %f, my = %f\n",
             mouse_x,
-            mouse_y,
-            mouse_x_old,
-            mouse_y_old
+            mouse_y
            );
     //normalize (a);                                                              // Normalizing vector "a"...
     //normalize (b);                                                              // Normalizing vector "b"...
@@ -248,7 +246,8 @@ void window::init (
   glfwMakeContextCurrent (glfw_window);                                         // Making the context of this window current for the calling thread...
 
   glfwSetWindowRefreshCallback (glfw_window, refresh_callback);                 // Setting refresh callback...
-  glfwSetWindowSizeCallback (glfw_window, resize_callback);                     // Setting resize callback...
+  glfwSetWindowSizeCallback (glfw_window, window_resize_callback);              // Setting window resize callback...
+  glfwSetFramebufferSizeCallback(glfw_window, framebuffer_resize_callback);     // Setting framebuffer resize callback...
   glfwSetKeyCallback (glfw_window, key_pressed_callback);                       // Setting key pressed callback...
   glfwSetMouseButtonCallback (glfw_window, mouse_pressed_callback);             // Setting mouse pressed callback...
   glfwSetCursorPosCallback (glfw_window, mouse_moved_callback);                 // Setting mouse moved callback...
@@ -329,15 +328,28 @@ void window::refresh_callback (
 
 /// # Window resize callback function
 /// ### Description:
-/// Invokes the resize retpoline function.
-void window::resize_callback (
+/// Invokes the window resize retpoline function.
+void window::window_resize_callback (
                               GLFWwindow* loc_window,                           // Window.
-                              int         loc_x_size,                           // Window x-size [px].
-                              int         loc_y_size                            // Window y-size [px].
+                              int         loc_x_size,                           // Window x-size [screen coordinates].
+                              int         loc_y_size                            // Window y-size [screen coordinates].
                              )
 {
   window* win = (window*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
-  win -> resize (loc_x_size, loc_y_size);                                       // Calling resize retpoline...
+  win -> window_resize (loc_x_size, loc_y_size);                                // Calling window resize retpoline...
+}
+
+/// # Framebuffer resize callback function
+/// ### Description:
+/// Invokes the framebuffer resize retpoline function.
+void window::framebuffer_resize_callback (
+                              GLFWwindow* loc_window,                           // Window.
+                              int         loc_x_size,                           // Framebuffer x-size [px].
+                              int         loc_y_size                            // Framebuffer y-size [px].
+                             )
+{
+  window* win = (window*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
+  win -> framebufffer_resize (loc_x_size, loc_y_size);                          // Calling framebuffer resize retpoline...
 }
 
 /// # Window key-pressed callback function
@@ -529,9 +541,9 @@ void window::refresh ()
 /// # Window resize retpoline function
 /// ### Description:
 /// Resizes the window, according to the perspective and aspect ratio.
-void window::resize (
-                     int loc_x_size,                                            // x-size.
-                     int loc_y_size                                             // y-size.
+void window::window_resize (
+                     int loc_x_size,                                            // Window x-size [screen coordinates].
+                     int loc_y_size                                             // Window y-size [screen coordinates].
                     )
 {
   window_size_x = loc_x_size;
@@ -539,6 +551,21 @@ void window::resize (
   aspect_ratio  = (double)window_size_x/(double)window_size_y;                  // Setting window aspect ration []...
   perspective (P, FOV*M_PI/180.0, aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);       // Setting Projection_matrix matrix...
   glViewport (0, 0, window_size_x, window_size_y);                              // Resizing OpenGL viewport...
+}
+
+/// # Framebuffer resize retpoline function
+/// ### Description:
+/// Resizes the framebuffer, according to the perspective and aspect ratio.
+void window::framebuffer_resize (
+                     int loc_x_size,                                            // Window x-size [screen coordinates].
+                     int loc_y_size                                             // Window y-size [screen coordinates].
+                    )
+{
+  framebuffer_size_x = loc_x_size;
+  framebuffer_size_y = loc_y_size;
+  aspect_ratio  = (double)framebuffer_size_x/(double)frambuffer_size_y;         // Setting window aspect ration []...
+  perspective (P, FOV*M_PI/180.0, aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);       // Setting Projection_matrix matrix...
+  glViewport (0, 0, framebuffer_size_x, framebuffer_size_y);                    // Resizing OpenGL viewport...
 }
 
 /// # Window poll events function

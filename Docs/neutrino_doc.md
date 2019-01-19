@@ -7,20 +7,12 @@ the [OpenGL](https://en.wikipedia.org/wiki/OpenGL) frameworks.
 The aim of Neutrino is to reduce the code overhead, due to the complexity of
 the GPU-accelerated coding paradigm, in order to let the users concentrate on the
 implementation of their algorithms.
-<<<<<<< HEAD
 The architecture of this computational paradigm is based on a parallel execution of routines
 running on a OpenCL *client* computing device (e.g. GPU card) and scheduled by a C++ *program* running
 on the *host* device carrying the client (e.g. a PC).
 The mathematical computation of interest is first prepared on the host device
 starting by the `main.cpp` file and then run, by means further code written in so called OpenCL
 *kernel* files, on the client.
-=======
-The mathematical computation of interest is done by means of one or more OpenCL
-*kernel* files and running on the OpenCL *client*
-device (GPU). The kernel is invoked by a Neutrino *program* defined by the
-program.cpp file and running on the OpenCL *host* device (CPU), where the client
-is resident (e.g. a CPU-based PC having a GPU card).
->>>>>>> 88c7a14... Working on pitch level.
 User-defined variables can be exchanged between the program running on the
 host and the kernel running on the client via the OpenCL framework.
 The results of the mathematical computation running on the client can be
