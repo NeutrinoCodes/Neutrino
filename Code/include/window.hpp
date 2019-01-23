@@ -17,8 +17,6 @@ class window
 {
 private:
   neutrino* baseline;                                                           // Neutrino baseline.
-  double    mouse_x_old;                                                        // Mouse x-coordinate backup [px].
-  double    mouse_y_old;                                                        // Mouse y-coordinate backup [px].
   bool      arcball_on;                                                         // Arcball activation flag.
 
   // Rotation matrix backup:
@@ -67,11 +65,11 @@ private:
                                       int         loc_y_size                    // Window y-size [screen coordinates].
                                      );
   // Framebuffer resize callback:
-  static void framebuffer_size_callback (
-                                         GLFWwindow* loc_window,                // Window.
-                                         int         loc_x_size,                // Framebuffer x-size [px].
-                                         int         loc_y_size                 // Framebuffer y-size [px].
-                                        );
+  static void framebuffer_resize_callback (
+                                           GLFWwindow* loc_window,              // Window.
+                                           int         loc_x_size,              // Framebuffer x-size [px].
+                                           int         loc_y_size               // Framebuffer y-size [px].
+                                          );
   // Key-pressed callback:
   static void key_pressed_callback (
                                     GLFWwindow* loc_window,                     // Window.
@@ -129,11 +127,18 @@ private:
 public:
   GLFWwindow* glfw_window;                                                      // Window handle.
   const char* title;                                                            // Window title.
-  int         window_size_x;                                                    // Window x-size [px].
-  int         window_size_y;                                                    // Window y-size [px].
+  int         window_size_x;                                                    // Window x-size [screen coordinates].
+  int         window_size_y;                                                    // Window y-size [screen coordinates].
+  int         framebuffer_size_x;                                               // Window x-size [px].
+  int         framebuffer_size_y;                                               // Window y-size [px].
+
   double      aspect_ratio;                                                     // Window aspect ratio [].
   double      mouse_x;                                                          // Mouse x-coordinate [px].
   double      mouse_y;                                                          // Mouse y-coordinate [px].
+  double      pixel_x;
+  double      pixel_y;
+  double      pixel_x_old;
+  double      pixel_y_old;
   double      scroll_x;                                                         // Scroll x-coordinate [px].
   double      scroll_y;                                                         // Scroll y-coordinate [px].
   double      zoom;                                                             // Zoom coefficient.
