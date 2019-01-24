@@ -23,8 +23,8 @@ void window::grasp (
 {
   float op_sq;                                                                  // Center "o" to "p" squared distance.
 
-  p[0]  = +(2.0*round ((float)x)/(float)framebuffer_size_x - 1.0);              // Computing point on unitary ball [x]...
-  p[1]  = -(2.0*round ((float)y)/(float)framebuffer_size_y - 1.0);              // Computing point on unitary ball [y] (axis inverted according to OpenGL)...
+  p[0]  = +(float)(2.0*x/framebuffer_size_x - 1.0);                             // Computing point on unitary ball [x]...
+  p[1]  = -(float)(2.0*y/framebuffer_size_y - 1.0);                             // Computing point on unitary ball [y] (axis inverted according to OpenGL)...
   p[2]  = 0.0;                                                                  // Computing point on unitary ball [z]...
   op_sq = p[0]*p[0] + p[1]*p[1];                                                // Computing "op" squared...
 
@@ -35,6 +35,7 @@ void window::grasp (
 
   else
   {
+    printf ("pizze\n");
     normalize (p);                                                              // Normalizing if too far...
   }
 }
@@ -55,12 +56,7 @@ void window::arcball ()
 
   if(arcball_on && (theta > 0.0))                                               // If mouse has been dragged (= left click + move):
   {
-    printf (
-            "mx = %f, my = %f, th = %f\n",
-            pixel_x,
-            pixel_y,
-            theta
-           );
+
     //normalize (a);                                                              // Normalizing vector "a"...
     //normalize (b);                                                              // Normalizing vector "b"...
     cross (axis, a, b);                                                         // Computing arcball axis of rotation...
@@ -68,6 +64,11 @@ void window::arcball ()
     quaternion (q, axis, theta);                                                // Computing rotation quaternion...
     rotate (R, R_old, q);                                                       // Computing rotation matrix...
     euler (&roll, &pitch, &yaw, q);                                             // Computing Euler (Tait-Bryan) angles...
+    printf (
+            "pyo = %f, py = %f\n",
+            pixel_y_old,
+            pixel_y
+           );
   }
 }
 
