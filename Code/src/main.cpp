@@ -163,12 +163,12 @@ int main ()
       points  -> release_gl (Q[0], 0);
       colors  -> release_gl (Q[0], 1);
 
-      gui     ->print(message);                                               // Printing text...
+      //gui     -> print (message);                                               // Printing text...
       gui     -> plot (points, colors, STYLE_POINT);
-      gui     -> cockpit_AI (controller);
+      //gui     -> cockpit_AI (controller);
       gui     -> refresh ();                                                    // Refreshing window...
-/*
-      printf (
+      /*
+         printf (
               "r = %f, p = %f, y = %f, q0 = %f, q1 = %f, q2 = %f, q3 = %f\n",
               gui -> roll,
               gui -> pitch,
@@ -178,7 +178,7 @@ int main ()
               gui -> q[2],
               gui -> q[3]
              );
-             */
+       */
 
       baseline -> get_toc ();                                                   // Getting "toc" [us]...
     }
