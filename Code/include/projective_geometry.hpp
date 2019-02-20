@@ -48,7 +48,7 @@ void vr_perspective (
                      float PR[16],                                              // 4x4 left eye perspective matrix.
                      float TL[16],                                              // 4x4 right eye translation matrix.
                      float TR[16],                                              // 4x4 left eye translation matrix.
-                     float IOD,                                                 // Intraocular distance.
+                     float iod,                                                 // Intraocular distance.
                      float fov,                                                 // Field of view [rad].
                      float aspect_ratio,                                        // Projective screen aspect ratio.
                      float z_near,                                              // Projective screen near depth...
