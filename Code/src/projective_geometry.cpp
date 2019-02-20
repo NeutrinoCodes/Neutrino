@@ -180,8 +180,10 @@ void perspective (
 /// ### Description:
 /// Computes the perspective matrix given the projective screen boundaries.
 void vr_perspective (
-                     float PR[16],                                              // 4x4 right perspective matrix.
-                     float PL[16],                                              // 4x4 left perspective matrix.
+                     float PL[16],                                              // 4x4 right eye perspective matrix.
+                     float PR[16],                                              // 4x4 left eye perspective matrix.
+                     float TL[16],                                              // 4x4 right eye translation matrix.
+                     float TR[16],                                              // 4x4 left eye translation matrix.
                      float IOD,                                                 // Intraocular distance.
                      float fov,                                                 // Field of view [rad].
                      float aspect_ratio,                                        // Projective screen aspect ratio.
@@ -193,11 +195,21 @@ void vr_perspective (
   float y_max;                                                                  // Projective screen maximum "y" coordinate.
   float x_eye_shift;                                                            // Eye horizontal shift, due to stereoscopic vision.
   float x_frustum_shift;                                                        // Frustum horizontal shift, due to stereoscopic vision.
+  float left_eye[3];                                                            // Left eye location.
+  float right_eye[3];                                                           // Right eye location.
 
   y_max           = z_near*tanf (fov/2.0);                                      // Computing y_max...
   x_max           = y_max*aspect_ratio;                                         // Computing x_max...
   x_eye_shift     = IOD/2.0;                                                    // Computing x_eye_shift...
   x_frustum_shift = x_eye_shift*z_near/z_far;                                   // Computing x_shift...
+
+  left_eye[0]     = -x_eye_shift;                                               // Setting left eye x-coordinate...
+  left_eye[1]     = 0;                                                          // Setting left eye y-coordinate...
+  left_eye[3]     = 0;                                                          // Setting left eye z-coordinate...
+
+  right_eye[0]    = +x_eye_shift;                                               // Setting right eye x-coordinate...
+  right_eye[1]    = 0;                                                          // Setting right eye y-coordinate...
+  right_eye[3]    = 0;                                                          // Setting right eye z-coordinate...
 
   // Computing left eye perspective frustum:
   frustum (
@@ -220,4 +232,16 @@ void vr_perspective (
            +z_near,                                                             // Projective screen near depth...
            +z_far                                                               // Projective screen far depth...
           );
+
+  // Computing left eye translation matrix:
+  translate (
+             TL,                                                                // 4x4 translation matrix.
+             left_eye                                                           // 3D translation vector.
+            );
+
+  // Computing right eye translation matrix:
+  translate (
+             TR,                                                                // 4x4 translation matrix.
+             right_eye                                                          // 3D translation vector.
+            );
 }
