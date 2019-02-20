@@ -667,7 +667,7 @@ void window::plot (
                                                ),
                           1,                                                    // # of matrices to be modified.
                           GL_FALSE,                                             // FALSE = column major.
-                          &P[0]                                                 // Projection matrix.
+                          &PL[0]                                                // Projection matrix.
                          );
       break;
   }
