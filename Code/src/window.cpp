@@ -283,6 +283,22 @@ void window::init (
   translate (T, initial_translation);                                           // Setting initial Translation_matrix matrix...
   perspective (P, FOV*M_PI/180.0, aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);       // Setting Projection_matrix matrix...
 
+
+  // Setting stereoscopic perspective and translation matrices:
+  translate (TL, initial_translation);                                          // Setting initial Translation_matrix matrix...
+  translate (TR, initial_translation);                                          // Setting initial Translation_matrix matrix...
+  vr_perspective (
+                  PL,                                                           // 4x4 right eye perspective matrix.
+                  PR,                                                           // 4x4 left eye perspective matrix.
+                  TL,                                                           // 4x4 right eye translation matrix.
+                  TR,                                                           // 4x4 left eye translation matrix.
+                  IOD,                                                          // Intraocular distance.
+                  FOV,                                                          // Field of view [rad].
+                  aspect_ratio,                                                 // Projective screen aspect ratio.
+                  NEAR_Z_CLIP,                                                  // Projective screen near depth...
+                  FAR_Z_CLIP                                                    // Projective screen far depth...
+                 );
+
   glfwSwapBuffers (glfw_window);                                                // Swapping front and back buffers...
   glfwPollEvents ();                                                            // Polling GLFW events...
 }
@@ -508,6 +524,10 @@ void window::mouse_scrolled (
   translation[1] = 0.0;                                                         // Building translation vector...
   translation[2] = zoom;                                                        // Building translation vector...
   translate (T, translation);                                                   // Building translation matrix...
+
+  // Applying zoom to stereoscopic translation matrices:
+  translate (TL, translation);                                                  // Building translation matrix...
+  translate (TR, translation);                                                  // Building translation matrix...
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -553,6 +573,20 @@ void window::framebuffer_resize (
   framebuffer_size_y = loc_y_size;                                              // Setting framebuffer_size_y...
   aspect_ratio       = (double)framebuffer_size_x/(double)framebuffer_size_y;   // Setting window aspect ration []...
   perspective (P, FOV*M_PI/180.0, aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);       // Setting Projection_matrix matrix...
+
+  // Setting stereoscopic perspective and translation matrices:
+  vr_perspective (
+                  PL,                                                           // 4x4 right eye perspective matrix.
+                  PR,                                                           // 4x4 left eye perspective matrix.
+                  TL,                                                           // 4x4 right eye translation matrix.
+                  TR,                                                           // 4x4 left eye translation matrix.
+                  IOD,                                                          // Intraocular distance.
+                  FOV,                                                          // Field of view [rad].
+                  aspect_ratio,                                                 // Projective screen aspect ratio.
+                  NEAR_Z_CLIP,                                                  // Projective screen near depth...
+                  FAR_Z_CLIP                                                    // Projective screen far depth...
+                 );
+
   glViewport (0, 0, framebuffer_size_x, framebuffer_size_y);                    // Resizing OpenGL viewport...
 }
 
@@ -576,7 +610,8 @@ void window::plot (
                    plot_style ps
                   )
 {
-  multiplicate (V, T, R);                                                       // Setting View_matrix matrix...
+  //multiplicate (V, T, R);                                                       // Setting View_matrix matrix...
+  multiplicate (V, TL, R);                                                      // Setting View_matrix matrix...
 
   switch(ps)
   {
@@ -604,7 +639,7 @@ void window::plot (
                                                ),
                           1,                                                    // # of matrices to be modified.
                           GL_FALSE,                                             // FALSE = column major.
-                          &P[0]                                                 // Projection matrix.
+                          &PL[0]                                                // Projection matrix.
                          );
       break;
 
