@@ -50,7 +50,7 @@
   #define NEAR_Z_CLIP                       0.1f                                // Near z-clipping distance [small, but > 0.0].
   #define FAR_Z_CLIP                        100.0f                              // Far z-clipping distance [big, but < +inf].
   #define FOV                               60.0f                               // Field of view [deg].
-  #define IOD                               0.0001f                             // Intraocular distance.
+  #define IOD                               0.5f                                // Intraocular distance.
   #define LINE_WIDTH                        3                                   // Line width [px].
   #define KERNEL_NAME                       "thekernel"                         // OpenCL kernel function name.
   #define MAX_TEXT_SIZE                     128                                 // Maximum # of characters in a text string.
