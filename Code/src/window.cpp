@@ -293,7 +293,7 @@ void window::init (
                   TL,                                                           // 4x4 right eye translation matrix.
                   TR,                                                           // 4x4 left eye translation matrix.
                   IOD,                                                          // Intraocular distance.
-                  FOV,                                                          // Field of view [rad].
+                  FOV*M_PI/180.0,                                               // Field of view [rad].
                   aspect_ratio,                                                 // Projective screen aspect ratio.
                   NEAR_Z_CLIP,                                                  // Projective screen near depth...
                   FAR_Z_CLIP                                                    // Projective screen far depth...
@@ -581,7 +581,7 @@ void window::framebuffer_resize (
                   TL,                                                           // 4x4 right eye translation matrix.
                   TR,                                                           // 4x4 left eye translation matrix.
                   IOD,                                                          // Intraocular distance.
-                  FOV,                                                          // Field of view [rad].
+                  FOV*M_PI/180.0,                                               // Field of view [rad].
                   aspect_ratio,                                                 // Projective screen aspect ratio.
                   NEAR_Z_CLIP,                                                  // Projective screen near depth...
                   FAR_Z_CLIP                                                    // Projective screen far depth...
