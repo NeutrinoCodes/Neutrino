@@ -280,9 +280,9 @@ void window::init (
   glEnable (GL_PROGRAM_POINT_SIZE);                                             // Enabling "gl_PointSize" in vertex shader...
   glLineWidth (LINE_WIDTH);                                                     // Setting line width...
 
+  PR_mode      = MODE_2D;                                                       // Setting 2D projection mode...
   translate (T, initial_translation);                                           // Setting initial Translation_matrix matrix...
   perspective (P, FOV*M_PI/180.0, aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);       // Setting Projection_matrix matrix...
-
 
   // Setting stereoscopic perspective and translation matrices:
   //translate (TL, initial_translation);                                          // Setting initial Translation_matrix matrix...
@@ -436,16 +436,22 @@ void window::key_pressed (
         glfwSetWindowShouldClose (glfw_window, GL_TRUE);                        // Setting window "closed" flag...
       }
       break;
+
+    case GLFW_KEY_2:
+      if(loc_action == GLFW_PRESS)
+      {
+        PR_mode = MODE_2D;                                                      // Switching to 2D mode...
+      }
+      break;
+
+    case GLFW_KEY_3:
+      if(loc_action == GLFW_PRESS)
+      {
+        PR_mode = MODE_3D;                                                      // Switching to 3D mode...
+      }
+      break;
   }
 
-  /*
-     if(
-     loc_key == GLFW_KEY_ESCAPE &&
-     loc_action == GLFW_PRESS
-     )
-     {
-     glfwSetWindowShouldClose (glfw_window, GL_TRUE);                            // Setting window "closed" flag...
-     } */
 }
 
 /// # Window mouse-pressed retpoline function
@@ -621,84 +627,169 @@ void window::plot (
                    plot_style ps
                   )
 {
-  multiplicate (V, T, R);                                                       // Setting View_matrix matrix...
-  multiplicate (V, TL, V);                                                      // Setting View_matrix matrix...
-
-  switch(ps)
+  switch(PR_mode)
   {
-    case STYLE_POINT:
-      glUseProgram (point_shader);                                              // Using shader...
+    case MODE_2D:
+      multiplicate (V, T, R);                                                   // Setting View_matrix matrix...
 
-      // Setting View_matrix matrix on shader:
-      glUniformMatrix4fv (
-                                                                                // Getting variable's uniform location:
-                          glGetUniformLocation (
-                                                point_shader,                   // Program.
-                                                "View_matrix"                   // Variable.
-                                               ),
-                          1,                                                    // # of matrices to be modified.
-                          GL_FALSE,                                             // FALSE = column major.
-                          &V[0]                                                 // View matrix.
-                         );
+      switch(ps)
+      {
+        case STYLE_POINT:
+          glUseProgram (point_shader);                                          // Using shader...
 
-      // Setting Projection_matrix matrix on shader:
-      glUniformMatrix4fv (
+          // Setting View_matrix matrix on shader:
+          glUniformMatrix4fv (
                                                                                 // Getting variable's uniform location:
-                          glGetUniformLocation (
-                                                point_shader,                   // Program.
-                                                "Projection_matrix"             // Variable.
-                                               ),
-                          1,                                                    // # of matrices to be modified.
-                          GL_FALSE,                                             // FALSE = column major.
-                          &PL[0]                                                // Projection matrix.
-                         );
+                              glGetUniformLocation (
+                                                    point_shader,               // Program.
+                                                    "View_matrix"               // Variable.
+                                                   ),
+                              1,                                                // # of matrices to be modified.
+                              GL_FALSE,                                         // FALSE = column major.
+                              &V[0]                                             // View matrix.
+                             );
+
+          // Setting Projection_matrix matrix on shader:
+          glUniformMatrix4fv (
+                                                                                // Getting variable's uniform location:
+                              glGetUniformLocation (
+                                                    point_shader,               // Program.
+                                                    "Projection_matrix"         // Variable.
+                                                   ),
+                              1,                                                // # of matrices to be modified.
+                              GL_FALSE,                                         // FALSE = column major.
+                              &P[0]                                             // Projection matrix.
+                             );
+          break;
+
+        default:
+          glUseProgram (point_shader);                                          // Using shader...
+
+          // Setting View_matrix matrix on shader:
+          glUniformMatrix4fv (
+                                                                                // Getting variable's uniform location:
+                              glGetUniformLocation (
+                                                    point_shader,               // Program.
+                                                    "View_matrix"               // Variable.
+                                                   ),
+                              1,                                                // # of matrices to be modified.
+                              GL_FALSE,                                         // FALSE = column major.
+                              &V[0]                                             // View matrix.
+                             );
+
+          // Setting Projection_matrix matrix on shader:
+          glUniformMatrix4fv (
+                                                                                // Getting variable's uniform location:
+                              glGetUniformLocation (
+                                                    point_shader,               // Program.
+                                                    "Projection_matrix"         // Variable.
+                                                   ),
+                              1,                                                // # of matrices to be modified.
+                              GL_FALSE,                                         // FALSE = column major.
+                              &P[0]                                             // Projection matrix.
+                             );
+          break;
+      }
+
+      // Binding "points" array:
+      glEnableVertexAttribArray (LAYOUT_0);                                     // Enabling "layout = 0" attribute in vertex shader...
+      glBindBuffer (GL_ARRAY_BUFFER, points -> vbo);                            // Binding VBO...
+      glVertexAttribPointer (LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);            // Specifying the format for "layout = 0" attribute in vertex shader...
+
+      // Binding "colors" array:
+      glEnableVertexAttribArray (LAYOUT_1);                                     // Enabling "layout = 1" attribute in vertex shader...
+      glBindBuffer (GL_ARRAY_BUFFER, colors -> vbo);                            // Binding VBO...
+      glVertexAttribPointer (LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);            // Specifying the format for "layout = 1" attribute in vertex shader...
+
+      // Drawing:
+      glDrawArrays (GL_POINTS, 0, points -> size);                              // Drawing "points"...
+
+      // Finishing:
+      glDisableVertexAttribArray (LAYOUT_0);                                    // Unbinding "points" array...
+      glDisableVertexAttribArray (LAYOUT_1);                                    // Unbinding "colors" array...
       break;
 
-    default:
-      glUseProgram (point_shader);                                              // Using shader...
+    case MODE_3D:
+      multiplicate (V, T, R);                                                   // Setting View_matrix matrix...
+      multiplicate (V, TL, V);                                                  // Setting View_matrix matrix...
 
-      // Setting View_matrix matrix on shader:
-      glUniformMatrix4fv (
-                                                                                // Getting variable's uniform location:
-                          glGetUniformLocation (
-                                                point_shader,                   // Program.
-                                                "View_matrix"                   // Variable.
-                                               ),
-                          1,                                                    // # of matrices to be modified.
-                          GL_FALSE,                                             // FALSE = column major.
-                          &V[0]                                                 // View matrix.
-                         );
+      switch(ps)
+      {
+        case STYLE_POINT:
+          glUseProgram (point_shader);                                          // Using shader...
 
-      // Setting Projection_matrix matrix on shader:
-      glUniformMatrix4fv (
+          // Setting View_matrix matrix on shader:
+          glUniformMatrix4fv (
                                                                                 // Getting variable's uniform location:
-                          glGetUniformLocation (
-                                                point_shader,                   // Program.
-                                                "Projection_matrix"             // Variable.
-                                               ),
-                          1,                                                    // # of matrices to be modified.
-                          GL_FALSE,                                             // FALSE = column major.
-                          &P[0]                                                 // Projection matrix.
-                         );
+                              glGetUniformLocation (
+                                                    point_shader,               // Program.
+                                                    "View_matrix"               // Variable.
+                                                   ),
+                              1,                                                // # of matrices to be modified.
+                              GL_FALSE,                                         // FALSE = column major.
+                              &V[0]                                             // View matrix.
+                             );
+
+          // Setting Projection_matrix matrix on shader:
+          glUniformMatrix4fv (
+                                                                                // Getting variable's uniform location:
+                              glGetUniformLocation (
+                                                    point_shader,               // Program.
+                                                    "Projection_matrix"         // Variable.
+                                                   ),
+                              1,                                                // # of matrices to be modified.
+                              GL_FALSE,                                         // FALSE = column major.
+                              &PL[0]                                            // Projection matrix.
+                             );
+          break;
+
+        default:
+          glUseProgram (point_shader);                                          // Using shader...
+
+          // Setting View_matrix matrix on shader:
+          glUniformMatrix4fv (
+                                                                                // Getting variable's uniform location:
+                              glGetUniformLocation (
+                                                    point_shader,               // Program.
+                                                    "View_matrix"               // Variable.
+                                                   ),
+                              1,                                                // # of matrices to be modified.
+                              GL_FALSE,                                         // FALSE = column major.
+                              &V[0]                                             // View matrix.
+                             );
+
+          // Setting Projection_matrix matrix on shader:
+          glUniformMatrix4fv (
+                                                                                // Getting variable's uniform location:
+                              glGetUniformLocation (
+                                                    point_shader,               // Program.
+                                                    "Projection_matrix"         // Variable.
+                                                   ),
+                              1,                                                // # of matrices to be modified.
+                              GL_FALSE,                                         // FALSE = column major.
+                              &PL[0]                                            // Projection matrix.
+                             );
+          break;
+      }
+
+      // Binding "points" array:
+      glEnableVertexAttribArray (LAYOUT_0);                                     // Enabling "layout = 0" attribute in vertex shader...
+      glBindBuffer (GL_ARRAY_BUFFER, points -> vbo);                            // Binding VBO...
+      glVertexAttribPointer (LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);            // Specifying the format for "layout = 0" attribute in vertex shader...
+
+      // Binding "colors" array:
+      glEnableVertexAttribArray (LAYOUT_1);                                     // Enabling "layout = 1" attribute in vertex shader...
+      glBindBuffer (GL_ARRAY_BUFFER, colors -> vbo);                            // Binding VBO...
+      glVertexAttribPointer (LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);            // Specifying the format for "layout = 1" attribute in vertex shader...
+
+      // Drawing:
+      glDrawArrays (GL_POINTS, 0, points -> size);                              // Drawing "points"...
+
+      // Finishing:
+      glDisableVertexAttribArray (LAYOUT_0);                                    // Unbinding "points" array...
+      glDisableVertexAttribArray (LAYOUT_1);                                    // Unbinding "colors" array...
       break;
   }
-
-  // Binding "points" array:
-  glEnableVertexAttribArray (LAYOUT_0);                                         // Enabling "layout = 0" attribute in vertex shader...
-  glBindBuffer (GL_ARRAY_BUFFER, points -> vbo);                                // Binding VBO...
-  glVertexAttribPointer (LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                // Specifying the format for "layout = 0" attribute in vertex shader...
-
-  // Binding "colors" array:
-  glEnableVertexAttribArray (LAYOUT_1);                                         // Enabling "layout = 1" attribute in vertex shader...
-  glBindBuffer (GL_ARRAY_BUFFER, colors -> vbo);                                // Binding VBO...
-  glVertexAttribPointer (LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                // Specifying the format for "layout = 1" attribute in vertex shader...
-
-  // Drawing:
-  glDrawArrays (GL_POINTS, 0, points -> size);                                  // Drawing "points"...
-
-  // Finishing:
-  glDisableVertexAttribArray (LAYOUT_0);                                        // Unbinding "points" array...
-  glDisableVertexAttribArray (LAYOUT_1);                                        // Unbinding "colors" array...
 }
 
 /// # Window print function
