@@ -52,6 +52,12 @@ private:
                     );
   // Arcball computation:
   void        arcball ();
+  // Plot style:
+  void        set_plot_style (
+                              plot_style ps,                                    // Plot style.
+                              float      view_matrix[16],                       // View matrix.
+                              float      projection_matrix[16]                  // Projection matrix.
+                             );
   ////////////////////////////////////////////////////////////////////////////
   //////////////////////////////// CALLBACKS /////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////
@@ -164,6 +170,18 @@ public:
                         0.0, 0.0, 1.0, 0.0,
                         0.0, 0.0, 0.0, 1.0};
 
+  // View matrix:
+  float       V[16]  = {1.0, 0.0, 0.0, 0.0,
+                        0.0, 1.0, 0.0, 0.0,
+                        0.0, 0.0, 1.0, 0.0,
+                        0.0, 0.0, 0.0, 1.0};
+
+  // Projection matrix:
+  float       P[16]  = {1.0, 0.0, 0.0, 0.0,
+                        0.0, 1.0, 0.0, 0.0,
+                        0.0, 0.0, 1.0, 0.0,
+                        0.0, 0.0, 0.0, 1.0};
+
   // Left eye stereoscopic translation matrix:
   float       TL[16] = {1.0, 0.0, 0.0, 0.0,
                         0.0, 1.0, 0.0, 0.0,
@@ -176,14 +194,14 @@ public:
                         0.0, 0.0, 1.0, 0.0,
                         0.0, 0.0, 0.0, 1.0};
 
-  // View matrix:
-  float       V[16]  = {1.0, 0.0, 0.0, 0.0,
+  // Left eye stereoscopic view matrix:
+  float       VL[16] = {1.0, 0.0, 0.0, 0.0,
                         0.0, 1.0, 0.0, 0.0,
                         0.0, 0.0, 1.0, 0.0,
                         0.0, 0.0, 0.0, 1.0};
 
-  // Projection matrix:
-  float       P[16]  = {1.0, 0.0, 0.0, 0.0,
+  // Right eye stereoscopic view matrix:
+  float       VR[16] = {1.0, 0.0, 0.0, 0.0,
                         0.0, 1.0, 0.0, 0.0,
                         0.0, 0.0, 1.0, 0.0,
                         0.0, 0.0, 0.0, 1.0};
