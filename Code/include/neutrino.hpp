@@ -57,6 +57,13 @@
   #define MAX_MESSAGE_SIZE                  64                                  // Maximum # of characters in a text message.
   #define MAX_PATH_SIZE                     32768                               // Maximum # of characters in a text file path.
 
+// Projection mode:
+typedef enum
+{
+  MODE_2D,                                                                      // Projection mode set as 2D.
+  MODE_3D                                                                       // Projection mode set as 3D.
+} projection_mode;
+
 // Plot styles:
 typedef enum
 {

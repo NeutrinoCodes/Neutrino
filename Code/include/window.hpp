@@ -16,23 +16,24 @@
 class window
 {
 private:
-  neutrino* baseline;                                                           // Neutrino baseline.
-  bool      arcball_on;                                                         // Arcball activation flag.
+  neutrino*       baseline;                                                     // Neutrino baseline.
+  bool            arcball_on;                                                   // Arcball activation flag.
 
   // Rotation matrix backup:
-  float     R_old[16]              = {1.0, 0.0, 0.0, 0.0,
-                                      0.0, 1.0, 0.0, 0.0,
-                                      0.0, 0.0, 1.0, 0.0,
-                                      0.0, 0.0, 0.0, 1.0};
+  float           R_old[16]              = {1.0, 0.0, 0.0, 0.0,
+                                            0.0, 1.0, 0.0, 0.0,
+                                            0.0, 0.0, 1.0, 0.0,
+                                            0.0, 0.0, 0.0, 1.0};
 
   // Rotation quaternion backup:
-  float     q_old[4]               = {1.0, 0.0, 0.0, 0.0};
+  float           q_old[4]               = {1.0, 0.0, 0.0, 0.0};
 
   // Initial translation vector:
-  float     initial_translation[3] = {0.0, 0.0, -3.0};
+  float           initial_translation[3] = {0.0, 0.0, -3.0};
 
-  GLuint    point_shader;                                                       // Point shader program.
-  GLuint    text_shader;                                                        // Point shader program.
+  GLuint          point_shader;                                                 // Point shader program.
+  GLuint          text_shader;                                                  // Point shader program.
+  projection_mode PR_mode;                                                      // Projection mode.
   // OpenGL shader compilation:
   GLuint      compile_shader (
                               const char* loc_shader_filename,                  // Shader file name.
