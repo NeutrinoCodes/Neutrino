@@ -428,13 +428,24 @@ void window::key_pressed (
                          )
 {
   // Checking key pressed:
-  if(
+  switch(loc_key)
+  {
+    case GLFW_KEY_ESCAPE:
+      if(loc_action == GLFW_PRESS)
+      {
+        glfwSetWindowShouldClose (glfw_window, GL_TRUE);                        // Setting window "closed" flag...
+      }
+      break;
+  }
+
+  /*
+     if(
      loc_key == GLFW_KEY_ESCAPE &&
      loc_action == GLFW_PRESS
-    )
-  {
-    glfwSetWindowShouldClose (glfw_window, GL_TRUE);                            // Setting window "closed" flag...
-  }
+     )
+     {
+     glfwSetWindowShouldClose (glfw_window, GL_TRUE);                            // Setting window "closed" flag...
+     } */
 }
 
 /// # Window mouse-pressed retpoline function
