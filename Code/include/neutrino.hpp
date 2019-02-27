@@ -50,7 +50,7 @@
   #define NEAR_Z_CLIP                       0.1f                                // Near z-clipping distance [small, but > 0.0].
   #define FAR_Z_CLIP                        100.0f                              // Far z-clipping distance [big, but < +inf].
   #define FOV                               60.0f                               // Field of view [deg].
-  #define IOD                               0.5f                                // Intraocular distance.
+  #define IOD                               0.02f                               // Intraocular distance.
   #define SCREEN_DISTANCE                   -2.5f                               // Screen distance.
   #define LINE_WIDTH                        3                                   // Line width [px].
   #define KERNEL_NAME                       "thekernel"                         // OpenCL kernel function name.

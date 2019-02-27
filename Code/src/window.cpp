@@ -361,7 +361,7 @@ void window::init (
                   TR,                                                           // 4x4 left eye translation matrix.
                   IOD,                                                          // Intraocular distance.
                   FOV*M_PI/180.0,                                               // Field of view [rad].
-                  aspect_ratio,                                                 // Projective screen aspect ratio.
+                  aspect_ratio/2.0,                                             // Projective screen aspect ratio.
                   NEAR_Z_CLIP,                                                  // Projective screen near depth...
                   FAR_Z_CLIP                                                    // Projective screen far depth...
                  );
@@ -666,7 +666,7 @@ void window::framebuffer_resize (
                   TR,                                                           // 4x4 left eye translation matrix.
                   IOD,                                                          // Intraocular distance.
                   FOV*M_PI/180.0,                                               // Field of view [rad].
-                  aspect_ratio,                                                 // Projective screen aspect ratio.
+                  aspect_ratio/2.0,                                             // Projective screen aspect ratio.
                   NEAR_Z_CLIP,                                                  // Projective screen near depth...
                   FAR_Z_CLIP                                                    // Projective screen far depth...
                  );
@@ -742,7 +742,7 @@ void window::plot (
       glVertexAttribPointer (LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);            // Specifying the format for "layout = 1" attribute in vertex shader...
 
       // Drawing:
-      glViewport (0, window_size_y/4, window_size_x/2, window_size_y/2);
+      glViewport (0, 0, window_size_x/2, window_size_y);
       glDrawArrays (GL_POINTS, 0, points -> size);                              // Drawing "points"...
 
       // Finishing:
@@ -767,9 +767,9 @@ void window::plot (
       // Drawing:
       glViewport (
                   window_size_x/2,
-                  window_size_y/4,
+                  0,
                   window_size_x/2,
-                  window_size_y/2
+                  window_size_y
                  );
       glDrawArrays (GL_POINTS, 0, points -> size);                              // Drawing "points"...
 
