@@ -530,70 +530,83 @@ void window::mouse_button (
                            int loc_mods                                         // Mods.
                           )
 {
-  float translation[3];                                                         // Translation vector.
-
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////// READING MOUSE BUTTONS: ////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   switch(loc_button)
   {
     case GLFW_MOUSE_BUTTON_LEFT:
-      // Checking whether mouse button has been pressed:
-      if(loc_action == GLFW_PRESS && arcball_on == false)
-      {
-        pixel_x     =
-          (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
-          0.5f;                                                                 // Computing OpenGL pixel x-coordinates...
-        pixel_y     =
-          (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
-          0.5f;                                                                 // Computing OpenGL pixel y-coordinates...
-        pixel_x_old = pixel_x;                                                  // Backing up pixel_x position...
-        pixel_y_old = pixel_y;                                                  // Backing up pixel_y position...
 
-        arcball_on  = true;                                                     // Turning on arcball...
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          if(arcball_on == false)
+          {
+            pixel_x_old =
+              (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
+              0.5f;                                                             // Backing up pixel_x position...
+            pixel_y_old =
+              (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
+              0.5f;                                                             // Backing up pixel_y position...
+
+            arcball_on  = true;                                                 // Turning on arcball...
+            mouse_button_left_pressed == true;
+          }
+          break;
+
+        case GLFW_RELEASE:
+          if(arcball_on == true)
+          {
+            R_old[0]   = R[0]; R_old[4] = R[4]; R_old[8] = R[8];
+            R_old[12]  = R[12];                                                 // Backing up Rotation_matrix matrix...
+            R_old[1]   = R[1]; R_old[5] = R[5]; R_old[9] = R[9];
+            R_old[13]  = R[13];                                                 // Backing up Rotation_matrix matrix...
+            R_old[2]   = R[2]; R_old[6] = R[6]; R_old[10] = R[10];
+            R_old[14]  = R[14];                                                 // Backing up Rotation_matrix matrix...
+            R_old[3]   = R[3]; R_old[7] = R[7]; R_old[11] = R[11];
+            R_old[15]  = R[15];                                                 // Backing up Rotation_matrix matrix...
+
+            arcball_on = false;                                                 // Turning off arcball...
+            mouse_button_left_pressed == false;
+          }
+          break;
       }
 
-      // Checking whether mouse button has been released:
-      if(loc_action == GLFW_RELEASE && arcball_on == true)
-      {
-        R_old[0]   = R[0]; R_old[4] = R[4]; R_old[8] = R[8];
-        R_old[12]  = R[12];                                                     // Backing up Rotation_matrix matrix...
-        R_old[1]   = R[1]; R_old[5] = R[5]; R_old[9] = R[9];
-        R_old[13]  = R[13];                                                     // Backing up Rotation_matrix matrix...
-        R_old[2]   = R[2]; R_old[6] = R[6]; R_old[10] = R[10];
-        R_old[14]  = R[14];                                                     // Backing up Rotation_matrix matrix...
-        R_old[3]   = R[3]; R_old[7] = R[7]; R_old[11] = R[11];
-        R_old[15]  = R[15];                                                     // Backing up Rotation_matrix matrix...
-
-        arcball_on = false;                                                     // Turning off arcball...
-      }
       break;
 
     case GLFW_MOUSE_BUTTON_RIGHT:
 
-/*
-      scroll_x = loc_xoffset;                                                   // Getting scroll position...
-      scroll_y = loc_yoffset;                                                   // Getting scroll position...
-      zoom     = T[14];                                                         // Getting z-axis translation...
-
-      // Checking y-position:
-      if(scroll_y > 0)
+      switch(loc_action)
       {
-        zoom *= ZOOM_FACTOR;                                                    // Zooming-in...
+        case GLFW_PRESS:
+          mouse_button_right_pressed == true;
+          break;
+
+        case GLFW_RELEASE:
+          mouse_button_right_pressed == false;
+          break;
       }
 
-      // Checking y-position:
-      if(scroll_y < 0)
-      {
-        zoom /= ZOOM_FACTOR;                                                    // Zooming-out...
-      }
-
-      translation[0] = 0.0;                                                     // Building translation vector...
-      translation[1] = 0.0;                                                     // Building translation vector...
-      translation[2] = zoom;                                                    // Building translation vector...
-      translate (T, translation);                                               // Building translation matrix...
- */
       break;
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////// SETTING MOUSE STATE: /////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  if(mouse_button_left_pressed && !mouse_button_right_pressed)
+  {
 
   }
 
+  if(!mouse_button_left_pressed && mouse_button_right_pressed)
+  {
+
+  }
+
+  if(mouse_button_left_pressed && mouse_button_right_pressed)
+  {
+
+  }
 }
 
 /// # Window mouse-moved retpoline function
@@ -604,6 +617,7 @@ void window::mouse_moved (
                           double loc_ypos                                       // Mouse position [px].
                          )
 {
+
   mouse_x = loc_xpos;                                                           // Getting mouse position...
   mouse_y = loc_ypos;                                                           // Getting mouse position...
   pixel_x = (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +

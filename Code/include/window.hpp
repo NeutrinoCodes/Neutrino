@@ -18,6 +18,9 @@ class window
 private:
   neutrino*       baseline;                                                     // Neutrino baseline.
   bool            arcball_on;                                                   // Arcball activation flag.
+  bool            mouse_button_left_pressed;                                    // Mouse button left pressed flag.
+  bool            mouse_button_right_pressed;                                   // Mouse button right pressed flag.
+
 
   // Rotation matrix backup:
   float           R_old[16]              = {1.0, 0.0, 0.0, 0.0,
@@ -87,11 +90,11 @@ private:
                                    );
   // Mouse-pressed callback:
   static void mouse_button_callback (
-                                      GLFWwindow* loc_window,                   // Window.
-                                      int         loc_button,                   // Button.
-                                      int         loc_action,                   // Action.
-                                      int         loc_mods                      // Mods.
-                                     );
+                                     GLFWwindow* loc_window,                    // Window.
+                                     int         loc_button,                    // Button.
+                                     int         loc_action,                    // Action.
+                                     int         loc_mods                       // Mods.
+                                    );
   // Mouse-moved callback:
   static void mouse_moved_callback (
                                     GLFWwindow* loc_window,                     // Window.
@@ -116,10 +119,10 @@ private:
                           );
   // Mouse-pressed retpoline:
   void        mouse_button (
-                             int loc_button,                                    // Button.
-                             int loc_action,                                    // Action.
-                             int loc_mods                                       // Mods.
-                            );
+                            int loc_button,                                     // Button.
+                            int loc_action,                                     // Action.
+                            int loc_mods                                        // Mods.
+                           );
   // Mouse-moved retpoline:
   void        mouse_moved (
                            double loc_xpos,                                     // Mouse x-position [px].
