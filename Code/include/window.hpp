@@ -86,7 +86,7 @@ private:
                                     int         loc_mods                        // Mods.
                                    );
   // Mouse-pressed callback:
-  static void mouse_pressed_callback (
+  static void mouse_button_callback (
                                       GLFWwindow* loc_window,                   // Window.
                                       int         loc_button,                   // Button.
                                       int         loc_action,                   // Action.
@@ -115,7 +115,7 @@ private:
                            int loc_mods                                         // Mods.
                           );
   // Mouse-pressed retpoline:
-  void        mouse_pressed (
+  void        mouse_button (
                              int loc_button,                                    // Button.
                              int loc_action,                                    // Action.
                              int loc_mods                                       // Mods.
