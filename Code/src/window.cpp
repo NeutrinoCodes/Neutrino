@@ -465,7 +465,6 @@ void window::mouse_moved_callback (
 {
   window* win = (window*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
   win -> mouse_moved (loc_xpos, loc_ypos);                                      // Calling mouse moved retpoline...
-  win -> arcball ();                                                            // Computing arcball...
 }
 
 /// # Window mouse-scrolled callback function
@@ -595,17 +594,18 @@ void window::mouse_button (
   ////////////////////////////////////////////////////////////////////////////////
   if(mouse_button_left_pressed && !mouse_button_right_pressed)
   {
-
+    current_mouse_state = L_PRESSED;
   }
 
   if(!mouse_button_left_pressed && mouse_button_right_pressed)
   {
-
+    current_mouse_state = R_PRESSED;
+    printf ("peppo\n");
   }
 
   if(mouse_button_left_pressed && mouse_button_right_pressed)
   {
-
+    current_mouse_state = LR_PRESSED;
   }
 }
 
@@ -617,6 +617,7 @@ void window::mouse_moved (
                           double loc_ypos                                       // Mouse position [px].
                          )
 {
+  float pan[3];                                                                 // Pan vector.
 
   mouse_x = loc_xpos;                                                           // Getting mouse position...
   mouse_y = loc_ypos;                                                           // Getting mouse position...
@@ -624,6 +625,39 @@ void window::mouse_moved (
             0.5f;                                                               // Computing OpenGL pixel x-coordinates...
   pixel_y = (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
             0.5f;                                                               // Computing OpenGL pixel y-coordinates...
+
+  switch(current_mouse_state)
+  {
+    case L_PRESSED:
+      arcball ();                                                               // Computing arcball...
+      break;
+
+    case R_PRESSED:
+
+/*
+      scroll_x = loc_xoffset;                                                   // Getting scroll position...
+      scroll_y = loc_yoffset;                                                   // Getting scroll position...
+      zoom     = T[14];                                                         // Getting z-axis translation...
+
+      // Checking y-position:
+      if(scroll_y > 0)
+      {
+        zoom *= ZOOM_FACTOR;                                                    // Zooming-in...
+      }
+
+      // Checking y-position:
+      if(scroll_y < 0)
+      {
+        zoom /= ZOOM_FACTOR;                                                    // Zooming-out...
+      }*/
+      printf ("puppo\n");
+      pan[0] = pixel_x;                                                         // Building translation vector...
+      pan[1] = pixel_y;                                                         // Building translation vector...
+      pan[2] = 0.0;                                                             // Building translation vector...
+      translate (T, pan);                                                       // Building translation matrix...
+      break;
+  }
+
 }
 
 /// # Window mouse-scrolled retpoline function
