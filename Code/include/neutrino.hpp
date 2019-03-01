@@ -61,6 +61,7 @@
 // Mouse states:
 typedef enum
 {
+  NO_PRESSED,                                                                   // No mouse button pressed.
   L_PRESSED,                                                                    // Left button pressed.
   R_PRESSED,                                                                    // Right button pressed.
   LR_PRESSED                                                                    // Left + right button pressed.
