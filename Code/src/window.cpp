@@ -232,29 +232,32 @@ void window::init (
                    const char* loc_title                                        // Window title.
                   )
 {
-  baseline         = loc_baseline;                                              // Initializing Neutrino baseline...
-  window_size_x    = loc_window_size_x;                                         // Initializing window x-size [px]...
-  window_size_y    = loc_window_size_y;                                         // Initializing window y-size [px]...
-  title            = loc_title;                                                 // Initializing window title...
-  aspect_ratio     = (double)window_size_x/(double)window_size_y;               // Initializing window aspect ration []...
-  mouse_x          = 0;                                                         // Initializing mouse x-coordinate [px]...
-  mouse_y          = 0;                                                         // Initializing mouse y-coordinate [px]...
-  pixel_x          = 0;
-  pixel_y          = 0;
-  pixel_x_old      = 0;
-  pixel_y_old      = 0;
-  scroll_x         = 0;                                                         // Initializing scroll x-coordinate [px]...
-  scroll_y         = 0;                                                         // Initializing scroll y-coordinate [px]...
-  zoom             = 0;                                                         // Initializing zoom coefficient...
-  arcball_on       = false;                                                     // Initializing arcball activation flag...
+  baseline                   = loc_baseline;                                    // Initializing Neutrino baseline...
+  window_size_x              = loc_window_size_x;                               // Initializing window x-size [px]...
+  window_size_y              = loc_window_size_y;                               // Initializing window y-size [px]...
+  title                      = loc_title;                                       // Initializing window title...
+  aspect_ratio               = (double)window_size_x/(double)window_size_y;     // Initializing window aspect ration []...
+  mouse_x                    = 0;                                               // Initializing mouse x-coordinate [px]...
+  mouse_y                    = 0;                                               // Initializing mouse y-coordinate [px]...
+  pixel_x                    = 0;
+  pixel_y                    = 0;
+  pixel_x_old                = 0;
+  pixel_y_old                = 0;
+  scroll_x                   = 0;                                               // Initializing scroll x-coordinate [px]...
+  scroll_y                   = 0;                                               // Initializing scroll y-coordinate [px]...
+  zoom                       = 0;                                               // Initializing zoom coefficient...
+  arcball_on                 = false;                                           // Initializing arcball activation flag...
+  mouse_button_left_pressed  = false;
+  mouse_button_right_pressed = false;
+  current_mouse_state        = NO_PRESSED;
 
   int opengl_ver_major;                                                         // OpenGL version major number.
   int opengl_ver_minor;                                                         // OpenGL version minor number.
   int opengl_msaa;                                                              // OpenGL multisampling antialiasing factor.
 
-  opengl_ver_major = 4;                                                         // EZOR 04NOV2018: to be generalized by iterative search.
-  opengl_ver_minor = 1;                                                         // EZOR 04NOV2018: to be generalized by iterative search.
-  opengl_msaa      = 4;                                                         // EZOR: 3 or 4 sample is good due to the general oversampling-decimation method.
+  opengl_ver_major           = 4;                                               // EZOR 04NOV2018: to be generalized by iterative search.
+  opengl_ver_minor           = 1;                                               // EZOR 04NOV2018: to be generalized by iterative search.
+  opengl_msaa                = 4;                                               // EZOR: 3 or 4 sample is good due to the general oversampling-decimation method.
 
   // Initializing GLFW context:
   baseline -> action ("initializing GLFW...");                                  // Printing message...
@@ -541,32 +544,35 @@ void window::mouse_button (
         case GLFW_PRESS:
           if(arcball_on == false)
           {
-            pixel_x_old =
+            pixel_x_old         =
               (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
               0.5f;                                                             // Backing up pixel_x position...
-            pixel_y_old =
+            pixel_y_old         =
               (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
               0.5f;                                                             // Backing up pixel_y position...
 
-            arcball_on  = true;                                                 // Turning on arcball...
-            mouse_button_left_pressed == true;
+            arcball_on          = true;                                         // Turning on arcball...
+            current_mouse_state = L_PRESSED;
           }
           break;
 
         case GLFW_RELEASE:
           if(arcball_on == true)
           {
-            R_old[0]   = R[0]; R_old[4] = R[4]; R_old[8] = R[8];
+            R_old[0]   = R[0]; R_old[4] = R[4];
+            R_old[8]   = R[8];
             R_old[12]  = R[12];                                                 // Backing up Rotation_matrix matrix...
-            R_old[1]   = R[1]; R_old[5] = R[5]; R_old[9] = R[9];
+            R_old[1]   = R[1]; R_old[5] = R[5];
+            R_old[9]   = R[9];
             R_old[13]  = R[13];                                                 // Backing up Rotation_matrix matrix...
-            R_old[2]   = R[2]; R_old[6] = R[6]; R_old[10] = R[10];
+            R_old[2]   = R[2]; R_old[6] = R[6];
+            R_old[10]  = R[10];
             R_old[14]  = R[14];                                                 // Backing up Rotation_matrix matrix...
-            R_old[3]   = R[3]; R_old[7] = R[7]; R_old[11] = R[11];
+            R_old[3]   = R[3]; R_old[7] = R[7];
+            R_old[11]  = R[11];
             R_old[15]  = R[15];                                                 // Backing up Rotation_matrix matrix...
 
             arcball_on = false;                                                 // Turning off arcball...
-            mouse_button_left_pressed == false;
           }
           break;
       }
@@ -578,34 +584,19 @@ void window::mouse_button (
       switch(loc_action)
       {
         case GLFW_PRESS:
-          mouse_button_right_pressed == true;
+          current_mouse_state = R_PRESSED;
           break;
 
         case GLFW_RELEASE:
-          mouse_button_right_pressed == false;
+
           break;
       }
 
       break;
-  }
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////// SETTING MOUSE STATE: /////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  if(mouse_button_left_pressed && !mouse_button_right_pressed)
-  {
-    current_mouse_state = L_PRESSED;
-  }
-
-  if(!mouse_button_left_pressed && mouse_button_right_pressed)
-  {
-    current_mouse_state = R_PRESSED;
-    printf ("peppo\n");
-  }
-
-  if(mouse_button_left_pressed && mouse_button_right_pressed)
-  {
-    current_mouse_state = LR_PRESSED;
+    default:
+      current_mouse_state = NO_PRESSED;
+      break;
   }
 }
 
