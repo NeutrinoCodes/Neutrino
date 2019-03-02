@@ -18,6 +18,7 @@ class window
 private:
   neutrino*       baseline;                                                     // Neutrino baseline.
   bool            arcball_on;                                                   // Arcball activation flag.
+  bool            pan_on;
   bool            mouse_button_left_pressed;                                    // Mouse button left pressed flag.
   bool            mouse_button_right_pressed;                                   // Mouse button right pressed flag.
   mouse_state     current_mouse_state;                                          // Current mouse state.
