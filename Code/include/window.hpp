@@ -57,9 +57,13 @@ private:
                       );
   // Orbit movement:
   void        orbit ();
-// Grasp computation:
-  void        grasp ();
-// Pan movement:
+  // Grasp computation:
+  void        grasp (
+                     float  position[3],
+                     double x,
+                     double y
+                    );
+  // Pan movement:
   void        pan ();
   // Plot style:
   void        set_plot_style (
