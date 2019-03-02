@@ -144,12 +144,20 @@ public:
   int         framebuffer_size_y;                                               // Window y-size [px].
 
   double      aspect_ratio;                                                     // Window aspect ratio [].
+
   double      mouse_x;                                                          // Mouse x-coordinate [px].
   double      mouse_y;                                                          // Mouse y-coordinate [px].
-  double      pixel_x;
-  double      pixel_y;
-  double      pixel_x_old;
-  double      pixel_y_old;
+
+  double      arcball_x_old;
+  double      arcball_y_old;
+  double      arcball_x;
+  double      arcball_y;
+
+  double      pan_x_old;
+  double      pan_y_old;
+  double      pan_x;
+  double      pan_y;
+
   double      scroll_x;                                                         // Scroll x-coordinate [px].
   double      scroll_y;                                                         // Scroll y-coordinate [px].
   double      zoom;                                                             // Zoom coefficient.
