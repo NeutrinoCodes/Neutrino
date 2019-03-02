@@ -52,24 +52,30 @@ void window::orbit ()
 }
 
 void grasp (
-            float  T[16],
+            float  position[3],
             double x,
-            double,
-            y
+            double y,
            )
 {
-  pan[0] = orbit_x;                                                             // Building translation vector...
-  pan[1] = orbit_y;                                                             // Building translation vector...
-  pan[2] = 0.0;                                                                 // Building translation vector...
-  translate (T, pan);                                                           // Building translation matrix...
-
-  ...EZOR 02MAR2019: to be completed.
+  position[0] = x;                                                              // Building translation vector...
+  position[1] = y;                                                              // Building translation vector...
+  position[2] = 0.0;                                                            // Building translation vector...                                          // Building translation matrix...
 }
 
 void pan ()
 {
-  grasp (T, pan_x_old, pan_y_old);
-  grasp (T, pan_x, pan_y);
+  float initial_position[3];
+  float final_position[3];
+  float translation[3];
+
+  grasp (initial_position, pan_x_old, pan_y_old);
+  grasp (final_position, pan_x, pan_y);
+
+  translation[0] = final_position[0] - initial_position[0];
+  translation[1] = final_position[1] - initial_position[1];
+  translation[2] = final_position[2] - initial_position[2];
+
+  translate (T, translation);
 }
 
 /// # OpenGL shader compile function
