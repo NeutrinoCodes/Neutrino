@@ -46,7 +46,7 @@
   #define LAYOUT_0                          0                                   // 1st variable ("location = 0") in vertex shader.
   #define LAYOUT_1                          1                                   // 2nd variable ("location = 1") in vertex shader.
   #define ZOOM_FACTOR                       1.05f                               // Mouse wheel zoom factor [> 1.0].
-  #define ROTATION_FACTOR                   2.0f                                // Mouse arcball rotation factor [].
+  #define ROTATION_FACTOR                   2.0f                                // Mouse orbit rotation factor [].
   #define NEAR_Z_CLIP                       0.1f                                // Near z-clipping distance [small, but > 0.0].
   #define FAR_Z_CLIP                        100.0f                              // Far z-clipping distance [big, but < +inf].
   #define FOV                               60.0f                               // Field of view [deg].

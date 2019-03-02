@@ -17,7 +17,7 @@ class window
 {
 private:
   neutrino*       baseline;                                                     // Neutrino baseline.
-  bool            arcball_on;                                                   // Arcball activation flag.
+  bool            orbit_on;                                                     // Arcball activation flag.
   bool            pan_on;
   bool            mouse_button_left_pressed;                                    // Mouse button left pressed flag.
   bool            mouse_button_right_pressed;                                   // Mouse button right pressed flag.
@@ -49,14 +49,14 @@ private:
                             const char* loc_vertex_filename,                    // Shader file name.
                             const char* loc_fragment_filename                   // Shader type.
                            );
-  // Grasp arcball action:
-  void        grasp (
-                     float* p,                                                  // Point on unitary ball.
-                     double x,                                                  // "Near clipping-plane" x-coordinate.
-                     double y                                                   // "Near clipping-plane" y-coordinate.
-                    );
   // Arcball computation:
-  void        arcball ();
+  void        arcball (
+                       float* p,                                                // Point on unitary ball.
+                       double x,                                                // "Near clipping-plane" x-coordinate.
+                       double y                                                 // "Near clipping-plane" y-coordinate.
+                      );
+  // Orbit movement:
+  void        orbit ();
   // Plot style:
   void        set_plot_style (
                               plot_style ps,                                    // Plot style.
@@ -149,10 +149,10 @@ public:
   double      mouse_x;                                                          // Mouse x-coordinate [px].
   double      mouse_y;                                                          // Mouse y-coordinate [px].
 
-  double      arcball_x_old;
-  double      arcball_y_old;
-  double      arcball_x;
-  double      arcball_y;
+  double      orbit_x_old;
+  double      orbit_y_old;
+  double      orbit_x;
+  double      orbit_y;
 
   double      pan_x_old;
   double      pan_y_old;

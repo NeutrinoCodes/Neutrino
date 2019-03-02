@@ -11,15 +11,15 @@ window::window()
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// PRIVATE METHODS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-/// # Window grasp function
+/// # Window arcball function
 /// ### Description:
 /// Builds a 3D world vector from the 2D screen projection of the input device
-/// coordinates during a grasp action on the screen space.
-void window::grasp (
-                    float* p,                                                   // Point on unitary ball.
-                    double x,                                                   // "Near clipping-plane" x-coordinate.
-                    double y                                                    // "Near clipping-plane" y-coordinate.
-                   )
+/// coordinates during an orbit movement on the screen space.
+void window::arcball (
+                      float* p,                                                 // Point on unitary ball.
+                      double x,                                                 // "Near clipping-plane" x-coordinate.
+                      double y                                                  // "Near clipping-plane" y-coordinate.
+                     )
 {
   p[0] = +(float)(2.0*x/(double)framebuffer_size_x - 1.0);                      // Computing x-point on arcball...
   p[1] = -(float)(2.0*y/(double)framebuffer_size_y - 1.0);                      // Computing y-point on arcball...
@@ -27,23 +27,23 @@ void window::grasp (
   normalize (p);                                                                // Normalizing vector...
 }
 
-/// # Window arcball function
+/// # Window orbit function
 /// ### Description:
-/// Rotates the view matrix according to an arcball movement.
-void window::arcball ()
+/// Rotates the view matrix according to an orbit movement.
+void window::orbit ()
 {
   float a[3];                                                                   // Mouse vector, world coordinates.
   float b[3];                                                                   // Mouse vector, world coordinates.
   float axis[3];                                                                // Arcball axis of rotation.
   float theta;                                                                  // Arcball angle of rotation.
 
-  grasp (a, arcball_x_old, arcball_y_old);                                      // Building mouse world vector (old)...
-  grasp (b, arcball_x, arcball_y);                                              // Building mouse world vector...
-  theta = ROTATION_FACTOR*angle (a, b);                                         // Computing arcball angle...
+  arcball (a, orbit_x_old, orbit_y_old);                                        // Building mouse world vector (old)...
+  arcball (b, orbit_x, orbit_y);                                                // Building mouse world vector...
+  theta = ROTATION_FACTOR*angle (a, b);                                         // Computing orbit angle...
 
-  if(arcball_on && (theta > 0.0))                                               // If mouse has been dragged (= left click + move):
+  if(orbit_on && (theta > 0.0))                                               // If mouse has been dragged (= left click + move):
   {
-    cross (axis, a, b);                                                         // Computing arcball axis of rotation...
+    cross (axis, a, b);                                                         // Computing orbit axis of rotation...
     normalize (axis);                                                           // Normalizing rotation 3D axis...
     quaternion (q, axis, theta);                                                // Computing rotation quaternion...
     rotate (R, R_old, q);                                                       // Computing rotation matrix...
@@ -241,11 +241,11 @@ void window::init (
   mouse_x                    = 0;                                               // Initializing mouse x-coordinate [px]...
   mouse_y                    = 0;                                               // Initializing mouse y-coordinate [px]...
 
-  arcball_x                  = 0;
-  arcball_y                  = 0;
-  arcball_x_old              = 0;
-  arcball_y_old              = 0;
-  arcball_on                 = false;                                           // Initializing arcball activation flag...
+  orbit_x                    = 0;
+  orbit_y                    = 0;
+  orbit_x_old                = 0;
+  orbit_y_old                = 0;
+  orbit_on                 = false;                                           // Initializing orbit activation flag...
 
   pan_x                      = 0;
   pan_y                      = 0;
@@ -536,7 +536,7 @@ void window::key_pressed (
 
 /// # Window mouse-button retpoline function
 /// ### Description:
-/// Gets the mouse coordinates, checks the arcball status.
+/// Gets the mouse coordinates, checks the orbit status.
 void window::mouse_button (
                            int loc_button,                                      // Button.
                            int loc_action,                                      // Action.
@@ -553,22 +553,22 @@ void window::mouse_button (
       switch(loc_action)
       {
         case GLFW_PRESS:
-          if(arcball_on == false)
+          if(orbit_on == false)
           {
-            arcball_x_old       =
+            orbit_x_old         =
               (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
-              0.5f;                                                             // Backing up arcball_x position...
-            arcball_y_old       =
+              0.5f;                                                             // Backing up orbit_x position...
+            orbit_y_old         =
               (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
-              0.5f;                                                             // Backing up arcball_y position...
+              0.5f;                                                             // Backing up orbit_y position...
 
-            arcball_on          = true;                                         // Turning on arcball...
+            orbit_on          = true;                                         // Turning on orbit...
             current_mouse_state = L_PRESSED;
           }
           break;
 
         case GLFW_RELEASE:
-          if(arcball_on == true)
+          if(orbit_on == true)
           {
             R_old[0]   = R[0]; R_old[4] = R[4];
             R_old[8]   = R[8];
@@ -583,7 +583,7 @@ void window::mouse_button (
             R_old[11]  = R[11];
             R_old[15]  = R[15];                                                 // Backing up Rotation_matrix matrix...
 
-            arcball_on = false;                                                 // Turning off arcball...
+            orbit_on = false;                                                 // Turning off orbit...
           }
           break;
       }
@@ -599,12 +599,12 @@ void window::mouse_button (
           {
             pan_x_old           =
               (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
-              0.5f;                                                             // Backing up arcball_x position...
+              0.5f;                                                             // Backing up orbit_x position...
             pan_y_old           =
               (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
-              0.5f;                                                             // Backing up arcball_y position...
+              0.5f;                                                             // Backing up orbit_y position...
 
-            pan_on              = true;                                         // Turning on arcball...
+            pan_on              = true;                                         // Turning on orbit...
             current_mouse_state = R_PRESSED;
           }
           break;
@@ -641,15 +641,18 @@ void window::mouse_moved (
   switch(current_mouse_state)
   {
     case L_PRESSED:
-      arcball_x = (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
-                  0.5f;                                                         // Computing OpenGL pixel x-coordinates...
-      arcball_y = (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
-                  0.5f;                                                         // Computing OpenGL pixel y-coordinates...
-      arcball ();                                                               // Computing arcball...
+      orbit_x = (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
+                0.5f;                                                           // Computing OpenGL pixel x-coordinates...
+      orbit_y = (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
+                0.5f;                                                           // Computing OpenGL pixel y-coordinates...
+      orbit ();                                                                 // Computing orbit...
       break;
 
     case R_PRESSED:
-
+      pan_x   = (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
+                0.5f;                                                           // Computing OpenGL pixel x-coordinates...
+      pan_y   = (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
+                0.5f;                                                           // Computing OpenGL pixel y-coordinates...
 /*
       scroll_x = loc_xoffset;                                                   // Getting scroll position...
       scroll_y = loc_yoffset;                                                   // Getting scroll position...
@@ -667,9 +670,9 @@ void window::mouse_moved (
         zoom /= ZOOM_FACTOR;                                                    // Zooming-out...
       }*/
       printf ("puppo\n");
-      pan[0]    = arcball_x;                                                    // Building translation vector...
-      pan[1]    = arcball_y;                                                    // Building translation vector...
-      pan[2]    = 0.0;                                                          // Building translation vector...
+      pan[0]  = orbit_x;                                                        // Building translation vector...
+      pan[1]  = orbit_y;                                                        // Building translation vector...
+      pan[2]  = 0.0;                                                            // Building translation vector...
       translate (T, pan);                                                       // Building translation matrix...
       break;
   }
