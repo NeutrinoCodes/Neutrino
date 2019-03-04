@@ -24,22 +24,22 @@ private:
   mouse_state     current_mouse_state;                                          // Current mouse state.
 
   // Translation matrix backup:
-  float           T_old[16]              = {1.0, 0.0, 0.0, 0.0,
-                                            0.0, 1.0, 0.0, 0.0,
-                                            0.0, 0.0, 1.0, 0.0,
-                                            0.0, 0.0, 0.0, 1.0};
+  float           T_old[16]                 = {1.0, 0.0, 0.0, 0.0,
+                                               0.0, 1.0, 0.0, 0.0,
+                                               0.0, 0.0, 1.0, 0.0,
+                                               0.0, 0.0, 0.0, 1.0};
 
   // Rotation matrix backup:
-  float           R_old[16]              = {1.0, 0.0, 0.0, 0.0,
-                                            0.0, 1.0, 0.0, 0.0,
-                                            0.0, 0.0, 1.0, 0.0,
-                                            0.0, 0.0, 0.0, 1.0};
+  float           R_old[16]                 = {1.0, 0.0, 0.0, 0.0,
+                                               0.0, 1.0, 0.0, 0.0,
+                                               0.0, 0.0, 1.0, 0.0,
+                                               0.0, 0.0, 0.0, 1.0};
 
   // Rotation quaternion backup:
-  float           q_old[4]               = {1.0, 0.0, 0.0, 0.0};
+  float           q_old[4]                  = {1.0, 0.0, 0.0, 0.0};
 
-  // Initial translation vector:
-  float           initial_translation[3] = {0.0, 0.0, -3.0};
+  // Initial scene position:
+  float           initial_scene_position[3] = INITIAL_SCENE_POSITION;
 
   GLuint          point_shader;                                                 // Point shader program.
   GLuint          text_shader;                                                  // Point shader program.
@@ -162,6 +162,9 @@ public:
   double      mouse_x;                                                          // Mouse x-coordinate [px].
   double      mouse_y;                                                          // Mouse y-coordinate [px].
 
+  double      scroll_x;                                                         // Scroll x-coordinate [px].
+  double      scroll_y;                                                         // Scroll y-coordinate [px].
+
   double      orbit_x_old;
   double      orbit_y_old;
   double      orbit_x;
@@ -172,8 +175,7 @@ public:
   double      pan_x;
   double      pan_y;
 
-  double      scroll_x;                                                         // Scroll x-coordinate [px].
-  double      scroll_y;                                                         // Scroll y-coordinate [px].
+  double      zoom_old;
   double      zoom;                                                             // Zoom coefficient.
 
   // Arcball quaternion:
