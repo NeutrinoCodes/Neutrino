@@ -71,11 +71,25 @@ void window::pan ()
   grasp (initial_position, pan_x_old, pan_y_old);
   grasp (final_position, pan_x, pan_y);
 
-  translation[0] = final_position[0] - initial_position[0];
-  translation[1] = final_position[1] - initial_position[1];
-  translation[2] = final_position[2] - initial_position[2];
+  translation[0] = final_position[0]/100.0 - initial_position[0];
+  translation[1] = final_position[1]/100.0 - initial_position[1];
+  translation[2] = final_position[2]/100.0 - initial_position[2];
 
-  translate (T, translation);
+  printf (
+          "fx = %lf, fy = %lf, fz = %lf\n",
+          final_position[0],
+          final_position[1],
+          final_position[2]
+         );
+
+  printf (
+          "tx = %lf, ty = %lf, tz = %lf\n",
+          translation[0],
+          translation[1],
+          translation[2]
+         );
+
+  translate (T, T_old, translation);
 }
 
 /// # OpenGL shader compile function
@@ -268,22 +282,23 @@ void window::init (
   mouse_x                    = 0;                                               // Initializing mouse x-coordinate [px]...
   mouse_y                    = 0;                                               // Initializing mouse y-coordinate [px]...
 
-  orbit_x                    = 0;
-  orbit_y                    = 0;
-  orbit_x_old                = 0;
-  orbit_y_old                = 0;
-  orbit_on                   = false;                                           // Initializing orbit activation flag...
-
-  pan_x                      = 0;
-  pan_y                      = 0;
-  pan_x_old                  = 0;
-  pan_y_old                  = 0;
-  pan_on                     = false;
-
   scroll_x                   = 0;                                               // Initializing scroll x-coordinate [px]...
   scroll_y                   = 0;                                               // Initializing scroll y-coordinate [px]...
 
-  zoom                       = 0;                                               // Initializing zoom coefficient...
+  orbit_x                    = 0.0;
+  orbit_y                    = 0.0;
+  orbit_x_old                = 0.0;
+  orbit_y_old                = 0.0;
+  orbit_on                   = false;                                           // Initializing orbit activation flag...
+
+  pan_x                      = 0.0;
+  pan_y                      = 0.0;
+  pan_x_old                  = 0.0;
+  pan_y_old                  = 0.0;
+  pan_on                     = false;
+
+  zoom_old                   = INITIAL_ZOOM;
+  zoom                       = 0.0;                                             // Initializing zoom coefficient...
 
   mouse_button_left_pressed  = false;
   mouse_button_right_pressed = false;
@@ -389,18 +404,17 @@ void window::init (
   glLineWidth (LINE_WIDTH);                                                     // Setting line width...
 
   PR_mode      = MODE_2D;                                                       // Setting 2D projection mode...
-// Setting Projection_matrix matrix:
+
+  // Setting monoscopic perspective:
   perspective (
                P,                                                               // 4x4 perspective matrix.
                FOV*M_PI/180.0,                                                  // Field of view [rad].
-               aspect_ratio,
-               NEAR_Z_CLIP,
-               FAR_Z_CLIP
+               aspect_ratio,                                                    // Projective screen aspect ratio.
+               NEAR_Z_CLIP,                                                     // Projective screen near depth...
+               FAR_Z_CLIP                                                       // Projective screen near depth...
               );
 
-  // Setting stereoscopic perspective and translation matrices:
-  //translate (TL, initial_translation);                                          // Setting initial Translation_matrix matrix...
-  //translate (TR, initial_translation);                                          // Setting initial Translation_matrix matrix...
+  // Setting stereoscopic perspective:
   vr_perspective (
                   PL,                                                           // 4x4 right eye perspective matrix.
                   PR,                                                           // 4x4 left eye perspective matrix.
@@ -410,8 +424,11 @@ void window::init (
                   FOV*M_PI/180.0,                                               // Field of view [rad].
                   aspect_ratio/2.0,                                             // Projective screen aspect ratio.
                   NEAR_Z_CLIP,                                                  // Projective screen near depth...
-                  FAR_Z_CLIP                                                    // Projective screen far depth...
+                  FAR_Z_CLIP                                                    // Projective screen near depth...
                  );
+
+  translate (T, T_old, initial_scene_position);                                 // Setting initial scene position...
+  zoom = zoom_old;                                                              // Setting initial zoom...
 
   glfwSwapBuffers (glfw_window);                                                // Swapping front and back buffers...
   glfwPollEvents ();                                                            // Polling GLFW events...
@@ -702,24 +719,23 @@ void window::mouse_scrolled (
 
   scroll_x = loc_xoffset;                                                       // Getting scroll position...
   scroll_y = loc_yoffset;                                                       // Getting scroll position...
-  zoom     = T[14];                                                             // Getting z-axis translation...
 
   // Checking y-position:
   if(scroll_y > 0)
   {
-    zoom *= ZOOM_FACTOR;                                                        // Zooming-in...
+    zoom += ZOOM_INCREMENT;                                                     // Zooming-in...
   }
 
   // Checking y-position:
   if(scroll_y < 0)
   {
-    zoom /= ZOOM_FACTOR;                                                        // Zooming-out...
+    zoom -= ZOOM_INCREMENT;                                                     // Zooming-out...
   }
 
   translation[0] = 0.0;                                                         // Building translation vector...
   translation[1] = 0.0;                                                         // Building translation vector...
   translation[2] = zoom;                                                        // Building translation vector...
-  translate (T, translation);                                                   // Building translation matrix...
+  translate (T, T_old, translation);                                            // Building translation matrix...
 
   // Applying zoom to stereoscopic translation matrices:
   //translate (TL, translation);                                                  // Building translation matrix...
