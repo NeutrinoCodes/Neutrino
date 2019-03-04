@@ -23,6 +23,11 @@ private:
   bool            mouse_button_right_pressed;                                   // Mouse button right pressed flag.
   mouse_state     current_mouse_state;                                          // Current mouse state.
 
+  // Translation matrix backup:
+  float           T_old[16]              = {1.0, 0.0, 0.0, 0.0,
+                                            0.0, 1.0, 0.0, 0.0,
+                                            0.0, 0.0, 1.0, 0.0,
+                                            0.0, 0.0, 0.0, 1.0};
 
   // Rotation matrix backup:
   float           R_old[16]              = {1.0, 0.0, 0.0, 0.0,

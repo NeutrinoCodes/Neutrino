@@ -51,18 +51,18 @@ void window::orbit ()
   }
 }
 
-void grasp (
-            float  position[3],
-            double x,
-            double y,
-           )
+void window::grasp (
+                    float  position[3],
+                    double x,
+                    double y
+                   )
 {
   position[0] = x;                                                              // Building translation vector...
   position[1] = y;                                                              // Building translation vector...
   position[2] = 0.0;                                                            // Building translation vector...                                          // Building translation matrix...
 }
 
-void pan ()
+void window::pan ()
 {
   float initial_position[3];
   float final_position[3];
@@ -389,8 +389,14 @@ void window::init (
   glLineWidth (LINE_WIDTH);                                                     // Setting line width...
 
   PR_mode      = MODE_2D;                                                       // Setting 2D projection mode...
-  translate (T, initial_translation);                                           // Setting initial Translation_matrix matrix...
-  perspective (P, FOV*M_PI/180.0, aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);       // Setting Projection_matrix matrix...
+// Setting Projection_matrix matrix:
+  perspective (
+               P,                                                               // 4x4 perspective matrix.
+               FOV*M_PI/180.0,                                                  // Field of view [rad].
+               aspect_ratio,
+               NEAR_Z_CLIP,
+               FAR_Z_CLIP
+              );
 
   // Setting stereoscopic perspective and translation matrices:
   //translate (TL, initial_translation);                                          // Setting initial Translation_matrix matrix...
@@ -660,8 +666,6 @@ void window::mouse_moved (
                           double loc_ypos                                       // Mouse position [px].
                          )
 {
-  float pan[3];                                                                 // Pan vector.
-
   mouse_x = loc_xpos;                                                           // Getting mouse position...
   mouse_y = loc_ypos;                                                           // Getting mouse position...
 
