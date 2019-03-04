@@ -14,7 +14,8 @@ void multiplicate (
 // Translation matrix computation:
 void translate (
                 float T[16],                                                    // 4x4 translation matrix.
-                float translation[3]                                            // 3D translation vector.
+                float T_old[16],                                                // 4x4 translation matrix backup.
+                float t[3]                                                      // 3D translation vector.
                );
 // Rotation matrix computation:
 void rotate (
