@@ -17,11 +17,9 @@ class window
 {
 private:
   neutrino*       baseline;                                                     // Neutrino baseline.
-  bool            orbit_on;                                                     // Arcball activation flag.
-  bool            pan_on;
-  bool            mouse_button_left_pressed;                                    // Mouse button left pressed flag.
-  bool            mouse_button_right_pressed;                                   // Mouse button right pressed flag.
-  mouse_state     current_mouse_state;                                          // Current mouse state.
+  bool            orbit_on;                                                     // Orbit activation flag.
+  bool            pan_on;                                                       // Pan activation flag.
+
 
   // Translation matrix backup:
   float           T_old[16]                 = {1.0, 0.0, 0.0, 0.0,
