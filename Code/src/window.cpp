@@ -690,12 +690,14 @@ void window::mouse_scrolled (
   if(scroll_y > 0)
   {
     zoom += ZOOM_INCREMENT;                                                     // Zooming-in...
+    printf ("zoom+\n");
   }
 
   // Checking y-position:
   if(scroll_y < 0)
   {
     zoom -= ZOOM_INCREMENT;                                                     // Zooming-out...
+    printf ("zoom-\n");
   }
 
   translation[0] = 0.0;                                                         // Building translation vector...
