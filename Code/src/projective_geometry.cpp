@@ -2,6 +2,20 @@
 
 #include "projective_geometry.hpp"
 
+/// # Backup matrix function
+/// ### Description:
+/// Copies "old" matrix into "new" matrix.
+void backup (
+             float M[16],                                                       // New matrix: takes values from old matrix.
+             float M_old[16]                                                    // Old matrix.
+            )
+{
+  M[0] = M_old[0]; M[4] = M_old[4], M[8] = M_old[8]; M[12] = M_old[12];         // Backing up matrix...
+  M[1] = M_old[1]; M[5] = M_old[5], M[9] = M_old[9]; M[13] = M_old[13];         // Backing up matrix...
+  M[2] = M_old[2]; M[6] = M_old[6], M[10] = M_old[10]; M[14] = M_old[14];       // Backing up matrix...
+  M[3] = M_old[3]; M[7] = M_old[7], M[11] = M_old[11]; M[15] = M_old[15];       // Backing up matrix...
+}
+
 /// # Multiplication matrix function
 /// ### Description:
 /// Computes the multiplication of two matrices.
@@ -155,13 +169,13 @@ void frustum (
 /// # Perspective matrix function
 /// ### Description:
 /// Computes the perspective matrix given the projective screen boundaries.
-void perspective (
-                  float P[16],                                                  // 4x4 perspective matrix.
-                  float fov,                                                    // Field of view [rad].
-                  float aspect_ratio,                                           // Projective screen aspect ratio.
-                  float z_near,                                                 // Projective screen near depth...
-                  float z_far                                                   // Projective screen far depth...
-                 )
+void perspective_mono (
+                       float P[16],                                             // 4x4 perspective matrix.
+                       float fov,                                               // Field of view [rad].
+                       float aspect_ratio,                                      // Projective screen aspect ratio.
+                       float z_near,                                            // Projective screen near depth...
+                       float z_far                                              // Projective screen far depth...
+                      )
 {
   float x_max;                                                                  // Projective screen maximum "x" coordinate.
   float y_max;                                                                  // Projective screen maximum "y" coordinate.
@@ -184,17 +198,17 @@ void perspective (
 /// # Perspective matrix function
 /// ### Description:
 /// Computes the perspective matrix given the projective screen boundaries.
-void vr_perspective (
-                     float PL[16],                                              // 4x4 right eye perspective matrix.
-                     float PR[16],                                              // 4x4 left eye perspective matrix.
-                     float TL[16],                                              // 4x4 right eye translation matrix.
-                     float TR[16],                                              // 4x4 left eye translation matrix.
-                     float iod,                                                 // Intraocular distance.
-                     float fov,                                                 // Field of view [rad].
-                     float aspect_ratio,                                        // Projective screen aspect ratio.
-                     float z_near,                                              // Projective screen near depth...
-                     float z_far                                                // Projective screen far depth...
-                    )
+void perspective_stereo (
+                         float PL[16],                                          // 4x4 right eye perspective matrix.
+                         float PR[16],                                          // 4x4 left eye perspective matrix.
+                         float TL[16],                                          // 4x4 right eye translation matrix.
+                         float TR[16],                                          // 4x4 left eye translation matrix.
+                         float iod,                                             // Intraocular distance.
+                         float fov,                                             // Field of view [rad].
+                         float aspect_ratio,                                    // Projective screen aspect ratio.
+                         float z_near,                                          // Projective screen near depth...
+                         float z_far                                            // Projective screen far depth...
+                        )
 {
   float x_max;                                                                  // Projective screen maximum "x" coordinate.
   float y_max;                                                                  // Projective screen maximum "y" coordinate.
