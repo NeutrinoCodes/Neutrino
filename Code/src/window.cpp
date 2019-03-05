@@ -71,9 +71,9 @@ void window::pan ()
   grasp (initial_position, pan_x_old, pan_y_old);
   grasp (final_position, pan_x, pan_y);
 
-  translation[0] = final_position[0]/100.0 - initial_position[0];
-  translation[1] = final_position[1]/100.0 - initial_position[1];
-  translation[2] = final_position[2]/100.0 - initial_position[2];
+  translation[0] = (final_position[0] - initial_position[0])/100.0;
+  translation[1] = (final_position[1] - initial_position[1])/100.0;
+  translation[2] = (final_position[2] - initial_position[2])/100.0;
 
   printf (
           "fx = %lf, fy = %lf, fz = %lf\n",
@@ -424,7 +424,12 @@ void window::init (
                  );
 
   translate (T, T_old, initial_scene_position);                                 // Setting initial scene position...
-  zoom = zoom_old;                                                              // Setting initial zoom...
+  T_old[0] = T[0]; T_old[4] = T[4]; T_old[8] = T[8]; T_old[12] = T[12];
+  T_old[1] = T[1]; T_old[5] = T[5]; T_old[9] = T[9]; T_old[13] = T[13];
+  T_old[2] = T[2]; T_old[6] = T[6]; T_old[10] = T[10]; T_old[14] = T[14];
+  T_old[3] = T[3]; T_old[7] = T[7]; T_old[11] = T[11]; T_old[15] = T[15];
+
+  zoom     = zoom_old;                                                          // Setting initial zoom...
 
   glfwSwapBuffers (glfw_window);                                                // Swapping front and back buffers...
   glfwPollEvents ();                                                            // Polling GLFW events...
@@ -725,10 +730,6 @@ void window::mouse_scrolled (
   translation[1] = 0.0;                                                         // Building translation vector...
   translation[2] = zoom;                                                        // Building translation vector...
   translate (T, T_old, translation);                                            // Building translation matrix...
-
-  // Applying zoom to stereoscopic translation matrices:
-  //translate (TL, translation);                                                  // Building translation matrix...
-  //translate (TR, translation);                                                  // Building translation matrix...
 }
 
 //////////////////////////////////////////////////////////////////////////////////

@@ -45,7 +45,7 @@
 ////////////////////////////////////////////////////////////////////////////////
   #define LAYOUT_0                          0                                   // 1st variable ("location = 0") in vertex shader.
   #define LAYOUT_1                          1                                   // 2nd variable ("location = 1") in vertex shader.
-  #define ZOOM_INCREMENT                    0.05f                               // Mouse wheel zoom increment [].
+  #define ZOOM_INCREMENT                    0.1f                                // Mouse wheel zoom increment [].
   #define INITIAL_ZOOM                      -3.0                                // Initial zoom factor [+.]
   #define ROTATION_FACTOR                   2.0f                                // Mouse orbit rotation factor [].
   #define NEAR_Z_CLIP                       0.1f                                // Near z-clipping distance [small, but > 0.0].
