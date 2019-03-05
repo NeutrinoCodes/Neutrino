@@ -273,44 +273,40 @@ void window::init (
                    const char* loc_title                                        // Window title.
                   )
 {
-  baseline                   = loc_baseline;                                    // Initializing Neutrino baseline...
-  window_size_x              = loc_window_size_x;                               // Initializing window x-size [px]...
-  window_size_y              = loc_window_size_y;                               // Initializing window y-size [px]...
-  title                      = loc_title;                                       // Initializing window title...
-  aspect_ratio               = (double)window_size_x/(double)window_size_y;     // Initializing window aspect ration []...
+  baseline         = loc_baseline;                                              // Initializing Neutrino baseline...
+  window_size_x    = loc_window_size_x;                                         // Initializing window x-size [px]...
+  window_size_y    = loc_window_size_y;                                         // Initializing window y-size [px]...
+  title            = loc_title;                                                 // Initializing window title...
+  aspect_ratio     = (double)window_size_x/(double)window_size_y;               // Initializing window aspect ration []...
 
-  mouse_x                    = 0;                                               // Initializing mouse x-coordinate [px]...
-  mouse_y                    = 0;                                               // Initializing mouse y-coordinate [px]...
+  mouse_x          = 0;                                                         // Initializing mouse x-coordinate [px]...
+  mouse_y          = 0;                                                         // Initializing mouse y-coordinate [px]...
 
-  scroll_x                   = 0;                                               // Initializing scroll x-coordinate [px]...
-  scroll_y                   = 0;                                               // Initializing scroll y-coordinate [px]...
+  scroll_x         = 0;                                                         // Initializing scroll x-coordinate [px]...
+  scroll_y         = 0;                                                         // Initializing scroll y-coordinate [px]...
 
-  orbit_x                    = 0.0;
-  orbit_y                    = 0.0;
-  orbit_x_old                = 0.0;
-  orbit_y_old                = 0.0;
-  orbit_on                   = false;                                           // Initializing orbit activation flag...
+  orbit_x          = 0.0;
+  orbit_y          = 0.0;
+  orbit_x_old      = 0.0;
+  orbit_y_old      = 0.0;
+  orbit_on         = false;                                                     // Initializing orbit activation flag...
 
-  pan_x                      = 0.0;
-  pan_y                      = 0.0;
-  pan_x_old                  = 0.0;
-  pan_y_old                  = 0.0;
-  pan_on                     = false;
+  pan_x            = 0.0;
+  pan_y            = 0.0;
+  pan_x_old        = 0.0;
+  pan_y_old        = 0.0;
+  pan_on           = false;
 
-  zoom_old                   = INITIAL_ZOOM;
-  zoom                       = 0.0;                                             // Initializing zoom coefficient...
-
-  mouse_button_left_pressed  = false;
-  mouse_button_right_pressed = false;
-  current_mouse_state        = NO_PRESSED;
+  zoom_old         = INITIAL_ZOOM;
+  zoom             = 0.0;                                                       // Initializing zoom coefficient...
 
   int opengl_ver_major;                                                         // OpenGL version major number.
   int opengl_ver_minor;                                                         // OpenGL version minor number.
   int opengl_msaa;                                                              // OpenGL multisampling antialiasing factor.
 
-  opengl_ver_major           = 4;                                               // EZOR 04NOV2018: to be generalized by iterative search.
-  opengl_ver_minor           = 1;                                               // EZOR 04NOV2018: to be generalized by iterative search.
-  opengl_msaa                = 4;                                               // EZOR: 3 or 4 sample is good due to the general oversampling-decimation method.
+  opengl_ver_major = 4;                                                         // EZOR 04NOV2018: to be generalized by iterative search.
+  opengl_ver_minor = 1;                                                         // EZOR 04NOV2018: to be generalized by iterative search.
+  opengl_msaa      = 4;                                                         // EZOR: 3 or 4 sample is good due to the general oversampling-decimation method.
 
   // Initializing GLFW context:
   baseline -> action ("initializing GLFW...");                                  // Printing message...
@@ -605,15 +601,14 @@ void window::mouse_button (
         case GLFW_PRESS:
           if(orbit_on == false)
           {
-            orbit_x_old         =
+            orbit_x_old =
               (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
               0.5f;                                                             // Backing up orbit_x position...
-            orbit_y_old         =
+            orbit_y_old =
               (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
               0.5f;                                                             // Backing up orbit_y position...
 
-            orbit_on            = true;                                         // Turning on orbit...
-            current_mouse_state = L_PRESSED;
+            orbit_on    = true;                                                 // Turning on orbit...
           }
           break;
 
@@ -647,15 +642,14 @@ void window::mouse_button (
         case GLFW_PRESS:
           if(pan_on == false)
           {
-            pan_x_old           =
+            pan_x_old =
               (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
               0.5f;                                                             // Backing up orbit_x position...
-            pan_y_old           =
+            pan_y_old =
               (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
               0.5f;                                                             // Backing up orbit_y position...
 
-            pan_on              = true;                                         // Turning on orbit...
-            current_mouse_state = R_PRESSED;
+            pan_on    = true;                                                   // Turning on orbit...
           }
           break;
 
@@ -667,10 +661,6 @@ void window::mouse_button (
           break;
       }
 
-      break;
-
-    default:
-      current_mouse_state = NO_PRESSED;
       break;
   }
 }
@@ -686,23 +676,22 @@ void window::mouse_moved (
   mouse_x = loc_xpos;                                                           // Getting mouse position...
   mouse_y = loc_ypos;                                                           // Getting mouse position...
 
-  switch(current_mouse_state)
+  if(orbit_on)
   {
-    case L_PRESSED:
-      orbit_x = (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
-                0.5f;                                                           // Computing OpenGL pixel x-coordinates...
-      orbit_y = (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
-                0.5f;                                                           // Computing OpenGL pixel y-coordinates...
-      orbit ();                                                                 // Computing orbit...
-      break;
+    orbit_x = (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
+              0.5f;                                                             // Computing OpenGL pixel x-coordinates...
+    orbit_y = (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
+              0.5f;                                                             // Computing OpenGL pixel y-coordinates...
+    orbit ();                                                                   // Computing orbit...
+  }
 
-    case R_PRESSED:
-      pan_x   = (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
-                0.5f;                                                           // Computing OpenGL pixel x-coordinates...
-      pan_y   = (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
-                0.5f;                                                           // Computing OpenGL pixel y-coordinates...
-      pan ();
-      break;
+  if(pan_on)
+  {
+    pan_x = (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
+            0.5f;                                                               // Computing OpenGL pixel x-coordinates...
+    pan_y = (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
+            0.5f;                                                               // Computing OpenGL pixel y-coordinates...
+    pan ();
   }
 
 }

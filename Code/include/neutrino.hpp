@@ -60,15 +60,6 @@
   #define MAX_MESSAGE_SIZE                  64                                  // Maximum # of characters in a text message.
   #define MAX_PATH_SIZE                     32768                               // Maximum # of characters in a text file path.
 
-// Mouse states:
-typedef enum
-{
-  NO_PRESSED,                                                                   // No mouse button pressed.
-  L_PRESSED,                                                                    // Left button pressed.
-  R_PRESSED,                                                                    // Right button pressed.
-  LR_PRESSED                                                                    // Left + right button pressed.
-} mouse_state;
-
 // Projection mode:
 typedef enum
 {
