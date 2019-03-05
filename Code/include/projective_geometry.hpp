@@ -5,6 +5,11 @@
 
   #include "neutrino.hpp"
   #include "linear_algebra.hpp"
+// Copies "old" matrix into "new" matrix.
+void backup (
+             float M[16],                                                       // New matrix: takes values from old matrix.
+             float M_old[16]                                                    // Old matrix.
+            );
 // Multiplication matrix computation:
 void multiplicate (
                    float C[16],                                                 // 4x4 matrix result.
@@ -34,26 +39,26 @@ void frustum (
               float z_far                                                       // Projective screen far depth...
              );
 // Perspective matrix computation:
-void perspective (
-                  float P[16],                                                  // 4x4 perspective matrix.
-                  float fov,                                                    // Field of view [rad].
-                  float aspect_ratio,                                           // Projective screen aspect ratio.
-                  float z_near,                                                 // Projective screen near depth...
-                  float z_far                                                   // Projective screen far depth...
-                 );
+void perspective_mono (
+                       float P[16],                                             // 4x4 perspective matrix.
+                       float fov,                                               // Field of view [rad].
+                       float aspect_ratio,                                      // Projective screen aspect ratio.
+                       float z_near,                                            // Projective screen near depth...
+                       float z_far                                              // Projective screen far depth...
+                      );
 /// # Perspective matrix function
 /// ### Description:
 /// Computes the perspective matrix given the projective screen boundaries.
-void vr_perspective (
-                     float PL[16],                                              // 4x4 right eye perspective matrix.
-                     float PR[16],                                              // 4x4 left eye perspective matrix.
-                     float TL[16],                                              // 4x4 right eye translation matrix.
-                     float TR[16],                                              // 4x4 left eye translation matrix.
-                     float iod,                                                 // Intraocular distance.
-                     float fov,                                                 // Field of view [rad].
-                     float aspect_ratio,                                        // Projective screen aspect ratio.
-                     float z_near,                                              // Projective screen near depth...
-                     float z_far                                                // Projective screen far depth...
-                    );
+void perspective_stereo (
+                         float PL[16],                                          // 4x4 right eye perspective matrix.
+                         float PR[16],                                          // 4x4 left eye perspective matrix.
+                         float TL[16],                                          // 4x4 right eye translation matrix.
+                         float TR[16],                                          // 4x4 left eye translation matrix.
+                         float iod,                                             // Intraocular distance.
+                         float fov,                                             // Field of view [rad].
+                         float aspect_ratio,                                    // Projective screen aspect ratio.
+                         float z_near,                                          // Projective screen near depth...
+                         float z_far                                            // Projective screen far depth...
+                        );
 
 #endif

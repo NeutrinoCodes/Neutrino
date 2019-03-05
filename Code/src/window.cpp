@@ -57,9 +57,9 @@ void window::grasp (
                     double y
                    )
 {
-  position[0] = x;                                                              // Building translation vector...
-  position[1] = y;                                                              // Building translation vector...
-  position[2] = 0.0;                                                            // Building translation vector...                                          // Building translation matrix...
+  position[0] = +x;                                                             // Building translation vector...
+  position[1] = -y;                                                             // Building translation vector (OpenGL sign convention)...
+  position[2] = +0.0;                                                           // Building translation vector...                                          // Building translation matrix...
 }
 
 void window::pan ()
@@ -74,20 +74,6 @@ void window::pan ()
   translation[0] = (final_position[0] - initial_position[0])/100.0;
   translation[1] = (final_position[1] - initial_position[1])/100.0;
   translation[2] = (final_position[2] - initial_position[2])/100.0;
-
-  printf (
-          "fx = %lf, fy = %lf, fz = %lf\n",
-          final_position[0],
-          final_position[1],
-          final_position[2]
-         );
-
-  printf (
-          "tx = %lf, ty = %lf, tz = %lf\n",
-          translation[0],
-          translation[1],
-          translation[2]
-         );
 
   translate (T, T_old, translation);
 }
@@ -402,34 +388,31 @@ void window::init (
   PR_mode      = MODE_2D;                                                       // Setting 2D projection mode...
 
   // Setting monoscopic perspective:
-  perspective (
-               P,                                                               // 4x4 perspective matrix.
-               FOV*M_PI/180.0,                                                  // Field of view [rad].
-               aspect_ratio,                                                    // Projective screen aspect ratio.
-               NEAR_Z_CLIP,                                                     // Projective screen near depth...
-               FAR_Z_CLIP                                                       // Projective screen near depth...
-              );
+  perspective_mono (
+                    P,                                                          // 4x4 perspective matrix.
+                    FOV*M_PI/180.0,                                             // Field of view [rad].
+                    aspect_ratio,                                               // Projective screen aspect ratio (full screen).
+                    NEAR_Z_CLIP,                                                // Projective screen near depth...
+                    FAR_Z_CLIP                                                  // Projective screen near depth...
+                   );
 
   // Setting stereoscopic perspective:
-  vr_perspective (
-                  PL,                                                           // 4x4 right eye perspective matrix.
-                  PR,                                                           // 4x4 left eye perspective matrix.
-                  TL,                                                           // 4x4 right eye translation matrix.
-                  TR,                                                           // 4x4 left eye translation matrix.
-                  IOD,                                                          // Intraocular distance.
-                  FOV*M_PI/180.0,                                               // Field of view [rad].
-                  aspect_ratio/2.0,                                             // Projective screen aspect ratio.
-                  NEAR_Z_CLIP,                                                  // Projective screen near depth...
-                  FAR_Z_CLIP                                                    // Projective screen near depth...
-                 );
+  perspective_stereo (
+                      PL,                                                       // 4x4 right eye perspective matrix.
+                      PR,                                                       // 4x4 left eye perspective matrix.
+                      TL,                                                       // 4x4 right eye translation matrix.
+                      TR,                                                       // 4x4 left eye translation matrix.
+                      IOD,                                                      // Intraocular distance.
+                      FOV*M_PI/180.0,                                           // Field of view [rad].
+                      aspect_ratio/2.0,                                         // Projective screen aspect ratio (half screen).
+                      NEAR_Z_CLIP,                                              // Projective screen near depth...
+                      FAR_Z_CLIP                                                // Projective screen near depth...
+                     );
 
   translate (T, T_old, initial_scene_position);                                 // Setting initial scene position...
-  T_old[0] = T[0]; T_old[4] = T[4]; T_old[8] = T[8]; T_old[12] = T[12];
-  T_old[1] = T[1]; T_old[5] = T[5]; T_old[9] = T[9]; T_old[13] = T[13];
-  T_old[2] = T[2]; T_old[6] = T[6]; T_old[10] = T[10]; T_old[14] = T[14];
-  T_old[3] = T[3]; T_old[7] = T[7]; T_old[11] = T[11]; T_old[15] = T[15];
+  backup (T_old, T);                                                            // Backing up translation matrix...
 
-  zoom     = zoom_old;                                                          // Setting initial zoom...
+  zoom = zoom_old;                                                              // Setting initial zoom...
 
   glfwSwapBuffers (glfw_window);                                                // Swapping front and back buffers...
   glfwPollEvents ();                                                            // Polling GLFW events...
@@ -620,20 +603,8 @@ void window::mouse_button (
         case GLFW_RELEASE:
           if(orbit_on == true)
           {
-            R_old[0]  = R[0]; R_old[4] = R[4];
-            R_old[8]  = R[8];
-            R_old[12] = R[12];                                                  // Backing up Rotation_matrix matrix...
-            R_old[1]  = R[1]; R_old[5] = R[5];
-            R_old[9]  = R[9];
-            R_old[13] = R[13];                                                  // Backing up Rotation_matrix matrix...
-            R_old[2]  = R[2]; R_old[6] = R[6];
-            R_old[10] = R[10];
-            R_old[14] = R[14];                                                  // Backing up Rotation_matrix matrix...
-            R_old[3]  = R[3]; R_old[7] = R[7];
-            R_old[11] = R[11];
-            R_old[15] = R[15];                                                  // Backing up Rotation_matrix matrix...
-
-            orbit_on  = false;                                                  // Turning off orbit...
+            backup (R_old, R);                                                  // Backing up rotation matrix...
+            orbit_on = false;                                                   // Turning off orbit...
           }
           break;
       }
@@ -661,6 +632,7 @@ void window::mouse_button (
         case GLFW_RELEASE:
           if(pan_on == true)
           {
+            backup (T_old, T);                                                  // Backing up translation matrix...
             pan_on = false;
           }
           break;
@@ -774,20 +746,20 @@ void window::framebuffer_resize (
   framebuffer_size_x = loc_x_size;                                              // Setting framebuffer_size_x...
   framebuffer_size_y = loc_y_size;                                              // Setting framebuffer_size_y...
   aspect_ratio       = (double)framebuffer_size_x/(double)framebuffer_size_y;   // Setting window aspect ration []...
-  perspective (P, FOV*M_PI/180.0, aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);       // Setting Projection_matrix matrix...
+  perspective_mono (P, FOV*M_PI/180.0, aspect_ratio, NEAR_Z_CLIP, FAR_Z_CLIP);  // Setting Projection_matrix matrix...
 
   // Setting stereoscopic perspective and translation matrices:
-  vr_perspective (
-                  PL,                                                           // 4x4 right eye perspective matrix.
-                  PR,                                                           // 4x4 left eye perspective matrix.
-                  TL,                                                           // 4x4 right eye translation matrix.
-                  TR,                                                           // 4x4 left eye translation matrix.
-                  IOD,                                                          // Intraocular distance.
-                  FOV*M_PI/180.0,                                               // Field of view [rad].
-                  aspect_ratio/2.0,                                             // Projective screen aspect ratio.
-                  NEAR_Z_CLIP,                                                  // Projective screen near depth...
-                  FAR_Z_CLIP                                                    // Projective screen far depth...
-                 );
+  perspective_stereo (
+                      PL,                                                       // 4x4 right eye perspective matrix.
+                      PR,                                                       // 4x4 left eye perspective matrix.
+                      TL,                                                       // 4x4 right eye translation matrix.
+                      TR,                                                       // 4x4 left eye translation matrix.
+                      IOD,                                                      // Intraocular distance.
+                      FOV*M_PI/180.0,                                           // Field of view [rad].
+                      aspect_ratio/2.0,                                         // Projective screen aspect ratio.
+                      NEAR_Z_CLIP,                                              // Projective screen near depth...
+                      FAR_Z_CLIP                                                // Projective screen far depth...
+                     );
 
   glViewport (0, 0, framebuffer_size_x, framebuffer_size_y);                    // Resizing OpenGL viewport...
 }
