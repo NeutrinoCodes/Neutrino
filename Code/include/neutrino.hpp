@@ -45,14 +45,15 @@
 ////////////////////////////////////////////////////////////////////////////////
   #define LAYOUT_0                          0                                   // 1st variable ("location = 0") in vertex shader.
   #define LAYOUT_1                          1                                   // 2nd variable ("location = 1") in vertex shader.
-  #define ZOOM_INCREMENT                    0.1f                                // Mouse wheel zoom increment [].
+  #define ZOOM_INCREMENT                    0.1                                 // Mouse wheel zoom increment [].
   #define INITIAL_ZOOM                      -3.0                                // Initial zoom factor [+.]
-  #define ROTATION_FACTOR                   2.0f                                // Mouse orbit rotation factor [].
-  #define NEAR_Z_CLIP                       0.1f                                // Near z-clipping distance [small, but > 0.0].
-  #define FAR_Z_CLIP                        100.0f                              // Far z-clipping distance [big, but < +inf].
-  #define FOV                               60.0f                               // Field of view [deg].
-  #define IOD                               0.02f                               // Intraocular distance.
-  #define SCREEN_DISTANCE                   -2.5f                               // Screen distance.
+  #define PAN_FACTOR                        0.01                                // Mouse pan translation factor [].
+  #define ROTATION_FACTOR                   2.0                                 // Mouse orbit rotation factor [].
+  #define NEAR_Z_CLIP                       0.1                                 // Near z-clipping distance [small, but > 0.0].
+  #define FAR_Z_CLIP                        100.0                               // Far z-clipping distance [big, but < +inf].
+  #define FOV                               60.0                                // Field of view [deg].
+  #define IOD                               0.02                                // Intraocular distance.
+  #define SCREEN_DISTANCE                   -2.5                                // Screen distance.
   #define INITIAL_SCENE_POSITION            {0.0, 0.0, INITIAL_ZOOM}            // Initial scene position.
   #define LINE_WIDTH                        3                                   // Line width [px].
   #define KERNEL_NAME                       "thekernel"                         // OpenCL kernel function name.

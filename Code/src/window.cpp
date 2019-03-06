@@ -71,11 +71,25 @@ void window::pan ()
   grasp (initial_position, pan_x_old, pan_y_old);
   grasp (final_position, pan_x, pan_y);
 
-  translation[0] = (final_position[0] - initial_position[0])/100.0;
-  translation[1] = (final_position[1] - initial_position[1])/100.0;
-  translation[2] = (final_position[2] - initial_position[2])/100.0;
+  translation[0] = PAN_FACTOR*(final_position[0] - initial_position[0]);
+  translation[1] = PAN_FACTOR*(final_position[1] - initial_position[1]);
+  translation[2] = PAN_FACTOR*(final_position[2] - initial_position[2]);
 
   translate (T, T_old, translation);
+}
+
+void window::zoom ()
+{
+  float initial_translation;
+  float final_translation;
+  float translation[3];
+
+  translation[0] = 0.0;
+  translation[1] = 0.0;
+  translation[2] = zoom_z;
+
+  translate (T, T_old, translation);
+  backup (T_old, T);
 }
 
 /// # OpenGL shader compile function
@@ -283,8 +297,8 @@ void window::init (
   pan_y_old        = 0.0;
   pan_on           = false;
 
-  zoom_old         = INITIAL_ZOOM;
-  zoom             = 0.0;                                                       // Initializing zoom coefficient...
+  zoom_z_old       = INITIAL_ZOOM;
+  zoom_z           = 0.0;                                                       // Initializing zoom coefficient...
 
   int opengl_ver_major;                                                         // OpenGL version major number.
   int opengl_ver_minor;                                                         // OpenGL version minor number.
@@ -412,7 +426,7 @@ void window::init (
   translate (T, T_old, initial_scene_position);                                 // Setting initial scene position...
   backup (T_old, T);                                                            // Backing up translation matrix...
 
-  zoom = zoom_old;                                                              // Setting initial zoom...
+  zoom_z = zoom_z_old;                                                          // Setting initial zoom...
 
   glfwSwapBuffers (glfw_window);                                                // Swapping front and back buffers...
   glfwPollEvents ();                                                            // Polling GLFW events...
@@ -681,37 +695,22 @@ void window::mouse_scrolled (
                              double loc_yoffset                                 // Mouse scrolled y-position [px].
                             )
 {
-  float translation[3];                                                         // Translation vector.
-  float M[16];
-
-  M[0]     = 1.0; M[4] = 0.0; M[8] = 0.0; M[12] = 0.0;
-  M[0]     = 0.0; M[4] = 1.0; M[8] = 0.0; M[12] = 0.0;
-  M[0]     = 0.0; M[4] = 0.0; M[8] = 1.0; M[12] = 0.0;
-  M[0]     = 0.0; M[4] = 0.0; M[8] = 0.0; M[12] = 1.0;
-
-
   scroll_x = loc_xoffset;                                                       // Getting scroll position...
   scroll_y = loc_yoffset;                                                       // Getting scroll position...
 
   // Checking y-position:
   if(scroll_y > 0)
   {
-    zoom += ZOOM_INCREMENT;                                                     // Zooming-in...
-    printf ("zoom+\n");
+    zoom_z = +ZOOM_INCREMENT;                                                   // Setting zoom-in...
   }
 
   // Checking y-position:
   if(scroll_y < 0)
   {
-    zoom -= ZOOM_INCREMENT;                                                     // Zooming-out...
-    printf ("zoom-\n");
+    zoom_z = -ZOOM_INCREMENT;                                                   // Setting zoom-out...
   }
 
-  translation[0] = 0.0;                                                         // Building translation vector...
-  translation[1] = 0.0;                                                         // Building translation vector...
-  translation[2] = zoom;                                                        // Building translation vector...
-  translate (T, M, translation);                                                // Building translation matrix...
-  backup (T_old, T);
+  zoom ();                                                                      // Zooming...
 }
 
 //////////////////////////////////////////////////////////////////////////////////

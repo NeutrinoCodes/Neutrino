@@ -68,6 +68,8 @@ private:
                     );
   // Pan movement:
   void        pan ();
+  // Zoom movement:
+  void        zoom ();
   // Plot style:
   void        set_plot_style (
                               plot_style ps,                                    // Plot style.
@@ -173,8 +175,8 @@ public:
   double      pan_x;
   double      pan_y;
 
-  double      zoom_old;
-  double      zoom;                                                             // Zoom coefficient.
+  double      zoom_z_old;
+  double      zoom_z;                                                           // Zoom coefficient.
 
   // Arcball quaternion:
   float       q[4]   = {1.0, 0.0, 0.0, 0.0};
