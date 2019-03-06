@@ -682,6 +682,13 @@ void window::mouse_scrolled (
                             )
 {
   float translation[3];                                                         // Translation vector.
+  float M[16];
+
+  M[0]     = 1.0; M[4] = 0.0; M[8] = 0.0; M[12] = 0.0;
+  M[0]     = 0.0; M[4] = 1.0; M[8] = 0.0; M[12] = 0.0;
+  M[0]     = 0.0; M[4] = 0.0; M[8] = 1.0; M[12] = 0.0;
+  M[0]     = 0.0; M[4] = 0.0; M[8] = 0.0; M[12] = 1.0;
+
 
   scroll_x = loc_xoffset;                                                       // Getting scroll position...
   scroll_y = loc_yoffset;                                                       // Getting scroll position...
@@ -703,7 +710,8 @@ void window::mouse_scrolled (
   translation[0] = 0.0;                                                         // Building translation vector...
   translation[1] = 0.0;                                                         // Building translation vector...
   translation[2] = zoom;                                                        // Building translation vector...
-  translate (T, T_old, translation);                                            // Building translation matrix...
+  translate (T, M, translation);                                                // Building translation matrix...
+  backup (T_old, T);
 }
 
 //////////////////////////////////////////////////////////////////////////////////
