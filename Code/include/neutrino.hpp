@@ -100,6 +100,23 @@ typedef enum
   ALL                                                                           // OpenCL ALL devices.
 } compute_device_type;
 
+// PS4 gamepad buttons:
+typedef enum
+{
+  CROSS,
+  CIRCLE,
+  TRIANGLE,
+  SQUARE,
+  DPAD_DOWN,
+  DPAD_RIGHT,
+  DPAD_UP,
+  DPAD_LEFT,
+  R1,
+  R2,
+  L1,
+  L2
+} PS4_gamepad;
+
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////// Standard C header files ///////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
