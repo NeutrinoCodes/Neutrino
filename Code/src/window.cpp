@@ -798,7 +798,25 @@ void window::framebuffer_resize (
 /// Polls GLFW events.
 void window::poll_events ()
 {
+
   glfwPollEvents ();                                                            // Polling GLFW events...
+
+  if(glfwJoystickPresent ( GLFW_JOYSTICK_1 ))
+  {
+    int                  buttonCount;
+    const unsigned char* buttons = glfwGetJoystickButtons (
+                                                           GLFW_JOYSTICK_1,
+                                                           &buttonCount
+                                                          );
+    if( GLFW_PRESS == buttons[1] )
+    {
+      printf ("Button pressed\n");
+    }
+    else if( GLFW_RELEASE == buttons[0] )
+    {
+      printf ("Button released\n");
+    }
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////
