@@ -122,6 +122,11 @@ private:
                                        double      loc_xoffset,                 // Mouse scroll x-offset [px].
                                        double      loc_yoffset                  // Mouse scroll y-offset [px].
                                       );
+  // Joystick-connected callback:
+  void        joystick_connected_callback (
+                                           int loc_joystick,                    // Joystick.
+                                           int loc_event                        // Joystick-connected event.
+                                          );
   ////////////////////////////////////////////////////////////////////////////
   //////////////////////////// PRIVATE RETPOLINES ////////////////////////////
   ////////////////////////////////////////////////////////////////////////////
