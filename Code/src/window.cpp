@@ -353,7 +353,7 @@ void window::init (
   glfwSetMouseButtonCallback (glfw_window, mouse_button_callback);              // Setting mouse pressed callback...
   glfwSetCursorPosCallback (glfw_window, mouse_moved_callback);                 // Setting mouse moved callback...
   glfwSetScrollCallback (glfw_window, mouse_scrolled_callback);                 // Setting mouse scrolled callback...
-  glfwSetJoystickCallback (joystick_connected_callback);                        // Setting joystick connected callback...
+  //glfwSetJoystickCallback (joystick_connected_callback);                        // Setting joystick connected callback...
 
   // Initializing GLEW context:
   baseline -> action ("initializing GLEW...");                                  // Printing message...
@@ -429,6 +429,7 @@ void window::init (
 
   zoom_z = zoom_z_old;                                                          // Setting initial zoom...
 
+  glfwSwapInterval (1);                                                         // Enabling screen vertical retrace synchronization (vsync)...
   glfwSwapBuffers (glfw_window);                                                // Swapping front and back buffers...
   glfwPollEvents ();                                                            // Polling GLFW events...
 }
@@ -548,16 +549,17 @@ void window::joystick_connected_callback (
                                           int loc_event                         // Joystick-connected event.
                                          )
 {
-  if(event == GLFW_CONNECTED)
-  {
-    // The joystick was connected:
-    printf ("Joystick connected!\n");
-  }
-  else if(event == GLFW_DISCONNECTED)
-  {
-    // The joystick was disconnected:
-    printf ("Joystick disconnected!\n");
-  }
+  /*
+     if(event == GLFW_CONNECTED)
+     {
+     // The joystick was connected:
+     printf ("Joystick connected!\n");
+     }
+     else if(event == GLFW_DISCONNECTED)
+     {
+     // The joystick was disconnected:
+     printf ("Joystick disconnected!\n");
+     }*/
 }
 
 //////////////////////////////////////////////////////////////////////////////////
