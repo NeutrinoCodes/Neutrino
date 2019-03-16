@@ -841,6 +841,60 @@ void window::poll_events ()
 
 
 
+    if((abs (axes[L_ANALOG_H]) <= 0.1) && (abs (axes[L_ANALOG_V]) <= 0.1))
+    {
+      if(orbit_on == true)
+      {
+        backup (R_old, R);                                                      // Backing up rotation matrix...
+        orbit_on = false;                                                       // Turning off orbit...
+      }
+    }
+
+
+
+    if((abs (axes[L_ANALOG_H]) > 0.1) || (abs (axes[L_ANALOG_V]) > 0.1))
+    {
+      if(!orbit_on)
+      {
+        orbit_x_old = axes[L_ANALOG_H]*(double)framebuffer_size_x + 0.5f;       // Computing OpenGL pixel x-coordinates...
+        orbit_y_old = axes[L_ANALOG_V]*(double)framebuffer_size_y + 0.5f;       // Computing OpenGL pixel y-coordinates...
+
+        orbit_on    = true;
+      }
+
+      if(orbit_on)
+      {
+        orbit_x = axes[L_ANALOG_H]*(double)framebuffer_size_x + 0.5f;           // Computing OpenGL pixel x-coordinates...
+        orbit_y = axes[L_ANALOG_V]*(double)framebuffer_size_y + 0.5f;           // Computing OpenGL pixel y-coordinates...
+
+        orbit ();                                                               // Computing orbit...
+      }
+
+    }
+
+/*
+    if(abs (axes[L_ANALOG_V]) > 0.1)
+    {
+      orbit_on = true;
+      orbit_y  =
+        (axes[L_ANALOG_V]*(double)framebuffer_size_y/(double)window_size_y) +
+        0.5f;                                                                   // Computing OpenGL pixel y-coordinates...
+      orbit ();                                                                 // Computing orbit...
+      orbit_on = false;
+    }
+ */
+/*
+    if(pan_on)
+    {
+      pan_x = (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
+              0.5f;                                                             // Computing OpenGL pixel x-coordinates...
+      pan_y = (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
+              0.5f;                                                             // Computing OpenGL pixel y-coordinates...
+      pan ();
+    }
+ */
+
+
 
 
     if( GLFW_PRESS == button[SQUARE] )
