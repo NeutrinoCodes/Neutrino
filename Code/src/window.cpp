@@ -809,6 +809,22 @@ void window::poll_events ()
                                                           &num_buttons
                                                          );
 
+    int                  num_axes;
+    const float*         axes   = glfwGetJoystickAxes (
+                                                       GLFW_JOYSTICK_1,
+                                                       &num_axes
+                                                      );
+
+    printf (
+            "L_H = %f L_V = %f R_H = %f R_V = %f L2 = %f R2 = %f\n",
+            axes[L_ANALOG_H],
+            axes[L_ANALOG_V],
+            axes[R_ANALOG_H],
+            axes[R_ANALOG_V],
+            axes[L2_ANALOG],
+            axes[R2_ANALOG]
+           );
+
     if( GLFW_PRESS == button[SQUARE] )
     {
       printf ("Button SQUARE pressed\n");
