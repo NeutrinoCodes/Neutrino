@@ -825,6 +825,24 @@ void window::poll_events ()
             axes[R2_ANALOG]
            );
 
+    if(axes[R2_ANALOG] > -0.95)
+    {
+      zoom_z = (axes[R2_ANALOG] + 1.0)/2.0*ZOOM_INCREMENT;
+      zoom ();                                                                  // Zooming...
+    }
+
+    if(axes[L2_ANALOG] > -0.95)
+    {
+      zoom_z = -(axes[L2_ANALOG] + 1.0)/2.0*ZOOM_INCREMENT;
+      zoom ();                                                                  // Zooming...
+    }
+
+
+
+
+
+
+
     if( GLFW_PRESS == button[SQUARE] )
     {
       printf ("Button SQUARE pressed\n");
