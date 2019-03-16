@@ -61,6 +61,32 @@
   #define MAX_MESSAGE_SIZE                  64                                  // Maximum # of characters in a text message.
   #define MAX_PATH_SIZE                     32768                               // Maximum # of characters in a text file path.
 
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// PS4 GAMEPAD BUTTONS ////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+  #define SQUARE                            0
+  #define CROSS                             1
+  #define CIRCLE                            2
+  #define TRIANGLE                          3
+
+  #define L1                                4
+  #define R1                                5
+  #define L2                                6
+  #define R2                                7
+
+  #define SHARE                             8
+  #define OPTIONS                           9
+  #define L_ANALOG                          10
+  #define R_ANALOG                          11
+
+  #define PS                                12
+  #define TOUCH                             13
+
+  #define DPAD_UP                           14
+  #define DPAD_RIGHT                        15
+  #define DPAD_DOWN                         16
+  #define DPAD_LEFT                         17
+
 // Projection mode:
 typedef enum
 {
@@ -99,23 +125,6 @@ typedef enum
   DEFAULT,                                                                      // OpenCL DEFAULT device.
   ALL                                                                           // OpenCL ALL devices.
 } compute_device_type;
-
-// PS4 gamepad buttons:
-typedef enum
-{
-  CROSS,
-  CIRCLE,
-  TRIANGLE,
-  SQUARE,
-  DPAD_DOWN,
-  DPAD_RIGHT,
-  DPAD_UP,
-  DPAD_LEFT,
-  R1,
-  R2,
-  L1,
-  L2
-} PS4_gamepad;
 
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////// Standard C header files ///////////////////////////
