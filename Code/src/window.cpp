@@ -801,20 +801,102 @@ void window::poll_events ()
 
   glfwPollEvents ();                                                            // Polling GLFW events...
 
-  if(glfwJoystickPresent ( GLFW_JOYSTICK_1 ))
+  if(glfwJoystickPresent ( GLFW_JOYSTICK_1 ))                                   // Checking joystick...
   {
-    int                  buttonCount;
-    const unsigned char* buttons = glfwGetJoystickButtons (
-                                                           GLFW_JOYSTICK_1,
-                                                           &buttonCount
-                                                          );
-    if( GLFW_PRESS == buttons[1] )
+    int                  num_buttons;
+    const unsigned char* button = glfwGetJoystickButtons (
+                                                          GLFW_JOYSTICK_1,
+                                                          &num_buttons
+                                                         );
+
+    if( GLFW_PRESS == button[SQUARE] )
     {
-      printf ("Button pressed\n");
+      printf ("Button SQUARE pressed\n");
     }
-    else if( GLFW_RELEASE == buttons[0] )
+
+    if( GLFW_PRESS == button[CROSS] )
     {
-      printf ("Button released\n");
+      printf ("Button CROSS pressed\n");
+    }
+
+    if( GLFW_PRESS == button[CIRCLE] )
+    {
+      printf ("Button CIRCLE pressed\n");
+    }
+
+    if( GLFW_PRESS == button[TRIANGLE] )
+    {
+      printf ("Button TRIANGLE pressed\n");
+    }
+
+    if( GLFW_PRESS == button[L1] )
+    {
+      printf ("Button L1 pressed\n");
+    }
+
+    if( GLFW_PRESS == button[R1] )
+    {
+      printf ("Button R1 pressed\n");
+    }
+
+    if( GLFW_PRESS == button[L2] )
+    {
+      printf ("Button L2 pressed\n");
+    }
+
+    if( GLFW_PRESS == button[R2] )
+    {
+      printf ("Button R2 pressed\n");
+    }
+
+    if( GLFW_PRESS == button[SHARE] )
+    {
+      printf ("Button SHARE pressed\n");
+    }
+
+    if( GLFW_PRESS == button[OPTIONS] )
+    {
+      printf ("Button OPTIONS pressed\n");
+    }
+
+    if( GLFW_PRESS == button[PS] )
+    {
+      printf ("Button PS pressed\n");
+    }
+
+    if( GLFW_PRESS == button[TOUCH] )
+    {
+      printf ("Button TOUCH pressed\n");
+    }
+
+    if( GLFW_PRESS == button[L_ANALOG] )
+    {
+      printf ("Button L_ANALOG pressed\n");
+    }
+
+    if( GLFW_PRESS == button[R_ANALOG] )
+    {
+      printf ("Button R_ANALOG pressed\n");
+    }
+
+    if( GLFW_PRESS == button[DPAD_LEFT] )
+    {
+      printf ("Button DPAD_LEFT pressed\n");
+    }
+
+    if( GLFW_PRESS == button[DPAD_DOWN] )
+    {
+      printf ("Button DPAD_DOWN pressed\n");
+    }
+
+    if( GLFW_PRESS == button[DPAD_RIGHT] )
+    {
+      printf ("Button DPAD_RIGHT pressed\n");
+    }
+
+    if( GLFW_PRESS == button[DPAD_UP] )
+    {
+      printf ("Button DPAD_UP pressed\n");
     }
   }
 }
