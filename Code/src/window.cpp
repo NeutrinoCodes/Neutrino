@@ -815,28 +815,21 @@ void window::poll_events ()
                                                        &num_axes
                                                       );
 
-    printf (
-            "L_H = %f L_V = %f R_H = %f R_V = %f L2 = %f R2 = %f\n",
-            axes[L_ANALOG_H],
-            axes[L_ANALOG_V],
-            axes[R_ANALOG_H],
-            axes[R_ANALOG_V],
-            axes[L2_ANALOG],
-            axes[R2_ANALOG]
-           );
-
+    // Setting zoom+:
     if(axes[R2_ANALOG] > ZOOM_THRESHOLD_PS4)
     {
       zoom_z = (axes[R2_ANALOG] + 1.0)/2.0*ZOOM_INCREMENT_PS4;
       zoom ();                                                                  // Zooming...
     }
 
+    // Setting zoom-:
     if(axes[L2_ANALOG] > ZOOM_THRESHOLD_PS4)
     {
       zoom_z = -(axes[L2_ANALOG] + 1.0)/2.0*ZOOM_INCREMENT_PS4;
       zoom ();                                                                  // Zooming...
     }
 
+    // Preparing for orbit movement:
     if((abs (axes[L_ANALOG_H]) <= ROTATION_THRESHOLD_PS4) &&
        (abs (axes[L_ANALOG_V]) <= ROTATION_THRESHOLD_PS4))
     {
@@ -846,6 +839,7 @@ void window::poll_events ()
       backup (R_old, R);                                                        // Backing up rotation matrix...
     }
 
+    // Setting orbit movement:
     if((abs (axes[L_ANALOG_H]) > ROTATION_THRESHOLD_PS4) ||
        (abs (axes[L_ANALOG_V]) > ROTATION_THRESHOLD_PS4))
     {
@@ -854,6 +848,27 @@ void window::poll_events ()
       orbit_y  = ROTATION_FACTOR_PS4*axes[L_ANALOG_V];
       orbit ();                                                                 // Computing orbit...
       backup (R_old, R);                                                        // Backing up rotation matrix...
+    }
+
+    // Preparing for pan movement:
+    if((abs (axes[R_ANALOG_H]) <= ROTATION_THRESHOLD_PS4) &&
+       (abs (axes[R_ANALOG_V]) <= ROTATION_THRESHOLD_PS4))
+    {
+      pan_on    = false;                                                        // Turning off orbit...
+      pan_x_old = ROTATION_FACTOR_PS4*axes[R_ANALOG_H];
+      pan_y_old = ROTATION_FACTOR_PS4*axes[R_ANALOG_V];
+      backup (T_old, T);                                                        // Backing up rotation matrix...
+    }
+
+    // Setting orbit movement:
+    if((abs (axes[R_ANALOG_H]) > ROTATION_THRESHOLD_PS4) ||
+       (abs (axes[R_ANALOG_V]) > ROTATION_THRESHOLD_PS4))
+    {
+      pan_on = true;
+      pan_x  = ROTATION_FACTOR_PS4*axes[R_ANALOG_H];
+      pan_y  = ROTATION_FACTOR_PS4*axes[R_ANALOG_V];
+      pan ();                                                                   // Computing orbit...
+      backup (T_old, T);                                                        // Backing up rotation matrix...
     }
 
     if( GLFW_PRESS == button[SQUARE] )
