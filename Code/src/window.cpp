@@ -878,7 +878,7 @@ void window::poll_events ()
 
     if( GLFW_PRESS == button[CROSS] )
     {
-      printf ("Button CROSS pressed\n");
+      glfwSetWindowShouldClose (glfw_window, GL_TRUE);                          // Setting window "closed" flag...
     }
 
     if( GLFW_PRESS == button[CIRCLE] )
