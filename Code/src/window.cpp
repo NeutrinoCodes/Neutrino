@@ -135,6 +135,10 @@ GLuint window::compile_shader (
     case FRAGMENT:
       shader = glCreateShader (GL_FRAGMENT_SHADER);                             // Creating shader...
       break;
+
+    case GEOMETRY:
+      shader = glCreateShader (GL_GEOMETRY_SHADER);                             // Creating shader...
+      break;
   }
 
   // Attaching source code to shader:
@@ -176,19 +180,23 @@ GLuint window::compile_shader (
 /// Builds an OpenGL shader.
 GLuint window::build_shader (
                              const char* loc_vertex_filename,                   // Vertex shader file name.
+                             const char* loc_geometry_filename,                 // Geometry shader file name.
                              const char* loc_fragment_filename                  // Fragment shader file name.
                             )
 {
   GLuint vertex;                                                                // Vertex shader.
+  GLuint geometry;                                                              // Geometry shader.
   GLuint fragment;                                                              // Fragment shader.
   GLuint program;                                                               // Shader program.
 
   vertex   = compile_shader (loc_vertex_filename, VERTEX);                      // Compiling vertex shader...
+  geometry = compile_shader (loc_geometry_filename, GEOMETRY);                  // Compiling geometry shader...
   fragment = compile_shader (loc_fragment_filename, FRAGMENT);                  // Compiling fragment shader...
   program  = glCreateProgram ();                                                // Creating program...
   glBindAttribLocation (program, 0, "point");                                   // Binding "point" to "layout = 0" shader attribute...
   glBindAttribLocation (program, 1, "color");                                   // Binding "color" to "layout = 1" shader attribute...
   glAttachShader (program, vertex);                                             // Attaching vertex shader to program...
+  glAttachShader (program, geometry);                                           // Attaching geometry shader to program...
   glAttachShader (program, fragment);                                           // Attaching fragment shader to program...
   glLinkProgram (program);                                                      // Linking program...
 
@@ -224,6 +232,62 @@ void window::set_plot_style (
                                                                                 // Getting variable's uniform location:
                           glGetUniformLocation (
                                                 point_shader,                   // Program.
+                                                "Projection_matrix"             // Variable.
+                                               ),
+                          1,                                                    // # of matrices to be modified.
+                          GL_FALSE,                                             // FALSE = column major.
+                          &projection_matrix[0]                                 // Projection matrix.
+                         );
+      break;
+
+    case STYLE_WIREFRAME:
+      glUseProgram (wireframe_shader);                                          // Using shader...
+
+      // Setting View_matrix matrix on shader:
+      glUniformMatrix4fv (
+                                                                                // Getting variable's uniform location:
+                          glGetUniformLocation (
+                                                wireframe_shader,               // Program.
+                                                "View_matrix"                   // Variable.
+                                               ),
+                          1,                                                    // # of matrices to be modified.
+                          GL_FALSE,                                             // FALSE = column major.
+                          &view_matrix[0]                                       // View matrix.
+                         );
+
+      // Setting Projection_matrix matrix on shader:
+      glUniformMatrix4fv (
+                                                                                // Getting variable's uniform location:
+                          glGetUniformLocation (
+                                                wireframe_shader,               // Program.
+                                                "Projection_matrix"             // Variable.
+                                               ),
+                          1,                                                    // # of matrices to be modified.
+                          GL_FALSE,                                             // FALSE = column major.
+                          &projection_matrix[0]                                 // Projection matrix.
+                         );
+      break;
+
+    case STYLE_SHADED:
+      glUseProgram (shaded_shader);                                             // Using shader...
+
+      // Setting View_matrix matrix on shader:
+      glUniformMatrix4fv (
+                                                                                // Getting variable's uniform location:
+                          glGetUniformLocation (
+                                                shaded_shader,                  // Program.
+                                                "View_matrix"                   // Variable.
+                                               ),
+                          1,                                                    // # of matrices to be modified.
+                          GL_FALSE,                                             // FALSE = column major.
+                          &view_matrix[0]                                       // View matrix.
+                         );
+
+      // Setting Projection_matrix matrix on shader:
+      glUniformMatrix4fv (
+                                                                                // Getting variable's uniform location:
+                          glGetUniformLocation (
+                                                shaded_shader,                  // Program.
                                                 "Projection_matrix"             // Variable.
                                                ),
                           1,                                                    // # of matrices to be modified.
@@ -353,7 +417,6 @@ void window::init (
   glfwSetMouseButtonCallback (glfw_window, mouse_button_callback);              // Setting mouse pressed callback...
   glfwSetCursorPosCallback (glfw_window, mouse_moved_callback);                 // Setting mouse moved callback...
   glfwSetScrollCallback (glfw_window, mouse_scrolled_callback);                 // Setting mouse scrolled callback...
-  //glfwSetJoystickCallback (joystick_connected_callback);                        // Setting joystick connected callback...
 
   // Initializing GLEW context:
   baseline -> action ("initializing GLEW...");                                  // Printing message...
@@ -377,11 +440,13 @@ void window::init (
 
   point_shader = build_shader (
                                POINT_VERTEX_FILE,                               // Vertex shader file name.
+                               POINT_GEOMETRY_FILE,                             // Geometry shader file name.
                                POINT_FRAGMENT_FILE                              // Fragment shader file name.
                               );
 
   text_shader  = build_shader (
                                TEXT_VERTEX_FILE,                                // Vertex shader file name.
+                               POINT_GEOMETRY_FILE,                             // Geometry shader file name.
                                TEXT_FRAGMENT_FILE                               // Fragment shader file name.
                               );
   baseline -> done ();                                                          // Printing message...

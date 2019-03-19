@@ -40,6 +40,8 @@ private:
   float           initial_scene_position[3] = INITIAL_SCENE_POSITION;
 
   GLuint          point_shader;                                                 // Point shader program.
+  GLuint          wireframe_shader;                                             // Wireframe shader program.
+  GLuint          shaded_shader;                                                // Shaded shader program.
   GLuint          text_shader;                                                  // Point shader program.
   projection_mode PR_mode;                                                      // Projection mode.
   // OpenGL shader compilation:
@@ -49,8 +51,9 @@ private:
                              );
   // OpenGL shader build:
   GLuint      build_shader (
-                            const char* loc_vertex_filename,                    // Shader file name.
-                            const char* loc_fragment_filename                   // Shader type.
+                            const char* loc_vertex_filename,                    // Vertex shader file name.
+                            const char* loc_geometry_filename,                  // Geometry shader file name.
+                            const char* loc_fragment_filename                   // Fragment shader file name.
                            );
   // Arcball computation:
   void        arcball (
