@@ -3,6 +3,7 @@
 
 /// These files are relative to the NEUTRINO_PATH environmental variable:
   #define POINT_VERTEX_FILE                 "/Code/shader/vertex.vert"          // Plot style POINT vertex shader.
+  #define POINT_GEOMETRY_FILE               "/Code/shader/geometry.geom"        // Plot style POINT geometry shader.
   #define POINT_FRAGMENT_FILE               "/Code/shader/fragment.frag"        // Plot style POINT fragment shader.
   #define TEXT_VERTEX_FILE                  "/Code/shader/text_vertex.vert"     // Print style TEXT vertex shader.
   #define TEXT_FRAGMENT_FILE                "/Code/shader/text_fragment.frag"   // Print style TEXT fragment shader.
@@ -158,7 +159,8 @@ typedef enum
 typedef enum
 {
   VERTEX,                                                                       // GLSL shader interpretation set as vertex.
-  FRAGMENT                                                                      // GLSL shader interpretation set as fragment.
+  FRAGMENT,                                                                     // GLSL shader interpretation set as fragment.
+  GEOMETRY                                                                      // GLSL shader interpretation set as geometry.
 } shader_type;
 
 // Kernel modes:
