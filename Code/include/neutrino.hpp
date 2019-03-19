@@ -68,38 +68,76 @@
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// PS4 GAMEPAD BUTTONS //////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-  #define SQUARE                            0
-  #define CROSS                             1
-  #define CIRCLE                            2
-  #define TRIANGLE                          3
+  #ifdef __APPLE__
+    #define SQUARE                          0
+    #define CROSS                           1
+    #define CIRCLE                          2
+    #define TRIANGLE                        3
 
-  #define L1                                4
-  #define R1                                5
-  #define L2                                6
-  #define R2                                7
+    #define L1                              4
+    #define R1                              5
+    #define L2                              6
+    #define R2                              7
 
-  #define SHARE                             8
-  #define OPTIONS                           9
-  #define L_ANALOG                          10
-  #define R_ANALOG                          11
+    #define SHARE                           8
+    #define OPTIONS                         9
+    #define L_ANALOG                        10
+    #define R_ANALOG                        11
 
-  #define PS                                12
-  #define TOUCH                             13
+    #define PS                              12
+    #define TOUCH                           13
 
-  #define DPAD_UP                           14
-  #define DPAD_RIGHT                        15
-  #define DPAD_DOWN                         16
-  #define DPAD_LEFT                         17
+    #define DPAD_UP                         14
+    #define DPAD_RIGHT                      15
+    #define DPAD_DOWN                       16
+    #define DPAD_LEFT                       17
+  #endif
+
+  #ifdef __linux__
+    #define SQUARE                          3
+    #define CROSS                           0
+    #define CIRCLE                          1
+    #define TRIANGLE                        2
+
+    #define L1                              4
+    #define R1                              5
+    #define L2                              6
+    #define R2                              7
+
+    #define SHARE                           8
+    #define OPTIONS                         9
+    #define L_ANALOG                        11
+    #define R_ANALOG                        12
+
+    #define PS                              10
+    #define TOUCH                           13
+
+    #define DPAD_UP                         14
+    #define DPAD_RIGHT                      15
+    #define DPAD_DOWN                       16
+    #define DPAD_LEFT                       17
+  #endif
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// PS4 GAMEPAD AXES //////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-  #define L_ANALOG_H                        0
-  #define L_ANALOG_V                        1
-  #define R_ANALOG_H                        2
-  #define L2_ANALOG                         3
-  #define R_ANALOG_V                        5
-  #define R2_ANALOG                         4
+  #ifdef __APPLE__
+    #define L_ANALOG_H                      0
+    #define L_ANALOG_V                      1
+    #define R_ANALOG_H                      2
+    #define L2_ANALOG                       3
+    #define R_ANALOG_V                      5
+    #define R2_ANALOG                       4
+  #endif
+
+  #ifdef __linux__
+    #define L_ANALOG_H                      0
+    #define L_ANALOG_V                      1
+    #define R_ANALOG_H                      3
+    #define L2_ANALOG                       2
+    #define R_ANALOG_V                      4
+    #define R2_ANALOG                       5
+  #endif
 
 // Projection mode:
 typedef enum
