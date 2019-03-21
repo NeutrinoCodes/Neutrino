@@ -438,17 +438,29 @@ void window::init (
   // Initializing shaders:
   baseline -> action ("initializing GLSL shaders...");                          // Printing message...
 
-  point_shader = build_shader (
-                               POINT_VERTEX_FILE,                               // Vertex shader file name.
-                               POINT_GEOMETRY_FILE,                             // Geometry shader file name.
-                               POINT_FRAGMENT_FILE                              // Fragment shader file name.
-                              );
+  point_shader     = build_shader (
+                                   POINT_VERTEX_FILE,                           // Vertex shader file name.
+                                   POINT_GEOMETRY_FILE,                         // Geometry shader file name.
+                                   POINT_FRAGMENT_FILE                          // Fragment shader file name.
+                                  );
 
-  text_shader  = build_shader (
-                               TEXT_VERTEX_FILE,                                // Vertex shader file name.
-                               POINT_GEOMETRY_FILE,                             // Geometry shader file name.
-                               TEXT_FRAGMENT_FILE                               // Fragment shader file name.
-                              );
+  wireframe_shader = build_shader (
+                                   WIREFRAME_VERTEX_FILE,                       // Vertex shader file name.
+                                   WIREFRAME_GEOMETRY_FILE,                     // Geometry shader file name.
+                                   WIREFRAME_FRAGMENT_FILE                      // Fragment shader file name.
+                                  );
+
+  shaded_shader    = build_shader (
+                                   SHADED_VERTEX_FILE,                          // Vertex shader file name.
+                                   SHADED_GEOMETRY_FILE,                        // Geometry shader file name.
+                                   SHADED_FRAGMENT_FILE                         // Fragment shader file name.
+                                  );
+
+  text_shader      = build_shader (
+                                   TEXT_VERTEX_FILE,                            // Vertex shader file name.
+                                   TEXT_GEOMETRY_FILE,                          // Geometry shader file name.
+                                   TEXT_FRAGMENT_FILE                           // Fragment shader file name.
+                                  );
   baseline -> done ();                                                          // Printing message...
 
   glfwGetWindowSize (glfw_window, &window_size_x, &window_size_y);              // Getting window size...
