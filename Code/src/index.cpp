@@ -122,7 +122,7 @@ void node_index::init (
   baseline       = loc_baseline;                                                // Getting Neutrino baseline...
   position       = new size_t[baseline -> k_num];                               // Initializing kernel argument position array...
 
-  baseline -> action ("initializing \"int1\" object...");                       // Printing message...
+  baseline -> action ("initializing \"node_index\" object...");                 // Printing message...
 
   size           = loc_data_size;                                               // Data array size.
   buffer         = NULL;                                                        // OpenCL data buffer.
@@ -135,7 +135,7 @@ void node_index::init (
 
     for(i = 0; i < size; i++)                                                   // Filling unfolded data array...
     {
-      data[4*i + 0] = 0.0f;                                                     // Filling "x"...
+      data[1*i + 0] = 0.0f;                                                     // Filling "x"...
     }
 
     glGenVertexArrays (1, &vao);                                                // Generating glyph VAO...
@@ -231,7 +231,7 @@ void node_index::set_arg (
   size_t kernel_index;
   size_t i;
 
-  baseline -> action ("setting \"int1\" kernel argument...");                   // Printing message...
+  baseline -> action ("setting \"node_index\" kernel argument...");             // Printing message...
 
   // Getting kernel index:
   for(i = 0; i < baseline -> k_num; i++)                                        // Scanning OpenCL kernel id array...
@@ -361,11 +361,61 @@ void node_index::pull (
   check_error (loc_error);
 }
 
+/// # OpenCL acquire buffer function
+/// ### Description:
+/// Acquires OpenCL memory objects that have been created from OpenGL objects.
+void node_index::acquire_gl (
+                             queue*  loc_queue,                                 // Queue.
+                             cl_uint loc_kernel_arg                             // Kernel argument index.
+                            )
+{
+  cl_int loc_error;                                                             // Local error code.
+
+  glFinish ();                                                                  // Ensuring that all OpenGL routines have completed all operations...
+
+  // Passing buffer to OpenCL kernel:
+  loc_error = clEnqueueAcquireGLObjects (
+                                         loc_queue -> queue_id,                 // Queue.
+                                         1,                                     // # of memory objects.
+                                         &buffer,                               // Memory object array.
+                                         0,                                     // # of events in event list.
+                                         NULL,                                  // Event list.
+                                         NULL                                   // Event.
+                                        );
+
+  check_error (loc_error);                                                      // Checking returned error code...
+}
+
+/// # OpenCL release buffer function:
+/// ### Description:
+/// Releases OpenCL memory objects that have been created from OpenGL objects.
+void node_index::release_gl (
+                             queue*  loc_queue,                                 // Queue.
+                             cl_uint loc_kernel_arg                             // Kernel argument index.
+                            )
+{
+  cl_int loc_error;                                                             // Local error code.
+
+  // Releasing buffer from OpenCL kernel:
+  loc_error = clEnqueueReleaseGLObjects (
+                                         loc_queue -> queue_id,                 // Queue.
+                                         1,                                     // # of memory objects.
+                                         &buffer,                               // Memory object array.
+                                         0,                                     // # of events in event list.
+                                         NULL,                                  // Event list.
+                                         NULL                                   // Event.
+                                        );
+
+  clFinish (loc_queue -> queue_id);                                             // Ensuring that all OpenCL routines have completed all operations...
+
+  check_error (loc_error);                                                      // Checking returned error code...
+}
+
 node_index::~node_index()
 {
   cl_int loc_error;                                                             // Local error code.
 
-  baseline -> action ("releasing \"int1\" object...");                          // Printing message...
+  baseline -> action ("releasing \"node_index\" object...");                    // Printing message...
 
   if(buffer != NULL)                                                            // Checking buffer..
   {

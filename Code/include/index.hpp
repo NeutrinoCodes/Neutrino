@@ -79,6 +79,16 @@ public:
                 queue*  loc_queue,                                              // OpenCL queue.
                 cl_uint loc_kernel_arg                                          // OpenCL kernel argument index.
                );
+  // OpenCL acquire buffer function:
+  void    acquire_gl (
+                      queue*  loc_queue,                                        // Queue.
+                      cl_uint loc_kernel_arg                                    // Kernel argument index.
+                     );
+  // OpenCL release buffer function:
+  void    release_gl (
+                      queue*  loc_queue,                                        // Queue.
+                      cl_uint loc_kernel_arg                                    // Kernel argument index.
+                     );
 
   ~node_index();
 };

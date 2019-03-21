@@ -103,14 +103,14 @@ int main ()
   // Mesh nodes:
   points    -> init (baseline, NODES);                                          // Initializing points...
 
+  // Mesh nodes colors:
+  colors    -> init (baseline, NODES);                                          // Initializing colors...
+
   // Mesh neighbourhood connectivity:
   index_PR -> init (baseline, NODES, 2);                                        // Right neighbours indexes...
   index_PU -> init (baseline, NODES, 3);                                        // Up neighbours indexes...
   index_PL -> init (baseline, NODES, 4);                                        // Left neighbours indexes...
   index_PD -> init (baseline, NODES, 5);                                        // Down neighbours indexes...
-
-  // Mesh nodes colors:
-  colors    -> init (baseline, NODES);                                          // Initializing colors...
 
   #if USE_OPENGL
     message   -> init (baseline, "neutrino 2.0!", 0.0, 1.0, 0.0, 1.0);          // Initializing message...
@@ -213,6 +213,10 @@ int main ()
   ////////////////////////////////////////////////////////////////////////////////
   points    -> set_arg (K[0], 0);                                               // Setting kernel argument...
   colors    -> set_arg (K[0], 1);                                               // Setting kernel argument...
+  index_PR -> set_arg (K[0], 2);
+  index_PU -> set_arg (K[0], 3);
+  index_PL -> set_arg (K[0], 4);
+  index_PD -> set_arg (K[0], 5);
 
   #if USE_OPENGL
     points    -> acquire_gl (Q[0], 0);
@@ -235,6 +239,47 @@ int main ()
   #endif
 
   #if USE_OPENGL
+    index_PR    -> acquire_gl (Q[0], 2);
+  #endif
+  printf ("pippo\n");
+  index_PR    -> push (Q[0], 2);
+  printf ("pippo\n");
+
+  #if USE_OPENGL
+    index_PR    -> release_gl (Q[0], 2);
+  #endif
+
+  #if USE_OPENGL
+    index_PU    -> acquire_gl (Q[0], 3);
+  #endif
+
+  index_PU    -> push (Q[0], 3);
+
+  #if USE_OPENGL
+    index_PU    -> release_gl (Q[0], 3);
+  #endif
+
+  #if USE_OPENGL
+    index_PL    -> acquire_gl (Q[0], 4);
+  #endif
+
+  index_PL    -> push (Q[0], 4);
+
+  #if USE_OPENGL
+    index_PL    -> release_gl (Q[0], 4);
+  #endif
+
+  #if USE_OPENGL
+    index_PD    -> acquire_gl (Q[0], 5);
+  #endif
+
+  index_PD    -> push (Q[0], 5);
+
+  #if USE_OPENGL
+    index_PD    -> release_gl (Q[0], 5);
+  #endif
+
+  #if USE_OPENGL
 
     while(!gui -> closed ())                                                    // Opening window...
     {
@@ -245,11 +290,19 @@ int main ()
 
       points  -> acquire_gl (Q[0], 0);
       colors  -> acquire_gl (Q[0], 1);
+      index_PR    -> acquire_gl (Q[0], 2);
+      index_PU    -> acquire_gl (Q[0], 3);
+      index_PL    -> acquire_gl (Q[0], 4);
+      index_PD    -> acquire_gl (Q[0], 5);
 
       K[0]    -> execute (Q[0], WAIT);
 
       points  -> release_gl (Q[0], 0);
       colors  -> release_gl (Q[0], 1);
+      index_PR    -> release_gl (Q[0], 2);
+      index_PU    -> release_gl (Q[0], 3);
+      index_PL    -> release_gl (Q[0], 4);
+      index_PD    -> release_gl (Q[0], 5);
 
       //gui     -> print (message);                                               // Printing text...
       gui     -> plot (points, colors, STYLE_WIREFRAME);
@@ -299,6 +352,10 @@ int main ()
 
   delete    points;
   delete    colors;
+  delete index_PR;
+  delete index_PU;
+  delete index_PL;
+  delete index_PD;
 
   delete[]  Q;
 
