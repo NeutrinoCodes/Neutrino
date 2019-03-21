@@ -7,13 +7,12 @@ layout (points, max_vertices = 1) out;                                          
 
 in vec4 color_vert[];
 out vec4 color_geom;
+
 // Dummy pass-through geometry shader:
 void main()
 {
   color_geom = color_vert[0];
   gl_Position = gl_in[0].gl_Position;
-
   EmitVertex();
-
   EndPrimitive();
 }
