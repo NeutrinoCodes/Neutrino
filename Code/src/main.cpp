@@ -241,9 +241,8 @@ int main ()
   #if USE_OPENGL
     index_PR    -> acquire_gl (Q[0], 2);
   #endif
-  printf ("pippo\n");
+
   index_PR    -> push (Q[0], 2);
-  printf ("pippo\n");
 
   #if USE_OPENGL
     index_PR    -> release_gl (Q[0], 2);
