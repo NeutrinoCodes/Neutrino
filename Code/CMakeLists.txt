@@ -24,6 +24,7 @@ src/device.cpp
 src/float1.cpp
 src/float4.cpp
 src/font.cpp
+src/index.cpp
 src/info.cpp
 src/int1.cpp
 src/int4.cpp
