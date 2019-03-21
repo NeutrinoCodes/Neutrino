@@ -10,7 +10,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// "FLOAT1" CLASS ///////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-class index
+class node_index
 {
 private:
   neutrino* baseline;                                                           // Neutrino baseline.
@@ -32,12 +32,15 @@ public:
 
   size_t     size;                                                              // Data size.
   cl_mem     buffer;                                                            // OpenGL data memory buffer.
+  GLuint     vao;                                                               // OpenGL data VAO.
+  GLuint     vbo;                                                               // OpenGL data VBO.
 
-  index ();
+  node_index ();
   // Initialization:
   void    init (
                 neutrino* loc_baseline,                                         // Neutrino baseline.
-                size_t    loc_data_size                                         // Data number.
+                size_t    loc_data_size,                                        // Data number.
+                GLuint    loc_vao_index                                         // VAO index.
                );
   ////////////////////////////////////////////////////////////////////////////
   /////////////////////////// HOST "SET" FUNCTIONS:  /////////////////////////
@@ -77,7 +80,7 @@ public:
                 cl_uint loc_kernel_arg                                          // OpenCL kernel argument index.
                );
 
-  ~index();
+  ~node_index();
 };
 
 #endif

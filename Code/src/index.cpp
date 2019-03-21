@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "INT1" CLASS //////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-index::index()
+node_index::node_index()
 {
 
 }
@@ -11,9 +11,9 @@ index::index()
 /// # OpenCL error get function
 /// ### Description:
 /// Translates an OpenCL numeric error code into a human-readable string.
-const char* index::get_error (
-                              cl_int loc_error                                  // Local error code.
-                             )
+const char* node_index::get_error (
+                                   cl_int loc_error                             // Local error code.
+                                  )
 {
   switch(loc_error)
   {
@@ -95,9 +95,9 @@ const char* index::get_error (
 /// # OpenCL error check function
 /// ### Description:
 /// Checks for an OpenCL error code and print it so stdout.
-void index::check_error (
-                         cl_int loc_error                                       // Error code.
-                        )
+void node_index::check_error (
+                              cl_int loc_error                                  // Error code.
+                             )
 {
   if(loc_error != CL_SUCCESS)                                                   // Checking local error code...
   {
@@ -110,10 +110,11 @@ void index::check_error (
 /// ### Description:
 /// Prepares a contiguous (unfolded) array to be used as data buffer
 /// allocated on the client memory space.
-void index::init (
-                  neutrino* loc_baseline,                                       // Neutrino baseline.
-                  size_t    loc_data_size                                       // Data number.
-                 )
+void node_index::init (
+                       neutrino* loc_baseline,                                  // Neutrino baseline.
+                       size_t    loc_data_size,                                 // Data number.
+                       GLuint    loc_vao_index                                  // VAO index.
+                      )
 {
   cl_int loc_error;                                                             // Error code.
   size_t i;                                                                     // Index.
@@ -127,21 +128,88 @@ void index::init (
   buffer         = NULL;                                                        // OpenCL data buffer.
   opencl_context = baseline -> context_id;                                      // Getting OpenCL context...
 
-  data           = new cl_long[1*size];                                         // Creating array for unfolded data...
-
-  for(i = 0; i < size; i++)                                                     // Filling unfolded data array...
+  if(baseline -> use_cl_gl_interop)
   {
-    data[1*i + 0] = 0.0f;                                                       // Filling "x"...
+    vbo  = 0;                                                                   // OpenGL data VBO.
+    data = new cl_long[1*size];                                                 // Creating array for unfolded data...
+
+    for(i = 0; i < size; i++)                                                   // Filling unfolded data array...
+    {
+      data[4*i + 0] = 0.0f;                                                     // Filling "x"...
+    }
+
+    glGenVertexArrays (1, &vao);                                                // Generating glyph VAO...
+    glBindVertexArray (vao);                                                    // Binding glyph VAO...
+
+    // Generating VBO:
+    glGenBuffers (
+                  1,                                                            // # of VBOs to generate.
+                  &vbo                                                          // VBOs array.
+                 );
+
+    // Binding VBO:
+    glBindBuffer (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  vbo                                                           // VBO to bind.
+                 );
+
+    // Creating and initializing a buffer object's data store:
+    glBufferData (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  (GLsizeiptr)(1*sizeof(GLfloat)*(size)),                       // VBO size.
+                  data,                                                         // VBO data.
+                  GL_DYNAMIC_DRAW                                               // VBO usage.
+                 );
+
+    // Enabling "layout = 0" attribute in vertex shader:
+    glEnableVertexAttribArray (
+                               loc_vao_index                                    // VAO index.
+                              );
+
+    // Binding VBO:
+    glBindBuffer (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  vbo                                                           // VBO to bind.
+                 );
+
+    // Specifying the format for "layout = 0" attribute in vertex shader:
+    glVertexAttribPointer (
+                           loc_vao_index,                                       // VAO index.
+                           1,                                                   // VAO's # of components.
+                           GL_FLOAT,                                            // Data type.
+                           GL_FALSE,                                            // Not using normalized numbers.
+                           0,                                                   // Data stride.
+                           0                                                    // Data offset.
+                          );
+
+    // Creating OpenCL buffer from OpenGL buffer:
+    buffer = clCreateFromGLBuffer (
+                                   opencl_context,                              // OpenCL context.
+                                   CL_MEM_READ_WRITE,                           // Memory flags.
+                                   vbo,                                         // VBO.
+                                   &loc_error                                   // Returned error.
+                                  );
+
   }
 
-  // Creating OpenCL memory buffer:
-  buffer         = clCreateBuffer (
-                                   opencl_context,                              // OpenCL context.
-                                   CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,    // Memory flags.
-                                   1*sizeof(cl_long)*size,                      // Data buffer size.
-                                   data,                                        // Data buffer.
-                                   &loc_error                                   // Error code.
-                                  );
+  else                                                                          // Replicate float4 init.
+  {
+    data   = new cl_long[1*size];                                               // Creating array for unfolded data...
+
+    for(i = 0; i < size; i++)                                                   // Filling unfolded data array...
+    {
+      data[1*i + 0] = 0.0f;                                                     // Filling "x"...
+    }
+
+    // Creating OpenCL memory buffer:
+    buffer = clCreateBuffer (
+                             opencl_context,                                    // OpenCL context.
+                             CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,          // Memory flags.
+                             1*sizeof(cl_long)*size,                            // Data buffer size.
+                             data,                                              // Data buffer.
+                             &loc_error                                         // Error code.
+                            );
+  }
 
   check_error (loc_error);                                                      // Checking returned error code...
 
@@ -154,10 +222,10 @@ void index::init (
 /// # Kernel set function
 /// ### Description:
 /// Sets a kernel argument at a specified index position.
-void index::set_arg (
-                     kernel* loc_kernel,                                        // OpenCL kernel.
-                     cl_uint loc_kernel_arg                                     // OpenCL kernel argument #.
-                    )
+void node_index::set_arg (
+                          kernel* loc_kernel,                                   // OpenCL kernel.
+                          cl_uint loc_kernel_arg                                // OpenCL kernel argument #.
+                         )
 {
   cl_int loc_error;                                                             // Error code.
   size_t kernel_index;
@@ -192,10 +260,10 @@ void index::set_arg (
 /// # "x" set function
 /// ### Description:
 /// Sets the "x" point data value in point data array.
-void index::set_x (
-                   size_t  loc_index,                                           // Data index.
-                   cl_long loc_value                                            // Data value.
-                  )
+void node_index::set_x (
+                        size_t  loc_index,                                      // Data index.
+                        cl_long loc_value                                       // Data value.
+                       )
 {
   data[1*loc_index + 0] = (cl_long)loc_value;                                   // Setting data value...
 }
@@ -206,9 +274,9 @@ void index::set_x (
 /// # Kernel get function:
 /// ### Description:
 /// Gets the index position of a kernel argument.
-size_t index::get_arg (
-                       kernel* loc_kernel                                       // OpenCL kernel.
-                      )
+size_t node_index::get_arg (
+                            kernel* loc_kernel                                  // OpenCL kernel.
+                           )
 {
   cl_int loc_error;                                                             // Error code.
   size_t kernel_index;
@@ -229,9 +297,9 @@ size_t index::get_arg (
 /// # "x" get function
 /// ### Description:
 /// Gets the "x" point data value in point data array.
-cl_long index::get_x (
-                      size_t loc_index                                          // Data index.
-                     )
+cl_long node_index::get_x (
+                           size_t loc_index                                     // Data index.
+                          )
 {
   cl_long loc_value;                                                            // Value.
 
@@ -246,10 +314,10 @@ cl_long index::get_x (
 /// # OpenCL write buffer function
 /// ### Description:
 /// Enqueues commands to write to a buffer object from host memory.
-void index::push (
-                  queue*  loc_queue,                                            // Queue.
-                  cl_uint loc_kernel_arg                                        // Kernel argument index.
-                 )
+void node_index::push (
+                       queue*  loc_queue,                                       // Queue.
+                       cl_uint loc_kernel_arg                                   // Kernel argument index.
+                      )
 {
   cl_int loc_error;                                                             // Local error code.
 
@@ -271,10 +339,10 @@ void index::push (
 /// # OpenCL read buffer function
 /// ### Description:
 /// Enqueues commands to read from a buffer object to host memory.
-void index::pull (
-                  queue*  loc_queue,                                            // Queue.
-                  cl_uint loc_kernel_arg                                        // Kernel argument index.
-                 )
+void node_index::pull (
+                       queue*  loc_queue,                                       // Queue.
+                       cl_uint loc_kernel_arg                                   // Kernel argument index.
+                      )
 {
   cl_int loc_error;                                                             // Local error code.
 
@@ -293,7 +361,7 @@ void index::pull (
   check_error (loc_error);
 }
 
-index::~index()
+node_index::~node_index()
 {
   cl_int loc_error;                                                             // Local error code.
 

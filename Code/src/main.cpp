@@ -26,7 +26,7 @@
 #include "opencl.hpp"
 #include "queue.hpp"
 #include "kernel.hpp"
-#include "int1.hpp"
+#include "index.hpp"
 
 int main ()
 {
@@ -51,10 +51,10 @@ int main ()
   point4*       points     = new point4 ();                                     // Point array.
   color4*       colors     = new color4 ();                                     // Color array.
 
-  int1*         index_PR   = new int1 ();                                       // Right particle.
-  int1*         index_PU   = new int1 ();                                       // Up particle.
-  int1*         index_PL   = new int1 ();                                       // Left particle.
-  int1*         index_PD   = new int1 ();                                       // Down particle.
+  node_index*   index_PR   = new node_index ();                                 // Right particle.
+  node_index*   index_PU   = new node_index ();                                 // Up particle.
+  node_index*   index_PL   = new node_index ();                                 // Left particle.
+  node_index*   index_PD   = new node_index ();                                 // Down particle.
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////// INITIALIZING NEUTRINO, OPENGL and OPENCL //////////////////
@@ -104,10 +104,10 @@ int main ()
   points    -> init (baseline, NODES);                                          // Initializing points...
 
   // Mesh neighbourhood connectivity:
-  index_PR -> init (baseline, NODES);                                           // Right neighbours indexes...
-  index_PU -> init (baseline, NODES);                                           // Up neighbours indexes...
-  index_PL -> init (baseline, NODES);                                           // Left neighbours indexes...
-  index_PD -> init (baseline, NODES);                                           // Down neighbours indexes...
+  index_PR -> init (baseline, NODES, 2);                                        // Right neighbours indexes...
+  index_PU -> init (baseline, NODES, 3);                                        // Up neighbours indexes...
+  index_PL -> init (baseline, NODES, 4);                                        // Left neighbours indexes...
+  index_PD -> init (baseline, NODES, 5);                                        // Down neighbours indexes...
 
   // Mesh nodes colors:
   colors    -> init (baseline, NODES);                                          // Initializing colors...
