@@ -26,6 +26,7 @@
 #include "opencl.hpp"
 #include "queue.hpp"
 #include "kernel.hpp"
+#include "int1.hpp"
 
 int main ()
 {
@@ -49,6 +50,11 @@ int main ()
 
   point4*       points     = new point4 ();                                     // Point array.
   color4*       colors     = new color4 ();                                     // Color array.
+
+  int1*         index_PR   = new int1 ();                                       // Right particle.
+  int1*         index_PU   = new int1 ();                                       // Up particle.
+  int1*         index_PL   = new int1 ();                                       // Left particle.
+  int1*         index_PD   = new int1 ();                                       // Down particle.
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////// INITIALIZING NEUTRINO, OPENGL and OPENCL //////////////////
@@ -94,8 +100,18 @@ int main ()
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////// INITIALIZING OPENCL DATA OBJECTS ///////////////////////
   ////////////////////////////////////////////////////////////////////////////////
+  // Mesh nodes:
   points    -> init (baseline, NODES);                                          // Initializing points...
+
+  // Mesh neighbourhood connectivity:
+  index_PR -> init (baseline, NODES);                                           // Right neighbours indexes...
+  index_PU -> init (baseline, NODES);                                           // Up neighbours indexes...
+  index_PL -> init (baseline, NODES);                                           // Left neighbours indexes...
+  index_PD -> init (baseline, NODES);                                           // Down neighbours indexes...
+
+  // Mesh nodes colors:
   colors    -> init (baseline, NODES);                                          // Initializing colors...
+
   #if USE_OPENGL
     message   -> init (baseline, "neutrino 2.0!", 0.0, 1.0, 0.0, 1.0);          // Initializing message...
     controller -> init (baseline);
@@ -112,6 +128,78 @@ int main ()
       points -> set_y (j*NODES_X + i, YMIN + j*DY);
       points -> set_z (j*NODES_X + i, 0.0);
       points -> set_w (j*NODES_X + i, 1.0);
+
+      if((i != 0) && (i != (NODES_X - 1)) && (j != 0) && (j != (NODES_Y - 1)))  // When on bulk:
+      {
+        index_PR -> set_x (i + NODES_X*j, (i + 1) + NODES_X*j);
+        index_PU -> set_x (i + NODES_X*j, i + NODES_X*(j + 1));
+        index_PL -> set_x (i + NODES_X*j, (i - 1) + NODES_X*j);
+        index_PD -> set_x (i + NODES_X*j, i + NODES_X*(j - 1));
+      }
+
+      if((i == 0) && (j != 0) && (j != (NODES_Y - 1)))                          // When on left border (excluding extremes):
+      {
+        index_PR -> set_x (i + NODES_X*j, (i + 1) + NODES_X*j);
+        index_PU -> set_x (i + NODES_X*j, i + NODES_X*(j + 1));
+        index_PL -> set_x (i + NODES_X*j, i + NODES_X*j);
+        index_PD -> set_x (i + NODES_X*j, i + NODES_X*(j - 1));
+      }
+
+      if((i == (NODES_X - 1)) && (j != 0) && (j != (NODES_Y - 1)))              // When on right border (excluding extremes):
+      {
+        index_PR -> set_x (i + NODES_X*j, i + NODES_X*j);
+        index_PU -> set_x (i + NODES_X*j, i + NODES_X*(j + 1));
+        index_PL -> set_x (i + NODES_X*j, (i - 1) + NODES_X*j);
+        index_PD -> set_x (i + NODES_X*j, i + NODES_X*(j - 1));
+      }
+
+      if((j == 0) && (i != 0) && (i != (NODES_X - 1)))                          // When on bottom border (excluding extremes):
+      {
+        index_PR -> set_x (i + NODES_X*j, (i + 1) + NODES_X*j);
+        index_PU -> set_x (i + NODES_X*j, i + NODES_X*(j + 1));
+        index_PL -> set_x (i + NODES_X*j, (i - 1) + NODES_X*j);
+        index_PD -> set_x (i + NODES_X*j, i + NODES_X*j);
+      }
+
+      if((j == (NODES_Y - 1)) && (i != 0) && (i != (NODES_X - 1)))              // When on high border (excluding extremes):
+      {
+        index_PR -> set_x (i + NODES_X*j, (i + 1) + NODES_X*j);
+        index_PU -> set_x (i + NODES_X*j, i + NODES_X*j);
+        index_PL -> set_x (i + NODES_X*j, (i - 1) + NODES_X*j);
+        index_PD -> set_x (i + NODES_X*j, i + NODES_X*(j - 1));
+      }
+
+      if((i == 0) && (j == 0))                                                  // When on bottom left corner:
+      {
+        index_PR -> set_x (i + NODES_X*j, (i + 1) + NODES_X*j);
+        index_PU -> set_x (i + NODES_X*j, i + NODES_X*(j + 1));
+        index_PL -> set_x (i + NODES_X*j, i + NODES_X*j);
+        index_PD -> set_x (i + NODES_X*j, i + NODES_X*j);
+      }
+
+      if((i == (NODES_X - 1)) && (j == 0))                                      // When on bottom right corner:
+      {
+        index_PR -> set_x (i + NODES_X*j, i + NODES_X*j);
+        index_PU -> set_x (i + NODES_X*j, i + NODES_X*(j + 1));
+        index_PL -> set_x (i + NODES_X*j, (i - 1) + NODES_X*j);
+        index_PD -> set_x (i + NODES_X*j, i + NODES_X*j);
+      }
+
+      if((i == 0) && (j == (NODES_Y - 1)))                                      // When on top left corner:
+      {
+        index_PR -> set_x (i + NODES_X*j, (i + 1) + NODES_X*j);
+        index_PU -> set_x (i + NODES_X*j, i + NODES_X*j);
+        index_PL -> set_x (i + NODES_X*j, i + NODES_X*j);
+        index_PD -> set_x (i + NODES_X*j, i + NODES_X*(j - 1));
+      }
+
+      if((i == (NODES_X - 1)) && (j == (NODES_Y - 1)))                          // When on top right corner:
+      {
+        index_PR -> set_x (i + NODES_X*j, i + NODES_X*j);
+        index_PU -> set_x (i + NODES_X*j, i + NODES_X*j);
+        index_PL -> set_x (i + NODES_X*j, (i - 1) + NODES_X*j);
+        index_PD -> set_x (i + NODES_X*j, i + NODES_X*(j - 1));
+      }
 
       colors -> set_r (j*NODES_X + i, 0.01*(rand () % 100));
       colors -> set_g (j*NODES_X + i, 0.01*(rand () % 100));
@@ -164,7 +252,7 @@ int main ()
       colors  -> release_gl (Q[0], 1);
 
       //gui     -> print (message);                                               // Printing text...
-      gui     -> plot (points, colors, STYLE_POINT);
+      gui     -> plot (points, colors, STYLE_WIREFRAME);
       //gui     -> cockpit_AI (controller);
       gui     -> refresh ();                                                    // Refreshing window...
       /*
