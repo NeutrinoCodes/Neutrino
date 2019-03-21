@@ -2,7 +2,11 @@
 
 __kernel void thekernel (
                           __global float4*    Positions,
-                          __global float4*    Colors
+                          __global float4*    Colors,
+                          __global long*      Index_1,
+                          __global long*      Index_2,
+                          __global long*      Index_3,
+                          __global long*      Index_4
                         )
 {
     //////////////////////////////////////////////////////////////////////////////
