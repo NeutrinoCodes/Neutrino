@@ -2,10 +2,25 @@
 #define neutrino_hpp
 
 /// These files are relative to the NEUTRINO_PATH environmental variable:
-  #define POINT_VERTEX_FILE                 "/Code/shader/vertex.vert"          // Plot style POINT vertex shader.
-  #define POINT_GEOMETRY_FILE               "/Code/shader/geometry.geom"        // Plot style POINT geometry shader.
-  #define POINT_FRAGMENT_FILE               "/Code/shader/fragment.frag"        // Plot style POINT fragment shader.
+  #define POINT_VERTEX_FILE                 "/Code/shader/point_vertex.vert"    // Plot style POINT vertex shader.
+  #define POINT_GEOMETRY_FILE               "/Code/shader/point_geometry.geom"  // Plot style POINT geometry shader.
+  #define POINT_FRAGMENT_FILE               "/Code/shader/point_fragment.frag"  // Plot style POINT fragment shader.
+
+  #define WIREFRAME_VERTEX_FILE \
+  "/Code/shader/wireframe_vertex.vert"                                          // Plot style POINT vertex shader.
+  #define WIREFRAME_GEOMETRY_FILE \
+  "/Code/shader/wireframe_geometry.geom"                                        // Plot style POINT geometry shader.
+  #define WIREFRAME_FRAGMENT_FILE \
+  "/Code/shader/wireframe_fragment.frag"                                        // Plot style POINT fragment shader.
+
+  #define SHADED_VERTEX_FILE                "/Code/shader/shaded_vertex.vert"   // Plot style POINT vertex shader.
+  #define SHADED_GEOMETRY_FILE \
+  "/Code/shader/shaded_geometry.geom"                                           // Plot style POINT geometry shader.
+  #define SHADED_FRAGMENT_FILE \
+  "/Code/shader/shaded_fragment.frag"                                           // Plot style POINT fragment shader.
+
   #define TEXT_VERTEX_FILE                  "/Code/shader/text_vertex.vert"     // Print style TEXT vertex shader.
+  #define TEXT_GEOMETRY_FILE                "/Code/shader/text_geometry.geom"   // Print style TEXT fragment shader.
   #define TEXT_FRAGMENT_FILE                "/Code/shader/text_fragment.frag"   // Print style TEXT fragment shader.
 
   #define CL_USE_DEPRECATED_OPENCL_1_2_APIS                                     // Allows the usage of "OpenCL 1.2" functions in newer versions.
