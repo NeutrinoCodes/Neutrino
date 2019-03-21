@@ -38,9 +38,9 @@ public:
   node_index ();
   // Initialization:
   void    init (
-                neutrino* loc_baseline,                                         // Neutrino baseline.
-                size_t    loc_data_size,                                        // Data number.
-                GLuint    loc_vao_index                                         // VAO index.
+                neutrino*  loc_baseline,                                        // Neutrino baseline.
+                GLsizeiptr loc_data_size,                                       // Data number.
+                GLuint     loc_vao_index                                        // VAO index.
                );
   ////////////////////////////////////////////////////////////////////////////
   /////////////////////////// HOST "SET" FUNCTIONS:  /////////////////////////

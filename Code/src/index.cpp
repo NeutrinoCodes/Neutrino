@@ -111,13 +111,13 @@ void node_index::check_error (
 /// Prepares a contiguous (unfolded) array to be used as data buffer
 /// allocated on the client memory space.
 void node_index::init (
-                       neutrino* loc_baseline,                                  // Neutrino baseline.
-                       size_t    loc_data_size,                                 // Data number.
-                       GLuint    loc_vao_index                                  // VAO index.
+                       neutrino*  loc_baseline,                                 // Neutrino baseline.
+                       GLsizeiptr loc_data_size,                                // Data number.
+                       GLuint     loc_vao_index                                 // VAO index.
                       )
 {
-  cl_int loc_error;                                                             // Error code.
-  size_t i;                                                                     // Index.
+  cl_int     loc_error;                                                         // Error code.
+  GLsizeiptr i;                                                                 // Index.
 
   baseline       = loc_baseline;                                                // Getting Neutrino baseline...
   position       = new size_t[baseline -> k_num];                               // Initializing kernel argument position array...
@@ -156,12 +156,12 @@ void node_index::init (
     // Creating and initializing a buffer object's data store:
     glBufferData (
                   GL_ARRAY_BUFFER,                                              // VBO target.
-                  (GLsizeiptr)(1*sizeof(GLfloat)*(size)),                       // VBO size.
+                  (GLsizeiptr)(1*sizeof(cl_long)*(size)),                       // VBO size.
                   data,                                                         // VBO data.
                   GL_DYNAMIC_DRAW                                               // VBO usage.
                  );
 
-    // Enabling "layout = 0" attribute in vertex shader:
+    // Enabling "layout = loc_vao_index" attribute in vertex shader:
     glEnableVertexAttribArray (
                                loc_vao_index                                    // VAO index.
                               );
@@ -172,11 +172,14 @@ void node_index::init (
                   vbo                                                           // VBO to bind.
                  );
 
-    // Specifying the format for "layout = 0" attribute in vertex shader:
+
+    // EZOR 21MAR2019: GL_DOUBLE macro means 64bit. cl_long is 64-bit long, but there is not GL_LONG macro:
+    // GL_UNSIGNED_INT is 32-bit long.
+    // Specifying the format for "layout = loc_vao_index" attribute in vertex shader:
     glVertexAttribPointer (
                            loc_vao_index,                                       // VAO index.
                            1,                                                   // VAO's # of components.
-                           GL_FLOAT,                                            // Data type.
+                           GL_DOUBLE,                                           // Data type.
                            GL_FALSE,                                            // Not using normalized numbers.
                            0,                                                   // Data stride.
                            0                                                    // Data offset.
@@ -332,8 +335,9 @@ void node_index::push (
                                     NULL,                                       // Event list.
                                     NULL                                        // Event.
                                    );
-
+  printf ("pippo \n");
   check_error (loc_error);
+  printf ("pippo\n");
 }
 
 /// # OpenCL read buffer function
