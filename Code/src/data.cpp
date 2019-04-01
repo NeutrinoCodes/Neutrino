@@ -112,7 +112,7 @@ void data::check_error (
 /// allocated on the client memory space.
 void data::init (
                  neutrino* loc_baseline,                                        // Neutrino baseline.
-                 data_type loc_data_type,                                       // Data type.
+                 data_type loc_variant,                                         // Data type.
                  size_t    loc_data_size                                        // Data number.
                 )
 
@@ -122,11 +122,12 @@ void data::init (
 
   baseline       = loc_baseline;                                                // Getting Neutrino baseline...
   position       = new size_t[baseline -> k_num];                               // Initializing kernel argument position array...
+  variant        = loc _variant;                                                // Data type.
   size           = loc_data_size;                                               // Data array size.
   buffer         = NULL;                                                        // OpenCL data buffer.
   opencl_context = baseline -> context_id;                                      // Getting OpenCL context...
 
-  switch(loc_data_type)
+  switch(variant)
   {
     case      INT:
       baseline -> action ("initializing \"int\" object...");                    // Printing message...
@@ -470,14 +471,17 @@ void data::set_data (
                      cl_float loc_value                                         // Data value.
                     )
 {
-  switch(loc_data_type)
+  switch(variant)
   {
     case      INT:
       data[1*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
       break;
 
     case      INT4:
-      data[1*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      data[4*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      data[4*loc_index + 1] = (cl_long)loc_value;                               // Setting data value...
+      data[4*loc_index + 2] = (cl_long)loc_value;                               // Setting data value...
+      data[4*loc_index + 3] = (cl_long)loc_value;                               // Setting data value...
       break;
 
     case      FLOAT:
@@ -485,7 +489,24 @@ void data::set_data (
       break;
 
     case      FLOAT4:
-      data[1*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 1] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 2] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 3] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      MESH:
+      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 1] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 2] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 3] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      COLOR:
+      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 1] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 2] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 3] = (cl_float)loc_value;                              // Setting data value...
       break;
   }
 
@@ -499,7 +520,32 @@ void float4::set_x (
                     cl_float loc_value                                          // Data value.
                    )
 {
-  data[4*loc_index + 0] = (cl_float)loc_value;                                  // Setting data value...
+  switch(variant)
+  {
+    case      INT:
+      data[1*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      break;
+
+    case      INT4:
+      data[4*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      break;
+
+    case      FLOAT:
+      data[1*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      FLOAT4:
+      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      MESH:
+      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      COLOR:
+      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      break;
+  }
 }
 
 /// # "y" set function
@@ -510,7 +556,32 @@ void float4::set_y (
                     cl_float loc_value                                          // Data value.
                    )
 {
-  data[4*loc_index + 1] = (cl_float)loc_value;                                  // Setting data value...
+  switch(variant)
+  {
+    case      INT:
+      data[1*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      break;
+
+    case      INT4:
+      data[4*loc_index + 1] = (cl_long)loc_value;                               // Setting data value...
+      break;
+
+    case      FLOAT:
+      data[1*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      FLOAT4:
+      data[4*loc_index + 1] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      MESH:
+      data[4*loc_index + 1] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      COLOR:
+      data[4*loc_index + 1] = (cl_float)loc_value;                              // Setting data value...
+      break;
+  }
 }
 
 /// # "z" set function
@@ -521,7 +592,32 @@ void float4::set_z (
                     cl_float loc_value                                          // Data value.
                    )
 {
-  data[4*loc_index + 2] = (cl_float)loc_value;                                  // Setting data value...
+  switch(variant)
+  {
+    case      INT:
+      data[1*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      break;
+
+    case      INT4:
+      data[4*loc_index + 2] = (cl_long)loc_value;                               // Setting data value...
+      break;
+
+    case      FLOAT:
+      data[1*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      FLOAT4:
+      data[4*loc_index + 2] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      MESH:
+      data[4*loc_index + 2] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      COLOR:
+      data[4*loc_index + 2] = (cl_float)loc_value;                              // Setting data value...
+      break;
+  }
 }
 
 /// # "w" set function
@@ -532,7 +628,32 @@ void float4::set_w (
                     cl_float loc_value                                          // Data value.
                    )
 {
-  data[4*loc_index + 3] = (cl_float)loc_value;                                  // Setting data value...
+  switch(variant)
+  {
+    case      INT:
+      data[1*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      break;
+
+    case      INT4:
+      data[4*loc_index + 3] = (cl_long)loc_value;                               // Setting data value...
+      break;
+
+    case      FLOAT:
+      data[1*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      FLOAT4:
+      data[4*loc_index + 3] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      MESH:
+      data[4*loc_index + 3] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      COLOR:
+      data[4*loc_index + 3] = (cl_float)loc_value;                              // Setting data value...
+      break;
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -568,6 +689,33 @@ cl_float data::get_data (
                          size_t loc_index                                       // Data index.
                         )
 {
+  switch(variant)
+  {
+    case      INT:
+      data[1*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      break;
+
+    case      INT4:
+      data[4*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      break;
+
+    case      FLOAT:
+      data[1*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      FLOAT4:
+      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      MESH:
+      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      break;
+
+    case      COLOR:
+      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      break;
+  }
+
   cl_float loc_value;                                                           // Value.
 
   loc_value = data[1*loc_index + 0];                                            // Getting data value...
