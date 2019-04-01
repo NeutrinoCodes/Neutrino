@@ -463,7 +463,55 @@ void data::set_arg (
   baseline -> done ();                                                          // Printing message...
 }
 
-/// # "data" set function
+/// # "data" set function, "cl_long" overload.
+/// ### Description:
+/// Sets value in data array.
+void data::set_data (
+                     size_t  loc_index,                                         // Data index.
+                     cl_long loc_value                                          // Data value.
+                    )
+{
+  switch(variant)
+  {
+    case      INT:
+      data[1*loc_index + 0] = loc_value;                                        // Setting data value...
+      break;
+
+    case      INT4:
+      data[4*loc_index + 0] = 0;                                                // Setting data value...
+      data[4*loc_index + 1] = 0;                                                // Setting data value...
+      data[4*loc_index + 2] = 0;                                                // Setting data value...
+      data[4*loc_index + 3] = 0;                                                // Setting data value...
+      break;
+
+    case      FLOAT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      FLOAT4:
+      data[4*loc_index + 0] = 0;                                                // Setting data value...
+      data[4*loc_index + 1] = 0;                                                // Setting data value...
+      data[4*loc_index + 2] = 0;                                                // Setting data value...
+      data[4*loc_index + 3] = 0;                                                // Setting data value...
+      break;
+
+    case      MESH:
+      data[4*loc_index + 0] = 0;                                                // Setting data value...
+      data[4*loc_index + 1] = 0;                                                // Setting data value...
+      data[4*loc_index + 2] = 0;                                                // Setting data value...
+      data[4*loc_index + 3] = 0;                                                // Setting data value...
+      break;
+
+    case      COLOR:
+      data[4*loc_index + 0] = 0;                                                // Setting data value...
+      data[4*loc_index + 1] = 0;                                                // Setting data value...
+      data[4*loc_index + 2] = 0;                                                // Setting data value...
+      data[4*loc_index + 3] = 0;                                                // Setting data value...
+      break;
+  }
+}
+
+/// # "data" set function, "cl_float" overload.
 /// ### Description:
 /// Sets value in data array.
 void data::set_data (
@@ -474,45 +522,80 @@ void data::set_data (
   switch(variant)
   {
     case      INT:
-      data[1*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
       break;
 
     case      INT4:
-      data[4*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
-      data[4*loc_index + 1] = (cl_long)loc_value;                               // Setting data value...
-      data[4*loc_index + 2] = (cl_long)loc_value;                               // Setting data value...
-      data[4*loc_index + 3] = (cl_long)loc_value;                               // Setting data value...
+      data[4*loc_index + 0] = 0;                                                // Setting data value...
+      data[4*loc_index + 1] = 0;                                                // Setting data value...
+      data[4*loc_index + 2] = 0;                                                // Setting data value...
+      data[4*loc_index + 3] = 0;                                                // Setting data value...
       break;
 
     case      FLOAT:
-      data[1*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      data[1*loc_index + 0] = loc_value;                                        // Setting data value...
       break;
 
     case      FLOAT4:
-      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
-      data[4*loc_index + 1] = (cl_float)loc_value;                              // Setting data value...
-      data[4*loc_index + 2] = (cl_float)loc_value;                              // Setting data value...
-      data[4*loc_index + 3] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 0] = 0;                                                // Setting data value...
+      data[4*loc_index + 1] = 0;                                                // Setting data value...
+      data[4*loc_index + 2] = 0;                                                // Setting data value...
+      data[4*loc_index + 3] = 0;                                                // Setting data value...
       break;
 
     case      MESH:
-      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
-      data[4*loc_index + 1] = (cl_float)loc_value;                              // Setting data value...
-      data[4*loc_index + 2] = (cl_float)loc_value;                              // Setting data value...
-      data[4*loc_index + 3] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 0] = 0;                                                // Setting data value...
+      data[4*loc_index + 1] = 0;                                                // Setting data value...
+      data[4*loc_index + 2] = 0;                                                // Setting data value...
+      data[4*loc_index + 3] = 0;                                                // Setting data value...
       break;
 
     case      COLOR:
-      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
-      data[4*loc_index + 1] = (cl_float)loc_value;                              // Setting data value...
-      data[4*loc_index + 2] = (cl_float)loc_value;                              // Setting data value...
-      data[4*loc_index + 3] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 0] = 0;                                                // Setting data value...
+      data[4*loc_index + 1] = 0;                                                // Setting data value...
+      data[4*loc_index + 2] = 0;                                                // Setting data value...
+      data[4*loc_index + 3] = 0;                                                // Setting data value...
       break;
   }
-
 }
 
-/// # "x" set function
+/// # "x" set function, "cl_long" overload.
+/// ### Description:
+/// Sets "x" data value in data array.
+void float4::set_x (
+                    size_t  loc_index,                                          // Data index.
+                    cl_long loc_value                                           // Data value.
+                   )
+{
+  switch(variant)
+  {
+    case      INT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      INT4:
+      data[4*loc_index + 0] = loc_value;                                        // Setting data value...
+      break;
+
+    case      FLOAT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      FLOAT4:
+      data[4*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      MESH:
+      data[4*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      COLOR:
+      data[4*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+  }
+}
+
+/// # "x" set function, "cl_float" overload.
 /// ### Description:
 /// Sets "x" data value in data array.
 void float4::set_x (
@@ -523,32 +606,68 @@ void float4::set_x (
   switch(variant)
   {
     case      INT:
-      data[1*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
       break;
 
     case      INT4:
-      data[4*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      data[4*loc_index + 0] = 0;                                                // Setting data value...
       break;
 
     case      FLOAT:
-      data[1*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
       break;
 
     case      FLOAT4:
-      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 0] = loc_value;                                        // Setting data value...
       break;
 
     case      MESH:
-      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 0] = loc_value;                                        // Setting data value...
       break;
 
     case      COLOR:
-      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 0] = loc_value;                                        // Setting data value...
       break;
   }
 }
 
-/// # "y" set function
+/// # "y" set function, "cl_long" overload.
+/// ### Description:
+/// Sets "y" data value in data array.
+void float4::set_y (
+                    size_t  loc_index,                                          // Data index.
+                    cl_long loc_value                                           // Data value.
+                   )
+{
+  switch(variant)
+  {
+    case      INT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      INT4:
+      data[4*loc_index + 1] = loc_value;                                        // Setting data value...
+      break;
+
+    case      FLOAT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      FLOAT4:
+      data[4*loc_index + 1] = 0;                                                // Setting data value...
+      break;
+
+    case      MESH:
+      data[4*loc_index + 1] = 0;                                                // Setting data value...
+      break;
+
+    case      COLOR:
+      data[4*loc_index + 1] = 0;                                                // Setting data value...
+      break;
+  }
+}
+
+/// # "y" set function, "cl_float" overload.
 /// ### Description:
 /// Sets "y" data value in data array.
 void float4::set_y (
@@ -559,32 +678,68 @@ void float4::set_y (
   switch(variant)
   {
     case      INT:
-      data[1*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
       break;
 
     case      INT4:
-      data[4*loc_index + 1] = (cl_long)loc_value;                               // Setting data value...
+      data[4*loc_index + 1] = 0;                                                // Setting data value...
       break;
 
     case      FLOAT:
-      data[1*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
       break;
 
     case      FLOAT4:
-      data[4*loc_index + 1] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 1] = loc_value;                                        // Setting data value...
       break;
 
     case      MESH:
-      data[4*loc_index + 1] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 1] = loc_value;                                        // Setting data value...
       break;
 
     case      COLOR:
-      data[4*loc_index + 1] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 1] = loc_value;                                        // Setting data value...
       break;
   }
 }
 
-/// # "z" set function
+/// # "z" set function, "cl_long" overload.
+/// ### Description:
+/// Sets "z" data value in data array.
+void float4::set_z (
+                    size_t  loc_index,                                          // Data index.
+                    cl_long loc_value                                           // Data value.
+                   )
+{
+  switch(variant)
+  {
+    case      INT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      INT4:
+      data[4*loc_index + 2] = loc_value;                                        // Setting data value...
+      break;
+
+    case      FLOAT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      FLOAT4:
+      data[4*loc_index + 2] = 0;                                                // Setting data value...
+      break;
+
+    case      MESH:
+      data[4*loc_index + 2] = 0;                                                // Setting data value...
+      break;
+
+    case      COLOR:
+      data[4*loc_index + 2] = 0;                                                // Setting data value...
+      break;
+  }
+}
+
+/// # "z" set function, "cl_float" overload.
 /// ### Description:
 /// Sets "z" data value in data array.
 void float4::set_z (
@@ -595,63 +750,99 @@ void float4::set_z (
   switch(variant)
   {
     case      INT:
-      data[1*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
       break;
 
     case      INT4:
-      data[4*loc_index + 2] = (cl_long)loc_value;                               // Setting data value...
+      data[4*loc_index + 2] = 0;                                                // Setting data value...
       break;
 
     case      FLOAT:
-      data[1*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
       break;
 
     case      FLOAT4:
-      data[4*loc_index + 2] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 2] = loc_value;                                        // Setting data value...
       break;
 
     case      MESH:
-      data[4*loc_index + 2] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 2] = loc_value;                                        // Setting data value...
       break;
 
     case      COLOR:
-      data[4*loc_index + 2] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 2] = loc_value;                                        // Setting data value...
       break;
   }
 }
 
-/// # "w" set function
+/// # "w" set function, "cl_long" overload.
 /// ### Description:
 /// Sets "w" data value in data array.
 void float4::set_w (
-                    size_t   loc_index,                                         // Data index.
-                    cl_float loc_value                                          // Data value.
+                    size_t  loc_index,                                          // Data index.
+                    cl_long loc_value                                           // Data value.
                    )
 {
   switch(variant)
   {
     case      INT:
-      data[1*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
       break;
 
     case      INT4:
-      data[4*loc_index + 3] = (cl_long)loc_value;                               // Setting data value...
+      data[4*loc_index + 3] = loc_value;                                        // Setting data value...
       break;
 
     case      FLOAT:
-      data[1*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
       break;
 
     case      FLOAT4:
-      data[4*loc_index + 3] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 3] = 0;                                                // Setting data value...
       break;
 
     case      MESH:
-      data[4*loc_index + 3] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 3] = 0;                                                // Setting data value...
       break;
 
     case      COLOR:
-      data[4*loc_index + 3] = (cl_float)loc_value;                              // Setting data value...
+      data[4*loc_index + 3] = 0;                                                // Setting data value...
+      break;
+  }
+}
+
+/// # "w" set function, "cl_float" overload.
+/// ### Description:
+/// Sets "w" data value in data array.
+void float4::set_w (
+                    size_t  loc_index,                                          // Data index.
+                    cl_long loc_value                                           // Data value.
+                   )
+{
+  switch(variant)
+  {
+    case      INT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      INT4:
+      data[4*loc_index + 3] = 0;                                                // Setting data value...
+      break;
+
+    case      FLOAT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      FLOAT4:
+      data[4*loc_index + 3] = loc_value;                                        // Setting data value...
+      break;
+
+    case      MESH:
+      data[4*loc_index + 3] = loc_value;                                        // Setting data value...
+      break;
+
+    case      COLOR:
+      data[4*loc_index + 3] = loc_value;                                        // Setting data value...
       break;
   }
 }
@@ -682,45 +873,434 @@ size_t data::get_arg (
   return(position[kernel_index]);                                               // Returning index of current argument in current kernel...
 }
 
-/// # "data" get function
+/// # "data" get function, "cl_long" overload.
+/// ### Description:
+/// Gets "data" from data array.
+cl_long data::get_data (
+                        size_t loc_index                                        // Data index.
+                       )
+{
+  cl_long loc_value;                                                            // Value.
+
+  switch(variant)
+  {
+    case      INT:
+      loc_value = data[1*loc_index + 0];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      INT4:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT4:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      MESH:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      COLOR:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+  }
+}
+
+/// # "data" get function, "cl_float" overload.
 /// ### Description:
 /// Gets "data" from data array.
 cl_float data::get_data (
                          size_t loc_index                                       // Data index.
                         )
 {
+  cl_float loc_value;                                                           // Value.
+
   switch(variant)
   {
     case      INT:
-      data[1*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
       break;
 
     case      INT4:
-      data[4*loc_index + 0] = (cl_long)loc_value;                               // Setting data value...
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
       break;
 
     case      FLOAT:
-      data[1*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      loc_value = data[1*loc_index + 0];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
       break;
 
     case      FLOAT4:
-      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
       break;
 
     case      MESH:
-      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
       break;
 
     case      COLOR:
-      data[4*loc_index + 0] = (cl_float)loc_value;                              // Setting data value...
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
       break;
   }
+}
 
+/// # "x" get function, "cl_long" overload.
+/// ### Description:
+/// Gets "x" from data array.
+cl_long data::get_x (
+                     size_t loc_index                                           // Data index.
+                    )
+{
+  cl_long loc_value;                                                            // Value.
+
+  switch(variant)
+  {
+    case      INT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      INT4:
+      loc_value = data[1*loc_index + 0];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT4:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      MESH:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      COLOR:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+  }
+}
+
+/// # "x" get function, "cl_float" overload.
+/// ### Description:
+/// Gets "x" from data array.
+cl_float data::get_x (
+                      size_t loc_index                                          // Data index.
+                     )
+{
   cl_float loc_value;                                                           // Value.
 
-  loc_value = data[1*loc_index + 0];                                            // Getting data value...
+  switch(variant)
+  {
+    case      INT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
 
-  return(loc_value);                                                            // Returning data value...
+    case      INT4:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT4:
+      loc_value = data[1*loc_index + 0];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      MESH:
+      loc_value = data[1*loc_index + 0];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      COLOR:
+      loc_value = data[1*loc_index + 0];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+  }
+}
+
+/// # "y" get function, "cl_long" overload.
+/// ### Description:
+/// Gets "y" from data array.
+cl_long data::get_y (
+                     size_t loc_index                                           // Data index.
+                    )
+{
+  cl_long loc_value;                                                            // Value.
+
+  switch(variant)
+  {
+    case      INT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      INT4:
+      loc_value = data[1*loc_index + 1];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT4:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      MESH:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      COLOR:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+  }
+}
+
+/// # "y" get function, "cl_float" overload.
+/// ### Description:
+/// Gets "y" from data array.
+cl_float data::get_y (
+                      size_t loc_index                                          // Data index.
+                     )
+{
+  cl_float loc_value;                                                           // Value.
+
+  switch(variant)
+  {
+    case      INT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      INT4:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT4:
+      loc_value = data[1*loc_index + 1];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      MESH:
+      loc_value = data[1*loc_index + 1];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      COLOR:
+      loc_value = data[1*loc_index + 1];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+  }
+}
+
+/// # "z" get function, "cl_long" overload.
+/// ### Description:
+/// Gets "z" from data array.
+cl_long data::get_z (
+                     size_t loc_index                                           // Data index.
+                    )
+{
+  cl_long loc_value;                                                            // Value.
+
+  switch(variant)
+  {
+    case      INT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      INT4:
+      loc_value = data[1*loc_index + 2];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT4:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      MESH:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      COLOR:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+  }
+}
+
+/// # "z" get function, "cl_float" overload.
+/// ### Description:
+/// Gets "z" from data array.
+cl_float data::get_z (
+                      size_t loc_index                                          // Data index.
+                     )
+{
+  cl_float loc_value;                                                           // Value.
+
+  switch(variant)
+  {
+    case      INT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      INT4:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT4:
+      loc_value = data[1*loc_index + 2];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      MESH:
+      loc_value = data[1*loc_index + 2];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      COLOR:
+      loc_value = data[1*loc_index + 2];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+  }
+}
+
+/// # "w" get function, "cl_long" overload.
+/// ### Description:
+/// Gets "w" from data array.
+cl_long data::get_w (
+                     size_t loc_index                                           // Data index.
+                    )
+{
+  cl_long loc_value;                                                            // Value.
+
+  switch(variant)
+  {
+    case      INT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      INT4:
+      loc_value = data[1*loc_index + 3];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT4:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      MESH:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      COLOR:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+  }
+}
+
+/// # "w" get function, "cl_float" overload.
+/// ### Description:
+/// Gets "w" from data array.
+cl_float data::get_w (
+                      size_t loc_index                                          // Data index.
+                     )
+{
+  cl_float loc_value;                                                           // Value.
+
+  switch(variant)
+  {
+    case      INT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      INT4:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT4:
+      loc_value = data[1*loc_index + 3];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      MESH:
+      loc_value = data[1*loc_index + 3];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      COLOR:
+      loc_value = data[1*loc_index + 3];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////
