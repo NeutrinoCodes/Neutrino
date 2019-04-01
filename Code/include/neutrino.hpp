@@ -185,6 +185,17 @@ typedef enum
   DONT_WAIT                                                                     // OpenCL kernel set as non-blocking mode.
 } kernel_mode;
 
+// Data types:
+typedef enum
+{
+  INT,                                                                          // OpenCL "int".
+  INT4,                                                                         // OpenCL "int4".
+  FLOAT,                                                                        // OpenCL "float".
+  FLOAT4,                                                                       // OpenCL "float4".
+  MESH,                                                                         // Mesh data, re-indexed for OpenGL plot.
+  COLOR                                                                         // Color data, re-indexed for OpenGL plot.
+} data_type;
+
 // Compute device types:
 typedef enum
 {
