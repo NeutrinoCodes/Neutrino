@@ -52,6 +52,11 @@ public:
   // "data" set function:
   void    set_data (
                     GLsizeiptr loc_index,                                       // Data index.
+                    cl_long    loc_value                                        // Data value.
+                   );
+  // "data" set function:
+  void    set_data (
+                    GLsizeiptr loc_index,                                       // Data index.
                     GLfloat    loc_value                                        // Data value.
                    );
   // "x" set function:
