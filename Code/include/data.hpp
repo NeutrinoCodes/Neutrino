@@ -15,6 +15,7 @@ class data
 private:
   neutrino*  baseline;                                                          // Neutrino baseline.
   size_t*    position;                                                          // Position of kernel argument in each kernel.
+  data_type  variant;                                                           // Data type.
   // OpenCL error get function:
   const char* get_error (
                          cl_int loc_error                                       // Error code.
