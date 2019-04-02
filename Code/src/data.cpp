@@ -562,10 +562,10 @@ void data::set_data (
 /// # "x" set function, "cl_long" overload.
 /// ### Description:
 /// Sets "x" data value in data array.
-void float4::set_x (
-                    size_t  loc_index,                                          // Data index.
-                    cl_long loc_value                                           // Data value.
-                   )
+void data::set_x (
+                  size_t  loc_index,                                            // Data index.
+                  cl_long loc_value                                             // Data value.
+                 )
 {
   switch(variant)
   {
@@ -598,10 +598,46 @@ void float4::set_x (
 /// # "x" set function, "cl_float" overload.
 /// ### Description:
 /// Sets "x" data value in data array.
-void float4::set_x (
-                    size_t   loc_index,                                         // Data index.
-                    cl_float loc_value                                          // Data value.
-                   )
+void data::set_x (
+                  size_t   loc_index,                                           // Data index.
+                  cl_float loc_value                                            // Data value.
+                 )
+{
+  switch(variant)
+  {
+    case      INT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      INT4:
+      data[4*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      FLOAT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      FLOAT4:
+      data[4*loc_index + 0] = loc_value;                                        // Setting data value...
+      break;
+
+    case      MESH:
+      data[4*loc_index + 0] = loc_value;                                        // Setting data value...
+      break;
+
+    case      COLOR:
+      data[4*loc_index + 0] = loc_value;                                        // Setting data value...
+      break;
+  }
+}
+
+/// # "x" set function, "GLfloat" overload.
+/// ### Description:
+/// Sets "x" data value in data array.
+void data::set_x (
+                  size_t  loc_index,                                            // Data index.
+                  GLfloat loc_value                                             // Data value.
+                 )
 {
   switch(variant)
   {
@@ -634,10 +670,10 @@ void float4::set_x (
 /// # "y" set function, "cl_long" overload.
 /// ### Description:
 /// Sets "y" data value in data array.
-void float4::set_y (
-                    size_t  loc_index,                                          // Data index.
-                    cl_long loc_value                                           // Data value.
-                   )
+void data::set_y (
+                  size_t  loc_index,                                            // Data index.
+                  cl_long loc_value                                             // Data value.
+                 )
 {
   switch(variant)
   {
@@ -670,10 +706,46 @@ void float4::set_y (
 /// # "y" set function, "cl_float" overload.
 /// ### Description:
 /// Sets "y" data value in data array.
-void float4::set_y (
-                    size_t   loc_index,                                         // Data index.
-                    cl_float loc_value                                          // Data value.
-                   )
+void data::set_y (
+                  size_t   loc_index,                                           // Data index.
+                  cl_float loc_value                                            // Data value.
+                 )
+{
+  switch(variant)
+  {
+    case      INT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      INT4:
+      data[4*loc_index + 1] = 0;                                                // Setting data value...
+      break;
+
+    case      FLOAT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      FLOAT4:
+      data[4*loc_index + 1] = loc_value;                                        // Setting data value...
+      break;
+
+    case      MESH:
+      data[4*loc_index + 1] = loc_value;                                        // Setting data value...
+      break;
+
+    case      COLOR:
+      data[4*loc_index + 1] = loc_value;                                        // Setting data value...
+      break;
+  }
+}
+
+/// # "y" set function, "GLfloat" overload.
+/// ### Description:
+/// Sets "y" data value in data array.
+void data::set_y (
+                  size_t  loc_index,                                            // Data index.
+                  GLfloat loc_value                                             // Data value.
+                 )
 {
   switch(variant)
   {
@@ -706,10 +778,10 @@ void float4::set_y (
 /// # "z" set function, "cl_long" overload.
 /// ### Description:
 /// Sets "z" data value in data array.
-void float4::set_z (
-                    size_t  loc_index,                                          // Data index.
-                    cl_long loc_value                                           // Data value.
-                   )
+void data::set_z (
+                  size_t  loc_index,                                            // Data index.
+                  cl_long loc_value                                             // Data value.
+                 )
 {
   switch(variant)
   {
@@ -742,10 +814,46 @@ void float4::set_z (
 /// # "z" set function, "cl_float" overload.
 /// ### Description:
 /// Sets "z" data value in data array.
-void float4::set_z (
-                    size_t   loc_index,                                         // Data index.
-                    cl_float loc_value                                          // Data value.
-                   )
+void data::set_z (
+                  size_t   loc_index,                                           // Data index.
+                  cl_float loc_value                                            // Data value.
+                 )
+{
+  switch(variant)
+  {
+    case      INT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      INT4:
+      data[4*loc_index + 2] = 0;                                                // Setting data value...
+      break;
+
+    case      FLOAT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      FLOAT4:
+      data[4*loc_index + 2] = loc_value;                                        // Setting data value...
+      break;
+
+    case      MESH:
+      data[4*loc_index + 2] = loc_value;                                        // Setting data value...
+      break;
+
+    case      COLOR:
+      data[4*loc_index + 2] = loc_value;                                        // Setting data value...
+      break;
+  }
+}
+
+/// # "z" set function, "GLfloat" overload.
+/// ### Description:
+/// Sets "z" data value in data array.
+void data::set_z (
+                  size_t  loc_index,                                            // Data index.
+                  GLfloat loc_value                                             // Data value.
+                 )
 {
   switch(variant)
   {
@@ -778,10 +886,10 @@ void float4::set_z (
 /// # "w" set function, "cl_long" overload.
 /// ### Description:
 /// Sets "w" data value in data array.
-void float4::set_w (
-                    size_t  loc_index,                                          // Data index.
-                    cl_long loc_value                                           // Data value.
-                   )
+void data::set_w (
+                  size_t  loc_index,                                            // Data index.
+                  cl_long loc_value                                             // Data value.
+                 )
 {
   switch(variant)
   {
@@ -814,10 +922,46 @@ void float4::set_w (
 /// # "w" set function, "cl_float" overload.
 /// ### Description:
 /// Sets "w" data value in data array.
-void float4::set_w (
-                    size_t  loc_index,                                          // Data index.
-                    cl_long loc_value                                           // Data value.
-                   )
+void data::set_w (
+                  size_t   loc_index,                                           // Data index.
+                  cl_float loc_value                                            // Data value.
+                 )
+{
+  switch(variant)
+  {
+    case      INT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      INT4:
+      data[4*loc_index + 3] = 0;                                                // Setting data value...
+      break;
+
+    case      FLOAT:
+      data[1*loc_index + 0] = 0;                                                // Setting data value...
+      break;
+
+    case      FLOAT4:
+      data[4*loc_index + 3] = loc_value;                                        // Setting data value...
+      break;
+
+    case      MESH:
+      data[4*loc_index + 3] = loc_value;                                        // Setting data value...
+      break;
+
+    case      COLOR:
+      data[4*loc_index + 3] = loc_value;                                        // Setting data value...
+      break;
+  }
+}
+
+/// # "w" set function, "GLfloat" overload.
+/// ### Description:
+/// Sets "w" data value in data array.
+void data::set_w (
+                  size_t  loc_index,                                            // Data index.
+                  GLfloat loc_value                                             // Data value.
+                 )
 {
   switch(variant)
   {
@@ -1045,6 +1189,49 @@ cl_float data::get_x (
   }
 }
 
+/// # "x" get function, "GLfloat" overload.
+/// ### Description:
+/// Gets "x" from data array.
+GLfloat data::get_x (
+                     size_t loc_index                                           // Data index.
+                    )
+{
+  GLfloat loc_value;                                                            // Value.
+
+  switch(variant)
+  {
+    case      INT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      INT4:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT4:
+      loc_value = data[1*loc_index + 0];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      MESH:
+      loc_value = data[1*loc_index + 0];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      COLOR:
+      loc_value = data[1*loc_index + 0];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+  }
+}
+
 /// # "y" get function, "cl_long" overload.
 /// ### Description:
 /// Gets "y" from data array.
@@ -1096,6 +1283,49 @@ cl_float data::get_y (
                      )
 {
   cl_float loc_value;                                                           // Value.
+
+  switch(variant)
+  {
+    case      INT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      INT4:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT4:
+      loc_value = data[1*loc_index + 1];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      MESH:
+      loc_value = data[1*loc_index + 1];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      COLOR:
+      loc_value = data[1*loc_index + 1];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+  }
+}
+
+/// # "y" get function, "GLfloat" overload.
+/// ### Description:
+/// Gets "y" from data array.
+GLfloat data::get_y (
+                     size_t loc_index                                           // Data index.
+                    )
+{
+  GLfloat loc_value;                                                            // Value.
 
   switch(variant)
   {
@@ -1217,6 +1447,49 @@ cl_float data::get_z (
   }
 }
 
+/// # "z" get function, "GLfloat" overload.
+/// ### Description:
+/// Gets "z" from data array.
+GLfloat data::get_z (
+                     size_t loc_index                                           // Data index.
+                    )
+{
+  GLfloat loc_value;                                                            // Value.
+
+  switch(variant)
+  {
+    case      INT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      INT4:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT4:
+      loc_value = data[1*loc_index + 2];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      MESH:
+      loc_value = data[1*loc_index + 2];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      COLOR:
+      loc_value = data[1*loc_index + 2];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+  }
+}
+
 /// # "w" get function, "cl_long" overload.
 /// ### Description:
 /// Gets "w" from data array.
@@ -1268,6 +1541,49 @@ cl_float data::get_w (
                      )
 {
   cl_float loc_value;                                                           // Value.
+
+  switch(variant)
+  {
+    case      INT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      INT4:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT:
+      loc_value = 0;                                                            // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      FLOAT4:
+      loc_value = data[1*loc_index + 3];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      MESH:
+      loc_value = data[1*loc_index + 3];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+
+    case      COLOR:
+      loc_value = data[1*loc_index + 3];                                        // Getting data value...
+      return(loc_value);                                                        // Returning data value...
+      break;
+  }
+}
+
+/// # "w" get function, "GLfloat" overload.
+/// ### Description:
+/// Gets "w" from data array.
+GLfloat data::get_w (
+                     size_t loc_index                                           // Data index.
+                    )
+{
+  GLfloat loc_value;                                                            // Value.
 
   switch(variant)
   {
