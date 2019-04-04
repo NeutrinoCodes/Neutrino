@@ -25,7 +25,11 @@ __kernel void thekernel (
 
     N.z = 0.1f*sin(10.0f*N.x) + 0.1*cos(10.0f*N.y);
     //C = (float4)(1.0f, 0.0f, 0.0f, 1.0f);
-    P = N;
+    P.x = N.y;
+    P.y = N.z;
+    P.z = N.x;
+    P.w = N.w;
+
     Nodes[gid] = N;
     Positions[gid] = P;
     Colors[gid] = C;
