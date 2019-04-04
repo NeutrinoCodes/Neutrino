@@ -10,7 +10,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// "DATA" CLASS ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-template <>
+template <typename T, int N>
 class data
 {
 private:
@@ -35,6 +35,10 @@ public:
   cl_mem     buffer;                                                            // OpenGL data memory buffer.
   GLuint     vao;                                                               // OpenGL data VAO.
   GLuint     vbo;                                                               // OpenGL data VBO.
+
+  data(
+       data_type variant                                                        // Data type variant.
+      );
   // Initialization:
   void   init (
                neutrino*  loc_baseline,                                         // Neutrino baseline.
