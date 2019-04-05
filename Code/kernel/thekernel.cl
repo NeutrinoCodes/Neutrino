@@ -1,12 +1,16 @@
 /// @file
 
 __kernel void thekernel (
-                          __global float4*    Positions,
-                          __global float4*    Colors,
-                          __global long*      Index_1,
-                          __global long*      Index_2,
-                          __global long*      Index_3,
-                          __global long*      Index_4
+                          __global float4*    colors_PC,
+                          __global float4*    points_PC,
+                          __global float4*    points_PR,
+                          __global float4*    points_PU,
+                          __global float4*    points_PL,
+                          __global float4*    points_PD,
+                          __global long*      index_PR,
+                          __global long*      index_PU,
+                          __global long*      index_PL,
+                          __global long*      index_PD
                         )
 {
     //////////////////////////////////////////////////////////////////////////////
@@ -17,12 +21,12 @@ __kernel void thekernel (
     //////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////// NODES ////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////
-    float4      P   = Positions[gid];                                           // Nodes positions.
-    float4      C   = Colors[gid];                                              // Nodes colors.
+    float4      col_PC  = colors_PC[gid];                                       // Nodes colors.
+    float4      pos_PC  = points_PC[gid];                                       // Nodes positions.
 
-    P.z = 0.1f*sin(10.0f*P.x) + 0.1*cos(10.0f*P.y);
+    pos_PC.z = 0.1f*sin(10.0f*pos_PC.x) + 0.1*cos(10.0f*pos_PC.y);
     //C = (float4)(1.0f, 0.0f, 0.0f, 1.0f);
 
-    Positions[gid] = P;
-    Colors[gid] = C;
+    colors_PC[gid] = col_PC;
+    points_PC[gid] = pos_PC;
 }

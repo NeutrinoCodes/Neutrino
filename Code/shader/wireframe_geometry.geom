@@ -15,9 +15,6 @@ out vec4 color_geom;
 
 void main()
 {
-  vec4 pippo;
-
-  pippo = PR_vert[0].gl_VertexID;
   color_geom = color_vert[0];
 
   gl_Position = gl_in[0].gl_Position;
