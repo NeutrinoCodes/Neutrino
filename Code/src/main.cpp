@@ -47,12 +47,12 @@ int main ()
   size_t**      K_size     = new size_t*[KERNEL_NUM];                           // OpenCL kernel dimensions array...
   kernel**      K          = new kernel*[KERNEL_NUM];                           // OpenCL kernel array...
 
-  color4*       colors_PC  = new color4 ();                                     // Color array.
-  point4*       points_PC  = new point4 ();                                     // Point array.
-  point4*       points_PR  = new point4 ();                                     // Right particle.
-  point4*       points_PU  = new point4 ();                                     // Up particle.
-  point4*       points_PL  = new point4 ();                                     // Left particle.
-  point4*       points_PD  = new point4 ();                                     // Down particle.
+  color4*       color_PC   = new color4 ();                                     // Color array.
+  point4*       point_PC   = new point4 ();                                     // Point array.
+  point4*       point_PR   = new point4 ();                                     // Right particle.
+  point4*       point_PU   = new point4 ();                                     // Up particle.
+  point4*       point_PL   = new point4 ();                                     // Left particle.
+  point4*       point_PD   = new point4 ();                                     // Down particle.
 
   int1*         index_PR   = new int1 ();                                       // Right particle.
   int1*         index_PU   = new int1 ();                                       // Up particle.
@@ -105,12 +105,12 @@ int main ()
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////// INITIALIZING OPENCL DATA OBJECTS ///////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  colors_PC -> init (baseline, NODES, 0);                                       // Initializing colors...
-  points_PC -> init (baseline, NODES, 1);                                       // Initializing PC points...
-  points_PR -> init (baseline, NODES, 2);                                       // Initializing PR points...
-  points_PU -> init (baseline, NODES, 3);                                       // Initializing PU points...
-  points_PL -> init (baseline, NODES, 4);                                       // Initializing PL points...
-  points_PD -> init (baseline, NODES, 5);                                       // Initializing PD points...
+  color_PC -> init (baseline, NODES, 0);                                        // Initializing PC colors...
+  point_PC -> init (baseline, NODES, 1);                                        // Initializing PC points...
+  point_PR -> init (baseline, NODES, 2);                                        // Initializing PR points...
+  point_PU -> init (baseline, NODES, 3);                                        // Initializing PU points...
+  point_PL -> init (baseline, NODES, 4);                                        // Initializing PL points...
+  point_PD -> init (baseline, NODES, 5);                                        // Initializing PD points...
 
   // Mesh neighbourhood connectivity:
   index_PR -> init (baseline, NODES);                                           // Right neighbours indexes...
@@ -130,10 +130,10 @@ int main ()
   {
     for(i = 0; i < NODES_X; i++)
     {
-      points_PC -> set_x (j*NODES_X + i, XMIN + i*DX);
-      points_PC -> set_y (j*NODES_X + i, YMIN + j*DY);
-      points_PC -> set_z (j*NODES_X + i, 0.0);
-      points_PC -> set_w (j*NODES_X + i, 1.0);
+      point_PC -> set_x (j*NODES_X + i, XMIN + i*DX);
+      point_PC -> set_y (j*NODES_X + i, YMIN + j*DY);
+      point_PC -> set_z (j*NODES_X + i, 0.0);
+      point_PC -> set_w (j*NODES_X + i, 1.0);
 
       if((i != 0) && (i != (NODES_X - 1)) && (j != 0) && (j != (NODES_Y - 1)))  // When on bulk:
       {
@@ -207,54 +207,54 @@ int main ()
         index_PD -> set_x (i + NODES_X*j, i + NODES_X*(j - 1));
       }
 
-      colors_PC -> set_r (j*NODES_X + i, 0.01*(rand () % 100));
-      colors_PC -> set_g (j*NODES_X + i, 0.01*(rand () % 100));
-      colors_PC -> set_b (j*NODES_X + i, 0.01*(rand () % 100));
-      colors_PC -> set_a (j*NODES_X + i, 1.0);
+      color_PC -> set_r (j*NODES_X + i, 0.01*(rand () % 100));
+      color_PC -> set_g (j*NODES_X + i, 0.01*(rand () % 100));
+      color_PC -> set_b (j*NODES_X + i, 0.01*(rand () % 100));
+      color_PC -> set_a (j*NODES_X + i, 1.0);
     }
   }
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////// SETTING OPENCL KERNEL ARGUMENTS ///////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  colors_PC   -> set_arg (K[0], 0);                                             // Setting kernel argument...
-  points_PC   -> set_arg (K[0], 1);                                             // Setting kernel argument...
-  points_PR   -> set_arg (K[0], 2);                                             // Setting kernel argument...
-  points_PU   -> set_arg (K[0], 3);                                             // Setting kernel argument...
-  points_PL   -> set_arg (K[0], 4);                                             // Setting kernel argument...
-  points_PD   -> set_arg (K[0], 5);                                             // Setting kernel argument...
+  color_PC   -> set_arg (K[0], 0);                                              // Setting kernel argument...
+  point_PC   -> set_arg (K[0], 1);                                              // Setting kernel argument...
+  point_PR   -> set_arg (K[0], 2);                                              // Setting kernel argument...
+  point_PU   -> set_arg (K[0], 3);                                              // Setting kernel argument...
+  point_PL   -> set_arg (K[0], 4);                                              // Setting kernel argument...
+  point_PD   -> set_arg (K[0], 5);                                              // Setting kernel argument...
   index_PR    -> set_arg (K[0], 6);                                             // Setting kernel argument...
   index_PU    -> set_arg (K[0], 7);                                             // Setting kernel argument...
   index_PL    -> set_arg (K[0], 8);                                             // Setting kernel argument...
   index_PD    -> set_arg (K[0], 9);                                             // Setting kernel argument...
 
   #if USE_OPENGL
-    colors_PC -> acquire_gl (Q[0], 0);
-    points_PC -> acquire_gl (Q[0], 1);
-    points_PR -> acquire_gl (Q[0], 2);
-    points_PU -> acquire_gl (Q[0], 3);
-    points_PL -> acquire_gl (Q[0], 4);
-    points_PD -> acquire_gl (Q[0], 5);
+    color_PC -> acquire_gl (Q[0], 0);
+    point_PC -> acquire_gl (Q[0], 1);
+    point_PR -> acquire_gl (Q[0], 2);
+    point_PU -> acquire_gl (Q[0], 3);
+    point_PL -> acquire_gl (Q[0], 4);
+    point_PD -> acquire_gl (Q[0], 5);
   #endif
 
-  colors_PC   -> push (Q[0], 0);
-  points_PC   -> push (Q[0], 1);
-  points_PR   -> push (Q[0], 2);
-  points_PU   -> push (Q[0], 3);
-  points_PL   -> push (Q[0], 4);
-  points_PD   -> push (Q[0], 5);
+  color_PC   -> push (Q[0], 0);
+  point_PC   -> push (Q[0], 1);
+  point_PR   -> push (Q[0], 2);
+  point_PU   -> push (Q[0], 3);
+  point_PL   -> push (Q[0], 4);
+  point_PD   -> push (Q[0], 5);
   index_PR    -> push (Q[0], 6);
   index_PU    -> push (Q[0], 7);
   index_PL    -> push (Q[0], 8);
   index_PD    -> push (Q[0], 9);
 
   #if USE_OPENGL
-    colors_PC -> release_gl (Q[0], 0);
-    points_PC -> release_gl (Q[0], 1);
-    points_PR -> release_gl (Q[0], 2);
-    points_PU -> release_gl (Q[0], 3);
-    points_PL -> release_gl (Q[0], 4);
-    points_PD -> release_gl (Q[0], 5);
+    color_PC -> release_gl (Q[0], 0);
+    point_PC -> release_gl (Q[0], 1);
+    point_PR -> release_gl (Q[0], 2);
+    point_PU -> release_gl (Q[0], 3);
+    point_PL -> release_gl (Q[0], 4);
+    point_PD -> release_gl (Q[0], 5);
   #endif
 
   #if USE_OPENGL
@@ -266,24 +266,24 @@ int main ()
       gui     -> clear ();                                                      // Clearing window...
       gui     -> poll_events ();                                                // Polling window events...
 
-      colors_PC -> acquire_gl (Q[0], 0);
-      points_PC -> acquire_gl (Q[0], 1);
-      points_PR -> acquire_gl (Q[0], 2);
-      points_PU -> acquire_gl (Q[0], 3);
-      points_PL -> acquire_gl (Q[0], 4);
-      points_PD -> acquire_gl (Q[0], 5);
+      color_PC -> acquire_gl (Q[0], 0);
+      point_PC -> acquire_gl (Q[0], 1);
+      point_PR -> acquire_gl (Q[0], 2);
+      point_PU -> acquire_gl (Q[0], 3);
+      point_PL -> acquire_gl (Q[0], 4);
+      point_PD -> acquire_gl (Q[0], 5);
 
       K[0]    -> execute (Q[0], WAIT);
 
-      colors_PC -> release_gl (Q[0], 0);
-      points_PC -> release_gl (Q[0], 1);
-      points_PR -> release_gl (Q[0], 2);
-      points_PU -> release_gl (Q[0], 3);
-      points_PL -> release_gl (Q[0], 4);
-      points_PD -> release_gl (Q[0], 5);
+      color_PC -> release_gl (Q[0], 0);
+      point_PC -> release_gl (Q[0], 1);
+      point_PR -> release_gl (Q[0], 2);
+      point_PU -> release_gl (Q[0], 3);
+      point_PL -> release_gl (Q[0], 4);
+      point_PD -> release_gl (Q[0], 5);
 
       //gui     -> print (message);                                             // Printing text...
-      gui     -> plot (points_PC, colors_PC, STYLE_WIREFRAME);
+      gui     -> plot (point_PC, color_PC, STYLE_WIREFRAME);
       //gui     -> cockpit_AI (controller);
       gui     -> refresh ();                                                    // Refreshing window...
       /*
@@ -314,12 +314,12 @@ int main ()
 
   delete    cl;
 
-  delete    colors_PC;
-  delete    points_PC;
-  delete    points_PR;
-  delete    points_PU;
-  delete    points_PL;
-  delete    points_PD;
+  delete    color_PC;
+  delete    point_PC;
+  delete    point_PR;
+  delete    point_PU;
+  delete    point_PL;
+  delete    point_PD;
 
   delete    index_PR;
   delete    index_PU;
