@@ -15,11 +15,14 @@ out vec4 color_geom;
 
 void main()
 {
+  vec4 pippo;
+
+  pippo = PR_vert[0].gl_VertexID;
   color_geom = color_vert[0];
 
   gl_Position = gl_in[0].gl_Position;
   EmitVertex();
-  gl_Position = PL_vert[0];
+  gl_Position = gl_in[0].gl_Position + vec4(0.05, 0.0, 0.0, 0.0);
   EmitVertex();
 
   EndPrimitive();

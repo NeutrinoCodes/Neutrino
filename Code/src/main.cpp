@@ -26,7 +26,6 @@
 #include "opencl.hpp"
 #include "queue.hpp"
 #include "kernel.hpp"
-#include "index.hpp"
 
 int main ()
 {
@@ -48,13 +47,19 @@ int main ()
   size_t**      K_size     = new size_t*[KERNEL_NUM];                           // OpenCL kernel dimensions array...
   kernel**      K          = new kernel*[KERNEL_NUM];                           // OpenCL kernel array...
 
-  point4*       points     = new point4 ();                                     // Point array.
-  color4*       colors     = new color4 ();                                     // Color array.
+  point4*       points_PC  = new point4 ();                                     // Point array.
+  point4*       points_PR  = new point4 ();                                     // Right particle.
+  point4*       points_PU  = new point4 ();                                     // Up particle.
+  point4*       points_PL  = new point4 ();                                     // Left particle.
+  point4*       points_PD  = new point4 ();                                     // Down particle.
+  color4*       colors_PC  = new color4 ();                                     // Color array.
 
-  node_index*   index_PR   = new node_index ();                                 // Right particle.
-  node_index*   index_PU   = new node_index ();                                 // Up particle.
-  node_index*   index_PL   = new node_index ();                                 // Left particle.
-  node_index*   index_PD   = new node_index ();                                 // Down particle.
+  int1*         index_PR   = new int1 ();                                       // Right particle.
+  int1*         index_PU   = new int1 ();                                       // Up particle.
+  int1*         index_PL   = new int1 ();                                       // Left particle.
+  int1*         index_PD   = new int1 ();                                       // Down particle.
+
+
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////// INITIALIZING NEUTRINO, OPENGL and OPENCL //////////////////
@@ -101,16 +106,16 @@ int main ()
   /////////////////////// INITIALIZING OPENCL DATA OBJECTS ///////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   // Mesh nodes:
-  points    -> init (baseline, NODES);                                          // Initializing points...
+  points_PC    -> init (baseline, NODES);                                       // Initializing points...
 
   // Mesh nodes colors:
   colors    -> init (baseline, NODES);                                          // Initializing colors...
 
   // Mesh neighbourhood connectivity:
-  index_PR -> init (baseline, NODES, 2);                                        // Right neighbours indexes...
-  index_PU -> init (baseline, NODES, 3);                                        // Up neighbours indexes...
-  index_PL -> init (baseline, NODES, 4);                                        // Left neighbours indexes...
-  index_PD -> init (baseline, NODES, 5);                                        // Down neighbours indexes...
+  index_PR -> init (baseline, NODES);                                           // Right neighbours indexes...
+  index_PU -> init (baseline, NODES);                                           // Up neighbours indexes...
+  index_PL -> init (baseline, NODES);                                           // Left neighbours indexes...
+  index_PD -> init (baseline, NODES);                                           // Down neighbours indexes...
 
   #if USE_OPENGL
     message   -> init (baseline, "neutrino 2.0!", 0.0, 1.0, 0.0, 1.0);          // Initializing message...
