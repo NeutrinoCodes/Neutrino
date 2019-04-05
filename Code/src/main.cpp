@@ -26,7 +26,7 @@
 #include "opencl.hpp"
 #include "queue.hpp"
 #include "kernel.hpp"
-#include "int1.hpp"
+#include "index.hpp"
 
 int main ()
 {
@@ -50,12 +50,11 @@ int main ()
 
   point4*       points     = new point4 ();                                     // Point array.
   color4*       colors     = new color4 ();                                     // Color array.
-  float4*       nodes      = new float4 ();                                     // Node array.
 
-  int1*         index_PR   = new int1 ();                                       // Right particle.
-  int1*         index_PU   = new int1 ();                                       // Up particle.
-  int1*         index_PL   = new int1 ();                                       // Left particle.
-  int1*         index_PD   = new int1 ();                                       // Down particle.
+  node_index*   index_PR   = new node_index ();                                 // Right particle.
+  node_index*   index_PU   = new node_index ();                                 // Up particle.
+  node_index*   index_PL   = new node_index ();                                 // Left particle.
+  node_index*   index_PD   = new node_index ();                                 // Down particle.
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////// INITIALIZING NEUTRINO, OPENGL and OPENCL //////////////////
@@ -103,16 +102,15 @@ int main ()
   ////////////////////////////////////////////////////////////////////////////////
   // Mesh nodes:
   points    -> init (baseline, NODES);                                          // Initializing points...
-  nodes    -> init (baseline, NODES);                                           // Initializing nodes...
 
   // Mesh nodes colors:
   colors    -> init (baseline, NODES);                                          // Initializing colors...
 
   // Mesh neighbourhood connectivity:
-  index_PR -> init (baseline, NODES);                                           // Right neighbours indexes...
-  index_PU -> init (baseline, NODES);                                           // Up neighbours indexes...
-  index_PL -> init (baseline, NODES);                                           // Left neighbours indexes...
-  index_PD -> init (baseline, NODES);                                           // Down neighbours indexes...
+  index_PR -> init (baseline, NODES, 2);                                        // Right neighbours indexes...
+  index_PU -> init (baseline, NODES, 3);                                        // Up neighbours indexes...
+  index_PL -> init (baseline, NODES, 4);                                        // Left neighbours indexes...
+  index_PD -> init (baseline, NODES, 5);                                        // Down neighbours indexes...
 
   #if USE_OPENGL
     message   -> init (baseline, "neutrino 2.0!", 0.0, 1.0, 0.0, 1.0);          // Initializing message...
@@ -126,10 +124,10 @@ int main ()
   {
     for(i = 0; i < NODES_X; i++)
     {
-      nodes -> set_x (j*NODES_X + i, XMIN + i*DX);
-      nodes -> set_y (j*NODES_X + i, YMIN + j*DY);
-      nodes -> set_z (j*NODES_X + i, 0.0);
-      nodes -> set_w (j*NODES_X + i, 1.0);
+      points -> set_x (j*NODES_X + i, XMIN + i*DX);
+      points -> set_y (j*NODES_X + i, YMIN + j*DY);
+      points -> set_z (j*NODES_X + i, 0.0);
+      points -> set_w (j*NODES_X + i, 1.0);
 
       if((i != 0) && (i != (NODES_X - 1)) && (j != 0) && (j != (NODES_Y - 1)))  // When on bulk:
       {
@@ -215,11 +213,10 @@ int main ()
   ////////////////////////////////////////////////////////////////////////////////
   points   -> set_arg (K[0], 0);                                                // Setting kernel argument...
   colors   -> set_arg (K[0], 1);                                                // Setting kernel argument...
-  nodes    -> set_arg (K[0], 2);
-  index_PR -> set_arg (K[0], 3);
-  index_PU -> set_arg (K[0], 4);
-  index_PL -> set_arg (K[0], 5);
-  index_PD -> set_arg (K[0], 6);
+  index_PR -> set_arg (K[0], 2);
+  index_PU -> set_arg (K[0], 3);
+  index_PL -> set_arg (K[0], 4);
+  index_PD -> set_arg (K[0], 5);
 
   #if USE_OPENGL
     points    -> acquire_gl (Q[0], 0);
@@ -241,7 +238,45 @@ int main ()
     colors    -> release_gl (Q[0], 1);
   #endif
 
-  nodes -> push (Q[0], 2);
+  #if USE_OPENGL
+    index_PR    -> acquire_gl (Q[0], 2);
+  #endif
+
+  index_PR    -> push (Q[0], 2);
+
+  #if USE_OPENGL
+    index_PR    -> release_gl (Q[0], 2);
+  #endif
+
+  #if USE_OPENGL
+    index_PU    -> acquire_gl (Q[0], 3);
+  #endif
+
+  index_PU    -> push (Q[0], 3);
+
+  #if USE_OPENGL
+    index_PU    -> release_gl (Q[0], 3);
+  #endif
+
+  #if USE_OPENGL
+    index_PL    -> acquire_gl (Q[0], 4);
+  #endif
+
+  index_PL    -> push (Q[0], 4);
+
+  #if USE_OPENGL
+    index_PL    -> release_gl (Q[0], 4);
+  #endif
+
+  #if USE_OPENGL
+    index_PD    -> acquire_gl (Q[0], 5);
+  #endif
+
+  index_PD    -> push (Q[0], 5);
+
+  #if USE_OPENGL
+    index_PD    -> release_gl (Q[0], 5);
+  #endif
 
   #if USE_OPENGL
 
@@ -254,11 +289,19 @@ int main ()
 
       points  -> acquire_gl (Q[0], 0);
       colors  -> acquire_gl (Q[0], 1);
+      index_PR -> acquire_gl (Q[0], 2);
+      index_PU -> acquire_gl (Q[0], 3);
+      index_PL -> acquire_gl (Q[0], 4);
+      index_PD -> acquire_gl (Q[0], 5);
 
       K[0]    -> execute (Q[0], WAIT);
 
       points  -> release_gl (Q[0], 0);
       colors  -> release_gl (Q[0], 1);
+      index_PR -> release_gl (Q[0], 2);
+      index_PU -> release_gl (Q[0], 3);
+      index_PL -> release_gl (Q[0], 4);
+      index_PD -> release_gl (Q[0], 5);
 
       //gui     -> print (message);                                               // Printing text...
       gui     -> plot (points, colors, STYLE_WIREFRAME);
@@ -287,15 +330,15 @@ int main ()
 
     baseline -> get_toc ();
 
-    nodes -> pull (Q[0], 2);
+    points -> pull (Q[0], 0);
 
     i = 100;
-    float x = nodes -> get_x (i);
-    float y = nodes -> get_y (i);
+    float x = points -> get_x (i);
+    float y = points -> get_y (i);
     float z = 0.1*sin (10*x) + 0.1*cos (10*y);
     printf ("x = %f, y = %f\n", x, y);
     printf ("Reference result: z = %f\n", z);
-    printf ("Result from OpenCL kernel: z = %f\n", nodes -> get_z (i));
+    printf ("Result from OpenCL kernel: z = %f\n", points -> get_z (i));
   #endif
 
   delete    baseline;
@@ -308,7 +351,7 @@ int main ()
 
   delete    points;
   delete    colors;
-  delete nodes;
+
   delete index_PR;
   delete index_PU;
   delete index_PL;

@@ -335,9 +335,8 @@ void node_index::push (
                                     NULL,                                       // Event list.
                                     NULL                                        // Event.
                                    );
-  printf ("pippo \n");
+
   check_error (loc_error);
-  printf ("pippo\n");
 }
 
 /// # OpenCL read buffer function
