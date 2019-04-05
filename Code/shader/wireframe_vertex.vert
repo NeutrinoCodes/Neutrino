@@ -33,5 +33,7 @@ void main(void)
   gl_Position = Projection_matrix*View_matrix*PD_vert;                            // Rendering "point" position...
   color_vert = color;                                                           // Forwarding "color" as "color_vert" to the geometry shader...
 
-
+  EZOR: interesting link:
+  https://stackoverflow.com/questions/28437241/get-vertex-positions-in-fragment-shader
+  
 }
