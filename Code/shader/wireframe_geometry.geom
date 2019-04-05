@@ -6,10 +6,10 @@ layout (points) in;                                                             
 layout (line_strip, max_vertices = 2) out;                                      // Output points.
 
 in vec4 color_PC_vert[];
-//in vec4 PR_vert[];
-//in vec4 PU_vert[];
-//in vec4 PL_vert[];
-//in vec4 PD_vert[];
+in vec4 point_PR_vert[];
+in vec4 point_PU_vert[];
+in vec4 point_PL_vert[];
+in vec4 point_PD_vert[];
 
 out vec4 color_PC_geom;
 
@@ -19,7 +19,7 @@ void main()
 
   gl_Position = gl_in[0].gl_Position;
   EmitVertex();
-  gl_Position = gl_in[0].gl_Position + vec4(0.05, 0.0, 0.0, 0.0);
+  gl_Position = point_PR_vert[0];
   EmitVertex();
 
   EndPrimitive();
