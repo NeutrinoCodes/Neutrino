@@ -23,13 +23,15 @@ uniform samplerBuffer vertex_buffer;                                            
 // Computing rendering point coordinates:
 void main(void)
 {
-  int vertex = gl_VertexID % 4;
-  //gl_PointSize = 5;                                                             // Setting point size...
-  gl_Position = Projection_matrix*View_matrix*point;                            // Rendering "point" position...
-  color_vert = color;                                                           // Forwarding "color" as "color_vert" to the geometry shader...
+  int vertex = gl_VertexID;
 
   PR_vert = texelFetch(vertex_buffer, index_PR);
   PU_vert = texelFetch(vertex_buffer, index_PU);
   PL_vert = texelFetch(vertex_buffer, index_PL);
   PD_vert = texelFetch(vertex_buffer, index_PD);
+  //gl_PointSize = 5;                                                             // Setting point size...
+  gl_Position = Projection_matrix*View_matrix*PD_vert;                            // Rendering "point" position...
+  color_vert = color;                                                           // Forwarding "color" as "color_vert" to the geometry shader...
+
+
 }
