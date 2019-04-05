@@ -25,7 +25,7 @@ void main(void)
 {
   int vertex = gl_VertexID;
 
-  PR_vert = texelFetch(vertex_buffer, index_PR);
+  PR_vert = texelFetch(point, index_PR);
   PU_vert = texelFetch(vertex_buffer, index_PU);
   PL_vert = texelFetch(vertex_buffer, index_PL);
   PD_vert = texelFetch(vertex_buffer, index_PD);
