@@ -47,12 +47,12 @@ int main ()
   size_t**      K_size     = new size_t*[KERNEL_NUM];                           // OpenCL kernel dimensions array...
   kernel**      K          = new kernel*[KERNEL_NUM];                           // OpenCL kernel array...
 
+  color4*       colors_PC  = new color4 ();                                     // Color array.
   point4*       points_PC  = new point4 ();                                     // Point array.
   point4*       points_PR  = new point4 ();                                     // Right particle.
   point4*       points_PU  = new point4 ();                                     // Up particle.
   point4*       points_PL  = new point4 ();                                     // Left particle.
   point4*       points_PD  = new point4 ();                                     // Down particle.
-  color4*       colors_PC  = new color4 ();                                     // Color array.
 
   int1*         index_PR   = new int1 ();                                       // Right particle.
   int1*         index_PU   = new int1 ();                                       // Up particle.
@@ -105,11 +105,12 @@ int main ()
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////// INITIALIZING OPENCL DATA OBJECTS ///////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  // Mesh nodes:
-  points_PC    -> init (baseline, NODES);                                       // Initializing points...
-
-  // Mesh nodes colors:
-  colors    -> init (baseline, NODES);                                          // Initializing colors...
+  colors_PC -> init (baseline, NODES, 0);                                       // Initializing colors...
+  points_PC -> init (baseline, NODES, 1);                                       // Initializing PC points...
+  points_PR -> init (baseline, NODES, 2);                                       // Initializing PR points...
+  points_PU -> init (baseline, NODES, 3);                                       // Initializing PU points...
+  points_PL -> init (baseline, NODES, 4);                                       // Initializing PL points...
+  points_PD -> init (baseline, NODES, 5);                                       // Initializing PD points...
 
   // Mesh neighbourhood connectivity:
   index_PR -> init (baseline, NODES);                                           // Right neighbours indexes...
@@ -129,10 +130,10 @@ int main ()
   {
     for(i = 0; i < NODES_X; i++)
     {
-      points -> set_x (j*NODES_X + i, XMIN + i*DX);
-      points -> set_y (j*NODES_X + i, YMIN + j*DY);
-      points -> set_z (j*NODES_X + i, 0.0);
-      points -> set_w (j*NODES_X + i, 1.0);
+      points_PC -> set_x (j*NODES_X + i, XMIN + i*DX);
+      points_PC -> set_y (j*NODES_X + i, YMIN + j*DY);
+      points_PC -> set_z (j*NODES_X + i, 0.0);
+      points_PC -> set_w (j*NODES_X + i, 1.0);
 
       if((i != 0) && (i != (NODES_X - 1)) && (j != 0) && (j != (NODES_Y - 1)))  // When on bulk:
       {
@@ -206,81 +207,54 @@ int main ()
         index_PD -> set_x (i + NODES_X*j, i + NODES_X*(j - 1));
       }
 
-      colors -> set_r (j*NODES_X + i, 0.01*(rand () % 100));
-      colors -> set_g (j*NODES_X + i, 0.01*(rand () % 100));
-      colors -> set_b (j*NODES_X + i, 0.01*(rand () % 100));
-      colors -> set_a (j*NODES_X + i, 1.0);
+      colors_PC -> set_r (j*NODES_X + i, 0.01*(rand () % 100));
+      colors_PC -> set_g (j*NODES_X + i, 0.01*(rand () % 100));
+      colors_PC -> set_b (j*NODES_X + i, 0.01*(rand () % 100));
+      colors_PC -> set_a (j*NODES_X + i, 1.0);
     }
   }
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////// SETTING OPENCL KERNEL ARGUMENTS ///////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  points   -> set_arg (K[0], 0);                                                // Setting kernel argument...
-  colors   -> set_arg (K[0], 1);                                                // Setting kernel argument...
-  index_PR -> set_arg (K[0], 2);
-  index_PU -> set_arg (K[0], 3);
-  index_PL -> set_arg (K[0], 4);
-  index_PD -> set_arg (K[0], 5);
+  colors_PC   -> set_arg (K[0], 0);                                             // Setting kernel argument...
+  points_PC   -> set_arg (K[0], 1);                                             // Setting kernel argument...
+  points_PR   -> set_arg (K[0], 2);                                             // Setting kernel argument...
+  points_PU   -> set_arg (K[0], 3);                                             // Setting kernel argument...
+  points_PL   -> set_arg (K[0], 4);                                             // Setting kernel argument...
+  points_PD   -> set_arg (K[0], 5);                                             // Setting kernel argument...
+  index_PR    -> set_arg (K[0], 6);                                             // Setting kernel argument...
+  index_PU    -> set_arg (K[0], 7);                                             // Setting kernel argument...
+  index_PL    -> set_arg (K[0], 8);                                             // Setting kernel argument...
+  index_PD    -> set_arg (K[0], 9);                                             // Setting kernel argument...
 
   #if USE_OPENGL
-    points    -> acquire_gl (Q[0], 0);
+    colors_PC -> acquire_gl (Q[0], 0);
+    points_PC -> acquire_gl (Q[0], 1);
+    points_PR -> acquire_gl (Q[0], 2);
+    points_PU -> acquire_gl (Q[0], 3);
+    points_PL -> acquire_gl (Q[0], 4);
+    points_PD -> acquire_gl (Q[0], 5);
   #endif
 
-  points    -> push (Q[0], 0);
+  colors_PC   -> push (Q[0], 0);
+  points_PC   -> push (Q[0], 1);
+  points_PR   -> push (Q[0], 2);
+  points_PU   -> push (Q[0], 3);
+  points_PL   -> push (Q[0], 4);
+  points_PD   -> push (Q[0], 5);
+  index_PR    -> push (Q[0], 6);
+  index_PU    -> push (Q[0], 7);
+  index_PL    -> push (Q[0], 8);
+  index_PD    -> push (Q[0], 9);
 
   #if USE_OPENGL
-    points    -> release_gl (Q[0], 0);
-  #endif
-
-  #if USE_OPENGL
-    colors    -> acquire_gl (Q[0], 1);
-  #endif
-
-  colors    -> push (Q[0], 1);
-
-  #if USE_OPENGL
-    colors    -> release_gl (Q[0], 1);
-  #endif
-
-  #if USE_OPENGL
-    index_PR    -> acquire_gl (Q[0], 2);
-  #endif
-
-  index_PR    -> push (Q[0], 2);
-
-  #if USE_OPENGL
-    index_PR    -> release_gl (Q[0], 2);
-  #endif
-
-  #if USE_OPENGL
-    index_PU    -> acquire_gl (Q[0], 3);
-  #endif
-
-  index_PU    -> push (Q[0], 3);
-
-  #if USE_OPENGL
-    index_PU    -> release_gl (Q[0], 3);
-  #endif
-
-  #if USE_OPENGL
-    index_PL    -> acquire_gl (Q[0], 4);
-  #endif
-
-  index_PL    -> push (Q[0], 4);
-
-  #if USE_OPENGL
-    index_PL    -> release_gl (Q[0], 4);
-  #endif
-
-  #if USE_OPENGL
-    index_PD    -> acquire_gl (Q[0], 5);
-  #endif
-
-  index_PD    -> push (Q[0], 5);
-
-  #if USE_OPENGL
-    index_PD    -> release_gl (Q[0], 5);
+    colors_PC -> release_gl (Q[0], 0);
+    points_PC -> release_gl (Q[0], 1);
+    points_PR -> release_gl (Q[0], 2);
+    points_PU -> release_gl (Q[0], 3);
+    points_PL -> release_gl (Q[0], 4);
+    points_PD -> release_gl (Q[0], 5);
   #endif
 
   #if USE_OPENGL
@@ -292,24 +266,24 @@ int main ()
       gui     -> clear ();                                                      // Clearing window...
       gui     -> poll_events ();                                                // Polling window events...
 
-      points  -> acquire_gl (Q[0], 0);
-      colors  -> acquire_gl (Q[0], 1);
-      index_PR -> acquire_gl (Q[0], 2);
-      index_PU -> acquire_gl (Q[0], 3);
-      index_PL -> acquire_gl (Q[0], 4);
-      index_PD -> acquire_gl (Q[0], 5);
+      colors_PC -> acquire_gl (Q[0], 0);
+      points_PC -> acquire_gl (Q[0], 1);
+      points_PR -> acquire_gl (Q[0], 2);
+      points_PU -> acquire_gl (Q[0], 3);
+      points_PL -> acquire_gl (Q[0], 4);
+      points_PD -> acquire_gl (Q[0], 5);
 
       K[0]    -> execute (Q[0], WAIT);
 
-      points  -> release_gl (Q[0], 0);
-      colors  -> release_gl (Q[0], 1);
-      index_PR -> release_gl (Q[0], 2);
-      index_PU -> release_gl (Q[0], 3);
-      index_PL -> release_gl (Q[0], 4);
-      index_PD -> release_gl (Q[0], 5);
+      colors_PC -> release_gl (Q[0], 0);
+      points_PC -> release_gl (Q[0], 1);
+      points_PR -> release_gl (Q[0], 2);
+      points_PU -> release_gl (Q[0], 3);
+      points_PL -> release_gl (Q[0], 4);
+      points_PD -> release_gl (Q[0], 5);
 
-      //gui     -> print (message);                                               // Printing text...
-      gui     -> plot (points, colors, STYLE_WIREFRAME);
+      //gui     -> print (message);                                             // Printing text...
+      gui     -> plot (points_PC, colors_PC, STYLE_WIREFRAME);
       //gui     -> cockpit_AI (controller);
       gui     -> refresh ();                                                    // Refreshing window...
       /*
@@ -328,39 +302,29 @@ int main ()
       baseline -> get_toc ();                                                   // Getting "toc" [us]...
     }
 
-  #else
-    baseline -> get_tic ();
-
-    K[0]    -> execute (Q[0], WAIT);
-
-    baseline -> get_toc ();
-
-    points -> pull (Q[0], 0);
-
-    i = 100;
-    float x = points -> get_x (i);
-    float y = points -> get_y (i);
-    float z = 0.1*sin (10*x) + 0.1*cos (10*y);
-    printf ("x = %f, y = %f\n", x, y);
-    printf ("Reference result: z = %f\n", z);
-    printf ("Result from OpenCL kernel: z = %f\n", points -> get_z (i));
   #endif
 
   delete    baseline;
+
   #if USE_OPENGL
     delete    gui;
     delete    message;
     delete    controller;
   #endif
+
   delete    cl;
 
-  delete    points;
-  delete    colors;
+  delete    colors_PC;
+  delete    points_PC;
+  delete    points_PR;
+  delete    points_PU;
+  delete    points_PL;
+  delete    points_PD;
 
-  delete index_PR;
-  delete index_PU;
-  delete index_PL;
-  delete index_PD;
+  delete    index_PR;
+  delete    index_PU;
+  delete    index_PL;
+  delete    index_PD;
 
   delete[]  Q;
 

@@ -2,12 +2,8 @@
 
 #version 410 core
 
-layout (location = 0) in  vec4 point;                                           // Input point to be processed.
-layout (location = 1) in  vec4 color;                                           // Input color to be processed.
-layout (location = 2) in  int index_PR;
-layout (location = 3) in  int index_PU;
-layout (location = 4) in  int index_PL;
-layout (location = 5) in  int index_PD;
+layout (location = 0) in  vec4 color;                                           // Input color to be processed.
+layout (location = 1) in  vec4 point;                                           // Input point to be processed.
 
 out vec4 color_vert;                                                            // Output color (for fragment shader).
 out vec4 PR_vert;

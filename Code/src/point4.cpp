@@ -113,7 +113,8 @@ void point4::check_error (
 /// use_cl_gl_interop` flag is set to `false`.
 void point4::init (
                    neutrino*  loc_baseline,                                     // Neutrino baseline.
-                   GLsizeiptr loc_data_size                                     // Data number.
+                   GLsizeiptr loc_data_size,                                    // Data number.
+                   GLuint     loc_vao_index                                     // VAO index.
                   )
 {
   cl_int     loc_error;                                                         // Error code.
@@ -164,9 +165,9 @@ void point4::init (
                   GL_DYNAMIC_DRAW                                               // VBO usage.
                  );
 
-    // Enabling "layout = 0" attribute in vertex shader:
+    // Enabling "loc_vao_index" attribute in vertex shader:
     glEnableVertexAttribArray (
-                               LAYOUT_0                                         // VAO index.
+                               loc_vao_index                                    // VAO index.
                               );
 
     // Binding VBO:
@@ -175,9 +176,9 @@ void point4::init (
                   vbo                                                           // VBO to bind.
                  );
 
-    // Specifying the format for "layout = 0" attribute in vertex shader:
+    // Specifying the format for "loc_vao_index" attribute in vertex shader:
     glVertexAttribPointer (
-                           LAYOUT_0,                                            // VAO index.
+                           loc_vao_index,                                       // VAO index.
                            4,                                                   // VAO's # of components.
                            GL_FLOAT,                                            // Data type.
                            GL_FALSE,                                            // Not using normalized numbers.
