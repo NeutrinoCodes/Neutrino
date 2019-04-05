@@ -13,7 +13,6 @@ in vec4 PD_vert[];
 
 out vec4 color_geom;
 
-// Dummy pass-through geometry shader:
 void main()
 {
   color_geom = color_vert[0];
