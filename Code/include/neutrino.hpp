@@ -61,6 +61,10 @@
 ////////////////////////////////////////////////////////////////////////////////
   #define LAYOUT_0                          0                                   // 1st variable ("location = 0") in vertex shader.
   #define LAYOUT_1                          1                                   // 2nd variable ("location = 1") in vertex shader.
+  #define LAYOUT_2                          2                                   // 3rd variable ("location = 2") in vertex shader.
+  #define LAYOUT_3                          3                                   // 4th variable ("location = 3") in vertex shader.
+  #define LAYOUT_4                          4                                   // 5th variable ("location = 4") in vertex shader.
+  #define LAYOUT_5                          5                                   // 6th variable ("location = 5") in vertex shader.
   #define ZOOM_INCREMENT                    0.1                                 // Mouse wheel zoom increment [].
   #define ZOOM_INCREMENT_PS4                0.02                                // PS4 gamepad zoom increment [].
   #define ZOOM_THRESHOLD_PS4                -0.95                               // PS4 gamepad zoom threshold [].
