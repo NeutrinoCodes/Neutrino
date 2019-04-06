@@ -293,6 +293,10 @@ public:
   void plot (
              color4*    color_PC,
              point4*    point_PC,
+             point4*    point_PR,
+             point4*    point_PU,
+             point4*    point_PL,
+             point4*    point_PD,
              plot_style ps
             );
   // Window "print" function:
