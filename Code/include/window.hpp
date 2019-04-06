@@ -291,8 +291,8 @@ public:
   bool closed ();
   // Window "plot" function:
   void plot (
-             point4*    points,
-             color4*    colors,
+             color4*    color_PC,
+             point4*    point_PC,
              plot_style ps
             );
   // Window "print" function:
