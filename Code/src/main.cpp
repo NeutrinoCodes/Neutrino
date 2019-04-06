@@ -15,8 +15,8 @@
 #define XMAX          1.0
 #define YMIN          -1.0
 #define YMAX          1.0
-#define NODES_X       100
-#define NODES_Y       100
+#define NODES_X       10
+#define NODES_Y       10
 #define NODES         NODES_X* NODES_Y                                          // Number of nodes.
 #define DX            (float)((XMAX - XMIN)/(NODES_X - 1))
 #define DY            (float)((YMAX - YMIN)/(NODES_Y - 1))
@@ -283,7 +283,7 @@ int main ()
       point_PD -> release_gl (Q[0], 5);
 
       //gui     -> print (message);                                             // Printing text...
-      gui     -> plot (point_PC, color_PC, STYLE_WIREFRAME);
+      gui     -> plot (color_PC, point_PC, STYLE_WIREFRAME);
       //gui     -> cockpit_AI (controller);
       gui     -> refresh ();                                                    // Refreshing window...
       /*
