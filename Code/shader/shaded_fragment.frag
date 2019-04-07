@@ -2,8 +2,8 @@
 
 #version 410 core
 
-in  vec4 color_geom;                                                            // (R, G, B, A) color, from vertex shader.
-out vec4 color_frag;                                                            // The rendered color.
+in  vec4 color_PC_geom;                                                         // (R, G, B, A) color, from vertex shader.
+out vec4 color_PC_frag;                                                         // The rendered color.
 
 /// @function
 // Rendering points as smoothed circles:
@@ -20,5 +20,5 @@ void main(void)
   //alpha = smoothstep(3.0, 0.0, r);
   //color_frag = alpha*color_geom;                                                // Assigning "color" as OpenGL color...
   //color_frag = color_geom;
-  color_frag = color_geom;
+  color_PC_frag = color_PC_geom;
 }
