@@ -49,5 +49,5 @@ __kernel void thekernel (
     point_PR[gid] = pos_PR;
     point_PU[gid] = pos_PU;
     point_PL[gid] = pos_PL;
-    point_PD[gid] = pos_PC;
+    point_PD[gid] = pos_PD;
 }

@@ -29,9 +29,9 @@ void main()
 
   gl_Position = gl_in[0].gl_Position;
   EmitVertex();
-  gl_Position = gs_in[0].point_PD;
-  EmitVertex();
   gl_Position = gs_in[0].point_PL;
+  EmitVertex();
+  gl_Position = gs_in[0].point_PD;
   EmitVertex();
 
   EndPrimitive();

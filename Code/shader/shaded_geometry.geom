@@ -22,18 +22,20 @@ void main()
 {
   color_PC_geom = gs_in[0].color_PC;
 
-  gl_Position = gl_in[0].gl_Position;
-  EmitVertex();
+
+
   gl_Position = gs_in[0].point_PU;
   EmitVertex();
   gl_Position = gs_in[0].point_PR;
   EmitVertex();
+  gl_Position = gl_in[0].gl_Position;
+  EmitVertex();
 
   gl_Position = gl_in[0].gl_Position;
   EmitVertex();
-  gl_Position = gs_in[0].point_PD;
-  EmitVertex();
   gl_Position = gs_in[0].point_PL;
+  EmitVertex();
+  gl_Position = gs_in[0].point_PD;
   EmitVertex();
 
   EndPrimitive();
