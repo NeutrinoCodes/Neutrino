@@ -3,7 +3,7 @@
 #version 410 core
 
 layout (points) in;                                                             // Input points.
-layout (triangle_strip, max_vertices = 6) out;                                      // Output points.
+layout (triangle_strip, max_vertices = 6) out;                                  // Output points.
 
 in VS_OUT
 {
