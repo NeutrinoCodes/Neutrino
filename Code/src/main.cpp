@@ -294,7 +294,7 @@ int main ()
                            color,
                            point,
                            PARTICLE_NUM,
-                           STYLE_SHADED
+                           STYLE_POINT
                           );
       //gui     -> cockpit_AI (controller);
       gui         -> refresh ();                                                // Refreshing window...
