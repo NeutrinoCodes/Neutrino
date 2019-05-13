@@ -22,8 +22,8 @@ void main()
 {
   //color_PC_geom = gs_in[0].color_PC;
   vec4 light = normalize(vec4(1.0, 1.0, 1.0, 1.0));
-  float diffusion_RU = clamp(dot(light.xyz, gs_in[0].normal_RU.xyz), 0.2, 1);
-  float diffusion_LD = clamp(dot(light.xyz, gs_in[0].normal_RU.xyz), 0.2, 1);
+  float diffusion_RU = clamp(dot(light.xyz, gs_in[0].normal_RU.xyz), 0.2, 1.0);
+  float diffusion_LD = clamp(dot(light.xyz, gs_in[0].normal_RU.xyz), 0.2, 1.0);
 
   // RIGHT-UP triangle:
   color_PC_geom = gs_in[0].color_PC;
