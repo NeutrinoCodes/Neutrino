@@ -240,6 +240,34 @@ void window::set_plot_style (
                          );
       break;
 
+    case STYLE_VOXEL:
+      glUseProgram (voxel_shader);                                              // Using shader...
+
+      // Setting View_matrix matrix on shader:
+      glUniformMatrix4fv (
+                                                                                // Getting variable's uniform location:
+                          glGetUniformLocation (
+                                                voxel_shader,                   // Program.
+                                                "View_matrix"                   // Variable.
+                                               ),
+                          1,                                                    // # of matrices to be modified.
+                          GL_FALSE,                                             // FALSE = column major.
+                          &view_matrix[0]                                       // View matrix.
+                         );
+
+      // Setting Projection_matrix matrix on shader:
+      glUniformMatrix4fv (
+                                                                                // Getting variable's uniform location:
+                          glGetUniformLocation (
+                                                voxel_shader,                   // Program.
+                                                "Projection_matrix"             // Variable.
+                                               ),
+                          1,                                                    // # of matrices to be modified.
+                          GL_FALSE,                                             // FALSE = column major.
+                          &projection_matrix[0]                                 // Projection matrix.
+                         );
+      break;
+
     case STYLE_WIREFRAME:
       glUseProgram (wireframe_shader);                                          // Using shader...
 
@@ -442,6 +470,12 @@ void window::init (
                                    POINT_VERTEX_FILE,                           // Vertex shader file name.
                                    POINT_GEOMETRY_FILE,                         // Geometry shader file name.
                                    POINT_FRAGMENT_FILE                          // Fragment shader file name.
+                                  );
+
+  voxel_shader     = build_shader (
+                                   VOXEL_VERTEX_FILE,                           // Vertex shader file name.
+                                   VOXEL_GEOMETRY_FILE,                         // Geometry shader file name.
+                                   VOXEL_FRAGMENT_FILE                          // Fragment shader file name.
                                   );
 
   wireframe_shader = build_shader (

@@ -43,6 +43,7 @@ private:
   float           initial_scene_position[3] = INITIAL_SCENE_POSITION;
 
   GLuint          point_shader;                                                 // Point shader program.
+  GLuint          voxel_shader;                                                 // Voxel shader program.
   GLuint          wireframe_shader;                                             // Wireframe shader program.
   GLuint          shaded_shader;                                                // Shaded shader program.
   GLuint          text_shader;                                                  // Point shader program.

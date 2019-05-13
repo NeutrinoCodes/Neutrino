@@ -6,6 +6,10 @@
   #define POINT_GEOMETRY_FILE               "/Code/shader/point_geometry.geom"  // Plot style POINT geometry shader.
   #define POINT_FRAGMENT_FILE               "/Code/shader/point_fragment.frag"  // Plot style POINT fragment shader.
 
+  #define VOXEL_VERTEX_FILE                 "/Code/shader/voxel_vertex.vert"    // Plot style VOXEL vertex shader.
+  #define VOXEL_GEOMETRY_FILE               "/Code/shader/voxel_geometry.geom"  // Plot style VOXEL geometry shader.
+  #define VOXEL_FRAGMENT_FILE               "/Code/shader/voxel_fragment.frag"  // Plot style VOXEL fragment shader.
+
   #define WIREFRAME_VERTEX_FILE \
   "/Code/shader/wireframe_vertex.vert"                                          // Plot style POINT vertex shader.
   #define WIREFRAME_GEOMETRY_FILE \
@@ -170,6 +174,7 @@ typedef enum
 typedef enum
 {
   STYLE_POINT,                                                                  // Plot style set as points.
+  STYLE_VOXEL,                                                                  // Plot style set as voxels.
   STYLE_WIREFRAME,                                                              // Plot style set as lines.
   STYLE_SHADED                                                                  // Plot style set as shaded surfaces.
 } plot_style;
