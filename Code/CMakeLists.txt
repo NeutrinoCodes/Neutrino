@@ -40,7 +40,8 @@ src/point4.cpp
 src/projective_geometry.cpp
 src/queue.cpp
 src/text4.cpp
-src/window.cpp)
+src/window.cpp
+src/glad.c)
 
 if(APPLE)
   message("Setting directory for the Mac executable...")
@@ -65,7 +66,7 @@ endif(APPLE)
 
 if(LINUX)
   message("Setting the Linux libraries that should be linked in the build command...")
-  target_link_libraries(neutrino "-lOpenGL" "-lOpenCL" "-lGLEW" "-lglfw" "-lm")
+  target_link_libraries(neutrino "-lOpenGL" "-lOpenCL" "-ldl" "-lglfw" "-lm")
 endif(LINUX)
 
 # Type: "make run" to run the executable.
