@@ -2,7 +2,7 @@
 
 #version 410 core
 
-layout (location = 0) in  vec4 color_PC;                                        // Input color to be processed.
+layout (location = 0) in  vec4 color_PC;                                        // Color of central particle.
 layout (location = 1) in  vec4 point_PC;                                        // Input point to be processed.
 layout (location = 2) in  vec4 point_PR;                                        // Input point to be processed.
 layout (location = 3) in  vec4 point_PU;                                        // Input point to be processed.
