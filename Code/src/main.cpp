@@ -1,7 +1,7 @@
 /// @file
 
 // GRAPHICS:
-#define USE_OPENGL    true                                                      // Set to "true" to use OpenGL-OpenCL interop.
+#define USE_GRAPHICS                                                            // Define it in order to use OpenGL-OpenCL interoperability graphics.
 
 // WINDOW:
 #define SIZE_WINDOW_X 800                                                       // Window x-size [px].

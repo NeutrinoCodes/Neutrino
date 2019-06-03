@@ -10,6 +10,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// DATA STRUCTURES ///////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
+// float4:
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
 typedef struct
 {
@@ -27,6 +28,34 @@ typedef struct
 } float4;
 #pragma pack(pop)
 
+// color4:
+#pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
+typedef struct
+{
+  #ifdef USE_OPENGL
+    GLfloat r;                                                                  // "x" coordinate.
+    GLfloat g;                                                                  // "y" coordinate.
+    GLfloat b;                                                                  // "z" coordinate.
+    GLfloat a;                                                                  // "w" coordinate.
+  #else
+    cl_float r;                                                                 // "x" coordinate.
+    cl_float g;                                                                 // "y" coordinate.
+    cl_float b;                                                                 // "z" coordinate.
+    cl_float a;                                                                 // "w" coordinate.
+  #endif
+} color4;
+#pragma pack(pop)
+
+// int1:
+#pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
+typedef struct
+{
+  cl_long index;                                                                // Integer index.
+} int1;
+#pragma pack(pop)
+
+// NODE:
+#define NODE 1
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
 typedef struct
 {
@@ -40,16 +69,20 @@ typedef struct
 } node;
 #pragma pack(pop)
 
+// NEIGHBOUR:
+#define NEIGHBOUR 2
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
 typedef struct
 {
-  cl_long up;                                                                   // "UP" neighbour index.
-  cl_long down;                                                                 // "DOWN" neighbour index.
-  cl_long left;                                                                 // "LEFT" neighbour index.
-  cl_long right;                                                                // "RIGHT" neighbour index.
+  int1 up;                                                                      // "UP" neighbour index.
+  int1 down;                                                                    // "DOWN" neighbour index.
+  int1 left;                                                                    // "LEFT" neighbour index.
+  int1 right;                                                                   // "RIGHT" neighbour index.
 } neighbour;
 #pragma pack(pop)
 
+// LINK:
+#define LINK  3
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
 typedef struct
 {
@@ -58,10 +91,97 @@ typedef struct
 } link;
 #pragma pack(pop)
 
+// COLOR:
+#define COLOR 4
+#pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
+typedef struct
+{
+  color4 node;                                                                  // "NODE" color.
+  color4 up;                                                                    // "UP" color.
+  color4 down;                                                                  // "DOWN" color.
+  color4 left;                                                                  // "LEFT" color.
+  color4 right;                                                                 // "RIGHT" color.
+} color;
+#pragma pack(pop)
 ////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////// POINT CLASS ////////////////////////////////
+///////////////////////////////// PARTICLE CLASS ///////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-class point4
+void init_float4 (
+                  float4 data
+                 );
+void init_color4 (
+                  color4 data
+                 );
+
+template<typename T>
+void cl_create_from_gl_buffer (
+                               GLuint     loc_vao,
+                               GLuint     loc_vbo,
+                               GLuint     loc_data_type,
+                               T          loc_data,
+                               GLsizeiptr loc_data_size,
+                               cl_context loc_opencl_context,
+                               cl_mem     loc_buffer
+                              )
+{
+  // Generating VAO...
+  glGenVertexArrays (
+                     1,                                                         // # of VAOs to generate.
+                     &loc_vao                                                   // VAOs array.
+                    );
+  glBindVertexArray (loc_vao);                                                  // Binding node VAO...
+
+  // Generating VBO:
+  glGenBuffers (
+                1,                                                              // # of VBOs to generate.
+                &loc_vbo                                                        // VBOs array.
+               );
+
+  // Binding VBO:
+  glBindBuffer (
+                GL_ARRAY_BUFFER,                                                // VBO target.
+                loc_vbo                                                         // VBO to bind.
+               );
+
+  // Creating and initializing a buffer object's data store:
+  glBufferData (
+                GL_ARRAY_BUFFER,                                                // VBO target.
+                (GLsizeiptr)(sizeof(loc_data)*(loc_data_size)),                 // VBO size.
+                loc_data,                                                       // VBO data.
+                GL_DYNAMIC_DRAW                                                 // VBO usage.
+               );
+
+  // Enabling attribute in vertex shader:
+  glEnableVertexAttribArray (
+                             NODE;                                              // VAO index.
+                            );
+
+  // Binding VBO:
+  glBindBuffer (
+                GL_ARRAY_BUFFER,                                                // VBO target.
+                loc_vbo                                                         // VBO to bind.
+               );
+
+  // Specifying the format for attribute in vertex shader:
+  glVertexAttribPointer (
+                         loc_data_type,                                         // VAO index.
+                         sizeof(loc_data),                                      // VAO's # of components.
+                         GL_FLOAT,                                              // Data type.
+                         GL_FALSE,                                              // Not using normalized numbers.
+                         0,                                                     // Data stride.
+                         0                                                      // Data offset.
+                        );
+
+  // Creating OpenCL buffer from OpenGL buffer:
+  loc_buffer = clCreateFromGLBuffer (
+                                     loc_opencl_context,                        // OpenCL context.
+                                     CL_MEM_READ_WRITE,                         // Memory flags.
+                                     loc_vbo,                                   // VBO.
+                                     &loc_error                                 // Returned error.
+                                    );
+}
+
+class particle
 {
 private:
   neutrino*  baseline;                                                          // Neutrino baseline.
@@ -78,14 +198,32 @@ private:
   cl_context opencl_context;                                                    // OpenCL context.
 
 public:
-  GLfloat*   data;                                                              // Wrapped data.
+  #ifdef USE_GRAPHICS
+    // OpenGL/CL shared data:
+    GLfloat* data;                                                              // Data.
+
+    // OpenGL VAOs:
+    GLuint   node_vao;                                                          // Node VAO.
+    GLuint   neighbour_vao;                                                     // Neighbour VAO.
+    GLuint   link_vao;                                                          // Link VAO.
+    GLuint   color_vao;                                                         // Color VAO.
+
+    // OpenGL VBOs:
+    GLuint   node_vbo;                                                          // Node VBO.
+    GLuint   neighbour_vbo;                                                     // Neighbour VBO.
+    GLuint   link_vbo;                                                          // Link VBO.
+    GLuint   color_vbo;                                                         // Color VBO.
+  #else
+    // OpenCL data:
+    cl_float* data;                                                             // Data.
+  #endif
 
   GLsizeiptr size;                                                              // Data size.
-  cl_mem     buffer;                                                            // OpenGL data memory buffer.
-  GLuint     vao;                                                               // OpenGL data VAO.
-  GLuint     vbo;                                                               // OpenGL data VBO.
+  cl_mem     buffer;                                                            // OpenCL data memory buffer.
 
-  point4();
+
+
+  particle ();
   // Initialization:
   void    init (
                 neutrino*  loc_baseline,                                        // Neutrino baseline.
@@ -167,7 +305,7 @@ public:
                       cl_uint loc_kernel_arg                                    // Kernel argument index.
                      );
 
-  ~point4();
+  ~particle();
 };
 
 #endif
