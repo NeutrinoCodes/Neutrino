@@ -113,73 +113,93 @@ void init_color4 (
                   color4 data
                  );
 
-template<typename T>
-void cl_create_from_gl_buffer (
-                               GLuint     loc_vao,
-                               GLuint     loc_vbo,
-                               GLuint     loc_data_type,
-                               T          loc_data,
-                               GLsizeiptr loc_data_size,
-                               cl_context loc_opencl_context,
-                               cl_mem     loc_buffer
-                              )
-{
-  // Generating VAO...
-  glGenVertexArrays (
-                     1,                                                         // # of VAOs to generate.
-                     &loc_vao                                                   // VAOs array.
-                    );
-  glBindVertexArray (loc_vao);                                                  // Binding node VAO...
+#ifdef USE_GRAPHICS
+  template<typename T>
+  void cl_create_from_gl_buffer (
+                                 GLuint     loc_vao,
+                                 GLuint     loc_vbo,
+                                 GLuint     loc_data_type,
+                                 T          loc_data,
+                                 GLsizeiptr loc_data_size,
+                                 cl_context loc_opencl_context,
+                                 cl_mem     loc_buffer
+                                )
+  {
+    // Generating VAO...
+    glGenVertexArrays (
+                       1,                                                       // # of VAOs to generate.
+                       &loc_vao                                                 // VAOs array.
+                      );
+    glBindVertexArray (loc_vao);                                                // Binding node VAO...
 
-  // Generating VBO:
-  glGenBuffers (
-                1,                                                              // # of VBOs to generate.
-                &loc_vbo                                                        // VBOs array.
-               );
+    // Generating VBO:
+    glGenBuffers (
+                  1,                                                            // # of VBOs to generate.
+                  &loc_vbo                                                      // VBOs array.
+                 );
 
-  // Binding VBO:
-  glBindBuffer (
-                GL_ARRAY_BUFFER,                                                // VBO target.
-                loc_vbo                                                         // VBO to bind.
-               );
+    // Binding VBO:
+    glBindBuffer (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  loc_vbo                                                       // VBO to bind.
+                 );
 
-  // Creating and initializing a buffer object's data store:
-  glBufferData (
-                GL_ARRAY_BUFFER,                                                // VBO target.
-                (GLsizeiptr)(sizeof(loc_data)*(loc_data_size)),                 // VBO size.
-                loc_data,                                                       // VBO data.
-                GL_DYNAMIC_DRAW                                                 // VBO usage.
-               );
+    // Creating and initializing a buffer object's data store:
+    glBufferData (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  (GLsizeiptr)(sizeof(loc_data)*(loc_data_size)),               // VBO size.
+                  loc_data,                                                     // VBO data.
+                  GL_DYNAMIC_DRAW                                               // VBO usage.
+                 );
 
-  // Enabling attribute in vertex shader:
-  glEnableVertexAttribArray (
-                             NODE;                                              // VAO index.
-                            );
+    // Enabling attribute in vertex shader:
+    glEnableVertexAttribArray (
+                               NODE;                                            // VAO index.
+                              );
 
-  // Binding VBO:
-  glBindBuffer (
-                GL_ARRAY_BUFFER,                                                // VBO target.
-                loc_vbo                                                         // VBO to bind.
-               );
+    // Binding VBO:
+    glBindBuffer (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  loc_vbo                                                       // VBO to bind.
+                 );
 
-  // Specifying the format for attribute in vertex shader:
-  glVertexAttribPointer (
-                         loc_data_type,                                         // VAO index.
-                         sizeof(loc_data),                                      // VAO's # of components.
-                         GL_FLOAT,                                              // Data type.
-                         GL_FALSE,                                              // Not using normalized numbers.
-                         0,                                                     // Data stride.
-                         0                                                      // Data offset.
-                        );
+    // Specifying the format for attribute in vertex shader:
+    glVertexAttribPointer (
+                           loc_data_type,                                       // VAO index.
+                           sizeof(loc_data),                                    // VAO's # of components.
+                           GL_FLOAT,                                            // Data type.
+                           GL_FALSE,                                            // Not using normalized numbers.
+                           0,                                                   // Data stride.
+                           0                                                    // Data offset.
+                          );
 
-  // Creating OpenCL buffer from OpenGL buffer:
-  loc_buffer = clCreateFromGLBuffer (
-                                     loc_opencl_context,                        // OpenCL context.
-                                     CL_MEM_READ_WRITE,                         // Memory flags.
-                                     loc_vbo,                                   // VBO.
-                                     &loc_error                                 // Returned error.
-                                    );
-}
+    // Creating OpenCL buffer from OpenGL buffer:
+    loc_buffer = clCreateFromGLBuffer (
+                                       loc_opencl_context,                      // OpenCL context.
+                                       CL_MEM_READ_WRITE,                       // Memory flags.
+                                       loc_vbo,                                 // VBO.
+                                       &loc_error                               // Returned error.
+                                      );
+  }
+#else
+  template<typename T>
+  void cl_create_buffer (
+                         T          loc_data,
+                         size_t     loc_data_size,
+                         cl_context loc_opencl_context,
+                         cl_mem     loc_buffer
+                        )
+  {
+    // Creating OpenCL memory buffer:
+    loc_buffer = clCreateBuffer (
+                                 loc_opencl_context,                            // OpenCL context.
+                                 CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,      // Memory flags.
+                                 sizeof(loc_data)*loc_data_size,                // Data buffer size.
+                                 loc_data,                                      // Data buffer.
+                                 &loc_error                                     // Error code.
+                                );
+  }
+#endif
 
 class particle
 {
@@ -198,10 +218,13 @@ private:
   cl_context opencl_context;                                                    // OpenCL context.
 
 public:
-  #ifdef USE_GRAPHICS
-    // OpenGL/CL shared data:
-    GLfloat* data;                                                              // Data.
+  node*      node_data;                                                         // Node data.
+  neighbour* neighbour_data;                                                    // Neighbour data.
+  link*      link_data;                                                         // Link data.
+  color*     color_data;                                                        // Color data.
+  GLsizeiptr data_size;                                                         // Data size.
 
+  #ifdef USE_GRAPHICS
     // OpenGL VAOs:
     GLuint   node_vao;                                                          // Node VAO.
     GLuint   neighbour_vao;                                                     // Neighbour VAO.
@@ -214,14 +237,13 @@ public:
     GLuint   link_vbo;                                                          // Link VBO.
     GLuint   color_vbo;                                                         // Color VBO.
   #else
-    // OpenCL data:
-    cl_float* data;                                                             // Data.
+    size_t   data_size;                                                         // Data size.
   #endif
 
-  GLsizeiptr size;                                                              // Data size.
-  cl_mem     buffer;                                                            // OpenCL data memory buffer.
-
-
+  cl_mem     node_buffer;                                                       // OpenCL NODE data memory buffer.
+  cl_mem     neighbour_buffer;                                                  // OpenCL NEIGHBOUR data memory buffer.
+  cl_mem     link_buffer;                                                       // OpenCL LINK data memory buffer.
+  cl_mem     color_buffer;                                                      // OpenCL COLOR data memory buffer.
 
   particle ();
   // Initialization:
