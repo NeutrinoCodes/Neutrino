@@ -20,6 +20,7 @@ project (neutrino)
 message("Creating a SOURCES variable with a link to all cpp files to compile...")
 set(SOURCES
 src/color4.cpp
+src/data.cpp
 src/device.cpp
 src/float1.cpp
 src/float4.cpp
@@ -40,7 +41,7 @@ src/point4.cpp
 src/projective_geometry.cpp
 src/queue.cpp
 src/text4.cpp
-src/window.cpp
+src/opengl.cpp
 src/glad.c)
 
 if(APPLE)
