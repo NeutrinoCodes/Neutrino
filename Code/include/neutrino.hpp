@@ -247,8 +247,8 @@ struct node
 
 struct index
 {
-  long
-}
+  long;
+};
 #pragma pack(pop)
 
 
