@@ -35,7 +35,7 @@
 #define PD            4                                                         // Down particle designator [#].
 
 #include "neutrino.hpp"
-#include "window.hpp"
+#include "opengl.hpp"
 #include "opencl.hpp"
 #include "queue.hpp"
 #include "kernel.hpp"
