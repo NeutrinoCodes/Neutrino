@@ -148,120 +148,137 @@ void point4::init (
   buffer         = NULL;                                                        // OpenCL data buffer.
   opencl_context = baseline -> context_id;                                      // Getting OpenCL context...
 
+  // DATA ARRAYS:
+  node_data      = new node[data_size];                                         // Node data array.
+  neighbour_data = new neighbour[data_size];                                    // Neighbour data array.
+  link_data      = new link[data_size];                                         // Link data array.
+  color_data     = new color[data_size];                                        // Color data array.
+
+  for(i = 0; i < data_size; i++)                                                // Filling data arrays with default values...
+  {
+    // POSITIONS:
+    init_float4 (node_data . position);                                         // Initializing "position"...
+    init_float4 (node_data . position_buffer);                                  // Initializing "position_buffer"...
+
+    // VELOCITIES:
+    init_float4 (node_data . velocity);                                         // Initializing "velocity"...
+    init_float4 (node_data . velocity_buffer);                                  // Initializing "velocity_buffer"...
+
+    // ACCELERATIONS:
+    init_float4 (node_data . acceleration);                                     // Initializing "acceleration"...
+    init_float4 (node_data . acceleration_buffer);                              // Initializing "acceleration_buffer"...
+
+    // NEIGHBOURS:
+    neighbour_data . up    = i;                                                 // Initializing "up" neighbour index...
+    neighbour_data . down  = i;                                                 // Initializing "down" neighbour index...
+    neighbour_data . left  = i;                                                 // Initializing "left" neighbour index...
+    neighbour_data . right = i;                                                 // Initializing "right" neighbour index...
+
+    // LINKS:
+    link_data . stiffness  = 0.0;                                               // Initializing link stiffness tensor...
+    link_data . damping    = 0.0;                                               // Initializing link damping tensor...
+
+    // COLORS:
+    init_color4 (color_data . node);                                            // Initializing node color...
+    init_color4 (color_data . up);                                              // Initializing "up" neighbour color...
+    init_color4 (color_data . down);                                            // Initializing "down" neighbour color...
+    init_color4 (color_data . left);                                            // Initializing "left" neighbour color...
+    init_color4 (color_data . right);                                           // Initializing "right" neighbour color...
+  }
+
   #ifdef USE_GRAPHICS
-    {
-      // DATA ARRAYS:
-      node_data      = new node[data_size];                                     // Node data array.
-      neighbour_data = new neightbour[data_size];                               // Neighbour data array.
-      link_data      = new link[data_size];                                     // Link data array.
-      color_data     = new color[data_size];                                    // Color data array.
+    // OpenGL VAOs:
+    node_vao      = 0;                                                          // Node data VAO.
+    neighbour_vao = 0;                                                          // Neighbour data VAO.
+    link_vao      = 0;                                                          // Link data VAO.
+    color_vao     = 0;                                                          // Color data VAO.
 
-      // OpenGL VBOs:
-      node_vbo       = 0;                                                       // Node data VBO.
-      neighbour_vbo  = 0;                                                       // Neighbour data VBO.
-      link_vbo       = 0;                                                       // Link data VBO.
-      color_vbo      = 0;                                                       // Color data VBO.
+    // OpenGL VBOs:
+    node_vbo      = 0;                                                          // Node data VBO.
+    neighbour_vbo = 0;                                                          // Neighbour data VBO.
+    link_vbo      = 0;                                                          // Link data VBO.
+    color_vbo     = 0;                                                          // Color data VBO.
 
-      for(i = 0; i < size; i++)                                                 // Filling data arrays with default values...
-      {
-        // POSITIONS:
-        init_float4 (node_data . position);                                     // Initializing "position"...
-        init_float4 (node_data . position_buffer);                              // Initializing "position_buffer"...
+    // Creating OpenCL buffer from OpenGL buffer for NODE structure:
+    cl_create_from_gl_buffer<node> (
+                                    node_vao,
+                                    node_vbo,
+                                    NODE,
+                                    node_data,
+                                    data_size,
+                                    opencl_context,
+                                    node_buffer
+                                   );
 
-        // VELOCITIES:
-        init_float4 (node_data . velocity);                                     // Initializing "velocity"...
-        init_float4 (node_data . velocity_buffer);                              // Initializing "velocity_buffer"...
+    // Creating OpenCL buffer from OpenGL buffer for NEIGHBOUR structure:
+    cl_create_from_gl_buffer<neighbour> (
+                                         neighbour,
+                                         neighbour,
+                                         NEIGHBOUR,
+                                         neighbour,
+                                         data_size,
+                                         opencl_context,
+                                         neighbour_buffer
+                                        );
 
-        // ACCELERATIONS:
-        init_float4 (node_data . acceleration);                                 // Initializing "acceleration"...
-        init_float4 (node_data . acceleration_buffer);                          // Initializing "acceleration_buffer"...
+    // Creating OpenCL buffer from OpenGL buffer for LINK structure:
+    cl_create_from_gl_buffer<link> (
+                                    link,
+                                    link,
+                                    LINK,
+                                    link,
+                                    data_size,
+                                    opencl_context,
+                                    link_buffer
+                                   );
 
-        // NEIGHBOURS:
-        neighbour_data . up    = i;                                             // Initializing "up" neighbour index...
-        neighbour_data . down  = i;                                             // Initializing "down" neighbour index...
-        neighbour_data . left  = i;                                             // Initializing "left" neighbour index...
-        neighbour_data . right = i;                                             // Initializing "right" neighbour index...
+    // Creating OpenCL buffer from OpenGL buffer for COLOR structure:
+    cl_create_from_gl_buffer<color> (
+                                     color,
+                                     color,
+                                     COLOR,
+                                     color,
+                                     data_size,
+                                     opencl_context,
+                                     color_buffer
+                                    );
+  #else
+    // Creating OpenCL buffer for NODE structure:
+    cl_create_buffer<node> (
+                            node_data,
+                            data_size,
+                            opencl_context,
+                            node_buffer
+                           );
 
-        // LINKS:
-        link_data . stiffness  = 0.0;                                           // Initializing link stiffness tensor...
-        link_data . damping    = 0.0;                                           // Initializing link damping tensor...
+    // Creating OpenCL buffer for NEIGHBOUR structure:
+    cl_create_buffer<node> (
+                            neighbour_data,
+                            data_size,
+                            opencl_context,
+                            neighbour_buffer
+                           );
 
-        // COLORS:
-        init_color4 (color_data . node);                                        // Initializing node color...
-        init_color4 (color_data . up);                                          // Initializing "up" neighbour color...
-        init_color4 (color_data . down);                                        // Initializing "down" neighbour color...
-        init_color4 (color_data . left);                                        // Initializing "left" neighbour color...
-        init_color4 (color_data . right);                                       // Initializing "right" neighbour color...
-      }
+    // Creating OpenCL buffer for LINK structure:
+    cl_create_buffer<node> (
+                            link_data,
+                            data_size,
+                            opencl_context,
+                            link_buffer
+                           );
 
-      // Creating OpenCL buffer from OpenGL buffer for NODE structure:
-      cl_create_from_gl_buffer<node> (
-                                      node_vao,
-                                      node_vbo,
-                                      NODE,
-                                      node_data,
-                                      data_size,
-                                      opencl_context
-                                     );
+    // Creating OpenCL buffer for COLOR structure:
+    cl_create_buffer<node> (
+                            color_data,
+                            data_size,
+                            opencl_context,
+                            color_buffer
+                           );
+  #endif
 
-      // Creating OpenCL buffer from OpenGL buffer for NEIGHBOUR structure:
-      cl_create_from_gl_buffer<neighbour> (
-                                           neighbour,
-                                           neighbour,
-                                           NEIGHBOUR,
-                                           neighbour,
-                                           data_size,
-                                           opencl_context
-                                          );
+  check_error (loc_error);                                                      // Checking returned error code...
 
-      // Creating OpenCL buffer from OpenGL buffer for LINK structure:
-      cl_create_from_gl_buffer<link> (
-                                      link,
-                                      link,
-                                      LINK,
-                                      link,
-                                      data_size,
-                                      opencl_context
-                                     );
-
-      // Creating OpenCL buffer from OpenGL buffer for COLOR structure:
-      cl_create_from_gl_buffer<color> (
-                                       color,
-                                       color,
-                                       COLOR,
-                                       color,
-                                       data_size,
-                                       opencl_context
-                                      );
-
-
-    }
-    else                                                                        // Replicate float4 init.
-    {
-      data   = new cl_float[4*size];                                            // Creating array for unfolded data...
-
-      for(i = 0; i < size; i++)                                                 // Filling unfolded data array...
-      {
-        data[4*i + 0] = 0.0f;                                                   // Filling "x"...
-        data[4*i + 1] = 0.0f;                                                   // Filling "y"...
-        data[4*i + 2] = 0.0f;                                                   // Filling "z"...
-        data[4*i + 3] = 1.0f;                                                   // Filling "w"...
-      }
-
-      // Creating OpenCL memory buffer:
-      buffer = clCreateBuffer (
-                               opencl_context,                                  // OpenCL context.
-                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,        // Memory flags.
-                               4*sizeof(cl_float)*size,                         // Data buffer size.
-                               data,                                            // Data buffer.
-                               &loc_error                                       // Error code.
-                              );
-
-    }
-
-    check_error (loc_error);                                                    // Checking returned error code...
-
-    baseline -> done ();                                                        // Printing message...
+  baseline -> done ();                                                          // Printing message...
 }
 
 //////////////////////////////////////////////////////////////////////////////////
