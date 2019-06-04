@@ -20,7 +20,7 @@ void init_color4 (
   loc_data . a = 1.0;
 }
 
-point4::point4()
+cell::cell()
 {
 
 }
@@ -28,9 +28,9 @@ point4::point4()
 /// # OpenCL error get function
 /// ### Description:
 /// Translates an OpenCL numeric error code into a human-readable string.
-const char* point4::get_error (
-                               cl_int loc_error                                 // Local error code.
-                              )
+const char* cell::get_error (
+                             cl_int loc_error                                   // Local error code.
+                            )
 {
   switch(loc_error)
   {
@@ -112,9 +112,9 @@ const char* point4::get_error (
 /// # OpenCL error check function
 /// ### Description:
 /// Checks for an OpenCL error code and print it to stdout.
-void point4::check_error (
-                          cl_int loc_error                                      // Error code.
-                         )
+void cell::check_error (
+                        cl_int loc_error                                        // Error code.
+                       )
 {
   if(loc_error != CL_SUCCESS)                                                   // Checking local error code...
   {
@@ -131,13 +131,18 @@ void point4::check_error (
 /// use_cl_gl_interop` flag is set to `true`.
 /// Creates an OpenCL buffer (not shared with OpenGL), in case the
 /// use_cl_gl_interop` flag is set to `false`.
-void point4::init (
-                   neutrino*  loc_baseline,                                     // Neutrino baseline.
-                   GLsizeiptr loc_data_size                                     // Data array size.
-                  )
+void cell::init (
+                 neutrino*  loc_baseline,                                       // Neutrino baseline.
+                 GLsizeiptr loc_data_size                                       // Data array size.
+                )
 {
-  cl_int     loc_error;                                                         // Error code.
-  GLsizeiptr i;                                                                 // Index.
+  cl_int       loc_error;                                                       // Error code.
+
+  #ifdef USE_GRAPHICS
+    GLsizeiptr i;                                                               // Index.
+  #else
+    size_t     i;                                                               // Index.
+  #endif
 
   baseline       = loc_baseline;                                                // Getting Neutrino baseline...
   position       = new size_t[baseline -> k_num];                               // Initializing kernel argument position array...
@@ -287,10 +292,10 @@ void point4::init (
 /// # Kernel set function
 /// ### Description:
 /// Sets a kernel argument at a specified index position.
-void point4::set_arg (
-                      kernel* loc_kernel,                                       // OpenCL kernel.
-                      cl_uint loc_kernel_arg                                    // OpenCL kernel argument #.
-                     )
+void cell::set_arg (
+                    kernel* loc_kernel,                                         // OpenCL kernel.
+                    cl_uint loc_kernel_arg                                      // OpenCL kernel argument #.
+                   )
 {
   cl_int loc_error;                                                             // Error code.
   size_t kernel_index;

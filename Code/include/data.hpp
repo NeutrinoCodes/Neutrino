@@ -104,7 +104,7 @@ typedef struct
 } color;
 #pragma pack(pop)
 ////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// PARTICLE CLASS ///////////////////////////////
+/////////////////////////////////// CELL CLASS /////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 void init_float4 (
                   float4 data
@@ -201,11 +201,11 @@ void init_color4 (
   }
 #endif
 
-class particle
+class cell
 {
 private:
-  neutrino*  baseline;                                                          // Neutrino baseline.
-  size_t*    position;                                                          // Position of kernel argument in each kernel.
+  neutrino*    baseline;                                                        // Neutrino baseline.
+  size_t*      position;                                                        // Position of kernel argument in each kernel.
   // OpenCL error get function:
   const char* get_error (
                          cl_int loc_error                                       // Error code.
@@ -215,37 +215,64 @@ private:
                            cl_int loc_error                                     // Error code.
                           );
 
-  cl_context opencl_context;                                                    // OpenCL context.
+  cl_context   opencl_context;                                                  // OpenCL context.
 
 public:
-  node*      node_data;                                                         // Node data.
-  neighbour* neighbour_data;                                                    // Neighbour data.
-  link*      link_data;                                                         // Link data.
-  color*     color_data;                                                        // Color data.
-  GLsizeiptr data_size;                                                         // Data size.
+  // Data structures:
+  node*        node_data;                                                       // Node data structure.
+  neighbour*   neighbour_data;                                                  // Neighbour data structure.
+  link*        link_data;                                                       // Link data structure.
+  color*       color_data;                                                      // Color data structure.
+
+  // Data OpenCL memory buffers:
+  cl_mem       node_buffer;                                                     // OpenCL NODE data memory buffer.
+  cl_mem       neighbour_buffer;                                                // OpenCL NEIGHBOUR data memory buffer.
+  cl_mem       link_buffer;                                                     // OpenCL LINK data memory buffer.
+  cl_mem       color_buffer;                                                    // OpenCL COLOR data memory buffer.
 
   #ifdef USE_GRAPHICS
     // OpenGL VAOs:
-    GLuint   node_vao;                                                          // Node VAO.
-    GLuint   neighbour_vao;                                                     // Neighbour VAO.
-    GLuint   link_vao;                                                          // Link VAO.
-    GLuint   color_vao;                                                         // Color VAO.
+    GLuint     node_vao;                                                        // Node VAO.
+    GLuint     neighbour_vao;                                                   // Neighbour VAO.
+    GLuint     link_vao;                                                        // Link VAO.
+    GLuint     color_vao;                                                       // Color VAO.
 
     // OpenGL VBOs:
-    GLuint   node_vbo;                                                          // Node VBO.
-    GLuint   neighbour_vbo;                                                     // Neighbour VBO.
-    GLuint   link_vbo;                                                          // Link VBO.
-    GLuint   color_vbo;                                                         // Color VBO.
+    GLuint     node_vbo;                                                        // Node VBO.
+    GLuint     neighbour_vbo;                                                   // Neighbour VBO.
+    GLuint     link_vbo;                                                        // Link VBO.
+    GLuint     color_vbo;                                                       // Color VBO.
+
+    // Data size:
+    GLsizeiptr data_size;                                                       // Data size.
   #else
-    size_t   data_size;                                                         // Data size.
+    // Data size:
+    size_t     data_size;                                                       // Data size.
   #endif
 
-  cl_mem     node_buffer;                                                       // OpenCL NODE data memory buffer.
-  cl_mem     neighbour_buffer;                                                  // OpenCL NEIGHBOUR data memory buffer.
-  cl_mem     link_buffer;                                                       // OpenCL LINK data memory buffer.
-  cl_mem     color_buffer;                                                      // OpenCL COLOR data memory buffer.
+  #ifdef USE_GRAPHICS
+    template<typename T>
+    void set_position (
+                       size_t     loc_data_type,                                //Data type.
+                       GLsizeiptr loc_index,                                    // Data index.
+                       GLfloat    loc_value[4]                                  // Data value.
+                      )
+    {
+      switch(loc_data_type)
+      {
+        case NODE:
+          node_data . position . x[loc_index] = loc_value[0];
+          node_data . position . y[loc_index] = loc_value[1];
+          node_data . position . z[loc_index] = loc_value[2];
+          node_data . position . w[loc_index] = loc_value[3];
+      }
 
-  particle ();
+      loc_data . x          = loc_value[0];
+      data[4*loc_index + 0] = loc_value;                                        // Setting data value...
+    };
+  #else
+
+  #endif
   // Initialization:
   void    init (
                 neutrino*  loc_baseline,                                        // Neutrino baseline.
