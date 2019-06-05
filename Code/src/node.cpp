@@ -19,6 +19,9 @@ void node::check_error (
   }
 }
 
+/// # Node init function
+/// ### Description:
+/// Initializes node object.
 void node::init (
                  neutrino*  loc_baseline,                                       // Neutrino baseline.
                  GLsizeiptr loc_data_size                                       // Data array size.
@@ -35,7 +38,7 @@ void node::init (
   baseline       = loc_baseline;                                                // Getting Neutrino baseline...
   position       = new size_t[baseline -> k_num];                               // Initializing kernel argument position array...
 
-  baseline -> action ("initializing \"point4\" object...");                     // Printing message...
+  baseline -> action ("initializing \"node\" object...");                       // Printing message...
 
   data_size      = loc_data_size;                                               // Array size.
   buffer         = NULL;                                                        // OpenCL data buffer.
@@ -44,45 +47,84 @@ void node::init (
 
   for(i = 0; i < data_size; i++)                                                // Filling data arrays with default values...
   {
-    // Initializing node physical variables:
     init_float4 (node_data . position);                                         // Initializing "position"...
     init_float4 (node_data . velocity);                                         // Initializing "velocity"...
     init_float4 (node_data . acceleration);                                     // Initializing "acceleration"...
-
-    // Initializing node numeric buffer variables:
     init_float4 (node_data . position_buffer);                                  // Initializing "position_buffer"...
     init_float4 (node_data . velocity_buffer);                                  // Initializing "velocity_buffer"...
     init_float4 (node_data . acceleration_buffer);                              // Initializing "acceleration_buffer"...
-
-    // Initializing node color:
-    init_color4 (color_data . node);                                            // Initializing node color...
-
-    // Initializing node color:
-    color_data . mass = 0.0;                                                    // Initializing node mass...
+    init_color4 (node_data . node);                                             // Initializing node color...
+    node_data . mass = 0.0;                                                     // Initializing node mass...
   }
 
   #ifdef USE_GRAPHICS
     node_vao = 0;                                                               // Node data VAO.
     node_vbo = 0;                                                               // Node data VBO.
 
-    // Creating OpenCL buffer from OpenGL buffer for NODE structure:
-    cl_create_from_gl_buffer<node> (
-                                    node_vao,
-                                    node_vbo,
-                                    NODE,
-                                    node_data,
-                                    data_size,
-                                    opencl_context,
-                                    node_buffer
-                                   );
+    // Generating VAO...
+    glGenVertexArrays (
+                       1,                                                       // # of VAOs to generate.
+                       &loc_vao                                                 // VAOs array.
+                      );
+    glBindVertexArray (loc_vao);                                                // Binding node VAO...
+
+    // Generating VBO:
+    glGenBuffers (
+                  1,                                                            // # of VBOs to generate.
+                  &loc_vbo                                                      // VBOs array.
+                 );
+
+    // Binding VBO:
+    glBindBuffer (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  loc_vbo                                                       // VBO to bind.
+                 );
+
+    // Creating and initializing a buffer object's data store:
+    glBufferData (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  (GLsizeiptr)(sizeof(loc_data)*(loc_data_size)),               // VBO size.
+                  loc_data,                                                     // VBO data.
+                  GL_DYNAMIC_DRAW                                               // VBO usage.
+                 );
+
+    // Enabling attribute in vertex shader:
+    glEnableVertexAttribArray (
+                               NODE;                                            // VAO index.
+                              );
+
+    // Binding VBO:
+    glBindBuffer (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  loc_vbo                                                       // VBO to bind.
+                 );
+
+    // Specifying the format for attribute in vertex shader:
+    glVertexAttribPointer (
+                           loc_data_type,                                       // VAO index.
+                           sizeof(loc_data),                                    // VAO's # of components.
+                           GL_FLOAT,                                            // Data type.
+                           GL_FALSE,                                            // Not using normalized numbers.
+                           0,                                                   // Data stride.
+                           0                                                    // Data offset.
+                          );
+
+    // Creating OpenCL buffer from OpenGL buffer:
+    loc_buffer = clCreateFromGLBuffer (
+                                       loc_opencl_context,                      // OpenCL context.
+                                       CL_MEM_READ_WRITE,                       // Memory flags.
+                                       loc_vbo,                                 // VBO.
+                                       &loc_error                               // Returned error.
+                                      );
   #else
-    // Creating OpenCL buffer for NODE structure:
-    cl_create_buffer<node> (
-                            node_data,
-                            data_size,
-                            opencl_context,
-                            node_buffer
-                           );
+    // Creating OpenCL memory buffer:
+    loc_buffer = clCreateBuffer (
+                                 loc_opencl_context,                            // OpenCL context.
+                                 CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,      // Memory flags.
+                                 sizeof(loc_data)*loc_data_size,                // Data buffer size.
+                                 loc_data,                                      // Data buffer.
+                                 &loc_error                                     // Error code.
+                                );
   #endif
 
   check_error (loc_error);                                                      // Checking returned error code...
@@ -105,23 +147,14 @@ void node::set_arg (
   size_t kernel_index;
   size_t i;
 
-  baseline -> action ("setting \"point4\" kernel argument...");                 // Printing message...
-
-  // Getting kernel index:
-  for(i = 0; i < baseline -> k_num; i++)                                        // Scanning OpenCL kernel id array...
-  {
-    if(baseline -> kernel_id[i] == loc_kernel -> kernel_id)                     // Finding current kernel id...
-    {
-      kernel_index = i;                                                         // Setting kernel index...
-    }
-  }
+  baseline -> action ("setting \"node\" kernel argument...");                   // Printing message...
 
   position[kernel_index] = loc_kernel_arg;                                      // Setting kernel argument position in current kernel...
 
   // Setting OpenCL buffer as kernel argument:
   loc_error              = clSetKernelArg (
                                            loc_kernel -> kernel_id,             // Kernel.
-                                           loc_kernel_arg,                      // Kernel argument index.
+                                           NODE,                                // Kernel argument index.
                                            sizeof(cl_mem),                      // Kernel argument size.
                                            &buffer                              // Kernel argument value.
                                           );
@@ -130,21 +163,6 @@ void node::set_arg (
 
   baseline -> done ();                                                          // Printing message...
 }
-
-/// # Node mass set function
-/// ### Description:
-/// Sets the mass in node structure.
-void node::set_mass (
-                     GLsizeiptr loc_index,                                      // Data index.
-                     GLfloat    loc_value                                       // Data value.
-                    )
-{
-  node_data . mass . x[loc_index] = loc_value;                                  // Setting "x" mass...
-  node_data . mass . y[loc_index] = loc_value;                                  // Setting "y" mass...
-  node_data . mass . z[loc_index] = loc_value;                                  // Setting "z" mass...
-  node_data . mass . w[loc_index] = 1.0;                                        // Setting "w" mass...
-};
-
 /// # Node position set function
 /// ### Description:
 /// Sets the position in node structure.
@@ -187,32 +205,32 @@ void node::set_acceleration (
   node_data . acceleration . w[loc_index] = loc_value[3];                       // Setting "w" acceleration...
 };
 
-/// # Node acceleration set function
+/// # Node color set function
 /// ### Description:
-/// Sets the acceleration in node structure.
-void node::set_neighbour (
-                          GLsizeiptr loc_index,                                 // Data index.
-                          GLsizeiptr loc_value[4]                               // Data value.
-                         )
+/// Sets the color in node structure.
+void node::set_color (
+                      GLsizeiptr loc_index,                                     // Data index.
+                      GLfloat    loc_value[4]                                   // Data value.
+                     )
 {
-  node_data . neighbour . up[loc_index]    = loc_value[0];                      // Setting "up" neighbour...
-  node_data . neighbour . down[loc_index]  = loc_value[1];                      // Setting "down" neighbour...
-  node_data . neighbour . left[loc_index]  = loc_value[2];                      // Setting "left" neighbour...
-  node_data . neighbour . right[loc_index] = loc_value[3];                      // Setting "right" neighbour...
+  node_data . color . r[loc_index] = loc_value[0];                              // Setting "r" color...
+  node_data . color . g[loc_index] = loc_value[1];                              // Setting "g" color...
+  node_data . color . b[loc_index] = loc_value[2];                              // Setting "b" color...
+  node_data . color . a[loc_index] = loc_value[3];                              // Setting "a" color...
 };
 
-/// # Node stiffness set function
+/// # Node mass set function
 /// ### Description:
-/// Sets the stiffness in node structure.
-void node::set_stiffness (
-                          GLsizeiptr loc_index,                                 // Data index.
-                          GLfloat    loc_value[4]                               // Data value.
-                         )
+/// Sets the mass in node structure.
+void node::set_mass (
+                     GLsizeiptr loc_index,                                      // Data index.
+                     GLfloat    loc_value                                       // Data value.
+                    )
 {
-  node_data . link . up[loc_index]    = loc_value[0];                           // Setting "up" link...
-  node_data . link . down[loc_index]  = loc_value[1];                           // Setting "down" link...
-  node_data . link . left[loc_index]  = loc_value[2];                           // Setting "left" link...
-  node_data . link . right[loc_index] = loc_value[3];                           // Setting "right" link...
+  node_data . mass . x[loc_index] = loc_value;                                  // Setting "x" mass...
+  node_data . mass . y[loc_index] = loc_value;                                  // Setting "y" mass...
+  node_data . mass . z[loc_index] = loc_value;                                  // Setting "z" mass...
+  node_data . mass . w[loc_index] = 1.0;                                        // Setting "w" mass...
 };
 
 //////////////////////////////////////////////////////////////////////////////////

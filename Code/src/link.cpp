@@ -19,6 +19,9 @@ void link::check_error (
   }
 }
 
+/// # Link init function
+/// ### Description:
+/// Initializes link object.
 void link::init (
                  neutrino*  loc_baseline,                                       // Neutrino baseline.
                  GLsizeiptr loc_data_size                                       // Data array size.
@@ -35,7 +38,7 @@ void link::init (
   baseline       = loc_baseline;                                                // Getting Neutrino baseline...
   position       = new size_t[baseline -> k_num];                               // Initializing kernel argument position array...
 
-  baseline -> action ("initializing \"point4\" object...");                     // Printing message...
+  baseline -> action ("initializing \"link\" object...");                       // Printing message...
 
   data_size      = loc_data_size;                                               // Array size.
   buffer         = NULL;                                                        // OpenCL data buffer.
@@ -90,3 +93,53 @@ void link::init (
 
   baseline -> done ();                                                          // Printing message...
 }
+
+/// # Link neighbour index set function
+/// ### Description:
+/// Sets the neighbour indexes in link structure.
+void link::set_neighbour (
+                          GLsizeiptr loc_index,                                 // Data index.
+                          GLsizeiptr loc_value[4]                               // Data value.
+                         )
+{
+  link_data . up_index[loc_index]    = loc_value[0];                            // Setting "up" neighbour index...
+  link_data . down_index[loc_index]  = loc_value[1];                            // Setting "down" neighbour index...
+  link_data . left_index[loc_index]  = loc_value[2];                            // Setting "left" neighbour index...
+  link_data . right_index[loc_index] = loc_value[3];                            // Setting "right" neighbour index...
+};
+
+/// # Link neighbour color set function
+/// ### Description:
+/// Sets the neighbour color in link structure.
+void node::set_color (
+                      GLsizeiptr loc_index,                                     // Data index.
+                      GLfloat    loc_value[4]                                   // Data value.
+                     )
+{
+  link_data . up_color[loc_index]    = loc_value[0];                            // Setting "up" neighbour color...
+  link_data . down_color[loc_index]  = loc_value[1];                            // Setting "down" neighbour color...
+  link_data . left_color[loc_index]  = loc_value[2];                            // Setting "left" neighbour color...
+  link_data . right_color[loc_index] = loc_value[3];                            // Setting "right" neighbour color...
+};
+
+/// # Link stiffness set function
+/// ### Description:
+/// Sets the stiffness in link structure.
+void node::set_stiffness (
+                          GLsizeiptr loc_index,                                 // Data index.
+                          GLfloat    loc_value                                  // Data value.
+                         )
+{
+  link_data . stiffness[loc_index] = loc_value;                                 // Setting link stiffness...
+};
+
+/// # Link damping set function
+/// ### Description:
+/// Sets the damping in link structure.
+void node::set_damping (
+                        GLsizeiptr loc_index,                                   // Data index.
+                        GLfloat    loc_value                                    // Data value.
+                       )
+{
+  link_data . damping[loc_index] = loc_value;                                   // Setting link internal damping...
+};
