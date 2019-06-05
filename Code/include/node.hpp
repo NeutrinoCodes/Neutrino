@@ -15,7 +15,6 @@ class node
 {
 private:
   neutrino*    baseline;                                                        // Neutrino baseline.
-  size_t*      position;                                                        // Position of kernel argument in each kernel.
   // OpenCL error get function:
   const char* get_error (
                          cl_int loc_error                                       // Error code.
@@ -34,17 +33,16 @@ public:
     #ifdef USE_GRAPHICS
     GLuint     node_vao;                                                        // Node VAO.
     GLuint     node_vbo;                                                        // Node VBO.
-    GLsizeiptr data_size;                                                       // Data size.
+    GLsizeiptr node_size;                                                       // Data size.
     #else
-    size_t     data_size;                                                       // Data size.
+    size_t     node_size;                                                       // Data size.
     #endif
 
   node();
   // Initialization:
   void    init (
                 neutrino*  loc_baseline,                                        // Neutrino baseline.
-                GLsizeiptr loc_data_size,                                       // Data number.
-                GLuint     loc_vao_index                                        // VAO index.
+                GLsizeiptr loc_node_size,                                       // Data number.
                );
   ////////////////////////////////////////////////////////////////////////////
   /////////////////////////// HOST "SET" FUNCTIONS:  /////////////////////////
