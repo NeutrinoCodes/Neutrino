@@ -24,7 +24,7 @@ void node::check_error (
 /// Initializes node object.
 void node::init (
                  neutrino*  loc_baseline,                                       // Neutrino baseline.
-                 GLsizeiptr loc_data_size                                       // Data array size.
+                 GLsizeiptr loc_node_size                                       // Data array size.
                 )
 {
   cl_int       loc_error;                                                       // Error code.
@@ -36,16 +36,15 @@ void node::init (
   #endif
 
   baseline       = loc_baseline;                                                // Getting Neutrino baseline...
-  position       = new size_t[baseline -> k_num];                               // Initializing kernel argument position array...
 
   baseline -> action ("initializing \"node\" object...");                       // Printing message...
 
-  data_size      = loc_data_size;                                               // Array size.
-  buffer         = NULL;                                                        // OpenCL data buffer.
+  node_size      = loc_node_size;                                               // Array size.
+  node_buffer    = NULL;                                                        // OpenCL data buffer.
   opencl_context = baseline -> context_id;                                      // Getting OpenCL context...
-  node_data      = new node[data_size];                                         // Node data array.
+  node_data      = new node[node_size];                                         // Node data array.
 
-  for(i = 0; i < data_size; i++)                                                // Filling data arrays with default values...
+  for(i = 0; i < node_size; i++)                                                // Filling data arrays with default values...
   {
     init_float4 (node_data . position);                                         // Initializing "position"...
     init_float4 (node_data . velocity);                                         // Initializing "velocity"...
@@ -64,27 +63,27 @@ void node::init (
     // Generating VAO...
     glGenVertexArrays (
                        1,                                                       // # of VAOs to generate.
-                       &loc_vao                                                 // VAOs array.
+                       &node_vao                                                // VAOs array.
                       );
-    glBindVertexArray (loc_vao);                                                // Binding node VAO...
+    glBindVertexArray (node_vao);                                               // Binding node VAO...
 
     // Generating VBO:
     glGenBuffers (
                   1,                                                            // # of VBOs to generate.
-                  &loc_vbo                                                      // VBOs array.
+                  &node_vbo                                                     // VBOs array.
                  );
 
     // Binding VBO:
     glBindBuffer (
                   GL_ARRAY_BUFFER,                                              // VBO target.
-                  loc_vbo                                                       // VBO to bind.
+                  node_vbo                                                      // VBO to bind.
                  );
 
     // Creating and initializing a buffer object's data store:
     glBufferData (
                   GL_ARRAY_BUFFER,                                              // VBO target.
-                  (GLsizeiptr)(sizeof(loc_data)*(loc_data_size)),               // VBO size.
-                  loc_data,                                                     // VBO data.
+                  (GLsizeiptr)(sizeof(node_data)*(node_size)),                  // VBO size.
+                  node_data,                                                    // VBO data.
                   GL_DYNAMIC_DRAW                                               // VBO usage.
                  );
 
@@ -96,13 +95,13 @@ void node::init (
     // Binding VBO:
     glBindBuffer (
                   GL_ARRAY_BUFFER,                                              // VBO target.
-                  loc_vbo                                                       // VBO to bind.
+                  node_vbo                                                      // VBO to bind.
                  );
 
     // Specifying the format for attribute in vertex shader:
     glVertexAttribPointer (
-                           loc_data_type,                                       // VAO index.
-                           sizeof(loc_data),                                    // VAO's # of components.
+                           NODE,                                                // VAO index.
+                           sizeof(node_data),                                   // VAO's # of components.
                            GL_FLOAT,                                            // Data type.
                            GL_FALSE,                                            // Not using normalized numbers.
                            0,                                                   // Data stride.
@@ -110,21 +109,21 @@ void node::init (
                           );
 
     // Creating OpenCL buffer from OpenGL buffer:
-    loc_buffer = clCreateFromGLBuffer (
-                                       loc_opencl_context,                      // OpenCL context.
-                                       CL_MEM_READ_WRITE,                       // Memory flags.
-                                       loc_vbo,                                 // VBO.
-                                       &loc_error                               // Returned error.
-                                      );
+    node_buffer = clCreateFromGLBuffer (
+                                        opencl_context,                         // OpenCL context.
+                                        CL_MEM_READ_WRITE,                      // Memory flags.
+                                        node_vbo,                               // VBO.
+                                        &loc_error                              // Returned error.
+                                       );
   #else
     // Creating OpenCL memory buffer:
-    loc_buffer = clCreateBuffer (
-                                 loc_opencl_context,                            // OpenCL context.
-                                 CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,      // Memory flags.
-                                 sizeof(loc_data)*loc_data_size,                // Data buffer size.
-                                 loc_data,                                      // Data buffer.
-                                 &loc_error                                     // Error code.
-                                );
+    node_buffer = clCreateBuffer (
+                                  opencl_context,                               // OpenCL context.
+                                  CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,     // Memory flags.
+                                  sizeof(node_data)*node_size,                  // Data buffer size.
+                                  node_data,                                    // Data buffer.
+                                  &loc_error                                    // Error code.
+                                 );
   #endif
 
   check_error (loc_error);                                                      // Checking returned error code...
@@ -135,34 +134,6 @@ void node::init (
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// HOST "SET" FUNCTIONS:  ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-/// # Kernel set function
-/// ### Description:
-/// Sets a kernel argument at a specified index position.
-void node::set_arg (
-                    kernel* loc_kernel,                                         // OpenCL kernel.
-                    cl_uint loc_kernel_arg                                      // OpenCL kernel argument #.
-                   )
-{
-  cl_int loc_error;                                                             // Error code.
-  size_t kernel_index;
-  size_t i;
-
-  baseline -> action ("setting \"node\" kernel argument...");                   // Printing message...
-
-  position[kernel_index] = loc_kernel_arg;                                      // Setting kernel argument position in current kernel...
-
-  // Setting OpenCL buffer as kernel argument:
-  loc_error              = clSetKernelArg (
-                                           loc_kernel -> kernel_id,             // Kernel.
-                                           NODE,                                // Kernel argument index.
-                                           sizeof(cl_mem),                      // Kernel argument size.
-                                           &buffer                              // Kernel argument value.
-                                          );
-
-  check_error (loc_error);                                                      // Checking returned error code...
-
-  baseline -> done ();                                                          // Printing message...
-}
 /// # Node position set function
 /// ### Description:
 /// Sets the position in node structure.
@@ -236,84 +207,58 @@ void node::set_mass (
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// HOST "GET" FUNCTIONS:  ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-/// # Kernel get function:
+/// # Node position get function
 /// ### Description:
-/// Gets the index position of a kernel argument.
-size_t point4::get_arg (
-                        kernel* loc_kernel                                      // OpenCL kernel.
-                       )
+/// Gets the position from node structure.
+float4 node::get_position (
+                           GLsizeiptr loc_index,                                // Data index.
+                          )
 {
-  cl_int loc_error;                                                             // Error code.
-  size_t kernel_index;
-  size_t i;
+  float4 data;
 
-  // Getting kernel index:
-  for(i = 0; i < baseline -> k_num; i++)                                        // Scanning OpenCL kernel id array...
-  {
-    if(baseline -> kernel_id[i] == loc_kernel -> kernel_id)                     // Finding current kernel id...
-    {
-      kernel_index = i;                                                         // Setting kernel index...
-    }
-  }
+  data . x = node_data . position . x[loc_index];                               // Getting "x" position...
+  data . y = node_data . position . y[loc_index];                               // Getting "y" position...
+  data . z = node_data . position . z[loc_index];                               // Getting "z" position...
+  data . w = node_data . position . w[loc_index];                               // Getting "w" position...
 
-  return(position[kernel_index]);                                               // Returning index of current argument in current kernel...
-}
+  return data;
+};
 
-/// # "x" get function
+/// # Node velocity get function
 /// ### Description:
-/// Gets the "x" point data value in point data array.
-GLfloat point4::get_x (
-                       GLsizeiptr loc_index                                     // Data index.
-                      )
+/// Gets the velocity from node structure.
+float4 node::get_velocity (
+                           GLsizeiptr loc_index,                                // Data index.
+                          )
 {
-  GLfloat loc_value;                                                            // Value.
+  float4 data;
 
-  loc_value = data[4*loc_index + 0];                                            // Getting data value...
+  data . x = node_data . velocity . x[loc_index];                               // Getting "x" velocity...
+  data . y = node_data . velocity . y[loc_index];                               // Getting "y" velocity...
+  data . z = node_data . velocity . z[loc_index];                               // Getting "z" velocity...
+  data . w = node_data . velocity . w[loc_index];                               // Getting "w" velocity...
 
-  return(loc_value);                                                            // Returning data value...
-}
+  return data;
+};
 
-/// # "y" get function
+/// # Node acceleration get function
 /// ### Description:
-/// Gets the "y" point data value in point data array.
-GLfloat point4::get_y (
-                       GLsizeiptr loc_index                                     // Data index.
-                      )
+/// Gets the acceleration from node structure.
+float4 node::get_acceleration (
+                               GLsizeiptr loc_index,                            // Data index.
+                              )
 {
-  GLfloat loc_value;                                                            // Value.
+  float4 data;
 
-  loc_value = data[4*loc_index + 1];                                            // Getting data value...
+  data . x = node_data . acceleration . x[loc_index];                           // Getting "x" acceleration...
+  data . y = node_data . acceleration . y[loc_index];                           // Getting "y" acceleration...
+  data . z = node_data . acceleration . z[loc_index];                           // Getting "z" acceleration...
+  data . w = node_data . acceleration . w[loc_index];                           // Getting "w" acceleration...
 
-  return(loc_value);                                                            // Returning data value...
-}
+  return data;
+};
 
-/// # "z" get function
-/// ### Description:
-/// Gets the "z" point data value in point data array.
-GLfloat point4::get_z (
-                       GLsizeiptr loc_index                                     // Data index.
-                      )
-{
-  GLfloat loc_value;                                                            // Value.
 
-  loc_value = data[4*loc_index + 2];                                            // Getting data value...
-
-  return(loc_value);                                                            // Returning data value...
-}
-
-/// # "w" get function
-/// ### Description:
-/// Gets the "w" point data value in point data array.
-GLfloat point4::get_w (
-                       GLsizeiptr loc_index                                     // Data index.
-                      )
-{
-  GLfloat loc_value;                                                            // Value.
-
-  loc_value = data[4*loc_index + 3];                                            // Getting data value...
-
-  return(loc_value);                                                            // Returning data value...
-}
 
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// CLIENT FUNCTIONS:  /////////////////////////////
@@ -321,36 +266,56 @@ GLfloat point4::get_w (
 /// # OpenCL push function:
 /// ### Description:
 /// Writes to an OpenCL client.
-void cell::load (
-                 queue*  loc_queue,                                             // Queue.
-                 cl_uint loc_kernel_arg                                         // Kernel argument index.
+void node::push (
+                 queue* loc_queue,                                              // Queue.
                 )
 {
   cl_int loc_error;                                                             // Local error code.
 
+  baseline -> action ("setting \"node\" kernel argument...");                   // Printing message...
+
+  // Setting OpenCL buffer as kernel argument:
+  loc_error = clSetKernelArg (
+                              loc_kernel -> kernel_id,                          // Kernel.
+                              NODE,                                             // Kernel argument index.
+                              sizeof(cl_mem),                                   // Kernel argument size.
+                              &node_buffer                                      // Kernel argument value.
+                             );
+
+  check_error (loc_error);                                                      // Checking returned error code...
+
+  baseline -> done ();                                                          // Printing message...
+
   #ifdef USE_GRAPHICS
+    baseline -> action ("acquiring \"node\" OpenCL buffer...");                 // Printing message...
+
     glFinish ();                                                                // Ensuring that all OpenGL routines have completed all operations...
 
-    // Passing buffer to OpenCL kernel:
+    // Acquiring OpenCL buffer:
     loc_error = clEnqueueAcquireGLObjects (
                                            loc_queue -> queue_id,               // Queue.
                                            1,                                   // # of memory objects.
-                                           &buffer,                             // Memory object array.
+                                           &node_buffer,                        // Memory object array.
                                            0,                                   // # of events in event list.
                                            NULL,                                // Event list.
                                            NULL                                 // Event.
                                           );
 
     check_error (loc_error);                                                    // Checking returned error code...
+
+    baseline -> done ();                                                        // Printing message...
   #endif
 
+  baseline -> action ("writing \"node\" OpenCL buffer...");                     // Printing message...
+
+  // Writing OpenCL buffer:
   loc_error = clEnqueueWriteBuffer (
                                     loc_queue -> queue_id,                      // OpenCL queue ID.
-                                    buffer,                                     // Data buffer.
+                                    node_buffer,                                // Data buffer.
                                     CL_TRUE,                                    // Blocking write flag.
                                     0,                                          // Data buffer offset.
-                                    (size_t)(4*sizeof(GLfloat)*size),           // Data buffer size.
-                                    data,                                       // Data buffer.
+                                    (size_t)(4*sizeof(GLfloat)*node_size),      // Data buffer size.
+                                    node_data,                                  // Data buffer.
                                     0,                                          // Number of events in the list.
                                     NULL,                                       // Event list.
                                     NULL                                        // Event.
@@ -358,12 +323,16 @@ void cell::load (
 
   check_error (loc_error);
 
+  baseline -> done ();                                                          // Printing message...
+
   #ifdef USE_GRAPHICS
-    // Releasing buffer from OpenCL kernel:
+    baseline -> action ("releasing \"node\" OpenCL buffer...");                 // Printing message...
+
+    // Releasing openCL buffer:
     loc_error = clEnqueueReleaseGLObjects (
                                            loc_queue -> queue_id,               // Queue.
                                            1,                                   // # of memory objects.
-                                           &buffer,                             // Memory object array.
+                                           &node_buffer,                        // Memory object array.
                                            0,                                   // # of events in event list.
                                            NULL,                                // Event list.
                                            NULL                                 // Event.
@@ -372,26 +341,27 @@ void cell::load (
     clFinish (loc_queue -> queue_id);                                           // Ensuring that all OpenCL routines have completed all operations...
 
     check_error (loc_error);                                                    // Checking returned error code...
+
+    baseline -> done ();                                                        // Printing message...
   #endif
 }
 
 /// # OpenCL pull function:
 /// ### Description:
 /// Reads from an OpenCL client.
-void point4::pull (
-                   queue*  loc_queue,                                           // Queue.
-                   cl_uint loc_kernel_arg                                       // Kernel argument index.
-                  )
+void node::pull (
+                 queue* loc_queue,                                              // Queue.
+                )
 {
   cl_int loc_error;                                                             // Local error code.
 
   loc_error = clEnqueueReadBuffer (
                                    loc_queue -> queue_id,                       // OpenCL queue ID.
-                                   buffer,                                      // Data buffer.
+                                   node_buffer,                                 // Data buffer.
                                    CL_TRUE,                                     // Blocking write flag.
                                    0,                                           // Data buffer offset.
-                                   (size_t)(4*sizeof(GLfloat)*size),            // Data buffer size.
-                                   data,                                        // Data buffer.
+                                   (size_t)(4*sizeof(GLfloat)*node_size),       // Data buffer size.
+                                   node_data,                                   // Data buffer.
                                    0,                                           // Number of events in the list.
                                    NULL,                                        // Event list.
                                    NULL                                         // Event.
@@ -400,26 +370,26 @@ void point4::pull (
   check_error (loc_error);
 }
 
-point4::~point4()
+node::~node()
 {
   cl_int loc_error;                                                             // Local error.
 
-  baseline -> action ("releasing \"point4\" object...");                        // Printing message...
+  baseline -> action ("releasing \"node\" object...");                          // Printing message...
 
-  if(buffer != NULL)                                                            // Checking buffer...
+  if(node_buffer != NULL)                                                       // Checking buffer...
   {
-    loc_error = clReleaseMemObject (buffer);                                    // Releasing OpenCL buffer object...
+    loc_error = clReleaseMemObject (node_buffer);                               // Releasing OpenCL buffer object...
 
     check_error (loc_error);                                                    // Checking returned error code...
   }
 
-  if(baseline -> use_cl_gl_interop)
-  {
-    glDeleteBuffers (1, &vbo);                                                  // Releasing OpenGL VBO...
-  }
+  #ifdef USE_GRAPHICS
+    {
+      glDeleteBuffers (1, &node_vbo);                                           // Releasing OpenGL VBO...
+    }
+  #endif
 
-  delete[] data;                                                                // Deleting array for unfolded data...
-  delete[] position;                                                            // Deleting kernel argument position array...
+  delete[] node_data;                                                           // Deleting array for unfolded data...
 
   baseline -> done ();                                                          // Printing message...
 }

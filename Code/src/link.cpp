@@ -24,7 +24,7 @@ void link::check_error (
 /// Initializes link object.
 void link::init (
                  neutrino*  loc_baseline,                                       // Neutrino baseline.
-                 GLsizeiptr loc_data_size                                       // Data array size.
+                 GLsizeiptr loc_link_size                                       // Data array size.
                 )
 {
   cl_int       loc_error;                                                       // Error code.
@@ -36,16 +36,15 @@ void link::init (
   #endif
 
   baseline       = loc_baseline;                                                // Getting Neutrino baseline...
-  position       = new size_t[baseline -> k_num];                               // Initializing kernel argument position array...
 
   baseline -> action ("initializing \"link\" object...");                       // Printing message...
 
-  data_size      = loc_data_size;                                               // Array size.
-  buffer         = NULL;                                                        // OpenCL data buffer.
+  link_size      = loc_link_size;                                               // Array size.
+  link_buffer    = NULL;                                                        // OpenCL data buffer.
   opencl_context = baseline -> context_id;                                      // Getting OpenCL context...
-  link_data      = new link[data_size];                                         // Link data array.
+  link_data      = new link[link_size];                                         // Link data array.
 
-  for(i = 0; i < data_size; i++)                                                // Filling data arrays with default values...
+  for(i = 0; i < link_size; i++)                                                // Filling data arrays with default values...
   {
     // Initializing neighbour indexes:
     link_data . up_index    = i;                                                // Initializing "up" neighbour index...
@@ -65,28 +64,73 @@ void link::init (
   }
 
   #ifdef USE_GRAPHICS
-    link_vao = 0;                                                               // Link data VAO.
-    link_vbo = 0;                                                               // Link data VBO.
+    link_vao = 0;                                                               // Node data VAO.
+    link_vbo = 0;                                                               // Node data VBO.
 
-    // Creating OpenCL buffer from OpenGL buffer for LINK structure:
-    cl_create_from_gl_buffer<link> (
-                                    link,
-                                    link,
-                                    LINK,
-                                    link,
-                                    data_size,
-                                    opencl_context,
-                                    link_buffer
-                                   );
+    // Generating VAO...
+    glGenVertexArrays (
+                       1,                                                       // # of VAOs to generate.
+                       &link_vao                                                // VAOs array.
+                      );
+    glBindVertexArray (link_vao);                                               // Binding node VAO...
 
+    // Generating VBO:
+    glGenBuffers (
+                  1,                                                            // # of VBOs to generate.
+                  &link_vbo                                                     // VBOs array.
+                 );
+
+    // Binding VBO:
+    glBindBuffer (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  link_vbo                                                      // VBO to bind.
+                 );
+
+    // Creating and initializing a buffer object's data store:
+    glBufferData (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  (GLsizeiptr)(sizeof(link_data)*(link_size)),                  // VBO size.
+                  link_data,                                                    // VBO data.
+                  GL_DYNAMIC_DRAW                                               // VBO usage.
+                 );
+
+    // Enabling attribute in vertex shader:
+    glEnableVertexAttribArray (
+                               NODE;                                            // VAO index.
+                              );
+
+    // Binding VBO:
+    glBindBuffer (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  link_vbo                                                      // VBO to bind.
+                 );
+
+    // Specifying the format for attribute in vertex shader:
+    glVertexAttribPointer (
+                           LINK,                                                // VAO index.
+                           sizeof(link_data),                                   // VAO's # of components.
+                           GL_FLOAT,                                            // Data type.
+                           GL_FALSE,                                            // Not using normalized numbers.
+                           0,                                                   // Data stride.
+                           0                                                    // Data offset.
+                          );
+
+    // Creating OpenCL buffer from OpenGL buffer:
+    link_buffer = clCreateFromGLBuffer (
+                                        opencl_context,                         // OpenCL context.
+                                        CL_MEM_READ_WRITE,                      // Memory flags.
+                                        link_vbo,                               // VBO.
+                                        &loc_error                              // Returned error.
+                                       );
   #else
-    // Creating OpenCL buffer for LINK structure:
-    cl_create_buffer<link> (
-                            link_data,
-                            data_size,
-                            opencl_context,
-                            link_buffer
-                           );
+    // Creating OpenCL memory buffer:
+    link_buffer = clCreateBuffer (
+                                  opencl_context,                               // OpenCL context.
+                                  CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,     // Memory flags.
+                                  sizeof(link_data)*link_size,                  // Data buffer size.
+                                  link_data,                                    // Data buffer.
+                                  &loc_error                                    // Error code.
+                                 );
   #endif
 
   check_error (loc_error);                                                      // Checking returned error code...
@@ -97,10 +141,10 @@ void link::init (
 /// # Link neighbour index set function
 /// ### Description:
 /// Sets the neighbour indexes in link structure.
-void link::set_neighbour (
-                          GLsizeiptr loc_index,                                 // Data index.
-                          GLsizeiptr loc_value[4]                               // Data value.
-                         )
+void link::set_neighbour_index (
+                                GLsizeiptr loc_index,                           // Data index.
+                                GLsizeiptr loc_value[4]                         // Data value.
+                               )
 {
   link_data . up_index[loc_index]    = loc_value[0];                            // Setting "up" neighbour index...
   link_data . down_index[loc_index]  = loc_value[1];                            // Setting "down" neighbour index...
@@ -111,10 +155,10 @@ void link::set_neighbour (
 /// # Link neighbour color set function
 /// ### Description:
 /// Sets the neighbour color in link structure.
-void node::set_color (
-                      GLsizeiptr loc_index,                                     // Data index.
-                      GLfloat    loc_value[4]                                   // Data value.
-                     )
+void link::set_neighbour_color (
+                                GLsizeiptr loc_index,                           // Data index.
+                                GLfloat    loc_value[4]                         // Data value.
+                               )
 {
   link_data . up_color[loc_index]    = loc_value[0];                            // Setting "up" neighbour color...
   link_data . down_color[loc_index]  = loc_value[1];                            // Setting "down" neighbour color...
