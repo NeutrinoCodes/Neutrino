@@ -46,62 +46,50 @@ typedef struct
 } color4;
 #pragma pack(pop)
 
-// int1:
-#pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
-typedef struct
-{
-  cl_long index;                                                                // Integer index.
-} int1;
-#pragma pack(pop)
-
 // NODE:
 #define NODE 1
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
 typedef struct
 {
+  // Physical variables:
   float4 position;                                                              // Node position.
-  float4 position_buffer;                                                       // Node position buffer.
   float4 velocity;                                                              // Node velocity.
-  float4 velocity_buffer;                                                       // Node velocity buffer.
   float4 acceleration;                                                          // Node acceleration.
+
+  // Numeric buffer variables:
+  float4 position_buffer;                                                       // Node position buffer.
+  float4 velocity_buffer;                                                       // Node velocity buffer.
   float4 acceleration_buffer;                                                   // Node acceleration buffer.
-  float4 mass;                                                                  // Node mass.
+
+  // Color:
+  color4 color;                                                                 // Node color.
+
+  // Mass:
+  GLfloat mass;                                                                 // Node mass.
 } node;
 #pragma pack(pop)
 
-// NEIGHBOUR:
-#define NEIGHBOUR 2
-#pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
-typedef struct
-{
-  int1 up;                                                                      // "UP" neighbour index.
-  int1 down;                                                                    // "DOWN" neighbour index.
-  int1 left;                                                                    // "LEFT" neighbour index.
-  int1 right;                                                                   // "RIGHT" neighbour index.
-} neighbour;
-#pragma pack(pop)
-
 // LINK:
-#define LINK  3
+#define LINK 2
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
 typedef struct
 {
-  float4 stiffness;                                                             // Link stifness.
-  float4 damping;                                                               // Link damping.
-} link;
-#pragma pack(pop)
+  // Neighbour indexes:
+  cl_long up_index;                                                             // "UP" neighbour index.
+  cl_long down_index;                                                           // "DOWN" neighbour index.
+  cl_long left_index;                                                           // "LEFT" neighbour index.
+  cl_long right_index;                                                          // "RIGHT" neighbour index.
 
-// COLOR:
-#define COLOR 4
-#pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
-typedef struct
-{
-  color4 node;                                                                  // "NODE" color.
-  color4 up;                                                                    // "UP" color.
-  color4 down;                                                                  // "DOWN" color.
-  color4 left;                                                                  // "LEFT" color.
-  color4 right;                                                                 // "RIGHT" color.
-} color;
+  // Neighbour colors:
+  color4 up_color;                                                              // "UP" neighbour color.
+  color4 down_color;                                                            // "DOWN" neighbour color.
+  color4 left_color;                                                            // "LEFT" neighbour color.
+  color4 right_color;                                                           // "RIGHT" neighbour color.
+
+  // Link properties:
+  GLfloat stiffness;                                                            // Link stiffness.
+  GLfloat damping;                                                              // Link internal damping.
+} link;
 #pragma pack(pop)
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// CELL CLASS /////////////////////////////////
@@ -220,9 +208,7 @@ private:
 public:
   // Data structures:
   node*        node_data;                                                       // Node data structure.
-  neighbour*   neighbour_data;                                                  // Neighbour data structure.
   link*        link_data;                                                       // Link data structure.
-  color*       color_data;                                                      // Color data structure.
 
   // Data OpenCL memory buffers:
   cl_mem       node_buffer;                                                     // OpenCL NODE data memory buffer.
@@ -248,30 +234,6 @@ public:
   #else
     // Data size:
     size_t     data_size;                                                       // Data size.
-  #endif
-
-  #ifdef USE_GRAPHICS
-    template<typename T>
-    void set_position (
-                       size_t     loc_data_type,                                //Data type.
-                       GLsizeiptr loc_index,                                    // Data index.
-                       GLfloat    loc_value[4]                                  // Data value.
-                      )
-    {
-      switch(loc_data_type)
-      {
-        case NODE:
-          node_data . position . x[loc_index] = loc_value[0];
-          node_data . position . y[loc_index] = loc_value[1];
-          node_data . position . z[loc_index] = loc_value[2];
-          node_data . position . w[loc_index] = loc_value[3];
-      }
-
-      loc_data . x          = loc_value[0];
-      data[4*loc_index + 0] = loc_value;                                        // Setting data value...
-    };
-  #else
-
   #endif
   // Initialization:
   void    init (
