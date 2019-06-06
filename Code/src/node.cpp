@@ -1,24 +1,16 @@
 #include "node.hpp"
 
+//////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// CONSTRUCTOR: /////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 node::node()
 {
 
 }
 
-/// # OpenCL error check function
-/// ### Description:
-/// Checks for an OpenCL error code and print it to stdout.
-void node::check_error (
-                        cl_int loc_error                                        // Error code.
-                       )
-{
-  if(loc_error != CL_SUCCESS)                                                   // Checking local error code...
-  {
-    baseline -> error (get_error (loc_error));                                  // Printing error message...
-    exit (EXIT_FAILURE);                                                        // Exiting...
-  }
-}
-
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////// "INIT" FUNCTION: ///////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 /// # Node init function
 /// ### Description:
 /// Initializes node object.
@@ -42,7 +34,7 @@ void node::init (
   node_size      = loc_node_size;                                               // Array size.
   node_buffer    = NULL;                                                        // OpenCL data buffer.
   opencl_context = baseline -> context_id;                                      // Getting OpenCL context...
-  node_data      = new node[node_size];                                         // Node data array.
+  node_data      = new node_structure[node_size];                               // Node data array.
 
   for(i = 0; i < node_size; i++)                                                // Filling data arrays with default values...
   {
@@ -132,20 +124,20 @@ void node::init (
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// HOST "SET" FUNCTIONS:  ////////////////////////////
+///////////////////////////////// "SET" FUNCTIONS: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 /// # Node position set function
 /// ### Description:
 /// Sets the position in node structure.
 void node::set_position (
                          GLsizeiptr loc_index,                                  // Data index.
-                         GLfloat    loc_value[4]                                // Data value.
+                         float4     loc_value                                   // Data value.
                         )
 {
-  node_data . position . x[loc_index] = loc_value[0];                           // Setting "x" position...
-  node_data . position . y[loc_index] = loc_value[1];                           // Setting "y" position...
-  node_data . position . z[loc_index] = loc_value[2];                           // Setting "z" position...
-  node_data . position . w[loc_index] = loc_value[3];                           // Setting "w" position...
+  node_data . position . x[loc_index] = loc_value . x;                          // Setting "x" position...
+  node_data . position . y[loc_index] = loc_value . y;                          // Setting "y" position...
+  node_data . position . z[loc_index] = loc_value . z;                          // Setting "z" position...
+  node_data . position . w[loc_index] = loc_value . w;                          // Setting "w" position...
 };
 
 /// # Node velocity set function
@@ -153,13 +145,13 @@ void node::set_position (
 /// Sets the velocity in node structure.
 void node::set_velocity (
                          GLsizeiptr loc_index,                                  // Data index.
-                         GLfloat    loc_value[4]                                // Data value.
+                         float4     loc_value                                   // Data value.
                         )
 {
-  node_data . velocity . x[loc_index] = loc_value[0];                           // Setting "x" velocity...
-  node_data . velocity . y[loc_index] = loc_value[1];                           // Setting "y" velocity...
-  node_data . velocity . z[loc_index] = loc_value[2];                           // Setting "z" velocity...
-  node_data . velocity . w[loc_index] = loc_value[3];                           // Setting "w" velocity...
+  node_data . velocity . x[loc_index] = loc_value . x;                          // Setting "x" velocity...
+  node_data . velocity . y[loc_index] = loc_value . y;                          // Setting "y" velocity...
+  node_data . velocity . z[loc_index] = loc_value . z;                          // Setting "z" velocity...
+  node_data . velocity . w[loc_index] = loc_value . w;                          // Setting "w" velocity...
 };
 
 /// # Node acceleration set function
@@ -167,13 +159,13 @@ void node::set_velocity (
 /// Sets the acceleration in node structure.
 void node::set_acceleration (
                              GLsizeiptr loc_index,                              // Data index.
-                             GLfloat    loc_value[4]                            // Data value.
+                             float4     loc_value                               // Data value.
                             )
 {
-  node_data . acceleration . x[loc_index] = loc_value[0];                       // Setting "x" acceleration...
-  node_data . acceleration . y[loc_index] = loc_value[1];                       // Setting "y" acceleration...
-  node_data . acceleration . z[loc_index] = loc_value[2];                       // Setting "z" acceleration...
-  node_data . acceleration . w[loc_index] = loc_value[3];                       // Setting "w" acceleration...
+  node_data . acceleration . x[loc_index] = loc_value . x;                      // Setting "x" acceleration...
+  node_data . acceleration . y[loc_index] = loc_value . y;                      // Setting "y" acceleration...
+  node_data . acceleration . z[loc_index] = loc_value . z;                      // Setting "z" acceleration...
+  node_data . acceleration . w[loc_index] = loc_value . w;                      // Setting "w" acceleration...
 };
 
 /// # Node color set function
@@ -181,13 +173,13 @@ void node::set_acceleration (
 /// Sets the color in node structure.
 void node::set_color (
                       GLsizeiptr loc_index,                                     // Data index.
-                      GLfloat    loc_value[4]                                   // Data value.
+                      color4     loc_value                                      // Data value.
                      )
 {
-  node_data . color . r[loc_index] = loc_value[0];                              // Setting "r" color...
-  node_data . color . g[loc_index] = loc_value[1];                              // Setting "g" color...
-  node_data . color . b[loc_index] = loc_value[2];                              // Setting "b" color...
-  node_data . color . a[loc_index] = loc_value[3];                              // Setting "a" color...
+  node_data . color . r[loc_index] = loc_value . r;                             // Setting "r" color...
+  node_data . color . g[loc_index] = loc_value . g;                             // Setting "g" color...
+  node_data . color . b[loc_index] = loc_value . b;                             // Setting "b" color...
+  node_data . color . a[loc_index] = loc_value . a;                             // Setting "a" color...
 };
 
 /// # Node mass set function
@@ -195,7 +187,7 @@ void node::set_color (
 /// Sets the mass in node structure.
 void node::set_mass (
                      GLsizeiptr loc_index,                                      // Data index.
-                     GLfloat    loc_value                                       // Data value.
+                     float1     loc_value                                       // Data value.
                     )
 {
   node_data . mass . x[loc_index] = loc_value;                                  // Setting "x" mass...
@@ -205,7 +197,7 @@ void node::set_mass (
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// HOST "GET" FUNCTIONS:  ////////////////////////////
+///////////////////////////////// "GET" FUNCTIONS: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 /// # Node position get function
 /// ### Description:
@@ -258,10 +250,39 @@ float4 node::get_acceleration (
   return data;
 };
 
+/// # Node color get function
+/// ### Description:
+/// Gets the color from node structure.
+float4 node::get_color (
+                        GLsizeiptr loc_index,                                   // Data index.
+                       )
+{
+  color4 data;
 
+  data . r = node_data . color . r[loc_index];                                  // Getting "r" color...
+  data . g = node_data . color . g[loc_index];                                  // Getting "g" color...
+  data . b = node_data . color . b[loc_index];                                  // Getting "b" color...
+  data . a = node_data . color . a[loc_index];                                  // Getting "a" color...
+
+  return data;
+};
+
+/// # Node mass get function
+/// ### Description:
+/// Gets the mass from node structure.
+float4 node::get_mass (
+                       GLsizeiptr loc_index,                                    // Data index.
+                      )
+{
+  float1 data;
+
+  // NOTE: mass.x = mass.y = mass.z, mass.w = 1.0 always.
+  data . value = node_data . mass . x[loc_index];                               // Getting mass...
+  return data;
+};
 
 //////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// CLIENT FUNCTIONS:  /////////////////////////////
+/////////////////////////////// "CONTROL" FUNCTIONS: /////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 /// # OpenCL push function:
 /// ### Description:
@@ -370,6 +391,74 @@ void node::pull (
   check_error (loc_error);
 }
 
+/// # OpenCL acquire function:
+/// ### Description:
+/// Acquires an OpenCL buffer.
+void node::acquire (
+                    queue* loc_queue,                                           // Queue.
+                   )
+{
+  #ifdef USE_GRAPHICS
+    glFinish ();                                                                // Ensuring that all OpenGL routines have completed all operations...
+
+    // Acquiring OpenCL buffer:
+    loc_error = clEnqueueAcquireGLObjects (
+                                           loc_queue -> queue_id,               // Queue.
+                                           1,                                   // # of memory objects.
+                                           &node_buffer,                        // Memory object array.
+                                           0,                                   // # of events in event list.
+                                           NULL,                                // Event list.
+                                           NULL                                 // Event.
+                                          );
+
+    check_error (loc_error);                                                    // Checking returned error code...
+  #endif
+}
+
+/// # OpenCL release function:
+/// ### Description:
+/// Releases an OpenCL buffer.
+void node::release (
+                    queue* loc_queue,                                           // Queue.
+                   )
+{
+  #ifdef USE_GRAPHICS
+    // Releasing openCL buffer:
+    loc_error = clEnqueueReleaseGLObjects (
+                                           loc_queue -> queue_id,               // Queue.
+                                           1,                                   // # of memory objects.
+                                           &node_buffer,                        // Memory object array.
+                                           0,                                   // # of events in event list.
+                                           NULL,                                // Event list.
+                                           NULL                                 // Event.
+                                          );
+
+    clFinish (loc_queue -> queue_id);                                           // Ensuring that all OpenCL routines have completed all operations...
+
+    check_error (loc_error);                                                    // Checking returned error code...
+  #endif
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////// ERROR FUNCTION: ///////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+/// # OpenCL error check function
+/// ### Description:
+/// Checks for an OpenCL error code and print it to stdout.
+void node::check_error (
+                        cl_int loc_error                                        // Error code.
+                       )
+{
+  if(loc_error != CL_SUCCESS)                                                   // Checking local error code...
+  {
+    baseline -> error (get_error (loc_error));                                  // Printing error message...
+    exit (EXIT_FAILURE);                                                        // Exiting...
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////// DESTRUCTOR: /////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 node::~node()
 {
   cl_int loc_error;                                                             // Local error.
