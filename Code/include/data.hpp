@@ -80,7 +80,7 @@ typedef struct
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// NODE STRUCTURE: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-#define NODE 1                                                                  // Kernel argument index.
+#define LAYOUT_NODE 1                                                           // Kernel argument index.
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
 typedef struct
 {
@@ -105,19 +105,19 @@ typedef struct
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// LINK STRUCTURE: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-#define LINK 2                                                                  // Kernel argument index.
+#define LAYOUT_LINK 2                                                           // Kernel argument index.
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
 typedef struct
 {
   // Neighbour indexes:
-  int1 index[NUM_NEIGHBOURS];                                                   // Neighbour index.
+  int1 index[NEIGHBOURS_NUM];                                                   // Neighbour index.
 
   // Neighbour colors:
-  color4 color[NUM_NEIGHBOURS];                                                 // Neighbour color.
+  color4 color[NEIGHBOURS_NUM];                                                 // Neighbour color.
 
   // Link properties:
-  float1 stiffness[NUM_NEIGHBOURS];                                             // Link stiffness.
-  float1 damping[NUM_NEIGHBOURS];                                               // Link internal damping.
+  float1 stiffness[NEIGHBOURS_NUM];                                             // Link stiffness.
+  float1 damping[NEIGHBOURS_NUM];                                               // Link internal damping.
 } link_structure;
 #pragma pack(pop)
 //////////////////////////////////////////////////////////////////////////////////

@@ -14,7 +14,7 @@
 class node
 {
 private:
-  neutrino*  baseline;                                                          // Neutrino baseline.
+  neutrino*       baseline;                                                     // Neutrino baseline.
   // OpenCL error get function:
   const char* get_error (
                          cl_int loc_error                                       // Error code.
@@ -24,16 +24,16 @@ private:
                            cl_int loc_error                                     // Error code.
                           );
 
-  cl_context opencl_context;                                                    // OpenCL context.
+  cl_context      opencl_context;                                               // OpenCL context.
 
 public:
-  node*      node_data;                                                         // Node data structure.
-  cl_mem     node_buffer;                                                       // OpenCL NODE data memory buffer.
-  int1       node_size;                                                         // Data size.
+  node_structure* node_data;                                                    // Node data structure.
+  cl_mem          node_buffer;                                                  // OpenCL NODE data memory buffer.
+  int1            node_size;                                                    // Data size.
 
   #ifdef USE_GRAPHICS
-    GLuint   node_vao;                                                          // Node VAO.
-    GLuint   node_vbo;                                                          // Node VBO.
+    GLuint        node_vao;                                                     // Node VAO.
+    GLuint        node_vbo;                                                     // Node VBO.
   #endif
 
   ////////////////////////////////////////////////////////////////////////////////

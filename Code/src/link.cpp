@@ -44,7 +44,7 @@ void link::init (
   {
     for(
         neighbour_id . value = 0;
-        neighbour_id . value < NUM_NEIGHBOURS;
+        neighbour_id . value < NEIGHBOURS_NUM;
         (neighbour_id . value)++
        )
     {
@@ -98,7 +98,7 @@ void link::init (
 
     // Enabling attribute in vertex shader:
     glEnableVertexAttribArray (
-                               LINK;                                            // VAO index.
+                               LAYOUT_LINK;                                     // VAO index.
                               );
 
     // Binding VBO:
@@ -109,7 +109,7 @@ void link::init (
 
     // Specifying the format for attribute in vertex shader:
     glVertexAttribPointer (
-                           LINK,                                                // VAO index.
+                           LAYOUT_LINK,                                         // VAO index.
                            sizeof(link_data),                                   // VAO's # of components.
                            GL_FLOAT,                                            // Data type.
                            GL_FALSE,                                            // Not using normalized numbers.
@@ -149,7 +149,7 @@ void link::init (
 void link::set_neighbour_index (
                                 int1 loc_node_index,                            // Node index.
                                 int1 loc_neighbour_index,                       // Neighbour index.
-                                int1 loc_neighbour_id                           // Neighbour id.
+                                int1 loc_neighbour_id[NEIGHBOURS_NUM]           // Neighbour id.
                                )
 {
   link_data[loc_node_index . value] . index[loc_neighbour_id . value] =
@@ -161,7 +161,8 @@ void link::set_neighbour_index (
 /// Sets the stiffness in link structure.
 void link::set_stiffness (
                           int1   loc_node_index,                                // Node index.
-                          float1 loc_value                                      // Data value.
+                          float1 loc_value,                                     // Data value.
+                          int1   loc_neighbour_id[NEIGHBOURS_NUM]               // Neighbour id.
                          )
 {
   link_data[loc_node_index . value] . stiffness[loc_neighbour_id . value] =
@@ -173,7 +174,8 @@ void link::set_stiffness (
 /// Sets the damping in link structure.
 void link::set_damping (
                         int1   loc_node_index,                                  // Node index.
-                        float1 loc_value                                        // Data value.
+                        float1 loc_value,                                       // Data value.
+                        int1   loc_neighbour_id[NEIGHBOURS_NUM]                 // Neighbour id.
                        )
 {
   link_data[loc_node_index . value] . damping[loc_neighbour_id . value] =

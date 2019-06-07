@@ -63,12 +63,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// WINDOW PARAMETERS //////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-  #define LAYOUT_0                          0                                   // 1st variable ("location = 0") in vertex shader.
-  #define LAYOUT_1                          1                                   // 2nd variable ("location = 1") in vertex shader.
-  #define LAYOUT_2                          2                                   // 3rd variable ("location = 2") in vertex shader.
-  #define LAYOUT_3                          3                                   // 4th variable ("location = 3") in vertex shader.
-  #define LAYOUT_4                          4                                   // 5th variable ("location = 4") in vertex shader.
-  #define LAYOUT_5                          5                                   // 6th variable ("location = 5") in vertex shader.
   #define ZOOM_INCREMENT                    0.1                                 // Mouse wheel zoom increment [].
   #define ZOOM_INCREMENT_PS4                0.02                                // PS4 gamepad zoom increment [].
   #define ZOOM_THRESHOLD_PS4                -0.95                               // PS4 gamepad zoom threshold [].
@@ -242,7 +236,8 @@ typedef enum
 /////////////////////////////// GLEW header files //////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 //#include <GL/glew.h>                                                          // http://glew.sourceforge.net
-  #include <glad/glad.h>
+  #include <glad/glad.h>                                                        // https://glad.dav1d.de
+
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// GLFW header files //////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -268,10 +263,16 @@ typedef enum
     #include <CL/cl_gl.h>                                                       // https://www.opengl.org
   #endif
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// Utility header files /////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
   #include "path.hpp"
   #include "info.hpp"
   #include "font.hpp"
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// Geometry header files /////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
   #include "linear_algebra.hpp"
   #include "projective_geometry.hpp"
 
@@ -309,8 +310,7 @@ public:
   // Initialization:
   void  init (
               size_t loc_q_num,
-              size_t loc_k_num,
-              bool   loc_use_cl_gl_interop
+              size_t loc_k_num
              );
   // Neutrino path add prefix function:
   char* prefix (
