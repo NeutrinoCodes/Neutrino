@@ -27,7 +27,7 @@ private:
   cl_context opencl_context;                                                    // OpenCL context.
 
 public:
-  link*      link_data;                                                         // Link data structure.
+  link*      link_data[NUM_NEIGHBOURS];                                         // Link data structure.
   cl_mem     link_buffer;                                                       // OpenCL link data memory buffer.
   int1       link_size;                                                         // Data size.
 
@@ -51,29 +51,31 @@ public:
   //////////////////////////////// "SET" FUNCTIONS: //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   void   set_neighbour_index (
-                              int1 loc_index,                                   // Data index.
-                              int1 loc_value[NUM_NEIGHBOURS]                    // Data value.
+                              int1 loc_node_index,                              // Node index.
+                              int1 loc_neighbour_index                          // Neighbour index.
                              );
   void   set_stiffness (
-                        int1   loc_index,                                       // Data index.
-                        float1 loc_value[NUM_NEIGHBOURS]                        // Data value.
+                        int1   loc_node_index,                                  // Node index.
+                        float1 loc_value                                        // Data value.
                        );
   void   set_damping (
-                      int1   loc_index,                                         // Data index.
-                      float1 loc_value[NUM_NEIGHBOURS]                          // Data value.
+                      int1   loc_node_index,                                    // Node index.
+                      float1 loc_value                                          // Data value.
                      );
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// "GET" FUNCTIONS: /////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   int1   get_neighbour_index (
-                              int1 loc_index,                                   // Data index.
-                              int1 loc_neighbour                                // Neighbour index.
+                              int1 loc_node_index,                              // Node index.
+                              int1 loc_neighbour_index                          // Neighbour index.
                              );
   float1 get_stiffness (
-                        int1 loc_index,                                         // Data index.
+                        int1 loc_node_index,                                    // Node index.
+                        int1 loc_neighbour_index                                // Neighbour index.
                        );
   float1 get_damping (
-                      int1 loc_index,                                           // Data index.
+                      int1 loc_node_index,                                      // Node index.
+                      int1 loc_neighbour_index                                  // Neighbour index.
                      );
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// "CONTROL" FUNCTIONS: ////////////////////////////
