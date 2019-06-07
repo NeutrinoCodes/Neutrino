@@ -21,7 +21,8 @@ void link::init (
 {
   cl_int loc_error;                                                             // Error code.
 
-  int1   i;                                                                     // Index.
+  int1   node_index;                                                            // Node index.
+  int1   neighbour_index;                                                       // Neighbour index.
 
   baseline          = loc_baseline;                                             // Getting Neutrino baseline...
 
@@ -33,21 +34,31 @@ void link::init (
   opencl_context    = baseline -> context_id;                                   // Getting OpenCL context...
   link_data         = new link_structure[link_size . value];                    // Link data array.
 
-  for(i . value = 0; i . value < link_size . value; (i . value)++)              // Filling data arrays with default values...
+  // Filling data arrays with default values:
+  for(
+      node_index . value = 0;
+      node_index . value < link_size . value;
+      (node_index . value)++
+     )
   {
+    init_float1 (link_data[node_index . value] . stiffness);                    // Initializing link stiffness...
+    init_float1 (link_data[node_index . value] . damping);                      // Initializing link damping...
+
     // Initializing neighbour indexes:
-
-    link_data . up_index    = i;                                                // Initializing "up" neighbour index...
-    link_data . down_index  = i;                                                // Initializing "down" neighbour index...
-    link_data . left_index  = i;                                                // Initializing "left" neighbour index...
-    link_data . right_index = i;                                                // Initializing "right" neighbour index...
-
-    init_color4 (link_data . up_color);                                         // Initializing "up" neighbour color...
-    init_color4 (link_data . down_color);                                       // Initializing "down" neighbour color...
-    init_color4 (link_data . left_color);                                       // Initializing "left" neighbour color...
-    init_color4 (link_data . right_color);                                      // Initializing "right" neighbour color...
-    init_float1 (link_data . stiffness);                                        // Initializing link stiffness...
-    init_float1 (link_data . damping);                                          // Initializing link damping...
+    for(
+        neighbour_index . value = 0;
+        neighbour_index . value < NUM_NEIGHBOURS;
+        (neighbour_index . value)++
+       )
+    {
+      init_int1 (
+                 link_data[node_index . value] . index[neighbour_index . value]
+                );                                                              // Initializing neighbour index...
+      init_color4 (
+                   link_data[node_index . value] . color[neighbour_index .
+                                                         value]
+                  );                                                            // Initializing neighbour color...
+    }
   }
 
   #ifdef USE_GRAPHICS
@@ -76,7 +87,7 @@ void link::init (
     // Creating and initializing a buffer object's data store:
     glBufferData (
                   GL_ARRAY_BUFFER,                                              // VBO target.
-                  sizeof(link_data)*(link_size),                                // VBO size.
+                  sizeof(link_data)*(link_size . value),                        // VBO size.
                   link_data,                                                    // VBO data.
                   GL_DYNAMIC_DRAW                                               // VBO usage.
                  );
@@ -114,7 +125,7 @@ void link::init (
     link_buffer = clCreateBuffer (
                                   opencl_context,                               // OpenCL context.
                                   CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,     // Memory flags.
-                                  sizeof(link_data)*link_size,                  // Data buffer size.
+                                  sizeof(link_data)*link_size . value,          // Data buffer size.
                                   link_data,                                    // Data buffer.
                                   &loc_error                                    // Error code.
                                  );
@@ -132,36 +143,33 @@ void link::init (
 /// ### Description:
 /// Sets the neighbour indexes in link structure.
 void link::set_neighbour_index (
-                                GLsizeiptr loc_index,                           // Data index.
-                                GLsizeiptr loc_value[4]                         // Data value.
+                                int1 loc_node_index,                            // Node index.
+                                int1 loc_neighbour_index                        // Neighbour index.
                                )
 {
-  link_data . up_index[loc_index]    = loc_value[0];                            // Setting "up" neighbour index...
-  link_data . down_index[loc_index]  = loc_value[1];                            // Setting "down" neighbour index...
-  link_data . left_index[loc_index]  = loc_value[2];                            // Setting "left" neighbour index...
-  link_data . right_index[loc_index] = loc_value[3];                            // Setting "right" neighbour index...
+  link_data[loc_node_index . value] . index = loc_neighbour_index . value;      // Setting neighbour index...
 };
 
 /// # Link stiffness set function
 /// ### Description:
 /// Sets the stiffness in link structure.
 void link::set_stiffness (
-                          GLsizeiptr loc_index,                                 // Data index.
-                          float1     loc_value                                  // Data value.
+                          int1   loc_node_index,                                // Node index.
+                          float1 loc_value                                      // Data value.
                          )
 {
-  link_data . stiffness[loc_index] = loc_value . value;                         // Setting link stiffness...
+  link_data[loc_node_index . value] . stiffness = loc_value . value;            // Setting link stiffness...
 };
 
 /// # Link damping set function
 /// ### Description:
 /// Sets the damping in link structure.
 void link::set_damping (
-                        GLsizeiptr loc_index,                                   // Data index.
-                        float1     loc_value                                    // Data value.
+                        int1   loc_node_index,                                  // Node index.
+                        float1 loc_value                                        // Data value.
                        )
 {
-  link_data . damping[loc_index] = loc_value . value;                           // Setting link internal damping...
+  link_data[loc_node_index . value] . damping = loc_value . value;              // Setting link internal damping...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -170,16 +178,14 @@ void link::set_damping (
 /// # Link neighbour index get function
 /// ### Description:
 /// Gets the neighbour indexes from link structure.
-float4 link::get_neighbour_index (
-                                  GLsizeiptr loc_index,                         // Data index.
-                                 )
+int1 link::get_neighbour_index (
+                                int1 loc_node_index,                            // Data index.
+                                int1 loc_neighbour_index                        // Neighbour index.
+                               )
 {
-  float4 data;
+  int1 data;
 
-  data . x = link_data . up_index[loc_index];                                   // Getting "up" index...
-  data . y = link_data . down_index[loc_index];                                 // Getting "down" index...
-  data . z = link_data . left_index[loc_index];                                 // Getting "left" index...
-  data . w = link_data . right_index[loc_index];                                // Getting "right" index...
+  data . value = link_data[loc_node_index . value] . index;                     // Getting neighbour index...
 
   return data;
 };
@@ -188,7 +194,8 @@ float4 link::get_neighbour_index (
 /// ### Description:
 /// Gets the stiffness from link structure.
 float1 link::get_stiffness (
-                            GLsizeiptr loc_index,                               // Data index.
+                            int1 loc_node_index,                                // Data index.
+                            int1 loc_neighbour_index                            // Neighbour index.
                            )
 {
   float1 data;
@@ -202,7 +209,8 @@ float1 link::get_stiffness (
 /// ### Description:
 /// Gets the damping from link structure.
 float1 link::get_damping (
-                          GLsizeiptr loc_index,                                 // Data index.
+                          int1 loc_index,                                       // Data index.
+                          int1 loc_neighbour_index                              // Neighbour index.
                          )
 {
   float1 data;

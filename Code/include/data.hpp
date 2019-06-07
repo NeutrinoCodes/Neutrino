@@ -110,11 +110,11 @@ typedef struct
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
 typedef struct
 {
-  // Neighbour indexe:
-  int1 index;                                                                   // Neighbour index.
+  // Neighbour indexes:
+  int1 index[NUM_NEIGHBOURS];                                                   // Neighbour index.
 
-  // Neighbour color:
-  color4 color;                                                                 // Neighbour color.
+  // Neighbour colors:
+  color4 color[NUM_NEIGHBOURS];                                                 // Neighbour color.
 
   // Link properties:
   float1 stiffness;                                                             // Link stiffness.
