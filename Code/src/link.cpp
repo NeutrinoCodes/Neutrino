@@ -23,6 +23,7 @@ void link::init (
 
   int1   node_index;                                                            // Node index.
   int1   neighbour_index;                                                       // Neighbour index.
+  int1   neighbour_id;                                                          // Neighbour id.
 
   baseline          = loc_baseline;                                             // Getting Neutrino baseline...
 
@@ -41,23 +42,26 @@ void link::init (
       (node_index . value)++
      )
   {
-    init_float1 (link_data[node_index . value] . stiffness);                    // Initializing link stiffness...
-    init_float1 (link_data[node_index . value] . damping);                      // Initializing link damping...
-
-    // Initializing neighbour indexes:
     for(
-        neighbour_index . value = 0;
-        neighbour_index . value < NUM_NEIGHBOURS;
-        (neighbour_index . value)++
+        neighbour_id . value = 0;
+        neighbour_id . value < NUM_NEIGHBOURS;
+        (neighbour_id . value)++
        )
     {
       init_int1 (
-                 link_data[node_index . value] . index[neighbour_index . value]
+                 link_data[node_index . value] . index[neighbour_id . value]
                 );                                                              // Initializing neighbour index...
       init_color4 (
-                   link_data[node_index . value] . color[neighbour_index .
-                                                         value]
+                   link_data[node_index . value] . color[neighbour_id . value]
                   );                                                            // Initializing neighbour color...
+      init_float1 (
+                   link_data[node_index . value] . stiffness[neighbour_id .
+                                                             value]
+                  );                                                            // Initializing link stiffness...
+      init_float1 (
+                   link_data[node_index . value] . damping[neighbour_id .
+                                                           value]
+                  );                                                            // Initializing link damping...
     }
   }
 
@@ -94,7 +98,7 @@ void link::init (
 
     // Enabling attribute in vertex shader:
     glEnableVertexAttribArray (
-                               NODE;                                            // VAO index.
+                               LINK;                                            // VAO index.
                               );
 
     // Binding VBO:
@@ -144,10 +148,12 @@ void link::init (
 /// Sets the neighbour indexes in link structure.
 void link::set_neighbour_index (
                                 int1 loc_node_index,                            // Node index.
-                                int1 loc_neighbour_index                        // Neighbour index.
+                                int1 loc_neighbour_index,                       // Neighbour index.
+                                int1 loc_neighbour_id                           // Neighbour id.
                                )
 {
-  link_data[loc_node_index . value] . index = loc_neighbour_index . value;      // Setting neighbour index...
+  link_data[loc_node_index . value] . index[loc_neighbour_id . value] =
+    loc_neighbour_index . value;                                                // Setting neighbour index...
 };
 
 /// # Link stiffness set function
@@ -158,7 +164,8 @@ void link::set_stiffness (
                           float1 loc_value                                      // Data value.
                          )
 {
-  link_data[loc_node_index . value] . stiffness = loc_value . value;            // Setting link stiffness...
+  link_data[loc_node_index . value] . stiffness[loc_neighbour_id . value] =
+    loc_value . value;                                                          // Setting link stiffness...
 };
 
 /// # Link damping set function
@@ -169,7 +176,8 @@ void link::set_damping (
                         float1 loc_value                                        // Data value.
                        )
 {
-  link_data[loc_node_index . value] . damping = loc_value . value;              // Setting link internal damping...
+  link_data[loc_node_index . value] . damping[loc_neighbour_id . value] =
+    loc_value . value;                                                          // Setting link internal damping...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -180,12 +188,13 @@ void link::set_damping (
 /// Gets the neighbour indexes from link structure.
 int1 link::get_neighbour_index (
                                 int1 loc_node_index,                            // Data index.
-                                int1 loc_neighbour_index                        // Neighbour index.
+                                int1 loc_neighbour_id                           // Neighbour id.
                                )
 {
   int1 data;
 
-  data . value = link_data[loc_node_index . value] . index;                     // Getting neighbour index...
+  data . value =
+    link_data[loc_node_index . value] . index[loc_neighbour_id . value];        // Getting neighbour index...
 
   return data;
 };
@@ -195,12 +204,13 @@ int1 link::get_neighbour_index (
 /// Gets the stiffness from link structure.
 float1 link::get_stiffness (
                             int1 loc_node_index,                                // Data index.
-                            int1 loc_neighbour_index                            // Neighbour index.
+                            int1 loc_neighbour_id                               // Neighbour id.
                            )
 {
   float1 data;
 
-  data . value = link_data . stiffness[loc_index];                              // Getting link stiffness...
+  data . value =
+    link_data[loc_node_index . value] . stiffness[loc_neighbour_id . value];    // Getting link stiffness...
 
   return data;
 };
@@ -210,12 +220,13 @@ float1 link::get_stiffness (
 /// Gets the damping from link structure.
 float1 link::get_damping (
                           int1 loc_index,                                       // Data index.
-                          int1 loc_neighbour_index                              // Neighbour index.
+                          int1 loc_neighbour_id                                 // Neighbour id.
                          )
 {
   float1 data;
 
-  data . value = link_data . damping[loc_index];                                // Getting link internal damping...
+  data . value =
+    link_data[loc_node_index . value] . damping[loc_neighbour_id . value];      // Getting link internal damping...
 
   return data;
 };

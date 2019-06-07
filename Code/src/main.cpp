@@ -4,41 +4,44 @@
 #define USE_GRAPHICS                                                            // Define it in order to use OpenGL-OpenCL interoperability graphics.
 
 // WINDOW:
-#define SIZE_WINDOW_X 800                                                       // Window x-size [px].
-#define SIZE_WINDOW_Y 600                                                       // Window y-size [px].
-#define WINDOW_NAME   "neutrino 2.0"                                            // Window name.
+#define SIZE_WINDOW_X  800                                                      // Window x-size [px].
+#define SIZE_WINDOW_Y  600                                                      // Window y-size [px].
+#define WINDOW_NAME    "neutrino 2.0"                                           // Window name.
 
 // OPENCL QUEUES:
-#define QUEUE_NUM     1                                                         // Number of OpenCL queues [#].
+#define QUEUE_NUM      1                                                        // Number of OpenCL queues [#].
 
 // OPENCL KERNELS:
-#define KERNEL_NUM    1                                                         // Number of OpenCL kernels [#].
-#define KERNEL_DIM    1                                                         // Dimension of OpenCL kernels [#].
+#define KERNEL_NUM     1                                                        // Number of OpenCL kernels [#].
+#define KERNEL_DIM     1                                                        // Dimension of OpenCL kernels [#].
 
 // MESH:
-#define XMIN          -1.0                                                      // XMIN spatial boundary [m].
-#define XMAX          1.0                                                       // XMAX spatial boundary [m].
-#define YMIN          -1.0                                                      // YMIN spatial boundary [m].
-#define YMAX          1.0                                                       // YMAX spatial boundary [m].
-#define NODES_X       100                                                       // Number of nodes in "X" direction [#].
-#define NODES_Y       100                                                       // Number of nodes in "Y" direction [#].
-#define NODES         NODES_X* NODES_Y                                          // Total number of nodes [#].
-#define DX            (float)((XMAX - XMIN)/(NODES_X - 1))                      // DX mesh spatial size [m].
-#define DY            (float)((YMAX - YMIN)/(NODES_Y - 1))                      // DY mesh spatial size [m].
+#define XMIN           -1.0                                                     // XMIN spatial boundary [m].
+#define XMAX           1.0                                                      // XMAX spatial boundary [m].
+#define YMIN           -1.0                                                     // YMIN spatial boundary [m].
+#define YMAX           1.0                                                      // YMAX spatial boundary [m].
+#define NODES_X        100                                                      // Number of nodes in "X" direction [#].
+#define NODES_Y        100                                                      // Number of nodes in "Y" direction [#].
+#define NODES          NODES_X* NODES_Y                                         // Total number of nodes [#].
+#define DX             (float)((XMAX - XMIN)/(NODES_X - 1))                     // DX mesh spatial size [m].
+#define DY             (float)((YMAX - YMIN)/(NODES_Y - 1))                     // DY mesh spatial size [m].
 
-// COMPUTATIONAL MOLECULE:
-#define PARTICLE_NUM  5                                                         // Total number of particles in computational molecule [#].
-#define PC            0                                                         // Central particle designator [#].
-#define PR            1                                                         // Right particle designator [#].
-#define PU            2                                                         // Up particle designator [#].
-#define PL            3                                                         // Left particle designator [#].
-#define PD            4                                                         // Down particle designator [#].
+// CELL:
+#define NUM_NEIGHBOURS 4                                                        // Number of neighbour nodes [#].
+#define PARTICLE_NUM   5                                                        // Total number of particles in computational molecule [#].
+#define PC             0                                                        // Central particle designator [#].
+#define PR             1                                                        // Right particle designator [#].
+#define PU             2                                                        // Up particle designator [#].
+#define PL             3                                                        // Left particle designator [#].
+#define PD             4                                                        // Down particle designator [#].
 
 #include "neutrino.hpp"
 #include "opengl.hpp"
 #include "opencl.hpp"
 #include "queue.hpp"
 #include "kernel.hpp"
+#include "node.hpp"
+#include "link.hpp"
 
 int main ()
 {
@@ -47,7 +50,7 @@ int main ()
 
   neutrino*     baseline   = new neutrino ();                                   // The Neutrino object.
 
-  #if USE_OPENGL
+  #if USE_GRAPHICS
     window*     gui        = new window ();                                     // The gui window object.
     text4*      message    = new text4 ();                                      // Text message.
     memory_orb* controller = new memory_orb ();

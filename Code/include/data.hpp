@@ -8,7 +8,6 @@
 #include "queue.hpp"
 
 #define NUM_VECTOR_COMPONENTS 4                                                 // # of components in data structure.
-#define NUM_NEIGHBOURS        4                                                 // # of neighbour nodes.
 
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// INT1 STRUCTURE: ////////////////////////////////
@@ -117,8 +116,8 @@ typedef struct
   color4 color[NUM_NEIGHBOURS];                                                 // Neighbour color.
 
   // Link properties:
-  float1 stiffness;                                                             // Link stiffness.
-  float1 damping;                                                               // Link internal damping.
+  float1 stiffness[NUM_NEIGHBOURS];                                             // Link stiffness.
+  float1 damping[NUM_NEIGHBOURS];                                               // Link internal damping.
 } link_structure;
 #pragma pack(pop)
 //////////////////////////////////////////////////////////////////////////////////
