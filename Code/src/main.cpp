@@ -27,13 +27,12 @@
 #define DY             (float)((YMAX - YMIN)/(NODES_Y - 1))                     // DY mesh spatial size [m].
 
 // CELL:
-#define NUM_NEIGHBOURS 4                                                        // Number of neighbour nodes [#].
-#define PARTICLE_NUM   5                                                        // Total number of particles in computational molecule [#].
-#define PC             0                                                        // Central particle designator [#].
-#define PR             1                                                        // Right particle designator [#].
-#define PU             2                                                        // Up particle designator [#].
-#define PL             3                                                        // Left particle designator [#].
-#define PD             4                                                        // Down particle designator [#].
+#define NEIGHBOURS_NUM 4                                                        // Number of neighbour nodes [#].
+#define NODE           0                                                        // Node designator [#].
+#define UP             1                                                        // Up neighbour designator [#].
+#define DOWN           2                                                        // Down neighbour designator [#].
+#define LEFT           3                                                        // Left neighbour designator [#].
+#define RIGHT          4                                                        // Right neighbour designator [#].
 
 #include "neutrino.hpp"
 #include "opengl.hpp"
@@ -45,32 +44,37 @@
 
 int main ()
 {
-  size_t        i;
-  size_t        j;
+  size_t    i;
+  size_t    j;
 
-  neutrino*     baseline   = new neutrino ();                                   // The Neutrino object.
+  neutrino* baseline  = new neutrino ();                                        // The Neutrino object.
 
   #if USE_GRAPHICS
-    window*     gui        = new window ();                                     // The gui window object.
-    text4*      message    = new text4 ();                                      // Text message.
-    memory_orb* controller = new memory_orb ();
+    window* gui       = new window ();                                          // The gui window object.
+    //text4*      message    = new text4 ();                                      // Text message.
+    //memory_orb* controller = new memory_orb ();
   #endif
 
-  opencl*       cl         = new opencl ();                                     // The OpenCL context object.
-  queue**       Q          = new queue*[QUEUE_NUM];                             // OpenCL queue.
-  size_t**      K_size     = new size_t*[KERNEL_NUM];                           // OpenCL kernel dimensions array...
-  kernel**      K          = new kernel*[KERNEL_NUM];                           // OpenCL kernel array...
+  opencl*   cl        = new opencl ();                                          // The OpenCL context object.
+  queue**   Q         = new queue*[QUEUE_NUM];                                  // OpenCL queue.
+  size_t**  K_size    = new size_t*[KERNEL_NUM];                                // OpenCL kernel dimensions array...
+  kernel**  K         = new kernel*[KERNEL_NUM];                                // OpenCL kernel array...
 
-  color4*       color      = new color4 ();                                     // Color array.
-  point4**      point      = new point4*[PARTICLE_NUM];                         // Point array.
-  int1**        index      = new int1*[PARTICLE_NUM];                           // Index array.
-  int           vao_index;                                                      // VAO index.
+  node*     cell_node = new node ();                                            // Node array.
+  link*     cell_link = new link ();                                            // Link array.
+  int1      cell_number;                                                        // Number of cells.
+  int1      cell_node_index;                                                    // Cell node index.
+  int1      cell_neighbour_index[NEIGHBOURS_NUM];                               // Cell neighbour index.
+  float4    cell_node_position;                                                 // Cell node position.
+  color4    cell_node_color;                                                    // Cell node color.
+
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////// INITIALIZING NEUTRINO, OPENGL and OPENCL //////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  baseline  -> init (QUEUE_NUM, KERNEL_NUM, USE_OPENGL);                        // Initializing neutrino...
-  #if USE_OPENGL
+  baseline  -> init (QUEUE_NUM, KERNEL_NUM);                                    // Initializing neutrino...
+
+  #ifdef USE_GRAPHICS
     gui       -> init (baseline, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);    // Initializing window...
     cl        -> init (baseline, gui -> glfw_window, GPU);                      // Initializing OpenCL context with CL-GL interop...
   #else
@@ -108,23 +112,12 @@ int main ()
   }
 
   ////////////////////////////////////////////////////////////////////////////////
-  /////////////////////// INITIALIZING OPENCL DATA OBJECTS ///////////////////////
+  //////////////////////////////// INITIALIZING CELLS ////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  vao_index = 0;                                                                // Setting VAO index...
-  color -> init (baseline, NODES, vao_index);                                   // Initializing PC colors...
+  cell_number . value = NODES;
 
-  for(i = 0; i < PARTICLE_NUM; i++)                                             // For each particle in computational molecule:
-  {
-    vao_index = i + 1;                                                          // Setting VAO index...
-
-    // Position arrays:
-    point[i]  = new point4 ();                                                  // Instatiating point array...
-    point[i] -> init (baseline, NODES, vao_index);                              // Initializing point array...
-
-    // Mesh neighbourhood connectivity:
-    index[i]  = new int1 ();                                                    // Instantiating index array...
-    index[i] -> init (baseline, NODES);                                         // Initializing index array...
-  }
+  cell_node -> init (baseline, cell_number);
+  cell_link -> init (baseline, cell_number);
 
   #if USE_OPENGL
     message   -> init (baseline, "neutrino 2.0!", 0.0, 1.0, 0.0, 1.0);          // Initializing message...
@@ -132,26 +125,44 @@ int main ()
   #endif
 
   ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////// SETTING OPENCL DATA OBJECTS /////////////////////////
+  ////////////////////////////////// SETTING CELLS ///////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   for(j = 0; j < NODES_Y; j++)
   {
     for(i = 0; i < NODES_X; i++)
     {
-      color -> set_r (j*NODES_X + i, 0.01*(rand () % 100));                     // Setting RED color channel...
-      color -> set_g (j*NODES_X + i, 0.01*(rand () % 100));                     // Setting GREEN color channel...
-      color -> set_b (j*NODES_X + i, 0.01*(rand () % 100));                     // Setting BLUE color channel...
-      color -> set_a (j*NODES_X + i, 1.0);                                      // Setting ALPHA color channel...
+      cell_node_index . value = j*NODES_X + i;
+
+      cell_node_position . x  = i*DX + XMIN;
+      cell_node_position . y  = j*DY + YMIN;
+      cell_node_position . z  = 0.0;
+      cell_node_position . w  = 1.0;
+
+      cell_node_color . r     = 0.01*(rand () % 100);
+      cell_node_color . g     = 0.01*(rand () % 100);
+      cell_node_color . b     = 0.01*(rand () % 100);
+      cell_node_color . a     = 1.0;
+
+      cell_node -> set_position (cell_node_index, cell_position);
+      cell_node -> set_color (cell_node_index, cell_color);
+
+
+
+
+
 
       index[PC] -> set_x (j*NODES_X + i, j*NODES_X + i);                        // Setting index of PC (trivial case, not used)...
 
-      point[PC] -> set_x (j*NODES_X + i, i*DX + XMIN);
-      point[PC] -> set_y (j*NODES_X + i, j*DY + YMIN);
-      point[PC] -> set_z (j*NODES_X + i, 0.0);
-      point[PC] -> set_w (j*NODES_X + i, 1.0);
+
 
       if((i != 0) && (i != (NODES_X - 1)) && (j != 0) && (j != (NODES_Y - 1)))  // When on bulk:
       {
+        cell_neighbour_index[UP] . value    = NODES_X*(j + 1) + (i + 0);
+        cell_neighbour_index[DOWN] . value  = NODES_X*(j - 1) + (i + 0);
+        cell_neighbour_index[LEFT] . value  = NODES_X*(j + 0) + (i + 0);
+        cell_neighbour_index[RIGHT] . value = NODES_X*(j + 0) + (i + 1);
+
+
         index[PR] -> set_x (j*NODES_X + i, NODES_X*j + (i + 1));
         index[PU] -> set_x (j*NODES_X + i, NODES_X*(j + 1) + i);
         index[PL] -> set_x (j*NODES_X + i, NODES_X*j + (i - 1));
