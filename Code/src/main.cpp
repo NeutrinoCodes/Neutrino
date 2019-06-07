@@ -162,6 +162,7 @@ int main ()
         cell_neighbour_index[LEFT] . value  = NODES_X*(j + 0) + (i + 0);
         cell_neighbour_index[RIGHT] . value = NODES_X*(j + 0) + (i + 1);
 
+        cell_link -> set_neighbour_index (cell_node_index, cell);
 
         index[PR] -> set_x (j*NODES_X + i, NODES_X*j + (i + 1));
         index[PU] -> set_x (j*NODES_X + i, NODES_X*(j + 1) + i);
