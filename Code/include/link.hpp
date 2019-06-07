@@ -52,7 +52,8 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   void   set_neighbour_index (
                               int1 loc_node_index,                              // Node index.
-                              int1 loc_neighbour_index                          // Neighbour index.
+                              int1 loc_neighbour_index,                         // Neighbour index.
+                              int1 loc_neighbour_id                             // Neighbour id.
                              );
   void   set_stiffness (
                         int1   loc_node_index,                                  // Node index.
@@ -67,15 +68,15 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   int1   get_neighbour_index (
                               int1 loc_node_index,                              // Node index.
-                              int1 loc_neighbour_index                          // Neighbour index.
+                              int1 loc_neighbour_id                             // Neighbour id.
                              );
   float1 get_stiffness (
                         int1 loc_node_index,                                    // Node index.
-                        int1 loc_neighbour_index                                // Neighbour index.
+                        int1 loc_neighbour_id                                   // Neighbour id.
                        );
   float1 get_damping (
                       int1 loc_node_index,                                      // Node index.
-                      int1 loc_neighbour_index                                  // Neighbour index.
+                      int1 loc_neighbour_id                                     // Neighbour id.
                      );
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// "CONTROL" FUNCTIONS: ////////////////////////////
