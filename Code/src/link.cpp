@@ -15,50 +15,39 @@ link::link()
 /// ### Description:
 /// Initializes link object.
 void link::init (
-                 neutrino*  loc_baseline,                                       // Neutrino baseline.
-                 GLsizeiptr loc_link_size                                       // Data array size.
+                 neutrino* loc_baseline,                                        // Neutrino baseline.
+                 int1      loc_link_size                                        // Data array size.
                 )
 {
-  cl_int       loc_error;                                                       // Error code.
+  cl_int loc_error;                                                             // Error code.
 
-  #ifdef USE_GRAPHICS
-    GLsizeiptr i;                                                               // Index.
-  #else
-    size_t     i;                                                               // Index.
-  #endif
+  int1   i;                                                                     // Index.
 
-  baseline       = loc_baseline;                                                // Getting Neutrino baseline...
+  baseline          = loc_baseline;                                             // Getting Neutrino baseline...
 
   baseline -> action ("initializing \"link\" object...");                       // Printing message...
 
-  link_size      = loc_link_size;                                               // Array size.
+  link_size . value = loc_link_size . value;                                    // Array size.
 
-  if(link_size > (2 << (sizeof(GLsizeiptr)/MAX_COMPONENTS)))                    // Checking data size...
-  {
-    baseline -> error ("non addressable array: maximum size overflow!");        // Printing message...
-  }
+  link_buffer       = NULL;                                                     // OpenCL data buffer.
+  opencl_context    = baseline -> context_id;                                   // Getting OpenCL context...
+  link_data         = new link_structure[link_size . value];                    // Link data array.
 
-  link_buffer    = NULL;                                                        // OpenCL data buffer.
-  opencl_context = baseline -> context_id;                                      // Getting OpenCL context...
-  link_data      = new link_structure[link_size];                               // Link data array.
-
-  for(i = 0; i < link_size; i++)                                                // Filling data arrays with default values...
+  for(i . value = 0; i . value < link_size . value; (i . value)++)              // Filling data arrays with default values...
   {
     // Initializing neighbour indexes:
+
     link_data . up_index    = i;                                                // Initializing "up" neighbour index...
     link_data . down_index  = i;                                                // Initializing "down" neighbour index...
     link_data . left_index  = i;                                                // Initializing "left" neighbour index...
     link_data . right_index = i;                                                // Initializing "right" neighbour index...
 
-    // Initializing neighbour colors:
     init_color4 (link_data . up_color);                                         // Initializing "up" neighbour color...
     init_color4 (link_data . down_color);                                       // Initializing "down" neighbour color...
     init_color4 (link_data . left_color);                                       // Initializing "left" neighbour color...
     init_color4 (link_data . right_color);                                      // Initializing "right" neighbour color...
-
-    // Initializing link properties:
-    link_data . stiffness   = 0.0;                                              // Initializing link stiffness...
-    link_data . damping     = 0.0;                                              // Initializing link damping...
+    init_float1 (link_data . stiffness);                                        // Initializing link stiffness...
+    init_float1 (link_data . damping);                                          // Initializing link damping...
   }
 
   #ifdef USE_GRAPHICS
@@ -87,7 +76,7 @@ void link::init (
     // Creating and initializing a buffer object's data store:
     glBufferData (
                   GL_ARRAY_BUFFER,                                              // VBO target.
-                  (GLsizeiptr)(sizeof(link_data)*(link_size)),                  // VBO size.
+                  sizeof(link_data)*(link_size),                                // VBO size.
                   link_data,                                                    // VBO data.
                   GL_DYNAMIC_DRAW                                               // VBO usage.
                  );
