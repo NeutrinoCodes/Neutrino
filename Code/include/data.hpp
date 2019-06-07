@@ -7,7 +7,8 @@
 #include "kernel.hpp"
 #include "queue.hpp"
 
-#define MAX_COMPONENTS 4                                                        // Maximum number of components in data structure.
+#define NUM_VECTOR_COMPONENTS 4                                                 // # of components in data structure.
+#define NUM_NEIGHBOURS        4                                                 // # of neighbour nodes.
 
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// INT1 STRUCTURE: ////////////////////////////////
@@ -34,7 +35,7 @@ typedef struct
   #else
     cl_float value;                                                             // Value.
   #endif
-} float4;
+} float1;
 #pragma pack(pop)
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +81,7 @@ typedef struct
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// NODE STRUCTURE: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-#define NODE 1
+#define NODE 1                                                                  // Kernel argument index.
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
 typedef struct
 {
@@ -98,38 +99,37 @@ typedef struct
   color4 color;                                                                 // Node color.
 
   // Mass:
-  GLfloat mass;                                                                 // Node mass.
+  float1 mass;                                                                  // Node mass.
 } node_structure;
 #pragma pack(pop)
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// LINK STRUCTURE: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-#define LINK 2
+#define LINK 2                                                                  // Kernel argument index.
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
 typedef struct
 {
-  // Neighbour indexes:
-  cl_long up_index;                                                             // "UP" neighbour index.
-  cl_long down_index;                                                           // "DOWN" neighbour index.
-  cl_long left_index;                                                           // "LEFT" neighbour index.
-  cl_long right_index;                                                          // "RIGHT" neighbour index.
+  // Neighbour indexe:
+  int1 index;                                                                   // Neighbour index.
 
-  // Neighbour colors:
-  color4 up_color;                                                              // "UP" neighbour color.
-  color4 down_color;                                                            // "DOWN" neighbour color.
-  color4 left_color;                                                            // "LEFT" neighbour color.
-  color4 right_color;                                                           // "RIGHT" neighbour color.
+  // Neighbour color:
+  color4 color;                                                                 // Neighbour color.
 
   // Link properties:
-  GLfloat stiffness;                                                            // Link stiffness.
-  GLfloat damping;                                                              // Link internal damping.
+  float1 stiffness;                                                             // Link stiffness.
+  float1 damping;                                                               // Link internal damping.
 } link_structure;
-
 #pragma pack(pop)
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// FUNCTIONS: //////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
+void        init_int1 (
+                       int1 loc_data
+                      );
+void        init_float1 (
+                         float1 data
+                        );
 void        init_float4 (
                          float4 data
                         );

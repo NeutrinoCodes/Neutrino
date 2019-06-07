@@ -5,7 +5,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 node::node()
 {
-
+// Doing nothing because we need a deferred init after OpenGL and OpenCL initialization.
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -15,29 +15,24 @@ node::node()
 /// ### Description:
 /// Initializes node object.
 void node::init (
-                 neutrino*  loc_baseline,                                       // Neutrino baseline.
-                 GLsizeiptr loc_node_size                                       // Data array size.
+                 neutrino* loc_baseline,                                        // Neutrino baseline.
+                 int1      loc_node_size                                        // Data array size.
                 )
 {
   cl_int loc_error;                                                             // Error code.
 
   int1   i;                                                                     // Data index.
-  baseline       = loc_baseline;                                                // Getting Neutrino baseline...
+  baseline          = loc_baseline;                                             // Getting Neutrino baseline...
 
   baseline -> action ("initializing \"node\" object...");                       // Printing message...
 
-  node_size      = loc_node_size;                                               // Array size.
+  node_size . value = loc_node_size . value;                                    // Array size.
 
-  if(node_size > (2 << (sizeof(GLsizeiptr)/MAX_COMPONENTS)))                    // Checking data size...
-  {
-    baseline -> error ("non addressable array: maximum size overflow!");        // Printing message...
-  }
+  node_buffer       = NULL;                                                     // OpenCL data buffer.
+  opencl_context    = baseline -> context_id;                                   // Getting OpenCL context...
+  node_data         = new node_structure[node_size . value];                    // Node data array.
 
-  node_buffer    = NULL;                                                        // OpenCL data buffer.
-  opencl_context = baseline -> context_id;                                      // Getting OpenCL context...
-  node_data      = new node_structure[node_size];                               // Node data array.
-
-  for(i . value = 0; i . value < node_size; (i . value)++)                      // Filling data arrays with default values...
+  for(i . value = 0; i . value < node_size . value; (i . value)++)              // Filling data arrays with default values...
   {
     init_float4 (node_data . position);                                         // Initializing "position"...
     init_float4 (node_data . velocity);                                         // Initializing "velocity"...
@@ -46,7 +41,7 @@ void node::init (
     init_float4 (node_data . velocity_buffer);                                  // Initializing "velocity_buffer"...
     init_float4 (node_data . acceleration_buffer);                              // Initializing "acceleration_buffer"...
     init_color4 (node_data . color);                                            // Initializing node color...
-    node_data . mass = 0.0;                                                     // Initializing node mass...
+    init_int1 (node_data . mass);                                               // Initializing node mass...
   }
 
   #ifdef USE_GRAPHICS
@@ -75,7 +70,7 @@ void node::init (
     // Creating and initializing a buffer object's data store:
     glBufferData (
                   GL_ARRAY_BUFFER,                                              // VBO target.
-                  (GLsizeiptr)(sizeof(node_data)*(node_size)),                  // VBO size.
+                  sizeof(node_data)*node_size . value,                          // VBO size.
                   node_data,                                                    // VBO data.
                   GL_DYNAMIC_DRAW                                               // VBO usage.
                  );
@@ -113,7 +108,7 @@ void node::init (
     node_buffer = clCreateBuffer (
                                   opencl_context,                               // OpenCL context.
                                   CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,     // Memory flags.
-                                  sizeof(node_data)*node_size,                  // Data buffer size.
+                                  sizeof(node_data)*node_size . value,          // Data buffer size.
                                   node_data,                                    // Data buffer.
                                   &loc_error                                    // Error code.
                                  );
@@ -131,70 +126,67 @@ void node::init (
 /// ### Description:
 /// Sets the position in node structure.
 void node::set_position (
-                         GLsizeiptr loc_index,                                  // Data index.
-                         float4     loc_value                                   // Data value.
+                         int1   loc_index,                                      // Data index.
+                         float4 loc_value                                       // Data value.
                         )
 {
-  node_data . position . x[loc_index] = loc_value . x;                          // Setting "x" position...
-  node_data . position . y[loc_index] = loc_value . y;                          // Setting "y" position...
-  node_data . position . z[loc_index] = loc_value . z;                          // Setting "z" position...
-  node_data . position . w[loc_index] = loc_value . w;                          // Setting "w" position...
+  node_data . position . x[loc_index . value] = loc_value . x;                  // Setting "x" position...
+  node_data . position . y[loc_index . value] = loc_value . y;                  // Setting "y" position...
+  node_data . position . z[loc_index . value] = loc_value . z;                  // Setting "z" position...
+  node_data . position . w[loc_index . value] = loc_value . w;                  // Setting "w" position...
 };
 
 /// # Node velocity set function
 /// ### Description:
 /// Sets the velocity in node structure.
 void node::set_velocity (
-                         GLsizeiptr loc_index,                                  // Data index.
-                         float4     loc_value                                   // Data value.
+                         int1   loc_index,                                      // Data index.
+                         float4 loc_value                                       // Data value.
                         )
 {
-  node_data . velocity . x[loc_index] = loc_value . x;                          // Setting "x" velocity...
-  node_data . velocity . y[loc_index] = loc_value . y;                          // Setting "y" velocity...
-  node_data . velocity . z[loc_index] = loc_value . z;                          // Setting "z" velocity...
-  node_data . velocity . w[loc_index] = loc_value . w;                          // Setting "w" velocity...
+  node_data . velocity . x[loc_index . value] = loc_value . x;                  // Setting "x" velocity...
+  node_data . velocity . y[loc_index . value] = loc_value . y;                  // Setting "y" velocity...
+  node_data . velocity . z[loc_index . value] = loc_value . z;                  // Setting "z" velocity...
+  node_data . velocity . w[loc_index . value] = loc_value . w;                  // Setting "w" velocity...
 };
 
 /// # Node acceleration set function
 /// ### Description:
 /// Sets the acceleration in node structure.
 void node::set_acceleration (
-                             GLsizeiptr loc_index,                              // Data index.
-                             float4     loc_value                               // Data value.
+                             int1   loc_index,                                  // Data index.
+                             float4 loc_value                                   // Data value.
                             )
 {
-  node_data . acceleration . x[loc_index] = loc_value . x;                      // Setting "x" acceleration...
-  node_data . acceleration . y[loc_index] = loc_value . y;                      // Setting "y" acceleration...
-  node_data . acceleration . z[loc_index] = loc_value . z;                      // Setting "z" acceleration...
-  node_data . acceleration . w[loc_index] = loc_value . w;                      // Setting "w" acceleration...
+  node_data . acceleration . x[loc_index . value] = loc_value . x;              // Setting "x" acceleration...
+  node_data . acceleration . y[loc_index . value] = loc_value . y;              // Setting "y" acceleration...
+  node_data . acceleration . z[loc_index . value] = loc_value . z;              // Setting "z" acceleration...
+  node_data . acceleration . w[loc_index . value] = loc_value . w;              // Setting "w" acceleration...
 };
 
 /// # Node color set function
 /// ### Description:
 /// Sets the color in node structure.
 void node::set_color (
-                      GLsizeiptr loc_index,                                     // Data index.
-                      color4     loc_value                                      // Data value.
+                      int1   loc_index,                                         // Data index.
+                      color4 loc_value                                          // Data value.
                      )
 {
-  node_data . color . r[loc_index] = loc_value . r;                             // Setting "r" color...
-  node_data . color . g[loc_index] = loc_value . g;                             // Setting "g" color...
-  node_data . color . b[loc_index] = loc_value . b;                             // Setting "b" color...
-  node_data . color . a[loc_index] = loc_value . a;                             // Setting "a" color...
+  node_data . color . r[loc_index . value] = loc_value . r;                     // Setting "r" color...
+  node_data . color . g[loc_index . value] = loc_value . g;                     // Setting "g" color...
+  node_data . color . b[loc_index . value] = loc_value . b;                     // Setting "b" color...
+  node_data . color . a[loc_index . value] = loc_value . a;                     // Setting "a" color...
 };
 
 /// # Node mass set function
 /// ### Description:
 /// Sets the mass in node structure.
 void node::set_mass (
-                     GLsizeiptr loc_index,                                      // Data index.
-                     float1     loc_value                                       // Data value.
+                     int1   loc_index,                                          // Data index.
+                     float1 loc_value                                           // Data value.
                     )
 {
-  node_data . mass . x[loc_index] = loc_value;                                  // Setting "x" mass...
-  node_data . mass . y[loc_index] = loc_value;                                  // Setting "y" mass...
-  node_data . mass . z[loc_index] = loc_value;                                  // Setting "z" mass...
-  node_data . mass . w[loc_index] = 1.0;                                        // Setting "w" mass...
+  node_data . mass . value[loc_index . value] = loc_value . value;              // Setting mass...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -204,15 +196,15 @@ void node::set_mass (
 /// ### Description:
 /// Gets the position from node structure.
 float4 node::get_position (
-                           GLsizeiptr loc_index,                                // Data index.
+                           int1 loc_index,                                      // Data index.
                           )
 {
   float4 data;
 
-  data . x = node_data . position . x[loc_index];                               // Getting "x" position...
-  data . y = node_data . position . y[loc_index];                               // Getting "y" position...
-  data . z = node_data . position . z[loc_index];                               // Getting "z" position...
-  data . w = node_data . position . w[loc_index];                               // Getting "w" position...
+  data . x = node_data . position . x[loc_index . value];                       // Getting "x" position...
+  data . y = node_data . position . y[loc_index . value];                       // Getting "y" position...
+  data . z = node_data . position . z[loc_index . value];                       // Getting "z" position...
+  data . w = node_data . position . w[loc_index . value];                       // Getting "w" position...
 
   return data;
 };
@@ -221,15 +213,15 @@ float4 node::get_position (
 /// ### Description:
 /// Gets the velocity from node structure.
 float4 node::get_velocity (
-                           GLsizeiptr loc_index,                                // Data index.
+                           int1 loc_index,                                      // Data index.
                           )
 {
   float4 data;
 
-  data . x = node_data . velocity . x[loc_index];                               // Getting "x" velocity...
-  data . y = node_data . velocity . y[loc_index];                               // Getting "y" velocity...
-  data . z = node_data . velocity . z[loc_index];                               // Getting "z" velocity...
-  data . w = node_data . velocity . w[loc_index];                               // Getting "w" velocity...
+  data . x = node_data . velocity . x[loc_index . value];                       // Getting "x" velocity...
+  data . y = node_data . velocity . y[loc_index . value];                       // Getting "y" velocity...
+  data . z = node_data . velocity . z[loc_index . value];                       // Getting "z" velocity...
+  data . w = node_data . velocity . w[loc_index . value];                       // Getting "w" velocity...
 
   return data;
 };
@@ -238,15 +230,15 @@ float4 node::get_velocity (
 /// ### Description:
 /// Gets the acceleration from node structure.
 float4 node::get_acceleration (
-                               GLsizeiptr loc_index,                            // Data index.
+                               int1 loc_index,                                  // Data index.
                               )
 {
   float4 data;
 
-  data . x = node_data . acceleration . x[loc_index];                           // Getting "x" acceleration...
-  data . y = node_data . acceleration . y[loc_index];                           // Getting "y" acceleration...
-  data . z = node_data . acceleration . z[loc_index];                           // Getting "z" acceleration...
-  data . w = node_data . acceleration . w[loc_index];                           // Getting "w" acceleration...
+  data . x = node_data . acceleration . x[loc_index . value];                   // Getting "x" acceleration...
+  data . y = node_data . acceleration . y[loc_index . value];                   // Getting "y" acceleration...
+  data . z = node_data . acceleration . z[loc_index . value];                   // Getting "z" acceleration...
+  data . w = node_data . acceleration . w[loc_index . value];                   // Getting "w" acceleration...
 
   return data;
 };
@@ -255,15 +247,15 @@ float4 node::get_acceleration (
 /// ### Description:
 /// Gets the color from node structure.
 float4 node::get_color (
-                        GLsizeiptr loc_index,                                   // Data index.
+                        int1 loc_index,                                         // Data index.
                        )
 {
   color4 data;
 
-  data . r = node_data . color . r[loc_index];                                  // Getting "r" color...
-  data . g = node_data . color . g[loc_index];                                  // Getting "g" color...
-  data . b = node_data . color . b[loc_index];                                  // Getting "b" color...
-  data . a = node_data . color . a[loc_index];                                  // Getting "a" color...
+  data . r = node_data . color . r[loc_index . value];                          // Getting "r" color...
+  data . g = node_data . color . g[loc_index . value];                          // Getting "g" color...
+  data . b = node_data . color . b[loc_index . value];                          // Getting "b" color...
+  data . a = node_data . color . a[loc_index . value];                          // Getting "a" color...
 
   return data;
 };
@@ -272,13 +264,13 @@ float4 node::get_color (
 /// ### Description:
 /// Gets the mass from node structure.
 float4 node::get_mass (
-                       GLsizeiptr loc_index,                                    // Data index.
+                       int1 loc_index,                                          // Data index.
                       )
 {
   float1 data;
 
-  // NOTE: mass.x = mass.y = mass.z, mass.w = 1.0 always.
-  data . value = node_data . mass . x[loc_index];                               // Getting mass...
+  data . value = node_data . mass . value[loc_index . value];                   // Getting mass...
+
   return data;
 };
 
@@ -336,7 +328,7 @@ void node::push (
                                     node_buffer,                                // Data buffer.
                                     CL_TRUE,                                    // Blocking write flag.
                                     0,                                          // Data buffer offset.
-                                    (size_t)(4*sizeof(GLfloat)*node_size),      // Data buffer size.
+                                    sizeof(node_data)*node_size . value,        // Data buffer size.
                                     node_data,                                  // Data buffer.
                                     0,                                          // Number of events in the list.
                                     NULL,                                       // Event list.
@@ -382,7 +374,7 @@ void node::pull (
                                    node_buffer,                                 // Data buffer.
                                    CL_TRUE,                                     // Blocking write flag.
                                    0,                                           // Data buffer offset.
-                                   (size_t)(4*sizeof(GLfloat)*node_size),       // Data buffer size.
+                                   sizeof(node_data)*node_size . value,         // Data buffer size.
                                    node_data,                                   // Data buffer.
                                    0,                                           // Number of events in the list.
                                    NULL,                                        // Event list.

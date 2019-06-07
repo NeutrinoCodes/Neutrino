@@ -8,13 +8,13 @@
 #include "queue.hpp"
 #include "data.hpp"
 
-////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////// LINK CLASS /////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// LINK CLASS ///////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 class link
 {
 private:
-  neutrino*    baseline;                                                        // Neutrino baseline.
+  neutrino*  baseline;                                                          // Neutrino baseline.
   // OpenCL error get function:
   const char* get_error (
                          cl_int loc_error                                       // Error code.
@@ -24,82 +24,75 @@ private:
                            cl_int loc_error                                     // Error code.
                           );
 
-  cl_context   opencl_context;                                                  // OpenCL context.
+  cl_context opencl_context;                                                    // OpenCL context.
 
 public:
-  link*        link_data;                                                       // Link data structure.
-  cl_mem       link_buffer;                                                     // OpenCL link data memory buffer.
+  link*      link_data;                                                         // Link data structure.
+  cl_mem     link_buffer;                                                       // OpenCL link data memory buffer.
+  int1       link_size;                                                         // Data size.
 
-    #ifdef USE_GRAPHICS
-    GLuint     link_vao;                                                        // Node VAO.
-    GLuint     link_vbo;                                                        // Node VBO.
-    GLsizeiptr link_size;                                                       // Data size.
-    #else
-    size_t     link_size;                                                       // Data size.
-    #endif
+  #ifdef USE_GRAPHICS
+    GLuint   link_vao;                                                          // Node VAO.
+    GLuint   link_vbo;                                                          // Node VBO.
+  #endif
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// CONSTRUCTOR: ////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   link();
   ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////// INIT FUNCTION: ///////////////////////////////
+  //////////////////////////////// "INIT" FUNCTION: //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   void   init (
-               neutrino*  loc_baseline,                                         // Neutrino baseline.
-               GLsizeiptr loc_link_size,                                        // Data number.
+               neutrino* loc_baseline,                                          // Neutrino baseline.
+               int1      loc_link_size,                                         // Data number.
               );
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////// "SET" FUNCTIONS: //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   void   set_neighbour_index (
-                              GLsizeiptr loc_index,                             // Data index.
-                              GLsizeiptr loc_value[4]                           // Data value.
+                              int1 loc_index,                                   // Data index.
+                              int1 loc_value[NUM_NEIGHBOURS]                    // Data value.
                              );
   void   set_stiffness (
-                        GLsizeiptr loc_index,                                   // Data index.
-                        float1     loc_value                                    // Data value.
+                        int1   loc_index,                                       // Data index.
+                        float1 loc_value[NUM_NEIGHBOURS]                        // Data value.
                        );
   void   set_damping (
-                      GLsizeiptr loc_index,                                     // Data index.
-                      float1     loc_value                                      // Data value.
+                      int1   loc_index,                                         // Data index.
+                      float1 loc_value[NUM_NEIGHBOURS]                          // Data value.
                      );
-  //////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////// "GET" FUNCTIONS: ///////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////////
-  float4 get_neighbour_index (
-                              GLsizeiptr loc_index,                             // Data index.
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////// "GET" FUNCTIONS: /////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  int1   get_neighbour_index (
+                              int1 loc_index,                                   // Data index.
+                              int1 loc_neighbour                                // Neighbour index.
                              );
   float1 get_stiffness (
-                        GLsizeiptr loc_index,                                   // Data index.
+                        int1 loc_index,                                         // Data index.
                        );
   float1 get_damping (
-                      GLsizeiptr loc_index,                                     // Data index.
+                      int1 loc_index,                                           // Data index.
                      );
-  ////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////// CLIENT FUNCTIONS:  ///////////////////////////
-  ////////////////////////////////////////////////////////////////////////////
-  // OpenCL write buffer function:
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////// "CONTROL" FUNCTIONS: ////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   void   push (
-               queue*  loc_queue,                                               // OpenCL queue.
-               cl_uint loc_kernel_arg                                           // OpenCL kernel argument index.
+               queue* loc_queue,                                                // OpenCL queue.
               );
-  // OpenCL read buffer function:
   void   pull (
-               queue*  loc_queue,                                               // OpenCL queue.
-               cl_uint loc_kernel_arg                                           // OpenCL kernel argument index.
+               queue* loc_queue,                                                // OpenCL queue.
               );
-  // OpenCL acquire buffer function:
-  void   acquire_gl (
-                     queue*  loc_queue,                                         // Queue.
-                     cl_uint loc_kernel_arg                                     // Kernel argument index.
-                    );
-  // OpenCL release buffer function:
-  void   release_gl (
-                     queue*  loc_queue,                                         // Queue.
-                     cl_uint loc_kernel_arg                                     // Kernel argument index.
-                    );
-
+  void   acquire (
+                  queue* loc_queue,                                             // OpenCL queue.
+                 );
+  void   release (
+                  queue* loc_queue,                                             // OpenCL queue.
+                 );
+  ////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////// DESTRUCTOR: ////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   ~link();
 };
 

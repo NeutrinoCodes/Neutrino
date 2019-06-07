@@ -1,5 +1,19 @@
 #include "data.hpp"
 
+void init_int1 (
+                int1 loc_data
+               )
+{
+  loc_data . value = 0.0;
+}
+
+void init_float1 (
+                  float1 loc_data
+                 )
+{
+  loc_data . value = 0.0;
+}
+
 void init_float4 (
                   float4 loc_data
                  )
