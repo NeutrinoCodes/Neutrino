@@ -25,42 +25,40 @@ void link::init (
   int1   neighbour_index;                                                       // Neighbour index.
   int1   neighbour_id;                                                          // Neighbour id.
 
-  baseline          = loc_baseline;                                             // Getting Neutrino baseline...
+  baseline        = loc_baseline;                                               // Getting Neutrino baseline...
 
-  baseline -> action ("initializing \"link\" object...");                       // Printing message...
+  baseline->action ("initializing \"link\" object...");                         // Printing message...
 
-  link_size . value = loc_link_size . value;                                    // Array size.
+  link_size.value = loc_link_size.value;                                        // Array size.
 
-  link_buffer       = NULL;                                                     // OpenCL data buffer.
-  opencl_context    = baseline -> context_id;                                   // Getting OpenCL context...
-  link_data         = new link_structure[link_size . value];                    // Link data array.
+  link_buffer     = NULL;                                                       // OpenCL data buffer.
+  opencl_context  = baseline->context_id;                                       // Getting OpenCL context...
+  link_data       = new link_structure[link_size.value];                        // Link data array.
 
   // Filling data arrays with default values:
   for(
-      node_index . value = 0;
-      node_index . value < link_size . value;
-      (node_index . value)++
+      node_index.value = 0;
+      node_index.value < link_size.value;
+      (node_index.value)++
      )
   {
     for(
-        neighbour_id . value = 0;
-        neighbour_id . value < NEIGHBOURS_NUM;
-        (neighbour_id . value)++
+        neighbour_id.value = 0;
+        neighbour_id.value < NEIGHBOURS_NUM;
+        (neighbour_id.value)++
        )
     {
       init_int1 (
-                 link_data[node_index . value] . index[neighbour_id . value]
+                 link_data[node_index.value].index[neighbour_id.value]
                 );                                                              // Initializing neighbour index...
       init_color4 (
-                   link_data[node_index . value] . color[neighbour_id . value]
+                   link_data[node_index.value].color[neighbour_id.value]
                   );                                                            // Initializing neighbour color...
       init_float1 (
-                   link_data[node_index . value] . stiffness[neighbour_id .
-                                                             value]
+                   link_data[node_index.value].stiffness[neighbour_id.value]
                   );                                                            // Initializing link stiffness...
       init_float1 (
-                   link_data[node_index . value] . damping[neighbour_id .
-                                                           value]
+                   link_data[node_index.value].damping[neighbour_id.value]
                   );                                                            // Initializing link damping...
     }
   }
@@ -91,7 +89,7 @@ void link::init (
     // Creating and initializing a buffer object's data store:
     glBufferData (
                   GL_ARRAY_BUFFER,                                              // VBO target.
-                  sizeof(link_data)*(link_size . value),                        // VBO size.
+                  sizeof(link_data)*(link_size.value),                          // VBO size.
                   link_data,                                                    // VBO data.
                   GL_DYNAMIC_DRAW                                               // VBO usage.
                  );
@@ -129,7 +127,7 @@ void link::init (
     link_buffer = clCreateBuffer (
                                   opencl_context,                               // OpenCL context.
                                   CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,     // Memory flags.
-                                  sizeof(link_data)*link_size . value,          // Data buffer size.
+                                  sizeof(link_data)*link_size.value,            // Data buffer size.
                                   link_data,                                    // Data buffer.
                                   &loc_error                                    // Error code.
                                  );
@@ -137,7 +135,7 @@ void link::init (
 
   check_error (loc_error);                                                      // Checking returned error code...
 
-  baseline -> done ();                                                          // Printing message...
+  baseline->done ();                                                            // Printing message...
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -152,8 +150,8 @@ void link::set_neighbour_index (
                                 int1 loc_neighbour_id[NEIGHBOURS_NUM]           // Neighbour id.
                                )
 {
-  link_data[loc_node_index . value] . index[loc_neighbour_id . value] =
-    loc_neighbour_index . value;                                                // Setting neighbour index...
+  link_data[loc_node_index.value].index[loc_neighbour_id.value] =
+    loc_neighbour_index.value;                                                  // Setting neighbour index...
 };
 
 /// # Link stiffness set function
@@ -165,8 +163,8 @@ void link::set_stiffness (
                           int1   loc_neighbour_id[NEIGHBOURS_NUM]               // Neighbour id.
                          )
 {
-  link_data[loc_node_index . value] . stiffness[loc_neighbour_id . value] =
-    loc_value . value;                                                          // Setting link stiffness...
+  link_data[loc_node_index.value].stiffness[loc_neighbour_id.value] =
+    loc_value.value;                                                            // Setting link stiffness...
 };
 
 /// # Link damping set function
@@ -178,8 +176,8 @@ void link::set_damping (
                         int1   loc_neighbour_id[NEIGHBOURS_NUM]                 // Neighbour id.
                        )
 {
-  link_data[loc_node_index . value] . damping[loc_neighbour_id . value] =
-    loc_value . value;                                                          // Setting link internal damping...
+  link_data[loc_node_index.value].damping[loc_neighbour_id.value] =
+    loc_value.value;                                                            // Setting link internal damping...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -195,8 +193,8 @@ int1 link::get_neighbour_index (
 {
   int1 data;
 
-  data . value =
-    link_data[loc_node_index . value] . index[loc_neighbour_id . value];        // Getting neighbour index...
+  data.value =
+    link_data[loc_node_index.value].index[loc_neighbour_id.value];              // Getting neighbour index...
 
   return data;
 };
@@ -211,8 +209,8 @@ float1 link::get_stiffness (
 {
   float1 data;
 
-  data . value =
-    link_data[loc_node_index . value] . stiffness[loc_neighbour_id . value];    // Getting link stiffness...
+  data.value =
+    link_data[loc_node_index.value].stiffness[loc_neighbour_id.value];          // Getting link stiffness...
 
   return data;
 };
@@ -227,8 +225,8 @@ float1 link::get_damping (
 {
   float1 data;
 
-  data . value =
-    link_data[loc_node_index . value] . damping[loc_neighbour_id . value];      // Getting link internal damping...
+  data.value =
+    link_data[loc_node_index.value].damping[loc_neighbour_id.value];            // Getting link internal damping...
 
   return data;
 };
@@ -245,7 +243,7 @@ void link::check_error (
 {
   if(loc_error != CL_SUCCESS)                                                   // Checking local error code...
   {
-    baseline -> error (get_error (loc_error));                                  // Printing error message...
+    baseline->error (get_error (loc_error));                                    // Printing error message...
     exit (EXIT_FAILURE);                                                        // Exiting...
   }
 }
@@ -257,7 +255,7 @@ link::~link()
 {
   cl_int loc_error;                                                             // Local error.
 
-  baseline -> action ("releasing \"link\" object...");                          // Printing message...
+  baseline->action ("releasing \"link\" object...");                            // Printing message...
 
   if(link_buffer != NULL)                                                       // Checking buffer...
   {
@@ -274,5 +272,5 @@ link::~link()
 
   delete[] link_data;                                                           // Deleting array for unfolded data...
 
-  baseline -> done ();                                                          // Printing message...
+  baseline->done ();                                                            // Printing message...
 }
