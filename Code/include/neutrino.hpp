@@ -160,8 +160,8 @@
 // Projection mode:
 typedef enum
 {
-  MODE_2D,                                                                      // Projection mode set as 2D.
-  MODE_3D                                                                       // Projection mode set as 3D.
+  MODE_MONO,                                                                    // Projection mode set as 2D.
+  MODE_STEREO                                                                   // Projection mode set as 3D.
 } projection_mode;
 
 // Plot styles:

@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "WINDOW" CLASS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-window::window()
+opengl::opengl()
 {
 
 }
@@ -15,7 +15,7 @@ window::window()
 /// ### Description:
 /// Builds a 3D world vector from the 2D screen projection of the input device
 /// coordinates during an orbit movement on the screen space.
-void window::arcball (
+void opengl::arcball (
                       float* p,                                                 // Point on unitary ball.
                       double x,                                                 // "Near clipping-plane" x-coordinate.
                       double y                                                  // "Near clipping-plane" y-coordinate.
@@ -30,7 +30,7 @@ void window::arcball (
 /// # Window orbit function
 /// ### Description:
 /// Rotates the view matrix according to an orbit movement.
-void window::orbit ()
+void opengl::orbit ()
 {
   float a[3];                                                                   // Mouse vector, world coordinates.
   float b[3];                                                                   // Mouse vector, world coordinates.
@@ -51,7 +51,7 @@ void window::orbit ()
   }
 }
 
-void window::grasp (
+void opengl::grasp (
                     float  position[3],
                     double x,
                     double y
@@ -62,7 +62,7 @@ void window::grasp (
   position[2] = +0.0;                                                           // Building translation vector...                                          // Building translation matrix...
 }
 
-void window::pan ()
+void opengl::pan ()
 {
   float initial_position[3];
   float final_position[3];
@@ -78,7 +78,7 @@ void window::pan ()
   translate (T_mat, T_mat_old, translation);
 }
 
-void window::zoom ()
+void opengl::zoom ()
 {
   float initial_translation;
   float final_translation;
@@ -95,7 +95,7 @@ void window::zoom ()
 /// # OpenGL shader compile function
 /// ### Description:
 /// Compiles an OpenGL shader.
-GLuint window::compile_shader (
+GLuint opengl::compile_shader (
                                const char* loc_shader_filename,                 // GLSL shader file name.
                                shader_type loc_shader_type                      // GLSL shader type.
                               )
@@ -113,16 +113,16 @@ GLuint window::compile_shader (
             shader_fullname,                                                    // Destination string.
             sizeof shader_fullname,                                             // Size of destination string.
             "%s%s",                                                             // Merging two strings.
-            baseline -> neutrino_path -> value,                                 // Source string 1 (NEUTRINO_PATH).
+            baseline->neutrino_path->value,                                     // Source string 1 (NEUTRINO_PATH).
             loc_shader_filename                                                 // Source string 2 (relative path).
            );
 
   // Loading shader from file:
-  baseline -> load_file (
-                         shader_fullname,                                       // Shader file.
-                         &shader_source,                                        // Shader buffer.
-                         &shader_size                                           // Shader buffer size.
-                        );
+  baseline->load_file (
+                       shader_fullname,                                         // Shader file.
+                       &shader_source,                                          // Shader buffer.
+                       &shader_size                                             // Shader buffer size.
+                      );
 
 
   // Selecting shader type:
@@ -170,7 +170,7 @@ GLuint window::compile_shader (
     exit (1);                                                                   // Exiting...
   }
 
-  baseline -> free_file (shader_source);                                        // Freeing shader source file...
+  baseline->free_file (shader_source);                                          // Freeing shader source file...
 
   return (shader);                                                              // Returning shader...
 }
@@ -178,7 +178,7 @@ GLuint window::compile_shader (
 /// # OpenGL shader build function
 /// ### Description:
 /// Builds an OpenGL shader.
-GLuint window::build_shader (
+GLuint opengl::build_shader (
                              const char* loc_vertex_filename,                   // Vertex shader file name.
                              const char* loc_geometry_filename,                 // Geometry shader file name.
                              const char* loc_fragment_filename                  // Fragment shader file name.
@@ -204,7 +204,7 @@ GLuint window::build_shader (
 }
 
 
-void window::set_plot_style (
+void opengl::set_plot_style (
                              plot_style ps,                                     // Plot style.
                              float      view_matrix[16],                        // View matrix.
                              float      projection_matrix[16]                   // Projection matrix.
@@ -358,7 +358,7 @@ void window::set_plot_style (
 /// ### Description:
 /// Initialises GLFW context, initialises GLEW context, initialises OpenGL
 /// shaders.
-void window::init (
+void opengl::init (
                    neutrino*   loc_baseline,                                    // Neutrino baseline.
                    int         loc_window_size_x,                               // Window x-size [px].
                    int         loc_window_size_y,                               // Window y-size [px].
@@ -400,161 +400,169 @@ void window::init (
   opengl_ver_minor = 1;                                                         // EZOR 04NOV2018: to be generalized by iterative search.
   opengl_msaa      = 4;                                                         // EZOR: 3 or 4 sample is good due to the general oversampling-decimation method.
 
-  // Initializing GLFW context:
-  baseline -> action ("initializing GLFW...");                                  // Printing message...
+  #ifdef USE_GRAPHICS
+    // Initializing GLFW context:
+    baseline->action ("initializing GLFW...");                                  // Printing message...
 
-  if(glfwInit () == GLFW_TRUE)                                                  // Inititalizing GLFW context...
-  {
-    glfwWindowHint (GLFW_CONTEXT_VERSION_MAJOR, opengl_ver_major);              // Initializing GLFW hints... EZOR 05OCT2018: (was 4)
-    glfwWindowHint (GLFW_CONTEXT_VERSION_MINOR, opengl_ver_minor);              // Initializing GLFW hints... EZOR 05OCT2018: (was 1)
-    glfwWindowHint (GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);                       // Initializing GLFW hints...
-    glfwWindowHint (GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);             // Initializing GLFW hints...
-    glfwWindowHint (GLFW_SAMPLES, opengl_msaa);                                 // Initializing GLFW hints... EZOR 05OCT2018: (was 4)
+    if(glfwInit () == GLFW_TRUE)                                                // Inititalizing GLFW context...
+    {
+      glfwWindowHint (GLFW_CONTEXT_VERSION_MAJOR, opengl_ver_major);            // Initializing GLFW hints... EZOR 05OCT2018: (was 4)
+      glfwWindowHint (GLFW_CONTEXT_VERSION_MINOR, opengl_ver_minor);            // Initializing GLFW hints... EZOR 05OCT2018: (was 1)
+      glfwWindowHint (GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);                     // Initializing GLFW hints...
+      glfwWindowHint (GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);           // Initializing GLFW hints...
+      glfwWindowHint (GLFW_SAMPLES, opengl_msaa);                               // Initializing GLFW hints... EZOR 05OCT2018: (was 4)
 
-    baseline -> done ();                                                        // Printing message...
-  }
+      baseline->done ();                                                        // Printing message...
+    }
 
-  else
-  {
-    printf ("Error:  unable to initialize GLFW!\n");                            // Printing message...
-    glfwTerminate ();                                                           // Terminating GLFW context...
-    exit (EXIT_FAILURE);                                                        // Exiting...
-  }
+    else
+    {
+      printf ("Error:  unable to initialize GLFW!\n");                          // Printing message...
+      glfwTerminate ();                                                         // Terminating GLFW context...
+      exit (EXIT_FAILURE);                                                      // Exiting...
+    }
 
-  glfw_window = glfwCreateWindow (
-                                  window_size_x,                                // Window x-size [px].
-                                  window_size_y,                                // Window y-size [px].
-                                  title,                                        // Window title.
-                                  NULL,                                         // Monitor.
-                                  NULL                                          // Share.
-                                 );
-  if(!glfw_window)
-  {
-    printf ("Error:  unable to create window!\n");                              // Printing message...
-    glfwTerminate ();                                                           // Terminating GLFW context...
-    exit (EXIT_FAILURE);                                                        // Exiting...
-  }
+    glfw_window = glfwCreateWindow (
+                                    window_size_x,                              // Window x-size [px].
+                                    window_size_y,                              // Window y-size [px].
+                                    title,                                      // Window title.
+                                    NULL,                                       // Monitor.
+                                    NULL                                        // Share.
+                                   );
+    if(!glfw_window)
+    {
+      printf ("Error:  unable to create window!\n");                            // Printing message...
+      glfwTerminate ();                                                         // Terminating GLFW context...
+      exit (EXIT_FAILURE);                                                      // Exiting...
+    }
 
-  glfwSetWindowUserPointer (glfw_window, this);                                 // Getting window pointer...
-  glfwMakeContextCurrent (glfw_window);                                         // Making the context of this window current for the calling thread...
+    glfwSetWindowUserPointer (glfw_window, this);                               // Getting window pointer...
+    glfwMakeContextCurrent (glfw_window);                                       // Making the context of this window current for the calling thread...
 
-  glfwSetWindowRefreshCallback (glfw_window, refresh_callback);                 // Setting refresh callback...
-  glfwSetWindowSizeCallback (glfw_window, window_resize_callback);              // Setting window resize callback...
-  glfwSetFramebufferSizeCallback (glfw_window, framebuffer_resize_callback);    // Setting framebuffer resize callback...
-  glfwSetKeyCallback (glfw_window, key_pressed_callback);                       // Setting key pressed callback...
-  glfwSetMouseButtonCallback (glfw_window, mouse_button_callback);              // Setting mouse pressed callback...
-  glfwSetCursorPosCallback (glfw_window, mouse_moved_callback);                 // Setting mouse moved callback...
-  glfwSetScrollCallback (glfw_window, mouse_scrolled_callback);                 // Setting mouse scrolled callback...
+    glfwSetWindowRefreshCallback (glfw_window, refresh_callback);               // Setting refresh callback...
+    glfwSetWindowSizeCallback (glfw_window, window_resize_callback);            // Setting window resize callback...
+    glfwSetFramebufferSizeCallback (glfw_window, framebuffer_resize_callback);  // Setting framebuffer resize callback...
+    glfwSetKeyCallback (glfw_window, key_pressed_callback);                     // Setting key pressed callback...
+    glfwSetMouseButtonCallback (glfw_window, mouse_button_callback);            // Setting mouse pressed callback...
+    glfwSetCursorPosCallback (glfw_window, mouse_moved_callback);               // Setting mouse moved callback...
+    glfwSetScrollCallback (glfw_window, mouse_scrolled_callback);               // Setting mouse scrolled callback...
 
-  // Initializing GLAD OpenGL extension loader:
-  baseline -> action ("initializing GLAD...");                                  // Printing message...
+    // Initializing GLAD OpenGL extension loader:
+    baseline->action ("initializing GLAD...");                                  // Printing message...
 
-  if(gladLoadGLLoader ((GLADloadproc)glfwGetProcAddress))
-  {
-    baseline -> done ();                                                        // Printing message...
-  }
+    if(gladLoadGLLoader ((GLADloadproc)glfwGetProcAddress))
+    {
+      baseline->done ();                                                        // Printing message...
+    }
 
-  else
-  {
-    printf ("Error:  unable to initialize GLAD!\n");                            // Printing message...
-    exit (EXIT_FAILURE);                                                        // Exiting...
-  }
+    else
+    {
+      printf ("Error:  unable to initialize GLAD!\n");                          // Printing message...
+      exit (EXIT_FAILURE);                                                      // Exiting...
+    }
 
-  // Initializing shaders:
-  baseline -> action ("initializing GLSL shaders...");                          // Printing message...
+    // Initializing shaders:
+    baseline->action ("initializing GLSL shaders...");                          // Printing message...
 
-  point_shader     = build_shader (
-                                   POINT_VERTEX_FILE,                           // Vertex shader file name.
-                                   POINT_GEOMETRY_FILE,                         // Geometry shader file name.
-                                   POINT_FRAGMENT_FILE                          // Fragment shader file name.
-                                  );
+    point_shader     = build_shader (
+                                     POINT_VERTEX_FILE,                         // Vertex shader file name.
+                                     POINT_GEOMETRY_FILE,                       // Geometry shader file name.
+                                     POINT_FRAGMENT_FILE                        // Fragment shader file name.
+                                    );
 
-  voxel_shader     = build_shader (
-                                   VOXEL_VERTEX_FILE,                           // Vertex shader file name.
-                                   VOXEL_GEOMETRY_FILE,                         // Geometry shader file name.
-                                   VOXEL_FRAGMENT_FILE                          // Fragment shader file name.
-                                  );
+    voxel_shader     = build_shader (
+                                     VOXEL_VERTEX_FILE,                         // Vertex shader file name.
+                                     VOXEL_GEOMETRY_FILE,                       // Geometry shader file name.
+                                     VOXEL_FRAGMENT_FILE                        // Fragment shader file name.
+                                    );
 
-  wireframe_shader = build_shader (
-                                   WIREFRAME_VERTEX_FILE,                       // Vertex shader file name.
-                                   WIREFRAME_GEOMETRY_FILE,                     // Geometry shader file name.
-                                   WIREFRAME_FRAGMENT_FILE                      // Fragment shader file name.
-                                  );
+    wireframe_shader = build_shader (
+                                     WIREFRAME_VERTEX_FILE,                     // Vertex shader file name.
+                                     WIREFRAME_GEOMETRY_FILE,                   // Geometry shader file name.
+                                     WIREFRAME_FRAGMENT_FILE                    // Fragment shader file name.
+                                    );
 
-  shaded_shader    = build_shader (
-                                   SHADED_VERTEX_FILE,                          // Vertex shader file name.
-                                   SHADED_GEOMETRY_FILE,                        // Geometry shader file name.
-                                   SHADED_FRAGMENT_FILE                         // Fragment shader file name.
-                                  );
+    shaded_shader    = build_shader (
+                                     SHADED_VERTEX_FILE,                        // Vertex shader file name.
+                                     SHADED_GEOMETRY_FILE,                      // Geometry shader file name.
+                                     SHADED_FRAGMENT_FILE                       // Fragment shader file name.
+                                    );
 
-  text_shader      = build_shader (
-                                   TEXT_VERTEX_FILE,                            // Vertex shader file name.
-                                   TEXT_GEOMETRY_FILE,                          // Geometry shader file name.
-                                   TEXT_FRAGMENT_FILE                           // Fragment shader file name.
-                                  );
-  baseline -> done ();                                                          // Printing message...
+    text_shader      = build_shader (
+                                     TEXT_VERTEX_FILE,                          // Vertex shader file name.
+                                     TEXT_GEOMETRY_FILE,                        // Geometry shader file name.
+                                     TEXT_FRAGMENT_FILE                         // Fragment shader file name.
+                                    );
+    baseline->done ();                                                          // Printing message...
 
-  glfwGetWindowSize (glfw_window, &window_size_x, &window_size_y);              // Getting window size...
-  glfwGetFramebufferSize (
+    glfwGetWindowSize (glfw_window, &window_size_x, &window_size_y);            // Getting window size...
+    glfwGetFramebufferSize (
                                                                                 // Getting framebuffer size...
-                          glfw_window,
-                          &framebuffer_size_x,
-                          &framebuffer_size_y
-                         );                                                     // Getting window size...
-  aspect_ratio = (double)framebuffer_size_x/(double)framebuffer_size_y;         // Setting window aspect ration []...
-  glClearColor (0.0f, 0.0f, 0.0f, 1.0f);                                        // Setting color for clearing window...
-  glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                          // Clearing window...
-  glEnable (GL_DEPTH_TEST);                                                     // Enabling depth test...
-  glEnable (GL_PROGRAM_POINT_SIZE);                                             // Enabling "gl_PointSize" in vertex shader...
-  glLineWidth (LINE_WIDTH);                                                     // Setting line width...
+                            glfw_window,
+                            &framebuffer_size_x,
+                            &framebuffer_size_y
+                           );                                                   // Getting window size...
+    aspect_ratio = (double)framebuffer_size_x/(double)framebuffer_size_y;       // Setting window aspect ration []...
+    glClearColor (0.0f, 0.0f, 0.0f, 1.0f);                                      // Setting color for clearing window...
+    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                        // Clearing window...
+    glEnable (GL_DEPTH_TEST);                                                   // Enabling depth test...
+    glEnable (GL_PROGRAM_POINT_SIZE);                                           // Enabling "gl_PointSize" in vertex shader...
+    glLineWidth (LINE_WIDTH);                                                   // Setting line width...
 
-  PR_mode      = MODE_2D;                                                       // Setting 2D projection mode...
+    PR_mode      = MODE_2D;                                                     // Setting 2D projection mode...
 
-  // Setting monoscopic perspective:
-  perspective_mono (
-                    P_mat,                                                      // 4x4 perspective matrix.
-                    FOV*M_PI/180.0,                                             // Field of view [rad].
-                    aspect_ratio,                                               // Projective screen aspect ratio (full screen).
-                    NEAR_Z_CLIP,                                                // Projective screen near depth...
-                    FAR_Z_CLIP                                                  // Projective screen near depth...
-                   );
-
-  // Setting stereoscopic perspective:
-  perspective_stereo (
-                      PL_mat,                                                   // 4x4 right eye perspective matrix.
-                      PR_mat,                                                   // 4x4 left eye perspective matrix.
-                      TL_mat,                                                   // 4x4 right eye translation matrix.
-                      TR_mat,                                                   // 4x4 left eye translation matrix.
-                      IOD,                                                      // Intraocular distance.
+    // Setting monoscopic perspective:
+    perspective_mono (
+                      P_mat,                                                    // 4x4 perspective matrix.
                       FOV*M_PI/180.0,                                           // Field of view [rad].
-                      aspect_ratio/2.0,                                         // Projective screen aspect ratio (half screen).
+                      aspect_ratio,                                             // Projective screen aspect ratio (full screen).
                       NEAR_Z_CLIP,                                              // Projective screen near depth...
                       FAR_Z_CLIP                                                // Projective screen near depth...
                      );
 
-  translate (T_mat, T_mat_old, initial_scene_position);                         // Setting initial scene position...
-  backup (T_mat_old, T_mat);                                                    // Backing up translation matrix...
+    // Setting stereoscopic perspective:
+    perspective_stereo (
+                        PL_mat,                                                 // 4x4 right eye perspective matrix.
+                        PR_mat,                                                 // 4x4 left eye perspective matrix.
+                        TL_mat,                                                 // 4x4 right eye translation matrix.
+                        TR_mat,                                                 // 4x4 left eye translation matrix.
+                        IOD,                                                    // Intraocular distance.
+                        FOV*M_PI/180.0,                                         // Field of view [rad].
+                        aspect_ratio/2.0,                                       // Projective screen aspect ratio (half screen).
+                        NEAR_Z_CLIP,                                            // Projective screen near depth...
+                        FAR_Z_CLIP                                              // Projective screen near depth...
+                       );
 
-  zoom_z = zoom_z_old;                                                          // Setting initial zoom...
+    translate (T_mat, T_mat_old, initial_scene_position);                       // Setting initial scene position...
+    backup (T_mat_old, T_mat);                                                  // Backing up translation matrix...
 
-  glfwSwapInterval (1);                                                         // Enabling screen vertical retrace synchronization (vsync)...
-  glfwSwapBuffers (glfw_window);                                                // Swapping front and back buffers...
-  glfwPollEvents ();                                                            // Polling GLFW events...
+    zoom_z = zoom_z_old;                                                        // Setting initial zoom...
+
+    glfwSwapInterval (1);                                                       // Enabling screen vertical retrace synchronization (vsync)...
+    glfwSwapBuffers (glfw_window);                                              // Swapping front and back buffers...
+    glfwPollEvents ();                                                          // Polling GLFW events...
+  #else
+    baseline->action ("graphics disabled by user: switching to text mode...");  // Printing message...
+  #endif
 }
 
 /// # Window closed function
 /// ### Description:
 /// Closes the graphics window.
-bool window::closed ()
+bool opengl::closed ()
 {
-  if(glfwWindowShouldClose (glfw_window))
-  {
-    baseline -> erase ();                                                       // Printing message...
-    baseline -> action ("finishing OpenCL program...");                         // Printing message...
-    baseline -> done ();                                                        // Printing message...
-  }
+  #ifdef USE_GRAPHICS
+    if(glfwWindowShouldClose (glfw_window))
+    {
+      baseline->erase ();                                                       // Printing message...
+      baseline->action ("terminating graphics context...");                     // Printing message...
+      baseline->done ();                                                        // Printing message...
+    }
 
-  return(glfwWindowShouldClose (glfw_window));                                  // Returning window closure status...
+    return(glfwWindowShouldClose (glfw_window));                                // Returning window closure status...
+  #else
+    baseline->action ("terminating text context...");                           // Printing message...
+  #endif
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -563,44 +571,44 @@ bool window::closed ()
 /// # Window refresh callback function
 /// ### Description:
 /// Invokes the refresh retpoline function.
-void window::refresh_callback (
+void opengl::refresh_callback (
                                GLFWwindow* loc_window                           // Window.
                               )
 {
-  window* win = (window*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
-  win -> refresh ();                                                            // Calling refresh retpoline...
+  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
+  win->refresh ();                                                              // Calling refresh retpoline...
 }
 
 /// # Window resize callback function
 /// ### Description:
 /// Invokes the window resize retpoline function.
-void window::window_resize_callback (
+void opengl::window_resize_callback (
                                      GLFWwindow* loc_window,                    // Window.
                                      int         loc_x_size,                    // Window x-size [screen coordinates].
                                      int         loc_y_size                     // Window y-size [screen coordinates].
                                     )
 {
-  window* win = (window*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
-  win -> window_resize (loc_x_size, loc_y_size);                                // Calling window resize retpoline...
+  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
+  win->window_resize (loc_x_size, loc_y_size);                                  // Calling window resize retpoline...
 }
 
 /// # Framebuffer resize callback function
 /// ### Description:
 /// Invokes the framebuffer resize retpoline function.
-void window::framebuffer_resize_callback (
+void opengl::framebuffer_resize_callback (
                                           GLFWwindow* loc_window,               // Window.
                                           int         loc_x_size,               // Framebuffer x-size [px].
                                           int         loc_y_size                // Framebuffer y-size [px].
                                          )
 {
-  window* win = (window*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
-  win -> framebuffer_resize (loc_x_size, loc_y_size);                           // Calling framebuffer resize retpoline...
+  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
+  win->framebuffer_resize (loc_x_size, loc_y_size);                             // Calling framebuffer resize retpoline...
 }
 
 /// # Window key-pressed callback function
 /// ### Description:
 /// Invokes the key-pressed retpoline function.
-void window::key_pressed_callback (
+void opengl::key_pressed_callback (
                                    GLFWwindow* loc_window,                      // Window.
                                    int         loc_key,                         // Key.
                                    int         loc_scancode,                    // Scancode.
@@ -608,51 +616,51 @@ void window::key_pressed_callback (
                                    int         loc_mods                         // Mods.
                                   )
 {
-  window* win = (window*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
-  win -> key_pressed (loc_key, loc_scancode, loc_action, loc_mods);             // Calling key pressed retpoline...
+  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
+  win->key_pressed (loc_key, loc_scancode, loc_action, loc_mods);               // Calling key pressed retpoline...
 }
 
 /// # Window mouse-pressed callback function
 /// ### Description:
 /// Invokes the mouse-pressed retpoline function.
-void window::mouse_button_callback (
+void opengl::mouse_button_callback (
                                     GLFWwindow* loc_window,                     // Window.
                                     int         loc_button,                     // Button.
                                     int         loc_action,                     // Action.
                                     int         loc_mods                        // Mods.
                                    )
 {
-  window* win = (window*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
-  win -> mouse_button (loc_button, loc_action, loc_mods);                       // Calling mouse pressed retpoline...
+  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
+  win->mouse_button (loc_button, loc_action, loc_mods);                         // Calling mouse pressed retpoline...
 }
 
 /// # Window mouse-moved callback function
 /// ### Description:
 /// Invokes the mouse-moved retpoline function.
-void window::mouse_moved_callback (
+void opengl::mouse_moved_callback (
                                    GLFWwindow* loc_window,                      // Window.
                                    double      loc_xpos,                        // Mouse x-position [px].
                                    double      loc_ypos                         // Mouse y-position [px].
                                   )
 {
-  window* win = (window*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
-  win -> mouse_moved (loc_xpos, loc_ypos);                                      // Calling mouse moved retpoline...
+  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
+  win->mouse_moved (loc_xpos, loc_ypos);                                        // Calling mouse moved retpoline...
 }
 
 /// # Window mouse-scrolled callback function
 /// ### Description:
 /// Invokes the mouse-scrolled retpoline function.
-void window::mouse_scrolled_callback (
+void opengl::mouse_scrolled_callback (
                                       GLFWwindow* loc_window,                   // Window.
                                       double      loc_xoffset,                  // Mouse scroll x-offset [px].
                                       double      loc_yoffset                   // Mouse scroll y-offset [px].
                                      )
 {
-  window* win = (window*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
-  win -> mouse_scrolled (loc_xoffset, loc_yoffset);                             // Calling mouse scrolled retpoline...
+  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                // Getting window pointer...
+  win->mouse_scrolled (loc_xoffset, loc_yoffset);                               // Calling mouse scrolled retpoline...
 }
 
-void window::joystick_connected_callback (
+void opengl::joystick_connected_callback (
                                           int loc_joystick,                     // Joystick.
                                           int loc_event                         // Joystick-connected event.
                                          )
@@ -676,7 +684,7 @@ void window::joystick_connected_callback (
 /// # Window key-pressed retpoline function
 /// ### Description:
 /// On ESC, closes the graphics window.
-void window::key_pressed (
+void opengl::key_pressed (
                           int loc_key,                                          // Key.
                           int loc_scancode,                                     // Scancode.
                           int loc_action,                                       // Action.
@@ -713,7 +721,7 @@ void window::key_pressed (
 /// # Window mouse-button retpoline function
 /// ### Description:
 /// Gets the mouse coordinates, checks the orbit status.
-void window::mouse_button (
+void opengl::mouse_button (
                            int loc_button,                                      // Button.
                            int loc_action,                                      // Action.
                            int loc_mods                                         // Mods.
@@ -787,7 +795,7 @@ void window::mouse_button (
 /// # Window mouse-moved retpoline function
 /// ### Description:
 /// Gets the mouse coordinates.
-void window::mouse_moved (
+void opengl::mouse_moved (
                           double loc_xpos,                                      // Mouse position [px].
                           double loc_ypos                                       // Mouse position [px].
                          )
@@ -818,7 +826,7 @@ void window::mouse_moved (
 /// # Window mouse-scrolled retpoline function
 /// ### Description:
 /// Gets the mouse scroll. Sets the zoom factor.
-void window::mouse_scrolled (
+void opengl::mouse_scrolled (
                              double loc_xoffset,                                // Mouse scrolled x-position [px].
                              double loc_yoffset                                 // Mouse scrolled y-position [px].
                             )
@@ -847,7 +855,7 @@ void window::mouse_scrolled (
 /// # Window clear retpoline function
 /// ### Description:
 /// Clears the window.
-void window::clear ()
+void opengl::clear ()
 {
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                          // Clearing window...
 }
@@ -855,7 +863,7 @@ void window::clear ()
 /// # Window refresh retpoline function
 /// ### Description:
 /// Refresh the window.
-void window::refresh ()
+void opengl::refresh ()
 {
   glfwSwapBuffers (glfw_window);                                                // Swapping front and back buffers...
 }
@@ -863,7 +871,7 @@ void window::refresh ()
 /// # Window resize retpoline function
 /// ### Description:
 /// Resizes the window, according to the perspective and aspect ratio.
-void window::window_resize (
+void opengl::window_resize (
                             int loc_x_size,                                     // Window x-size [screen coordinates].
                             int loc_y_size                                      // Window y-size [screen coordinates].
                            )
@@ -875,7 +883,7 @@ void window::window_resize (
 /// # Framebuffer resize retpoline function
 /// ### Description:
 /// Resizes the framebuffer, according to the perspective and aspect ratio.
-void window::framebuffer_resize (
+void opengl::framebuffer_resize (
                                  int loc_x_size,                                // Window x-size [screen coordinates].
                                  int loc_y_size                                 // Window y-size [screen coordinates].
                                 )
@@ -910,7 +918,7 @@ void window::framebuffer_resize (
 /// # Window poll events function
 /// ### Description:
 /// Polls GLFW events.
-void window::poll_events ()
+void opengl::poll_events ()
 {
 
   glfwPollEvents ();                                                            // Polling GLFW events...
@@ -1083,7 +1091,7 @@ void window::poll_events ()
 /// # Window plot function
 /// ### Description:
 /// Selects a plot style and plots data.
-void window::plot (
+void opengl::plot (
                    color4*    color,
                    point4**   point,
                    int        particle_num,
@@ -1095,7 +1103,7 @@ void window::plot (
 
   switch(PR_mode)
   {
-    case MODE_2D:
+    case MODE_MONO:
       // Computing view matrix:
       multiplicate (V_mat, T_mat, R_mat);                                       // Setting view matrix...
       set_plot_style (ps, V_mat, P_mat);                                        // Setting plot style...
@@ -1103,7 +1111,7 @@ void window::plot (
       // Binding "colors" array:
       vao_index = 0;                                                            // Setting vao_index...
       glEnableVertexAttribArray (vao_index);                                    // Enabling "layout = vao_index" attribute in vertex shader...
-      glBindBuffer (GL_ARRAY_BUFFER, color -> vbo);                             // Binding VBO...
+      glBindBuffer (GL_ARRAY_BUFFER, color->vbo);                               // Binding VBO...
       glVertexAttribPointer (vao_index, 4, GL_FLOAT, GL_FALSE, 0, 0);           // Specifying the format for "layout = vao_index" attribute in vertex shader...
 
       // Binding "points" array:
@@ -1111,13 +1119,13 @@ void window::plot (
       {
         vao_index = i + 1;
         glEnableVertexAttribArray (vao_index);                                  // Enabling "layout = vao_index" attribute in vertex shader...
-        glBindBuffer (GL_ARRAY_BUFFER, point[i] -> vbo);                        // Binding VBO...
+        glBindBuffer (GL_ARRAY_BUFFER, point[i]->vbo);                          // Binding VBO...
         glVertexAttribPointer (vao_index, 4, GL_FLOAT, GL_FALSE, 0, 0);         // Specifying the format for "layout = vao_index" attribute in vertex shader...
       }
 
       // Drawing:
       glViewport (0, 0, window_size_x, window_size_y);
-      glDrawArrays (GL_POINTS, 0, point[0] -> size);                            // Drawing "points"...
+      glDrawArrays (GL_POINTS, 0, point[0]->size);                              // Drawing "points"...
 
       // Finishing:
       vao_index = 0;
@@ -1131,7 +1139,7 @@ void window::plot (
 
       break;
 
-    case MODE_3D:
+    case MODE_STEREO:
       multiplicate (V_mat, T_mat, R_mat);                                       // Setting view matrix...
       multiplicate (VL_mat, TL_mat, V_mat);                                     // Setting left eye stereoscopic view matrix...
       multiplicate (VR_mat, TR_mat, V_mat);                                     // Setting right eye stereoscopic view matrix...
@@ -1144,7 +1152,7 @@ void window::plot (
       // Binding "colors" array:
       vao_index = 0;                                                            // Setting vao_index...
       glEnableVertexAttribArray (vao_index);                                    // Enabling "layout = vao_index" attribute in vertex shader...
-      glBindBuffer (GL_ARRAY_BUFFER, color -> vbo);                             // Binding VBO...
+      glBindBuffer (GL_ARRAY_BUFFER, color->vbo);                               // Binding VBO...
       glVertexAttribPointer (vao_index, 4, GL_FLOAT, GL_FALSE, 0, 0);           // Specifying the format for "layout = vao_index" attribute in vertex shader...
 
       // Binding "points" array:
@@ -1152,13 +1160,13 @@ void window::plot (
       {
         vao_index = i + 1;
         glEnableVertexAttribArray (vao_index);                                  // Enabling "layout = vao_index" attribute in vertex shader...
-        glBindBuffer (GL_ARRAY_BUFFER, point[i] -> vbo);                        // Binding VBO...
+        glBindBuffer (GL_ARRAY_BUFFER, point[i]->vbo);                          // Binding VBO...
         glVertexAttribPointer (vao_index, 4, GL_FLOAT, GL_FALSE, 0, 0);         // Specifying the format for "layout = vao_index" attribute in vertex shader...
       }
 
       // Drawing:
       glViewport (0, 0, window_size_x/2, window_size_y);
-      glDrawArrays (GL_POINTS, 0, point[0] -> size);                            // Drawing "points"...
+      glDrawArrays (GL_POINTS, 0, point[0]->size);                              // Drawing "points"...
 
       // Finishing:
       vao_index = 0;
@@ -1178,7 +1186,7 @@ void window::plot (
       // Binding "colors" array:
       vao_index = 0;                                                            // Setting vao_index...
       glEnableVertexAttribArray (vao_index);                                    // Enabling "layout = vao_index" attribute in vertex shader...
-      glBindBuffer (GL_ARRAY_BUFFER, color -> vbo);                             // Binding VBO...
+      glBindBuffer (GL_ARRAY_BUFFER, color->vbo);                               // Binding VBO...
       glVertexAttribPointer (vao_index, 4, GL_FLOAT, GL_FALSE, 0, 0);           // Specifying the format for "layout = vao_index" attribute in vertex shader...
 
       // Binding "points" array:
@@ -1186,7 +1194,7 @@ void window::plot (
       {
         vao_index = i + 1;
         glEnableVertexAttribArray (vao_index);                                  // Enabling "layout = vao_index" attribute in vertex shader...
-        glBindBuffer (GL_ARRAY_BUFFER, point[i] -> vbo);                        // Binding VBO...
+        glBindBuffer (GL_ARRAY_BUFFER, point[i]->vbo);                          // Binding VBO...
         glVertexAttribPointer (vao_index, 4, GL_FLOAT, GL_FALSE, 0, 0);         // Specifying the format for "layout = vao_index" attribute in vertex shader...
       }
 
@@ -1197,7 +1205,7 @@ void window::plot (
                   window_size_x/2,
                   window_size_y
                  );
-      glDrawArrays (GL_POINTS, 0, point[0] -> size);                            // Drawing "points"...
+      glDrawArrays (GL_POINTS, 0, point[0]->size);                              // Drawing "points"...
 
       // Finishing:
       vao_index = 0;
@@ -1216,7 +1224,7 @@ void window::plot (
 /// # Window print function
 /// ### Description:
 /// Prints 3D text on the graphics window.
-void window::print (
+void opengl::print (
                     text4* text
                    )
 {
@@ -1249,16 +1257,16 @@ void window::print (
 
   // Binding "glyph" array:
   glEnableVertexAttribArray (LAYOUT_0);                                         // Enabling "layout = 0" attribute in vertex shader...
-  glBindBuffer (GL_ARRAY_BUFFER, text -> glyph_vbo);                            // Binding glyph VBO...
+  glBindBuffer (GL_ARRAY_BUFFER, text->glyph_vbo);                              // Binding glyph VBO...
   glVertexAttribPointer (LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                // Specifying the format for "layout = 0" attribute in vertex shader...
 
   // Binding "color" array:
   glEnableVertexAttribArray (LAYOUT_1);                                         // Enabling "layout = 1" attribute in vertex shader...
-  glBindBuffer (GL_ARRAY_BUFFER, text -> color_vbo);                            // Binding color VBO...
+  glBindBuffer (GL_ARRAY_BUFFER, text->color_vbo);                              // Binding color VBO...
   glVertexAttribPointer (LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                // Specifying the format for "layout = 1" attribute in vertex shader...
 
   // Drawing:
-  glDrawArrays (GL_LINES, 0, text -> size);                                     // Drawing "glyphs"...
+  glDrawArrays (GL_LINES, 0, text->size);                                       // Drawing "glyphs"...
 
   // Finishing:
   glDisableVertexAttribArray (LAYOUT_0);                                        // Unbinding "glyph" array...
@@ -1266,7 +1274,7 @@ void window::print (
 }
 
 // Cockpit_AI function:
-void window::cockpit_AI (
+void opengl::cockpit_AI (
                          memory_orb* controller
                         )
 {
@@ -1324,16 +1332,16 @@ void window::cockpit_AI (
 
   // Binding "glyph" array:
   glEnableVertexAttribArray (LAYOUT_0);                                         // Enabling "layout = 0" attribute in vertex shader...
-  glBindBuffer (GL_ARRAY_BUFFER, controller -> wings_data_vbo);                 // Binding glyph VBO...
+  glBindBuffer (GL_ARRAY_BUFFER, controller->wings_data_vbo);                   // Binding glyph VBO...
   glVertexAttribPointer (LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                // Specifying the format for "layout = 0" attribute in vertex shader...
 
   // Binding "color" array:
   glEnableVertexAttribArray (LAYOUT_1);                                         // Enabling "layout = 1" attribute in vertex shader...
-  glBindBuffer (GL_ARRAY_BUFFER, controller -> wings_colors_vbo);               // Binding color VBO...
+  glBindBuffer (GL_ARRAY_BUFFER, controller->wings_colors_vbo);                 // Binding color VBO...
   glVertexAttribPointer (LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                // Specifying the format for "layout = 1" attribute in vertex shader...
 
   // Drawing:
-  glDrawArrays (GL_LINES, 0, controller -> wings_points);                       // Drawing "glyphs"...
+  glDrawArrays (GL_LINES, 0, controller->wings_points);                         // Drawing "glyphs"...
 
   /*
 
@@ -1357,7 +1365,7 @@ void window::cockpit_AI (
   glDisableVertexAttribArray (LAYOUT_1);                                        // Unbinding "color" array...
 }
 
-window::~window()
+opengl::~opengl()
 {
   glfwTerminate ();                                                             // Terminating GLFW...
 }
