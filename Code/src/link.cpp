@@ -64,9 +64,6 @@ void link::init (
   }
 
   #ifdef USE_GRAPHICS
-    link_vao = 0;                                                               // Node data VAO.
-    link_vbo = 0;                                                               // Node data VBO.
-
     // Generating VAO...
     glGenVertexArrays (
                        1,                                                       // # of VAOs to generate.
@@ -94,6 +91,16 @@ void link::init (
                   GL_DYNAMIC_DRAW                                               // VBO usage.
                  );
 
+    // Specifying the format for attribute in vertex shader:
+    glVertexAttribPointer (
+                           LAYOUT_LINK,                                         // VAO index.
+                           sizeof(link_data),                                   // VAO's # of components.
+                           GL_FLOAT,                                            // Data type.
+                           GL_FALSE,                                            // Not using normalized numbers.
+                           0,                                                   // Data stride.
+                           0                                                    // Data offset.
+                          );
+
     // Enabling attribute in vertex shader:
     glEnableVertexAttribArray (
                                LAYOUT_LINK;                                     // VAO index.
@@ -104,16 +111,6 @@ void link::init (
                   GL_ARRAY_BUFFER,                                              // VBO target.
                   link_vbo                                                      // VBO to bind.
                  );
-
-    // Specifying the format for attribute in vertex shader:
-    glVertexAttribPointer (
-                           LAYOUT_LINK,                                         // VAO index.
-                           sizeof(link_data),                                   // VAO's # of components.
-                           GL_FLOAT,                                            // Data type.
-                           GL_FALSE,                                            // Not using normalized numbers.
-                           0,                                                   // Data stride.
-                           0                                                    // Data offset.
-                          );
 
     // Creating OpenCL buffer from OpenGL buffer:
     link_buffer = clCreateFromGLBuffer (
