@@ -80,7 +80,22 @@ typedef struct
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// NODE STRUCTURE: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-#define LAYOUT_NODE 1                                                           // Kernel argument index.
+#define ARGUMENT_NODE                   0                                       // Kernel argument index.
+
+// OPENGL VBO OFFSET INDEXES (must match the same order of definition in the corresponding data structure):
+#define OFFSET_NODE_POSITION            0
+#define OFFSET_NODE_VELOCITY            1
+#define OFFSET_NODE_ACCELERATION        2
+#define OFFSET_NODE_POSITION_BUFFER     3
+#define OFFSET_NODE_VELOCITY_BUFFER     4
+#define OFFSET_NODE_ACCELERATION_BUFFER 5
+#define OFFSET_NODE_COLOR               6
+#define OFFSET_NODE_MASS                7
+
+// OPENGL LAYOUTS (must be a progressive number across all data structures):
+#define LAYOUT_NODE_POSITION            0
+#define LAYOUT_NODE_COLOR               1
+
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
 typedef struct
 {
@@ -105,12 +120,27 @@ typedef struct
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// LINK STRUCTURE: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-#define LAYOUT_LINK 2                                                           // Kernel argument index.
+#define ARGUMENT_LINK                  1                                        // Kernel argument index.
+
+// OPENGL VBO OFFSET INDEXES (must match the same order of definition in the corresponding typdef struct):
+#define OFFSET_LINK_INDEX              0
+#define OFFSET_LINK_NEIGHBOUR_POSITION 1
+#define OFFSET_LINK_NEIGHBOUR_COLOR    2
+#define OFFSET_LINK_STIFFNESS          3
+#define OFFSET_LINK_DAMPING            4
+
+// OPENGL LAYOUTS:
+#define LAYOUT_LINK_NEIGHBOUR_POSITION 2
+#define LAYOUT_LINK_NEIGHBOUR_COLOR    3
+
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
 typedef struct
 {
   // Neighbour indexes:
   int1 index[NEIGHBOURS_NUM];                                                   // Neighbour index.
+
+  // Neighbour positions:
+  float4 position[NEIGHBOURS_NUM];                                              // Neighbour position.
 
   // Neighbour colors:
   color4 color[NEIGHBOURS_NUM];                                                 // Neighbour color.

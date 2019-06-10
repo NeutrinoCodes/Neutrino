@@ -1092,14 +1092,12 @@ void opengl::poll_events ()
 /// ### Description:
 /// Selects a plot style and plots data.
 void opengl::plot (
-                   color4*    color,
-                   point4**   point,
-                   int        particle_num,
+                   node*      loc_cell_node,
+                   link*      loc_cell_link,
                    plot_style ps
                   )
 {
-  int i;
-  int vao_index;
+  size_t i;
 
   switch(PR_mode)
   {
@@ -1108,19 +1106,47 @@ void opengl::plot (
       multiplicate (V_mat, T_mat, R_mat);                                       // Setting view matrix...
       set_plot_style (ps, V_mat, P_mat);                                        // Setting plot style...
 
-      // Binding "colors" array:
-      vao_index = 0;                                                            // Setting vao_index...
-      glEnableVertexAttribArray (vao_index);                                    // Enabling "layout = vao_index" attribute in vertex shader...
-      glBindBuffer (GL_ARRAY_BUFFER, color->vbo);                               // Binding VBO...
-      glVertexAttribPointer (vao_index, 4, GL_FLOAT, GL_FALSE, 0, 0);           // Specifying the format for "layout = vao_index" attribute in vertex shader...
+      // Binding "node position" array:
+      glBindBuffer (GL_ARRAY_BUFFER, loc_cell_node->node_vbo);                  // Binding VBO...
+      glVertexAttribPointer (
+                             LAYOUT_NODE_POSITION,                              // VAO index.
+                             NUM_VECTOR_COMPONENTS,                             // Size of data vector.
+                             GL_FLOAT,                                          // Data type.
+                             GL_FALSE,                                          // Fixed-point data normalization.
+                             sizeof(loc_cell_node),                             // Data stride.
+                             (GLvoid*)(OFFSET_NODE_POSITION*
+                                       sizeof(loc_cell_node.position))          // Data offset.
+                            );                                                  // Specifying the format for "layout = vao_index" attribute in vertex shader...
+      glEnableVertexAttribArray (LAYOUT_NODE_POSITION);                         // Enabling "LAYOUT_NODE_POSITION" attribute in vertex shader...
 
-      // Binding "points" array:
-      for(i = 0; i < particle_num; i++)
+      // Binding "node color" array:
+      glBindBuffer (GL_ARRAY_BUFFER, loc_cell_node->node_vbo);                  // Binding VBO...
+      glVertexAttribPointer (
+                             LAYOUT_NODE_COLOR,                                 // VAO index.
+                             NUM_VECTOR_COMPONENTS,                             // Size of data vector.
+                             GL_FLOAT,                                          // Data type.
+                             GL_FALSE,                                          // Fixed-point data normalization.
+                             sizeof(loc_cell_node),                             // Data stride.
+                             (GLvoid*)(OFFSET_NODE_COLOR*NEIGHBOURS_NUM*
+                                       sizeof(loc_cell_node.color))             // Data offset.
+                            );                                                  // Specifying the format for "layout = vao_index" attribute in vertex shader...
+      glEnableVertexAttribArray (LAYOUT_NODE_COLOR);                            // Enabling "LAYOUT_NODE_COLOR" attribute in vertex shader...
+
+      // Binding "link neighbour position" array:
+      for(i = 0; i < NEIGHBOURS_NUM; i++)
       {
-        vao_index = i + 1;
-        glEnableVertexAttribArray (vao_index);                                  // Enabling "layout = vao_index" attribute in vertex shader...
         glBindBuffer (GL_ARRAY_BUFFER, point[i]->vbo);                          // Binding VBO...
-        glVertexAttribPointer (vao_index, 4, GL_FLOAT, GL_FALSE, 0, 0);         // Specifying the format for "layout = vao_index" attribute in vertex shader...
+        glVertexAttribPointer (
+                               LAYOUT_LINK_NEIGHBOUR_POSITION + i,
+                               NUM_VECTOR_COMPONENTS,
+                               GL_FLOAT,
+                               GL_FALSE,
+                               sizeof(loc_cell_link),                           // Data stride.
+                               (GLvoid*)((OFFSET_LINK_NEIGHBOUR_POSITION + i)*
+                                         NEIGHBOURS_NUM*
+                                         sizeof(loc_cell_node.link))            // Data offset.
+                              );                                                // Specifying the format for "layout = vao_index" attribute in vertex shader...
+        glEnableVertexAttribArray (LAYOUT_LINK_NEIGHBOUR_POSITION + i);         // Enabling "LAYOUT_LINK_NEIGHBOUR_POSITION + i" attribute in vertex shader...
       }
 
       // Drawing:
