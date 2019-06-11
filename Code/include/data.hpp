@@ -2,10 +2,6 @@
 #define data_hpp
 
 #include "neutrino.hpp"
-#include "opengl.hpp"
-#include "opencl.hpp"
-#include "kernel.hpp"
-#include "queue.hpp"
 
 #define OFFSETOF(s, f) ((size_t)((char*)&((s*)0)->f - (char*)0))                // "s" = structure, "f" = field
 
@@ -13,7 +9,7 @@
 ///////////////////////////////// INT1 STRUCTURE: ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
-typedef struct
+typedef struct int1
 {
   #ifdef USE_GRAPHICS
     GLsizeiptr value;                                                           // Value.
@@ -27,7 +23,7 @@ typedef struct
 //////////////////////////////// FLOAT1 STRUCTURE: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
-typedef struct
+typedef struct float1
 {
   #ifdef USE_GRAPHICS
     GLfloat value;                                                              // Value.
@@ -41,7 +37,7 @@ typedef struct
 //////////////////////////////// FLOAT4 STRUCTURE: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
-typedef struct
+typedef struct float4
 {
   #ifdef USE_GRAPHICS
     GLfloat x;                                                                  // "x" coordinate.
@@ -61,7 +57,7 @@ typedef struct
 //////////////////////////////// COLOR4 STRUCTURE: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
-typedef struct
+typedef struct color4
 {
   #ifdef USE_GRAPHICS
     GLfloat r;                                                                  // "x" coordinate.
@@ -87,7 +83,7 @@ typedef struct
 #define LAYOUT_NODE_COLOR    1
 
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
-typedef struct
+typedef struct node_structure
 {
   // Physical variables:
   float4 position;                                                              // Node position.
@@ -117,20 +113,20 @@ typedef struct
 #define LAYOUT_LINK_NEIGHBOUR_COLOR    3
 
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
-typedef struct
+typedef struct link_structure
 {
   // Neighbour indexes:
-  int1 index[NEIGHBOURS_NUM];                                                   // Neighbour index.
+  int1 index[4];                                                                // Neighbour index.
 
   // Neighbour positions:
-  float4 position[NEIGHBOURS_NUM];                                              // Neighbour position.
+  float4 position[4];                                                           // Neighbour position.
 
   // Neighbour colors:
-  color4 color[NEIGHBOURS_NUM];                                                 // Neighbour color.
+  color4 color[4];                                                              // Neighbour color.
 
   // Link properties:
-  float1 stiffness[NEIGHBOURS_NUM];                                             // Link stiffness.
-  float1 damping[NEIGHBOURS_NUM];                                               // Link internal damping.
+  float1 stiffness[4];                                                          // Link stiffness.
+  float1 damping[4];                                                            // Link internal damping.
 } link_structure;
 #pragma pack(pop)
 //////////////////////////////////////////////////////////////////////////////////
