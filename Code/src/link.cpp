@@ -5,7 +5,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 link::link()
 {
-
+// Doing nothing because we need a deferred init after OpenGL and OpenCL initialization.
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -227,6 +227,164 @@ float1 link::get_damping (
 
   return data;
 };
+
+//////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// "CONTROL" FUNCTIONS: /////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+/// # OpenCL push function:
+/// ### Description:
+/// Writes to an OpenCL client.
+void link::push (
+                 queue* loc_queue                                               // Queue.
+                )
+{
+  cl_int loc_error;                                                             // Local error code.
+
+  baseline->action ("setting \"link\" kernel argument...");                     // Printing message...
+
+  // Setting OpenCL buffer as kernel argument:
+  loc_error = clSetKernelArg (
+                              loc_kernel->kernel_id,                            // Kernel.
+                              LAYOUT_NODE,                                      // Kernel argument index.
+                              sizeof(cl_mem),                                   // Kernel argument size.
+                              &link_buffer                                      // Kernel argument value.
+                             );
+
+  check_error (loc_error);                                                      // Checking returned error code...
+
+  baseline->done ();                                                            // Printing message...
+
+  #ifdef USE_GRAPHICS
+    baseline->action ("acquiring \"link\" OpenCL buffer...");                   // Printing message...
+
+    glFinish ();                                                                // Ensuring that all OpenGL routines have completed all operations...
+
+    // Acquiring OpenCL buffer:
+    loc_error = clEnqueueAcquireGLObjects (
+                                           loc_queue->queue_id,                 // Queue.
+                                           1,                                   // # of memory objects.
+                                           &link_buffer,                        // Memory object array.
+                                           0,                                   // # of events in event list.
+                                           NULL,                                // Event list.
+                                           NULL                                 // Event.
+                                          );
+
+    check_error (loc_error);                                                    // Checking returned error code...
+
+    baseline->done ();                                                          // Printing message...
+  #endif
+
+  baseline->action ("writing \"link\" OpenCL buffer...");                       // Printing message...
+
+  // Writing OpenCL buffer:
+  loc_error = clEnqueueWriteBuffer (
+                                    loc_queue->queue_id,                        // OpenCL queue ID.
+                                    link_buffer,                                // Data buffer.
+                                    CL_TRUE,                                    // Blocking write flag.
+                                    0,                                          // Data buffer offset.
+                                    sizeof(link_data)*link_size.value,          // Data buffer size.
+                                    link_data,                                  // Data buffer.
+                                    0,                                          // Number of events in the list.
+                                    NULL,                                       // Event list.
+                                    NULL                                        // Event.
+                                   );
+
+  check_error (loc_error);
+
+  baseline->done ();                                                            // Printing message...
+
+  #ifdef USE_GRAPHICS
+    baseline->action ("releasing \"link\" OpenCL buffer...");                   // Printing message...
+
+    // Releasing openCL buffer:
+    loc_error = clEnqueueReleaseGLObjects (
+                                           loc_queue->queue_id,                 // Queue.
+                                           1,                                   // # of memory objects.
+                                           &link_buffer,                        // Memory object array.
+                                           0,                                   // # of events in event list.
+                                           NULL,                                // Event list.
+                                           NULL                                 // Event.
+                                          );
+
+    clFinish (loc_queue->queue_id);                                             // Ensuring that all OpenCL routines have completed all operations...
+
+    check_error (loc_error);                                                    // Checking returned error code...
+
+    baseline->done ();                                                          // Printing message...
+  #endif
+}
+
+/// # OpenCL pull function:
+/// ### Description:
+/// Reads from an OpenCL client.
+void link::pull (
+                 queue* loc_queue                                               // Queue.
+                )
+{
+  cl_int loc_error;                                                             // Local error code.
+
+  loc_error = clEnqueueReadBuffer (
+                                   loc_queue->queue_id,                         // OpenCL queue ID.
+                                   link_buffer,                                 // Data buffer.
+                                   CL_TRUE,                                     // Blocking write flag.
+                                   0,                                           // Data buffer offset.
+                                   sizeof(link_data)*link_size.value,           // Data buffer size.
+                                   link_data,                                   // Data buffer.
+                                   0,                                           // Number of events in the list.
+                                   NULL,                                        // Event list.
+                                   NULL                                         // Event.
+                                  );
+
+  check_error (loc_error);
+}
+
+/// # OpenCL acquire function:
+/// ### Description:
+/// Acquires an OpenCL buffer.
+void link::acquire (
+                    queue* loc_queue                                            // Queue.
+                   )
+{
+  #ifdef USE_GRAPHICS
+    glFinish ();                                                                // Ensuring that all OpenGL routines have completed all operations...
+
+    // Acquiring OpenCL buffer:
+    loc_error = clEnqueueAcquireGLObjects (
+                                           loc_queue->queue_id,                 // Queue.
+                                           1,                                   // # of memory objects.
+                                           &link_buffer,                        // Memory object array.
+                                           0,                                   // # of events in event list.
+                                           NULL,                                // Event list.
+                                           NULL                                 // Event.
+                                          );
+
+    check_error (loc_error);                                                    // Checking returned error code...
+  #endif
+}
+
+/// # OpenCL release function:
+/// ### Description:
+/// Releases an OpenCL buffer.
+void link::release (
+                    queue* loc_queue                                            // Queue.
+                   )
+{
+  #ifdef USE_GRAPHICS
+    // Releasing openCL buffer:
+    loc_error = clEnqueueReleaseGLObjects (
+                                           loc_queue->queue_id,                 // Queue.
+                                           1,                                   // # of memory objects.
+                                           &link_buffer,                        // Memory object array.
+                                           0,                                   // # of events in event list.
+                                           NULL,                                // Event list.
+                                           NULL                                 // Event.
+                                          );
+
+    clFinish (loc_queue->queue_id);                                             // Ensuring that all OpenCL routines have completed all operations...
+
+    check_error (loc_error);                                                    // Checking returned error code...
+  #endif
+}
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// ERROR FUNCTION: ///////////////////////////////
