@@ -4,12 +4,8 @@
 #define window_hpp
 
   #include "neutrino.hpp"
-  #include "point4.hpp"
-  #include "color4.hpp"
-  #include "int1.hpp"
-  #include "int4.hpp"
-  #include "float1.hpp"
-  #include "float4.hpp"
+  #include "node.hpp"
+  #include "link.hpp"
   #include "text4.hpp"
   #include "memory_orb.hpp"
 
@@ -305,9 +301,8 @@ public:
   bool closed ();
   // Window "plot" function:
   void plot (
-             color4*    color,
-             point4**   point,
-             int        particle_num,
+             node*      loc_cell_node,                                          // Node.
+             link*      loc_cell_link,                                          // Link.
              plot_style ps
             );
   // Window "print" function:

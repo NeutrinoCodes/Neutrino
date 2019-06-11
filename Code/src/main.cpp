@@ -229,6 +229,8 @@ int main ()
     gui->clear ();                                                              // Clearing window...
     gui->poll_events ();                                                        // Polling window events...
 
+// EZOR: testing data structures.
+/*
     cell_node->acquire (Q[0]);
     cell_link->acquire (Q[0]);
 
@@ -243,7 +245,7 @@ int main ()
                PARTICLE_NUM,
                STYLE_SHADED
               );
-
+ */
     gui->refresh ();                                                            // Refreshing window...
 
     baseline->get_toc ();                                                       // Getting "toc" [us]...

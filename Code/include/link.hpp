@@ -2,8 +2,6 @@
 #define link_hpp
 
 #include "neutrino.hpp"
-#include "opengl.hpp"
-#include "opencl.hpp"
 #include "kernel.hpp"
 #include "queue.hpp"
 #include "data.hpp"
@@ -45,7 +43,7 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   void   init (
                neutrino* loc_baseline,                                          // Neutrino baseline.
-               int1      loc_link_size,                                         // Data number.
+               int1      loc_link_size                                          // Data number.
               );
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////// "SET" FUNCTIONS: //////////////////////////////
@@ -84,16 +82,16 @@ public:
   ////////////////////////////// "CONTROL" FUNCTIONS: ////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   void   push (
-               queue* loc_queue,                                                // OpenCL queue.
+               queue* loc_queue                                                 // OpenCL queue.
               );
   void   pull (
-               queue* loc_queue,                                                // OpenCL queue.
+               queue* loc_queue                                                 // OpenCL queue.
               );
   void   acquire (
-                  queue* loc_queue,                                             // OpenCL queue.
+                  queue* loc_queue                                              // OpenCL queue.
                  );
   void   release (
-                  queue* loc_queue,                                             // OpenCL queue.
+                  queue* loc_queue                                              // OpenCL queue.
                  );
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// DESTRUCTOR: ////////////////////////////////

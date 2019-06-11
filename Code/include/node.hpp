@@ -2,8 +2,6 @@
 #define node_hpp
 
 #include "neutrino.hpp"
-#include "opengl.hpp"
-#include "opencl.hpp"
 #include "kernel.hpp"
 #include "queue.hpp"
 #include "data.hpp"
@@ -45,7 +43,7 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   void   init (
                neutrino* loc_baseline,                                          // Neutrino baseline.
-               int1      loc_node_size,                                         // Data number.
+               int1      loc_node_size                                          // Data number.
               );
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////// "SET" FUNCTIONS: //////////////////////////////
@@ -74,34 +72,34 @@ public:
   //////////////////////////////// "GET" FUNCTIONS: //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   float4 get_position (
-                       int1 loc_index,                                          // Data index.
+                       int1 loc_index                                           // Data index.
                       );
   float4 get_velocity (
-                       int1 loc_index,                                          // Data index.
+                       int1 loc_index                                           // Data index.
                       );
   float4 get_acceleration (
-                           int1 loc_index,                                      // Data index.
+                           int1 loc_index                                       // Data index.
                           );
   color4 get_color (
-                    int1 loc_index,                                             // Data index.
+                    int1 loc_index                                              // Data index.
                    );
   float1 get_mass (
-                   int1 loc_index,                                              // Data index.
+                   int1 loc_index                                               // Data index.
                   );
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// "CONTROL" FUNCTIONS:  ///////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   void   push (
-               queue* loc_queue,                                                // OpenCL queue.
+               queue* loc_queue                                                 // OpenCL queue.
               );
   void   pull (
-               queue* loc_queue,                                                // OpenCL queue.
+               queue* loc_queue                                                 // OpenCL queue.
               );
   void   acquire (
-                  queue* loc_queue,                                             // OpenCL queue.
+                  queue* loc_queue                                              // OpenCL queue.
                  );
   void   release (
-                  queue* loc_queue,                                             // OpenCL queue.
+                  queue* loc_queue                                              // OpenCL queue.
                  );
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// DESTRUCTOR: ////////////////////////////////
