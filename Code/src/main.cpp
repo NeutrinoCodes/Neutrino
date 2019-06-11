@@ -48,7 +48,7 @@ int main ()
   kernel**  K         = new kernel*[KERNEL_NUM];                                // OpenCL kernel array...
 
   node*     cell_node = new node ();                                            // Node array.
-  alink*    cell_link = new alink ();                                           // Link array.
+  link*     cell_link = new link ();                                            // Link array.
   int1      cell_number;                                                        // Number of cells.
   int1      cell_node_index;                                                    // Cell node index.
   int1      cell_neighbour_index[NEIGHBOURS_NUM];                               // Cell neighbour index.
