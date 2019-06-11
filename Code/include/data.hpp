@@ -7,7 +7,7 @@
 #include "kernel.hpp"
 #include "queue.hpp"
 
-#define NUM_VECTOR_COMPONENTS 4                                                 // # of components in data structure.
+#define OFFSETOF(s, f) ((size_t)((char*)&((s*)0)->f - (char*)0))                // "s" = structure, "f" = field
 
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// INT1 STRUCTURE: ////////////////////////////////
@@ -80,21 +80,11 @@ typedef struct
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// NODE STRUCTURE: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-#define ARGUMENT_NODE                   0                                       // Kernel argument index.
-
-// OPENGL VBO OFFSET INDEXES (must match the same order of definition in the corresponding data structure):
-#define OFFSET_NODE_POSITION            0
-#define OFFSET_NODE_VELOCITY            1
-#define OFFSET_NODE_ACCELERATION        2
-#define OFFSET_NODE_POSITION_BUFFER     3
-#define OFFSET_NODE_VELOCITY_BUFFER     4
-#define OFFSET_NODE_ACCELERATION_BUFFER 5
-#define OFFSET_NODE_COLOR               6
-#define OFFSET_NODE_MASS                7
+#define ARGUMENT_NODE        0                                                  // Kernel argument index.
 
 // OPENGL LAYOUTS (must be a progressive number across all data structures):
-#define LAYOUT_NODE_POSITION            0
-#define LAYOUT_NODE_COLOR               1
+#define LAYOUT_NODE_POSITION 0
+#define LAYOUT_NODE_COLOR    1
 
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
 typedef struct
@@ -121,13 +111,6 @@ typedef struct
 ////////////////////////////////// LINK STRUCTURE: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 #define ARGUMENT_LINK                  1                                        // Kernel argument index.
-
-// OPENGL VBO OFFSET INDEXES (must match the same order of definition in the corresponding typdef struct):
-#define OFFSET_LINK_INDEX              0
-#define OFFSET_LINK_NEIGHBOUR_POSITION 1
-#define OFFSET_LINK_NEIGHBOUR_COLOR    2
-#define OFFSET_LINK_STIFFNESS          3
-#define OFFSET_LINK_DAMPING            4
 
 // OPENGL LAYOUTS:
 #define LAYOUT_LINK_NEIGHBOUR_POSITION 2
