@@ -48,7 +48,7 @@ int main ()
   kernel**  K         = new kernel*[KERNEL_NUM];                                // OpenCL kernel array...
 
   node*     cell_node = new node ();                                            // Node array.
-  link*     cell_link = new link ();                                            // Link array.
+  alink*    cell_link = new alink ();                                           // Link array.
   int1      cell_number;                                                        // Number of cells.
   int1      cell_node_index;                                                    // Cell node index.
   int1      cell_neighbour_index[NEIGHBOURS_NUM];                               // Cell neighbour index.
@@ -121,8 +121,8 @@ int main ()
       cell_node_color.b     = 0.01*(rand () % 100);
       cell_node_color.a     = 1.0;
 
-      cell_node->set_position (cell_node_index, cell_position);
-      cell_node->set_color (cell_node_index, cell_color);
+      cell_node->set_position (cell_node_index, cell_node_position);
+      cell_node->set_color (cell_node_index, cell_node_color);
 
       if((i != 0) && (i != (NODES_X - 1)) && (j != 0) && (j != (NODES_Y - 1)))  // When on bulk:
       {

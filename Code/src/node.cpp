@@ -193,7 +193,7 @@ void node::set_mass (
 /// ### Description:
 /// Gets the position from node structure.
 float4 node::get_position (
-                           int1 loc_index,                                      // Data index.
+                           int1 loc_index                                       // Data index.
                           )
 {
   float4 data;
@@ -210,7 +210,7 @@ float4 node::get_position (
 /// ### Description:
 /// Gets the velocity from node structure.
 float4 node::get_velocity (
-                           int1 loc_index,                                      // Data index.
+                           int1 loc_index                                       // Data index.
                           )
 {
   float4 data;
@@ -227,7 +227,7 @@ float4 node::get_velocity (
 /// ### Description:
 /// Gets the acceleration from node structure.
 float4 node::get_acceleration (
-                               int1 loc_index,                                  // Data index.
+                               int1 loc_index                                   // Data index.
                               )
 {
   float4 data;
@@ -244,7 +244,7 @@ float4 node::get_acceleration (
 /// ### Description:
 /// Gets the color from node structure.
 float4 node::get_color (
-                        int1 loc_index,                                         // Data index.
+                        int1 loc_index                                          // Data index.
                        )
 {
   color4 data;
@@ -261,7 +261,7 @@ float4 node::get_color (
 /// ### Description:
 /// Gets the mass from node structure.
 float4 node::get_mass (
-                       int1 loc_index,                                          // Data index.
+                       int1 loc_index                                           // Data index.
                       )
 {
   float1 data;
@@ -278,7 +278,7 @@ float4 node::get_mass (
 /// ### Description:
 /// Writes to an OpenCL client.
 void node::push (
-                 queue* loc_queue,                                              // Queue.
+                 queue* loc_queue                                               // Queue.
                 )
 {
   cl_int loc_error;                                                             // Local error code.
@@ -361,7 +361,7 @@ void node::push (
 /// ### Description:
 /// Reads from an OpenCL client.
 void node::pull (
-                 queue* loc_queue,                                              // Queue.
+                 queue* loc_queue                                               // Queue.
                 )
 {
   cl_int loc_error;                                                             // Local error code.
@@ -385,7 +385,7 @@ void node::pull (
 /// ### Description:
 /// Acquires an OpenCL buffer.
 void node::acquire (
-                    queue* loc_queue,                                           // Queue.
+                    queue* loc_queue                                            // Queue.
                    )
 {
   #ifdef USE_GRAPHICS
@@ -409,7 +409,7 @@ void node::acquire (
 /// ### Description:
 /// Releases an OpenCL buffer.
 void node::release (
-                    queue* loc_queue,                                           // Queue.
+                    queue* loc_queue                                            // Queue.
                    )
 {
   #ifdef USE_GRAPHICS
