@@ -48,6 +48,9 @@ private:
   GLuint          shaded_shader;                                                // Shaded shader program.
   GLuint          text_shader;                                                  // Point shader program.
   projection_mode PR_mode;                                                      // Projection mode.
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////// PRIVATE METHODS ///////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   // OpenGL shader compilation:
   GLuint      compile_shader (
                               const char* loc_shader_filename,                  // Shader file name.
@@ -83,9 +86,19 @@ private:
                               float      view_matrix[16],                       // View matrix.
                               float      projection_matrix[16]                  // Projection matrix.
                              );
-  ////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////// CALLBACKS /////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////
+  // Bind cell data:
+  void        bind_cell (
+                         node* loc_cell_node,                                   // Node.
+                         link* loc_cell_link                                    // Link.
+                        );
+  // Unbind cell data
+  void        unbind_cell (
+                           node* loc_cell_node,                                 // Node.
+                           link* loc_cell_link                                  // Link.
+                          );
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////// CALLBACKS ///////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   // Refresh callback:
   static void refresh_callback (
                                 GLFWwindow* loc_window                          // Window.
