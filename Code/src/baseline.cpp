@@ -1,37 +1,37 @@
-#include "data.hpp"
+#include "baseline.hpp"
 
 void init_int1 (
                 int1 loc_data
                )
 {
-  loc_data . value = 0.0;
+  loc_data.value = 0.0;
 }
 
 void init_float1 (
                   float1 loc_data
                  )
 {
-  loc_data . value = 0.0;
+  loc_data.value = 0.0;
 }
 
 void init_float4 (
                   float4 loc_data
                  )
 {
-  loc_data . x = 0.0;
-  loc_data . y = 0.0;
-  loc_data . z = 0.0;
-  loc_data . w = 1.0;
+  loc_data.x = 0.0;
+  loc_data.y = 0.0;
+  loc_data.z = 0.0;
+  loc_data.w = 1.0;
 }
 
 void init_color4 (
                   color4 loc_data
                  )
 {
-  loc_data . r = 0.0;
-  loc_data . g = 0.0;
-  loc_data . b = 0.0;
-  loc_data . a = 1.0;
+  loc_data.r = 0.0;
+  loc_data.g = 0.0;
+  loc_data.b = 0.0;
+  loc_data.a = 1.0;
 }
 
 const char* get_error (

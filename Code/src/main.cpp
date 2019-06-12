@@ -1,41 +1,12 @@
 /// @file
 
-// OPENGL:
-#define USE_GRAPHICS                                                            // Define it in order to use OpenGL-OpenCL interoperability graphics.
-#define SIZE_WINDOW_X 800                                                       // Window x-size [px].
-#define SIZE_WINDOW_Y 600                                                       // Window y-size [px].
-#define WINDOW_NAME   "neutrino 2.0"                                            // Window name.
-
-// OPENCL:
-#define QUEUE_NUM     1                                                         // Number of OpenCL queues [#].
-#define KERNEL_NUM    1                                                         // Number of OpenCL kernels [#].
-#define KERNEL_DIM    1                                                         // Dimension of OpenCL kernels [#].
-
-// MESH:
-#define XMIN          -1.0                                                      // XMIN spatial boundary [m].
-#define XMAX          1.0                                                       // XMAX spatial boundary [m].
-#define YMIN          -1.0                                                      // YMIN spatial boundary [m].
-#define YMAX          1.0                                                       // YMAX spatial boundary [m].
-#define NODES_X       100                                                       // Number of nodes in "X" direction [#].
-#define NODES_Y       100                                                       // Number of nodes in "Y" direction [#].
-#define NODES         NODES_X* NODES_Y                                          // Total number of nodes [#].
-#define DX            (float)((XMAX - XMIN)/(NODES_X - 1))                      // DX mesh spatial size [m].
-#define DY            (float)((YMAX - YMIN)/(NODES_Y - 1))                      // DY mesh spatial size [m].
-
-// CELL:
-#define NEIGHBOURS    4                                                         // Number of neighbour nodes [#].
-#define UP            0                                                         // Up neighbour designator [#].
-#define DOWN          1                                                         // Down neighbour designator [#].
-#define LEFT          2                                                         // Left neighbour designator [#].
-#define RIGHT         3                                                         // Right neighbour designator [#].
-
 // INCLUDES:
 #include "opengl.hpp"
 #include "opencl.hpp"
 
 int main ()
 {
-  neutrino* baseline  = new neutrino ();                                        // The Neutrino object.
+  neutrino* stem      = new neutrino ();                                        // The Neutrino object.
   opengl*   gui       = new opengl ();                                          // The gui window object.
   opencl*   context   = new opencl ();                                          // The OpenCL context object.
   queue**   Q         = new queue*[QUEUE_NUM];                                  // OpenCL queue.
@@ -55,9 +26,9 @@ int main ()
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////// INITIALIZING NEUTRINO, OPENGL and OPENCL //////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  baseline->init (QUEUE_NUM, KERNEL_NUM);                                       // Initializing neutrino...
-  gui->init (baseline, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);              // Initializing window...
-  context->init (baseline, gui->glfw_window, GPU);                              // Initializing OpenCL context...
+  stem->init (QUEUE_NUM, KERNEL_NUM);                                           // Initializing neutrino...
+  gui->init (stem, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);                  // Initializing window...
+  context->init (stem, gui->glfw_window, GPU);                                  // Initializing OpenCL context...
 
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////// INITIALIZING OPENCL QUEUES /////////////////////////
@@ -65,7 +36,7 @@ int main ()
   for(i = 0; i < QUEUE_NUM; i++)                                                // For each OpenCL queue:
   {
     Q[i] = new queue ();                                                        // OpenCL queue.
-    Q[i]->init (baseline);                                                      // Initializing OpenCL queue...
+    Q[i]->init (stem);                                                          // Initializing OpenCL queue...
   }
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -82,8 +53,8 @@ int main ()
 
     K[j]      = new kernel ();                                                  // OpenCL kernel.
     K[j]->init (
-                baseline,                                                       // Neutrino baseline.
-                baseline->prefix ("Code/kernel/thekernel.cl"),                  // Kernel file name.
+                stem,                                                           // Neutrino baseline.
+                stem->prefix ("Code/kernel/thekernel.cl"),                      // Kernel file name.
                 K_size[j],                                                      // Kernel dimensions array.
                 KERNEL_DIM                                                      // Kernel dimension.
                );
@@ -94,8 +65,8 @@ int main ()
   ////////////////////////////////////////////////////////////////////////////////
   cell_number.value = NODES;
 
-  cell_node->init (baseline, cell_number);
-  cell_bond->init (baseline, cell_number);
+  cell_node->init (stem, cell_number);
+  cell_bond->init (stem, cell_number);
 
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////// SETTING CELLS DATA /////////////////////////////
@@ -222,7 +193,7 @@ int main ()
 
   while(!gui->closed ())                                                        // Opening window...
   {
-    baseline->get_tic ();                                                       // Getting "tic" [us]...
+    stem->get_tic ();                                                           // Getting "tic" [us]...
 
     gui->clear ();                                                              // Clearing window...
     gui->poll_events ();                                                        // Polling window events...
@@ -246,10 +217,10 @@ int main ()
  */
     gui->refresh ();                                                            // Refreshing window...
 
-    baseline->get_toc ();                                                       // Getting "toc" [us]...
+    stem->get_toc ();                                                           // Getting "toc" [us]...
   }
 
-  delete    baseline;
+  delete    stem;
   delete    gui;
   delete    context;
 
