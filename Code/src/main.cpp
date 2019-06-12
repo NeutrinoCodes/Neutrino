@@ -37,13 +37,13 @@ int main ()
 {
   neutrino* baseline  = new neutrino ();                                        // The Neutrino object.
   opengl*   gui       = new opengl ();                                          // The gui window object.
-  opencl*   cl        = new opencl ();                                          // The OpenCL context object.
+  opencl*   context   = new opencl ();                                          // The OpenCL context object.
   queue**   Q         = new queue*[QUEUE_NUM];                                  // OpenCL queue.
   size_t**  K_size    = new size_t*[KERNEL_NUM];                                // OpenCL kernel dimensions array...
   kernel**  K         = new kernel*[KERNEL_NUM];                                // OpenCL kernel array...
 
   node*     cell_node = new node ();                                            // Node array.
-  link*     cell_link = new link ();                                            // Link array.
+  bond*     cell_link = new bond ();                                            // Link array.
   int1      cell_number;                                                        // Number of cells.
   int1      cell_node_index;                                                    // Cell node index.
   int1      cell_neighbour_index[NEIGHBOURS_NUM];                               // Cell neighbour index.
@@ -57,7 +57,7 @@ int main ()
   ////////////////////////////////////////////////////////////////////////////////
   baseline->init (QUEUE_NUM, KERNEL_NUM);                                       // Initializing neutrino...
   gui->init (baseline, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);              // Initializing window...
-  cl->init (baseline, gui->glfw_window, GPU);                                   // Initializing OpenCL context...
+  context->init (baseline, gui->glfw_window, GPU);                              // Initializing OpenCL context...
 
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////// INITIALIZING OPENCL QUEUES /////////////////////////
@@ -248,7 +248,7 @@ int main ()
 
   delete    baseline;
   delete    gui;
-  delete    cl;
+  delete    context;
 
   delete    cell_node;
   delete    cell_link;

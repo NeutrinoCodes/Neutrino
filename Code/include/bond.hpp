@@ -1,15 +1,14 @@
-#ifndef link_hpp
-#define link_hpp
+#ifndef bond_hpp
+#define bond_hpp
 
 #include "neutrino.hpp"
 #include "kernel.hpp"
 #include "queue.hpp"
-#include "data.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// LINK CLASS ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-class link
+class bond
 {
 private:
   neutrino*       baseline;                                                     // Neutrino baseline.
@@ -25,25 +24,25 @@ private:
   cl_context      opencl_context;                                               // OpenCL context.
 
 public:
-  link_structure* link_data[NEIGHBOURS_NUM];                                    // Link data structure.
-  cl_mem          link_buffer;                                                  // OpenCL link data memory buffer.
-  int1            link_size;                                                    // Data size.
+  bond_structure* bond_data[NEIGHBOURS_NUM];                                    // Bond data structure.
+  cl_mem          bond_buffer;                                                  // OpenCL bond data memory buffer.
+  int1            bond_size;                                                    // Data size.
 
   #ifdef USE_GRAPHICS
-    GLuint        link_vao;                                                     // Link VAO.
-    GLuint        link_vbo;                                                     // Link VBO.
+    GLuint        bond_vao;                                                     // Bond VAO.
+    GLuint        bond_vbo;                                                     // Bond VBO.
   #endif
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// CONSTRUCTOR: ////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  link();
+  bond();
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////// "INIT" FUNCTION: //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   void   init (
                neutrino* loc_baseline,                                          // Neutrino baseline.
-               int1      loc_link_size                                          // Data number.
+               int1      loc_bond_size                                          // Data size.
               );
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////// "SET" FUNCTIONS: //////////////////////////////
@@ -97,7 +96,7 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// DESTRUCTOR: ////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  ~link();
+  ~bond();
 };
 
 #endif

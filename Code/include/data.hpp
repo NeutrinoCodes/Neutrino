@@ -113,7 +113,7 @@ typedef struct node_structure
 #define LAYOUT_LINK_NEIGHBOUR_COLOR    3
 
 #pragma pack(push, 1)                                                           // Telling the C++ compiler to use tight packing...
-typedef struct link_structure
+typedef struct bond_structure
 {
   // Neighbour indexes:
   int1 index[4];                                                                // Neighbour index.
@@ -127,7 +127,7 @@ typedef struct link_structure
   // Link properties:
   float1 stiffness[4];                                                          // Link stiffness.
   float1 damping[4];                                                            // Link internal damping.
-} link_structure;
+} bond_structure;
 #pragma pack(pop)
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// FUNCTIONS: //////////////////////////////////
