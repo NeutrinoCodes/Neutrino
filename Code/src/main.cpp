@@ -30,13 +30,8 @@
 #define RIGHT          3                                                        // Right neighbour designator [#].
 
 // INCLUDES:
-#include "neutrino.hpp"
 #include "opengl.hpp"
 #include "opencl.hpp"
-#include "queue.hpp"
-#include "kernel.hpp"
-#include "node.hpp"
-#include "link.hpp"
 
 int main ()
 {

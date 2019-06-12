@@ -25,13 +25,13 @@ private:
   cl_context      opencl_context;                                               // OpenCL context.
 
 public:
-  link_structure* link_data[4];                                                 // Link data structure.
+  link_structure* link_data[NEIGHBOURS_NUM];                                    // Link data structure.
   cl_mem          link_buffer;                                                  // OpenCL link data memory buffer.
   int1            link_size;                                                    // Data size.
 
   #ifdef USE_GRAPHICS
-    GLuint        link_vao;                                                     // Node VAO.
-    GLuint        link_vbo;                                                     // Node VBO.
+    GLuint        link_vao;                                                     // Link VAO.
+    GLuint        link_vbo;                                                     // Link VBO.
   #endif
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -51,17 +51,17 @@ public:
   void   set_neighbour_index (
                               int1 loc_node_index,                              // Node index.
                               int1 loc_neighbour_index,                         // Neighbour index.
-                              int1 loc_neighbour_id[4]                          // Neighbour id.
+                              int1 loc_neighbour_id[NEIGHBOURS_NUM]             // Neighbour id.
                              );
   void   set_stiffness (
                         int1   loc_node_index,                                  // Node index.
                         float1 loc_value,                                       // Data value.
-                        int1   loc_neighbour_id[4]                              // Neighbour id.
+                        int1   loc_neighbour_id[NEIGHBOURS_NUM]                 // Neighbour id.
                        );
   void   set_damping (
                       int1   loc_node_index,                                    // Node index.
                       float1 loc_value,                                         // Data value.
-                      int1   loc_neighbour_id[4]                                // Neighbour id.
+                      int1   loc_neighbour_id[NEIGHBOURS_NUM]                   // Neighbour id.
                      );
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// "GET" FUNCTIONS: /////////////////////////////
@@ -82,7 +82,8 @@ public:
   ////////////////////////////// "CONTROL" FUNCTIONS: ////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   void   push (
-               queue* loc_queue                                                 // OpenCL queue.
+               kernel* loc_kernel,                                              // Kernel.
+               queue*  loc_queue                                                // OpenCL queue.
               );
   void   pull (
                queue* loc_queue                                                 // OpenCL queue.
