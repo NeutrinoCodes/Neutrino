@@ -235,7 +235,8 @@ float1 link::get_damping (
 /// ### Description:
 /// Writes to an OpenCL client.
 void link::push (
-                 queue* loc_queue                                               // Queue.
+                 kernel* loc_kernel,                                            // Kernel.
+                 queue*  loc_queue                                              // Queue.
                 )
 {
   cl_int loc_error;                                                             // Local error code.
