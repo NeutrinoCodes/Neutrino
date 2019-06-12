@@ -5,7 +5,7 @@
 
   #include "neutrino.hpp"
   #include "node.hpp"
-  #include "link.hpp"
+  #include "bond.hpp"
   #include "text4.hpp"
   #include "memory_orb.hpp"
 
@@ -85,12 +85,12 @@ private:
   // Bind cell data:
   void        bind_cell (
                          node* loc_cell_node,                                   // Node.
-                         link* loc_cell_link                                    // Link.
+                         bond* loc_cell_link                                    // Link.
                         );
   // Unbind cell data
   void        unbind_cell (
                            node* loc_cell_node,                                 // Node.
-                           link* loc_cell_link                                  // Link.
+                           bond* loc_cell_link                                  // Link.
                           );
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// CALLBACKS ///////////////////////////////////
@@ -302,7 +302,7 @@ public:
   // Window "plot" function:
   void plot (
              node*      loc_cell_node,                                          // Node.
-             link*      loc_cell_link,                                          // Link.
+             bond*      loc_cell_link,                                          // Link.
              plot_style ps
             );
   // Window "print" function:

@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// CONSTRUCTOR: /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-link::link()
+bond::bond()
 {
 // Doing nothing because we need a deferred init after OpenGL and OpenCL initialization.
 }
@@ -14,7 +14,7 @@ link::link()
 /// # Link init function
 /// ### Description:
 /// Initializes link object.
-void link::init (
+void bond::init (
                  neutrino* loc_baseline,                                        // Neutrino baseline.
                  int1      loc_link_size                                        // Data array size.
                 )
@@ -27,18 +27,18 @@ void link::init (
 
   baseline        = loc_baseline;                                               // Getting Neutrino baseline...
 
-  baseline->action ("initializing \"link\" object...");                         // Printing message...
+  baseline->action ("initializing \"bond\" object...");                         // Printing message...
 
-  link_size.value = loc_link_size.value;                                        // Array size.
+  bond_size.value = loc_bond_size.value;                                        // Array size.
 
-  link_buffer     = NULL;                                                       // OpenCL data buffer.
+  bond_buffer     = NULL;                                                       // OpenCL data buffer.
   opencl_context  = baseline->context_id;                                       // Getting OpenCL context...
-  link_data       = new link_structure[link_size.value];                        // Link data array.
+  bond_data       = new link_structure[bond_size.value];                        // Bond data array.
 
   // Filling data arrays with default values:
   for(
       node_index.value = 0;
-      node_index.value < link_size.value;
+      node_index.value < bond_size.value;
       (node_index.value)++
      )
   {
@@ -49,16 +49,16 @@ void link::init (
        )
     {
       init_int1 (
-                 link_data[node_index.value].index[neighbour_id.value]
+                 bond_data[node_index.value].index[neighbour_id.value]
                 );                                                              // Initializing neighbour index...
       init_color4 (
-                   link_data[node_index.value].color[neighbour_id.value]
+                   bond_data[node_index.value].color[neighbour_id.value]
                   );                                                            // Initializing neighbour color...
       init_float1 (
-                   link_data[node_index.value].stiffness[neighbour_id.value]
+                   bond_data[node_index.value].stiffness[neighbour_id.value]
                   );                                                            // Initializing link stiffness...
       init_float1 (
-                   link_data[node_index.value].damping[neighbour_id.value]
+                   bond_data[node_index.value].damping[neighbour_id.value]
                   );                                                            // Initializing link damping...
     }
   }
@@ -67,34 +67,34 @@ void link::init (
     // Generating VAO...
     glGenVertexArrays (
                        1,                                                       // # of VAOs to generate.
-                       &link_vao                                                // VAOs array.
+                       &bond_vao                                                // VAOs array.
                       );
-    glBindVertexArray (link_vao);                                               // Binding node VAO...
+    glBindVertexArray (bond_vao);                                               // Binding node VAO...
 
     // Generating VBO:
     glGenBuffers (
                   1,                                                            // # of VBOs to generate.
-                  &link_vbo                                                     // VBOs array.
+                  &bond_vbo                                                     // VBOs array.
                  );
 
     // Binding VBO:
     glBindBuffer (
                   GL_ARRAY_BUFFER,                                              // VBO target.
-                  link_vbo                                                      // VBO to bind.
+                  bond_vbo                                                      // VBO to bind.
                  );
 
     // Creating and initializing a buffer object's data store:
     glBufferData (
                   GL_ARRAY_BUFFER,                                              // VBO target.
-                  sizeof(link_data)*(link_size.value),                          // VBO size.
-                  link_data,                                                    // VBO data.
+                  sizeof(bond_data)*(bond_size.value),                          // VBO size.
+                  bond_data,                                                    // VBO data.
                   GL_DYNAMIC_DRAW                                               // VBO usage.
                  );
 
     // Specifying the format for attribute in vertex shader:
     glVertexAttribPointer (
                            LAYOUT_LINK,                                         // VAO index.
-                           sizeof(link_data),                                   // VAO's # of components.
+                           sizeof(bond_data),                                   // VAO's # of components.
                            GL_FLOAT,                                            // Data type.
                            GL_FALSE,                                            // Not using normalized numbers.
                            0,                                                   // Data stride.
@@ -109,23 +109,23 @@ void link::init (
     // Binding VBO:
     glBindBuffer (
                   GL_ARRAY_BUFFER,                                              // VBO target.
-                  link_vbo                                                      // VBO to bind.
+                  bond_vbo                                                      // VBO to bind.
                  );
 
     // Creating OpenCL buffer from OpenGL buffer:
-    link_buffer = clCreateFromGLBuffer (
+    bond_buffer = clCreateFromGLBuffer (
                                         opencl_context,                         // OpenCL context.
                                         CL_MEM_READ_WRITE,                      // Memory flags.
-                                        link_vbo,                               // VBO.
+                                        bond_vbo,                               // VBO.
                                         &loc_error                              // Returned error.
                                        );
   #else
     // Creating OpenCL memory buffer:
-    link_buffer = clCreateBuffer (
+    bond_buffer = clCreateBuffer (
                                   opencl_context,                               // OpenCL context.
                                   CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,     // Memory flags.
-                                  sizeof(link_data)*link_size.value,            // Data buffer size.
-                                  link_data,                                    // Data buffer.
+                                  sizeof(bond_data)*bond_size.value,            // Data buffer size.
+                                  bond_data,                                    // Data buffer.
                                   &loc_error                                    // Error code.
                                  );
   #endif
@@ -141,39 +141,39 @@ void link::init (
 /// # Link neighbour index set function
 /// ### Description:
 /// Sets the neighbour indexes in link structure.
-void link::set_neighbour_index (
+void bond::set_neighbour_index (
                                 int1 loc_node_index,                            // Node index.
                                 int1 loc_neighbour_index,                       // Neighbour index.
                                 int1 loc_neighbour_id[NEIGHBOURS_NUM]           // Neighbour id.
                                )
 {
-  link_data[loc_node_index.value].index[loc_neighbour_id.value] =
+  bond_data[loc_node_index.value].index[loc_neighbour_id.value] =
     loc_neighbour_index.value;                                                  // Setting neighbour index...
 };
 
 /// # Link stiffness set function
 /// ### Description:
 /// Sets the stiffness in link structure.
-void link::set_stiffness (
+void bond::set_stiffness (
                           int1   loc_node_index,                                // Node index.
                           float1 loc_value,                                     // Data value.
                           int1   loc_neighbour_id[NEIGHBOURS_NUM]               // Neighbour id.
                          )
 {
-  link_data[loc_node_index.value].stiffness[loc_neighbour_id.value] =
+  bond_data[loc_node_index.value].stiffness[loc_neighbour_id.value] =
     loc_value.value;                                                            // Setting link stiffness...
 };
 
 /// # Link damping set function
 /// ### Description:
 /// Sets the damping in link structure.
-void link::set_damping (
+void bond::set_damping (
                         int1   loc_node_index,                                  // Node index.
                         float1 loc_value,                                       // Data value.
                         int1   loc_neighbour_id[NEIGHBOURS_NUM]                 // Neighbour id.
                        )
 {
-  link_data[loc_node_index.value].damping[loc_neighbour_id.value] =
+  bond_data[loc_node_index.value].damping[loc_neighbour_id.value] =
     loc_value.value;                                                            // Setting link internal damping...
 };
 
@@ -183,7 +183,7 @@ void link::set_damping (
 /// # Link neighbour index get function
 /// ### Description:
 /// Gets the neighbour indexes from link structure.
-int1 link::get_neighbour_index (
+int1 bond::get_neighbour_index (
                                 int1 loc_node_index,                            // Data index.
                                 int1 loc_neighbour_id                           // Neighbour id.
                                )
@@ -191,7 +191,7 @@ int1 link::get_neighbour_index (
   int1 data;
 
   data.value =
-    link_data[loc_node_index.value].index[loc_neighbour_id.value];              // Getting neighbour index...
+    bond_data[loc_node_index.value].index[loc_neighbour_id.value];              // Getting neighbour index...
 
   return data;
 };
@@ -199,7 +199,7 @@ int1 link::get_neighbour_index (
 /// # Link stiffness get function
 /// ### Description:
 /// Gets the stiffness from link structure.
-float1 link::get_stiffness (
+float1 bond::get_stiffness (
                             int1 loc_node_index,                                // Data index.
                             int1 loc_neighbour_id                               // Neighbour id.
                            )
@@ -207,7 +207,7 @@ float1 link::get_stiffness (
   float1 data;
 
   data.value =
-    link_data[loc_node_index.value].stiffness[loc_neighbour_id.value];          // Getting link stiffness...
+    bond_data[loc_node_index.value].stiffness[loc_neighbour_id.value];          // Getting link stiffness...
 
   return data;
 };
@@ -215,7 +215,7 @@ float1 link::get_stiffness (
 /// # Link damping get function
 /// ### Description:
 /// Gets the damping from link structure.
-float1 link::get_damping (
+float1 bond::get_damping (
                           int1 loc_index,                                       // Data index.
                           int1 loc_neighbour_id                                 // Neighbour id.
                          )
@@ -223,7 +223,7 @@ float1 link::get_damping (
   float1 data;
 
   data.value =
-    link_data[loc_node_index.value].damping[loc_neighbour_id.value];            // Getting link internal damping...
+    bond_data[loc_node_index.value].damping[loc_neighbour_id.value];            // Getting link internal damping...
 
   return data;
 };
@@ -234,21 +234,21 @@ float1 link::get_damping (
 /// # OpenCL push function:
 /// ### Description:
 /// Writes to an OpenCL client.
-void link::push (
+void bond::push (
                  kernel* loc_kernel,                                            // Kernel.
                  queue*  loc_queue                                              // Queue.
                 )
 {
   cl_int loc_error;                                                             // Local error code.
 
-  baseline->action ("setting \"link\" kernel argument...");                     // Printing message...
+  baseline->action ("setting \"bond\" kernel argument...");                     // Printing message...
 
   // Setting OpenCL buffer as kernel argument:
   loc_error = clSetKernelArg (
                               loc_kernel->kernel_id,                            // Kernel.
                               LAYOUT_NODE,                                      // Kernel argument index.
                               sizeof(cl_mem),                                   // Kernel argument size.
-                              &link_buffer                                      // Kernel argument value.
+                              &bond_buffer                                      // Kernel argument value.
                              );
 
   check_error (loc_error);                                                      // Checking returned error code...
@@ -256,7 +256,7 @@ void link::push (
   baseline->done ();                                                            // Printing message...
 
   #ifdef USE_GRAPHICS
-    baseline->action ("acquiring \"link\" OpenCL buffer...");                   // Printing message...
+    baseline->action ("acquiring \"bond\" OpenCL buffer...");                   // Printing message...
 
     glFinish ();                                                                // Ensuring that all OpenGL routines have completed all operations...
 
@@ -264,7 +264,7 @@ void link::push (
     loc_error = clEnqueueAcquireGLObjects (
                                            loc_queue->queue_id,                 // Queue.
                                            1,                                   // # of memory objects.
-                                           &link_buffer,                        // Memory object array.
+                                           &bond_buffer,                        // Memory object array.
                                            0,                                   // # of events in event list.
                                            NULL,                                // Event list.
                                            NULL                                 // Event.
@@ -275,16 +275,16 @@ void link::push (
     baseline->done ();                                                          // Printing message...
   #endif
 
-  baseline->action ("writing \"link\" OpenCL buffer...");                       // Printing message...
+  baseline->action ("writing \"bond\" OpenCL buffer...");                       // Printing message...
 
   // Writing OpenCL buffer:
   loc_error = clEnqueueWriteBuffer (
                                     loc_queue->queue_id,                        // OpenCL queue ID.
-                                    link_buffer,                                // Data buffer.
+                                    bond_buffer,                                // Data buffer.
                                     CL_TRUE,                                    // Blocking write flag.
                                     0,                                          // Data buffer offset.
-                                    sizeof(link_data)*link_size.value,          // Data buffer size.
-                                    link_data,                                  // Data buffer.
+                                    sizeof(bond_data)*bond_size.value,          // Data buffer size.
+                                    bond_data,                                  // Data buffer.
                                     0,                                          // Number of events in the list.
                                     NULL,                                       // Event list.
                                     NULL                                        // Event.
@@ -301,7 +301,7 @@ void link::push (
     loc_error = clEnqueueReleaseGLObjects (
                                            loc_queue->queue_id,                 // Queue.
                                            1,                                   // # of memory objects.
-                                           &link_buffer,                        // Memory object array.
+                                           &bond_buffer,                        // Memory object array.
                                            0,                                   // # of events in event list.
                                            NULL,                                // Event list.
                                            NULL                                 // Event.
@@ -318,7 +318,7 @@ void link::push (
 /// # OpenCL pull function:
 /// ### Description:
 /// Reads from an OpenCL client.
-void link::pull (
+void bond::pull (
                  queue* loc_queue                                               // Queue.
                 )
 {
@@ -326,11 +326,11 @@ void link::pull (
 
   loc_error = clEnqueueReadBuffer (
                                    loc_queue->queue_id,                         // OpenCL queue ID.
-                                   link_buffer,                                 // Data buffer.
+                                   bond_buffer,                                 // Data buffer.
                                    CL_TRUE,                                     // Blocking write flag.
                                    0,                                           // Data buffer offset.
-                                   sizeof(link_data)*link_size.value,           // Data buffer size.
-                                   link_data,                                   // Data buffer.
+                                   sizeof(bond_data)*bond_size.value,           // Data buffer size.
+                                   bond_data,                                   // Data buffer.
                                    0,                                           // Number of events in the list.
                                    NULL,                                        // Event list.
                                    NULL                                         // Event.
@@ -342,7 +342,7 @@ void link::pull (
 /// # OpenCL acquire function:
 /// ### Description:
 /// Acquires an OpenCL buffer.
-void link::acquire (
+void bond::acquire (
                     queue* loc_queue                                            // Queue.
                    )
 {
@@ -353,7 +353,7 @@ void link::acquire (
     loc_error = clEnqueueAcquireGLObjects (
                                            loc_queue->queue_id,                 // Queue.
                                            1,                                   // # of memory objects.
-                                           &link_buffer,                        // Memory object array.
+                                           &bond_buffer,                        // Memory object array.
                                            0,                                   // # of events in event list.
                                            NULL,                                // Event list.
                                            NULL                                 // Event.
@@ -366,7 +366,7 @@ void link::acquire (
 /// # OpenCL release function:
 /// ### Description:
 /// Releases an OpenCL buffer.
-void link::release (
+void bond::release (
                     queue* loc_queue                                            // Queue.
                    )
 {
@@ -375,7 +375,7 @@ void link::release (
     loc_error = clEnqueueReleaseGLObjects (
                                            loc_queue->queue_id,                 // Queue.
                                            1,                                   // # of memory objects.
-                                           &link_buffer,                        // Memory object array.
+                                           &bond_buffer,                        // Memory object array.
                                            0,                                   // # of events in event list.
                                            NULL,                                // Event list.
                                            NULL                                 // Event.
@@ -393,7 +393,7 @@ void link::release (
 /// # OpenCL error check function
 /// ### Description:
 /// Checks for an OpenCL error code and print it to stdout.
-void link::check_error (
+void bond::check_error (
                         cl_int loc_error                                        // Error code.
                        )
 {
@@ -407,26 +407,26 @@ void link::check_error (
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// DESTRUCTOR: /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-link::~link()
+bond::~bond()
 {
   cl_int loc_error;                                                             // Local error.
 
-  baseline->action ("releasing \"link\" object...");                            // Printing message...
+  baseline->action ("releasing \"bond\" object...");                            // Printing message...
 
-  if(link_buffer != NULL)                                                       // Checking buffer...
+  if(bond_buffer != NULL)                                                       // Checking buffer...
   {
-    loc_error = clReleaseMemObject (link_buffer);                               // Releasing OpenCL buffer object...
+    loc_error = clReleaseMemObject (bond_buffer);                               // Releasing OpenCL buffer object...
 
     check_error (loc_error);                                                    // Checking returned error code...
   }
 
   #ifdef USE_GRAPHICS
     {
-      glDeleteBuffers (1, &link_vbo);                                           // Releasing OpenGL VBO...
+      glDeleteBuffers (1, &bond_vbo);                                           // Releasing OpenGL VBO...
     }
   #endif
 
-  delete[] link_data;                                                           // Deleting array for unfolded data...
+  delete[] bond_data;                                                           // Deleting array for unfolded data...
 
   baseline->done ();                                                            // Printing message...
 }

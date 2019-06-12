@@ -37,7 +37,7 @@ src/projective_geometry.cpp
 src/queue.cpp
 src/text4.cpp
 src/node.cpp
-src/link.cpp
+src/bond.cpp
 src/glad.c)
 
 if(APPLE)
