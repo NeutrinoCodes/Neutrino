@@ -11,9 +11,9 @@ bond::bond()
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// "INIT" FUNCTION: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-/// # Link init function
+/// # Bond init function
 /// ### Description:
-/// Initializes link object.
+/// Initializes bond object.
 void bond::init (
                  neutrino* loc_baseline,                                        // Neutrino baseline.
                  int1      loc_link_size                                        // Data array size.
@@ -44,7 +44,7 @@ void bond::init (
   {
     for(
         neighbour_id.value = 0;
-        neighbour_id.value < NEIGHBOURS_NUM;
+        neighbour_id.value < NEIGHBOURS;
         (neighbour_id.value)++
        )
     {
@@ -138,30 +138,37 @@ void bond::init (
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// "SET" FUNCTIONS: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-/// # Link neighbour index set function
+/// # Bond index set function
 /// ### Description:
-/// Sets the neighbour indexes in link structure.
+/// Sets the bond indexes in bond structure.
 void bond::set_neighbour_index (
                                 int1 loc_node_index,                            // Node index.
-                                int1 loc_neighbour_index,                       // Neighbour index.
-                                int1 loc_neighbour_id[NEIGHBOURS_NUM]           // Neighbour id.
+                                int1 loc_bond_index[NEIGHBOURS]                 // Bond index value.
                                )
 {
-  bond_data[loc_node_index.value].index[loc_neighbour_id.value] =
-    loc_neighbour_index.value;                                                  // Setting neighbour index...
+  size_t i;
+
+  for(i = 0; i < NEIGHBOURS; i++)
+  {
+    bond_data[loc_node_index.value].index[i] = loc_bond_index[i].value;         // Setting bond index...
+  }
 };
 
-/// # Link stiffness set function
+/// # BOnd stiffness set function
 /// ### Description:
-/// Sets the stiffness in link structure.
+/// Sets the stiffness in bond structure.
 void bond::set_stiffness (
                           int1   loc_node_index,                                // Node index.
-                          float1 loc_value,                                     // Data value.
-                          int1   loc_neighbour_id[NEIGHBOURS_NUM]               // Neighbour id.
+                          float1 loc_bond_stiffness[NEIGHBOURS]                 // Bond stiffness value.
                          )
 {
-  bond_data[loc_node_index.value].stiffness[loc_neighbour_id.value] =
-    loc_value.value;                                                            // Setting link stiffness...
+  size_t i;
+
+  for(i = 0; i < NEIGHBOURS; i++)
+  {
+    bond_data[loc_node_index.value].stiffness[i] =
+      loc_bond_stiffness[i].value;                                              // Setting bond stiffness...
+  }
 };
 
 /// # Link damping set function
@@ -169,12 +176,16 @@ void bond::set_stiffness (
 /// Sets the damping in link structure.
 void bond::set_damping (
                         int1   loc_node_index,                                  // Node index.
-                        float1 loc_value,                                       // Data value.
-                        int1   loc_neighbour_id[NEIGHBOURS_NUM]                 // Neighbour id.
+                        float1 loc_bond_damping[NEIGHBOURS]                     // Bond stiffness value.
                        )
 {
-  bond_data[loc_node_index.value].damping[loc_neighbour_id.value] =
-    loc_value.value;                                                            // Setting link internal damping...
+  size_t i;
+
+  for(i = 0; i < NEIGHBOURS; i++)
+  {
+    bond_data[loc_node_index.value].stiffness[i] =
+      loc_bond_damping[i].value;                                                // Setting bond damping...
+  }
 };
 
 //////////////////////////////////////////////////////////////////////////////////

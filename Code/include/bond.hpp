@@ -24,7 +24,7 @@ private:
   cl_context      opencl_context;                                               // OpenCL context.
 
 public:
-  bond_structure* bond_data[NEIGHBOURS_NUM];                                    // Bond data structure.
+  bond_structure* bond_data[NEIGHBOURS];                                        // Bond data structure.
   cl_mem          bond_buffer;                                                  // OpenCL bond data memory buffer.
   int1            bond_size;                                                    // Data size.
 
@@ -47,20 +47,17 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////// "SET" FUNCTIONS: //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  void   set_neighbour_index (
-                              int1 loc_node_index,                              // Node index.
-                              int1 loc_neighbour_index,                         // Neighbour index.
-                              int1 loc_neighbour_id[NEIGHBOURS_NUM]             // Neighbour id.
-                             );
+  void   set_bond_index (
+                         int1 loc_node_index,                                   // Node index.
+                         int1 loc_bond_index[NEIGHBOURS]                        // Bond index value.
+                        );
   void   set_stiffness (
                         int1   loc_node_index,                                  // Node index.
-                        float1 loc_value,                                       // Data value.
-                        int1   loc_neighbour_id[NEIGHBOURS_NUM]                 // Neighbour id.
+                        float1 loc_bond_stiffness[NEIGHBOURS]                   // Bond stiffness value.
                        );
   void   set_damping (
                       int1   loc_node_index,                                    // Node index.
-                      float1 loc_value,                                         // Data value.
-                      int1   loc_neighbour_id[NEIGHBOURS_NUM]                   // Neighbour id.
+                      float1 loc_bond_damping[NEIGHBOURS]                       // Bond stiffness value.
                      );
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// "GET" FUNCTIONS: /////////////////////////////
