@@ -2,32 +2,32 @@
 
 // OPENGL:
 #define USE_GRAPHICS                                                            // Define it in order to use OpenGL-OpenCL interoperability graphics.
-#define SIZE_WINDOW_X  800                                                      // Window x-size [px].
-#define SIZE_WINDOW_Y  600                                                      // Window y-size [px].
-#define WINDOW_NAME    "neutrino 2.0"                                           // Window name.
+#define SIZE_WINDOW_X 800                                                       // Window x-size [px].
+#define SIZE_WINDOW_Y 600                                                       // Window y-size [px].
+#define WINDOW_NAME   "neutrino 2.0"                                            // Window name.
 
 // OPENCL:
-#define QUEUE_NUM      1                                                        // Number of OpenCL queues [#].
-#define KERNEL_NUM     1                                                        // Number of OpenCL kernels [#].
-#define KERNEL_DIM     1                                                        // Dimension of OpenCL kernels [#].
+#define QUEUE_NUM     1                                                         // Number of OpenCL queues [#].
+#define KERNEL_NUM    1                                                         // Number of OpenCL kernels [#].
+#define KERNEL_DIM    1                                                         // Dimension of OpenCL kernels [#].
 
 // MESH:
-#define XMIN           -1.0                                                     // XMIN spatial boundary [m].
-#define XMAX           1.0                                                      // XMAX spatial boundary [m].
-#define YMIN           -1.0                                                     // YMIN spatial boundary [m].
-#define YMAX           1.0                                                      // YMAX spatial boundary [m].
-#define NODES_X        100                                                      // Number of nodes in "X" direction [#].
-#define NODES_Y        100                                                      // Number of nodes in "Y" direction [#].
-#define NODES          NODES_X* NODES_Y                                         // Total number of nodes [#].
-#define DX             (float)((XMAX - XMIN)/(NODES_X - 1))                     // DX mesh spatial size [m].
-#define DY             (float)((YMAX - YMIN)/(NODES_Y - 1))                     // DY mesh spatial size [m].
+#define XMIN          -1.0                                                      // XMIN spatial boundary [m].
+#define XMAX          1.0                                                       // XMAX spatial boundary [m].
+#define YMIN          -1.0                                                      // YMIN spatial boundary [m].
+#define YMAX          1.0                                                       // YMAX spatial boundary [m].
+#define NODES_X       100                                                       // Number of nodes in "X" direction [#].
+#define NODES_Y       100                                                       // Number of nodes in "Y" direction [#].
+#define NODES         NODES_X* NODES_Y                                          // Total number of nodes [#].
+#define DX            (float)((XMAX - XMIN)/(NODES_X - 1))                      // DX mesh spatial size [m].
+#define DY            (float)((YMAX - YMIN)/(NODES_Y - 1))                      // DY mesh spatial size [m].
 
 // CELL:
-#define NEIGHBOURS_NUM 4                                                        // Number of neighbour nodes [#].
-#define UP             0                                                        // Up neighbour designator [#].
-#define DOWN           1                                                        // Down neighbour designator [#].
-#define LEFT           2                                                        // Left neighbour designator [#].
-#define RIGHT          3                                                        // Right neighbour designator [#].
+#define NEIGHBOURS    4                                                         // Number of neighbour nodes [#].
+#define UP            0                                                         // Up neighbour designator [#].
+#define DOWN          1                                                         // Down neighbour designator [#].
+#define LEFT          2                                                         // Left neighbour designator [#].
+#define RIGHT         3                                                         // Right neighbour designator [#].
 
 // INCLUDES:
 #include "opengl.hpp"
@@ -43,10 +43,10 @@ int main ()
   kernel**  K         = new kernel*[KERNEL_NUM];                                // OpenCL kernel array...
 
   node*     cell_node = new node ();                                            // Node array.
-  bond*     cell_link = new bond ();                                            // Link array.
+  bond*     cell_bond = new bond ();                                            // Bond array.
   int1      cell_number;                                                        // Number of cells.
   int1      cell_node_index;                                                    // Cell node index.
-  int1      cell_neighbour_index[NEIGHBOURS_NUM];                               // Cell neighbour index.
+  int1      cell_bond_index[NEIGHBOURS];                                        // Cell neighbour index.
   float4    cell_node_position;                                                 // Cell node position.
   color4    cell_node_color;                                                    // Cell node color.
   size_t    i;
@@ -95,7 +95,7 @@ int main ()
   cell_number.value = NODES;
 
   cell_node->init (baseline, cell_number);
-  cell_link->init (baseline, cell_number);
+  cell_bond->init (baseline, cell_number);
 
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////// SETTING CELLS DATA /////////////////////////////
@@ -121,92 +121,95 @@ int main ()
 
       if((i != 0) && (i != (NODES_X - 1)) && (j != 0) && (j != (NODES_Y - 1)))  // When on bulk:
       {
-        cell_neighbour_index[UP].value    = NODES_X*(j + 1) + (i + 0);
-        cell_neighbour_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
-        cell_neighbour_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
-        cell_neighbour_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
+        cell_bond_index[UP].value    = NODES_X*(j + 1) + (i + 0);
+        cell_bond_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
+        cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
+        cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
 
-        cell_link->set_neighbour_index (cell_node_index, cell);
+        cell_bond->set_bond_index (
+                                   cell_node_index,
+                                   cell_bond_index
+                                  );
       }
 
       if((i == 0) && (j != 0) && (j != (NODES_Y - 1)))                          // When on left border (excluding extremes):
       {
-        cell_neighbour_index[UP].value    = NODES_X*(j + 1) + (i + 0);
-        cell_neighbour_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
-        cell_neighbour_index[LEFT].value  = NODES_X*(j + 0) + (i + 0);
-        cell_neighbour_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
+        cell_bond_index[UP].value    = NODES_X*(j + 1) + (i + 0);
+        cell_bond_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
+        cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i + 0);
+        cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
 
-        cell_link->set_neighbour_index (cell_node_index, cell);
+        cell_bond->set_bond_index (cell_node_index, cell_bond_index);
       }
 
       if((i == (NODES_X - 1)) && (j != 0) && (j != (NODES_Y - 1)))              // When on right border (excluding extremes):
       {
-        cell_neighbour_index[UP].value    = NODES_X*(j + 1) + (i + 0);
-        cell_neighbour_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
-        cell_neighbour_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
-        cell_neighbour_index[RIGHT].value = NODES_X*(j + 0) + (i + 0);
+        cell_bond_index[UP].value    = NODES_X*(j + 1) + (i + 0);
+        cell_bond_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
+        cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
+        cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 0);
 
-        cell_link->set_neighbour_index (cell_node_index, cell);
+        cell_bond->set_bond_index (cell_node_index, cell_bond_index);
       }
 
       if((j == 0) && (i != 0) && (i != (NODES_X - 1)))                          // When on bottom border (excluding extremes):
       {
-        cell_neighbour_index[UP].value    = NODES_X*(j + 1) + (i + 0);
-        cell_neighbour_index[DOWN].value  = NODES_X*(j + 0) + (i + 0);
-        cell_neighbour_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
-        cell_neighbour_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
+        cell_bond_index[UP].value    = NODES_X*(j + 1) + (i + 0);
+        cell_bond_index[DOWN].value  = NODES_X*(j + 0) + (i + 0);
+        cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
+        cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
 
-        cell_link->set_neighbour_index (cell_node_index, cell);
+        cell_bond->set_bond_index (cell_node_index, cell_bond_index);
       }
 
       if((j == (NODES_Y - 1)) && (i != 0) && (i != (NODES_X - 1)))              // When on high border (excluding extremes):
       {
-        cell_neighbour_index[UP].value    = NODES_X*(j + 0) + (i + 0);
-        cell_neighbour_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
-        cell_neighbour_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
-        cell_neighbour_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
+        cell_bond_index[UP].value    = NODES_X*(j + 0) + (i + 0);
+        cell_bond_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
+        cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
+        cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
 
-        cell_link->set_neighbour_index (cell_node_index, cell);
+        cell_bond->set_bond_index (cell_node_index, cell_bond_index);
       }
 
       if((i == 0) && (j == 0))                                                  // When on bottom left corner:
       {
-        cell_neighbour_index[UP].value    = NODES_X*(j + 1) + (i + 0);
-        cell_neighbour_index[DOWN].value  = NODES_X*(j + 0) + (i + 0);
-        cell_neighbour_index[LEFT].value  = NODES_X*(j + 0) + (i + 0);
-        cell_neighbour_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
+        cell_bond_index[UP].value    = NODES_X*(j + 1) + (i + 0);
+        cell_bond_index[DOWN].value  = NODES_X*(j + 0) + (i + 0);
+        cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i + 0);
+        cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
 
-        cell_link->set_neighbour_index (cell_node_index, cell);
+        cell_bond->set_bond_index (cell_node_index, cell_bond_index);
       }
 
       if((i == (NODES_X - 1)) && (j == 0))                                      // When on bottom right corner:
       {
-        cell_neighbour_index[UP].value    = NODES_X*(j + 1) + (i + 0);
-        cell_neighbour_index[DOWN].value  = NODES_X*(j + 0) + (i + 0);
-        cell_neighbour_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
-        cell_neighbour_index[RIGHT].value = NODES_X*(j + 0) + (i + 0);
+        cell_bond_index[UP].value    = NODES_X*(j + 1) + (i + 0);
+        cell_bond_index[DOWN].value  = NODES_X*(j + 0) + (i + 0);
+        cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
+        cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 0);
 
-        cell_link->set_neighbour_index (cell_node_index, cell);
+        cell_bond->set_bond_index (cell_node_index, cell_bond_index);
       }
 
       if((i == 0) && (j == (NODES_Y - 1)))                                      // When on top left corner:
       {
-        cell_neighbour_index[UP].value    = NODES_X*(j + 0) + (i + 0);
-        cell_neighbour_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
-        cell_neighbour_index[LEFT].value  = NODES_X*(j + 0) + (i + 0);
-        cell_neighbour_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
+        cell_bond_index[UP].value    = NODES_X*(j + 0) + (i + 0);
+        cell_bond_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
+        cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i + 0);
+        cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
 
-        cell_link->set_neighbour_index (cell_node_index, cell);
+        cell_bond->set_bond_index (cell_node_index, cell_bond_index);
       }
 
       if((i == (NODES_X - 1)) && (j == (NODES_Y - 1)))                          // When on top right corner:
       {
-        cell_neighbour_index[UP].value    = NODES_X*(j + 0) + (i + 0);
-        cell_neighbour_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
-        cell_neighbour_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
-        cell_neighbour_index[RIGHT].value = NODES_X*(j + 0) + (i + 0);
+        cell_bond_index[UP].value    = NODES_X*(j + 0) + (i + 0);
+        cell_bond_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
+        cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
+        cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 0);
 
-        cell_link->set_neighbour_index (cell_node_index, cell);
+        cell_bond->set_bond_index (cell_node_index, cell_bond_index);
       }
     }
   }
@@ -215,7 +218,7 @@ int main ()
   //////////////////////// SETTING OPENCL KERNEL ARGUMENTS ///////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   cell_node->push (Q[0]);
-  cell_link->push (Q[0]);
+  cell_bond->push (Q[0]);
 
   while(!gui->closed ())                                                        // Opening window...
   {
@@ -251,7 +254,7 @@ int main ()
   delete    context;
 
   delete    cell_node;
-  delete    cell_link;
+  delete    cell_bond;
 
   delete[]  Q;
 

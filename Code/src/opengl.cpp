@@ -397,7 +397,7 @@ void opengl::bind_cell (
   layout++;                                                                     // Incrementing layout value...
 
   // Binding "link neighbour position" array:
-  for(i = 0; i < NEIGHBOURS_NUM; i++)
+  for(i = 0; i < NEIGHBOURS; i++)
   {
     glBindBuffer (GL_ARRAY_BUFFER, loc_cell_node->node_vbo);                    // Binding VBO...
     glVertexAttribPointer (
@@ -412,10 +412,10 @@ void opengl::bind_cell (
     glEnableVertexAttribArray (layout + i);                                     // Enabling "LAYOUT_LINK_NEIGHBOUR_POSITION + i" attribute in vertex shader...
   }
 
-  layout += NEIGHBOURS_NUM;                                                     // Incrementing layout value...
+  layout += NEIGHBOURS;                                                         // Incrementing layout value...
 
   // Binding "link neighbour color" array:
-  for(i = 0; i < NEIGHBOURS_NUM; i++)
+  for(i = 0; i < NEIGHBOURS; i++)
   {
     glBindBuffer (GL_ARRAY_BUFFER, loc_cell_node->node_vbo);                    // Binding VBO...
     glVertexAttribPointer (
@@ -453,14 +453,14 @@ void opengl::unbind_cell (
   glDisableVertexAttribArray (layout);                                          // Unbinding "node color" array...
   layout++;                                                                     // Incrementing layout value...
 
-  for(i = 0; i < NEIGHBOURS_NUM; i++)
+  for(i = 0; i < NEIGHBOURS; i++)
   {
     glDisableVertexAttribArray (layout + i);                                    // Unbinding "link neighbour position" arrays...
   }
 
-  layout += NEIGHBOURS_NUM;                                                     // Incrementing layout value...
+  layout += NEIGHBOURS;                                                         // Incrementing layout value...
 
-  for(i = 0; i < NEIGHBOURS_NUM; i++)
+  for(i = 0; i < NEIGHBOURS; i++)
   {
     glDisableVertexAttribArray (layout + i);                                    // Unbinding "link neighbour color" arrays...
   }

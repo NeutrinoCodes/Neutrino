@@ -116,17 +116,17 @@ typedef struct node_structure
 typedef struct bond_structure
 {
   // Neighbour indexes:
-  int1 index[4];                                                                // Neighbour index.
+  int1 index[NEIGHBOURS];                                                       // Neighbour index.
 
   // Neighbour positions:
-  float4 position[4];                                                           // Neighbour position.
+  float4 position[NEIGHBOURS];                                                  // Neighbour position.
 
   // Neighbour colors:
-  color4 color[4];                                                              // Neighbour color.
+  color4 color[NEIGHBOURS];                                                     // Neighbour color.
 
   // Link properties:
-  float1 stiffness[4];                                                          // Link stiffness.
-  float1 damping[4];                                                            // Link internal damping.
+  float1 stiffness[NEIGHBOURS];                                                 // Link stiffness.
+  float1 damping[NEIGHBOURS];                                                   // Link internal damping.
 } bond_structure;
 #pragma pack(pop)
 //////////////////////////////////////////////////////////////////////////////////
