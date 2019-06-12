@@ -19,7 +19,7 @@ project (neutrino)
 
 message("Creating a SOURCES variable with a link to all cpp files to compile...")
 set(SOURCES
-src/data.cpp
+src/baseline.cpp
 src/device.cpp
 src/font.cpp
 src/index.cpp

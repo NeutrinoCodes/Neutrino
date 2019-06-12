@@ -1,9 +1,36 @@
-#ifndef data_hpp
-#define data_hpp
+#ifndef baseline_hpp
+#define baseline_hpp
 
 #include "neutrino.hpp"
 
-#define OFFSETOF(s, f) ((size_t)((char*)&((s*)0)->f - (char*)0))                // "s" = structure, "f" = field
+// OPENGL:
+#define USE_GRAPHICS                                                            // Define it in order to use OpenGL-OpenCL interoperability graphics.
+#define SIZE_WINDOW_X 800                                                       // Window x-size [px].
+#define SIZE_WINDOW_Y 600                                                       // Window y-size [px].
+#define WINDOW_NAME   "neutrino 2.0"                                            // Window name.
+
+// OPENCL:
+#define QUEUE_NUM     1                                                         // Number of OpenCL queues [#].
+#define KERNEL_NUM    1                                                         // Number of OpenCL kernels [#].
+#define KERNEL_DIM    1                                                         // Dimension of OpenCL kernels [#].
+
+// MESH:
+#define XMIN          -1.0                                                      // XMIN spatial boundary [m].
+#define XMAX          1.0                                                       // XMAX spatial boundary [m].
+#define YMIN          -1.0                                                      // YMIN spatial boundary [m].
+#define YMAX          1.0                                                       // YMAX spatial boundary [m].
+#define NODES_X       100                                                       // Number of nodes in "X" direction [#].
+#define NODES_Y       100                                                       // Number of nodes in "Y" direction [#].
+#define NODES         NODES_X* NODES_Y                                          // Total number of nodes [#].
+#define DX            (float)((XMAX - XMIN)/(NODES_X - 1))                      // DX mesh spatial size [m].
+#define DY            (float)((YMAX - YMIN)/(NODES_Y - 1))                      // DY mesh spatial size [m].
+
+// CELL:
+#define NEIGHBOURS    4                                                         // Number of neighbour nodes [#].
+#define UP            0                                                         // Up neighbour designator [#].
+#define DOWN          1                                                         // Down neighbour designator [#].
+#define LEFT          2                                                         // Left neighbour designator [#].
+#define RIGHT         3                                                         // Right neighbour designator [#].
 
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// INT1 STRUCTURE: ////////////////////////////////
