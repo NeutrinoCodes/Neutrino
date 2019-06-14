@@ -483,6 +483,51 @@ void opencl::init (
   baseline->done ();                                                                // Printing message...
 }
 
+/// # OpenCL kernel execute function
+/// ### Description:
+/// Enqueues the OpenCL kernel (as a single task). Selects the kernel mode.
+void opencl::execute (
+                      kernel*     loc_kernel,                                       // OpenCL kernel.
+                      queue*      loc_queue,                                        // OpenCL queue.
+                      kernel_mode loc_kernel_mode                                   // Kernel mode.
+                     )
+{
+  cl_int loc_error;                                                                 // Error code.
+
+  // Enqueueing OpenCL kernel (as a single task):
+  loc_error = clEnqueueNDRangeKernel (
+                                      loc_queue->queue_id,                          // Queue ID.
+                                      loc_kernel->kernel_id,                        // Kernel ID.
+                                      loc_kernel->dimension,                        // Kernel dimension.
+                                      NULL,                                         // Global work offset.
+                                      loc_kernel->size,                             // Global work size.
+                                      NULL,                                         // Local work size.
+                                      0,                                            // # of events.
+                                      NULL,                                         // Event list.
+                                      &loc_kernel->event                            // Event.
+                                     );
+
+  check_error (loc_error);                                                          // Checking error...
+
+  // Selecting kernel mode:
+  switch(loc_kernel_mode)
+  {
+    case WAIT:
+      loc_error = clWaitForEvents (1, &loc_kernel->event);                          // Waiting for kernel execution to be completed (host blocking)...
+      check_error (loc_error);                                                      // Checking error...
+      break;
+
+    case DONT_WAIT:
+      // Doing nothing, without waiting!
+      break;
+
+    default:
+      loc_error = clWaitForEvents (1, &loc_kernel->event);                          // Waiting for kernel execution to be completed (host blocking)...
+      check_error (loc_error);                                                      // Checking error...
+      break;
+  }
+}
+
 opencl::~opencl()
 {
   cl_int loc_error;                                                                 // Error code.
