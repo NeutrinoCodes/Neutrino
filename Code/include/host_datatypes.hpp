@@ -1,27 +1,45 @@
 #ifndef host_datatypes_hpp
 #define host_datatypes_hpp
 
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////// GLfloat4 STRUCTURE: /////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-typedef struct __attribute__ ((packed)) GLfloat4
-{
-  GLfloat x;                                                                    // "x" value.
-  GLfloat y;                                                                    // "y" value.
-  GLfloat z;                                                                    // "z" value.
-  GLfloat w;                                                                    // "w" value.
-} GLfloat4;
+#include "neutrino.hpp"
 
-/////////////////////////////////////////////////////7////////////////////////////
-///////////////////////////////// POINT STRUCTURE: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-typedef struct __attribute__ ((packed)) point
+//////////////////////////////// "POINT" STRUCTURE ///////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+typedef struct __attribute__ ((packed)) _point_structure
 {
   // Position:
-  GLfloat4 position;                                                            // Point coordinates.
+  GLfloat x;                                                                    // "x" coordinate.
+  GLfloat y;                                                                    // "y" coordinate.
+  GLfloat z;                                                                    // "z" coordinate.
+  GLfloat w;                                                                    // "w" coordinate.
 
   // Color:
-  GLfloat4 color;                                                               // Point color.
-} point;
+  GLfloat r;                                                                    // "r" color.
+  GLfloat g;                                                                    // "g" color.
+  GLfloat b;                                                                    // "b" color.
+  GLfloat a;                                                                    // "a" color.
+} point_structure;
+
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////// "POINT" CLASS /////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+class point
+{
+private:
+
+public:
+  point_structure* data;                                                        // Point data structure.
+  cl_mem           buffer;                                                      // OpenCL data memory buffer.
+  GLuint           vao;                                                         // Node VAO.
+  GLuint           vbo;                                                         // Node VBO.
+  GLsizeiptr       size;                                                        // Data size.
+
+  point(
+        GLsizeiptr loc_size                                                     // Data size.
+       );
+
+  ~point();
+};
 
 #endif

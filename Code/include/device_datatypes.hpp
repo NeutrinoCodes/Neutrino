@@ -4,13 +4,34 @@
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// POINT STRUCTURE: ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-typedef struct __attribute__ ((packed)) point
+typedef struct __attribute__ ((packed)) _point
 {
   // Position:
-  float4 position;                                                              //  Point coordinates.
+  float x;                                                                      // "x" coordinate.
+  float y;                                                                      // "y" coordinate.
+  float z;                                                                      // "z" coordinate.
+  float w;                                                                      // "w" coordinate.
 
   // Color:
-  float4 color;                                                                 // Point color.
+  float r;                                                                      // "r" color.
+  float g;                                                                      // "g" color.
+  float b;                                                                      // "b" color.
+  float a;                                                                      // "a" color.
+} point;
+
+typedef struct __attribute__ ((packed)) _point
+{
+  // Position:
+  float x;                                                                      // "x" coordinate.
+  float y;                                                                      // "y" coordinate.
+  float z;                                                                      // "z" coordinate.
+  float w;                                                                      // "w" coordinate.
+
+  // Color:
+  float r;                                                                      // "r" color.
+  float g;                                                                      // "g" color.
+  float b;                                                                      // "b" color.
+  float a;                                                                      // "a" color.
 } point;
 
 #endif
