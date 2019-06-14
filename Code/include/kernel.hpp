@@ -4,7 +4,6 @@
 #define kernel_hpp
 
 #include "neutrino.hpp"
-#include "queue.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "KERNEL" CLASS ////////////////////////////////
@@ -56,23 +55,32 @@ public:
                                      T loc_data                                 // Data object.
                                     )
   {
+    cl_int loc_error;                                                           // Error code.
+
+    baseline->action ("setting kernel argument...");                            // Printing message...
     // Creating OpenCL memory buffer:
     loc_data.buffer = clCreateBuffer (
                                       opencl_context,                           // OpenCL context.
                                       CL_MEM_READ_WRITE |
                                       CL_MEM_COPY_HOST_PTR,                     // Memory flags.
                                       sizeof(loc_data.data)*loc_data.size,      // Data buffer size.
-                                      loc_data.data_type,                       // Data buffer.
+                                      loc_data.data,                            // Data buffer.
                                       &loc_error                                // Error code.
                                      );
 
     check_error (loc_error);                                                    // Checking returned error code...
+
+    baseline->done ();                                                          // Printing message...
   };
 
   template <> void setarg <point*>(
                                    point* loc_data                              // Data object.
                                   )
   {
+    cl_int loc_error;                                                           // Error code.
+
+    baseline->action ("setting kernel argument...");                            // Printing message...
+
     // Generating VAO...
     glGenVertexArrays (
                        1,                                                       // # of VAOs to generate.
@@ -130,15 +138,9 @@ public:
                                            );
 
     check_error (loc_error);                                                    // Checking returned error code...
+
+    baseline->done ();                                                          // Printing message...
   };
-  // EZOR: to be put as a method of the opencl class.
-  // Kernel execution:
-  void execute (
-                queue*      loc_queue,                                          // OpenCL queue.
-                kernel_mode loc_kernel_mode                                     // OpenCL kernel mode.
-               );
-
-
 
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// DESTRUCTOR /////////////////////////////////

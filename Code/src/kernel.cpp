@@ -242,34 +242,6 @@ void kernel::init (
 }
 
 
-
-
-// EZOR: working on this.
-
-void kernel::setarg (
-                     queue* loc_queue                                           // Queue.
-                    )
-{
-  cl_int loc_error;                                                             // Local error code.
-
-  baseline->action ("setting \"node\" kernel argument...");                     // Printing message...
-
-  // Setting OpenCL buffer as kernel argument:
-  loc_error = clSetKernelArg (
-                              loc_kernel->kernel_id,                            // Kernel.
-                              LAYOUT_NODE,                                      // Kernel argument index.
-                              sizeof(cl_mem),                                   // Kernel argument size.
-                              &node_buffer                                      // Kernel argument value.
-                             );
-
-  check_error (loc_error);                                                      // Checking returned error code...
-
-  baseline->done ();                                                            // Printing message...
-
-}
-
-
-
 /// # OpenCL kernel execute function
 /// ### Description:
 /// Enqueues the OpenCL kernel (as a single task). Selects the kernel mode.
