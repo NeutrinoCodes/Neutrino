@@ -13,26 +13,18 @@ class kernel
 private:
   neutrino*     baseline;                                                       // Neutrino baseline.
   cl_device_id* device_id;                                                      // Device ID array.
-  // OpenCL error get function:
-  const char* get_error (
-                         cl_int loc_error                                       // Error code.
-                        );
-  // OpenCL error check function:
-  void        check_error (
-                           cl_int loc_error                                     // Error code.
-                          );
 
 public:
-  cl_kernel  kernel_id;                                                         // Kernel id.
-  char*      file_name;                                                         // Kernel file name.
-  char*      source;                                                            // Kernel source.
-  size_t     source_size;                                                       // Kernel source size [characters].
-  cl_program program;                                                           // Kernel program.
-  size_t*    size;                                                              // Kernel size(s) [size_t x dimension array].
-  cl_uint    dimension;                                                         // Kernel dimension.
-  cl_event   event;                                                             // Kernel event.
-  char*      log_value;                                                         // OpenCL compiler log value array.
-  size_t     log_size;                                                          // OpenCL compiler log size array.
+  cl_kernel     kernel_id;                                                      // Kernel id.
+  char*         file_name;                                                      // Kernel file name.
+  char*         source;                                                         // Kernel source.
+  size_t        source_size;                                                    // Kernel source size [characters].
+  cl_program    program;                                                        // Kernel program.
+  size_t*       size;                                                           // Kernel size(s) [size_t x dimension array].
+  cl_uint       dimension;                                                      // Kernel dimension.
+  cl_event      event;                                                          // Kernel event.
+  char*         log_value;                                                      // OpenCL compiler log value array.
+  size_t        log_size;                                                       // OpenCL compiler log size array.
 
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// CONSTRUCTOR ////////////////////////////////
@@ -68,7 +60,7 @@ public:
                                       &loc_error                                // Error code.
                                      );
 
-    check_error (loc_error);                                                    // Checking returned error code...
+    baseline->check_error (loc_error);                                          // Checking returned error code...
 
     baseline->done ();                                                          // Printing message...
   };
@@ -139,7 +131,7 @@ public:
 
     check_error (loc_error);                                                    // Checking returned error code...
 
-    baseline->done ();                                                          // Printing message...
+    baseline->baseline->done ();                                                // Printing message...
   };
 
   ////////////////////////////////////////////////////////////////////////////////

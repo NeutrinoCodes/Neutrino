@@ -313,54 +313,62 @@ public:
 
   neutrino();
   // Initialization:
-  void  init (
-              size_t loc_q_num,
-              size_t loc_k_num
-             );
-  // Neutrino path add prefix function:
-  char* prefix (
-                const char* loc_path                                            // Path.
-               );
-  // Get "tic" time:
-  void  get_tic ();
-  // Get "toc" time:
-  void  get_toc ();
-  // Load file:
-  void  load_file (
-                   const char* file_name,                                       // File name.
-                   char**      file_buffer,                                     // File buffer (char array).
-                   size_t*     file_size                                        // File size.
-                  );
-  // Write file:
-  void  write_file (
-                    const char* file_name,                                      // File name.
-                    char*       file_buffer                                     // File buffer.
+  void        init (
+                    size_t loc_q_num,
+                    size_t loc_k_num
                    );
+  // Neutrino path add prefix function:
+  char*       prefix (
+                      const char* loc_path                                      // Path.
+                     );
+  // Get "tic" time:
+  void        get_tic ();
+  // Get "toc" time:
+  void        get_toc ();
+  // Load file:
+  void        load_file (
+                         const char* file_name,                                 // File name.
+                         char**      file_buffer,                               // File buffer (char array).
+                         size_t*     file_size                                  // File size.
+                        );
+  // Write file:
+  void        write_file (
+                          const char* file_name,                                // File name.
+                          char*       file_buffer                               // File buffer.
+                         );
   // Free file:
-  void  free_file (
-                   char* buffer                                                 // File buffer.
-                  );
+  void        free_file (
+                         char* buffer                                           // File buffer.
+                        );
   // Query numeric input from stdin:
-  int   query_numeric (
-                       const char* caption,                                     // Text query caption.
-                       int         min,                                         // Minimum queried numeric value.
-                       int         max                                          // Maximum queried numeric value.
-                      );
+  int         query_numeric (
+                             const char* caption,                               // Text query caption.
+                             int         min,                                   // Minimum queried numeric value.
+                             int         max                                    // Maximum queried numeric value.
+                            );
   // Current stdout terminal line erase function:
-  void  erase ();
-  void  action (
-                const char* loc_text                                            // Message.
-               );
-  void  error (
-               const char* loc_text                                             // Message.
-              );
-  void  list (
-              char*  loc_text,
-              size_t loc_length,
-              char   loc_delimiter,
-              size_t loc_tab
-             );
-  void  done ();
+  void        erase ();
+  void        action (
+                      const char* loc_text                                      // Message.
+                     );
+  void        error (
+                     const char* loc_text                                       // Message.
+                    );
+  void        list (
+                    char*  loc_text,
+                    size_t loc_length,
+                    char   loc_delimiter,
+                    size_t loc_tab
+                   );
+  void        done ();
+  // OpenCL error get function:
+  const char* get_error (
+                         cl_int loc_error                                       // Error code.
+                        );
+  // OpenCL error check function:
+  void        check_error (
+                           cl_int loc_error                                     // Error code.
+                          );
 
   ~neutrino();
 };
