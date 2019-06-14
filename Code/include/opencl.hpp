@@ -29,14 +29,6 @@ private:
                                 cl_uint loc_device_index,
                                 cl_uint loc_platform_index
                                );
-  // OpenCL error get function:
-  const char*    get_error (
-                            cl_int loc_error                                    // Local error code.
-                           );
-  // OpenCL error check function:
-  void           check_error (
-                              cl_int loc_error                                  // Local error code.
-                             );
 
 public:
   cl_uint                platforms_number;                                      // Existing OpenCL platforms number.

@@ -5,53 +5,40 @@
 
   #include "neutrino.hpp"
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////// "PLATFORM" CLASS /////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  class platform
-  {
-    private:
-      neutrino*           baseline;                                             // Neutrino baseline.
-      char*               parameter_value;                                      // Parameter value.
+////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////// "PLATFORM" CLASS /////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+class platform
+{
+private:
+  neutrino* baseline;                                                           // Neutrino baseline.
+  char*     parameter_value;                                                    // Parameter value.
+  // Gets size information:
+  size_t get_info_size (
+                        cl_platform_id   loc_platform_id,                       // Platform ID.
+                        cl_platform_info loc_parameter_name                     // Paramenter name.
+                       );
+  // Gets size information:
+  char*  get_info_value (
+                         cl_platform_id   loc_platform_id,                      // Platform ID.
+                         cl_platform_info loc_parameter_name,                   // Paramenter name.
+                         size_t           loc_parameter_size                    // Parameter size.
+                        );
 
-      // OpenCL error get function:
-      const char*         get_error     (
-                                          cl_int            loc_error           // Local error code.
-                                        );
+public:
+  cl_platform_id id;                                                            // OpenCL platform id.
+  info*          profile;                                                       // Platform parameter.
+  info*          version;                                                       // Platform parameter.
+  info*          name;                                                          // Platform parameter.
+  info*          vendor;                                                        // Platform parameter.
+  info*          extensions;                                                    // Platform parameter.
 
-      // OpenCL error check function:
-      void                check_error   (
-                                          cl_int            loc_error           // Error code.
-                                        );
+  platform  ();
+  void init (
+             cl_platform_id loc_platform_id                                     // Platform ID.
+            );
 
-      // Gets size information:
-      size_t              get_info_size (
-                                          cl_platform_id    loc_platform_id,    // Platform ID.
-                                          cl_platform_info  loc_parameter_name  // Paramenter name.
-                                        );
-
-      // Gets size information:
-      char*               get_info_value(
-                                          cl_platform_id    loc_platform_id,    // Platform ID.
-                                          cl_platform_info  loc_parameter_name, // Paramenter name.
-                                          size_t            loc_parameter_size  // Parameter size.
-                                        );
-
-    public:
-      cl_platform_id          id;                                               // OpenCL platform id.
-      info*                   profile;                                          // Platform parameter.
-      info*                   version;                                          // Platform parameter.
-      info*                   name;                                             // Platform parameter.
-      info*                   vendor;                                           // Platform parameter.
-      info*                   extensions;                                       // Platform parameter.
-
-                              platform  ();
-
-      void                    init      (
-                                          cl_platform_id    loc_platform_id     // Platform ID.
-                                        );
-
-                              ~platform ();
-  };
+  ~platform ();
+};
 
 #endif
