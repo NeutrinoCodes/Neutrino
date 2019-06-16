@@ -4,6 +4,7 @@
 #define kernel_hpp
 
 #include "neutrino.hpp"
+#include "host_datatypes.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "KERNEL" CLASS ////////////////////////////////
@@ -52,7 +53,7 @@ public:
     baseline->action ("setting kernel argument...");                            // Printing message...
     // Creating OpenCL memory buffer:
     loc_data.buffer = clCreateBuffer (
-                                      opencl_context,                           // OpenCL context.
+                                      baseline->context_id,                     // OpenCL context.
                                       CL_MEM_READ_WRITE |
                                       CL_MEM_COPY_HOST_PTR,                     // Memory flags.
                                       sizeof(loc_data.data)*loc_data.size,      // Data buffer size.
@@ -65,79 +66,80 @@ public:
     baseline->done ();                                                          // Printing message...
   };
 
-  template <> void setarg <point*>(
-                                   point* loc_data                              // Data object.
-                                  )
-  {
-    cl_int loc_error;                                                           // Error code.
-
-    baseline->action ("setting kernel argument...");                            // Printing message...
-
-    // Generating VAO...
-    glGenVertexArrays (
-                       1,                                                       // # of VAOs to generate.
-                       &loc_data.vao                                            // VAOs array.
-                      );
-    glBindVertexArray (loc_data.vao);                                           // Binding node VAO...
-
-    // Generating VBO:
-    glGenBuffers (
-                  1,                                                            // # of VBOs to generate.
-                  &loc_data.vbo                                                 // VBOs array.
-                 );
-
-    // Binding VBO:
-    glBindBuffer (
-                  GL_ARRAY_BUFFER,                                              // VBO target.
-                  loc_data.vbo                                                  // VBO to bind.
-                 );
-
-    // Creating and initializing a buffer object's data store:
-    glBufferData (
-                  GL_ARRAY_BUFFER,                                              // VBO target.
-                  sizeof(loc_data.data)*loc_data.size,                          // VBO size.
-                  loc_data.data,                                                // VBO data.
-                  GL_DYNAMIC_DRAW                                               // VBO usage.
-                 );
-
-    // Specifying the format for attribute in vertex shader:
-    glVertexAttribPointer (
-                           LAYOUT_NODE,                                         // VAO index.
-                           sizeof(loc_data.data),                               // VAO's # of components.
-                           GL_FLOAT,                                            // Data type.
-                           GL_FALSE,                                            // Not using normalized numbers.
-                           0,                                                   // Data stride.
-                           0                                                    // Data offset.
-                          );
-
-    // Enabling attribute in vertex shader:
-    glEnableVertexAttribArray (
-                               LAYOUT_NODE;                                     // VAO index.
-                              );
-
-    // Binding VBO:
-    glBindBuffer (
-                  GL_ARRAY_BUFFER,                                              // VBO target.
-                  loc_data.vbo                                                  // VBO to bind.
-                 );
-
-    // Creating OpenCL buffer from OpenGL buffer:
-    loc_data.buffer = clCreateFromGLBuffer (
-                                            opencl_context,                     // OpenCL context.
-                                            CL_MEM_READ_WRITE,                  // Memory flags.
-                                            loc_data.vbo,                       // VBO.
-                                            &loc_error                          // Returned error.
-                                           );
-
-    check_error (loc_error);                                                    // Checking returned error code...
-
-    baseline->baseline->done ();                                                // Printing message...
-  };
-
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// DESTRUCTOR /////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   ~kernel();
+};
+
+template <>
+void kernel::setarg <point*>(
+                             point* loc_data                                    // Data object.
+                            )
+{
+  cl_int loc_error;                                                             // Error code.
+
+  baseline->action ("setting kernel argument...");                              // Printing message...
+
+  // Generating VAO...
+  glGenVertexArrays (
+                     1,                                                         // # of VAOs to generate.
+                     &loc_data->vao                                             // VAOs array.
+                    );
+  glBindVertexArray (loc_data->vao);                                            // Binding node VAO...
+
+  // Generating VBO:
+  glGenBuffers (
+                1,                                                              // # of VBOs to generate.
+                &loc_data->vbo                                                  // VBOs array.
+               );
+
+  // Binding VBO:
+  glBindBuffer (
+                GL_ARRAY_BUFFER,                                                // VBO target.
+                loc_data->vbo                                                   // VBO to bind.
+               );
+
+  // Creating and initializing a buffer object's data store:
+  glBufferData (
+                GL_ARRAY_BUFFER,                                                // VBO target.
+                sizeof(loc_data->data)*loc_data->size,                          // VBO size.
+                loc_data->data,                                                 // VBO data.
+                GL_DYNAMIC_DRAW                                                 // VBO usage.
+               );
+
+  // Specifying the format for attribute in vertex shader:
+  glVertexAttribPointer (
+                         LAYOUT_NODE,                                           // VAO index.
+                         sizeof(loc_data->data),                                // VAO's # of components.
+                         GL_FLOAT,                                              // Data type.
+                         GL_FALSE,                                              // Not using normalized numbers.
+                         0,                                                     // Data stride.
+                         0                                                      // Data offset.
+                        );
+
+  // Enabling attribute in vertex shader:
+  glEnableVertexAttribArray (
+                             LAYOUT_NODE;                                       // VAO index.
+                            );
+
+  // Binding VBO:
+  glBindBuffer (
+                GL_ARRAY_BUFFER,                                                // VBO target.
+                loc_data->vbo                                                   // VBO to bind.
+               );
+
+  // Creating OpenCL buffer from OpenGL buffer:
+  loc_data->buffer = clCreateFromGLBuffer (
+                                           baseline->context_id,                // OpenCL context.
+                                           CL_MEM_READ_WRITE,                   // Memory flags.
+                                           loc_data->vbo,                       // VBO.
+                                           &loc_error                           // Returned error.
+                                          );
+
+  check_error (loc_error);                                                      // Checking returned error code...
+
+  baseline->baseline->done ();                                                  // Printing message...
 };
 
 #endif
