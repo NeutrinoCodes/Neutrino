@@ -354,21 +354,18 @@ void opengl::set_plot_style (
   }
 }
 
-/// # OpenGL variable bind function
+/// # OpenGL bind function
 /// ### Description:
-/// Binds cell variables.
-void opengl::bind_cell (
-                        node* loc_cell_node,                                    // Node.
-                        link* loc_cell_link                                     // Link.
-                       )
+/// Binds variables.
+void opengl::bind (
+                   point* loc_point                                             // Point.
+                  )
 {
-  size_t num_position_components;                                               // # of position components.
-  size_t num_color_components;                                                  // # of color components.
+  size_t num_components;                                                        // # of vector components.
   size_t layout;                                                                // OpenGL GLSL layout value.
 
-  num_position_components = sizeof(float4)/sizeof(float4 ().x);                 // Setting # of position componets...
-  num_color_components    = sizeof(color4)/sizeof(color4 ().r);                 // Setting # of color components...
-  layout                  = 0;                                                  // Resetting layout value...
+  num_components = sizeof(point_structure)/sizeof(GLfloat)/2;                   // Setting # of vector componets...
+  layout         = 0;                                                           // Resetting layout value...
 
   // Binding "node position" array:
   glBindBuffer (GL_ARRAY_BUFFER, loc_cell_node->node_vbo);                      // Binding VBO...
