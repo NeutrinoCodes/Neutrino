@@ -4,8 +4,6 @@
 #define window_hpp
 
   #include "neutrino.hpp"
-  #include "node.hpp"
-  #include "bond.hpp"
   #include "text4.hpp"
   #include "memory_orb.hpp"
 
