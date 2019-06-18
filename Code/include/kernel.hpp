@@ -44,9 +44,10 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// SETARG ///////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  template <typename T> void setarg (
-                                     T loc_data                                 // Data object.
-                                    )
+  template <typename T, typename ... Args> void setarg (
+                                                        T       loc_data,       // Data object.
+                                                        Args... args            // Extra arguments.
+                                                       )
   {
     cl_int loc_error;                                                           // Error code.
 
@@ -74,7 +75,8 @@ public:
 
 template <>
 void kernel::setarg <point*>(
-                             point* loc_data                                    // Data object.
+                             point* loc_data,                                   // Data object.
+                             GLuint loc_layout_index                            // OpenGL GLSL layout index.
                             )
 {
   cl_int loc_error;                                                             // Error code.
@@ -110,7 +112,7 @@ void kernel::setarg <point*>(
 
   // Specifying the format for attribute in vertex shader:
   glVertexAttribPointer (
-                         LAYOUT_NODE,                                           // VAO index.
+                         loc_layout_index,                                      // VAO index.
                          sizeof(loc_data->data),                                // VAO's # of components.
                          GL_FLOAT,                                              // Data type.
                          GL_FALSE,                                              // Not using normalized numbers.
@@ -120,7 +122,7 @@ void kernel::setarg <point*>(
 
   // Enabling attribute in vertex shader:
   glEnableVertexAttribArray (
-                             LAYOUT_NODE;                                       // VAO index.
+                             loc_layout_index                                   // VAO index.
                             );
 
   // Binding VBO:
@@ -137,9 +139,9 @@ void kernel::setarg <point*>(
                                            &loc_error                           // Returned error.
                                           );
 
-  check_error (loc_error);                                                      // Checking returned error code...
+  baseline->check_error (loc_error);                                            // Checking returned error code...
 
-  baseline->baseline->done ();                                                  // Printing message...
+  baseline->done ();                                                            // Printing message...
 };
 
 #endif
