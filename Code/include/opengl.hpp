@@ -82,16 +82,6 @@ private:
                               float      view_matrix[16],                       // View matrix.
                               float      projection_matrix[16]                  // Projection matrix.
                              );
-  // Bind cell data:
-  void        bind_cell (
-                         node* loc_cell_node,                                   // Node.
-                         bond* loc_cell_link                                    // Link.
-                        );
-  // Unbind cell data
-  void        unbind_cell (
-                           node* loc_cell_node,                                 // Node.
-                           bond* loc_cell_link                                  // Link.
-                          );
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// CALLBACKS ///////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////

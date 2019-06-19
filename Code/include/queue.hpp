@@ -85,33 +85,22 @@ public:
   ///////////////////////////////////// ACQUIRE //////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   void acquire (
-                point* loc_data                                                 // Data object.
+                point* loc_data,                                                // Data object.
+                GLuint loc_layout_index                                         // OpenGL shader layout index.
+               );
+
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////// RELEASE //////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  void release (
+                point* loc_data,                                                // Data object.
+                GLuint loc_layout_index                                         // OpenGL shader layout index.
                );
 
   ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////// RELEASE ///////////////////////////////////
+  //////////////////////////////////// DESTRUCTOR ////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  template <typename T> void release (
-                                      T loc_data                                // Data object.
-                                     )
-  {
-    cl_int loc_error;                                                           // Local error code.
-
-    // Releasing openCL buffer:
-    loc_error = clEnqueueReleaseGLObjects (
-                                           queue_id,                            // Queue.
-                                           1,                                   // # of memory objects.
-                                           &loc_data.buffer,                    // Memory object array.
-                                           0,                                   // # of events in event list.
-                                           NULL,                                // Event list.
-                                           NULL                                 // Event.
-                                          );
-
-    clFinish (queue_id);                                                        // Ensuring that all OpenCL routines have completed all operations...
-
-    check_error (loc_error);                                                    // Checking returned error code...
-  };
-
   ~queue();
 
 #endif
