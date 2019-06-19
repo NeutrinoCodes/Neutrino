@@ -354,115 +354,6 @@ void opengl::set_plot_style (
   }
 }
 
-/// # OpenGL bind function
-/// ### Description:
-/// Binds variables.
-void opengl::bind (
-                   point* loc_point                                             // Point.
-                  )
-{
-  size_t num_components;                                                        // # of vector components.
-  size_t layout;                                                                // OpenGL GLSL layout value.
-
-  num_components = sizeof(point_structure)/sizeof(GLfloat)/2;                   // Setting # of vector componets...
-  layout         = 0;                                                           // Resetting layout value...
-
-  // Binding "node position" array:
-  glBindBuffer (GL_ARRAY_BUFFER, loc_cell_node->node_vbo);                      // Binding VBO...
-  glVertexAttribPointer (
-                         layout,                                                // VAO index.
-                         num_position_components,                               // Number of components of data vector.
-                         GL_FLOAT,                                              // Data type.
-                         GL_FALSE,                                              // Fixed-point data normalization.
-                         sizeof(node_structure),                                // Data stride.
-                         (GLvoid*)OFFSETOF (node_structure, position)           // Data offset.
-                        );                                                      // Specifying the format for "layout = vao_index" attribute in vertex shader...
-  glEnableVertexAttribArray (layout);                                           // Enabling "LAYOUT_NODE_POSITION" attribute in vertex shader...
-  layout++;                                                                     // Incrementing layout value...
-
-  // Binding "node color" array:
-  glBindBuffer (GL_ARRAY_BUFFER, loc_cell_node->node_vbo);                      // Binding VBO...
-  glVertexAttribPointer (
-                         layout,                                                // VAO index.
-                         num_color_components,                                  // Number of components of data vector.
-                         GL_FLOAT,                                              // Data type.
-                         GL_FALSE,                                              // Fixed-point data normalization.
-                         sizeof(node_structure),                                // Data stride.
-                         (GLvoid*)OFFSETOF (node_structure, color)              // Data offset.
-                        );                                                      // Specifying the format for "layout = vao_index" attribute in vertex shader...
-  glEnableVertexAttribArray (layout);                                           // Enabling "LAYOUT_NODE_COLOR" attribute in vertex shader...
-  layout++;                                                                     // Incrementing layout value...
-
-  // Binding "link neighbour position" array:
-  for(i = 0; i < NEIGHBOURS; i++)
-  {
-    glBindBuffer (GL_ARRAY_BUFFER, loc_cell_node->node_vbo);                    // Binding VBO...
-    glVertexAttribPointer (
-                           layout + i,                                          // VAO index.
-                           num_position_components,                             // Number of components of data vector.
-                           GL_FLOAT,                                            // Data type.
-                           GL_FALSE,                                            // Fixed-point data normalization.
-                           sizeof(link_structure),                              // Data stride.
-                           (GLvoid*)(OFFSETOF (link_structure, position) +
-                                     i * num_position_components)               // Data offset.
-                          );                                                    // Specifying the format for "layout = vao_index" attribute in vertex shader...
-    glEnableVertexAttribArray (layout + i);                                     // Enabling "LAYOUT_LINK_NEIGHBOUR_POSITION + i" attribute in vertex shader...
-  }
-
-  layout += NEIGHBOURS;                                                         // Incrementing layout value...
-
-  // Binding "link neighbour color" array:
-  for(i = 0; i < NEIGHBOURS; i++)
-  {
-    glBindBuffer (GL_ARRAY_BUFFER, loc_cell_node->node_vbo);                    // Binding VBO...
-    glVertexAttribPointer (
-                           layout + i,                                          // VAO index.
-                           sizeof(float4)/sizeof(float4 ().x),                  // Number of components of data vector.
-                           GL_FLOAT,                                            // Data type.
-                           GL_FALSE,                                            // Fixed-point data normalization.
-                           sizeof(loc_cell_link),                               // Data stride.
-                           (GLvoid*)(OFFSETOF (link_structure, color) +
-                                     i * num_position_components)               // Data offset.
-                          );                                                    // Specifying the format for "layout = vao_index" attribute in vertex shader...
-    glEnableVertexAttribArray (layout + num_position_components + i);           // Enabling "LAYOUT_LINK_NEIGHBOUR_POSITION + i" attribute in vertex shader...
-  }
-}
-
-/// # OpenGL variable unbind function
-/// ### Description:
-/// Unbinds cell variables.
-void opengl::unbind_cell (
-                          node* loc_cell_node,                                  // Node.
-                          link* loc_cell_link                                   // Link.
-                         )
-{
-  size_t num_position_components;                                               // # of position components.
-  size_t num_color_components;                                                  // # of color components.
-  size_t layout;                                                                // OpenGL GLSL layout value.
-
-  num_position_components = sizeof(float4)/sizeof(float4 ().x);                 // Setting # of position componets...
-  num_color_components    = sizeof(color4)/sizeof(color4 ().r);                 // Setting # of color components...
-  layout                  = 0;                                                  // Resetting layout value...
-
-  glDisableVertexAttribArray (layout);                                          // Unbinding "node position" array...
-  layout++;                                                                     // Incrementing layout value...
-
-  glDisableVertexAttribArray (layout);                                          // Unbinding "node color" array...
-  layout++;                                                                     // Incrementing layout value...
-
-  for(i = 0; i < NEIGHBOURS; i++)
-  {
-    glDisableVertexAttribArray (layout + i);                                    // Unbinding "link neighbour position" arrays...
-  }
-
-  layout += NEIGHBOURS;                                                         // Incrementing layout value...
-
-  for(i = 0; i < NEIGHBOURS; i++)
-  {
-    glDisableVertexAttribArray (layout + i);                                    // Unbinding "link neighbour color" arrays...
-  }
-}
-
 /// # Initialisation function
 /// ### Description:
 /// Initialises GLFW context, initialises GLAD context, initialises OpenGL
@@ -1222,21 +1113,9 @@ void opengl::plot (
       multiplicate (V_mat, T_mat, R_mat);                                       // Setting view matrix...
       set_plot_style (ps, V_mat, P_mat);                                        // Setting plot style...
 
-      // Binding cell variables.
-      bind_cell (
-                 loc_cell_node,                                                 // Node.
-                 loc_cell_link                                                  // Link.
-                );
-
       // Drawing:
       glViewport (0, 0, window_size_x, window_size_y);
       glDrawArrays (GL_POINTS, 0, NODES);                                       // Drawing "points"...
-
-      // Unbinding cell variables.
-      unbind_cell (
-                   loc_cell_node,                                               // Node.
-                   loc_cell_link                                                // Link.
-                  );
 
       break;
 
@@ -1250,12 +1129,6 @@ void opengl::plot (
       ////////////////////////////////////////////////////////////////////////////
       set_plot_style (ps, VL_mat, PL_mat);                                      // Setting plot style...
 
-      // Binding cell variables.
-      bind_cell (
-                 loc_cell_node,                                                 // Node.
-                 loc_cell_link                                                  // Link.
-                );
-
       // Drawing:
       glViewport (
                   0,
@@ -1268,24 +1141,12 @@ void opengl::plot (
                     0,
                     NODES
                    );                                                           // Drawing "points"...
-
-      // Unbinding cell variables.
-      unbind_cell (
-                   loc_cell_node,                                               // Node.
-                   loc_cell_link                                                // Link.
-                  );
 
       ////////////////////////////////////////////////////////////////////////////
       //////////////////////////////// RIGHT EYE /////////////////////////////////
       ////////////////////////////////////////////////////////////////////////////
       set_plot_style (ps, VR_mat, PR_mat);                                      // Setting plot style...
 
-      // Binding cell variables.
-      bind_cell (
-                 loc_cell_node,                                                 // Node.
-                 loc_cell_link                                                  // Link.
-                );
-
       // Drawing:
       glViewport (
                   window_size_x/2,
@@ -1298,12 +1159,6 @@ void opengl::plot (
                     0,
                     NODES
                    );                                                           // Drawing "points"...
-
-      // Unbinding cell variables.
-      unbind_cell (
-                   loc_cell_node,                                               // Node.
-                   loc_cell_link                                                // Link.
-                  );
 
       break;
   }

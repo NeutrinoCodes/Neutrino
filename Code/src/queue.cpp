@@ -42,11 +42,25 @@ void queue::init (
 ///////////////////////////////////// ACQUIRE ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 void queue::acquire (
-                     point* loc_data                                            // Data object.
+                     point* loc_data,                                           // Data object.
+                     GLuint loc_layout_index                                    // OpenGL shader layout index.
                     )
 {
   cl_int loc_error;                                                             // Local error code.
+  size_t num_components;                                                        // # of vector components.
+  size_t layout;                                                                // OpenGL GLSL layout value.
 
+  // Binding data:
+  glBindBuffer (GL_ARRAY_BUFFER, loc_cell_node->node_vbo);                      // Binding VBO...
+  glVertexAttribPointer (
+                         loc_layout_index,                                      // VAO index.
+                         sizeof(point_structure)/sizeof(GLfloat),               // Number of components of data vector.
+                         GL_FLOAT,                                              // Data type.
+                         GL_FALSE,                                              // Fixed-point data normalization.
+                         sizeof(point_structure),                               // Data stride.
+                         0                                                      // Data offset.
+                        );                                                      // Specifying the format for "layout = vao_index" attribute in vertex shader...
+  glEnableVertexAttribArray (layout);                                           // Enabling "LAYOUT_NODE_POSITION" attribute in vertex shader...
   glFinish ();                                                                  // Ensuring that all OpenGL routines have completed all operations...
 
   // Acquiring OpenCL buffer:
@@ -66,7 +80,8 @@ void queue::acquire (
 //////////////////////////////////// RELEASE /////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 void queue::release (
-                     point* loc_data                                            // Data object.
+                     point* loc_data,                                           // Data object.
+                     GLuint loc_layout_index                                    // OpenGL shader layout index.
                     )
 {
   cl_int loc_error;                                                             // Local error code.
@@ -82,6 +97,8 @@ void queue::release (
                                         );
 
   clFinish (queue_id);                                                          // Ensuring that all OpenCL routines have completed all operations...
+
+  glDisableVertexAttribArray (loc_layout_index);                                // Unbinding data array...
 
   baseline->check_error (loc_error);                                            // Checking returned error code...
 };
