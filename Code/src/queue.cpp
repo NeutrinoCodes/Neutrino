@@ -51,7 +51,7 @@ void queue::acquire (
   size_t layout;                                                                // OpenGL GLSL layout value.
 
   // Binding data:
-  glBindBuffer (GL_ARRAY_BUFFER, loc_cell_node->node_vbo);                      // Binding VBO...
+  glBindBuffer (GL_ARRAY_BUFFER, loc_data->vbo);                                // Binding VBO...
   glVertexAttribPointer (
                          loc_layout_index,                                      // VAO index.
                          sizeof(point_structure)/sizeof(GLfloat),               // Number of components of data vector.
@@ -67,7 +67,7 @@ void queue::acquire (
   loc_error = clEnqueueAcquireGLObjects (
                                          queue_id,                              // Queue.
                                          1,                                     // # of memory objects.
-                                         &loc_data.buffer,                      // Memory object array.
+                                         &loc_data->buffer,                     // Memory object array.
                                          0,                                     // # of events in event list.
                                          NULL,                                  // Event list.
                                          NULL                                   // Event.
@@ -90,7 +90,7 @@ void queue::release (
   loc_error = clEnqueueReleaseGLObjects (
                                          queue_id,                              // Queue.
                                          1,                                     // # of memory objects.
-                                         &loc_data.buffer,                      // Memory object array.
+                                         &loc_data->buffer,                     // Memory object array.
                                          0,                                     // # of events in event list.
                                          NULL,                                  // Event list.
                                          NULL                                   // Event.

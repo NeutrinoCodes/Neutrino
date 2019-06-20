@@ -35,7 +35,9 @@ public:
   GLuint           vbo;                                                         // Node VBO.
   GLsizeiptr       size;                                                        // Data size.
 
-  point(
+  point();
+
+  init (
         GLsizeiptr loc_size                                                     // Data size.
        );
 
