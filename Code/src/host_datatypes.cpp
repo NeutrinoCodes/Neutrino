@@ -5,6 +5,13 @@
 //////////////////////////////////////////////////////////////////////////////////
 point::point()
 {
+// Doing nothing.
+}
+
+point::init (
+             GLsizeiptr loc_size                                                // Data size.
+            )
+{
   point_structure* data = new point_structure[loc_size];
   size = loc_size;
 }
