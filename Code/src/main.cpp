@@ -42,6 +42,8 @@ int main ()
   size_t**  K_size   = new size_t*[KERNEL_NUM];                                 // OpenCL kernel dimensions array...
   kernel**  K        = new kernel*[KERNEL_NUM];                                 // OpenCL kernel array...
 
+  point*    P        = new point ();
+
   /*
      node*     cell_node = new node ();                                            // Node array.
      bond*     cell_bond = new bond ();                                            // Bond array.
@@ -230,6 +232,11 @@ int main ()
 
     gui->clear ();                                                              // Clearing window...
     gui->poll_events ();                                                        // Polling window events...
+
+    Q->acquire (
+                point* loc_data,                                                // Data object.
+                GLuint loc_layout_index                                         // OpenGL shader layout index.
+               );
 
 // EZOR: testing data structures.
 /*
