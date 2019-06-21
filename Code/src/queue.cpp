@@ -47,8 +47,6 @@ void queue::acquire (
                     )
 {
   cl_int loc_error;                                                             // Local error code.
-  size_t num_components;                                                        // # of vector components.
-  size_t layout;                                                                // OpenGL GLSL layout value.
 
   // Binding data:
   glBindBuffer (GL_ARRAY_BUFFER, loc_data->vbo);                                // Binding VBO...
@@ -59,8 +57,8 @@ void queue::acquire (
                          GL_FALSE,                                              // Fixed-point data normalization.
                          sizeof(point_structure),                               // Data stride.
                          0                                                      // Data offset.
-                        );                                                      // Specifying the format for "layout = vao_index" attribute in vertex shader...
-  glEnableVertexAttribArray (layout);                                           // Enabling "LAYOUT_NODE_POSITION" attribute in vertex shader...
+                        );
+  glEnableVertexAttribArray (loc_layout_index);                                 // Setting layout index in vertex shader...
   glFinish ();                                                                  // Ensuring that all OpenGL routines have completed all operations...
 
   // Acquiring OpenCL buffer:
