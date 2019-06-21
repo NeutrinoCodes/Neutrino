@@ -2,12 +2,14 @@
 
 #version 410 core
 
-layout (location = 0) in  vec4 color_PC;                                        // Input color to be processed.
-layout (location = 1) in  vec4 point_PC;                                        // Input point to be processed.
-layout (location = 2) in  vec4 point_PR;                                        // Input point to be processed.
-layout (location = 3) in  vec4 point_PU;                                        // Input point to be processed.
-layout (location = 4) in  vec4 point_PL;                                        // Input point to be processed.
-layout (location = 5) in  vec4 point_PD;                                        // Input point to be processed.
+layout (location = 0) in float Px;                                              // "x" coordinate.
+layout (location = 1) in float Py;                                              // "y" coordinate.
+layout (location = 2) in float Pz;                                              // "z" coordinate.
+layout (location = 3) in float Pw;                                              // "w" coordinate.
+layout (location = 4) in float Pr;                                              // "r" color.
+layout (location = 5) in float Pg;                                              // "g" color.
+layout (location = 6) in float Pb;                                              // "b" color.
+layout (location = 7) in float Pa;                                              // "a" color.
 
 out VS_OUT
 {
