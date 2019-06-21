@@ -33,12 +33,13 @@
 
 int main ()
 {
-  neutrino* baseline = new neutrino ();                                         // The Neutrino object.
-  opengl*   gui      = new opengl ();                                           // The gui window object.
-  opencl*   context  = new opencl ();                                           // The OpenCL context object.
-  queue*    Q        = new queue ();                                            // OpenCL queue.
-  kernel*   K        = new kernel ();                                           // OpenCL kernel array...
-  point*    P        = new point ();
+  neutrino* baseline     = new neutrino ();                                     // Neutrino object.
+  opengl*   gui          = new opengl ();                                       // OpenGL context.
+  shader*   voxel_shader = new shader ();                                       // OpenGL shader program.
+  opencl*   context      = new opencl ();                                       // OpenCL context.
+  queue*    Q            = new queue ();                                        // OpenCL queue.
+  kernel*   K            = new kernel ();                                       // OpenCL kernel array...
+  point*    P            = new point ();
 
   /*
      node*     cell_node = new node ();                                            // Node array.
