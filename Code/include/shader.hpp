@@ -10,9 +10,7 @@ class shader
 {
 private:
   neutrino* baseline;                                                           // Neutrino baseline.
-  ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////// PRIVATE METHODS ///////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+
   // OpenGL shader compilation:
   GLuint    compile (
                      const char* loc_shader_filename,                           // Shader file name.
@@ -24,7 +22,6 @@ private:
                    const char* loc_geometry_filename,                           // Geometry shader file name.
                    const char* loc_fragment_filename                            // Fragment shader file name.
                   );
-
 
 public:
   GLuint    vertex;                                                             // Vertex shader id.
@@ -45,20 +42,9 @@ public:
                  );
 
   ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////// SETARG TEMPLATE ///////////////////////////////
+  //////////////////////////////////// BUILD /////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
-  void setarg (
-               T       loc_data,                                                // Data object.
-               cl_uint loc_layout_index                                         // Layout index.
-              )
-  {
-    glBindAttribLocation (
-                          program,
-                          loc_layout_index,
-                          loc_data->name
-                         );                                                     // Binding data...
-  };
+  void      build ();
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////// DESTRUCTOR ////////////////////////////////
@@ -71,14 +57,14 @@ public:
   template <>
   void shader::setarg <point*>(
                                point* loc_data,                                 // Data object.
-                               GLuint loc_layout_index                          // Layout index.
+                               GLuint loc_layout_index                          // Data layout index.
                               )
   {
     glBindAttribLocation (
                           program,                                              // OpenGL GLSL program.
-                          loc_layout_index,                                     // Layout index.
+                          loc_layout_index,                                     // Data layout index.
                           loc_data->name                                        // Data name.
-                         );                                                     // Binding point data...
+                         );
   };
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -87,13 +73,14 @@ public:
   template <>
   void shader::setarg <color*>(
                                color* loc_data,                                 // Data object.
-                               GLuint loc_layout_index                          // Layout index.
+                               GLuint loc_layout_index                          // Data layout index.
                               )
   {
     glBindAttribLocation (
                           program,                                              // OpenGL GLSL program.
-                          loc_layout_index,                                     // Layout index.
+                          loc_layout_index,                                     // Data layout index.
                           loc_data->name                                        // Data name.
-                         );                                                     // Binding color data...
+                         );
   };
+
 #endif
