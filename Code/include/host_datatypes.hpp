@@ -34,11 +34,12 @@ private:
 
 public:
   point_structure* data;                                                        // Point data structure.
-  cl_mem           buffer;                                                      // OpenCL data memory buffer.
-  GLuint           vao;                                                         // Node VAO.
-  GLuint           vbo;                                                         // Node VBO.
+  cl_mem           buffer;                                                      // Data memory buffer.
+  GLuint           vao;                                                         // Data VAO.
+  GLuint           vbo;                                                         // Data VBO.
   GLsizeiptr       size;                                                        // Data size.
-  GLuint           layout;                                                      // Layout index.
+  GLuint           layout;                                                      // Data layout index.
+  const char*      name;                                                        // Data name.
 
   point();
 
@@ -58,11 +59,12 @@ private:
 
 public:
   color_structure* data;                                                        // Color data structure.
-  cl_mem           buffer;                                                      // OpenCL data memory buffer.
-  GLuint           vao;                                                         // Node VAO.
-  GLuint           vbo;                                                         // Node VBO.
+  cl_mem           buffer;                                                      // Data memory buffer.
+  GLuint           vao;                                                         // Data VAO.
+  GLuint           vbo;                                                         // Data VBO.
   GLsizeiptr       size;                                                        // Data size.
-  GLuint           layout;                                                      // Layout index.
+  GLuint           layout;                                                      // Data layout index.
+  const char*      name;                                                        // Data name.
 
   color();
 

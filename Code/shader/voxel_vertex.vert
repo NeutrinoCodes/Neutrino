@@ -2,14 +2,8 @@
 
 #version 410 core
 
-layout (location = 0) in float Px;                                              // "x" coordinate.
-layout (location = 1) in float Py;                                              // "y" coordinate.
-layout (location = 2) in float Pz;                                              // "z" coordinate.
-layout (location = 3) in float Pw;                                              // "w" coordinate.
-layout (location = 4) in float Pr;                                              // "r" color.
-layout (location = 5) in float Pg;                                              // "g" color.
-layout (location = 6) in float Pb;                                              // "b" color.
-layout (location = 7) in float Pa;                                              // "a" color.
+layout (location = 0) in float voxel_center;                                    // Voxel center.
+layout (location = 1) in float voxel_color;                                     // Voxel color.
 
 out VS_OUT
 {
