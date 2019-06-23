@@ -27,8 +27,7 @@ private:
 
 
 public:
-
-
+  GLuint    program;                                                            // OpenGL program.
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////// CONSTRUCTOR ///////////////////////////////
@@ -38,53 +37,9 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// INIT /////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  template <typename T, typename ... Args>
-  GLuint init (
-               const char* loc_vertex_filename,                                 // Vertex shader file name.
-               const char* loc_geometry_filename,                               // Geometry shader file name.
-               const char* loc_fragment_filename,                               // Fragment shader file name.
-               const char* loc_var_name,                                        // Vertex shader 1st input variable name.
-               Args...     args                                                 // Vertex shader extra input variable names.
-              )
-  {
-    GLuint vertex;                                                              // Vertex shader.
-    GLuint geometry;                                                            // Geometry shader.
-    GLuint fragment;                                                            // Fragment shader.
-    GLuint program;                                                             // Shader program.
-    size_t i = 0;                                                               // Argument counter;
-
-    if(i == 0)
-    {
-      vertex   = compile_shader (loc_vertex_filename, VERTEX);                  // Compiling vertex shader...
-      geometry = compile_shader (loc_geometry_filename, GEOMETRY);              // Compiling geometry shader...
-      fragment = compile_shader (loc_fragment_filename, FRAGMENT);              // Compiling fragment shader...
-
-      program  = glCreateProgram ();                                            // Creating program...
-
-      glAttachShader (program, vertex);                                         // Attaching vertex shader to program...
-      glAttachShader (program, geometry);                                       // Attaching geometry shader to program...
-      glAttachShader (program, fragment);                                       // Attaching fragment shader to program...
-
-      glLinkProgram (program);                                                  // Linking program...
-
-      return (program);                                                         // Returning shader program...
-    }
-
-    i++;
-
-    glBindAttribLocation (program, 0, loc_var_name);                            // Binding point...
-    init (args ...);
-
-    if( i == sizeof...(args))
-    {
-      glAttachShader (program, vertex);                                         // Attaching vertex shader to program...
-      glAttachShader (program, geometry);                                       // Attaching geometry shader to program...
-      glAttachShader (program, fragment);                                       // Attaching fragment shader to program...
-      glLinkProgram (program);                                                  // Linking program...
-
-      return (program);                                                         // Returning shader program...
-    }
-  };
+  void      init (
+                  neutrino* loc_baseline                                        // Neutrino baseline.
+                 );
 
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// DESTRUCTOR ////////////////////////////////
