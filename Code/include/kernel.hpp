@@ -44,10 +44,11 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// SETARG ///////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  template <typename T> void setarg (
-                                     T       loc_data,                          // Data object.
-                                     cl_uint loc_layout_index                   // Layout index.
-                                    )
+  template <typename T>
+  void setarg (
+               T       loc_data,                                                // Data object.
+               cl_uint loc_layout_index                                         // Layout index.
+              )
   {
     cl_int loc_error;                                                           // Error code.
 
