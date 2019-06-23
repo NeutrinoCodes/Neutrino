@@ -27,6 +27,9 @@ private:
 
 
 public:
+  GLuint    vertex;                                                             // Vertex shader id.
+  GLuint    geometry;                                                           // Geometry shader id.
+  GLuint    fragment;                                                           // Fragment shader id.
   GLuint    program;                                                            // OpenGL program.
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -41,8 +44,56 @@ public:
                   neutrino* loc_baseline                                        // Neutrino baseline.
                  );
 
-////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////// DESTRUCTOR ////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////// SETARG TEMPLATE ///////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  template <typename T>
+  void setarg (
+               T       loc_data,                                                // Data object.
+               cl_uint loc_layout_index                                         // Layout index.
+              )
+  {
+    glBindAttribLocation (
+                          program,
+                          loc_layout_index,
+                          loc_data->name
+                         );                                                     // Binding data...
+  };
+
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////// DESTRUCTOR ////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   ~shader ();
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////// SETARG "point" SPECIALIZATION ///////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  template <>
+  void shader::setarg <point*>(
+                               point* loc_data,                                 // Data object.
+                               GLuint loc_layout_index                          // Layout index.
+                              )
+  {
+    glBindAttribLocation (
+                          program,                                              // OpenGL GLSL program.
+                          loc_layout_index,                                     // Layout index.
+                          loc_data->name                                        // Data name.
+                         );                                                     // Binding point data...
+  };
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////// SETARG "color" SPECIALIZATION ///////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  template <>
+  void shader::setarg <color*>(
+                               color* loc_data,                                 // Data object.
+                               GLuint loc_layout_index                          // Layout index.
+                              )
+  {
+    glBindAttribLocation (
+                          program,                                              // OpenGL GLSL program.
+                          loc_layout_index,                                     // Layout index.
+                          loc_data->name                                        // Data name.
+                         );                                                     // Binding color data...
+  };
 #endif

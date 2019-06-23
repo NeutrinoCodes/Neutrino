@@ -33,41 +33,31 @@
 
 int main ()
 {
-  neutrino* baseline     = new neutrino ();                                     // Neutrino object.
-  opengl*   gui          = new opengl ();                                       // OpenGL context.
-  shader*   voxel_shader = new shader ();                                       // OpenGL shader program.
-  opencl*   context      = new opencl ();                                       // OpenCL context.
-  queue*    Q            = new queue ();                                        // OpenCL queue.
-  kernel*   K            = new kernel ();                                       // OpenCL kernel array...
-  point*    P            = new point ();
-
-  /*
-     node*     cell_node = new node ();                                            // Node array.
-     bond*     cell_bond = new bond ();                                            // Bond array.
-     int1      cell_number;                                                        // Number of cells.
-     int1      cell_node_index;                                                    // Cell node index.
-     int1      cell_bond_index[NEIGHBOURS];                                        // Cell neighbour index.
-     float4    cell_node_position;                                                 // Cell node position.
-     color4    cell_node_color;                                                    // Cell node color.
-     size_t    i;
-     size_t    j;
-   */
+  neutrino* bas = new neutrino ();                                              // Neutrino baseline.
+  opengl*   gui = new opengl ();                                                // OpenGL context.
+  opencl*   ctx = new opencl ();                                                // OpenCL context.
+  shader*   S   = new shader ();                                                // OpenGL shader program.
+  point*    P   = new point ();                                                 // OpenGL point.
+  color*    C   = new color ();                                                 // OpenGL color.
+  queue*    Q   = new queue ();                                                 // OpenCL queue.
+  kernel*   K   = new kernel ();                                                // OpenCL kernel array.
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// INITIALIZATION ///////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  baseline->init (QUEUE_NUM, KERNEL_NUM);                                       // Initializing Neutrino...
+  bas->init (QUEUE_NUM, KERNEL_NUM);                                            // Initializing Neutrino...
   gui->init (baseline, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);              // Initializing OpenGL context...
-  context->init (baseline, gui->glfw_window, GPU);                              // Initializing OpenCL context...
-  Q->init (baseline);                                                           // Initializing OpenCL queue...
-  // Initializing OpenCL kernel...
+  ctx->init (bas, gui->glfw_window, GPU);                                       // Initializing OpenCL context...
+  S->init ();                                                                   // Initializing OpenGL shader...
+  P->init (NODES);                                                              // Initializing OpenGL point array...
+  C->init (NODES);                                                              // Initializing OpenGL color array...
+  Q->init (bas);                                                                // Initializing OpenCL queue...
   K->init (
-           baseline,                                                            // Neutrino baseline.
-           baseline->prefix ("Code/kernel/thekernel.cl"),                       // Kernel file name.
+           bas,                                                                 // Neutrino baseline.
+           bas->prefix ("Code/kernel/thekernel.cl"),                            // Kernel file name.
            NODES,                                                               // Kernel dimensions array.
            KERNEL_DIM                                                           // Kernel dimension.
           );
-  P->init (NODES);                                                              // Initializing point array..
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// SETTING POINTS DATA /////////////////////////////
@@ -76,112 +66,17 @@ int main ()
   {
     for(i = 0; i < NODES_X; i++)
     {
-      cell_node_index.value = j*NODES_X + i;                                    // Setting node index...
+      P[j*NODES_X + i].x = i*DX + XMIN;
+      P[j*NODES_X + i].y = j*DY + YMIN;
+      P[j*NODES_X + i].z = 0.0;
+      P[j*NODES_X + i].w = 1.0;
 
-      P[j*NODES_X + i].x    = i*DX + XMIN;
-      P[j*NODES_X + i].y    = j*DY + YMIN;
-      P[j*NODES_X + i].z    = 0.0;
-      P[j*NODES_X + i].w    = 1.0;
+      C[j*NODES_X + i].r = 0.01*(rand () % 100);
+      C[j*NODES_X + i].g = 0.01*(rand () % 100);
+      C[j*NODES_X + i].b = 0.01*(rand () % 100);
+      C[j*NODES_X + i].a = 1.0;
 
-      P[j*NODES_X + i].r    = 0.01*(rand () % 100);
-      P[j*NODES_X + i].g    = 0.01*(rand () % 100);
-      P[j*NODES_X + i].b    = 0.01*(rand () % 100);
-      P[j*NODES_X + i].a    = 1.0;
 
-      /*
-         if((i != 0) && (i != (NODES_X - 1)) && (j != 0) && (j != (NODES_Y - 1)))  // When on bulk:
-         {
-         cell_bond_index[UP].value    = NODES_X*(j + 1) + (i + 0);
-         cell_bond_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
-         cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
-         cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
-
-         cell_bond->set_bond_index (
-                                   cell_node_index,
-                                   cell_bond_index
-                                  );
-         }
-
-         if((i == 0) && (j != 0) && (j != (NODES_Y - 1)))                          // When on left border (excluding extremes):
-         {
-         cell_bond_index[UP].value    = NODES_X*(j + 1) + (i + 0);
-         cell_bond_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
-         cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i + 0);
-         cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
-
-         cell_bond->set_bond_index (cell_node_index, cell_bond_index);
-         }
-
-         if((i == (NODES_X - 1)) && (j != 0) && (j != (NODES_Y - 1)))              // When on right border (excluding extremes):
-         {
-         cell_bond_index[UP].value    = NODES_X*(j + 1) + (i + 0);
-         cell_bond_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
-         cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
-         cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 0);
-
-         cell_bond->set_bond_index (cell_node_index, cell_bond_index);
-         }
-
-         if((j == 0) && (i != 0) && (i != (NODES_X - 1)))                          // When on bottom border (excluding extremes):
-         {
-         cell_bond_index[UP].value    = NODES_X*(j + 1) + (i + 0);
-         cell_bond_index[DOWN].value  = NODES_X*(j + 0) + (i + 0);
-         cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
-         cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
-
-         cell_bond->set_bond_index (cell_node_index, cell_bond_index);
-         }
-
-         if((j == (NODES_Y - 1)) && (i != 0) && (i != (NODES_X - 1)))              // When on high border (excluding extremes):
-         {
-         cell_bond_index[UP].value    = NODES_X*(j + 0) + (i + 0);
-         cell_bond_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
-         cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
-         cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
-
-         cell_bond->set_bond_index (cell_node_index, cell_bond_index);
-         }
-
-         if((i == 0) && (j == 0))                                                  // When on bottom left corner:
-         {
-         cell_bond_index[UP].value    = NODES_X*(j + 1) + (i + 0);
-         cell_bond_index[DOWN].value  = NODES_X*(j + 0) + (i + 0);
-         cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i + 0);
-         cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
-
-         cell_bond->set_bond_index (cell_node_index, cell_bond_index);
-         }
-
-         if((i == (NODES_X - 1)) && (j == 0))                                      // When on bottom right corner:
-         {
-         cell_bond_index[UP].value    = NODES_X*(j + 1) + (i + 0);
-         cell_bond_index[DOWN].value  = NODES_X*(j + 0) + (i + 0);
-         cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
-         cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 0);
-
-         cell_bond->set_bond_index (cell_node_index, cell_bond_index);
-         }
-
-         if((i == 0) && (j == (NODES_Y - 1)))                                      // When on top left corner:
-         {
-         cell_bond_index[UP].value    = NODES_X*(j + 0) + (i + 0);
-         cell_bond_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
-         cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i + 0);
-         cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 1);
-
-         cell_bond->set_bond_index (cell_node_index, cell_bond_index);
-         }
-
-         if((i == (NODES_X - 1)) && (j == (NODES_Y - 1)))                          // When on top right corner:
-         {
-         cell_bond_index[UP].value    = NODES_X*(j + 0) + (i + 0);
-         cell_bond_index[DOWN].value  = NODES_X*(j - 1) + (i + 0);
-         cell_bond_index[LEFT].value  = NODES_X*(j + 0) + (i - 1);
-         cell_bond_index[RIGHT].value = NODES_X*(j + 0) + (i + 0);
-
-         cell_bond->set_bond_index (cell_node_index, cell_bond_index);
-         }
-       */
     }
   }
 
@@ -191,15 +86,30 @@ int main ()
   K->setarg (P, 0);
   Q->write (P, 0);
 
+  K->setarg (C, 1);
+  Q->write (C, 1);
+
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////// SETTING OPENGL SHADER ARGUMENTS ///////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  S->setarg (P, 0);
+  S->write (P, 0);
+
+  S->setarg (C, 1);
+  S->write (C, 1);
+
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////// APPLICATION LOOP //////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   while(!gui->closed ())                                                        // Opening window...
   {
-    baseline->get_tic ();                                                       // Getting "tic" [us]...
+    bas->get_tic ();                                                            // Getting "tic" [us]...
 
     gui->clear ();                                                              // Clearing window...
     gui->poll_events ();                                                        // Polling window events...
 
     Q->acquire (P, 0);
-    context->execute (K, Q, WAIT);
+    ctx->execute (K, Q, WAIT);
     Q->release (P, 0);
 
     gui->plot (
@@ -211,15 +121,20 @@ int main ()
 
     gui->refresh ();                                                            // Refreshing window...
 
-    baseline->get_toc ();                                                       // Getting "toc" [us]...
+    bas->get_toc ();                                                            // Getting "toc" [us]...
   }
 
-  delete baseline;
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////// CLEANUP //////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  delete bas;
   delete gui;
-  delete context;
+  delete ctx;
+  delete S;
+  delete P;
+  delete C;
   delete Q;
   delete K;
-  delete P;
 
   return 0;
 }

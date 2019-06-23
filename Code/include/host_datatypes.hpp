@@ -8,18 +8,22 @@
 //////////////////////////////////////////////////////////////////////////////////
 typedef struct __attribute__ ((packed)) _point_structure
 {
-  // Position:
   GLfloat x;                                                                    // "x" coordinate.
   GLfloat y;                                                                    // "y" coordinate.
   GLfloat z;                                                                    // "z" coordinate.
   GLfloat w;                                                                    // "w" coordinate.
+} point_structure;
 
-  // Color:
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// "COLOR" STRUCTURE ///////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+typedef struct __attribute__ ((packed)) _color_structure
+{
   GLfloat r;                                                                    // "r" color.
   GLfloat g;                                                                    // "g" color.
   GLfloat b;                                                                    // "b" color.
   GLfloat a;                                                                    // "a" color.
-} point_structure;
+} color_structure;
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "POINT" CLASS /////////////////////////////////
@@ -43,6 +47,30 @@ public:
        );
 
   ~point();
+};
+
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////// "COLOR" CLASS /////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+class color
+{
+private:
+
+public:
+  color_structure* data;                                                        // Color data structure.
+  cl_mem           buffer;                                                      // OpenCL data memory buffer.
+  GLuint           vao;                                                         // Node VAO.
+  GLuint           vbo;                                                         // Node VBO.
+  GLsizeiptr       size;                                                        // Data size.
+  GLuint           layout;                                                      // Layout index.
+
+  color();
+
+  init (
+        GLsizeiptr loc_size                                                     // Data size.
+       );
+
+  ~color();
 };
 
 #endif

@@ -20,3 +20,24 @@ point::~point()
 {
   delete point_structure;
 }
+
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////// "COLOR" CLASS /////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+color::color()
+{
+// Doing nothing.
+}
+
+color::init (
+             GLsizeiptr loc_size                                                // Data size.
+            )
+{
+  color_structure* data = new color_structure[loc_size];
+  size = loc_size;
+}
+
+color::~color()
+{
+  delete color_structure;
+}
