@@ -1,28 +1,6 @@
 #ifndef neutrino_hpp
 #define neutrino_hpp
 
-/// These files are relative to the NEUTRINO_PATH environmental variable:
-  #define POINT_VERTEX_FILE                 "/Code/shader/point_vertex.vert"    // Plot style POINT vertex shader.
-  #define POINT_GEOMETRY_FILE               "/Code/shader/point_geometry.geom"  // Plot style POINT geometry shader.
-  #define POINT_FRAGMENT_FILE               "/Code/shader/point_fragment.frag"  // Plot style POINT fragment shader.
-
-  #define WIREFRAME_VERTEX_FILE \
-  "/Code/shader/wireframe_vertex.vert"                                          // Plot style POINT vertex shader.
-  #define WIREFRAME_GEOMETRY_FILE \
-  "/Code/shader/wireframe_geometry.geom"                                        // Plot style POINT geometry shader.
-  #define WIREFRAME_FRAGMENT_FILE \
-  "/Code/shader/wireframe_fragment.frag"                                        // Plot style POINT fragment shader.
-
-  #define SHADED_VERTEX_FILE                "/Code/shader/shaded_vertex.vert"   // Plot style POINT vertex shader.
-  #define SHADED_GEOMETRY_FILE \
-  "/Code/shader/shaded_geometry.geom"                                           // Plot style POINT geometry shader.
-  #define SHADED_FRAGMENT_FILE \
-  "/Code/shader/shaded_fragment.frag"                                           // Plot style POINT fragment shader.
-
-  #define TEXT_VERTEX_FILE                  "/Code/shader/text_vertex.vert"     // Print style TEXT vertex shader.
-  #define TEXT_GEOMETRY_FILE                "/Code/shader/text_geometry.geom"   // Print style TEXT fragment shader.
-  #define TEXT_FRAGMENT_FILE                "/Code/shader/text_fragment.frag"   // Print style TEXT fragment shader.
-
   #define CL_USE_DEPRECATED_OPENCL_1_2_APIS                                     // Allows the usage of "OpenCL 1.2" functions in newer versions.
 
   #ifdef __WINDOWS__
@@ -160,15 +138,6 @@ typedef enum
   MODE_STEREO                                                                   // Projection mode set as 3D.
 } projection_mode;
 
-// Plot styles:
-typedef enum
-{
-  STYLE_POINT,                                                                  // Plot style set as points.
-  STYLE_VOXEL,                                                                  // Plot style set as voxels.
-  STYLE_WIREFRAME,                                                              // Plot style set as lines.
-  STYLE_SHADED                                                                  // Plot style set as shaded surfaces.
-} plot_style;
-
 // Shader types:
 typedef enum
 {
@@ -183,17 +152,6 @@ typedef enum
   WAIT,                                                                         // OpenCL kernel set as blocking mode.
   DONT_WAIT                                                                     // OpenCL kernel set as non-blocking mode.
 } kernel_mode;
-
-// Data types:
-typedef enum
-{
-  INT,                                                                          // OpenCL "int".
-  INT4,                                                                         // OpenCL "int4".
-  FLOAT,                                                                        // OpenCL "float".
-  FLOAT4,                                                                       // OpenCL "float4".
-  MESH,                                                                         // Mesh data, re-indexed for OpenGL plot.
-  COLOR                                                                         // Color data, re-indexed for OpenGL plot.
-} data_type;
 
 // Compute device types:
 typedef enum
@@ -215,23 +173,8 @@ typedef enum
   #include <errno.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-///////////////////////////// Timing C header files ////////////////////////////
+/////////////////////////////// GLAD header files //////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-  #if defined(__WINDOWS__)
-    #include <Windows.h>
-  #elif defined(__linux__) || defined(__APPLE__)
-    #include <unistd.h>
-    #include <sys/resource.h>
-    #include <sys/times.h>
-    #include <time.h>
-  #else
-    #error "Unable to define getCPUTime() for an unknown OS."
-  #endif
-
-////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////// GLEW header files //////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-//#include <GL/glew.h>                                                          // http://glew.sourceforge.net
   #include <glad/glad.h>                                                        // https://glad.dav1d.de
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -258,11 +201,6 @@ typedef enum
     #include <CL/cl.h>                                                          // https://www.opengl.org
     #include <CL/cl_gl.h>                                                       // https://www.opengl.org
   #endif
-
-//////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////// Baseline header file /////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-  #include "baseline.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// Utility header files //////////////////////////////

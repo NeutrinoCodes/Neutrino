@@ -92,154 +92,38 @@ void opengl::zoom ()
   backup (T_mat_old, T_mat);
 }
 
-void opengl::set_plot_style (
-                             plot_style ps,                                     // Plot style.
-                             float      view_matrix[16],                        // View matrix.
-                             float      projection_matrix[16]                   // Projection matrix.
-                            )
+void opengl::set_shader (
+                         shader* loc_shader,                                    // Shader.
+                         float   view_matrix[16],                               // View matrix.
+                         float   projection_matrix[16]                          // Projection matrix.
+                        )
 {
-  switch(ps)
-  {
-    case STYLE_POINT:
-      glUseProgram (point_shader);                                              // Using shader...
 
-      // Setting View_matrix matrix on shader:
-      glUniformMatrix4fv (
+  glUseProgram (loc_shader->program);                                           // Using shader...
+
+  // Setting View_matrix matrix on shader:
+  glUniformMatrix4fv (
                                                                                 // Getting variable's uniform location:
-                          glGetUniformLocation (
-                                                point_shader,                   // Program.
-                                                "View_matrix"                   // Variable.
-                                               ),
-                          1,                                                    // # of matrices to be modified.
-                          GL_FALSE,                                             // FALSE = column major.
-                          &view_matrix[0]                                       // View matrix.
-                         );
+                      glGetUniformLocation (
+                                            loc_shader->program,                // Program.
+                                            "View_matrix"                       // Variable.
+                                           ),
+                      1,                                                        // # of matrices to be modified.
+                      GL_FALSE,                                                 // FALSE = column major.
+                      &view_matrix[0]                                           // View matrix.
+                     );
 
-      // Setting Projection_matrix matrix on shader:
-      glUniformMatrix4fv (
+  // Setting Projection_matrix matrix on shader:
+  glUniformMatrix4fv (
                                                                                 // Getting variable's uniform location:
-                          glGetUniformLocation (
-                                                point_shader,                   // Program.
-                                                "Projection_matrix"             // Variable.
-                                               ),
-                          1,                                                    // # of matrices to be modified.
-                          GL_FALSE,                                             // FALSE = column major.
-                          &projection_matrix[0]                                 // Projection matrix.
-                         );
-      break;
-
-    case STYLE_VOXEL:
-      glUseProgram (voxel_shader);                                              // Using shader...
-
-      // Setting View_matrix matrix on shader:
-      glUniformMatrix4fv (
-                                                                                // Getting variable's uniform location:
-                          glGetUniformLocation (
-                                                voxel_shader,                   // Program.
-                                                "View_matrix"                   // Variable.
-                                               ),
-                          1,                                                    // # of matrices to be modified.
-                          GL_FALSE,                                             // FALSE = column major.
-                          &view_matrix[0]                                       // View matrix.
-                         );
-
-      // Setting Projection_matrix matrix on shader:
-      glUniformMatrix4fv (
-                                                                                // Getting variable's uniform location:
-                          glGetUniformLocation (
-                                                voxel_shader,                   // Program.
-                                                "Projection_matrix"             // Variable.
-                                               ),
-                          1,                                                    // # of matrices to be modified.
-                          GL_FALSE,                                             // FALSE = column major.
-                          &projection_matrix[0]                                 // Projection matrix.
-                         );
-      break;
-
-    case STYLE_WIREFRAME:
-      glUseProgram (wireframe_shader);                                          // Using shader...
-
-      // Setting View_matrix matrix on shader:
-      glUniformMatrix4fv (
-                                                                                // Getting variable's uniform location:
-                          glGetUniformLocation (
-                                                wireframe_shader,               // Program.
-                                                "View_matrix"                   // Variable.
-                                               ),
-                          1,                                                    // # of matrices to be modified.
-                          GL_FALSE,                                             // FALSE = column major.
-                          &view_matrix[0]                                       // View matrix.
-                         );
-
-      // Setting Projection_matrix matrix on shader:
-      glUniformMatrix4fv (
-                                                                                // Getting variable's uniform location:
-                          glGetUniformLocation (
-                                                wireframe_shader,               // Program.
-                                                "Projection_matrix"             // Variable.
-                                               ),
-                          1,                                                    // # of matrices to be modified.
-                          GL_FALSE,                                             // FALSE = column major.
-                          &projection_matrix[0]                                 // Projection matrix.
-                         );
-      break;
-
-    case STYLE_SHADED:
-      glUseProgram (shaded_shader);                                             // Using shader...
-
-      // Setting View_matrix matrix on shader:
-      glUniformMatrix4fv (
-                                                                                // Getting variable's uniform location:
-                          glGetUniformLocation (
-                                                shaded_shader,                  // Program.
-                                                "View_matrix"                   // Variable.
-                                               ),
-                          1,                                                    // # of matrices to be modified.
-                          GL_FALSE,                                             // FALSE = column major.
-                          &view_matrix[0]                                       // View matrix.
-                         );
-
-      // Setting Projection_matrix matrix on shader:
-      glUniformMatrix4fv (
-                                                                                // Getting variable's uniform location:
-                          glGetUniformLocation (
-                                                shaded_shader,                  // Program.
-                                                "Projection_matrix"             // Variable.
-                                               ),
-                          1,                                                    // # of matrices to be modified.
-                          GL_FALSE,                                             // FALSE = column major.
-                          &projection_matrix[0]                                 // Projection matrix.
-                         );
-      break;
-
-    default:
-      glUseProgram (point_shader);                                              // Using shader...
-
-      // Setting View_matrix matrix on shader:
-      glUniformMatrix4fv (
-                                                                                // Getting variable's uniform location:
-                          glGetUniformLocation (
-                                                point_shader,                   // Program.
-                                                "View_matrix"                   // Variable.
-                                               ),
-                          1,                                                    // # of matrices to be modified.
-                          GL_FALSE,                                             // FALSE = column major.
-                          &view_matrix[0]                                       // View matrix.
-                         );
-
-      // Setting Projection_matrix matrix on shader:
-      glUniformMatrix4fv (
-                                                                                // Getting variable's uniform location:
-                          glGetUniformLocation (
-                                                point_shader,                   // Program.
-                                                "Projection_matrix"             // Variable.
-                                               ),
-                          1,                                                    // # of matrices to be modified.
-                          GL_FALSE,                                             // FALSE = column major.
-                          &projection_matrix[0]                                 // Projection matrix.
-                         );
-      break;
-  }
+                      glGetUniformLocation (
+                                            loc_shader->program,                // Program.
+                                            "Projection_matrix"                 // Variable.
+                                           ),
+                      1,                                                        // # of matrices to be modified.
+                      GL_FALSE,                                                 // FALSE = column major.
+                      &projection_matrix[0]                                     // Projection matrix.
+                     );
 }
 
 /// # Initialisation function
