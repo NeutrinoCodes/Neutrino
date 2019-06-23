@@ -83,6 +83,8 @@ void kernel::setarg <point*>(
 
   baseline->action ("setting kernel argument...");                              // Printing message...
 
+  loc_data->layout = loc_layout_index;                                          // Setting layout index.
+
   // Generating VAO...
   glGenVertexArrays (
                      1,                                                         // # of VAOs to generate.

@@ -34,6 +34,7 @@ public:
   GLuint           vao;                                                         // Node VAO.
   GLuint           vbo;                                                         // Node VBO.
   GLsizeiptr       size;                                                        // Data size.
+  GLuint           layout;                                                      // Layout index.
 
   point();
 
