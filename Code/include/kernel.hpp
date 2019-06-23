@@ -44,10 +44,10 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// SETARG ///////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  template <typename T, typename ... Args> void setarg (
-                                                        T       loc_data,       // Data object.
-                                                        Args... args            // Extra arguments.
-                                                       )
+  template <typename T> void setarg (
+                                     T       loc_data,                          // Data object.
+                                     cl_uint loc_layout_index                   // Layout index.
+                                    )
   {
     cl_int loc_error;                                                           // Error code.
 
@@ -64,6 +64,13 @@ public:
 
     baseline->check_error (loc_error);                                          // Checking returned error code...
 
+    loc_error = clSetKernelArg (
+                                kernel_id,                                      // Kernel id.
+                                loc_layout_index,                               // Layout index.
+                                sizeof(cl_mem),                                 // Data size.
+                                &loc_data->buffer                               // Data value.
+                               );
+
     baseline->done ();                                                          // Printing message...
   };
 
@@ -76,7 +83,7 @@ public:
 template <>
 void kernel::setarg <point*>(
                              point* loc_data,                                   // Data object.
-                             GLuint loc_layout_index                            // OpenGL GLSL layout index.
+                             GLuint loc_layout_index                            // Layout index.
                             )
 {
   cl_int loc_error;                                                             // Error code.
@@ -140,6 +147,13 @@ void kernel::setarg <point*>(
                                            loc_data->vbo,                       // VBO.
                                            &loc_error                           // Returned error.
                                           );
+
+  loc_error        = clSetKernelArg (
+                                     kernel_id,                                 // Kernel id.
+                                     loc_layout_index,                          // Layout index.
+                                     sizeof(cl_mem),                            // Data size.
+                                     &loc_data->buffer                          // Data value.
+                                    );
 
   baseline->check_error (loc_error);                                            // Checking returned error code...
 
