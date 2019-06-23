@@ -189,7 +189,7 @@ int main ()
   //////////////////////// SETTING OPENCL KERNEL ARGUMENTS ///////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   K->setarg (P, 0);
-  Q->write (P);
+  Q->write (P, 0);
 
   while(!gui->closed ())                                                        // Opening window...
   {

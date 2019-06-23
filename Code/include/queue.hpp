@@ -57,13 +57,21 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// WRITE ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  template <typename T> void write (
-                                    T loc_data                                  // Data object.
-                                   )
+  template <typename T1, typename T2> void write (
+                                                  T1 loc_data,                  // Data object.
+                                                  T2 loc_layout_index           // OpenGL GLSL layout index.
+                                                 )
   {
     cl_int loc_error;                                                           // Local error code.
 
     // Writing OpenCL buffer:
+
+    if(loc_layout_index != loc_data->layout)
+    {
+      baseline->error ("Layout index mismatch!");                               // Printing message...
+      exit (EXIT_FAILURE);                                                      // Exiting...
+    }
+
     loc_error = clEnqueueWriteBuffer (
                                       queue_id,                                 // OpenCL queue ID.
                                       loc_data.buffer,                          // Data buffer.
