@@ -8,9 +8,9 @@ point::point()
 // Doing nothing.
 }
 
-point::init (
-             GLsizeiptr loc_size                                                // Data size.
-            )
+void point::init (
+                  GLsizeiptr loc_size                                           // Data size.
+                 )
 {
   point_structure* data = new point_structure[loc_size];
   size = loc_size;
@@ -18,7 +18,7 @@ point::init (
 
 point::~point()
 {
-  delete point_structure;
+  delete[] data;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -29,9 +29,9 @@ color::color()
 // Doing nothing.
 }
 
-color::init (
-             GLsizeiptr loc_size                                                // Data size.
-            )
+void color::init (
+                  GLsizeiptr loc_size                                           // Data size.
+                 )
 {
   color_structure* data = new color_structure[loc_size];
   size = loc_size;
@@ -39,5 +39,5 @@ color::init (
 
 color::~color()
 {
-  delete color_structure;
+  delete[] data;
 }

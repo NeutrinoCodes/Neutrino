@@ -42,10 +42,9 @@ public:
   const char*      name;                                                        // Data name.
 
   point();
-
-  init (
-        GLsizeiptr loc_size                                                     // Data size.
-       );
+  void init (
+             GLsizeiptr loc_size                                                // Data size.
+            );
 
   ~point();
 };
@@ -67,10 +66,9 @@ public:
   const char*      name;                                                        // Data name.
 
   color();
-
-  init (
-        GLsizeiptr loc_size                                                     // Data size.
-       );
+  void init (
+             GLsizeiptr loc_size                                                // Data size.
+            );
 
   ~color();
 };
