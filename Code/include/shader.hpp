@@ -2,6 +2,7 @@
 #define shader_hpp
 
 #include "neutrino.hpp"
+#include "host_datatypes.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "SHADER" CLASS ////////////////////////////////
@@ -47,40 +48,26 @@ public:
   void      build ();
 
   ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////// SETARG "point" overload //////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  void      setarg (
+                    point* loc_data,                                            // Data object.
+                    GLuint loc_layout_index                                     // Data layout index.
+                   );
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////// SETARG "color" overload //////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  void      setarg (
+                    color* loc_data,                                            // Data object.
+                    GLuint loc_layout_index                                     // Data layout index.
+                   );
+
+  ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////// DESTRUCTOR ////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   ~shader ();
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////// SETARG "point" SPECIALIZATION ///////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  template <>
-  void shader::setarg <point*>(
-                               point* loc_data,                                 // Data object.
-                               GLuint loc_layout_index                          // Data layout index.
-                              )
-  {
-    glBindAttribLocation (
-                          program,                                              // OpenGL GLSL program.
-                          loc_layout_index,                                     // Data layout index.
-                          loc_data->name                                        // Data name.
-                         );
-  };
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////// SETARG "color" SPECIALIZATION ///////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  template <>
-  void shader::setarg <color*>(
-                               color* loc_data,                                 // Data object.
-                               GLuint loc_layout_index                          // Data layout index.
-                              )
-  {
-    glBindAttribLocation (
-                          program,                                              // OpenGL GLSL program.
-                          loc_layout_index,                                     // Data layout index.
-                          loc_data->name                                        // Data name.
-                         );
-  };
 
 #endif

@@ -864,20 +864,9 @@ void opengl::poll_events ()
 /// ### Description:
 /// Selects a plot style and plots data.
 void opengl::plot (
-                   node*      loc_cell_node,                                    // Node.
-                   link*      loc_cell_link,                                    // Link.
-                   plot_style ps                                                // Plot style.
+                   shader* loc_shader                                           // OpenGL shader.
                   )
 {
-  size_t i;                                                                     // Neighbour index.
-  size_t num_position_components;                                               // # of position components.
-  size_t num_color_components;                                                  // # of color components.
-  size_t layout;                                                                // OpenGL GLSL layout value.
-
-  num_position_components = sizeof(float4)/sizeof(float4 ().x);                 // Setting # of position componets...
-  num_color_components    = sizeof(color4)/sizeof(color4 ().r);                 // Setting # of color components...
-  layout                  = 0;                                                  // Resetting layout value...
-
   switch(PR_mode)
   {
     case MODE_MONO:

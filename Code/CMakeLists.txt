@@ -19,25 +19,23 @@ project (neutrino)
 
 message("Creating a SOURCES variable with a link to all cpp files to compile...")
 set(SOURCES
-#src/baseline.cpp
 src/device.cpp
 src/font.cpp
-#src/index.cpp
+src/host_datatypes.cpp
 src/info.cpp
 src/kernel.cpp
 src/linear_algebra.cpp
 src/main.cpp
 src/memory_orb.cpp
 src/neutrino.cpp
-src/opengl.cpp
 src/opencl.cpp
+src/opengl.cpp
 src/path.cpp
 src/platform.cpp
 src/projective_geometry.cpp
 src/queue.cpp
 src/text4.cpp
-#src/node.cpp
-#src/bond.cpp
+src/shader.cpp
 src/glad.c)
 
 if(APPLE)

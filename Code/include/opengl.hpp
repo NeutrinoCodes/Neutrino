@@ -4,10 +4,9 @@
 #define window_hpp
 
   #include "neutrino.hpp"
+  #include "shader.hpp"
   #include "text4.hpp"
   #include "memory_orb.hpp"
-
-  #define OFFSETOF(s, f) ((size_t)((char*)&((s*)0)->f - (char*)0))              // "s" = structure, "f" = field
 
 ////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// "OPENGL" CLASS ///////////////////////////////
@@ -77,11 +76,11 @@ private:
   // Zoom movement:
   void        zoom ();
   // Plot style:
-  void        set_plot_style (
-                              plot_style ps,                                    // Plot style.
-                              float      view_matrix[16],                       // View matrix.
-                              float      projection_matrix[16]                  // Projection matrix.
-                             );
+  void        set_shader (
+                          shader* loc_shader,                                   // Shader.
+                          float   view_matrix[16],                              // View matrix.
+                          float   projection_matrix[16]                         // Projection matrix.
+                         );
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// CALLBACKS ///////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
@@ -291,9 +290,7 @@ public:
   bool closed ();
   // Window "plot" function:
   void plot (
-             node*      loc_cell_node,                                          // Node.
-             bond*      loc_cell_link,                                          // Link.
-             plot_style ps
+             shader* loc_shader                                                 // OpenGL shader.
             );
   // Window "print" function:
   void print (

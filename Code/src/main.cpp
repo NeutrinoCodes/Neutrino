@@ -104,15 +104,12 @@ int main ()
     gui->poll_events ();                                                        // Polling window events...
 
     Q->acquire (P, 0);
+    Q->acquire (C, 1);
     ctx->execute (K, Q, WAIT);
     Q->release (P, 0);
+    Q->release (C, 1);
 
-    gui->plot (
-               cell_node,
-               cell_link,
-               PARTICLE_NUM,
-               STYLE_SHADED
-              );
+    gui->plot (S);
 
     gui->refresh ();                                                            // Refreshing window...
 

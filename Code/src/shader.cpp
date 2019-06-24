@@ -119,6 +119,36 @@ void shader::build ()
 }
 
 //////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// SETARG "point" overload ///////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void setarg (
+             point* loc_data,                                                   // Data object.
+             GLuint loc_layout_index                                            // Data layout index.
+            )
+{
+  glBindAttribLocation (
+                        program,                                                // OpenGL GLSL program.
+                        loc_layout_index,                                       // Data layout index.
+                        loc_data->name                                          // Data name.
+                       );
+};
+
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// SETARG "color" overload ///////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void shader::setarg (
+                     color* loc_data,                                           // Data object.
+                     GLuint loc_layout_index                                    // Data layout index.
+                    )
+{
+  glBindAttribLocation (
+                        program,                                                // OpenGL GLSL program.
+                        loc_layout_index,                                       // Data layout index.
+                        loc_data->name                                          // Data name.
+                       );
+};
+
+//////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////// DESTRUCTOR /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 shader::~shader ()
