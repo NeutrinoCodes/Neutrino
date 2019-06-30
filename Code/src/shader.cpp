@@ -121,10 +121,10 @@ void shader::build ()
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// SETARG "point" overload ///////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void setarg (
-             point* loc_data,                                                   // Data object.
-             GLuint loc_layout_index                                            // Data layout index.
-            )
+void shader::setarg (
+                     point* loc_data,                                           // Data object.
+                     GLuint loc_layout_index                                    // Data layout index.
+                    )
 {
   glBindAttribLocation (
                         program,                                                // OpenGL GLSL program.
