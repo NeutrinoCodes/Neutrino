@@ -172,7 +172,8 @@ void opengl::init (
   opengl_ver_minor = 1;                                                         // EZOR 04NOV2018: to be generalized by iterative search.
   opengl_msaa      = 4;                                                         // EZOR: 3 or 4 sample is good due to the general oversampling-decimation method.
 
-  #ifdef USE_GRAPHICS
+  if(baseline->interop)
+  {
     // Initializing GLFW context:
     baseline->action ("initializing GLFW...");                                  // Printing message...
 
@@ -313,9 +314,11 @@ void opengl::init (
     glfwSwapInterval (1);                                                       // Enabling screen vertical retrace synchronization (vsync)...
     glfwSwapBuffers (glfw_window);                                              // Swapping front and back buffers...
     glfwPollEvents ();                                                          // Polling GLFW events...
-  #else
-    baseline->action ("graphics disabled by user: switching to text mode...");  // Printing message...
-  #endif
+  }
+  else
+  {
+    baseline->action ("OpenCL/GL interoperability disabled by user...");        // Printing message...
+  }
 }
 
 /// # Window closed function
@@ -323,7 +326,8 @@ void opengl::init (
 /// Closes the graphics window.
 bool opengl::closed ()
 {
-  #ifdef USE_GRAPHICS
+  if(baseline->interop)
+  {
     if(glfwWindowShouldClose (glfw_window))
     {
       baseline->erase ();                                                       // Printing message...
@@ -332,9 +336,11 @@ bool opengl::closed ()
     }
 
     return(glfwWindowShouldClose (glfw_window));                                // Returning window closure status...
-  #else
+  }
+  else
+  {
     baseline->action ("terminating text context...");                           // Printing message...
-  #endif
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////
