@@ -81,7 +81,7 @@ public:
   size_t          size;                                                         // Data size.
   cl_uint         layout;                                                       // Data layout index.
 
-  float4 ();
+  int4 ();
   void init (
              size_t loc_size                                                    // Data size.
             );

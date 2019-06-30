@@ -18,10 +18,10 @@ kernel::kernel()
 /// Creates the OpenCL program from its source. Creates the device ID list.
 /// Builds the OpenCL program. Creates the OpenCL kernel.
 void kernel::init (
-                   neutrino* loc_baseline,                                      // Neutrino baseline.
-                   char*     loc_kernel_filename,                               // OpenCL kernel file name.
-                   size_t*   loc_kernel_size,                                   // OpenCL kernel size.
-                   cl_uint   loc_kernel_dimension                               // OpenCL kernel dimension.
+                   neutrino*   loc_baseline,                                    // Neutrino baseline.
+                   const char* loc_kernel_filename,                             // OpenCL kernel file name.
+                   size_t      loc_kernel_size,                                 // OpenCL kernel size.
+                   cl_uint     loc_kernel_dimension                             // OpenCL kernel dimension.
                   )
 {
   cl_int loc_error;                                                             // Error code.
@@ -214,7 +214,7 @@ void kernel::setarg (
 void kernel::setarg (
                      point* loc_data,                                           // Data object.
                      GLuint loc_layout_index                                    // Layout index.
-                    );
+                    )
 {
   cl_int loc_error;                                                             // Error code.
 

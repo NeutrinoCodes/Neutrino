@@ -31,90 +31,101 @@ public:
                         );
 
   ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////// READ ////////////////////////////////////
+  ///////////////////////////// READ "float4" overload ///////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  template <typename T1, typename T2>
-  void read (
-             T1 loc_data,                                                       // Data object.
-             T2 loc_layout_index                                                // OpenGL GLSL layout index.
-            )
-  {
-    cl_int loc_error;                                                           // Local error code.
-
-    // Checking layout index:
-    if(loc_layout_index != loc_data->layout)
-    {
-      baseline->error ("Layout index mismatch!");                               // Printing message...
-      exit (EXIT_FAILURE);                                                      // Exiting...
-    }
-
-    // Reading OpenCL buffer:
-    loc_error = clEnqueueReadBuffer (
-                                     queue_id,                                  // OpenCL queue ID.
-                                     loc_data.buffer,                           // Data buffer.
-                                     CL_TRUE,                                   // Blocking write flag.
-                                     0,                                         // Data buffer offset.
-                                     sizeof(loc_data.data)*loc_data.size,       // Data buffer size.
-                                     loc_data.data,                             // Data buffer.
-                                     0,                                         // Number of events in the list.
-                                     NULL,                                      // Event list.
-                                     NULL                                       // Event.
-                                    );
-
-    check_error (loc_error);
-  };
+  void             read (
+                         float4* loc_data,                                      // Data object.
+                         cl_uint loc_layout_index                               // Layout index.
+                        );
 
   ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////// WRITE ////////////////////////////////////
+  /////////////////////////////// READ "int4" overload ///////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  template <typename T1, typename T2>
-  void write (
-              T1 loc_data,                                                      // Data object.
-              T2 loc_layout_index                                               // OpenGL GLSL layout index.
-             )
-  {
-    cl_int loc_error;                                                           // Local error code.
-
-    // Checking layout index:
-    if(loc_layout_index != loc_data->layout)
-    {
-      baseline->error ("Layout index mismatch!");                               // Printing message...
-      exit (EXIT_FAILURE);                                                      // Exiting...
-    }
-
-    // Writing OpenCL buffer:
-    loc_error = clEnqueueWriteBuffer (
-                                      queue_id,                                 // OpenCL queue ID.
-                                      loc_data.buffer,                          // Data buffer.
-                                      CL_TRUE,                                  // Blocking write flag.
-                                      0,                                        // Data buffer offset.
-                                      sizeof(loc_data.data)*loc_data.size,      // Data buffer size.
-                                      loc_data.data,                            // Data buffer.
-                                      0,                                        // Number of events in the list.
-                                      NULL,                                     // Event list.
-                                      NULL                                      // Event.
-                                     );
-
-    check_error (loc_error);
-
-    baseline->done ();                                                          // Printing message...
-  };
+  void             read (
+                         int4* loc_data,                                        // Data object.
+                         cl_uint loc_layout_index                               // Layout index.
+                        );
 
   ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////// ACQUIRE //////////////////////////////////
+  ////////////////////////////// READ "point" overload ///////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  void acquire (
-                point* loc_data,                                                // Data object.
-                GLuint loc_layout_index                                         // OpenGL shader layout index.
-               );
+  void             read (
+                         point* loc_data,                                       // Data object.
+                         GLuint loc_layout_index                                // Layout index.
+                        );
 
   ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////// RELEASE //////////////////////////////////
+  ////////////////////////////// READ "color" overload ///////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  void release (
-                point* loc_data,                                                // Data object.
-                GLuint loc_layout_index                                         // OpenGL shader layout index.
-               );
+  void             read (
+                         color* loc_data,                                       // Data object.
+                         GLuint loc_layout_index                                // Layout index.
+                        );
+
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////// WRITE "float4" overload //////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  void             write (
+                          float4* loc_data,                                     // Data object.
+                          cl_uint loc_layout_index                              // Layout index.
+                         );
+
+  ////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////// WRITE "int4" overload //////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  void             write (
+                          int4* loc_data,                                       // Data object.
+                          cl_uint loc_layout_index                              // Layout index.
+                         );
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////// WRITE "point" overload //////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  void             write (
+                          point* loc_data,                                      // Data object.
+                          GLuint loc_layout_index                               // Layout index.
+                         );
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////// WRITE "color" overload //////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  void             write (
+                          color* loc_data,                                      // Data object.
+                          GLuint loc_layout_index                               // Layout index.
+                         );
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////// ACQUIRE "point" overload /////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  void             acquire (
+                            point* loc_data,                                    // Data object.
+                            GLuint loc_layout_index                             // OpenGL shader layout index.
+                           );
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////// ACQUIRE "color" overload /////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  void             acquire (
+                            color* loc_data,                                    // Data object.
+                            GLuint loc_layout_index                             // OpenGL shader layout index.
+                           );
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////// RELEASE "point" overload //////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  void             release (
+                            point* loc_data,                                    // Data object.
+                            GLuint loc_layout_index                             // OpenGL shader layout index.
+                           );
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////// RELEASE "color" overload //////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  void             release (
+                            color* loc_data,                                    // Data object.
+                            GLuint loc_layout_index                             // OpenGL shader layout index.
+                           );
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////// DESTRUCTOR ////////////////////////////////

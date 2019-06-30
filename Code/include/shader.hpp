@@ -39,7 +39,10 @@ public:
   ///////////////////////////////////// INIT /////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   void      init (
-                  neutrino* loc_baseline                                        // Neutrino baseline.
+                  neutrino* loc_baseline,                                       // Neutrino baseline.
+                  const char* loc_vertex_filename,                              // Vertex shader file name.
+                  const char* loc_geometry_filename,                            // Geometry shader file name.
+                  const char* loc_fragment_filename                             // Fragment shader file name.
                  );
 
   ////////////////////////////////////////////////////////////////////////////////
