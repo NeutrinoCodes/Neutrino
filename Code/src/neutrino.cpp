@@ -7,16 +7,16 @@
 //////////////////////////////////////////////////////////////////////////////////
 neutrino::neutrino()
 {
-  neutrino_path     = NULL;                                                     // NEUTRINO_PATH environmental variable.
-  neutrino_font     = NULL;                                                     // Neutrino font.
-  use_cl_gl_interop = true;                                                     // Use OpenCL-OpenGL interop.
-  tic               = 0.0;                                                      // Tic time [ms].
-  toc               = 0.0;                                                      // Toc time [ms].
-  loop_time         = 0.0;                                                      // Loop time [ms].
+  neutrino_path = NULL;                                                         // NEUTRINO_PATH environmental variable.
+  neutrino_font = NULL;                                                         // Neutrino font.
+  interop       = false;                                                        // Use OpenCL-OpenGL interop.
+  tic           = 0.0;                                                          // Tic time [ms].
+  toc           = 0.0;                                                          // Toc time [ms].
+  loop_time     = 0.0;                                                          // Loop time [ms].
 
-  context_id        = NULL;                                                     // OpenCL context ID.
-  platform_id       = NULL;                                                     // OpenCL platform ID.
-  device_id         = NULL;                                                     // OpenCL device ID.
+  context_id    = NULL;                                                         // OpenCL context ID.
+  platform_id   = NULL;                                                         // OpenCL platform ID.
+  device_id     = NULL;                                                         // OpenCL device ID.
 }
 
 /// # OpenCL error get function
@@ -65,11 +65,13 @@ double neutrino::get_cpu_time ()
 /// Initialises the neutrino object.
 void neutrino::init (
                      size_t loc_q_num,
-                     size_t loc_k_num
+                     size_t loc_k_num,
+                     bool   loc_interop
                     )
 {
   q_num         = loc_q_num;                                                    // Getting # of OpenCL queues...
   k_num         = loc_k_num;                                                    // Getting # of OpenCL kernels...
+  interop       = loc_interop;                                                  // Getting OpenCL/GL interoperability flag...
   kernel_id     = new cl_kernel[k_num];                                         // Initializing OpenCL kernel ID array...
   terminal_time = 0;
   prefix_buffer = new char[MAX_PATH_SIZE];

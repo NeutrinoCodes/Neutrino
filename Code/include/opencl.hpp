@@ -45,7 +45,7 @@ public:
   opencl();
   void init (
              neutrino*           loc_baseline,
-             GLFWwindow*         loc_glfw_window,
+             opengl*             loc_gui,
              compute_device_type loc_device_type
             );
   // Kernel execution:

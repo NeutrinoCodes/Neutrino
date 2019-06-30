@@ -1,10 +1,10 @@
 /// @file
 
 // OPENGL:
-#define USE_GRAPHICS                                                            // Define it in order to use OpenGL-OpenCL interoperability graphics.
+#define INTEROP       true                                                      // "true" = use OpenGL-OpenCL interoperability.
 #define SIZE_WINDOW_X 800                                                       // Window x-size [px].
 #define SIZE_WINDOW_Y 600                                                       // Window y-size [px].
-#define WINDOW_NAME   "neutrino 2.0"                                            // Window name.
+#define WINDOW_NAME   "neutrino 3.0"                                            // Window name.
 #define VERTEX_FILE   "/Code/shader/voxel_vertex.vert"                          // OpenGL vertex shader.
 #define GEOMETRY_FILE "/Code/shader/voxel_geometry.geom"                        // OpenGL geometry shader.
 #define FRAGMENT_FILE "/Code/shader/voxel_fragment.frag"                        // OpenGL fragment shader.
@@ -42,19 +42,14 @@ int main ()
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// INITIALIZATION ///////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  bas->init (QUEUE_NUM, KERNEL_NUM);                                            // Initializing Neutrino...
+  bas->init (QUEUE_NUM, KERNEL_NUM, INTEROP);                                   // Initializing Neutrino baseline...
   gui->init (bas, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);                   // Initializing OpenGL context...
-  ctx->init (bas, gui->glfw_window, GPU);                                       // Initializing OpenCL context...
+  ctx->init (bas, gui, GPU);                                                    // Initializing OpenCL context...
   S->init ();                                                                   // Initializing OpenGL shader...
   P->init (NODES);                                                              // Initializing OpenGL point array...
   C->init (NODES);                                                              // Initializing OpenGL color array...
   Q->init (bas);                                                                // Initializing OpenCL queue...
-  K->init (
-           bas,                                                                 // Neutrino baseline.
-           bas->prefix (KERNEL_FILE),                                           // Kernel file name.
-           NODES,                                                               // Kernel dimensions array.
-           KERNEL_DIM                                                           // Kernel dimension.
-          );
+  K->init (bas, KERNEL_FILE, NODES, KERNEL_DIM);                                // Initializing OpenCL kernel...
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// SETTING POINTS DATA /////////////////////////////

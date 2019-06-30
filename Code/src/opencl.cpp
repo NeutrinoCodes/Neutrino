@@ -138,21 +138,22 @@ cl_device_id opencl::get_device_id (
 /// identifies the operating system, creates the OpenCL context.
 void opencl::init (
                    neutrino*           loc_baseline,                                // Neutrino baseline.
-                   GLFWwindow*         loc_glfw_window,                             // GLFW window.
+                   opengl*             loc_gui,                                     // OpenGL gui.
                    compute_device_type loc_device_type                              // OpenCL device type.
                   )
 {
   cl_int loc_error;                                                                 // Error code.
   cl_int i;                                                                         // Index.
 
-  baseline          = loc_baseline;                                                 // Getting Neutrino baseline...
-  device_type_text  = new char[MAX_TEXT_SIZE];                                      // Device type text [string].
+  baseline         = loc_baseline;                                                  // Getting Neutrino baseline...
+  device_type_text = new char[MAX_TEXT_SIZE];                                       // Device type text [string].
 
-  #ifndef USE_GRAPHICS
-    loc_glfw_window = NULL;
+  if(!(baseline->interop))
+  {
+    loc_gui->glfw_window = NULL;
 
     baseline->action ("using OpenCL without OpenGL interoperability...");           // Printing message...
-  #endif
+  }
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// SETTING TARGET DEVICE TYPE //////////////////////////
@@ -305,17 +306,20 @@ void opencl::init (
 
     cl_context_properties properties[3];
 
-    #ifdef USE_GRAPHICS
-      CGLContextObj       kCGLContext    = CGLGetCurrentContext ();
-      CGLShareGroupObj    kCGLShareGroup = CGLGetShareGroup (kCGLContext);
+    if(baseline->interop)
+    {
+      CGLContextObj    kCGLContext    = CGLGetCurrentContext ();
+      CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup (kCGLContext);
       properties[0] = CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE;                 // Setting APPLE OpenCL context properties with CL-GL interop...
       properties[1] = (cl_context_properties) kCGLShareGroup;
       properties[2] = 0;
-    #else
+    }
+    else
+    {
       properties[0] = CL_CONTEXT_PLATFORM;                                          // Setting APPLE OpenCL context properties without CL-GL interop...
       properties[1] = (cl_context_properties)baseline->platform_id;
       properties[2] = 0;
-    #endif
+    }
   #endif
 
   #ifdef __linux__                                                                  // Checking for LINUX system...
@@ -324,7 +328,8 @@ void opencl::init (
 
     cl_context_properties properties[7];
 
-    #ifdef USE_GRAPHICS
+    if(baseline->interop)
+    {
       properties[0] = CL_GL_CONTEXT_KHR;                                            // Setting LINUX OpenCL context properties with CL-GL interop...
       properties[1] = (cl_context_properties)glfwGetGLXContext (
                                                                 loc_glfw_window
@@ -334,11 +339,13 @@ void opencl::init (
       properties[4] = CL_CONTEXT_PLATFORM;
       properties[5] = (cl_context_properties)baseline->platform_id;
       properties[6] = 0;
-    #else
+    }
+    else
+    {
       properties[0] = CL_CONTEXT_PLATFORM;                                          // Setting LINUX OpenCL context properties without CL-GL interop...
       properties[1] = (cl_context_properties)baseline->platform_id;
       properties[2] = 0;
-    #endif
+    }
   #endif
 
   #ifdef __WINDOWS__                                                                // Checking for WINDOWS system...
@@ -347,22 +354,29 @@ void opencl::init (
 
     cl_context_properties properties[7];
 
-    #ifdef USE_GRAPHICS
-      properties[0]    = CL_GL_CONTEXT_KHR;                                         // Setting WINDOWS OpenCL context properties with CL-GL interop...
-      properties[1]    = (cl_context_properties)glfwGetWGLContext (
-                                                                   loc_glfw_window
-                                                                  );
-      properties[2]    = CL_WGL_HDC_KHR;
-      properties[3]    =
-        (cl_context_properties)GetDC (glfwGetWin32Window (loc_glfw_window));
-      properties[4]    = CL_CONTEXT_PLATFORM;
-      properties[5]    = (cl_context_properties)baseline->platform_id;
-      properties[6]    = 0;
-    #else
-      properties[0]    = CL_CONTEXT_PLATFORM;                                       // Setting WINDOWS OpenCL context properties without CL-GL interop...
-      properties[1]    = (cl_context_properties)baseline->platform_id;
-      properties[2]    = 0;
-    #endif
+    if(baseline->interop)
+    {
+      properties[0] = CL_GL_CONTEXT_KHR;                                            // Setting WINDOWS OpenCL context properties with CL-GL interop...
+      properties[1] = (cl_context_properties)glfwGetWGLContext (
+                                                                loc_gui->glfw_window
+                                                               );
+      properties[2] = CL_WGL_HDC_KHR;
+      properties[3] =
+        (cl_context_properties)GetDC (
+                                      glfwGetWin32Window (
+                                                          loc_gui->glfw_window
+                                                         )
+                                     );
+      properties[4] = CL_CONTEXT_PLATFORM;
+      properties[5] = (cl_context_properties)baseline->platform_id;
+      properties[6] = 0;
+    }
+    else
+    {
+      properties[0] = CL_CONTEXT_PLATFORM;                                          // Setting WINDOWS OpenCL context properties without CL-GL interop...
+      properties[1] = (cl_context_properties)baseline->platform_id;
+      properties[2] = 0;
+    }
   #endif
 
   ////////////////////////////////////////////////////////////////////////////////
