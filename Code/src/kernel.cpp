@@ -143,38 +143,12 @@ void kernel::init (
   baseline->done ();                                                            // Printing message...
 }
 
-kernel::~kernel()
-{
-  cl_int loc_error;                                                             // Error code.
-
-  baseline->action ("releasing OpenCL kernel...");                              // Printing message...
-
-  loc_error = clReleaseKernel (kernel_id);                                      // Releasing OpenCL kernel...
-  baseline->check_error (loc_error);
-
-  baseline->done ();
-
-  baseline->action ("releasing OpenCL kernel event...");                        // Printing message...
-
-  loc_error = clReleaseEvent (event);                                           // Releasing OpenCL event...
-  baseline->check_error (loc_error);
-
-  baseline->done ();
-
-  baseline->action ("releasing OpenCL program...");                             // Printing message...
-
-  loc_error = clReleaseProgram (program);                                       // Releasing OpenCL program...
-  baseline->check_error (loc_error);
-
-  delete[] device_id;                                                           // Deleting device ID array...
-
-  baseline->done ();
-}
-
-template <typename T1, typename T2>
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////// SETARG "float4" overload ////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 void kernel::setarg (
-                     T1 loc_data,                                               // Data object.
-                     T2 loc_layout_index                                        // Layout index.
+                     float4* loc_data,                                          // Float4 object.
+                     cl_uint loc_layout_index                                   // Layout index.
                     )
 {
   cl_int loc_error;                                                             // Error code.
@@ -201,10 +175,46 @@ void kernel::setarg (
 
   baseline->done ();                                                            // Printing message...
 }
-template void kernel::setarg <point*, GLuint>(
-                                              point* loc_data,                  // Data object.
-                                              GLuint loc_layout_index           // Layout index.
-                                             );
+
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// SETARG "int4" overload ////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void kernel::setarg (
+                     int4*   loc_data,                                          // Int4 object.
+                     cl_uint loc_layout_index                                   // Layout index.
+                    )
+{
+  cl_int loc_error;                                                             // Error code.
+
+  baseline->action ("setting kernel argument...");                              // Printing message...
+  // Creating OpenCL memory buffer:
+  loc_data->buffer = clCreateBuffer (
+                                     baseline->context_id,                      // OpenCL context.
+                                     CL_MEM_READ_WRITE |
+                                     CL_MEM_COPY_HOST_PTR,                      // Memory flags.
+                                     sizeof(loc_data->data)*loc_data->size,     // Data buffer size.
+                                     loc_data->data,                            // Data buffer.
+                                     &loc_error                                 // Error code.
+                                    );
+
+  baseline->check_error (loc_error);                                            // Checking returned error code...
+
+  loc_error = clSetKernelArg (
+                              kernel_id,                                        // Kernel id.
+                              (cl_uint)loc_layout_index,                        // Layout index.
+                              sizeof(cl_mem),                                   // Data size.
+                              &loc_data->buffer                                 // Data value.
+                             );
+
+  baseline->done ();                                                            // Printing message...
+}
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////// SETARG "point" overload ////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void kernel::setarg (
+                     point* loc_data,                                           // Data object.
+                     GLuint loc_layout_index                                    // Layout index.
+                    );
 {
   cl_int loc_error;                                                             // Error code.
 
@@ -280,10 +290,13 @@ template void kernel::setarg <point*, GLuint>(
   baseline->done ();                                                            // Printing message...
 }
 
-template void kernel::setarg <color*, GLuint>(
-                                              color* loc_data,                  // Data object.
-                                              GLuint loc_layout_index           // Layout index.
-                                             )
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////// SETARG "color" overload ////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void kernel::setarg (
+                     color* loc_data,                                           // Data object.
+                     GLuint loc_layout_index                                    // Layout index.
+                    )
 {
   cl_int loc_error;                                                             // Error code.
 
@@ -356,5 +369,32 @@ template void kernel::setarg <color*, GLuint>(
 
   baseline->check_error (loc_error);                                            // Checking returned error code...
 
+  baseline->done ();                                                            // Printing message...
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// DESTRUCTOR ///////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+kernel::~kernel()
+{
+  cl_int loc_error;                                                             // Error code.
+
+  baseline->action ("releasing OpenCL kernel...");                              // Printing message...
+  loc_error = clReleaseKernel (kernel_id);                                      // Releasing OpenCL kernel...
+  baseline->check_error (loc_error);                                            // Checking error code...
+  baseline->done ();                                                            // Printing message...
+
+  baseline->action ("releasing OpenCL kernel event...");                        // Printing message...
+  loc_error = clReleaseEvent (event);                                           // Releasing OpenCL event...
+  baseline->check_error (loc_error);                                            // Checking error code...
+  baseline->done ();                                                            // Printing message...
+
+  baseline->action ("releasing OpenCL program...");                             // Printing message...
+  loc_error = clReleaseProgram (program);                                       // Releasing OpenCL program...
+  baseline->check_error (loc_error);                                            // Checking error code...
+  baseline->done ();                                                            // Printing message...
+
+  baseline->action ("releasing device ID array...");                            // Printing message...
+  delete[] device_id;                                                           // Deleting device ID array...
   baseline->done ();                                                            // Printing message...
 }
