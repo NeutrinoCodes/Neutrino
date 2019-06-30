@@ -10,8 +10,10 @@
 #define FRAGMENT_FILE "/Code/shader/voxel_fragment.frag"                        // OpenGL fragment shader.
 
 // OPENCL:
+#define KERNEL_NUM    1                                                         // # of OpenCL kernels [#].
 #define KERNEL_DIM    1                                                         // Dimension of OpenCL kernels [#].
 #define KERNEL_FILE   "Code/kernel/sine_kernel.cl"                              // OpenCL kernel.
+#define QUEUE_NUM     1                                                         // # of OpenCL queues [#].
 
 // MESH:
 #define XMIN          -1.0                                                      // XMIN spatial boundary [m].
@@ -20,7 +22,7 @@
 #define YMAX          +1.0                                                      // YMAX spatial boundary [m].
 #define NODES_X       100                                                       // Number of nodes in "X" direction [#].
 #define NODES_Y       100                                                       // Number of nodes in "Y" direction [#].
-#define NODES         NODES_X* NODES_Y                                          // Total number of nodes [#].
+#define NODES         10000                                                     // To be fixed: (NODES_X)*(NODES_Y)                           // Total number of nodes [#].
 #define DX            (float)((XMAX - XMIN)/(NODES_X - 1))                      // DX mesh spatial size [m].
 #define DY            (float)((YMAX - YMIN)/(NODES_Y - 1))                      // DY mesh spatial size [m].
 
@@ -38,6 +40,8 @@ int main ()
   color*    C   = new color ();                                                 // OpenGL color.
   queue*    Q   = new queue ();                                                 // OpenCL queue.
   kernel*   K   = new kernel ();                                                // OpenCL kernel array.
+  size_t    i;                                                                  // "x" direction index.
+  size_t    j;                                                                  // "y" direction index.
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// INITIALIZATION ///////////////////////////////
@@ -45,7 +49,7 @@ int main ()
   bas->init (QUEUE_NUM, KERNEL_NUM, INTEROP);                                   // Initializing Neutrino baseline...
   gui->init (bas, SIZE_WINDOW_X, SIZE_WINDOW_Y, WINDOW_NAME);                   // Initializing OpenGL context...
   ctx->init (bas, gui, GPU);                                                    // Initializing OpenCL context...
-  S->init ();                                                                   // Initializing OpenGL shader...
+  S->init (bas, VERTEX_FILE, GEOMETRY_FILE, FRAGMENT_FILE);                     // Initializing OpenGL shader...
   P->init (NODES);                                                              // Initializing OpenGL point array...
   C->init (NODES);                                                              // Initializing OpenGL color array...
   Q->init (bas);                                                                // Initializing OpenCL queue...

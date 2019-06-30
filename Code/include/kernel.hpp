@@ -35,10 +35,10 @@ public:
   ////////////////////////////////////// INIT ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   void init (
-             neutrino* loc_baseline,                                            // Neutrino baseline.
-             char*     loc_kernel_filename,                                     // OpenCL kernel file name.
-             size_t*   loc_kernel_size,                                         // OpenCL kernel size.
-             cl_uint   loc_kernel_dimension                                     // OpenCL kernel dimension.
+             neutrino*   loc_baseline,                                          // Neutrino baseline.
+             const char* loc_kernel_filename,                                   // OpenCL kernel file name.
+             size_t      loc_kernel_size,                                       // OpenCL kernel size.
+             cl_uint     loc_kernel_dimension                                   // OpenCL kernel dimension.
             );
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////// SETARG "float4" overload //////////////////////////
