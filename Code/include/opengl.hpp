@@ -1,7 +1,7 @@
 /// @file
 
-#ifndef window_hpp
-#define window_hpp
+#ifndef opengl_hpp
+#define opengl_hpp
 
   #include "neutrino.hpp"
   #include "shader.hpp"
@@ -302,8 +302,6 @@ public:
                   );
 
   ~opengl();
-
-
 };
 
 #endif
