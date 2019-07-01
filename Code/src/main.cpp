@@ -1,30 +1,32 @@
 /// @file
 
+// MESH:
+ #define XMIN          -1.0                                                     // XMIN spatial boundary [m].
+ #define XMAX          +1.0                                                     // XMAX spatial boundary [m].
+ #define YMIN          -1.0                                                     // YMIN spatial boundary [m].
+ #define YMAX          +1.0                                                     // YMAX spatial boundary [m].
+ #define NODES_X       100                                                      // Number of nodes in "X" direction [#].
+ #define NODES_Y       100                                                      // Number of nodes in "Y" direction [#].
+ #define NODES         10000                                                    // To be fixed: (NODES_X)*(NODES_Y)                           // Total number of nodes [#].
+ #define DX            (float)((XMAX - XMIN)/(NODES_X - 1))                     // DX mesh spatial size [m].
+ #define DY            (float)((YMAX - YMIN)/(NODES_Y - 1))                     // DY mesh spatial size [m].
+
 // OPENGL:
-#define INTEROP       true                                                      // "true" = use OpenGL-OpenCL interoperability.
-#define SIZE_WINDOW_X 800                                                       // Window x-size [px].
-#define SIZE_WINDOW_Y 600                                                       // Window y-size [px].
-#define WINDOW_NAME   "neutrino 3.0"                                            // Window name.
-#define VERTEX_FILE   "/Code/shader/voxel_vertex.vert"                          // OpenGL vertex shader.
-#define GEOMETRY_FILE "/Code/shader/voxel_geometry.geom"                        // OpenGL geometry shader.
-#define FRAGMENT_FILE "/Code/shader/voxel_fragment.frag"                        // OpenGL fragment shader.
+ #define INTEROP       true                                                     // "true" = use OpenGL-OpenCL interoperability.
+ #define SIZE_WINDOW_X 800                                                      // Window x-size [px].
+ #define SIZE_WINDOW_Y 600                                                      // Window y-size [px].
+ #define WINDOW_NAME   "neutrino 3.0"                                           // Window name.
+ #define VERTEX_FILE   "/Code/shader/voxel_vertex.vert"                         // OpenGL vertex shader.
+ #define GEOMETRY_FILE "/Code/shader/voxel_geometry.geom"                       // OpenGL geometry shader.
+ #define FRAGMENT_FILE "/Code/shader/voxel_fragment.frag"                       // OpenGL fragment shader.
 
 // OPENCL:
-#define KERNEL_NUM    1                                                         // # of OpenCL kernels [#].
-#define KERNEL_DIM    1                                                         // Dimension of OpenCL kernels [#].
-#define KERNEL_FILE   "Code/kernel/sine_kernel.cl"                              // OpenCL kernel.
-#define QUEUE_NUM     1                                                         // # of OpenCL queues [#].
-
-// MESH:
-#define XMIN          -1.0                                                      // XMIN spatial boundary [m].
-#define XMAX          +1.0                                                      // XMAX spatial boundary [m].
-#define YMIN          -1.0                                                      // YMIN spatial boundary [m].
-#define YMAX          +1.0                                                      // YMAX spatial boundary [m].
-#define NODES_X       100                                                       // Number of nodes in "X" direction [#].
-#define NODES_Y       100                                                       // Number of nodes in "Y" direction [#].
-#define NODES         10000                                                     // To be fixed: (NODES_X)*(NODES_Y)                           // Total number of nodes [#].
-#define DX            (float)((XMAX - XMIN)/(NODES_X - 1))                      // DX mesh spatial size [m].
-#define DY            (float)((YMAX - YMIN)/(NODES_Y - 1))                      // DY mesh spatial size [m].
+ #define QUEUE_NUM     1                                                        // # of OpenCL queues [#].
+ #define KERNEL_NUM    1                                                        // # of OpenCL kernel [#].
+ #define KERNEL_SX     NODES                                                    // Dimension of OpenCL kernel (i-index).
+ #define KERNEL_SY     0                                                        // Dimension of OpenCL kernel (j-index).
+ #define KERNEL_SZ     0                                                        // Dimension of OpenCL kernel (k-index).
+ #define KERNEL_FILE   "/Code/kernel/sine_kernel.cl"                            // OpenCL kernel.
 
 // INCLUDES:
 #include "opengl.hpp"
@@ -53,26 +55,29 @@ int main ()
   P->init (NODES);                                                              // Initializing OpenGL point array...
   C->init (NODES);                                                              // Initializing OpenGL color array...
   Q->init (bas);                                                                // Initializing OpenCL queue...
-  K->init (bas, KERNEL_FILE, NODES, KERNEL_DIM);                                // Initializing OpenCL kernel...
+  K->init (bas, KERNEL_FILE, KERNEL_SX, KERNEL_SY, KERNEL_SZ);                  // Initializing OpenCL kernel...
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// SETTING POINTS DATA /////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
+  P->name = "voxel_center";
+  C->name = "voxel_color";
+
   for(j = 0; j < NODES_Y; j++)
   {
     for(i = 0; i < NODES_X; i++)
     {
       // Setting point coordinates:
-      P[j*NODES_X + i].x = i*DX + XMIN;
-      P[j*NODES_X + i].y = j*DY + YMIN;
-      P[j*NODES_X + i].z = 0.0;
-      P[j*NODES_X + i].w = 1.0;
+      P->data[j*NODES_X + i].x = i*DX + XMIN;
+      P->data[j*NODES_X + i].y = j*DY + YMIN;
+      P->data[j*NODES_X + i].z = 0.0;
+      P->data[j*NODES_X + i].w = 1.0;
 
       // Setting point colors:
-      C[j*NODES_X + i].r = 0.01*(rand () % 100);
-      C[j*NODES_X + i].g = 0.01*(rand () % 100);
-      C[j*NODES_X + i].b = 0.01*(rand () % 100);
-      C[j*NODES_X + i].a = 1.0;
+      C->data[j*NODES_X + i].r = 0.01*(rand () % 100);
+      C->data[j*NODES_X + i].g = 0.01*(rand () % 100);
+      C->data[j*NODES_X + i].b = 0.01*(rand () % 100);
+      C->data[j*NODES_X + i].a = 1.0;
     }
   }
 
@@ -88,8 +93,8 @@ int main ()
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////// SETTING OPENGL SHADER ARGUMENTS ///////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  S->setarg (P, 0, "voxel_center");                                             // Setting shader argument...
-  S->setarg (C, 1, "voxel_color");                                              // Setting shader argument...
+  S->setarg (P, 0);                                                             // Setting shader argument...
+  S->setarg (C, 1);                                                             // Setting shader argument...
   S->build ();                                                                  // Building shader program...
 
   ////////////////////////////////////////////////////////////////////////////////

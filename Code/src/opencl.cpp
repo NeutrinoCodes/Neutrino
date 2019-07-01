@@ -408,15 +408,59 @@ void opencl::execute (
                       kernel_mode loc_kernel_mode                                   // Kernel mode.
                      )
 {
-  cl_int loc_error;                                                                 // Error code.
+  cl_int  loc_error;                                                                // Error code.
+  cl_uint kernel_dimension;                                                         // Kernel dimension.
+
+  // Selecting kernel size:
+  if(
+     (loc_kernel->size_i > 0) &&
+     (loc_kernel->size_j == 0) &&
+     (loc_kernel->size_k == 0)
+    )
+  {
+    kernel_dimension = 1;
+    size_t* kernel_size = new size_t[kernel_dimension];
+    kernel_size[0]   = loc_kernel->size_i;
+  }
+
+  if(
+     (loc_kernel->size_i > 0) &&
+     (loc_kernel->size_j > 0) &&
+     (loc_kernel->size_k == 0)
+    )
+  {
+    kernel_dimension = 2;
+    size_t* kernel_size = new size_t[kernel_dimension];
+    kernel_size[0]   = loc_kernel->size_i;
+    kernel_size[1]   = loc_kernel->size_j;
+  }
+
+  if(
+     (loc_kernel->size_i > 0) &&
+     (loc_kernel->size_j > 0) &&
+     (loc_kernel->size_k > 0)
+    )
+  {
+    kernel_dimension = 3;
+    size_t* kernel_size = new size_t[kernel_dimension];
+    kernel_size[0]   = loc_kernel->size_i;
+    kernel_size[1]   = loc_kernel->size_j;
+    kernel_size[2]   = loc_kernel->size_k;
+  }
+
+  else
+  {
+    baseline->error ("invalid kernel size!");
+    exit (EXIT_FAILURE);
+  }
 
   // Enqueueing OpenCL kernel (as a single task):
   loc_error = clEnqueueNDRangeKernel (
                                       loc_queue->queue_id,                          // Queue ID.
                                       loc_kernel->kernel_id,                        // Kernel ID.
-                                      loc_kernel->dimension,                        // Kernel dimension.
+                                      kernel_dimension,                             // Kernel dimension.
                                       NULL,                                         // Global work offset.
-                                      loc_kernel->size,                             // Global work size.
+                                      kernel_size,                                  // Global work size.
                                       NULL,                                         // Local work size.
                                       0,                                            // # of events.
                                       NULL,                                         // Event list.

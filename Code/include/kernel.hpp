@@ -21,8 +21,9 @@ public:
   char*         source;                                                         // Kernel source.
   size_t        source_size;                                                    // Kernel source size [characters].
   cl_program    program;                                                        // Kernel program.
-  size_t*       size;                                                           // Kernel size(s) [size_t x dimension array].
-  cl_uint       dimension;                                                      // Kernel dimension.
+  size_t        size_i;                                                         // Kernel size (i-index).
+  size_t        size_j;                                                         // Kernel size (j-index).
+  size_t        size_k;                                                         // Kernel size (k-index).
   cl_event      event;                                                          // Kernel event.
   char*         log_value;                                                      // OpenCL compiler log value array.
   size_t        log_size;                                                       // OpenCL compiler log size array.
@@ -37,8 +38,9 @@ public:
   void init (
              neutrino*   loc_baseline,                                          // Neutrino baseline.
              const char* loc_kernel_filename,                                   // OpenCL kernel file name.
-             size_t      loc_kernel_size,                                       // OpenCL kernel size.
-             cl_uint     loc_kernel_dimension                                   // OpenCL kernel dimension.
+             size_t      loc_kernel_size_i,                                     // OpenCL kernel size (i-index).
+             size_t      loc_kernel_size_j,                                     // OpenCL kernel size (j-index).
+             size_t      loc_kernel_size_k                                      // OpenCL kernel size (k-index).
             );
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////// SETARG "float4" overload //////////////////////////
