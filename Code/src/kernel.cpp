@@ -70,7 +70,7 @@ void kernel::init (
                                  program,                                       // Program.
                                  1,                                             // # of devices.
                                  device_id,                                     // Device ID.
-                                 "",                                            // Options.
+                                 "-I.",                                         // Options.
                                  NULL,                                          // Notification routine.
                                  NULL                                           // Notification argument.
                                 );
