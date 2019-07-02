@@ -7,15 +7,15 @@ layout (triangle_strip, max_vertices = 14) out;                                 
 
 in VS_OUT
 {
-  vec4 color_PC;
-  vec4 point_A;
-  vec4 point_B;
-  vec4 point_C;
-  vec4 point_D;
-  vec4 point_E;
-  vec4 point_F;
-  vec4 point_G;
-  vec4 point_H;
+  vec4 voxel_color;
+  vec4 voxel_A;
+  vec4 voxel_B;
+  vec4 voxel_C;
+  vec4 voxel_D;
+  vec4 voxel_E;
+  vec4 voxel_F;
+  vec4 voxel_G;
+  vec4 voxel_H;
 } gs_in[];
 
 out vec4 color_PC_geom;
