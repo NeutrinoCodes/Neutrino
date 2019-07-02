@@ -43,7 +43,7 @@ void queue::init (
 void queue::read (
                   float4* loc_data,                                             // Data object.
                   cl_uint loc_layout_index                                      // Layout index.
-                 );
+                 )
 {
   cl_int loc_error;                                                             // Local error code.
 
@@ -57,11 +57,11 @@ void queue::read (
   // Reading OpenCL buffer:
   loc_error = clEnqueueReadBuffer (
                                    queue_id,                                    // OpenCL queue ID.
-                                   loc_data.buffer,                             // Data buffer.
+                                   loc_data->buffer,                            // Data buffer.
                                    CL_TRUE,                                     // Blocking write flag.
                                    0,                                           // Data buffer offset.
-                                   sizeof(loc_data.data)*loc_data.size,         // Data buffer size.
-                                   loc_data.data,                               // Data buffer.
+                                   sizeof(loc_data->data)*loc_data->size,       // Data buffer size.
+                                   loc_data->data,                              // Data buffer.
                                    0,                                           // Number of events in the list.
                                    NULL,                                        // Event list.
                                    NULL                                         // Event.
@@ -75,7 +75,7 @@ void queue::read (
 void queue::read (
                   int4*   loc_data,                                             // Data object.
                   cl_uint loc_layout_index                                      // Layout index.
-                 );
+                 )
 {
   cl_int loc_error;                                                             // Local error code.
 
@@ -89,11 +89,11 @@ void queue::read (
   // Reading OpenCL buffer:
   loc_error = clEnqueueReadBuffer (
                                    queue_id,                                    // OpenCL queue ID.
-                                   loc_data.buffer,                             // Data buffer.
+                                   loc_data->buffer,                            // Data buffer.
                                    CL_TRUE,                                     // Blocking write flag.
                                    0,                                           // Data buffer offset.
-                                   sizeof(loc_data.data)*loc_data.size,         // Data buffer size.
-                                   loc_data.data,                               // Data buffer.
+                                   sizeof(loc_data->data)*loc_data->size,       // Data buffer size.
+                                   loc_data->data,                              // Data buffer.
                                    0,                                           // Number of events in the list.
                                    NULL,                                        // Event list.
                                    NULL                                         // Event.
@@ -107,7 +107,7 @@ void queue::read (
 void queue::read (
                   point*  loc_data,                                             // Data object.
                   cl_uint loc_layout_index                                      // Layout index.
-                 );
+                 )
 {
   cl_int loc_error;                                                             // Local error code.
 
@@ -121,11 +121,11 @@ void queue::read (
   // Reading OpenCL buffer:
   loc_error = clEnqueueReadBuffer (
                                    queue_id,                                    // OpenCL queue ID.
-                                   loc_data.buffer,                             // Data buffer.
+                                   loc_data->buffer,                            // Data buffer.
                                    CL_TRUE,                                     // Blocking write flag.
                                    0,                                           // Data buffer offset.
-                                   sizeof(loc_data.data)*loc_data.size,         // Data buffer size.
-                                   loc_data.data,                               // Data buffer.
+                                   sizeof(loc_data->data)*loc_data->size,       // Data buffer size.
+                                   loc_data->data,                              // Data buffer.
                                    0,                                           // Number of events in the list.
                                    NULL,                                        // Event list.
                                    NULL                                         // Event.
@@ -139,7 +139,7 @@ void queue::read (
 void queue::read (
                   color*  loc_data,                                             // Data object.
                   cl_uint loc_layout_index                                      // Layout index.
-                 );
+                 )
 {
   cl_int loc_error;                                                             // Local error code.
 
@@ -153,11 +153,11 @@ void queue::read (
   // Reading OpenCL buffer:
   loc_error = clEnqueueReadBuffer (
                                    queue_id,                                    // OpenCL queue ID.
-                                   loc_data.buffer,                             // Data buffer.
+                                   loc_data->buffer,                            // Data buffer.
                                    CL_TRUE,                                     // Blocking write flag.
                                    0,                                           // Data buffer offset.
-                                   sizeof(loc_data.data)*loc_data.size,         // Data buffer size.
-                                   loc_data.data,                               // Data buffer.
+                                   sizeof(loc_data->data)*loc_data->size,       // Data buffer size.
+                                   loc_data->data,                              // Data buffer.
                                    0,                                           // Number of events in the list.
                                    NULL,                                        // Event list.
                                    NULL                                         // Event.
@@ -186,11 +186,11 @@ void queue::write (
   // Writing OpenCL buffer:
   loc_error = clEnqueueWriteBuffer (
                                     queue_id,                                   // OpenCL queue ID.
-                                    loc_data.buffer,                            // Data buffer.
+                                    loc_data->buffer,                           // Data buffer.
                                     CL_TRUE,                                    // Blocking write flag.
                                     0,                                          // Data buffer offset.
-                                    sizeof(loc_data.data)*loc_data.size,        // Data buffer size.
-                                    loc_data.data,                              // Data buffer.
+                                    sizeof(loc_data->data)*loc_data->size,      // Data buffer size.
+                                    loc_data->data,                             // Data buffer.
                                     0,                                          // Number of events in the list.
                                     NULL,                                       // Event list.
                                     NULL                                        // Event.
@@ -221,11 +221,11 @@ void queue::write (
   // Writing OpenCL buffer:
   loc_error = clEnqueueWriteBuffer (
                                     queue_id,                                   // OpenCL queue ID.
-                                    loc_data.buffer,                            // Data buffer.
+                                    loc_data->buffer,                           // Data buffer.
                                     CL_TRUE,                                    // Blocking write flag.
                                     0,                                          // Data buffer offset.
-                                    sizeof(loc_data.data)*loc_data.size,        // Data buffer size.
-                                    loc_data.data,                              // Data buffer.
+                                    sizeof(loc_data->data)*loc_data->size,      // Data buffer size.
+                                    loc_data->data,                             // Data buffer.
                                     0,                                          // Number of events in the list.
                                     NULL,                                       // Event list.
                                     NULL                                        // Event.
@@ -256,11 +256,11 @@ void queue::write (
   // Writing OpenCL buffer:
   loc_error = clEnqueueWriteBuffer (
                                     queue_id,                                   // OpenCL queue ID.
-                                    loc_data.buffer,                            // Data buffer.
+                                    loc_data->buffer,                           // Data buffer.
                                     CL_TRUE,                                    // Blocking write flag.
                                     0,                                          // Data buffer offset.
-                                    sizeof(loc_data.data)*loc_data.size,        // Data buffer size.
-                                    loc_data.data,                              // Data buffer.
+                                    sizeof(loc_data->data)*loc_data->size,      // Data buffer size.
+                                    loc_data->data,                             // Data buffer.
                                     0,                                          // Number of events in the list.
                                     NULL,                                       // Event list.
                                     NULL                                        // Event.
@@ -291,11 +291,11 @@ void queue::write (
   // Writing OpenCL buffer:
   loc_error = clEnqueueWriteBuffer (
                                     queue_id,                                   // OpenCL queue ID.
-                                    loc_data.buffer,                            // Data buffer.
+                                    loc_data->buffer,                           // Data buffer.
                                     CL_TRUE,                                    // Blocking write flag.
                                     0,                                          // Data buffer offset.
-                                    sizeof(loc_data.data)*loc_data.size,        // Data buffer size.
-                                    loc_data.data,                              // Data buffer.
+                                    sizeof(loc_data->data)*loc_data->size,      // Data buffer size.
+                                    loc_data->data,                             // Data buffer.
                                     0,                                          // Number of events in the list.
                                     NULL,                                       // Event list.
                                     NULL                                        // Event.
