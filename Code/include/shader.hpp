@@ -23,11 +23,15 @@ private:
                 const char* loc_fragment_filename                               // Fragment shader file name.
                );
 
+  // Shader argument size: temporary variable for mismatch detection.
+  GLsizei old_size;
+
 public:
-  GLuint vertex;                                                                // Vertex shader id.
-  GLuint geometry;                                                              // Geometry shader id.
-  GLuint fragment;                                                              // Fragment shader id.
-  GLuint program;                                                               // OpenGL program.
+  GLuint  vertex;                                                               // Vertex shader id.
+  GLuint  geometry;                                                             // Geometry shader id.
+  GLuint  fragment;                                                             // Fragment shader id.
+  GLuint  program;                                                              // OpenGL program.
+  GLsizei size;                                                                 // Shader argument size.
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////// CONSTRUCTOR ///////////////////////////////

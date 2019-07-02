@@ -332,7 +332,7 @@ void opencl::init (
     {
       properties[0] = CL_GL_CONTEXT_KHR;                                            // Setting LINUX OpenCL context properties with CL-GL interop...
       properties[1] = (cl_context_properties)glfwGetGLXContext (
-                                                                loc_glfw_window
+                                                                loc_gui->glfw_window
                                                                );
       properties[2] = CL_GLX_DISPLAY_KHR;
       properties[3] = (cl_context_properties)glfwGetX11Display ();
@@ -410,6 +410,7 @@ void opencl::execute (
 {
   cl_int  loc_error;                                                                // Error code.
   cl_uint kernel_dimension;                                                         // Kernel dimension.
+  size_t* kernel_size;                                                              // Kernel size array.
 
   // Selecting kernel size:
   if(
@@ -419,7 +420,7 @@ void opencl::execute (
     )
   {
     kernel_dimension = 1;
-    size_t* kernel_size = new size_t[kernel_dimension];
+    kernel_size      = new size_t[kernel_dimension];
     kernel_size[0]   = loc_kernel->size_i;
   }
 
@@ -430,7 +431,7 @@ void opencl::execute (
     )
   {
     kernel_dimension = 2;
-    size_t* kernel_size = new size_t[kernel_dimension];
+    kernel_size      = new size_t[kernel_dimension];
     kernel_size[0]   = loc_kernel->size_i;
     kernel_size[1]   = loc_kernel->size_j;
   }
@@ -442,7 +443,7 @@ void opencl::execute (
     )
   {
     kernel_dimension = 3;
-    size_t* kernel_size = new size_t[kernel_dimension];
+    kernel_size      = new size_t[kernel_dimension];
     kernel_size[0]   = loc_kernel->size_i;
     kernel_size[1]   = loc_kernel->size_j;
     kernel_size[2]   = loc_kernel->size_k;

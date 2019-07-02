@@ -26,7 +26,6 @@ src/info.cpp
 src/kernel.cpp
 src/linear_algebra.cpp
 src/main.cpp
-src/memory_orb.cpp
 src/neutrino.cpp
 src/opencl.cpp
 src/opengl.cpp
@@ -34,7 +33,6 @@ src/path.cpp
 src/platform.cpp
 src/projective_geometry.cpp
 src/queue.cpp
-src/text4.cpp
 src/shader.cpp
 src/glad.c)
 
