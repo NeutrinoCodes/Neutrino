@@ -5,8 +5,6 @@
 
   #include "neutrino.hpp"
   #include "shader.hpp"
-  #include "text4.hpp"
-  #include "memory_orb.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// "OPENGL" CLASS ///////////////////////////////
@@ -292,14 +290,6 @@ public:
   void plot (
              shader* loc_shader                                                 // OpenGL shader.
             );
-  // Window "print" function:
-  void print (
-              text4* text
-             );
-  // Window "cockpit_AI" function:
-  void cockpit_AI (
-                   memory_orb* controller
-                  );
 
   ~opengl();
 };

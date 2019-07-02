@@ -4,6 +4,7 @@
 #define opencl_hpp
 
 #include "neutrino.hpp"
+#include "opengl.hpp"
 #include "platform.hpp"
 #include "device.hpp"
 #include "queue.hpp"

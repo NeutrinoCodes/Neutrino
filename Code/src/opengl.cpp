@@ -190,10 +190,13 @@ void opengl::init (
 
     else
     {
-      printf ("Error:  unable to initialize GLFW!\n");                          // Printing message...
+      baseline->error ("unable to initialize GLFW!\n");                         // Printing message...
       glfwTerminate ();                                                         // Terminating GLFW context...
       exit (EXIT_FAILURE);                                                      // Exiting...
     }
+
+    // Creating window:
+    baseline->action ("creating window...");                                    // Printing message...
 
     glfw_window = glfwCreateWindow (
                                     window_size_x,                              // Window x-size [px].
@@ -204,10 +207,18 @@ void opengl::init (
                                    );
     if(!glfw_window)
     {
-      printf ("Error:  unable to create window!\n");                            // Printing message...
+      baseline->error ("unable to create window!\n");                           // Printing message...
       glfwTerminate ();                                                         // Terminating GLFW context...
       exit (EXIT_FAILURE);                                                      // Exiting...
     }
+
+    else
+    {
+      baseline->done ();                                                        // Printing message...
+    }
+
+    // Initializing GLFW window properties:
+    baseline->action ("initializing GLFW window properties...");                // Printing message...
 
     glfwSetWindowUserPointer (glfw_window, this);                               // Getting window pointer...
     glfwMakeContextCurrent (glfw_window);                                       // Making the context of this window current for the calling thread...
@@ -220,6 +231,8 @@ void opengl::init (
     glfwSetCursorPosCallback (glfw_window, mouse_moved_callback);               // Setting mouse moved callback...
     glfwSetScrollCallback (glfw_window, mouse_scrolled_callback);               // Setting mouse scrolled callback...
 
+    baseline->done ();                                                          // Printing message...
+
     // Initializing GLAD OpenGL extension loader:
     baseline->action ("initializing GLAD...");                                  // Printing message...
 
@@ -230,43 +243,12 @@ void opengl::init (
 
     else
     {
-      printf ("Error:  unable to initialize GLAD!\n");                          // Printing message...
+      baseline->error ("unable to initialize GLAD!\n");                         // Printing message...
       exit (EXIT_FAILURE);                                                      // Exiting...
     }
 
-    // Initializing shaders:
-    baseline->action ("initializing GLSL shaders...");                          // Printing message...
-
-    point_shader     = build_shader (
-                                     POINT_VERTEX_FILE,                         // Vertex shader file name.
-                                     POINT_GEOMETRY_FILE,                       // Geometry shader file name.
-                                     POINT_FRAGMENT_FILE                        // Fragment shader file name.
-                                    );
-
-    voxel_shader     = build_shader (
-                                     VOXEL_VERTEX_FILE,                         // Vertex shader file name.
-                                     VOXEL_GEOMETRY_FILE,                       // Geometry shader file name.
-                                     VOXEL_FRAGMENT_FILE                        // Fragment shader file name.
-                                    );
-
-    wireframe_shader = build_shader (
-                                     WIREFRAME_VERTEX_FILE,                     // Vertex shader file name.
-                                     WIREFRAME_GEOMETRY_FILE,                   // Geometry shader file name.
-                                     WIREFRAME_FRAGMENT_FILE                    // Fragment shader file name.
-                                    );
-
-    shaded_shader    = build_shader (
-                                     SHADED_VERTEX_FILE,                        // Vertex shader file name.
-                                     SHADED_GEOMETRY_FILE,                      // Geometry shader file name.
-                                     SHADED_FRAGMENT_FILE                       // Fragment shader file name.
-                                    );
-
-    text_shader      = build_shader (
-                                     TEXT_VERTEX_FILE,                          // Vertex shader file name.
-                                     TEXT_GEOMETRY_FILE,                        // Geometry shader file name.
-                                     TEXT_FRAGMENT_FILE                         // Fragment shader file name.
-                                    );
-    baseline->done ();                                                          // Printing message...
+    // Initializing OpenGL:
+    baseline->action ("initializing OpenGL...");                                // Printing message...
 
     glfwGetWindowSize (glfw_window, &window_size_x, &window_size_y);            // Getting window size...
     glfwGetFramebufferSize (
@@ -282,7 +264,7 @@ void opengl::init (
     glEnable (GL_PROGRAM_POINT_SIZE);                                           // Enabling "gl_PointSize" in vertex shader...
     glLineWidth (LINE_WIDTH);                                                   // Setting line width...
 
-    PR_mode      = MODE_2D;                                                     // Setting 2D projection mode...
+    PR_mode      = MODE_MONO;                                                   // Setting monoscopic projection mode...
 
     // Setting monoscopic perspective:
     perspective_mono (
@@ -314,6 +296,8 @@ void opengl::init (
     glfwSwapInterval (1);                                                       // Enabling screen vertical retrace synchronization (vsync)...
     glfwSwapBuffers (glfw_window);                                              // Swapping front and back buffers...
     glfwPollEvents ();                                                          // Polling GLFW events...
+
+    baseline->done ();                                                          // Printing message...
   }
   else
   {
@@ -482,14 +466,14 @@ void opengl::key_pressed (
     case GLFW_KEY_2:
       if(loc_action == GLFW_PRESS)
       {
-        PR_mode = MODE_2D;                                                      // Switching to 2D mode...
+        PR_mode = MODE_MONO;                                                    // Switching to monoscopic mode...
       }
       break;
 
     case GLFW_KEY_3:
       if(loc_action == GLFW_PRESS)
       {
-        PR_mode = MODE_3D;                                                      // Switching to 3D mode...
+        PR_mode = MODE_STEREO;                                                  // Switching to stereoscopic mode...
       }
       break;
   }
@@ -878,11 +862,15 @@ void opengl::plot (
     case MODE_MONO:
       // Computing view matrix:
       multiplicate (V_mat, T_mat, R_mat);                                       // Setting view matrix...
-      set_plot_style (ps, V_mat, P_mat);                                        // Setting plot style...
+      set_shader (loc_shader, V_mat, P_mat);                                    // Setting plot style...
 
       // Drawing:
       glViewport (0, 0, window_size_x, window_size_y);
-      glDrawArrays (GL_POINTS, 0, NODES);                                       // Drawing "points"...
+      glDrawArrays (
+                    GL_POINTS,
+                    0,
+                    loc_shader->size
+                   );                                                           // Drawing "points"...
 
       break;
 
@@ -894,7 +882,7 @@ void opengl::plot (
       ////////////////////////////////////////////////////////////////////////////
       ///////////////////////////////// LEFT EYE /////////////////////////////////
       ////////////////////////////////////////////////////////////////////////////
-      set_plot_style (ps, VL_mat, PL_mat);                                      // Setting plot style...
+      set_shader (loc_shader, VL_mat, PL_mat);                                  // Setting plot style...
 
       // Drawing:
       glViewport (
@@ -906,13 +894,13 @@ void opengl::plot (
       glDrawArrays (
                     GL_POINTS,
                     0,
-                    NODES
+                    loc_shader->size
                    );                                                           // Drawing "points"...
 
       ////////////////////////////////////////////////////////////////////////////
       //////////////////////////////// RIGHT EYE /////////////////////////////////
       ////////////////////////////////////////////////////////////////////////////
-      set_plot_style (ps, VR_mat, PR_mat);                                      // Setting plot style...
+      set_shader (loc_shader, VR_mat, PR_mat);                                  // Setting plot style...
 
       // Drawing:
       glViewport (
@@ -924,155 +912,11 @@ void opengl::plot (
       glDrawArrays (
                     GL_POINTS,
                     0,
-                    NODES
+                    loc_shader->size
                    );                                                           // Drawing "points"...
 
       break;
   }
-}
-
-/// # Window print function
-/// ### Description:
-/// Prints 3D text on the graphics window.
-void opengl::print (
-                    text4* text
-                   )
-{
-  multiplicate (V_mat, T_mat, R_mat);                                           // Setting View_matrix matrix...
-  glUseProgram (text_shader);                                                   // Using shader...
-
-  // Setting View_matrix matrix on shader:
-  glUniformMatrix4fv (
-                                                                                // Getting variable's uniform location:
-                      glGetUniformLocation (
-                                            text_shader,                        // Program.
-                                            "View_matrix"                       // Variable.
-                                           ),
-                      1,                                                        // # of matrices to be modified.
-                      GL_FALSE,                                                 // FALSE = column major.
-                      &V_mat[0]                                                 // View matrix.
-                     );
-
-  // Setting Projection_matrix matrix on shader:
-  glUniformMatrix4fv (
-                                                                                // Getting variable's uniform location:
-                      glGetUniformLocation (
-                                            text_shader,                        // Program.
-                                            "Projection_matrix"                 // Variable.
-                                           ),
-                      1,                                                        // # of matrices to be modified.
-                      GL_FALSE,                                                 // FALSE = column major.
-                      &P_mat[0]                                                 // Projection matrix.
-                     );
-
-  // Binding "glyph" array:
-  glEnableVertexAttribArray (LAYOUT_0);                                         // Enabling "layout = 0" attribute in vertex shader...
-  glBindBuffer (GL_ARRAY_BUFFER, text->glyph_vbo);                              // Binding glyph VBO...
-  glVertexAttribPointer (LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                // Specifying the format for "layout = 0" attribute in vertex shader...
-
-  // Binding "color" array:
-  glEnableVertexAttribArray (LAYOUT_1);                                         // Enabling "layout = 1" attribute in vertex shader...
-  glBindBuffer (GL_ARRAY_BUFFER, text->color_vbo);                              // Binding color VBO...
-  glVertexAttribPointer (LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                // Specifying the format for "layout = 1" attribute in vertex shader...
-
-  // Drawing:
-  glDrawArrays (GL_LINES, 0, text->size);                                       // Drawing "glyphs"...
-
-  // Finishing:
-  glDisableVertexAttribArray (LAYOUT_0);                                        // Unbinding "glyph" array...
-  glDisableVertexAttribArray (LAYOUT_1);                                        // Unbinding "color" array...
-}
-
-// Cockpit_AI function:
-void opengl::cockpit_AI (
-                         memory_orb* controller
-                        )
-{
-  // Rotation matrix:
-  float R_AI[16] = {1.0, 0.0, 0.0, 0.0,
-                    0.0, 1.0, 0.0, 0.0,
-                    0.0, 0.0, 1.0, 0.0,
-                    0.0, 0.0, 0.0, 1.0};
-
-  // Translation matrix:
-  float T_AI[16] = {1.0, 0.0, 0.0, 0.0,
-                    0.0, 1.0, 0.0, 0.0,
-                    0.0, 0.0, 1.0, 0.0,
-                    0.0, 0.0, 0.0, 1.0};
-
-  // View matrix:
-  float V_AI[16] = {1.0, 0.0, 0.0, 0.0,
-                    0.0, 1.0, 0.0, 0.0,
-                    0.0, 0.0, 1.0, 0.0,
-                    0.0, 0.0, 0.0, 1.0};
-
-  // Projection matrix:
-  float P_AI[16] = {1.0, 0.0, 0.0, 0.0,
-                    0.0, 1.0, 0.0, 0.0,
-                    0.0, 0.0, 1.0, 0.0,
-                    0.0, 0.0, 0.0, 1.0};
-
-  multiplicate (V_AI, T_AI, R_AI);                                              // Setting View_matrix matrix...
-  glUseProgram (text_shader);                                                   // Using shader...
-
-  // Setting View_matrix matrix on shader:
-  glUniformMatrix4fv (
-                                                                                // Getting variable's uniform location:
-                      glGetUniformLocation (
-                                            text_shader,                        // Program.
-                                            "View_matrix"                       // Variable.
-                                           ),
-                      1,                                                        // # of matrices to be modified.
-                      GL_FALSE,                                                 // FALSE = column major.
-                      &V_AI[0]                                                  // View matrix.
-                     );
-
-  // Setting Projection_matrix matrix on shader:
-  glUniformMatrix4fv (
-                                                                                // Getting variable's uniform location:
-                      glGetUniformLocation (
-                                            text_shader,                        // Program.
-                                            "Projection_matrix"                 // Variable.
-                                           ),
-                      1,                                                        // # of matrices to be modified.
-                      GL_FALSE,                                                 // FALSE = column major.
-                      &P_AI[0]                                                  // Projection matrix.
-                     );
-
-
-  // Binding "glyph" array:
-  glEnableVertexAttribArray (LAYOUT_0);                                         // Enabling "layout = 0" attribute in vertex shader...
-  glBindBuffer (GL_ARRAY_BUFFER, controller->wings_data_vbo);                   // Binding glyph VBO...
-  glVertexAttribPointer (LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                // Specifying the format for "layout = 0" attribute in vertex shader...
-
-  // Binding "color" array:
-  glEnableVertexAttribArray (LAYOUT_1);                                         // Enabling "layout = 1" attribute in vertex shader...
-  glBindBuffer (GL_ARRAY_BUFFER, controller->wings_colors_vbo);                 // Binding color VBO...
-  glVertexAttribPointer (LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                // Specifying the format for "layout = 1" attribute in vertex shader...
-
-  // Drawing:
-  glDrawArrays (GL_LINES, 0, controller->wings_points);                         // Drawing "glyphs"...
-
-  /*
-
-     // Binding "glyph" array:
-     glEnableVertexAttribArray(LAYOUT_0);                                          // Enabling "layout = 0" attribute in vertex shader...
-     glBindBuffer(GL_ARRAY_BUFFER, controller->pitch_level_data_vbo);                // Binding glyph VBO...
-     glVertexAttribPointer(LAYOUT_0, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 0" attribute in vertex shader...
-
-     // Binding "color" array:
-     glEnableVertexAttribArray(LAYOUT_1);                                          // Enabling "layout = 1" attribute in vertex shader...
-     glBindBuffer(GL_ARRAY_BUFFER, controller->pitch_level_colors_vbo);              // Binding color VBO...
-     glVertexAttribPointer(LAYOUT_1, 4, GL_FLOAT, GL_FALSE, 0, 0);                 // Specifying the format for "layout = 1" attribute in vertex shader...
-
-     // Drawing:
-     glDrawArrays(GL_LINES, 0, controller->pitch_level_points);                 // Drawing "glyphs"...
-
-   */
-
-  // Finishing:
-  glDisableVertexAttribArray (LAYOUT_0);                                        // Unbinding "glyph" array...
-  glDisableVertexAttribArray (LAYOUT_1);                                        // Unbinding "color" array...
 }
 
 opengl::~opengl()
