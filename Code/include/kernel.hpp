@@ -17,7 +17,9 @@ private:
 
 public:
   cl_kernel     kernel_id;                                                      // Kernel id.
-  char          file_name[MAX_PATH_SIZE];                                       // Kernel file name.
+  char          kernel_home[MAX_PATH_SIZE];                                     // Kernel home directory.
+  char          kernel_file_name[MAX_PATH_SIZE];                                // Kernel file name.
+  char          compiler_options[MAX_PATH_SIZE];                                // JIT complier options string.
   char*         source;                                                         // Kernel source.
   size_t        source_size;                                                    // Kernel source size [characters].
   cl_program    program;                                                        // Kernel program.
@@ -37,7 +39,8 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   void init (
              neutrino*   loc_baseline,                                          // Neutrino baseline.
-             const char* loc_kernel_filename,                                   // OpenCL kernel file name.
+             const char* loc_kernel_home,                                       // Kernel home directory.
+             const char* loc_kernel_file_name,                                  // OpenCL kernel file name.
              size_t      loc_kernel_size_i,                                     // OpenCL kernel size (i-index).
              size_t      loc_kernel_size_j,                                     // OpenCL kernel size (j-index).
              size_t      loc_kernel_size_k                                      // OpenCL kernel size (k-index).

@@ -27,6 +27,7 @@ private:
   GLsizei old_size;
 
 public:
+  char    shader_home[MAX_PATH_SIZE];                                           // Shader home directory.
   char    vertex_file_name[MAX_PATH_SIZE];                                      // Vertex source file name.
   char    geometry_file_name[MAX_PATH_SIZE];                                    // Geometry source file name.
   char    fragment_file_name[MAX_PATH_SIZE];                                    // Fragment source file name.
@@ -45,9 +46,10 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   void init (
              neutrino*   loc_baseline,                                          // Neutrino baseline.
-             const char* loc_vertex_filename,                                   // Vertex shader file name.
-             const char* loc_geometry_filename,                                 // Geometry shader file name.
-             const char* loc_fragment_filename                                  // Fragment shader file name.
+             const char* loc_shader_home,                                       // Shader home directory.
+             const char* loc_vertex_file_name,                                  // Vertex shader file name.
+             const char* loc_geometry_file_name,                                // Geometry shader file name.
+             const char* loc_fragment_file_name                                 // Fragment shader file name.
             );
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////// BUILD /////////////////////////////////////

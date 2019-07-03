@@ -8,6 +8,52 @@ shader::shader ()
   // Doing nothing.
 }
 
+/// # OpenGL shader init function
+/// ### Description:
+/// Initializes an OpenGL shader.
+void shader::init (
+                   neutrino*   loc_baseline,                                    // Neutrino baseline.
+                   const char* loc_shader_home,                                 // Shader home directory.
+                   const char* loc_vertex_file_name,                            // Vertex shader file name.
+                   const char* loc_geometry_file_name,                          // Geometry shader file name.
+                   const char* loc_fragment_file_name                           // Fragment shader file name.
+                  )
+{
+  strncpy (shader_home, loc_shader_home, strlen (loc_shader_home));             // Getting shader home directory...
+
+  // Building up vertex file full name:
+  snprintf (
+            vertex_file_name,                                                   // Destination string.
+            MAX_PATH_SIZE,                                                      // Size of destination string.
+            "%s/%s",                                                            // Compiled string.
+            shader_home,                                                        // Shader home directory.
+            loc_vertex_file_name                                                // Vertex shader file name.
+           );
+
+  // Building up geometry file full name:
+  snprintf (
+            geometry_file_name,                                                 // Destination string.
+            MAX_PATH_SIZE,                                                      // Size of destination string.
+            "%s/%s",                                                            // Compiled string.
+            shader_home,                                                        // Shader home directory.
+            loc_geometry_file_name                                              // Geometry shader file name.
+           );
+
+  // Building up fragment file full name:
+  snprintf (
+            fragment_file_name,                                                 // Destination string.
+            MAX_PATH_SIZE,                                                      // Size of destination string.
+            "%s/%s",                                                            // Compiled string.
+            shader_home,                                                        // Shader home directory.
+            loc_fragment_file_name                                              // Fragment shader file name.
+           );
+
+  vertex   = compile (vertex_file_name, VERTEX);                                // Compiling vertex shader...
+  geometry = compile (geometry_file_name, GEOMETRY);                            // Compiling geometry shader...
+  fragment = compile (fragment_file_name, FRAGMENT);                            // Compiling fragment shader...
+  program  = glCreateProgram ();                                                // Creating program...
+}
+
 /// # OpenGL shader compile function
 /// ### Description:
 /// Compiles an OpenGL shader.
@@ -42,17 +88,14 @@ GLuint shader::compile (
   {
     case VERTEX:
       shader = glCreateShader (GL_VERTEX_SHADER);                               // Creating shader...
-      strncpy (vertex_file_name, loc_shader_filename, MAX_PATH_SIZE);           // Getting OpenCL kernel file name...
       break;
 
     case FRAGMENT:
       shader = glCreateShader (GL_FRAGMENT_SHADER);                             // Creating shader...
-      strncpy (fragment_file_name, loc_shader_filename, MAX_PATH_SIZE);         // Getting OpenCL kernel file name...
       break;
 
     case GEOMETRY:
       shader = glCreateShader (GL_GEOMETRY_SHADER);                             // Creating shader...
-      strncpy (geometry_file_name, loc_shader_filename, MAX_PATH_SIZE);         // Getting OpenCL kernel file name...
       break;
   }
 
@@ -88,22 +131,6 @@ GLuint shader::compile (
   baseline->free_file (shader_source);                                          // Freeing shader source file...
 
   return (shader);                                                              // Returning shader...
-}
-
-/// # OpenGL shader init function
-/// ### Description:
-/// Initializes an OpenGL shader.
-void shader::init (
-                   neutrino*   loc_baseline,                                    // Neutrino baseline.
-                   const char* loc_vertex_filename,                             // Vertex shader file name.
-                   const char* loc_geometry_filename,                           // Geometry shader file name.
-                   const char* loc_fragment_filename                            // Fragment shader file name.
-                  )
-{
-  vertex   = compile (loc_vertex_filename, VERTEX);                             // Compiling vertex shader...
-  geometry = compile (loc_geometry_filename, GEOMETRY);                         // Compiling geometry shader...
-  fragment = compile (loc_fragment_filename, FRAGMENT);                         // Compiling fragment shader...
-  program  = glCreateProgram ();                                                // Creating program...
 }
 
 /// # OpenGL shader init function
