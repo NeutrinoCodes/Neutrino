@@ -28,9 +28,12 @@ void main(void)
   float l = 0.005;
   vec4 D = vec4(l, l, l, 1.0);
 
-  gl_Position = Projection_matrix*View_matrix*voxel_center;                     // Rendering "point" position...
-  vs_out.voxel_color = voxel_color;                                              // Forwarding "color" as "color_vert" to the geometry shader...
+  gl_Position = Projection_matrix*View_matrix*voxel_center;                     // Setting voxel position...
+  vs_out.voxel_color = voxel_color;                                             // Forwarding voxel color...
 
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////// CUBE VERTEX BARICENTRIC COORDINATES (3D binary hypercube) ///////////
+  ////////////////////////////////////////////////////////////////////////////////
   vs_out.vertex_A = Projection_matrix*View_matrix*(voxel_center + D*vec4(-1.0, -1.0, -1.0, 1.0));
   vs_out.vertex_B = Projection_matrix*View_matrix*(voxel_center + D*vec4(-1.0, -1.0, +1.0, 1.0));
   vs_out.vertex_C = Projection_matrix*View_matrix*(voxel_center + D*vec4(-1.0, +1.0, -1.0, 1.0));

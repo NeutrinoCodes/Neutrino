@@ -7,57 +7,14 @@
 //////////////////////////////////////////////////////////////////////////////////
 neutrino::neutrino()
 {
-  neutrino_path = NULL;                                                         // NEUTRINO_PATH environmental variable.
-  neutrino_font = NULL;                                                         // Neutrino font.
-  interop       = false;                                                        // Use OpenCL-OpenGL interop.
-  tic           = 0.0;                                                          // Tic time [ms].
-  toc           = 0.0;                                                          // Toc time [ms].
-  loop_time     = 0.0;                                                          // Loop time [ms].
+  interop     = false;                                                          // Use OpenCL-OpenGL interop.
+  tic         = 0.0;                                                            // Tic time [ms].
+  toc         = 0.0;                                                            // Toc time [ms].
+  loop_time   = 0.0;                                                            // Loop time [ms].
 
-  context_id    = NULL;                                                         // OpenCL context ID.
-  platform_id   = NULL;                                                         // OpenCL platform ID.
-  device_id     = NULL;                                                         // OpenCL device ID.
-}
-
-/// # OpenCL error get function
-/// ### Description:
-/// Gets the NEUTRINO_PATH environmental variable.
-path* neutrino::get_neutrino_path ()
-{
-  temp_neutrino_path        = new path;
-
-  temp_neutrino_path->value = getenv ("NEUTRINO_PATH");                         // Getting neutrino path...
-  temp_neutrino_path->size  = strlen (temp_neutrino_path->value) + 1;           // Getting neutrino path length...
-
-  if(temp_neutrino_path->value == NULL)
-  {
-    printf ("Error:  NEUTRINO_PATH environmental variable not defined!\n");
-    exit (1);
-
-  }
-
-  return(temp_neutrino_path);
-}
-
-/// # OpenCL error get function
-/// ### Description:
-/// Gets the neutrino font.
-font* neutrino::get_neutrino_font ()
-{
-  temp_neutrino_font = new font;
-
-  return(temp_neutrino_font);
-}
-
-/// # CPU get time function
-/// ### Description:
-/// Gets the host CPU time [us].
-double neutrino::get_cpu_time ()
-{
-  double time;
-
-  time = glfwGetTime ();
-  return time;
+  context_id  = NULL;                                                           // OpenCL context ID.
+  platform_id = NULL;                                                           // OpenCL platform ID.
+  device_id   = NULL;                                                           // OpenCL device ID.
 }
 
 /// # Initialization function
@@ -69,16 +26,15 @@ void neutrino::init (
                      bool   loc_interop
                     )
 {
+  // Initializing neutrino object:
+  action ("initializing neutrino object...");                                   // Printing message...
+
   q_num         = loc_q_num;                                                    // Getting # of OpenCL queues...
   k_num         = loc_k_num;                                                    // Getting # of OpenCL kernels...
   interop       = loc_interop;                                                  // Getting OpenCL/GL interoperability flag...
   kernel_id     = new cl_kernel[k_num];                                         // Initializing OpenCL kernel ID array...
   terminal_time = 0;
-  prefix_buffer = new char[MAX_PATH_SIZE];
   size_t i;                                                                     // Index.
-
-  // Initializing neutrino object:
-  action ("initializing neutrino object...");                                   // Printing message...
 
   for(i = 0; i < k_num; i++)                                                    // Scanning OpenCL kernel argument array...
   {
@@ -86,37 +42,6 @@ void neutrino::init (
   }
 
   done ();                                                                      // Printing message...
-
-  // Initializing NEUTRINO_PATH:
-  action ("initializing neutrino path...");                                     // Printing message...
-
-  neutrino_path = get_neutrino_path ();
-  done ();                                                                      // Printing message...
-
-  // Initializing font:
-  action ("initializing neutrino font...");                                     // Printing message...
-
-  neutrino_font = get_neutrino_font ();                                         // Font object.
-  done ();                                                                      // Printing message...
-}
-
-/// # Neutrino path prefix function
-/// ### Description:
-/// Adds the NEUTRINO_PATH before a file name.
-char* neutrino::prefix (
-                        const char* loc_path
-                       )
-{
-  // Compiling message string:
-  snprintf (
-            prefix_buffer,                                                      // Destination string.
-            MAX_PATH_SIZE,                                                      // Size of destination string.
-            "%s/%s",                                                            // Compiled string.
-            get_neutrino_path ()->value,                                        // Neutrino path prefix.
-            loc_path                                                            // Path.
-           );
-
-  return(prefix_buffer);
 }
 
 /// # Neutrino get "tic" function
@@ -124,7 +49,7 @@ char* neutrino::prefix (
 /// Gets the host CPU time "tic" [us].
 void neutrino::get_tic ()
 {
-  tic = get_cpu_time ();
+  tic = glfwGetTime ();
 }
 
 /// # Neutrino get "toc" function
@@ -138,11 +63,11 @@ void neutrino::get_toc ()
   char   buffer[MAX_TEXT_SIZE];                                                 // Text buffer.
   char   text[MAX_TEXT_SIZE];                                                   // Text buffer.
 
-  toc            = get_cpu_time ();
+  toc            = glfwGetTime ();
   loop_time      = size_t (round (1000000.0*double(toc - tic)));                // Loop execution time [us].
   terminal_time += loop_time;
 
-  if(terminal_time > 20000)
+  if(terminal_time > TERMINAL_REFRESH)                                          // Checking terminal time...
   {
     terminal_time = 0;                                                          // Resetting terminal time.
     erase ();
@@ -544,8 +469,5 @@ void neutrino::check_error (
 
 neutrino::~neutrino()
 {
-  delete    temp_neutrino_path;
-  delete    temp_neutrino_font;
   delete[]  kernel_id;
-  delete[]  prefix_buffer;
 }

@@ -24,14 +24,17 @@ private:
                );
 
   // Shader argument size: temporary variable for mismatch detection.
-  GLsizei old_size;
+  GLsizei     old_size;
 
 public:
-  GLuint  vertex;                                                               // Vertex shader id.
-  GLuint  geometry;                                                             // Geometry shader id.
-  GLuint  fragment;                                                             // Fragment shader id.
-  GLuint  program;                                                              // OpenGL program.
-  GLsizei size;                                                                 // Shader argument size.
+  const char* vertex_file_name[MAX_PATH_SIZE];                                  // Vertex source file name.
+  const char* geometry_file_name[MAX_PATH_SIZE];                                // Geometry source file name.
+  const char* fragment_file_name[MAX_PATH_SIZE];                                // Fragment source file name.
+  GLuint      vertex;                                                           // Vertex shader id.
+  GLuint      geometry;                                                         // Geometry shader id.
+  GLuint      fragment;                                                         // Fragment shader id.
+  GLuint      program;                                                          // OpenGL program.
+  GLsizei     size;                                                             // Shader argument size.
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////// CONSTRUCTOR ///////////////////////////////

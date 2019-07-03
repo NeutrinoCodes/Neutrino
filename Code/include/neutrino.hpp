@@ -13,9 +13,10 @@
     #define GLFW_EXPOSE_NATIVE_GLX                                              // Enabling Linux native access functions...
   #endif
 
-////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////// TERMINAL COLORS ///////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// TERMINAL PARAMETERS //////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+  #define TERMINAL_REFRESH                  20000                               // Terminal refresh time [us].
   #define COLOR_NORMAL                      "\x1B[0m"                           // Default terminal color.
   #define COLOR_RED                         "\x1B[31m"                          // Red.
   #define COLOR_GREEN                       "\x1B[32m"                          // Green.
@@ -25,18 +26,9 @@
   #define COLOR_CYAN                        "\x1B[36m"                          // Cyan.
   #define COLOR_WHITE                       "\x1B[37m"                          // White.
 
-////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////// FONT PARAMETERS ///////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-  #define ASCII_33                          33                                  // 1st printable ascii character ("!"), [DEC].
-  #define ASCII_126                         126                                 // Last printable ascii character ("~"), [DEC].
-  #define ASCII_SCALE                       0.01                                // Ascii character scale factor [].
-  #define ASCII_SPACE_LITTLE                4                                   // Hershey's vector font little space [pt].
-  #define ASCII_SPACE_BIG                   16                                  // Hershey's vector font big space [pt].
-
-////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////// WINDOW PARAMETERS //////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// WINDOW PARAMETERS ////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
   #define ZOOM_INCREMENT                    0.1                                 // Mouse wheel zoom increment [].
   #define ZOOM_INCREMENT_PS4                0.02                                // PS4 gamepad zoom increment [].
   #define ZOOM_THRESHOLD_PS4                -0.95                               // PS4 gamepad zoom threshold [].
@@ -203,13 +195,6 @@ typedef enum
   #endif
 
 //////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// Utility header files //////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-  #include "path.hpp"
-  #include "info.hpp"
-  #include "font.hpp"
-
-//////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// Geometry header files /////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
   #include "linear_algebra.hpp"
@@ -221,28 +206,18 @@ typedef enum
 class neutrino
 {
 private:
-  path*          temp_neutrino_path;
-  font*          temp_neutrino_font;
-  size_t         terminal_time;
-  path*  get_neutrino_path ();                                                  // Gets NEUTRINO_PATH environmental variable.
-  font*  get_neutrino_font ();                                                  // Gets neutrino font.
-  double get_cpu_time ();                                                       // Gets CPU time [us].
-
-  char*          prefix_buffer;                                                 // Buffer for Neutrino path prefix.
+  size_t         terminal_time;                                                 // Terminal time (for refresh) [us].
 
 public:
-  path*          neutrino_path;                                                 // NEUTRINO_PATH environmental variable.
-  font*          neutrino_font;                                                 // Font object.
   bool           interop;                                                       // Use OpenCL-OpenGL interop.
   double         tic;                                                           // Tic time [us].
   double         toc;                                                           // Toc time [us].
   size_t         loop_time;                                                     // Loop time [us].
-
+  size_t         q_num;                                                         // # of OpenCL queues.
+  size_t         k_num;                                                         // # of OpenCL kernels.
   cl_context     context_id;                                                    // OpenCL context id.
   cl_platform_id platform_id;                                                   // OpenCL platform ID.
   cl_device_id   device_id;                                                     // OpenCL device id.
-  size_t         q_num;                                                         // # of OpenCL queues.
-  size_t         k_num;                                                         // # of OpenCL kernels.
   cl_kernel*     kernel_id;                                                     // OpenCL kernel ID array.
 
   neutrino();
@@ -252,10 +227,6 @@ public:
                     size_t loc_k_num,
                     bool   loc_interop
                    );
-  // Neutrino path add prefix function:
-  char*       prefix (
-                      const char* loc_path                                      // Path.
-                     );
   // Get "tic" time:
   void        get_tic ();
   // Get "toc" time:
