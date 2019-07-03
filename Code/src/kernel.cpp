@@ -20,7 +20,8 @@ kernel::kernel()
 /// Builds the OpenCL program. Creates the OpenCL kernel.
 void kernel::init (
                    neutrino*   loc_baseline,                                    // Neutrino baseline.
-                   const char* loc_kernel_filename,                             // OpenCL kernel file name.
+                   const char* loc_kernel_home,                                 // Kernel hoem directory.
+                   const char* loc_kernel_file_name,                            // OpenCL kernel file name.
                    size_t      loc_kernel_size_i,                               // OpenCL kernel size (i-index).
                    size_t      loc_kernel_size_j,                               // OpenCL kernel size (j-index).
                    size_t      loc_kernel_size_k                                // OpenCL kernel size (k-index).
@@ -34,19 +35,30 @@ void kernel::init (
   size_i   = loc_kernel_size_i;                                                 // Getting OpenCL kernel size (i-index)...
   size_j   = loc_kernel_size_j;                                                 // Getting OpenCL kernel size (j-index)...
   size_k   = loc_kernel_size_k;                                                 // Getting OpenCL kernel size (k-index)...
-  strncpy (file_name, loc_kernel_filename, MAX_PATH_SIZE);                      // Getting OpenCL kernel file name...
-  // Compiling message string:
+
+  strncpy (kernel_home, loc_kernel_home, MAX_PATH_SIZE);                        // Getting OpenCL kernel hoem directory...
+
+  // Building up vertex file full name:
   snprintf (
-            compiler_options,                                                             // Destination string.
+            kernel_file_name,                                                   // Destination string.
             MAX_PATH_SIZE,                                                      // Size of destination string.
-            "%s %s",                                                   // Compiled string.
-            "-I",                                                          // Red color.
-            loc_text                                                            // Source string.
+            "%s/%s",                                                            // Compiled string.
+            kernel_home,                                                        // Shader home directory.
+            loc_kernel_file_name                                                // Vertex shader file name.
+           );
+
+  // Building up JIT compiler options string:
+  snprintf (
+            compiler_options,                                                   // Destination string.
+            MAX_PATH_SIZE,                                                      // Size of destination string.
+            "%s %s",                                                            // Compiled string.
+            "-I",                                                               // "Include" option.
+            kernel_home                                                         // Kernel home directory.
            );
 
   baseline->action ("loading OpenCL kernel source from file...");               // Printing message...
 
-  baseline->load_file (file_name, &source, &source_size);                       // Loading file...
+  baseline->load_file (kernel_file_name, &source, &source_size);                // Loading file...
 
   baseline->done ();                                                            // Printing message...
 
@@ -78,7 +90,7 @@ void kernel::init (
                                  program,                                       // Program.
                                  1,                                             // # of devices.
                                  device_id,                                     // Device ID.
-                                 "-I /run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/kernel",                                        // Including header files from kernel's directory.
+                                 compiler_options,                              // Including header files from kernel's directory.
                                  NULL,                                          // Notification routine.
                                  NULL                                           // Notification argument.
                                 );
