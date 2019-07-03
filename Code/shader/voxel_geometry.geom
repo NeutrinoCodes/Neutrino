@@ -8,49 +8,52 @@ layout (triangle_strip, max_vertices = 14) out;                                 
 in VS_OUT
 {
   vec4 voxel_color;
-  vec4 voxel_A;
-  vec4 voxel_B;
-  vec4 voxel_C;
-  vec4 voxel_D;
-  vec4 voxel_E;
-  vec4 voxel_F;
-  vec4 voxel_G;
-  vec4 voxel_H;
+  vec4 vertex_A;
+  vec4 vertex_B;
+  vec4 vertex_C;
+  vec4 vertex_D;
+  vec4 vertex_E;
+  vec4 vertex_F;
+  vec4 vertex_G;
+  vec4 vertex_H;
 } gs_in[];
 
-out vec4 color_PC_geom;
+out vec4 voxel_color;
 
 void main()
 {
-  color_PC_geom = gs_in[0].color_PC;
+  voxel_color = gs_in[0].voxel_color;
 
-  gl_Position = gs_in[0].point_C;
+  ////////////////////////////////////////////////////////////////////////////////
+  /////////// CUBE TRIANGULATION (Evans, Skiena, Varshney: IEEE - 1996) //////////
+  ////////////////////////////////////////////////////////////////////////////////
+  gl_Position = gs_in[0].vertex_C;
   EmitVertex();
-  gl_Position = gs_in[0].point_D;
+  gl_Position = gs_in[0].vertex_D;
   EmitVertex();
-  gl_Position = gs_in[0].point_G;
+  gl_Position = gs_in[0].vertex_G;
   EmitVertex();
-  gl_Position = gs_in[0].point_H;
+  gl_Position = gs_in[0].vertex_H;
   EmitVertex();
-  gl_Position = gs_in[0].point_F;
+  gl_Position = gs_in[0].vertex_F;
   EmitVertex();
-  gl_Position = gs_in[0].point_D;
+  gl_Position = gs_in[0].vertex_D;
   EmitVertex();
-  gl_Position = gs_in[0].point_B;
+  gl_Position = gs_in[0].vertex_B;
   EmitVertex();
-  gl_Position = gs_in[0].point_C;
+  gl_Position = gs_in[0].vertex_C;
   EmitVertex();
-  gl_Position = gs_in[0].point_A;
+  gl_Position = gs_in[0].vertex_A;
   EmitVertex();
-  gl_Position = gs_in[0].point_G;
+  gl_Position = gs_in[0].vertex_G;
   EmitVertex();
-  gl_Position = gs_in[0].point_E;
+  gl_Position = gs_in[0].vertex_E;
   EmitVertex();
-  gl_Position = gs_in[0].point_F;
+  gl_Position = gs_in[0].vertex_F;
   EmitVertex();
-  gl_Position = gs_in[0].point_A;
+  gl_Position = gs_in[0].vertex_A;
   EmitVertex();
-  gl_Position = gs_in[0].point_B;
+  gl_Position = gs_in[0].vertex_B;
   EmitVertex();
 
   EndPrimitive();

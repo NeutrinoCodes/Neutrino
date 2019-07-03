@@ -1,4 +1,5 @@
 /// @file
+# include "client_datatypes.cl"
 
 __kernel void thekernel (
                           __global float4*    color_PC,

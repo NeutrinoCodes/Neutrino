@@ -24,15 +24,6 @@ GLuint shader::compile (
   GLsizei log_size;                                                             // Size of OpenGL error log.
   char    shader_fullname[MAX_PATH_SIZE];                                       // Shader full file name.
 
-  // Adding NEUTRINO_PATH to relative path file name:
-  snprintf (
-            shader_fullname,                                                    // Destination string.
-            sizeof shader_fullname,                                             // Size of destination string.
-            "%s%s",                                                             // Merging two strings.
-            baseline->neutrino_path->value,                                     // Source string 1 (NEUTRINO_PATH).
-            loc_shader_filename                                                 // Source string 2 (relative path).
-           );
-
   // Loading shader from file:
   baseline->load_file (
                        shader_fullname,                                         // Shader file.
@@ -46,14 +37,17 @@ GLuint shader::compile (
   {
     case VERTEX:
       shader = glCreateShader (GL_VERTEX_SHADER);                               // Creating shader...
+      strncpy (vertex_file_name, loc_kernel_filename, MAX_PATH_SIZE);           // Getting OpenCL kernel file name...
       break;
 
     case FRAGMENT:
       shader = glCreateShader (GL_FRAGMENT_SHADER);                             // Creating shader...
+      strncpy (fragment_file_name, loc_kernel_filename, MAX_PATH_SIZE);         // Getting OpenCL kernel file name...
       break;
 
     case GEOMETRY:
       shader = glCreateShader (GL_GEOMETRY_SHADER);                             // Creating shader...
+      strncpy (geometry_file_name, loc_kernel_filename, MAX_PATH_SIZE);         // Getting OpenCL kernel file name...
       break;
   }
 
