@@ -22,7 +22,7 @@ GLuint shader::compile (
   GLint   success;                                                              // "GL_COMPILE_STATUS" flag.
   GLchar* log;                                                                  // Buffer for OpenGL error log.
   GLsizei log_size;                                                             // Size of OpenGL error log.
-  char    shader_fullname [MAX_PATH_SIZE];                                     // Shader full file name.
+  char    shader_fullname [MAX_PATH_SIZE];                                      // Shader full file name.
 
   strncpy (
            shader_fullname,
