@@ -16,12 +16,9 @@
  #define SIZE_WINDOW_X 800                                                                                 // Window x-size [px].
  #define SIZE_WINDOW_Y 600                                                                                 // Window y-size [px].
  #define WINDOW_NAME   "neutrino 3.0"                                                                      // Window name.
- #define VERTEX_FILE   \
-                       "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/shader/voxel_vertex.vert"   // OpenGL vertex shader.
- #define GEOMETRY_FILE \
-                       "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/shader/voxel_geometry.geom" // OpenGL geometry shader.
- #define FRAGMENT_FILE \
-                       "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/shader/voxel_fragment.frag" // OpenGL fragment shader.
+ #define VERTEX_FILE   "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/shader/voxel_vertex.vert"   // OpenGL vertex shader.
+ #define GEOMETRY_FILE "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/shader/voxel_geometry.geom" // OpenGL geometry shader.
+ #define FRAGMENT_FILE "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/shader/voxel_fragment.frag" // OpenGL fragment shader.
 
 // OPENCL:
  #define QUEUE_NUM     1                                                                                   // # of OpenCL queues [#].
@@ -29,8 +26,8 @@
  #define KERNEL_SX     NODES                                                                               // Dimension of OpenCL kernel (i-index).
  #define KERNEL_SY     0                                                                                   // Dimension of OpenCL kernel (j-index).
  #define KERNEL_SZ     0                                                                                   // Dimension of OpenCL kernel (k-index).
- #define KERNEL_FILE   \
-                       "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/kernel/sine_kernel.cl"      // OpenCL kernel.
+ #define KERNEL_HEADERS_DIRECTORY "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/kernel"          // OpenCL kernel header files directory.
+ #define KERNEL_FILE   "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/kernel/sine_kernel.cl"      // OpenCL kernel.
 
 // INCLUDES:
 #include "opengl.hpp"

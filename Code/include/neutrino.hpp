@@ -267,6 +267,7 @@ public:
                     size_t loc_tab
                    );
   void        done ();
+  void        terminated ();
   // OpenCL error get function:
   const char* get_error (
                          cl_int loc_error                                       // Error code.

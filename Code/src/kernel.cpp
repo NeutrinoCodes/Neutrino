@@ -35,6 +35,14 @@ void kernel::init (
   size_j   = loc_kernel_size_j;                                                 // Getting OpenCL kernel size (j-index)...
   size_k   = loc_kernel_size_k;                                                 // Getting OpenCL kernel size (k-index)...
   strncpy (file_name, loc_kernel_filename, MAX_PATH_SIZE);                      // Getting OpenCL kernel file name...
+  // Compiling message string:
+  snprintf (
+            compiler_options,                                                             // Destination string.
+            MAX_PATH_SIZE,                                                      // Size of destination string.
+            "%s %s",                                                   // Compiled string.
+            "-I",                                                          // Red color.
+            loc_text                                                            // Source string.
+           );
 
   baseline->action ("loading OpenCL kernel source from file...");               // Printing message...
 
@@ -70,7 +78,7 @@ void kernel::init (
                                  program,                                       // Program.
                                  1,                                             // # of devices.
                                  device_id,                                     // Device ID.
-                                 "-I.",                                         // Including header files from kernel's directory.
+                                 "-I /run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/kernel",                                        // Including header files from kernel's directory.
                                  NULL,                                          // Notification routine.
                                  NULL                                           // Notification argument.
                                 );

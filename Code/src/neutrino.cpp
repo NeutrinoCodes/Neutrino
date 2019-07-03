@@ -243,7 +243,7 @@ void neutrino::action (
            );
 
   printf ("%s", buffer);                                                        // Printing buffer...
-  padding = MAX_MESSAGE_SIZE - strlen (buffer);                                 // Computing text padding...
+  padding = MAX_MESSAGE_SIZE - strlen (loc_text);                               // Computing text padding...
 
   if(padding >= 0)                                                              // Checking padding...
   {
@@ -272,8 +272,11 @@ void neutrino::error (
   char   buffer[MAX_TEXT_SIZE];                                                 // Text buffer.
   size_t padding;                                                               // Text padding.
   size_t i;                                                                     // Index.
+  char   error_of_error[MAX_TEXT_SIZE];                                         // Error message.
 
   padding = MAX_MESSAGE_SIZE - strlen (loc_text);                               // Computing text padding...
+
+  printf ("\n");                                                                // Printing new line...
 
   // Compiling message string:
   snprintf (
@@ -298,20 +301,31 @@ void neutrino::error (
 
   else                                                                          // Generating error message...
   {
-    printf ("Error: string too big!\n");                                        // Printing message...
-    exit (1);                                                                   // Exiting...
+    // Compiling message string:
+    snprintf (
+              buffer,                                                           // Destination string.
+              MAX_TEXT_SIZE,                                                    // Size of destination string.
+              "%sError:%s  %s",                                                 // Compiled string.
+              COLOR_RED,                                                        // Red color.
+              COLOR_NORMAL,                                                     // Normal color.
+              "string too big!"                                                 // Source string.
+             );
+
+    padding = MAX_MESSAGE_SIZE - strlen ("string too big!");                    // Computing text padding...
+
+    if(padding >= 0)                                                            // Checking padding...
+    {
+      for(i = 0; i < padding; i++)                                              // Compiling padding...
+      {
+        printf (" ");                                                           // Printing padding...
+        fflush (stdout);                                                        // Flushing stdout...
+      }
+    }
   }
 
-  // Compiling message string:
-  snprintf (
-            buffer,                                                             // Destination string.
-            MAX_TEXT_SIZE,                                                      // Size of destination string.
-            "%sTERMINATED!%s",                                                  // Compiled string.
-            COLOR_RED,                                                          // Red color.
-            COLOR_NORMAL                                                        // Normal color.
-           );
+  terminated ();
 
-  printf ("%s\n", buffer);                                                      // Printing buffer...
+  exit (1);                                                                     // Exiting...
 }
 
 /// # Neutrino list message function
@@ -362,6 +376,22 @@ void neutrino::done ()
             MAX_TEXT_SIZE,                                                      // Size of destination string.
             "%sDONE!%s",                                                        // Compiled string.
             COLOR_GREEN,                                                        // Green color.
+            COLOR_NORMAL                                                        // Normal color.
+           );
+
+  printf ("%s\n", buffer);                                                      // Printing buffer...
+}
+
+void neutrino::terminated ()
+{
+  char buffer[MAX_TEXT_SIZE];                                                   // Text buffer.
+
+  // Compiling message string:
+  snprintf (
+            buffer,                                                             // Destination string.
+            MAX_TEXT_SIZE,                                                      // Size of destination string.
+            "%sTERMINATED!%s",                                                  // Compiled string.
+            COLOR_RED,                                                          // Green color.
             COLOR_NORMAL                                                        // Normal color.
            );
 
