@@ -184,8 +184,6 @@ void opengl::init (
       glfwWindowHint (GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);                     // Initializing GLFW hints...
       glfwWindowHint (GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);           // Initializing GLFW hints...
       glfwWindowHint (GLFW_SAMPLES, opengl_msaa);                               // Initializing GLFW hints... EZOR 05OCT2018: (was 4)
-
-      baseline->done ();                                                        // Printing message...
     }
 
     else
@@ -194,9 +192,6 @@ void opengl::init (
       glfwTerminate ();                                                         // Terminating GLFW context...
       exit (EXIT_FAILURE);                                                      // Exiting...
     }
-
-    // Creating window:
-    baseline->action ("creating window...");                                    // Printing message...
 
     glfw_window = glfwCreateWindow (
                                     window_size_x,                              // Window x-size [px].
@@ -211,14 +206,6 @@ void opengl::init (
       glfwTerminate ();                                                         // Terminating GLFW context...
       exit (EXIT_FAILURE);                                                      // Exiting...
     }
-
-    else
-    {
-      baseline->done ();                                                        // Printing message...
-    }
-
-    // Initializing GLFW window properties:
-    baseline->action ("initializing GLFW window properties...");                // Printing message...
 
     glfwSetWindowUserPointer (glfw_window, this);                               // Getting window pointer...
     glfwMakeContextCurrent (glfw_window);                                       // Making the context of this window current for the calling thread...
@@ -307,7 +294,7 @@ void opengl::init (
 
 /// # Window closed function
 /// ### Description:
-/// Closes the graphics window.
+/// Returns "true" if graphics window has been closed.
 bool opengl::closed ()
 {
   if(baseline->interop)
@@ -324,6 +311,7 @@ bool opengl::closed ()
   else
   {
     baseline->action ("terminating text context...");                           // Printing message...
+    return (true);
   }
 }
 

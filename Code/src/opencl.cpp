@@ -20,8 +20,6 @@ cl_uint opencl::get_platforms_number ()
   cl_int  loc_error;                                                                // Error code.
   cl_uint loc_platforms_number;                                                     // # of platforms.
 
-  baseline->action ("getting number of OpenCL platforms...");                       // Printing message...
-
   // Getting number of existing OpenCL platforms:
   loc_error = clGetPlatformIDs (
                                 0,                                                  // Dummy # of platforms ("0" means we are asking for the # of platfomrs).
@@ -30,8 +28,6 @@ cl_uint opencl::get_platforms_number ()
                                );
 
   baseline->check_error (loc_error);                                                // Checking returned error code...
-
-  baseline->done ();
 
   return loc_platforms_number;                                                      // Returning # of existing platforms...
 }
@@ -78,8 +74,6 @@ cl_uint opencl::get_devices_number (
   cl_int  loc_error;                                                                // Error code.
   cl_uint loc_devices_number;                                                       // # of devices.
 
-  baseline->action ("getting number of OpenCL devices...");                         // Printing message...
-
   // Getting number of existing OpenCL devices:
   loc_error = clGetDeviceIDs (
                               opencl_platform[loc_platform_index]->id,              // Platform ID.
@@ -90,8 +84,6 @@ cl_uint opencl::get_devices_number (
                              );
 
   baseline->check_error (loc_error);                                                // Checking returned error code...
-
-  baseline->done ();
 
   return(loc_devices_number);                                                       // Returning # of existing devices...
 }
@@ -145,6 +137,8 @@ void opencl::init (
   cl_int loc_error;                                                                 // Error code.
   cl_int i;                                                                         // Index.
 
+  baseline->action ("initializing OpenCL...");                                      // Printing message...
+
   baseline         = loc_baseline;                                                  // Getting Neutrino baseline...
   device_type_text = new char[MAX_TEXT_SIZE];                                       // Device type text [string].
 
@@ -158,8 +152,6 @@ void opencl::init (
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// SETTING TARGET DEVICE TYPE //////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  baseline->action ("setting target device type...");                               // Printing message...
-
   switch(loc_device_type)                                                           // Selecting device type...
   {
     case CPU:
