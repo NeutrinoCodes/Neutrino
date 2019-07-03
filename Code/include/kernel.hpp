@@ -17,7 +17,7 @@ private:
 
 public:
   cl_kernel     kernel_id;                                                      // Kernel id.
-  char*         file_name[MAX_PATH_SIZE];                                       // Kernel file name.
+  char          file_name[MAX_PATH_SIZE];                                       // Kernel file name.
   char*         source;                                                         // Kernel source.
   size_t        source_size;                                                    // Kernel source size [characters].
   cl_program    program;                                                        // Kernel program.
