@@ -152,7 +152,7 @@ void kernel::init (
   baseline->done ();                                                            // Printing message...
 
   // Initializing kernel object:
-  baseline->action ("initializing \"kernel\" object...");
+  baseline->action ("initializing kernel object...");
 
   for(i = 0; i < baseline->k_num; i++)                                          // Scanning OpenCL kernel argument array...
   {
