@@ -2,8 +2,8 @@
 #include "client_datatypes.cl"
 
 __kernel void thekernel (
-                          __global float4*    voxel_point,
-                          __global float4*    voxel_color
+                          __global point*    voxel_point,
+                          __global color*    voxel_color
                         )
 {
   ////////////////////////////////////////////////////////////////////////////////
@@ -14,11 +14,11 @@ __kernel void thekernel (
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// NODES ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  float4      P  = voxel_point[gid];                                            // Voxel point coordinates.
-  float4      C  = voxel_color[gid];                                            // Voxel color coordinates.
+  //float4      P  = voxel_point[gid];                                            // Voxel point coordinates.
+  //float4      C  = voxel_color[gid];                                            // Voxel color coordinates.
 
-  P.z = 0.1f*sin(10.0f*voxel_point.x) + 0.1f*cos(10.0f*voxel_point.y);
+  //P.z = 0.1f*sin(10.0f*voxel_point.x) + 0.1f*cos(10.0f*voxel_point.y);
 
-  voxel_point[gid] = P;
-  voxel_color[gid] = C;
+  //voxel_point[gid] = P;
+  //voxel_color[gid] = C;
 }
