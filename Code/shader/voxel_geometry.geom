@@ -22,37 +22,62 @@ out vec4 voxel_color;
 
 void main()
 {
-  voxel_color = gs_in[0].voxel_color;
-
   ////////////////////////////////////////////////////////////////////////////////
   /////////// CUBE TRIANGULATION (Evans, Skiena, Varshney: IEEE - 1996) //////////
   ////////////////////////////////////////////////////////////////////////////////
+  voxel_color = gs_in[0].voxel_color;
   gl_Position = gs_in[0].vertex_C;
   EmitVertex();
+
+  voxel_color = gs_in[0].voxel_color;
   gl_Position = gs_in[0].vertex_D;
   EmitVertex();
+
+  voxel_color = gs_in[0].voxel_color;
   gl_Position = gs_in[0].vertex_G;
   EmitVertex();
+
+  voxel_color = gs_in[0].voxel_color;
   gl_Position = gs_in[0].vertex_H;
   EmitVertex();
+
+  voxel_color = gs_in[0].voxel_color;
   gl_Position = gs_in[0].vertex_F;
   EmitVertex();
+
+  voxel_color = gs_in[0].voxel_color;
   gl_Position = gs_in[0].vertex_D;
   EmitVertex();
+
+  voxel_color = gs_in[0].voxel_color;
   gl_Position = gs_in[0].vertex_B;
   EmitVertex();
+
+  voxel_color = gs_in[0].voxel_color;
   gl_Position = gs_in[0].vertex_C;
   EmitVertex();
+
+  voxel_color = gs_in[0].voxel_color;
   gl_Position = gs_in[0].vertex_A;
   EmitVertex();
+
+  voxel_color = gs_in[0].voxel_color;
   gl_Position = gs_in[0].vertex_G;
   EmitVertex();
+
+  voxel_color = gs_in[0].voxel_color;
   gl_Position = gs_in[0].vertex_E;
   EmitVertex();
+
+  voxel_color = gs_in[0].voxel_color;
   gl_Position = gs_in[0].vertex_F;
   EmitVertex();
+
+  voxel_color = gs_in[0].voxel_color;
   gl_Position = gs_in[0].vertex_A;
   EmitVertex();
+
+  voxel_color = gs_in[0].voxel_color;
   gl_Position = gs_in[0].vertex_B;
   EmitVertex();
 
