@@ -403,6 +403,7 @@ void opencl::execute (
   cl_int  loc_error;                                                                // Error code.
   cl_uint kernel_dimension;                                                         // Kernel dimension.
   size_t* kernel_size;                                                              // Kernel size array.
+  bool    kernel_valid = false;                                                     // Validity flag.
 
   // Selecting kernel size:
   if(
@@ -414,6 +415,7 @@ void opencl::execute (
     kernel_dimension = 1;
     kernel_size      = new size_t[kernel_dimension];
     kernel_size[0]   = loc_kernel->size_i;
+    kernel_valid     = true;
   }
 
   if(
@@ -426,6 +428,7 @@ void opencl::execute (
     kernel_size      = new size_t[kernel_dimension];
     kernel_size[0]   = loc_kernel->size_i;
     kernel_size[1]   = loc_kernel->size_j;
+    kernel_valid     = true;
   }
 
   if(
@@ -439,9 +442,10 @@ void opencl::execute (
     kernel_size[0]   = loc_kernel->size_i;
     kernel_size[1]   = loc_kernel->size_j;
     kernel_size[2]   = loc_kernel->size_k;
+    kernel_valid     = true;
   }
 
-  else
+  if(!kernel_valid)
   {
     baseline->error ("invalid kernel size!");
     exit (EXIT_FAILURE);
