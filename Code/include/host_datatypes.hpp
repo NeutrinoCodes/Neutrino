@@ -103,7 +103,7 @@ public:
   GLuint           vbo;                                                         // Data VBO.
   GLsizeiptr       size;                                                        // Data size.
   GLuint           layout;                                                      // Data layout index.
-  const char*      name;                                                        // Data name.
+  char*            name;                                                        // Data name.
 
   point();
   void init (

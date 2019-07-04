@@ -12,7 +12,7 @@ void float4::init (
                    size_t loc_size                                              // Data size.
                   )
 {
-  float4_structure* data = new float4_structure[loc_size];
+  data = new float4_structure[loc_size];
   size = loc_size;
 }
 
@@ -33,7 +33,7 @@ void int4::init (
                  size_t loc_size                                                // Data size.
                 )
 {
-  int4_structure* data = new int4_structure[loc_size];
+  data = new int4_structure[loc_size];
   size = loc_size;
 }
 
@@ -54,7 +54,7 @@ void point::init (
                   GLsizeiptr loc_size                                           // Data size.
                  )
 {
-  point_structure* data = new point_structure[loc_size];
+  data = new point_structure[loc_size];
   size = loc_size;
 }
 
@@ -75,7 +75,7 @@ void color::init (
                   GLsizeiptr loc_size                                           // Data size.
                  )
 {
-  color_structure* data = new color_structure[loc_size];
+  data = new color_structure[loc_size];
   size = loc_size;
 }
 
@@ -91,8 +91,8 @@ info::info(
            size_t loc_size
           )
 {
-  size  = loc_size;
   value = new char[loc_size];
+  size  = loc_size;
 }
 
 info::~info()
