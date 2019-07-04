@@ -182,7 +182,7 @@ void kernel::setarg (
                                      baseline->context_id,                      // OpenCL context.
                                      CL_MEM_READ_WRITE |
                                      CL_MEM_COPY_HOST_PTR,                      // Memory flags.
-                                     sizeof(loc_data->data)*loc_data->size,     // Data buffer size.
+                                     sizeof(float4_structure)*loc_data->size,   // Data buffer size.
                                      loc_data->data,                            // Data buffer.
                                      &loc_error                                 // Error code.
                                     );
@@ -215,7 +215,7 @@ void kernel::setarg (
                                      baseline->context_id,                      // OpenCL context.
                                      CL_MEM_READ_WRITE |
                                      CL_MEM_COPY_HOST_PTR,                      // Memory flags.
-                                     sizeof(loc_data->data)*loc_data->size,     // Data buffer size.
+                                     sizeof(int4_structure)*loc_data->size,     // Data buffer size.
                                      loc_data->data,                            // Data buffer.
                                      &loc_error                                 // Error code.
                                     );
@@ -267,7 +267,7 @@ void kernel::setarg (
   // Creating and initializing a buffer object's data store:
   glBufferData (
                 GL_ARRAY_BUFFER,                                                // VBO target.
-                sizeof(loc_data->data)*loc_data->size,                          // VBO size.
+                sizeof(point_structure)*loc_data->size,                         // VBO size.
                 loc_data->data,                                                 // VBO data.
                 GL_DYNAMIC_DRAW                                                 // VBO usage.
                );
@@ -275,7 +275,7 @@ void kernel::setarg (
   // Specifying the format for attribute in vertex shader:
   glVertexAttribPointer (
                          loc_layout_index,                                      // VAO index.
-                         sizeof(loc_data->data),                                // VAO's # of components.
+                         sizeof(point_structure),                               // VAO's # of components.
                          GL_FLOAT,                                              // Data type.
                          GL_FALSE,                                              // Not using normalized numbers.
                          0,                                                     // Data stride.
@@ -349,7 +349,7 @@ void kernel::setarg (
   // Creating and initializing a buffer object's data store:
   glBufferData (
                 GL_ARRAY_BUFFER,                                                // VBO target.
-                sizeof(loc_data->data)*loc_data->size,                          // VBO size.
+                sizeof(color_structure)*loc_data->size,                         // VBO size.
                 loc_data->data,                                                 // VBO data.
                 GL_DYNAMIC_DRAW                                                 // VBO usage.
                );
@@ -357,7 +357,7 @@ void kernel::setarg (
   // Specifying the format for attribute in vertex shader:
   glVertexAttribPointer (
                          loc_layout_index,                                      // VAO index.
-                         sizeof(loc_data->data),                                // VAO's # of components.
+                         sizeof(color_structure),                               // VAO's # of components.
                          GL_FLOAT,                                              // Data type.
                          GL_FALSE,                                              // Not using normalized numbers.
                          0,                                                     // Data stride.

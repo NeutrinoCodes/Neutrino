@@ -60,7 +60,7 @@ void queue::read (
                                    loc_data->buffer,                            // Data buffer.
                                    CL_TRUE,                                     // Blocking write flag.
                                    0,                                           // Data buffer offset.
-                                   sizeof(loc_data->data)*loc_data->size,       // Data buffer size.
+                                   sizeof(float4_structure)*loc_data->size,     // Data buffer size.
                                    loc_data->data,                              // Data buffer.
                                    0,                                           // Number of events in the list.
                                    NULL,                                        // Event list.
@@ -92,7 +92,7 @@ void queue::read (
                                    loc_data->buffer,                            // Data buffer.
                                    CL_TRUE,                                     // Blocking write flag.
                                    0,                                           // Data buffer offset.
-                                   sizeof(loc_data->data)*loc_data->size,       // Data buffer size.
+                                   sizeof(int4_structure)*loc_data->size,       // Data buffer size.
                                    loc_data->data,                              // Data buffer.
                                    0,                                           // Number of events in the list.
                                    NULL,                                        // Event list.
@@ -124,7 +124,7 @@ void queue::read (
                                    loc_data->buffer,                            // Data buffer.
                                    CL_TRUE,                                     // Blocking write flag.
                                    0,                                           // Data buffer offset.
-                                   sizeof(loc_data->data)*loc_data->size,       // Data buffer size.
+                                   sizeof(point_structure)*loc_data->size,      // Data buffer size.
                                    loc_data->data,                              // Data buffer.
                                    0,                                           // Number of events in the list.
                                    NULL,                                        // Event list.
@@ -156,7 +156,7 @@ void queue::read (
                                    loc_data->buffer,                            // Data buffer.
                                    CL_TRUE,                                     // Blocking write flag.
                                    0,                                           // Data buffer offset.
-                                   sizeof(loc_data->data)*loc_data->size,       // Data buffer size.
+                                   sizeof(color_structure)*loc_data->size,      // Data buffer size.
                                    loc_data->data,                              // Data buffer.
                                    0,                                           // Number of events in the list.
                                    NULL,                                        // Event list.
@@ -189,7 +189,7 @@ void queue::write (
                                     loc_data->buffer,                           // Data buffer.
                                     CL_TRUE,                                    // Blocking write flag.
                                     0,                                          // Data buffer offset.
-                                    sizeof(loc_data->data)*loc_data->size,      // Data buffer size.
+                                    sizeof(float4_structure)*loc_data->size,    // Data buffer size.
                                     loc_data->data,                             // Data buffer.
                                     0,                                          // Number of events in the list.
                                     NULL,                                       // Event list.
@@ -197,8 +197,6 @@ void queue::write (
                                    );
 
   baseline->check_error (loc_error);
-
-  baseline->done ();                                                            // Printing message...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -224,7 +222,7 @@ void queue::write (
                                     loc_data->buffer,                           // Data buffer.
                                     CL_TRUE,                                    // Blocking write flag.
                                     0,                                          // Data buffer offset.
-                                    sizeof(loc_data->data)*loc_data->size,      // Data buffer size.
+                                    sizeof(int4_structure)*loc_data->size,      // Data buffer size.
                                     loc_data->data,                             // Data buffer.
                                     0,                                          // Number of events in the list.
                                     NULL,                                       // Event list.
@@ -232,8 +230,6 @@ void queue::write (
                                    );
 
   baseline->check_error (loc_error);
-
-  baseline->done ();                                                            // Printing message...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -259,16 +255,13 @@ void queue::write (
                                     loc_data->buffer,                           // Data buffer.
                                     CL_TRUE,                                    // Blocking write flag.
                                     0,                                          // Data buffer offset.
-                                    sizeof(loc_data->data)*loc_data->size,      // Data buffer size.
+                                    sizeof(point_structure),                    // Data buffer size.
                                     loc_data->data,                             // Data buffer.
                                     0,                                          // Number of events in the list.
                                     NULL,                                       // Event list.
                                     NULL                                        // Event.
                                    );
-
   baseline->check_error (loc_error);
-
-  baseline->done ();                                                            // Printing message...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -294,7 +287,7 @@ void queue::write (
                                     loc_data->buffer,                           // Data buffer.
                                     CL_TRUE,                                    // Blocking write flag.
                                     0,                                          // Data buffer offset.
-                                    sizeof(loc_data->data)*loc_data->size,      // Data buffer size.
+                                    sizeof(color_structure)*loc_data->size,     // Data buffer size.
                                     loc_data->data,                             // Data buffer.
                                     0,                                          // Number of events in the list.
                                     NULL,                                       // Event list.
@@ -302,8 +295,6 @@ void queue::write (
                                    );
 
   baseline->check_error (loc_error);
-
-  baseline->done ();                                                            // Printing message...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -356,10 +347,10 @@ void queue::acquire (
   glBindBuffer (GL_ARRAY_BUFFER, loc_data->vbo);                                // Binding VBO...
   glVertexAttribPointer (
                          loc_layout_index,                                      // VAO index.
-                         sizeof(point_structure)/sizeof(GLfloat),               // Number of components of data vector.
+                         sizeof(color_structure)/sizeof(GLfloat),               // Number of components of data vector.
                          GL_FLOAT,                                              // Data type.
                          GL_FALSE,                                              // Fixed-point data normalization.
-                         sizeof(point_structure),                               // Data stride.
+                         sizeof(color_structure),                               // Data stride.
                          0                                                      // Data offset.
                         );
   glEnableVertexAttribArray (loc_layout_index);                                 // Setting layout index in vertex shader...
