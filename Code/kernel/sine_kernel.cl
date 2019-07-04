@@ -17,6 +17,7 @@ __kernel void thekernel (
   float4      P;                                                                // Voxel point coordinates.
   float4      C;                                                                // Voxel color coordinates.
 
+  /*
   P.x = voxel_point[gid].x;
   P.y = voxel_point[gid].y;
   P.z = voxel_point[gid].z;
@@ -26,10 +27,21 @@ __kernel void thekernel (
   C.y = voxel_color[gid].g;
   C.z = voxel_color[gid].b;
   C.w = voxel_color[gid].a;
+  */
+  P.x = 1.0;
+  P.y = 1.0;
+  P.z = 1.0;
+  P.w = 1.0;
+
+  C.x = 1.0;
+  C.y = 1.0;
+  C.z = 1.0;
+  C.w = 1.0;
+
   //float4      P  = voxel_point[gid];                                            // Voxel point coordinates.
   //float4      C  = voxel_color[gid];                                            // Voxel color coordinates.
 
-  P.z = 0.1f*sin(10.0f*P.x) + 0.1f*cos(10.0f*P.y);
+  //P.z = 0.1f*sin(10.0f*P.x) + 0.1f*cos(10.0f*P.y);
 
   voxel_point[gid].x = P.x;
   voxel_point[gid].y = P.y;
