@@ -255,7 +255,7 @@ void queue::write (
                                     loc_data->buffer,                           // Data buffer.
                                     CL_TRUE,                                    // Blocking write flag.
                                     0,                                          // Data buffer offset.
-                                    sizeof(point_structure),                    // Data buffer size.
+                                    sizeof(point_structure)*loc_data->size,     // Data buffer size.
                                     loc_data->data,                             // Data buffer.
                                     0,                                          // Number of events in the list.
                                     NULL,                                       // Event list.
