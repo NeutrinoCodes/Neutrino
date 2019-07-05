@@ -162,6 +162,7 @@ void shader::setarg (
   {
     size     = loc_data->size;
     old_size = size;
+
   }
 
   else
