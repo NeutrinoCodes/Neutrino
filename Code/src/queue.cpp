@@ -311,10 +311,10 @@ void queue::acquire (
   glBindBuffer (GL_ARRAY_BUFFER, loc_data->vbo);                                // Binding VBO...
   glVertexAttribPointer (
                          loc_layout_index,                                      // VAO index.
-                         sizeof(point_structure)/sizeof(GLfloat),               // Number of components of data vector.
+                         4,                                                     // Number of components of data vector.
                          GL_FLOAT,                                              // Data type.
                          GL_FALSE,                                              // Fixed-point data normalization.
-                         sizeof(point_structure),                               // Data stride.
+                         0,                                                     // Data stride.
                          0                                                      // Data offset.
                         );
   glEnableVertexAttribArray (loc_layout_index);                                 // Setting layout index in vertex shader...
@@ -347,10 +347,10 @@ void queue::acquire (
   glBindBuffer (GL_ARRAY_BUFFER, loc_data->vbo);                                // Binding VBO...
   glVertexAttribPointer (
                          loc_layout_index,                                      // VAO index.
-                         sizeof(color_structure)/sizeof(GLfloat),               // Number of components of data vector.
+                         4,                                                     // Number of components of data vector.
                          GL_FLOAT,                                              // Data type.
                          GL_FALSE,                                              // Fixed-point data normalization.
-                         sizeof(color_structure),                               // Data stride.
+                         0,                                                     // Data stride.
                          0                                                      // Data offset.
                         );
   glEnableVertexAttribArray (loc_layout_index);                                 // Setting layout index in vertex shader...

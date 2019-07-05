@@ -28,7 +28,7 @@ typedef struct __attribute__ ((packed)) _int4_structure
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "POINT" STRUCTURE ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-typedef struct __attribute__ ((packed)) _point_structure
+typedef struct _point_structure
 {
   GLfloat x;                                                                    // "x" coordinate.
   GLfloat y;                                                                    // "y" coordinate.
@@ -39,7 +39,7 @@ typedef struct __attribute__ ((packed)) _point_structure
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "COLOR" STRUCTURE ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-typedef struct __attribute__ ((packed)) _color_structure
+typedef struct _color_structure
 {
   GLfloat r;                                                                    // "r" color.
   GLfloat g;                                                                    // "g" color.

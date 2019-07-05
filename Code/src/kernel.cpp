@@ -275,7 +275,7 @@ void kernel::setarg (
   // Specifying the format for attribute in vertex shader:
   glVertexAttribPointer (
                          loc_layout_index,                                      // VAO index.
-                         sizeof(point_structure),                               // VAO's # of components.
+                         4,                                                     // VAO's # of components.
                          GL_FLOAT,                                              // Data type.
                          GL_FALSE,                                              // Not using normalized numbers.
                          0,                                                     // Data stride.
@@ -357,7 +357,7 @@ void kernel::setarg (
   // Specifying the format for attribute in vertex shader:
   glVertexAttribPointer (
                          loc_layout_index,                                      // VAO index.
-                         sizeof(color_structure),                               // VAO's # of components.
+                         sizeof(color_structure)/sizeof(GLfloat),               // VAO's # of components.
                          GL_FLOAT,                                              // Data type.
                          GL_FALSE,                                              // Not using normalized numbers.
                          0,                                                     // Data stride.
