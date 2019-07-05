@@ -11,7 +11,7 @@ typedef struct __attribute__ ((packed)) _point
   float y;                                                                      // "y" coordinate.
   float z;                                                                      // "z" coordinate.
   float w;                                                                      // "w" coordinate.
-} point;
+}point;
 
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// COLOR STRUCTURE: ///////////////////////////////
@@ -23,6 +23,6 @@ typedef struct __attribute__ ((packed)) _color
   float g;                                                                      // "g" color.
   float b;                                                                      // "b" color.
   float a;                                                                      // "a" color.
-} color;
+}color;
 
 #endif
