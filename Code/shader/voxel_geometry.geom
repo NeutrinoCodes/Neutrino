@@ -28,16 +28,6 @@ out vec4 voxel_color;
 
 void main()
 {
-  vec4 light = vec4(0.0, 0.0, 1.0, 1.0);
-  light.xyz = normalize(light.xyz);
-  float diffusion_L = clamp(dot(light.xyz, gs_in[0].normal_L.xyz), 0.2, 1.0);
-  float diffusion_R = clamp(dot(light.xyz, gs_in[0].normal_R.xyz), 0.2, 1.0);
-  float diffusion_D = clamp(dot(light.xyz, gs_in[0].normal_D.xyz), 0.2, 1.0);
-  float diffusion_U = clamp(dot(light.xyz, gs_in[0].normal_U.xyz), 0.2, 1.0);
-  float diffusion_B = clamp(dot(light.xyz, gs_in[0].normal_B.xyz), 0.2, 1.0);
-  float diffusion_F = clamp(dot(light.xyz, gs_in[0].normal_F.xyz), 0.2, 1.0);
-
-
   ////////////////////////////////////////////////////////////////////////////////
   /////////// CUBE TRIANGULATION (Evans, Skiena, Varshney: IEEE - 1996) //////////
   ////////////////////////////////////////////////////////////////////////////////

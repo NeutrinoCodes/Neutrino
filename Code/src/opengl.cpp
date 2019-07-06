@@ -106,7 +106,7 @@ void opengl::set_shader (
                                                                                 // Getting variable's uniform location:
                       glGetUniformLocation (
                                             loc_shader->program,                // Program.
-                                            "View_matrix"                       // Variable.
+                                            "V_mat"                             // Variable.
                                            ),
                       1,                                                        // # of matrices to be modified.
                       GL_FALSE,                                                 // FALSE = column major.
@@ -118,7 +118,7 @@ void opengl::set_shader (
                                                                                 // Getting variable's uniform location:
                       glGetUniformLocation (
                                             loc_shader->program,                // Program.
-                                            "Projection_matrix"                 // Variable.
+                                            "P_mat"                             // Variable.
                                            ),
                       1,                                                        // # of matrices to be modified.
                       GL_FALSE,                                                 // FALSE = column major.
