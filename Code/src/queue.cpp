@@ -249,6 +249,12 @@ void queue::write (
     exit (EXIT_FAILURE);                                                        // Exiting...
   }
 
+  // Acquiring OpenGL buffer:
+  acquire (
+           loc_data,                                                            // Data object.
+           loc_layout_index                                                     // OpenGL shader layout index.
+          );
+
   // Writing OpenCL buffer:
   loc_error = clEnqueueWriteBuffer (
                                     queue_id,                                   // OpenCL queue ID.
@@ -262,6 +268,12 @@ void queue::write (
                                     NULL                                        // Event.
                                    );
   baseline->check_error (loc_error);
+
+  // Releasing OpenGL buffer:
+  release (
+           loc_data,                                                            // Data object.
+           loc_layout_index                                                     // OpenGL shader layout index.
+          );
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -281,6 +293,12 @@ void queue::write (
     exit (EXIT_FAILURE);                                                        // Exiting...
   }
 
+  // Acquiring OpenGL buffer:
+  acquire (
+           loc_data,                                                            // Data object.
+           loc_layout_index                                                     // OpenGL shader layout index.
+          );
+
   // Writing OpenCL buffer:
   loc_error = clEnqueueWriteBuffer (
                                     queue_id,                                   // OpenCL queue ID.
@@ -295,6 +313,12 @@ void queue::write (
                                    );
 
   baseline->check_error (loc_error);
+
+  // Releasing OpenGL buffer:
+  release (
+           loc_data,                                                            // Data object.
+           loc_layout_index                                                     // OpenGL shader layout index.
+          );
 };
 
 //////////////////////////////////////////////////////////////////////////////////

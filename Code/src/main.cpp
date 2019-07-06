@@ -5,9 +5,9 @@
  #define XMAX        +1.0                                                       // XMAX spatial boundary [m].
  #define YMIN        -1.0                                                       // YMIN spatial boundary [m].
  #define YMAX        +1.0                                                       // YMAX spatial boundary [m].
- #define NODES_X     10                                                         // Number of nodes in "X" direction [#].
- #define NODES_Y     10                                                         // Number of nodes in "Y" direction [#].
- #define NODES       100                                                        // To be fixed: (NODES_X)*(NODES_Y)                           // Total number of nodes [#].
+ #define NODES_X     100                                                        // Number of nodes in "X" direction [#].
+ #define NODES_Y     100                                                        // Number of nodes in "Y" direction [#].
+ #define NODES       10000                                                      // To be fixed: (NODES_X)*(NODES_Y)                           // Total number of nodes [#].
  #define DX          (float)((XMAX - XMIN)/(NODES_X - 1))                       // DX mesh spatial size [m].
  #define DY          (float)((YMAX - YMIN)/(NODES_Y - 1))                       // DY mesh spatial size [m].
 
@@ -82,10 +82,9 @@ int main ()
       P->data[j*NODES_X + i].w = 1.0;
 
       // Setting point colors:
-      //C->data[j*NODES_X + i].r = 0.01*(rand () % 100);
-      C->data[j*NODES_X + i].r = 1.0;
-      C->data[j*NODES_X + i].g = 1.0;
-      C->data[j*NODES_X + i].b = 1.0;
+      C->data[j*NODES_X + i].r = 0.01*(rand () % 100);
+      C->data[j*NODES_X + i].g = 0.01*(rand () % 100);
+      C->data[j*NODES_X + i].b = 0.01*(rand () % 100);
       C->data[j*NODES_X + i].a = 1.0;
     }
   }
@@ -99,13 +98,8 @@ int main ()
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// WRITING DATA ON OPENCL QUEUE ////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  Q->acquire (P, 0);                                                            // Acquiring OpenGL/CL shared argument...
   Q->write (P, 0);                                                              // Uploading data on kernel...
-  Q->release (P, 0);                                                            // Releasing OpenGL/CL shared argument...
-
-  Q->acquire (C, 1);                                                            // Acquiring OpenGL/CL shared argument...
   Q->write (C, 1);                                                              // Uploading data on kernel...
-  Q->release (C, 1);                                                            // Releasing OpenGL/CL shared argument...
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////// SETTING OPENGL SHADER ARGUMENTS ///////////////////////
