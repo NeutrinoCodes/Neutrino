@@ -16,6 +16,12 @@ in VS_OUT
   vec4 vertex_F;
   vec4 vertex_G;
   vec4 vertex_H;
+  vec4 normal_L;
+  vec4 normal_R;
+  vec4 normal_D;
+  vec4 normal_U;
+  vec4 normal_B;
+  vec4 normal_F;
 } gs_in[];
 
 out vec4 voxel_color;

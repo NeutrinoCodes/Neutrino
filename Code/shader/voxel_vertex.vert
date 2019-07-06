@@ -16,6 +16,12 @@ out VS_OUT
   vec4 vertex_F;
   vec4 vertex_G;
   vec4 vertex_H;
+  vec4 normal_L;
+  vec4 normal_R;
+  vec4 normal_D;
+  vec4 normal_U;
+  vec4 normal_B;
+  vec4 normal_F;
 } vs_out;
 
 uniform mat4 View_matrix;                                                       // "View_matrix" matrix.
@@ -34,12 +40,36 @@ void main(void)
   ////////////////////////////////////////////////////////////////////////////////
   ////////// CUBE VERTEX BARICENTRIC COORDINATES (3D binary hypercube) ///////////
   ////////////////////////////////////////////////////////////////////////////////
-  vs_out.vertex_A = Projection_matrix*View_matrix*(voxel_center + D*vec4(-1.0, -1.0, -1.0, 1.0));
-  vs_out.vertex_B = Projection_matrix*View_matrix*(voxel_center + D*vec4(-1.0, -1.0, +1.0, 1.0));
-  vs_out.vertex_C = Projection_matrix*View_matrix*(voxel_center + D*vec4(-1.0, +1.0, -1.0, 1.0));
-  vs_out.vertex_D = Projection_matrix*View_matrix*(voxel_center + D*vec4(-1.0, +1.0, +1.0, 1.0));
-  vs_out.vertex_E = Projection_matrix*View_matrix*(voxel_center + D*vec4(+1.0, -1.0, -1.0, 1.0));
-  vs_out.vertex_F = Projection_matrix*View_matrix*(voxel_center + D*vec4(+1.0, -1.0, +1.0, 1.0));
-  vs_out.vertex_G = Projection_matrix*View_matrix*(voxel_center + D*vec4(+1.0, +1.0, -1.0, 1.0));
-  vs_out.vertex_H = Projection_matrix*View_matrix*(voxel_center + D*vec4(+1.0, +1.0, +1.0, 1.0));
+  //
+  //       (-1.0, +1.0, -1.0)    C--------G  (+1.0, +1.0, -1.0)
+  //                            /|       /|
+  //       (-1.0, +1.0, +1.0)  D--------H |  (+1.0, +1.0, +1.0)
+  //       (-1.0, -1.0, -1.0)  | A------|-E  (+1.0, -1.0, -1.0)
+  //                           |/       |/
+  //       (-1.0, -1.0, +1.0)  B--------F    (+1.0, -1.0, +1.0)
+  //
+  //         y
+  //         |
+  //         o -- x
+  //        /
+  //       z
+  //
+  vs_out.vertex_A = Projection_matrix*View_matrix*(voxel_center + D*vec4(-1.0, -1.0, -1.0, +1.0));
+  vs_out.vertex_B = Projection_matrix*View_matrix*(voxel_center + D*vec4(-1.0, -1.0, +1.0, +1.0));
+  vs_out.vertex_C = Projection_matrix*View_matrix*(voxel_center + D*vec4(-1.0, +1.0, -1.0, +1.0));
+  vs_out.vertex_D = Projection_matrix*View_matrix*(voxel_center + D*vec4(-1.0, +1.0, +1.0, +1.0));
+  vs_out.vertex_E = Projection_matrix*View_matrix*(voxel_center + D*vec4(+1.0, -1.0, -1.0, +1.0));
+  vs_out.vertex_F = Projection_matrix*View_matrix*(voxel_center + D*vec4(+1.0, -1.0, +1.0, +1.0));
+  vs_out.vertex_G = Projection_matrix*View_matrix*(voxel_center + D*vec4(+1.0, +1.0, -1.0, +1.0));
+  vs_out.vertex_H = Projection_matrix*View_matrix*(voxel_center + D*vec4(+1.0, +1.0, +1.0, +1.0));
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////// CUBE FACE BARICENTRIC NORMALS ///////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  vs_out.normal_L = Projection_matrix*View_matrix*(voxel_center + vec4(-1.0, +0.0, +0.0, +1.0)); // LEFT:  face "ABDC" normal.
+  vs_out.normal_R = Projection_matrix*View_matrix*(voxel_center + vec4(+1.0, +0.0, +0.0, +1.0)); // RIGHT: face "EFHG" normal.
+  vs_out.normal_D = Projection_matrix*View_matrix*(voxel_center + vec4(+0.0, +0.0, -1.0, +1.0)); // DOWN:  face "ABFE" normal.
+  vs_out.normal_U = Projection_matrix*View_matrix*(voxel_center + vec4(+0.0, +0.0, +1.0, +1.0)); // UP:    face "CDHG" normal.
+  vs_out.normal_B = Projection_matrix*View_matrix*(voxel_center + vec4(+0.0, +0.0, -1.0, +1.0)); // BACK:  face "AEGC" normal.
+  vs_out.normal_F = Projection_matrix*View_matrix*(voxel_center + vec4(+0.0, +0.0, +1.0, +1.0)); // FRONT: face "BFHD" normal.
 }
