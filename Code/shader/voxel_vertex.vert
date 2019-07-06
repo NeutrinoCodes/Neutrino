@@ -7,7 +7,7 @@ layout (location = 1) in vec4 voxel_color;                                      
 
 out VS_OUT
 {
-  vec4 voxel_color;                                                              // Output color (for fragment shader).
+  vec4 voxel_color;                                                             // Output color (for fragment shader).
   vec4 vertex_A;
   vec4 vertex_B;
   vec4 vertex_C;
@@ -29,7 +29,7 @@ void main(void)
   vec4 D = vec4(l, l, l, 1.0);
 
   gl_Position = Projection_matrix*View_matrix*voxel_center;                     // Setting voxel position...
-  vs_out.voxel_color = vec4(1.0,0.0,0.0,1.0);                                             // Forwarding voxel color...
+  vs_out.voxel_color = voxel_color;                                             // Forwarding voxel color...
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////// CUBE VERTEX BARICENTRIC COORDINATES (3D binary hypercube) ///////////
