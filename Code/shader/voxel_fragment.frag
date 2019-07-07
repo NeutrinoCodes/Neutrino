@@ -2,8 +2,8 @@
 
 #version 410 core
 
-in  vec4 voxel_color;                                                           // (R, G, B, A) color, from geometry shader.
-out vec4 fragment_color;                                                        // The rendered color.
+in  vec4 voxel_color;                                                           // Voxel color.
+out vec4 fragment_color;                                                        // Fragment color.
 
 void main(void)
 {
