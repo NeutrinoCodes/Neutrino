@@ -79,7 +79,6 @@ void main()
   gl_Position = gs_in[0].vertex_H;
   EmitVertex();                                                                 // "H" vertex.
 
-  /*
   //////////////////////////////////// GHF ///////////////////////////////////////
   voxel_color = gs_in[0].color_R;
   gl_Position = gs_in[0].vertex_G;
@@ -137,7 +136,7 @@ void main()
   EmitVertex();                                                                 // "A" vertex.
 
   voxel_color = gs_in[0].color_B;
-  gl_Position = gs_in[0].vertex_A;
+  gl_Position = gs_in[0].vertex_G;
   EmitVertex();                                                                 // "G" vertex.
 
   voxel_color = gs_in[0].color_B;
@@ -173,6 +172,6 @@ void main()
   voxel_color = gs_in[0].color_D;
   gl_Position = gs_in[0].vertex_B;
   EmitVertex();                                                                 // "B" vertex.
-*/
+
   EndPrimitive();
 }
