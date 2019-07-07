@@ -2,14 +2,14 @@
 #include "client_datatypes.cl"
 
 __kernel void thekernel (
-                          __global point*    voxel_point,
-                          __global color*    voxel_color
+                          __global point*    voxel_point,                       // Voxel point coordinates.
+                          __global color*    voxel_color                        // VOxel color coordinates.
                         )
 {
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////// INDEXES ///////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  unsigned int gid = get_global_id(0);                                          // Setting global index "gid"...
+  unsigned int gid = get_global_id(0);                                          // Global index "0".
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// NODES ////////////////////////////////////
@@ -17,28 +17,25 @@ __kernel void thekernel (
   float4      P;                                                                // Voxel point coordinates.
   float4      C;                                                                // Voxel color coordinates.
 
-  P.x = voxel_point[gid].x;
-  P.y = voxel_point[gid].y;
-  P.z = voxel_point[gid].z;
-  P.w = voxel_point[gid].w;
+  P.x = voxel_point[gid].x;                                                     // Getting voxel "x" point coordinate...
+  P.y = voxel_point[gid].y;                                                     // Getting voxel "y" point coordinate...
+  P.z = voxel_point[gid].z;                                                     // Getting voxel "z" point coordinate...
+  P.w = voxel_point[gid].w;                                                     // Getting voxel "w" point coordinate...
 
-  C.x = voxel_color[gid].r;
-  C.y = voxel_color[gid].g;
-  C.z = voxel_color[gid].b;
-  C.w = voxel_color[gid].a;
+  C.x = voxel_color[gid].r;                                                     // Getting voxel "r" color coordinate...
+  C.y = voxel_color[gid].g;                                                     // Getting voxel "g" color coordinate...
+  C.z = voxel_color[gid].b;                                                     // Getting voxel "b" color coordinate...
+  C.w = voxel_color[gid].a;                                                     // Getting voxel "a" color coordinate...
 
-  //float4      P  = voxel_point[gid];                                            // Voxel point coordinates.
-  //float4      C  = voxel_color[gid];                                            // Voxel color coordinates.
+  P.z = 0.1f*sin(10.0f*P.x) + 0.1f*cos(10.0f*P.y);                              // Computing "z" point coordinate...
 
-  P.z = 0.1f*sin(10.0f*P.x) + 0.1f*cos(10.0f*P.y);
-  
-  voxel_point[gid].x = P.x;
-  voxel_point[gid].y = P.y;
-  voxel_point[gid].z = P.z;
-  voxel_point[gid].w = P.w;
+  voxel_point[gid].x = P.x;                                                     // Setting voxel "x" point coordinate...
+  voxel_point[gid].y = P.y;                                                     // Setting voxel "y" point coordinate...
+  voxel_point[gid].z = P.z;                                                     // Setting voxel "z" point coordinate...
+  voxel_point[gid].w = P.w;                                                     // Setting voxel "w" point coordinate...
 
-  voxel_color[gid].r = C.x;
-  voxel_color[gid].g = C.y;
-  voxel_color[gid].b = C.z;
-  voxel_color[gid].a = C.w;
+  voxel_color[gid].r = C.x;                                                     // Getting voxel "r" color coordinate...
+  voxel_color[gid].g = C.y;                                                     // Getting voxel "g" color coordinate...
+  voxel_color[gid].b = C.z;                                                     // Getting voxel "b" color coordinate...
+  voxel_color[gid].a = C.w;                                                     // Getting voxel "a" color coordinate...
 }
