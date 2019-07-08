@@ -38,6 +38,70 @@ void queue::init (
   baseline->done ();                                                            // Printing message...
 }
 //////////////////////////////////////////////////////////////////////////////////
+///////////////////////////// READ "float1" overload /////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void queue::read (
+                  float1* loc_data,                                             // float1 object.
+                  cl_uint loc_layout_index                                      // Layout index.
+                 )
+{
+  cl_int loc_error;                                                             // Local error code.
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    baseline->error ("Layout index mismatch!");                                 // Printing message...
+    exit (EXIT_FAILURE);                                                        // Exiting...
+  }
+
+  // Reading OpenCL buffer:
+  loc_error = clEnqueueReadBuffer (
+                                   queue_id,                                    // OpenCL queue ID.
+                                   loc_data->buffer,                            // Data buffer.
+                                   CL_TRUE,                                     // Blocking write flag.
+                                   0,                                           // Data buffer offset.
+                                   sizeof(cl_float)*loc_data->size,             // Data buffer size.
+                                   loc_data->data,                              // Data buffer.
+                                   0,                                           // Number of events in the list.
+                                   NULL,                                        // Event list.
+                                   NULL                                         // Event.
+                                  );
+
+  baseline->check_error (loc_error);
+};
+//////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// READ "int1" overload /////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void queue::read (
+                  int1*   loc_data,                                             // int1 object.
+                  cl_uint loc_layout_index                                      // Layout index.
+                 )
+{
+  cl_int loc_error;                                                             // Local error code.
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    baseline->error ("Layout index mismatch!");                                 // Printing message...
+    exit (EXIT_FAILURE);                                                        // Exiting...
+  }
+
+  // Reading OpenCL buffer:
+  loc_error = clEnqueueReadBuffer (
+                                   queue_id,                                    // OpenCL queue ID.
+                                   loc_data->buffer,                            // Data buffer.
+                                   CL_TRUE,                                     // Blocking write flag.
+                                   0,                                           // Data buffer offset.
+                                   sizeof(cl_long)*loc_data->size,              // Data buffer size.
+                                   loc_data->data,                              // Data buffer.
+                                   0,                                           // Number of events in the list.
+                                   NULL,                                        // Event list.
+                                   NULL                                         // Event.
+                                  );
+
+  baseline->check_error (loc_error);
+};
+//////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////// READ "float4" overload /////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 void queue::read (
@@ -162,6 +226,72 @@ void queue::read (
                                    NULL,                                        // Event list.
                                    NULL                                         // Event.
                                   );
+
+  baseline->check_error (loc_error);
+};
+
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////// WRITE "float1" overload ////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void queue::write (
+                   float1* loc_data,                                            // float1 object.
+                   cl_uint loc_layout_index                                     // Layout index.
+                  )
+{
+  cl_int loc_error;                                                             // Local error code.
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    baseline->error ("Layout index mismatch!");                                 // Printing message...
+    exit (EXIT_FAILURE);                                                        // Exiting...
+  }
+
+  // Writing OpenCL buffer:
+  loc_error = clEnqueueWriteBuffer (
+                                    queue_id,                                   // OpenCL queue ID.
+                                    loc_data->buffer,                           // Data buffer.
+                                    CL_TRUE,                                    // Blocking write flag.
+                                    0,                                          // Data buffer offset.
+                                    sizeof(cl_float)*loc_data->size,            // Data buffer size.
+                                    loc_data->data,                             // Data buffer.
+                                    0,                                          // Number of events in the list.
+                                    NULL,                                       // Event list.
+                                    NULL                                        // Event.
+                                   );
+
+  baseline->check_error (loc_error);
+};
+
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// WRITE "int1" overload /////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void queue::write (
+                   int1*   loc_data,                                            // int1 object.
+                   cl_uint loc_layout_index                                     // Layout index.
+                  )
+{
+  cl_int loc_error;                                                             // Local error code.
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    baseline->error ("Layout index mismatch!");                                 // Printing message...
+    exit (EXIT_FAILURE);                                                        // Exiting...
+  }
+
+  // Writing OpenCL buffer:
+  loc_error = clEnqueueWriteBuffer (
+                                    queue_id,                                   // OpenCL queue ID.
+                                    loc_data->buffer,                           // Data buffer.
+                                    CL_TRUE,                                    // Blocking write flag.
+                                    0,                                          // Data buffer offset.
+                                    sizeof(cl_long)*loc_data->size,             // Data buffer size.
+                                    loc_data->data,                             // Data buffer.
+                                    0,                                          // Number of events in the list.
+                                    NULL,                                       // Event list.
+                                    NULL                                        // Event.
+                                   );
 
   baseline->check_error (loc_error);
 };
