@@ -3,7 +3,8 @@
 
 __kernel void thekernel (
                           __global point*    voxel_point,                       // Voxel point coordinates.
-                          __global color*    voxel_color                        // VOxel color coordinates.
+                          __global color*    voxel_color,                        // VOxel color coordinates.
+                          __global tempus*     float
                         )
 {
   ////////////////////////////////////////////////////////////////////////////////
@@ -16,6 +17,7 @@ __kernel void thekernel (
   ////////////////////////////////////////////////////////////////////////////////
   float4      P;                                                                // Voxel point coordinates.
   float4      C;                                                                // Voxel color coordinates.
+  float       t;
 
   P.x = voxel_point[gid].x;                                                     // Getting voxel "x" point coordinate...
   P.y = voxel_point[gid].y;                                                     // Getting voxel "y" point coordinate...
@@ -27,7 +29,10 @@ __kernel void thekernel (
   C.z = voxel_color[gid].b;                                                     // Getting voxel "b" color coordinate...
   C.w = voxel_color[gid].a;                                                     // Getting voxel "a" color coordinate...
 
-  P.z = 0.1f*sin(10.0f*P.x) + 0.1f*cos(10.0f*P.y);                              // Computing "z" point coordinate...
+  t = tempus[gid];
+
+  P.z = 0.1f*sin(10.0f*P.x - 0.1f*t) + 0.1f*cos(10.0f*P.y - 0.1f*t);            // Computing "z" point coordinate...
+  t += 0.01;
 
   voxel_point[gid].x = P.x;                                                     // Setting voxel "x" point coordinate...
   voxel_point[gid].y = P.y;                                                     // Setting voxel "y" point coordinate...
@@ -38,4 +43,6 @@ __kernel void thekernel (
   voxel_color[gid].g = C.y;                                                     // Getting voxel "g" color coordinate...
   voxel_color[gid].b = C.z;                                                     // Getting voxel "b" color coordinate...
   voxel_color[gid].a = C.w;                                                     // Getting voxel "a" color coordinate...
+
+  tempus[gid] = t;
 }
