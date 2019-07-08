@@ -165,7 +165,71 @@ void kernel::init (
 
   baseline->done ();                                                            // Printing message...
 }
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////// SETARG "float1" overload ////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void kernel::setarg (
+                     float1* loc_data,                                          // float1 object
+                     cl_uint loc_layout_index                                   // Layout index.
+                    )
+{
+  cl_int loc_error;                                                             // Error code.
 
+  baseline->action ("setting kernel argument...");                              // Printing message...
+  // Creating OpenCL memory buffer:
+  loc_data->buffer = clCreateBuffer (
+                                     baseline->context_id,                      // OpenCL context.
+                                     CL_MEM_READ_WRITE |
+                                     CL_MEM_COPY_HOST_PTR,                      // Memory flags.
+                                     sizeof(cl_float)*loc_data->size,           // Data buffer size.
+                                     loc_data->data,                            // Data buffer.
+                                     &loc_error                                 // Error code.
+                                    );
+
+  baseline->check_error (loc_error);                                            // Checking returned error code...
+
+  loc_error = clSetKernelArg (
+                              kernel_id,                                        // Kernel id.
+                              (cl_uint)loc_layout_index,                        // Layout index.
+                              sizeof(cl_mem),                                   // Data size.
+                              &loc_data->buffer                                 // Data value.
+                             );
+
+  baseline->done ();                                                            // Printing message...
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// SETARG "int1" overload ////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void kernel::setarg (
+                     int1*   loc_data,                                          // int1 object.
+                     cl_uint loc_layout_index                                   // Layout index.
+                    )
+{
+  cl_int loc_error;                                                             // Error code.
+
+  baseline->action ("setting kernel argument...");                              // Printing message...
+  // Creating OpenCL memory buffer:
+  loc_data->buffer = clCreateBuffer (
+                                     baseline->context_id,                      // OpenCL context.
+                                     CL_MEM_READ_WRITE |
+                                     CL_MEM_COPY_HOST_PTR,                      // Memory flags.
+                                     sizeof(cl_long)*loc_data->size,            // Data buffer size.
+                                     loc_data->data,                            // Data buffer.
+                                     &loc_error                                 // Error code.
+                                    );
+
+  baseline->check_error (loc_error);                                            // Checking returned error code...
+
+  loc_error = clSetKernelArg (
+                              kernel_id,                                        // Kernel id.
+                              (cl_uint)loc_layout_index,                        // Layout index.
+                              sizeof(cl_mem),                                   // Data size.
+                              &loc_data->buffer                                 // Data value.
+                             );
+
+  baseline->done ();                                                            // Printing message...
+}
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////// SETARG "float4" overload ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////

@@ -48,6 +48,48 @@ typedef struct __attribute__ ((packed)) _color_structure
 } color_structure;
 
 //////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////// "FLOAT1" CLASS ////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+class float1
+{
+private:
+
+public:
+  cl_float* data;                                                               // cl_float data.
+  cl_mem    buffer;                                                             // Data memory buffer.
+  size_t    size;                                                               // Data size.
+  cl_uint   layout;                                                             // Data layout index.
+
+  float1 ();
+  void init (
+             size_t loc_size                                                    // Data size.
+            );
+
+  ~float1();
+};
+
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////// "INT1" CLASS ////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+class int1
+{
+private:
+
+public:
+  cl_long* data;                                                                // cl_long data.
+  cl_mem   buffer;                                                              // Data memory buffer.
+  size_t   size;                                                                // Data size.
+  cl_uint  layout;                                                              // Data layout index.
+
+  int1 ();
+  void init (
+             size_t loc_size                                                    // Data size.
+            );
+
+  ~int1();
+};
+
+//////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "FLOAT4" CLASS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 class float4
