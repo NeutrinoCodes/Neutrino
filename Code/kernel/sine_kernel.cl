@@ -3,8 +3,8 @@
 
 __kernel void thekernel (
                           __global point*    voxel_point,                       // Voxel point coordinates.
-                          __global color*    voxel_color,                        // VOxel color coordinates.
-                          __global tempus*     float
+                          __global color*    voxel_color,                       // VOxel color coordinates.
+                          __global float*    tempus
                         )
 {
   ////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ __kernel void thekernel (
   t = tempus[gid];
 
   P.z = 0.1f*sin(10.0f*P.x - 0.1f*t) + 0.1f*cos(10.0f*P.y - 0.1f*t);            // Computing "z" point coordinate...
-  t += 0.01;
+  t += 0.1;
 
   voxel_point[gid].x = P.x;                                                     // Setting voxel "x" point coordinate...
   voxel_point[gid].y = P.y;                                                     // Setting voxel "y" point coordinate...
