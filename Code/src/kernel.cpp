@@ -176,6 +176,9 @@ void kernel::setarg (
   cl_int loc_error;                                                             // Error code.
 
   baseline->action ("setting kernel argument...");                              // Printing message...
+
+  loc_data->layout = loc_layout_index;                                          // Setting layout index.
+
   // Creating OpenCL memory buffer:
   loc_data->buffer = clCreateBuffer (
                                      baseline->context_id,                      // OpenCL context.
@@ -209,6 +212,9 @@ void kernel::setarg (
   cl_int loc_error;                                                             // Error code.
 
   baseline->action ("setting kernel argument...");                              // Printing message...
+
+  loc_data->layout = loc_layout_index;                                          // Setting layout index.
+
   // Creating OpenCL memory buffer:
   loc_data->buffer = clCreateBuffer (
                                      baseline->context_id,                      // OpenCL context.
@@ -241,6 +247,9 @@ void kernel::setarg (
   cl_int loc_error;                                                             // Error code.
 
   baseline->action ("setting kernel argument...");                              // Printing message...
+
+  loc_data->layout = loc_layout_index;                                          // Setting layout index.
+
   // Creating OpenCL memory buffer:
   loc_data->buffer = clCreateBuffer (
                                      baseline->context_id,                      // OpenCL context.
@@ -274,6 +283,9 @@ void kernel::setarg (
   cl_int loc_error;                                                             // Error code.
 
   baseline->action ("setting kernel argument...");                              // Printing message...
+
+  loc_data->layout = loc_layout_index;                                          // Setting layout index.
+
   // Creating OpenCL memory buffer:
   loc_data->buffer = clCreateBuffer (
                                      baseline->context_id,                      // OpenCL context.
