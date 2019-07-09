@@ -137,36 +137,41 @@ void opengl::init (
                    const char* loc_title                                        // Window title.
                   )
 {
-  baseline         = loc_baseline;                                              // Initializing Neutrino baseline...
-  window_size_x    = loc_window_size_x;                                         // Initializing window x-size [px]...
-  window_size_y    = loc_window_size_y;                                         // Initializing window y-size [px]...
-  title            = loc_title;                                                 // Initializing window title...
-  aspect_ratio     = (double)window_size_x/(double)window_size_y;               // Initializing window aspect ration []...
+  baseline      = loc_baseline;                                                 // Initializing Neutrino baseline...
+  window_size_x = loc_window_size_x;                                            // Initializing window x-size [px]...
+  window_size_y = loc_window_size_y;                                            // Initializing window y-size [px]...
+  title         = loc_title;                                                    // Initializing window title...
+  aspect_ratio  = (double)window_size_x/(double)window_size_y;                  // Initializing window aspect ration []...
 
-  mouse_x          = 0;                                                         // Initializing mouse x-coordinate [px]...
-  mouse_y          = 0;                                                         // Initializing mouse y-coordinate [px]...
+  mouse_x       = 0;                                                            // Initializing mouse x-coordinate [px]...
+  mouse_y       = 0;                                                            // Initializing mouse y-coordinate [px]...
 
-  scroll_x         = 0;                                                         // Initializing scroll x-coordinate [px]...
-  scroll_y         = 0;                                                         // Initializing scroll y-coordinate [px]...
+  scroll_x      = 0;                                                            // Initializing scroll x-coordinate [px]...
+  scroll_y      = 0;                                                            // Initializing scroll y-coordinate [px]...
 
-  orbit_x          = 0.0;
-  orbit_y          = 0.0;
-  orbit_x_old      = 0.0;
-  orbit_y_old      = 0.0;
-  orbit_on         = false;                                                     // Initializing orbit activation flag...
+  orbit_x       = 0.0;
+  orbit_y       = 0.0;
+  orbit_x_old   = 0.0;
+  orbit_y_old   = 0.0;
+  orbit_on      = false;                                                        // Initializing orbit activation flag...
 
-  pan_x            = 0.0;
-  pan_y            = 0.0;
-  pan_x_old        = 0.0;
-  pan_y_old        = 0.0;
-  pan_on           = false;
+  pan_x         = 0.0;
+  pan_y         = 0.0;
+  pan_x_old     = 0.0;
+  pan_y_old     = 0.0;
+  pan_on        = false;
 
-  zoom_z_old       = INITIAL_ZOOM;
-  zoom_z           = 0.0;                                                       // Initializing zoom coefficient...
+  zoom_z_old    = INITIAL_ZOOM;
+  zoom_z        = 0.0;                                                          // Initializing zoom coefficient...
 
-  int opengl_ver_major;                                                         // OpenGL version major number.
-  int opengl_ver_minor;                                                         // OpenGL version minor number.
-  int opengl_msaa;                                                              // OpenGL multisampling antialiasing factor.
+  int  glfw_ver_major;
+  int  glfw_ver_minor;
+  int  glfw_rev;
+  char glfw_ver_string[MAX_MESSAGE_SIZE];
+
+  int  opengl_ver_major;                                                        // OpenGL version major number.
+  int  opengl_ver_minor;                                                        // OpenGL version minor number.
+  int  opengl_msaa;                                                             // OpenGL multisampling antialiasing factor.
 
   opengl_ver_major = 4;                                                         // EZOR 04NOV2018: to be generalized by iterative search.
   opengl_ver_minor = 1;                                                         // EZOR 04NOV2018: to be generalized by iterative search.
@@ -174,9 +179,21 @@ void opengl::init (
 
   if(baseline->interop)
   {
-    // Initializing GLFW context:
-    baseline->action ("initializing GLFW...");                                  // Printing message...
+    glfwGetVersion (&glfw_ver_major, &glfw_ver_minor, &glfw_rev);               // Getting GLFW version...
 
+    // Building up glfw version string:
+    snprintf (
+              glfw_ver_string,                                                  // Destination string.
+              MAX_MESSAGE_SIZE,                                                 // Size of destination string.
+              "initializing GLFW... found version %d.%d.%d!",                   // Compiled string.
+              glfw_ver_major,                                                   // GLFW major version.
+              glfw_ver_minor,                                                   // GLFW minor version.
+              glfw_rev                                                          // GLFW revision.
+             );
+
+    baseline->action (glfw_ver_string);                                         // Printing message...
+
+    // Initializing GLFW context:
     if(glfwInit () == GLFW_TRUE)                                                // Inititalizing GLFW context...
     {
       glfwWindowHint (GLFW_CONTEXT_VERSION_MAJOR, opengl_ver_major);            // Initializing GLFW hints... EZOR 05OCT2018: (was 4)
