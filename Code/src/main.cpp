@@ -16,10 +16,10 @@
  #define GUI_SIZE_X  800                                                        // Window x-size [px].
  #define GUI_SIZE_Y  600                                                        // Window y-size [px].
  #define GUI_NAME    "neutrino 3.0"                                             // Window name.
-//#define SHADER_HOME \
-//  "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/shader"
 #define SHADER_HOME \
-  "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/shader"
+  "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/shader"
+//#define SHADER_HOME \
+//  "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/shader"
  #define SHADER_VERT "voxel_vertex.vert"                                        // OpenGL vertex shader.
  #define SHADER_GEOM "voxel_geometry.geom"                                      // OpenGL geometry shader.
  #define SHADER_FRAG "voxel_fragment.frag"                                      // OpenGL fragment shader.
@@ -30,10 +30,10 @@
  #define KERNEL_SX   NODES                                                      // Dimension of OpenCL kernel (i-index).
  #define KERNEL_SY   0                                                          // Dimension of OpenCL kernel (j-index).
  #define KERNEL_SZ   0                                                          // Dimension of OpenCL kernel (k-index).
-//#define KERNEL_HOME \
-//  "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/kernel"               // OpenCL kernel header files directory.
 #define KERNEL_HOME \
-  "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/kernel"
+  "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/kernel"               // OpenCL kernel header files directory.
+//#define KERNEL_HOME \
+//  "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/kernel"
  #define KERNEL_FILE "sine_kernel.cl"                                           // OpenCL kernel.
 
 // INCLUDES:
@@ -125,14 +125,16 @@ int main ()
     gui->poll_events ();                                                        // Polling gui events...
 
     Q->write (t, 2);
-    ctx->execute (K, Q, WAIT);                                                  // Executing OpenCL kenrnel...
-    Q->read (t, 2);
 
     Q->acquire (P, 0);                                                          // Acquiring OpenGL/CL shared argument...
     Q->acquire (C, 1);                                                          // Acquiring OpenGL/CL shared argument...
+    ctx->execute (K, Q, WAIT);                                                  // Executing OpenCL kenrnel...
+
     gui->plot (S);                                                              // Plotting shared arguments...
     Q->release (P, 0);                                                          // Releasing OpenGL/CL shared argument...
     Q->release (C, 1);                                                          // Releasing OpenGL/CL shared argument...
+
+    Q->read (t, 2);
 
     gui->refresh ();                                                            // Refreshing gui...
     bas->get_toc ();                                                            // Getting "toc" [us]...
