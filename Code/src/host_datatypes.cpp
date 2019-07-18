@@ -5,7 +5,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 float1::float1()
 {
-// Doing nothing.
+  ready = false;                                                                // Resetting "ready" flag...
 }
 
 void float1::init (
@@ -14,6 +14,7 @@ void float1::init (
 {
   data = new cl_float[loc_size];
   size = loc_size;
+
 }
 
 float1::~float1()
@@ -26,7 +27,7 @@ float1::~float1()
 //////////////////////////////////////////////////////////////////////////////////
 int1::int1()
 {
-// Doing nothing.
+  ready = false;                                                                // Resetting "ready" flag...
 }
 
 void int1::init (
@@ -47,7 +48,7 @@ int1::~int1()
 //////////////////////////////////////////////////////////////////////////////////
 float4::float4()
 {
-// Doing nothing.
+  ready = false;                                                                // Resetting "ready" flag...
 }
 
 void float4::init (
@@ -68,7 +69,7 @@ float4::~float4()
 //////////////////////////////////////////////////////////////////////////////////
 int4::int4()
 {
-// Doing nothing.
+  ready = false;                                                                // Resetting "ready" flag...
 }
 
 void int4::init (
@@ -89,7 +90,7 @@ int4::~int4()
 //////////////////////////////////////////////////////////////////////////////////
 point::point()
 {
-// Doing nothing.
+  ready = false;                                                                // Resetting "ready" flag...
 }
 
 void point::init (
@@ -110,7 +111,7 @@ point::~point()
 //////////////////////////////////////////////////////////////////////////////////
 color::color()
 {
-// Doing nothing.
+  ready = false;                                                                // Resetting "ready" flag...
 }
 
 void color::init (
