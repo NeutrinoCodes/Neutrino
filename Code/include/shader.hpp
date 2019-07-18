@@ -27,10 +27,10 @@ private:
   GLsizei old_size;
 
 public:
-  char    shader_home[MAX_PATH_SIZE];                                           // Shader home directory.
-  char    vertex_file_name[MAX_PATH_SIZE];                                      // Vertex source file name.
-  char    geometry_file_name[MAX_PATH_SIZE];                                    // Geometry source file name.
-  char    fragment_file_name[MAX_PATH_SIZE];                                    // Fragment source file name.
+  char    shader_home[NU_MAX_PATH_SIZE];                                           // Shader home directory.
+  char    vertex_file_name[NU_MAX_PATH_SIZE];                                      // Vertex source file name.
+  char    geometry_file_name[NU_MAX_PATH_SIZE];                                    // Geometry source file name.
+  char    fragment_file_name[NU_MAX_PATH_SIZE];                                    // Fragment source file name.
   GLuint  vertex;                                                               // Vertex shader id.
   GLuint  geometry;                                                             // Geometry shader id.
   GLuint  fragment;                                                             // Fragment shader id.

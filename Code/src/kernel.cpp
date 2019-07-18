@@ -36,12 +36,12 @@ void kernel::init (
   size_j   = loc_kernel_size_j;                                                 // Getting OpenCL kernel size (j-index)...
   size_k   = loc_kernel_size_k;                                                 // Getting OpenCL kernel size (k-index)...
 
-  strncpy (kernel_home, loc_kernel_home, MAX_PATH_SIZE);                        // Getting OpenCL kernel hoem directory...
+  strncpy (kernel_home, loc_kernel_home, NU_MAX_PATH_SIZE);                     // Getting OpenCL kernel hoem directory...
 
   // Building up vertex file full name:
   snprintf (
             kernel_file_name,                                                   // Destination string.
-            MAX_PATH_SIZE,                                                      // Size of destination string.
+            NU_MAX_PATH_SIZE,                                                   // Size of destination string.
             "%s/%s",                                                            // Compiled string.
             kernel_home,                                                        // Shader home directory.
             loc_kernel_file_name                                                // Vertex shader file name.
@@ -50,7 +50,7 @@ void kernel::init (
   // Building up JIT compiler options string:
   snprintf (
             compiler_options,                                                   // Destination string.
-            MAX_PATH_SIZE,                                                      // Size of destination string.
+            NU_MAX_PATH_SIZE,                                                   // Size of destination string.
             "%s %s",                                                            // Compiled string.
             "-I",                                                               // "Include" option.
             kernel_home                                                         // Kernel home directory.
@@ -143,7 +143,7 @@ void kernel::init (
   // Creating OpenCL kernel:
   kernel_id = clCreateKernel (
                               program,                                          // OpenCL kernel program.
-                              KERNEL_NAME,                                      // Kernel name.
+                              NU_KERNEL_NAME,                                   // Kernel name.
                               &loc_error                                        // Error code.
                              );
 

@@ -1,14 +1,14 @@
 # Neutrino documentation {#Neutrino_documentation}
 
 # 1. Neutrino in a nutshell {#Neutrino_in_a_nutshell}
-*Neutrino* is a C++ software environment for GPU-accelerated parallel computing,
+*Neutrino* is a C++ software environment for NU_GPU-accelerated parallel computing,
 based on the [OpenCL](https://en.wikipedia.org/wiki/OpenCL) and
 the [OpenGL](https://en.wikipedia.org/wiki/OpenGL) frameworks.
 The aim of Neutrino is to reduce the code overhead, due to the complexity of
-the GPU-accelerated coding paradigm, in order to let the users concentrate on the
+the NU_GPU-accelerated coding paradigm, in order to let the users concentrate on the
 implementation of their algorithms.
 The architecture of this computational paradigm is based on a parallel execution of routines
-running on a OpenCL *client* computing device (e.g. GPU card) and scheduled by a C++ *program* running
+running on a OpenCL *client* computing device (e.g. NU_GPU card) and scheduled by a C++ *program* running
 on the *host* device carrying the client (e.g. a PC).
 The mathematical computation of interest is first prepared on the host device
 starting by the `main.cpp` file and then run, by means further code written in so called OpenCL
@@ -21,7 +21,7 @@ thanks to a modality called OpenCL/GL *interoperability*. The interoperability
 allows the data buffers used for the computation within the OpenCL framework and
 already allocated on the client to be directly shared with the OpenGL framework
 in order to be used for the graphics rendition by the client itself: the advantage
-of this is the usage of the fast GPU memory of the client for both computational and
+of this is the usage of the fast NU_GPU memory of the client for both computational and
 graphics purposes, without using the memory space of the host.
 
 Moreover, the host can also directly render some graphics on the OpenGL GUI via the OpenGL
@@ -30,10 +30,10 @@ framework, if necessary.
 @dot
 graph neutrino_nutshell
 {
-  "host program\n(CPU)" -- "client kernel\n(GPU)" [label = " OpenCL"]
-  "host program\n(CPU)" -- "OpenGL GUI" [label = " OpenGL"]
-  "client kernel\n(GPU)" -- "OpenGL GUI" [label = " OpenCL/GL\ninteroperability"]
-  {rank=same; "client kernel\n(GPU)", "OpenGL GUI"}
+  "host program\n(NU_CPU)" -- "client kernel\n(NU_GPU)" [label = " OpenCL"]
+  "host program\n(NU_CPU)" -- "OpenGL GUI" [label = " OpenGL"]
+  "client kernel\n(NU_GPU)" -- "OpenGL GUI" [label = " OpenCL/GL\ninteroperability"]
+  {rank=same; "client kernel\n(NU_GPU)", "OpenGL GUI"}
 }
 @enddot
 
@@ -73,24 +73,24 @@ After their instantiation, these object must be initialised in the same sequence
 they depend each other in this hierarchy. The number of queues and kernels depends on the
 user's application.
 
-# 3. OpenCL/GL GPU-accelerated parallel computing paradigm {#OpenCL_GL_GPU-accelerated_parallel_computing_paradigm}
+# 3. OpenCL/GL NU_GPU-accelerated parallel computing paradigm {#OpenCL_GL_GPU-accelerated_parallel_computing_paradigm}
 Modern GPUs are not made of a single, monolithic, processor. Instead they are organised as an
 array of multiple identical elementary *compute units*.
 OpenCL is a software framework that let the user taking control of all those
 compute units within a *parallel computing* paradigm, taking advantage of the
-underlying GPU's hardware architecture.
+underlying NU_GPU's hardware architecture.
 OpenCL abstracts and generalises the particular hardware implementation of each
 different type of GPUs by means of its dedicated drivers, making possible
 to program different GPUs by a same common programming language.
 It is therefore not necessary to know how the hardware architecture is implemented
-at a low level inside the GPU: it is sufficient to know there is an *array of
+at a low level inside the NU_GPU: it is sufficient to know there is an *array of
 compute units* available to the user. Each of the compute units can be functionally
-considered as like as an individual CPU.
+considered as like as an individual NU_CPU.
 
 @dot
 digraph Modern_GPU
 {
-  graph [label = "Modern GPU architecture:", labelloc = t]
+  graph [label = "Modern NU_GPU architecture:", labelloc = t]
   node [shape = record]
   struct1 [label = "{CPU_1|CPU_1|CPU_3|CPU_4}|
                     {CPU_5|CPU_6|CPU_7|CPU_8}|
@@ -142,7 +142,7 @@ for (i = 0; i < N; i++)
   c[i] = a[i]*b[i];
 }
 ```
-This program takes *N-cycles* to be completed on a CPU.
+This program takes *N-cycles* to be completed on a NU_CPU.
 
 The same program can be rewritten, in OpenCL kernel language, this way:
 ```
@@ -181,7 +181,7 @@ a *1D-kernel* because only one global index is used.
 A variable *c* is defined for later use.
 The function *barrier(CLK_GLOBAL_MEM_FENCE)* serves as a
 synchronisation of this process of instantiation: for reasons depending on both
-the OpenCL software and the GPU underlying hardware it might be that this kind of
+the OpenCL software and the NU_GPU underlying hardware it might be that this kind of
 operation *will not occur exactly simultaneously* on all compute units. There
 could be a little *time jitter*, therefore the program *must wait* for all compute
 units to complete all the local operations before proceeding with the next steps.
@@ -199,8 +199,8 @@ containing the result of that operation.
 
 What about the number of element *N*? How big can it be?
 
-It depends on the available GPU. There are big and small OpenCL-compatible
-GPUs. In case a given GPU is too small to comply with a big *N*, OpenCL has got
+It depends on the available NU_GPU. There are big and small OpenCL-compatible
+GPUs. In case a given NU_GPU is too small to comply with a big *N*, OpenCL has got
 methods to split the computation in sequential time slots: it first fills all
 available compute units and performs a first computation, later it continues with
 the remaining part of the dataset. This generates a considerable *memory swapping*
@@ -260,7 +260,7 @@ memory, as opposed to ordinary client PC memory.
 @dot
 graph client_host_memory
 {
-  "client (e.g. GPU) memory" -- "host (e.g. PC) memory"
+  "client (e.g. NU_GPU) memory" -- "host (e.g. PC) memory"
 }
 @enddot
 
