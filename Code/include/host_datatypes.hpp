@@ -59,6 +59,7 @@ public:
   cl_mem    buffer;                                                             // Data memory buffer.
   size_t    size;                                                               // Data size.
   cl_uint   layout;                                                             // Data layout index.
+  bool      ready;                                                              // ready flag.
 
   float1 ();
   void init (
@@ -80,6 +81,7 @@ public:
   cl_mem   buffer;                                                              // Data memory buffer.
   size_t   size;                                                                // Data size.
   cl_uint  layout;                                                              // Data layout index.
+  bool     ready;                                                               // ready flag.
 
   int1 ();
   void init (
@@ -101,6 +103,7 @@ public:
   cl_mem            buffer;                                                     // Data memory buffer.
   size_t            size;                                                       // Data size.
   cl_uint           layout;                                                     // Data layout index.
+  bool              ready;                                                      // ready flag.
 
   float4 ();
   void init (
@@ -122,6 +125,7 @@ public:
   cl_mem          buffer;                                                       // Data memory buffer.
   size_t          size;                                                         // Data size.
   cl_uint         layout;                                                       // Data layout index.
+  bool            ready;                                                        // ready flag.
 
   int4 ();
   void init (
@@ -146,6 +150,7 @@ public:
   GLsizeiptr       size;                                                        // Data size.
   GLuint           layout;                                                      // Data layout index.
   const char*      name;                                                        // Data name.
+  bool             ready;                                                       // ready flag.
 
   point();
   void init (
@@ -170,6 +175,7 @@ public:
   GLsizeiptr       size;                                                        // Data size.
   GLuint           layout;                                                      // Data layout index.
   const char*      name;                                                        // Data name.
+  bool             ready;                                                       // ready flag.
 
   color();
   void init (
