@@ -7,7 +7,7 @@
  #define YMAX        +1.0                                                       // YMAX spatial boundary [m].
  #define NODES_X     100                                                        // Number of nodes in "X" direction [#].
  #define NODES_Y     100                                                        // Number of nodes in "Y" direction [#].
- #define NODES       10000                                                      // To be fixed: (NODES_X)*(NODES_Y)                           // Total number of nodes [#].
+ #define NODES       NODES_X* NODES_Y                                           // Total number of nodes [#].
  #define DX          (float)((XMAX - XMIN)/(NODES_X - 1))                       // DX mesh spatial size [m].
  #define DY          (float)((YMAX - YMIN)/(NODES_Y - 1))                       // DY mesh spatial size [m].
 
@@ -16,10 +16,10 @@
  #define GUI_SIZE_X  800                                                        // Window x-size [px].
  #define GUI_SIZE_Y  600                                                        // Window y-size [px].
  #define GUI_NAME    "neutrino 3.0"                                             // Window name.
-#define SHADER_HOME \
-  "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/shader"
 //#define SHADER_HOME \
-//  "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/shader"
+//  "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/shader"
+#define SHADER_HOME \
+  "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/shader"
  #define SHADER_VERT "voxel_vertex.vert"                                        // OpenGL vertex shader.
  #define SHADER_GEOM "voxel_geometry.geom"                                      // OpenGL geometry shader.
  #define SHADER_FRAG "voxel_fragment.frag"                                      // OpenGL fragment shader.
@@ -30,10 +30,10 @@
  #define KERNEL_SX   NODES                                                      // Dimension of OpenCL kernel (i-index).
  #define KERNEL_SY   0                                                          // Dimension of OpenCL kernel (j-index).
  #define KERNEL_SZ   0                                                          // Dimension of OpenCL kernel (k-index).
-#define KERNEL_HOME \
-  "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/kernel"               // OpenCL kernel header files directory.
 //#define KERNEL_HOME \
-//  "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/kernel"
+//  "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/kernel"               // OpenCL kernel header files directory.
+#define KERNEL_HOME \
+  "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/kernel"
  #define KERNEL_FILE "sine_kernel.cl"                                           // OpenCL kernel.
 
 // INCLUDES:
