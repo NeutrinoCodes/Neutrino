@@ -39,7 +39,7 @@ void opengl::orbit ()
 
   arcball (a, orbit_x_old, orbit_y_old);                                        // Building mouse world vector (old)...
   arcball (b, orbit_x, orbit_y);                                                // Building mouse world vector...
-  theta = ROTATION_FACTOR*angle (a, b);                                         // Computing orbit angle...
+  theta = NU_ROTATION_FACTOR*angle (a, b);                                         // Computing orbit angle...
 
   if(orbit_on && (theta > 0.0))                                                 // If mouse has been dragged (= left click + move):
   {
@@ -71,9 +71,9 @@ void opengl::pan ()
   grasp (initial_position, pan_x_old, pan_y_old);
   grasp (final_position, pan_x, pan_y);
 
-  translation[0] = PAN_FACTOR*(final_position[0] - initial_position[0]);
-  translation[1] = PAN_FACTOR*(final_position[1] - initial_position[1]);
-  translation[2] = PAN_FACTOR*(final_position[2] - initial_position[2]);
+  translation[0] = NU_PAN_FACTOR*(final_position[0] - initial_position[0]);
+  translation[1] = NU_PAN_FACTOR*(final_position[1] - initial_position[1]);
+  translation[2] = NU_PAN_FACTOR*(final_position[2] - initial_position[2]);
 
   translate (T_mat, T_mat_old, translation);
 }
@@ -161,13 +161,13 @@ void opengl::init (
   pan_y_old     = 0.0;
   pan_on        = false;
 
-  zoom_z_old    = INITIAL_ZOOM;
+  zoom_z_old    = NU_INITIAL_ZOOM;
   zoom_z        = 0.0;                                                          // Initializing zoom coefficient...
 
   int  glfw_ver_major;
   int  glfw_ver_minor;
   int  glfw_rev;
-  char glfw_ver_string[MAX_MESSAGE_SIZE];
+  char glfw_ver_string[NU_MAX_MESSAGE_SIZE];
 
   int  opengl_ver_major;                                                        // OpenGL version major number.
   int  opengl_ver_minor;                                                        // OpenGL version minor number.
@@ -184,7 +184,7 @@ void opengl::init (
     // Building up glfw version string:
     snprintf (
               glfw_ver_string,                                                  // Destination string.
-              MAX_MESSAGE_SIZE,                                                 // Size of destination string.
+              NU_MAX_MESSAGE_SIZE,                                                 // Size of destination string.
               "initializing GLFW... found version %d.%d.%d!",                   // Compiled string.
               glfw_ver_major,                                                   // GLFW major version.
               glfw_ver_minor,                                                   // GLFW minor version.
@@ -266,17 +266,17 @@ void opengl::init (
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                        // Clearing window...
     glEnable (GL_DEPTH_TEST);                                                   // Enabling depth test...
     glEnable (GL_PROGRAM_POINT_SIZE);                                           // Enabling "gl_PointSize" in vertex shader...
-    glLineWidth (LINE_WIDTH);                                                   // Setting line width...
+    glLineWidth (NU_LINE_WIDTH);                                                   // Setting line width...
 
-    PR_mode      = MODE_MONO;                                                   // Setting monoscopic projection mode...
+    PR_mode      = NU_MODE_MONO;                                                   // Setting monoscopic projection mode...
 
     // Setting monoscopic perspective:
     perspective_mono (
                       P_mat,                                                    // 4x4 perspective matrix.
-                      FOV*M_PI/180.0,                                           // Field of view [rad].
+                      NU_FOV*M_PI/180.0,                                           // Field of view [rad].
                       aspect_ratio,                                             // Projective screen aspect ratio (full screen).
-                      NEAR_Z_CLIP,                                              // Projective screen near depth...
-                      FAR_Z_CLIP                                                // Projective screen near depth...
+                      NU_NEAR_Z_CLIP,                                              // Projective screen near depth...
+                      NU_FAR_Z_CLIP                                                // Projective screen near depth...
                      );
 
     // Setting stereoscopic perspective:
@@ -285,11 +285,11 @@ void opengl::init (
                         PR_mat,                                                 // 4x4 left eye perspective matrix.
                         TL_mat,                                                 // 4x4 right eye translation matrix.
                         TR_mat,                                                 // 4x4 left eye translation matrix.
-                        IOD,                                                    // Intraocular distance.
-                        FOV*M_PI/180.0,                                         // Field of view [rad].
+                        NU_IOD,                                                    // Intraocular distance.
+                        NU_FOV*M_PI/180.0,                                         // Field of view [rad].
                         aspect_ratio/2.0,                                       // Projective screen aspect ratio (half screen).
-                        NEAR_Z_CLIP,                                            // Projective screen near depth...
-                        FAR_Z_CLIP                                              // Projective screen near depth...
+                        NU_NEAR_Z_CLIP,                                            // Projective screen near depth...
+                        NU_FAR_Z_CLIP                                              // Projective screen near depth...
                        );
 
     translate (T_mat, T_mat_old, initial_scene_position);                       // Setting initial scene position...
@@ -471,14 +471,14 @@ void opengl::key_pressed (
     case GLFW_KEY_2:
       if(loc_action == GLFW_PRESS)
       {
-        PR_mode = MODE_MONO;                                                    // Switching to monoscopic mode...
+        PR_mode = NU_MODE_MONO;                                                    // Switching to monoscopic mode...
       }
       break;
 
     case GLFW_KEY_3:
       if(loc_action == GLFW_PRESS)
       {
-        PR_mode = MODE_STEREO;                                                  // Switching to stereoscopic mode...
+        PR_mode = NU_MODE_STEREO;                                                  // Switching to stereoscopic mode...
       }
       break;
   }
@@ -604,13 +604,13 @@ void opengl::mouse_scrolled (
   // Checking y-position:
   if(scroll_y > 0)
   {
-    zoom_z = +ZOOM_INCREMENT;                                                   // Setting zoom-in...
+    zoom_z = +NU_ZOOM_INCREMENT;                                                   // Setting zoom-in...
   }
 
   // Checking y-position:
   if(scroll_y < 0)
   {
-    zoom_z = -ZOOM_INCREMENT;                                                   // Setting zoom-out...
+    zoom_z = -NU_ZOOM_INCREMENT;                                                   // Setting zoom-out...
   }
 
   zoom ();                                                                      // Zooming...
@@ -660,10 +660,10 @@ void opengl::framebuffer_resize (
   aspect_ratio       = (double)framebuffer_size_x/(double)framebuffer_size_y;   // Setting window aspect ration []...
   perspective_mono (
                     P_mat,
-                    FOV*M_PI/180.0,
+                    NU_FOV*M_PI/180.0,
                     aspect_ratio,
-                    NEAR_Z_CLIP,
-                    FAR_Z_CLIP
+                    NU_NEAR_Z_CLIP,
+                    NU_FAR_Z_CLIP
                    );                                                           // Setting Projection_matrix matrix...
 
   // Setting stereoscopic perspective and translation matrices:
@@ -672,11 +672,11 @@ void opengl::framebuffer_resize (
                       PR_mat,                                                   // 4x4 left eye perspective matrix.
                       TL_mat,                                                   // 4x4 right eye translation matrix.
                       TR_mat,                                                   // 4x4 left eye translation matrix.
-                      IOD,                                                      // Intraocular distance.
-                      FOV*M_PI/180.0,                                           // Field of view [rad].
+                      NU_IOD,                                                      // Intraocular distance.
+                      NU_FOV*M_PI/180.0,                                           // Field of view [rad].
                       aspect_ratio/2.0,                                         // Projective screen aspect ratio.
-                      NEAR_Z_CLIP,                                              // Projective screen near depth...
-                      FAR_Z_CLIP                                                // Projective screen far depth...
+                      NU_NEAR_Z_CLIP,                                              // Projective screen near depth...
+                      NU_FAR_Z_CLIP                                                // Projective screen far depth...
                      );
 
   glViewport (0, 0, framebuffer_size_x, framebuffer_size_y);                    // Resizing OpenGL viewport...
@@ -705,149 +705,149 @@ void opengl::poll_events ()
                                                       );
 
     // Setting zoom+:
-    if(axes[R2_ANALOG] > ZOOM_THRESHOLD_PS4)
+    if(axes[NU_R2_ANALOG] > NU_ZOOM_THRESHOLD_PS4)
     {
-      zoom_z = (axes[R2_ANALOG] + 1.0)/2.0*ZOOM_INCREMENT_PS4;
+      zoom_z = (axes[NU_R2_ANALOG] + 1.0)/2.0*NU_ZOOM_INCREMENT_PS4;
       zoom ();                                                                  // Zooming...
     }
 
     // Setting zoom-:
-    if(axes[L2_ANALOG] > ZOOM_THRESHOLD_PS4)
+    if(axes[NU_L2_ANALOG] > NU_ZOOM_THRESHOLD_PS4)
     {
-      zoom_z = -(axes[L2_ANALOG] + 1.0)/2.0*ZOOM_INCREMENT_PS4;
+      zoom_z = -(axes[NU_L2_ANALOG] + 1.0)/2.0*NU_ZOOM_INCREMENT_PS4;
       zoom ();                                                                  // Zooming...
     }
 
     // Preparing for orbit movement:
-    if((abs (axes[L_ANALOG_H]) <= ROTATION_THRESHOLD_PS4) &&
-       (abs (axes[L_ANALOG_V]) <= ROTATION_THRESHOLD_PS4))
+    if((abs (axes[NU_L_ANALOG_H]) <= NU_ROTATION_THRESHOLD_PS4) &&
+       (abs (axes[NU_L_ANALOG_V]) <= NU_ROTATION_THRESHOLD_PS4))
     {
       orbit_on    = false;                                                      // Turning off orbit...
-      orbit_x_old = ROTATION_FACTOR_PS4*axes[L_ANALOG_H];
-      orbit_y_old = ROTATION_FACTOR_PS4*axes[L_ANALOG_V];
+      orbit_x_old = NU_ROTATION_FACTOR_PS4*axes[NU_L_ANALOG_H];
+      orbit_y_old = NU_ROTATION_FACTOR_PS4*axes[NU_L_ANALOG_V];
       backup (R_mat_old, R_mat);                                                // Backing up rotation matrix...
     }
 
     // Setting orbit movement:
-    if((abs (axes[L_ANALOG_H]) > ROTATION_THRESHOLD_PS4) ||
-       (abs (axes[L_ANALOG_V]) > ROTATION_THRESHOLD_PS4))
+    if((abs (axes[NU_L_ANALOG_H]) > NU_ROTATION_THRESHOLD_PS4) ||
+       (abs (axes[NU_L_ANALOG_V]) > NU_ROTATION_THRESHOLD_PS4))
     {
       orbit_on = true;
-      orbit_x  = ROTATION_FACTOR_PS4*axes[L_ANALOG_H];
-      orbit_y  = ROTATION_FACTOR_PS4*axes[L_ANALOG_V];
+      orbit_x  = NU_ROTATION_FACTOR_PS4*axes[NU_L_ANALOG_H];
+      orbit_y  = NU_ROTATION_FACTOR_PS4*axes[NU_L_ANALOG_V];
       orbit ();                                                                 // Computing orbit...
       backup (R_mat_old, R_mat);                                                // Backing up rotation matrix...
     }
 
     // Preparing for pan movement:
-    if((abs (axes[R_ANALOG_H]) <= ROTATION_THRESHOLD_PS4) &&
-       (abs (axes[R_ANALOG_V]) <= ROTATION_THRESHOLD_PS4))
+    if((abs (axes[NU_R_ANALOG_H]) <= NU_ROTATION_THRESHOLD_PS4) &&
+       (abs (axes[NU_R_ANALOG_V]) <= NU_ROTATION_THRESHOLD_PS4))
     {
       pan_on    = false;                                                        // Turning off orbit...
-      pan_x_old = ROTATION_FACTOR_PS4*axes[R_ANALOG_H];
-      pan_y_old = ROTATION_FACTOR_PS4*axes[R_ANALOG_V];
+      pan_x_old = NU_ROTATION_FACTOR_PS4*axes[NU_R_ANALOG_H];
+      pan_y_old = NU_ROTATION_FACTOR_PS4*axes[NU_R_ANALOG_V];
       backup (T_mat_old, T_mat);                                                // Backing up rotation matrix...
     }
 
     // Setting orbit movement:
-    if((abs (axes[R_ANALOG_H]) > ROTATION_THRESHOLD_PS4) ||
-       (abs (axes[R_ANALOG_V]) > ROTATION_THRESHOLD_PS4))
+    if((abs (axes[NU_R_ANALOG_H]) > NU_ROTATION_THRESHOLD_PS4) ||
+       (abs (axes[NU_R_ANALOG_V]) > NU_ROTATION_THRESHOLD_PS4))
     {
       pan_on = true;
-      pan_x  = ROTATION_FACTOR_PS4*axes[R_ANALOG_H];
-      pan_y  = ROTATION_FACTOR_PS4*axes[R_ANALOG_V];
+      pan_x  = NU_ROTATION_FACTOR_PS4*axes[NU_R_ANALOG_H];
+      pan_y  = NU_ROTATION_FACTOR_PS4*axes[NU_R_ANALOG_V];
       pan ();                                                                   // Computing orbit...
       backup (T_mat_old, T_mat);                                                // Backing up rotation matrix...
     }
 
-    if( GLFW_PRESS == button[SQUARE] )
+    if( GLFW_PRESS == button[NU_SQUARE] )
     {
-      printf ("Button SQUARE pressed\n");
+      printf ("Button NU_SQUARE pressed\n");
     }
 
-    if( GLFW_PRESS == button[CROSS] )
+    if( GLFW_PRESS == button[NU_CROSS] )
     {
       glfwSetWindowShouldClose (glfw_window, GL_TRUE);                          // Setting window "closed" flag...
     }
 
-    if( GLFW_PRESS == button[CIRCLE] )
+    if( GLFW_PRESS == button[NU_CIRCLE] )
     {
-      printf ("Button CIRCLE pressed\n");
+      printf ("Button NU_CIRCLE pressed\n");
     }
 
-    if( GLFW_PRESS == button[TRIANGLE] )
+    if( GLFW_PRESS == button[NU_TRIANGLE] )
     {
-      printf ("Button TRIANGLE pressed\n");
+      printf ("Button NU_TRIANGLE pressed\n");
     }
 
-    if( GLFW_PRESS == button[L1] )
+    if( GLFW_PRESS == button[NU_L1] )
     {
-      printf ("Button L1 pressed\n");
+      printf ("Button NU_L1 pressed\n");
     }
 
-    if( GLFW_PRESS == button[R1] )
+    if( GLFW_PRESS == button[NU_R1] )
     {
-      printf ("Button R1 pressed\n");
+      printf ("Button NU_R1 pressed\n");
     }
 
-    if( GLFW_PRESS == button[L2] )
+    if( GLFW_PRESS == button[NU_L2] )
     {
-      printf ("Button L2 pressed\n");
+      printf ("Button NU_L2 pressed\n");
     }
 
-    if( GLFW_PRESS == button[R2] )
+    if( GLFW_PRESS == button[NU_R2] )
     {
-      printf ("Button R2 pressed\n");
+      printf ("Button NU_R2 pressed\n");
     }
 
-    if( GLFW_PRESS == button[SHARE] )
+    if( GLFW_PRESS == button[NU_SHARE] )
     {
-      printf ("Button SHARE pressed\n");
+      printf ("Button NU_SHARE pressed\n");
     }
 
-    if( GLFW_PRESS == button[OPTIONS] )
+    if( GLFW_PRESS == button[NU_OPTIONS] )
     {
-      printf ("Button OPTIONS pressed\n");
+      printf ("Button NU_OPTIONS pressed\n");
     }
 
-    if( GLFW_PRESS == button[PS] )
+    if( GLFW_PRESS == button[NU_PS] )
     {
-      printf ("Button PS pressed\n");
+      printf ("Button NU_PS pressed\n");
     }
 
-    if( GLFW_PRESS == button[TOUCH] )
+    if( GLFW_PRESS == button[NU_TOUCH] )
     {
-      printf ("Button TOUCH pressed\n");
+      printf ("Button NU_TOUCH pressed\n");
     }
 
-    if( GLFW_PRESS == button[L_ANALOG] )
+    if( GLFW_PRESS == button[NU_L_ANALOG] )
     {
-      printf ("Button L_ANALOG pressed\n");
+      printf ("Button NU_L_ANALOG pressed\n");
     }
 
-    if( GLFW_PRESS == button[R_ANALOG] )
+    if( GLFW_PRESS == button[NU_R_ANALOG] )
     {
-      printf ("Button R_ANALOG pressed\n");
+      printf ("Button NU_R_ANALOG pressed\n");
     }
 
-    if( GLFW_PRESS == button[DPAD_LEFT] )
+    if( GLFW_PRESS == button[NU_DPAD_LEFT] )
     {
-      printf ("Button DPAD_LEFT pressed\n");
+      printf ("Button NU_DPAD_LEFT pressed\n");
     }
 
-    if( GLFW_PRESS == button[DPAD_DOWN] )
+    if( GLFW_PRESS == button[NU_DPAD_DOWN] )
     {
-      printf ("Button DPAD_DOWN pressed\n");
+      printf ("Button NU_DPAD_DOWN pressed\n");
     }
 
-    if( GLFW_PRESS == button[DPAD_RIGHT] )
+    if( GLFW_PRESS == button[NU_DPAD_RIGHT] )
     {
-      printf ("Button DPAD_RIGHT pressed\n");
+      printf ("Button NU_DPAD_RIGHT pressed\n");
     }
 
-    if( GLFW_PRESS == button[DPAD_UP] )
+    if( GLFW_PRESS == button[NU_DPAD_UP] )
     {
-      printf ("Button DPAD_UP pressed\n");
+      printf ("Button NU_DPAD_UP pressed\n");
     }
   }
 }
@@ -864,7 +864,7 @@ void opengl::plot (
 {
   switch(PR_mode)
   {
-    case MODE_MONO:
+    case NU_MODE_MONO:
       // Computing view matrix:
       multiplicate (V_mat, T_mat, R_mat);                                       // Setting view matrix...
       set_shader (loc_shader, V_mat, P_mat);                                    // Setting plot style...
@@ -879,7 +879,7 @@ void opengl::plot (
 
       break;
 
-    case MODE_STEREO:
+    case NU_MODE_STEREO:
       multiplicate (V_mat, T_mat, R_mat);                                       // Setting view matrix...
       multiplicate (VL_mat, TL_mat, V_mat);                                     // Setting left eye stereoscopic view matrix...
       multiplicate (VR_mat, TR_mat, V_mat);                                     // Setting right eye stereoscopic view matrix...

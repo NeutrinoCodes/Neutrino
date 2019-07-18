@@ -16,143 +16,143 @@
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// TERMINAL PARAMETERS //////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-  #define TERMINAL_REFRESH                  20000                               // Terminal refresh time [us].
-  #define COLOR_NORMAL                      "\x1B[0m"                           // Default terminal color.
-  #define COLOR_RED                         "\x1B[31m"                          // Red.
-  #define COLOR_GREEN                       "\x1B[32m"                          // Green.
-  #define COLOR_YELLOW                      "\x1B[33m"                          // Yellow.
-  #define COLOR_BLUE                        "\x1B[34m"                          // Blue.
-  #define COLOR_MAGENTA                     "\x1B[35m"                          // Magenta.
-  #define COLOR_CYAN                        "\x1B[36m"                          // Cyan.
-  #define COLOR_WHITE                       "\x1B[37m"                          // White.
+  #define NU_TERMINAL_REFRESH               20000                               // Terminal refresh time [us].
+  #define NU_COLOR_NORMAL                   "\x1B[0m"                           // Default terminal color.
+  #define NU_COLOR_RED                      "\x1B[31m"                          // Red.
+  #define NU_COLOR_GREEN                    "\x1B[32m"                          // Green.
+  #define NU_COLOR_YELLOW                   "\x1B[33m"                          // Yellow.
+  #define NU_COLOR_BLUE                     "\x1B[34m"                          // Blue.
+  #define NU_COLOR_MAGENTA                  "\x1B[35m"                          // Magenta.
+  #define NU_COLOR_CYAN                     "\x1B[36m"                          // Cyan.
+  #define NU_COLOR_WHITE                    "\x1B[37m"                          // White.
 
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// WINDOW PARAMETERS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-  #define ZOOM_INCREMENT                    0.1                                 // Mouse wheel zoom increment [].
-  #define ZOOM_INCREMENT_PS4                0.02                                // PS4 gamepad zoom increment [].
-  #define ZOOM_THRESHOLD_PS4                -0.95                               // PS4 gamepad zoom threshold [].
-  #define INITIAL_ZOOM                      -3.0                                // Initial zoom factor [+.]
-  #define PAN_FACTOR                        0.01                                // Mouse pan translation factor [].
-  #define ROTATION_FACTOR                   2.0                                 // Mouse orbit rotation factor [].
-  #define ROTATION_FACTOR_PS4               4.0                                 // PS4 gampad rotation factor [].
-  #define ROTATION_THRESHOLD_PS4            0.1                                 // PS4 gampad rotation thrshold [].
-  #define NEAR_Z_CLIP                       0.1                                 // Near z-clipping distance [small, but > 0.0].
-  #define FAR_Z_CLIP                        100.0                               // Far z-clipping distance [big, but < +inf].
-  #define FOV                               60.0                                // Field of view [deg].
-  #define IOD                               0.02                                // Intraocular distance.
-  #define SCREEN_DISTANCE                   -2.5                                // Screen distance.
-  #define INITIAL_SCENE_POSITION            {0.0, 0.0, INITIAL_ZOOM}            // Initial scene position.
-  #define LINE_WIDTH                        3                                   // Line width [px].
-  #define KERNEL_NAME                       "thekernel"                         // OpenCL kernel function name.
-  #define MAX_TEXT_SIZE                     128                                 // Maximum # of characters in a text string.
-  #define MAX_MESSAGE_SIZE                  64                                  // Maximum # of characters in a text message.
-  #define MAX_PATH_SIZE                     32768                               // Maximum # of characters in a text file path.
+  #define NU_ZOOM_INCREMENT                 0.1                                 // Mouse wheel zoom increment [].
+  #define NU_ZOOM_INCREMENT_PS4             0.02                                // PS4 gamepad zoom increment [].
+  #define NU_ZOOM_THRESHOLD_PS4             -0.95                               // PS4 gamepad zoom threshold [].
+  #define NU_INITIAL_ZOOM                   -3.0                                // Initial zoom factor [+.]
+  #define NU_PAN_FACTOR                     0.01                                // Mouse pan translation factor [].
+  #define NU_ROTATION_FACTOR                2.0                                 // Mouse orbit rotation factor [].
+  #define NU_ROTATION_FACTOR_PS4            4.0                                 // PS4 gampad rotation factor [].
+  #define NU_ROTATION_THRESHOLD_PS4         0.1                                 // PS4 gampad rotation thrshold [].
+  #define NU_NEAR_Z_CLIP                    0.1                                 // Near z-clipping distance [small, but > 0.0].
+  #define NU_FAR_Z_CLIP                     100.0                               // Far z-clipping distance [big, but < +inf].
+  #define NU_FOV                            60.0                                // Field of view [deg].
+  #define NU_IOD                            0.02                                // Intraocular distance.
+  #define NU_SCREEN_DISTANCE                -2.5                                // Screen distance.
+  #define NU_INITIAL_SCENE_POSITION         {0.0, 0.0, NU_INITIAL_ZOOM}         // Initial scene position.
+  #define NU_LINE_WIDTH                     3                                   // Line width [px].
+  #define NU_KERNEL_NAME                    "thekernel"                         // OpenCL kernel function name.
+  #define NU_MAX_TEXT_SIZE                  128                                 // Maximum # of characters in a text string.
+  #define NU_MAX_MESSAGE_SIZE               64                                  // Maximum # of characters in a text message.
+  #define NU_MAX_PATH_SIZE                  32768                               // Maximum # of characters in a text file path.
 
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// PS4 GAMEPAD BUTTONS //////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
   #ifdef __APPLE__
-    #define SQUARE                          0
-    #define CROSS                           1
-    #define CIRCLE                          2
-    #define TRIANGLE                        3
+    #define NU_SQUARE                       0
+    #define NU_CROSS                        1
+    #define NU_CIRCLE                       2
+    #define NU_TRIANGLE                     3
 
-    #define L1                              4
-    #define R1                              5
-    #define L2                              6
-    #define R2                              7
+    #define NU_L1                           4
+    #define NU_R1                           5
+    #define NU_L2                           6
+    #define NU_R2                           7
 
-    #define SHARE                           8
-    #define OPTIONS                         9
-    #define L_ANALOG                        10
-    #define R_ANALOG                        11
+    #define NU_SHARE                        8
+    #define NU_OPTIONS                      9
+    #define NU_L_ANALOG                     10
+    #define NU_R_ANALOG                     11
 
-    #define PS                              12
-    #define TOUCH                           13
+    #define NU_PS                           12
+    #define NU_TOUCH                        13
 
-    #define DPAD_UP                         14
-    #define DPAD_RIGHT                      15
-    #define DPAD_DOWN                       16
-    #define DPAD_LEFT                       17
+    #define NU_DPAD_UP                      14
+    #define NU_DPAD_RIGHT                   15
+    #define NU_DPAD_DOWN                    16
+    #define NU_DPAD_LEFT                    17
   #endif
 
   #ifdef __linux__
-    #define SQUARE                          3
-    #define CROSS                           0
-    #define CIRCLE                          1
-    #define TRIANGLE                        2
+    #define NU_SQUARE                       3
+    #define NU_CROSS                        0
+    #define NU_CIRCLE                       1
+    #define NU_TRIANGLE                     2
 
-    #define L1                              4
-    #define R1                              5
-    #define L2                              6
-    #define R2                              7
+    #define NU_L1                           4
+    #define NU_R1                           5
+    #define NU_L2                           6
+    #define NU_R2                           7
 
-    #define SHARE                           8
-    #define OPTIONS                         9
-    #define L_ANALOG                        11
-    #define R_ANALOG                        12
+    #define NU_SHARE                        8
+    #define NU_OPTIONS                      9
+    #define NU_L_ANALOG                     11
+    #define NU_R_ANALOG                     12
 
-    #define PS                              10
-    #define TOUCH                           13
+    #define NU_PS                           10
+    #define NU_TOUCH                        13
 
-    #define DPAD_UP                         14
-    #define DPAD_RIGHT                      15
-    #define DPAD_DOWN                       16
-    #define DPAD_LEFT                       17
+    #define NU_DPAD_UP                      14
+    #define NU_DPAD_RIGHT                   15
+    #define NU_DPAD_DOWN                    16
+    #define NU_DPAD_LEFT                    17
   #endif
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// PS4 GAMEPAD AXES //////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
   #ifdef __APPLE__
-    #define L_ANALOG_H                      0
-    #define L_ANALOG_V                      1
-    #define R_ANALOG_H                      2
-    #define L2_ANALOG                       3
-    #define R_ANALOG_V                      5
-    #define R2_ANALOG                       4
+    #define NU_L_ANALOG_H                   0
+    #define NU_L_ANALOG_V                   1
+    #define NU_R_ANALOG_H                   2
+    #define NU_L2_ANALOG                    3
+    #define NU_R_ANALOG_V                   5
+    #define NU_R2_ANALOG                    4
   #endif
 
   #ifdef __linux__
-    #define L_ANALOG_H                      0
-    #define L_ANALOG_V                      1
-    #define R_ANALOG_H                      3
-    #define L2_ANALOG                       2
-    #define R_ANALOG_V                      4
-    #define R2_ANALOG                       5
+    #define NU_L_ANALOG_H                   0
+    #define NU_L_ANALOG_V                   1
+    #define NU_R_ANALOG_H                   3
+    #define NU_L2_ANALOG                    2
+    #define NU_R_ANALOG_V                   4
+    #define NU_R2_ANALOG                    5
   #endif
 
 // Projection mode:
 typedef enum
 {
-  MODE_MONO,                                                                    // Projection mode set as 2D.
-  MODE_STEREO                                                                   // Projection mode set as 3D.
+  NU_MODE_MONO,                                                                 // Projection mode set as 2D.
+  NU_MODE_STEREO                                                                // Projection mode set as 3D.
 } projection_mode;
 
 // Shader types:
 typedef enum
 {
-  VERTEX,                                                                       // GLSL shader interpretation set as vertex.
-  FRAGMENT,                                                                     // GLSL shader interpretation set as fragment.
-  GEOMETRY                                                                      // GLSL shader interpretation set as geometry.
+  NU_VERTEX,                                                                    // GLSL shader interpretation set as vertex.
+  NU_FRAGMENT,                                                                  // GLSL shader interpretation set as fragment.
+  NU_GEOMETRY                                                                   // GLSL shader interpretation set as geometry.
 } shader_type;
 
 // Kernel modes:
 typedef enum
 {
-  WAIT,                                                                         // OpenCL kernel set as blocking mode.
-  DONT_WAIT                                                                     // OpenCL kernel set as non-blocking mode.
+  NU_WAIT,                                                                      // OpenCL kernel set as blocking mode.
+  NU_DONT_WAIT                                                                  // OpenCL kernel set as non-blocking mode.
 } kernel_mode;
 
 // Compute device types:
 typedef enum
 {
-  CPU,                                                                          // OpenCL CPU device.
-  GPU,                                                                          // OpenCL GPU device.
-  ACCELERATOR,                                                                  // OpenCL ACCELERATOR device.
-  DEFAULT,                                                                      // OpenCL DEFAULT device.
-  ALL                                                                           // OpenCL ALL devices.
+  NU_CPU,                                                                       // OpenCL NU_CPU device.
+  NU_GPU,                                                                       // OpenCL NU_GPU device.
+  NU_ACCELERATOR,                                                               // OpenCL NU_ACCELERATOR device.
+  NU_DEFAULT,                                                                   // OpenCL NU_DEFAULT device.
+  NU_ALL                                                                        // OpenCL NU_ALL devices.
 } compute_device_type;
 
 ////////////////////////////////////////////////////////////////////////////////

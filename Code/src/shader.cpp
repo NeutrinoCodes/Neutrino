@@ -24,7 +24,7 @@ void shader::init (
   // Building up vertex file full name:
   snprintf (
             vertex_file_name,                                                   // Destination string.
-            MAX_PATH_SIZE,                                                      // Size of destination string.
+            NU_MAX_PATH_SIZE,                                                      // Size of destination string.
             "%s/%s",                                                            // Compiled string.
             shader_home,                                                        // Shader home directory.
             loc_vertex_file_name                                                // Vertex shader file name.
@@ -33,7 +33,7 @@ void shader::init (
   // Building up geometry file full name:
   snprintf (
             geometry_file_name,                                                 // Destination string.
-            MAX_PATH_SIZE,                                                      // Size of destination string.
+            NU_MAX_PATH_SIZE,                                                      // Size of destination string.
             "%s/%s",                                                            // Compiled string.
             shader_home,                                                        // Shader home directory.
             loc_geometry_file_name                                              // Geometry shader file name.
@@ -42,15 +42,15 @@ void shader::init (
   // Building up fragment file full name:
   snprintf (
             fragment_file_name,                                                 // Destination string.
-            MAX_PATH_SIZE,                                                      // Size of destination string.
+            NU_MAX_PATH_SIZE,                                                      // Size of destination string.
             "%s/%s",                                                            // Compiled string.
             shader_home,                                                        // Shader home directory.
             loc_fragment_file_name                                              // Fragment shader file name.
            );
 
-  vertex   = compile (vertex_file_name, VERTEX);                                // Compiling vertex shader...
-  geometry = compile (geometry_file_name, GEOMETRY);                            // Compiling geometry shader...
-  fragment = compile (fragment_file_name, FRAGMENT);                            // Compiling fragment shader...
+  vertex   = compile (vertex_file_name, NU_VERTEX);                                // Compiling vertex shader...
+  geometry = compile (geometry_file_name, NU_GEOMETRY);                            // Compiling geometry shader...
+  fragment = compile (fragment_file_name, NU_FRAGMENT);                            // Compiling fragment shader...
   program  = glCreateProgram ();                                                // Creating program...
 }
 
@@ -68,7 +68,7 @@ GLuint shader::compile (
   GLint   success;                                                              // "GL_COMPILE_STATUS" flag.
   GLchar* log;                                                                  // Buffer for OpenGL error log.
   GLsizei log_size;                                                             // Size of OpenGL error log.
-  char    shader_fullname [MAX_PATH_SIZE];                                      // Shader full file name.
+  char    shader_fullname [NU_MAX_PATH_SIZE];                                      // Shader full file name.
 
   strncpy (
            shader_fullname,
@@ -86,15 +86,15 @@ GLuint shader::compile (
   // Selecting shader type:
   switch(loc_shader_type)
   {
-    case VERTEX:
+    case NU_VERTEX:
       shader = glCreateShader (GL_VERTEX_SHADER);                               // Creating shader...
       break;
 
-    case FRAGMENT:
+    case NU_FRAGMENT:
       shader = glCreateShader (GL_FRAGMENT_SHADER);                             // Creating shader...
       break;
 
-    case GEOMETRY:
+    case NU_GEOMETRY:
       shader = glCreateShader (GL_GEOMETRY_SHADER);                             // Creating shader...
       break;
   }

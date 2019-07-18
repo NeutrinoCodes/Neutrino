@@ -17,9 +17,9 @@ private:
 
 public:
   cl_kernel     kernel_id;                                                      // Kernel id.
-  char          kernel_home[MAX_PATH_SIZE];                                     // Kernel home directory.
-  char          kernel_file_name[MAX_PATH_SIZE];                                // Kernel file name.
-  char          compiler_options[MAX_PATH_SIZE];                                // JIT complier options string.
+  char          kernel_home[NU_MAX_PATH_SIZE];                                     // Kernel home directory.
+  char          kernel_file_name[NU_MAX_PATH_SIZE];                                // Kernel file name.
+  char          compiler_options[NU_MAX_PATH_SIZE];                                // JIT complier options string.
   char*         source;                                                         // Kernel source.
   size_t        source_size;                                                    // Kernel source size [characters].
   cl_program    program;                                                        // Kernel program.

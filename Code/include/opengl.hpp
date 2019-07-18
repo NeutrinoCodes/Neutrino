@@ -33,7 +33,7 @@ private:
   float           q_old[4]                  = {1.0, 0.0, 0.0, 0.0};
 
   // Initial scene position:
-  float           initial_scene_position[3] = INITIAL_SCENE_POSITION;
+  float           initial_scene_position[3] = NU_INITIAL_SCENE_POSITION;
 
   GLuint          point_shader;                                                 // Point shader program.
   GLuint          voxel_shader;                                                 // Voxel shader program.

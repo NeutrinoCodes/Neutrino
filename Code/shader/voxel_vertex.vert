@@ -115,7 +115,7 @@ void main(void)
   diffusion_F = clamp(dot(light, normal_F), 0.2, 1.0);                          // FRONT: computing face "BFHD" diffusion coefficient.
 
   ////////////////////////////////////////////////////////////////////////////////
-  /////////////////// VOXEL'S VERTEX BARICENTRIC COORDINATES /////////////////////
+  /////////////////// VOXEL'S NU_VERTEX BARICENTRIC COORDINATES /////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   vs_out.vertex_A = P_mat*V_mat*(voxel_center + vec4(s*A, 1.0));                // Computing vertex "A".
   vs_out.vertex_B = P_mat*V_mat*(voxel_center + vec4(s*B, 1.0));                // Computing vertex "B".
