@@ -166,11 +166,11 @@ void queue::read (
   baseline->check_error (loc_error);
 };
 //////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// READ "point" overload /////////////////////////////
+////////////////////////////// READ "float4G" overload ///////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 void queue::read (
-                  point*  loc_data,                                             // Data object.
-                  cl_uint loc_layout_index                                      // Layout index.
+                  float4G* loc_data,                                            // Data object.
+                  cl_uint  loc_layout_index                                     // Layout index.
                  )
 {
   cl_int loc_error;                                                             // Local error code.
@@ -188,39 +188,7 @@ void queue::read (
                                    loc_data->buffer,                            // Data buffer.
                                    CL_TRUE,                                     // Blocking write flag.
                                    0,                                           // Data buffer offset.
-                                   sizeof(point_structure)*loc_data->size,      // Data buffer size.
-                                   loc_data->data,                              // Data buffer.
-                                   0,                                           // Number of events in the list.
-                                   NULL,                                        // Event list.
-                                   NULL                                         // Event.
-                                  );
-
-  baseline->check_error (loc_error);
-};
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// READ "color" overload /////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-void queue::read (
-                  color*  loc_data,                                             // Data object.
-                  cl_uint loc_layout_index                                      // Layout index.
-                 )
-{
-  cl_int loc_error;                                                             // Local error code.
-
-  // Checking layout index:
-  if(loc_layout_index != loc_data->layout)
-  {
-    baseline->error ("Layout index mismatch!");                                 // Printing message...
-    exit (EXIT_FAILURE);                                                        // Exiting...
-  }
-
-  // Reading OpenCL buffer:
-  loc_error = clEnqueueReadBuffer (
-                                   queue_id,                                    // OpenCL queue ID.
-                                   loc_data->buffer,                            // Data buffer.
-                                   CL_TRUE,                                     // Blocking write flag.
-                                   0,                                           // Data buffer offset.
-                                   sizeof(color_structure)*loc_data->size,      // Data buffer size.
+                                   sizeof(float4G_structure)*loc_data->size,    // Data buffer size.
                                    loc_data->data,                              // Data buffer.
                                    0,                                           // Number of events in the list.
                                    NULL,                                        // Event list.
@@ -363,11 +331,11 @@ void queue::write (
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-///////////////////////////// WRITE "point" overload /////////////////////////////
+///////////////////////////// WRITE "float4G" overload ///////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 void queue::write (
-                   point*  loc_data,                                            // Data object.
-                   cl_uint loc_layout_index                                     // Layout index.
+                   float4G* loc_data,                                           // Data object.
+                   cl_uint  loc_layout_index                                    // Layout index.
                   )
 {
   cl_int loc_error;                                                             // Local error code.
@@ -391,7 +359,7 @@ void queue::write (
                                     loc_data->buffer,                           // Data buffer.
                                     CL_TRUE,                                    // Blocking write flag.
                                     0,                                          // Data buffer offset.
-                                    sizeof(point_structure)*loc_data->size,     // Data buffer size.
+                                    sizeof(float4G_structure)*loc_data->size,   // Data buffer size.
                                     loc_data->data,                             // Data buffer.
                                     0,                                          // Number of events in the list.
                                     NULL,                                       // Event list.
@@ -407,56 +375,11 @@ void queue::write (
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-///////////////////////////// WRITE "color" overload /////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-void queue::write (
-                   color*  loc_data,                                            // Data object.
-                   cl_uint loc_layout_index                                     // Layout index.
-                  )
-{
-  cl_int loc_error;                                                             // Local error code.
-
-  // Checking layout index:
-  if(loc_layout_index != loc_data->layout)
-  {
-    baseline->error ("Layout index mismatch!");                                 // Printing message...
-    exit (EXIT_FAILURE);                                                        // Exiting...
-  }
-
-  // Acquiring OpenGL buffer:
-  acquire (
-           loc_data,                                                            // Data object.
-           loc_layout_index                                                     // OpenGL shader layout index.
-          );
-
-  // Writing OpenCL buffer:
-  loc_error = clEnqueueWriteBuffer (
-                                    queue_id,                                   // OpenCL queue ID.
-                                    loc_data->buffer,                           // Data buffer.
-                                    CL_TRUE,                                    // Blocking write flag.
-                                    0,                                          // Data buffer offset.
-                                    sizeof(color_structure)*loc_data->size,     // Data buffer size.
-                                    loc_data->data,                             // Data buffer.
-                                    0,                                          // Number of events in the list.
-                                    NULL,                                       // Event list.
-                                    NULL                                        // Event.
-                                   );
-
-  baseline->check_error (loc_error);
-
-  // Releasing OpenGL buffer:
-  release (
-           loc_data,                                                            // Data object.
-           loc_layout_index                                                     // OpenGL shader layout index.
-          );
-};
-
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////// ACQUIRE "point" overload ///////////////////////////
+///////////////////////////// ACQUIRE "float4G" overload /////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 void queue::acquire (
-                     point* loc_data,                                           // Data object.
-                     GLuint loc_layout_index                                    // OpenGL shader layout index.
+                     float4G* loc_data,                                         // Data object.
+                     GLuint   loc_layout_index                                  // OpenGL shader layout index.
                     )
 {
   cl_int loc_error;                                                             // Local error code.
@@ -488,74 +411,11 @@ void queue::acquire (
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-///////////////////////////// ACQUIRE "color" overload ///////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-void queue::acquire (
-                     color* loc_data,                                           // Data object.
-                     GLuint loc_layout_index                                    // OpenGL shader layout index.
-                    )
-{
-  cl_int loc_error;                                                             // Local error code.
-
-  // Binding data:
-  glBindBuffer (GL_ARRAY_BUFFER, loc_data->vbo);                                // Binding VBO...
-  glVertexAttribPointer (
-                         loc_layout_index,                                      // VAO index.
-                         4,                                                     // Number of components of data vector.
-                         GL_FLOAT,                                              // Data type.
-                         GL_FALSE,                                              // Fixed-point data normalization.
-                         0,                                                     // Data stride.
-                         0                                                      // Data offset.
-                        );
-  glEnableVertexAttribArray (loc_layout_index);                                 // Setting layout index in vertex shader...
-  glFinish ();                                                                  // Ensuring that all OpenGL routines have completed all operations...
-
-  // Acquiring OpenCL buffer:
-  loc_error = clEnqueueAcquireGLObjects (
-                                         queue_id,                              // Queue.
-                                         1,                                     // # of memory objects.
-                                         &loc_data->buffer,                     // Memory object array.
-                                         0,                                     // # of events in event list.
-                                         NULL,                                  // Event list.
-                                         NULL                                   // Event.
-                                        );
-
-  baseline->check_error (loc_error);                                            // Checking returned error code...
-};
-
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////// RELEASE "point" overlad ////////////////////////////
+///////////////////////////// RELEASE "float4G" overlad //////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 void queue::release (
-                     point* loc_data,                                           // Data object.
-                     GLuint loc_layout_index                                    // OpenGL shader layout index.
-                    )
-{
-  cl_int loc_error;                                                             // Local error code.
-
-  // Releasing openCL buffer:
-  loc_error = clEnqueueReleaseGLObjects (
-                                         queue_id,                              // Queue.
-                                         1,                                     // # of memory objects.
-                                         &loc_data->buffer,                     // Memory object array.
-                                         0,                                     // # of events in event list.
-                                         NULL,                                  // Event list.
-                                         NULL                                   // Event.
-                                        );
-
-  clFinish (queue_id);                                                          // Ensuring that all OpenCL routines have completed all operations...
-
-  glDisableVertexAttribArray (loc_layout_index);                                // Unbinding data array...
-
-  baseline->check_error (loc_error);                                            // Checking returned error code...
-};
-
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////// RELEASE "color" overlad ////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-void queue::release (
-                     color* loc_data,                                           // Data object.
-                     GLuint loc_layout_index                                    // OpenGL shader layout index.
+                     float4G* loc_data,                                         // Data object.
+                     GLuint   loc_layout_index                                  // OpenGL shader layout index.
                     )
 {
   cl_int loc_error;                                                             // Local error code.

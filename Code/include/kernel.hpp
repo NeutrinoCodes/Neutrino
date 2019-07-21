@@ -17,9 +17,9 @@ private:
 
 public:
   cl_kernel     kernel_id;                                                      // Kernel id.
-  char          kernel_home[NU_MAX_PATH_SIZE];                                     // Kernel home directory.
-  char          kernel_file_name[NU_MAX_PATH_SIZE];                                // Kernel file name.
-  char          compiler_options[NU_MAX_PATH_SIZE];                                // JIT complier options string.
+  char          kernel_home[NU_MAX_PATH_SIZE];                                  // Kernel home directory.
+  char          kernel_file_name[NU_MAX_PATH_SIZE];                             // Kernel file name.
+  char          compiler_options[NU_MAX_PATH_SIZE];                             // JIT complier options string.
   char*         source;                                                         // Kernel source.
   size_t        source_size;                                                    // Kernel source size [characters].
   cl_program    program;                                                        // Kernel program.
@@ -74,18 +74,11 @@ public:
                cl_uint loc_layout_index                                         // Layout index.
               );
   ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////// SETARG "point" overload //////////////////////////
+  ///////////////////////////// SETARG "float4G" overload ////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   void setarg (
-               point* loc_data,                                                 // Point object.
-               GLuint loc_layout_index                                          // Layout index.
-              );
-  ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////// SETARG "color" overload //////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  void setarg (
-               color* loc_data,                                                 // Color object.
-               GLuint loc_layout_index                                          // Layout index.
+               float4G* loc_data,                                               // Point object.
+               GLuint   loc_layout_index                                        // Layout index.
               );
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// DESTRUCTOR /////////////////////////////////
