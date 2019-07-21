@@ -1,5 +1,4 @@
 /// @file
-#include "client_datatypes.cl"
 
 __kernel void thekernel (
                           __global float4*    voxel_point,                      // Voxel point coordinates.
