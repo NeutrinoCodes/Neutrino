@@ -24,7 +24,7 @@ void shader::init (
   // Building up vertex file full name:
   snprintf (
             vertex_file_name,                                                   // Destination string.
-            NU_MAX_PATH_SIZE,                                                      // Size of destination string.
+            NU_MAX_PATH_SIZE,                                                   // Size of destination string.
             "%s/%s",                                                            // Compiled string.
             shader_home,                                                        // Shader home directory.
             loc_vertex_file_name                                                // Vertex shader file name.
@@ -33,7 +33,7 @@ void shader::init (
   // Building up geometry file full name:
   snprintf (
             geometry_file_name,                                                 // Destination string.
-            NU_MAX_PATH_SIZE,                                                      // Size of destination string.
+            NU_MAX_PATH_SIZE,                                                   // Size of destination string.
             "%s/%s",                                                            // Compiled string.
             shader_home,                                                        // Shader home directory.
             loc_geometry_file_name                                              // Geometry shader file name.
@@ -42,15 +42,15 @@ void shader::init (
   // Building up fragment file full name:
   snprintf (
             fragment_file_name,                                                 // Destination string.
-            NU_MAX_PATH_SIZE,                                                      // Size of destination string.
+            NU_MAX_PATH_SIZE,                                                   // Size of destination string.
             "%s/%s",                                                            // Compiled string.
             shader_home,                                                        // Shader home directory.
             loc_fragment_file_name                                              // Fragment shader file name.
            );
 
-  vertex   = compile (vertex_file_name, NU_VERTEX);                                // Compiling vertex shader...
-  geometry = compile (geometry_file_name, NU_GEOMETRY);                            // Compiling geometry shader...
-  fragment = compile (fragment_file_name, NU_FRAGMENT);                            // Compiling fragment shader...
+  vertex   = compile (vertex_file_name, NU_VERTEX);                             // Compiling vertex shader...
+  geometry = compile (geometry_file_name, NU_GEOMETRY);                         // Compiling geometry shader...
+  fragment = compile (fragment_file_name, NU_FRAGMENT);                         // Compiling fragment shader...
   program  = glCreateProgram ();                                                // Creating program...
 }
 
@@ -68,7 +68,7 @@ GLuint shader::compile (
   GLint   success;                                                              // "GL_COMPILE_STATUS" flag.
   GLchar* log;                                                                  // Buffer for OpenGL error log.
   GLsizei log_size;                                                             // Size of OpenGL error log.
-  char    shader_fullname [NU_MAX_PATH_SIZE];                                      // Shader full file name.
+  char    shader_fullname [NU_MAX_PATH_SIZE];                                   // Shader full file name.
 
   strncpy (
            shader_fullname,
@@ -145,11 +145,11 @@ void shader::build ()
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// SETARG "point" overload ///////////////////////////
+////////////////////////////// SETARG "float4G" overload /////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 void shader::setarg (
-                     point* loc_data,                                           // Data object.
-                     GLuint loc_layout_index                                    // Data layout index.
+                     float4G* loc_data,                                         // Data object.
+                     GLuint   loc_layout_index                                  // Data layout index.
                     )
 {
   glBindAttribLocation (
@@ -175,37 +175,6 @@ void shader::setarg (
     }
   }
 
-};
-
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// SETARG "color" overload ///////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-void shader::setarg (
-                     color* loc_data,                                           // Data object.
-                     GLuint loc_layout_index                                    // Data layout index.
-                    )
-{
-  glBindAttribLocation (
-                        program,                                                // OpenGL GLSL program.
-                        loc_layout_index,                                       // Data layout index.
-                        loc_data->name                                          // Data name.
-                       );
-
-  if(old_size == 0)
-  {
-    size     = loc_data->size;
-    old_size = size;
-  }
-
-  else
-  {
-    size = loc_data->size;
-    if(size != old_size)
-    {
-      baseline->error ("shader argument size mismatch!");
-      exit (EXIT_FAILURE);
-    }
-  }
 };
 
 //////////////////////////////////////////////////////////////////////////////////
