@@ -145,6 +145,39 @@ void shader::build ()
 }
 
 //////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// SETARG "float1G" overload /////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void shader::setarg (
+                     float1G* loc_data,                                         // Data object.
+                     GLuint   loc_layout_index                                  // Data layout index.
+                    )
+{
+  glBindAttribLocation (
+                        program,                                                // OpenGL GLSL program.
+                        loc_layout_index,                                       // Data layout index.
+                        loc_data->name                                          // Data name.
+                       );
+
+  if(old_size == 0)
+  {
+    size     = loc_data->size;
+    old_size = size;
+
+  }
+
+  else
+  {
+    size = loc_data->size;
+    if(size != old_size)
+    {
+      baseline->error ("shader argument size mismatch!");
+      exit (EXIT_FAILURE);
+    }
+  }
+
+};
+
+//////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// SETARG "float4G" overload /////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 void shader::setarg (

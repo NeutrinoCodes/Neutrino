@@ -44,11 +44,11 @@ class float1
 private:
 
 public:
-  cl_float* data;                                                               // cl_float data.
+  cl_float* data;                                                               // Data.
   cl_mem    buffer;                                                             // Data memory buffer.
   size_t    size;                                                               // Data size.
   cl_uint   layout;                                                             // Data layout index.
-  bool      ready;                                                              // ready flag.
+  bool      ready;                                                              // "ready" flag.
 
   float1 ();
   void init (
@@ -66,11 +66,11 @@ class int1
 private:
 
 public:
-  cl_long* data;                                                                // cl_long data.
+  cl_long* data;                                                                // Data.
   cl_mem   buffer;                                                              // Data memory buffer.
   size_t   size;                                                                // Data size.
   cl_uint  layout;                                                              // Data layout index.
-  bool     ready;                                                               // ready flag.
+  bool     ready;                                                               // "ready" flag.
 
   int1 ();
   void init (
@@ -88,11 +88,11 @@ class float4
 private:
 
 public:
-  float4_structure* data;                                                       // Float4 data structure.
+  float4_structure* data;                                                       // Data structure.
   cl_mem            buffer;                                                     // Data memory buffer.
   size_t            size;                                                       // Data size.
   cl_uint           layout;                                                     // Data layout index.
-  bool              ready;                                                      // ready flag.
+  bool              ready;                                                      // "ready" flag.
 
   float4 ();
   void init (
@@ -110,11 +110,11 @@ class int4
 private:
 
 public:
-  int4_structure* data;                                                         // Int4 data structure.
+  int4_structure* data;                                                         // Data structure.
   cl_mem          buffer;                                                       // Data memory buffer.
   size_t          size;                                                         // Data size.
   cl_uint         layout;                                                       // Data layout index.
-  bool            ready;                                                        // ready flag.
+  bool            ready;                                                        // "ready" flag.
 
   int4 ();
   void init (
@@ -125,6 +125,31 @@ public:
 };
 
 //////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////// "float1G" CLASS ///////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+class float1G
+{
+private:
+
+public:
+  GLfloat*    data;                                                             // Data structure.
+  cl_mem      buffer;                                                           // Data memory buffer.
+  GLuint      vao;                                                              // Data VAO.
+  GLuint      vbo;                                                              // Data VBO.
+  GLsizeiptr  size;                                                             // Data size.
+  GLuint      layout;                                                           // Data layout index.
+  const char* name;                                                             // Data name.
+  bool        ready;                                                            // "ready" flag.
+
+  float1G ();
+  void init (
+             GLsizeiptr loc_size                                                // Data size.
+            );
+
+  ~float1G();
+};
+
+//////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "float4G" CLASS ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 class float4G
@@ -132,14 +157,14 @@ class float4G
 private:
 
 public:
-  float4G_structure* data;                                                      // Point data structure.
+  float4G_structure* data;                                                      // Data structure.
   cl_mem             buffer;                                                    // Data memory buffer.
   GLuint             vao;                                                       // Data VAO.
   GLuint             vbo;                                                       // Data VBO.
   GLsizeiptr         size;                                                      // Data size.
   GLuint             layout;                                                    // Data layout index.
   const char*        name;                                                      // Data name.
-  bool               ready;                                                     // ready flag.
+  bool               ready;                                                     // "ready" flag.
 
   float4G ();
   void init (
@@ -150,7 +175,7 @@ public:
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// "INFO" CLASS //////////////////////////////////
+////////////////////////////////// "info" CLASS //////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 class info
 {
