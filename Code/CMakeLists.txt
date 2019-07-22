@@ -20,7 +20,7 @@ project (neutrino)
 message("Creating a SOURCES variable with a link to all cpp files to compile...")
 set(SOURCES
 src/device.cpp
-src/host_datatypes.cpp
+src/datatypes.cpp
 src/kernel.cpp
 src/linear_algebra.cpp
 src/main.cpp

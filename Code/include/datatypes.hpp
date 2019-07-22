@@ -1,5 +1,5 @@
-#ifndef host_datatypes_hpp
-#define host_datatypes_hpp
+#ifndef datatypes_hpp
+#define datatypes_hpp
 
 #include "neutrino.hpp"
 
