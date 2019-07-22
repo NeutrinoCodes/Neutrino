@@ -327,6 +327,94 @@ void kernel::setarg (
 
   baseline->done ();                                                            // Printing message...
 }
+
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////// SETARG "float1G" overload //////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+void kernel::setarg (
+                     float1G* loc_data,                                         // Data object.
+                     GLuint   loc_layout_index                                  // Layout index.
+                    )
+{
+  cl_int loc_error;                                                             // Error code.
+
+  baseline->action ("setting kernel argument...");                              // Printing message...
+
+  loc_data->layout = loc_layout_index;                                          // Setting layout index.
+
+  if(!loc_data->ready)
+  {
+    // Generating VAO...
+    glGenVertexArrays (
+                       1,                                                       // # of VAOs to generate.
+                       &loc_data->vao                                           // VAOs array.
+                      );
+    glBindVertexArray (loc_data->vao);                                          // Binding node VAO...
+
+    // Generating VBO:
+    glGenBuffers (
+                  1,                                                            // # of VBOs to generate.
+                  &loc_data->vbo                                                // VBOs array.
+                 );
+
+    // Binding VBO:
+    glBindBuffer (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  loc_data->vbo                                                 // VBO to bind.
+                 );
+
+    // Creating and initializing a buffer object's data store:
+    glBufferData (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  sizeof(GLfloat)*loc_data->size,                               // VBO size.
+                  loc_data->data,                                               // VBO data.
+                  GL_DYNAMIC_DRAW                                               // VBO usage.
+                 );
+
+    // Specifying the format for attribute in vertex shader:
+    glVertexAttribPointer (
+                           loc_layout_index,                                    // VAO index.
+                           1,                                                   // VAO's # of components.
+                           GL_FLOAT,                                            // Data type.
+                           GL_FALSE,                                            // Not using normalized numbers.
+                           0,                                                   // Data stride.
+                           0                                                    // Data offset.
+                          );
+
+    // Enabling attribute in vertex shader:
+    glEnableVertexAttribArray (
+                               loc_layout_index                                 // VAO index.
+                              );
+
+    // Binding VBO:
+    glBindBuffer (
+                  GL_ARRAY_BUFFER,                                              // VBO target.
+                  loc_data->vbo                                                 // VBO to bind.
+                 );
+
+    // Creating OpenCL buffer from OpenGL buffer:
+    loc_data->buffer = clCreateFromGLBuffer (
+                                             baseline->context_id,              // OpenCL context.
+                                             CL_MEM_READ_WRITE,                 // Memory flags.
+                                             loc_data->vbo,                     // VBO.
+                                             &loc_error                         // Returned error.
+                                            );
+
+    loc_data->ready  = true;                                                    // Setting "ready" flag...
+  }
+
+  loc_error = clSetKernelArg (
+                              kernel_id,                                        // Kernel id.
+                              loc_layout_index,                                 // Layout index.
+                              sizeof(cl_mem),                                   // Data size.
+                              &loc_data->buffer                                 // Data value.
+                             );
+
+  baseline->check_error (loc_error);                                            // Checking returned error code...
+
+  baseline->done ();                                                            // Printing message...
+}
+
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////// SETARG "float4G" overload //////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
