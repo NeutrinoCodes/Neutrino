@@ -1,2 +1,3 @@
 #!/bin/sh
-cmake -B"./cmake" -H"./" -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX
+# cmake -B"./cmake" -H"./" -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX -DGLFW_PATH=/run/media/ezor/LINUX/BookhouseBoys/ezor/glfw-3.3/include -DGLAD_PATH=/run/media/ezor/LINUX/BookhouseBoys/ezor/glfw-3.3/deps
+cmake -B"./cmake" -H"./" -DGLFW_PATH=/run/media/ezor/LINUX/BookhouseBoys/ezor/glfw-3.3/include -DGLAD_PATH=/run/media/ezor/LINUX/BookhouseBoys/ezor/glfw-3.3/deps

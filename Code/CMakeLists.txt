@@ -18,20 +18,10 @@ message("Setting project name...")
 project (neutrino)
 
 message("Creating a SOURCES variable with a link to all cpp files to compile...")
-set(SOURCES
-src/device.cpp
-src/datatypes.cpp
-src/kernel.cpp
-src/linear_algebra.cpp
-src/main.cpp
-src/neutrino.cpp
-src/opencl.cpp
-src/opengl.cpp
-src/platform.cpp
-src/projective_geometry.cpp
-src/queue.cpp
-src/shader.cpp
-src/glad.c)
+aux_source_directory("src/" SRC_DIR)
+
+message("Creating a SOURCES variable with a link to all cpp files to compile...")
+set(SOURCES ${SRC_DIR})
 
 if(APPLE)
   message("Setting directory for the Mac executable...")
@@ -47,7 +37,11 @@ message("Adding an executable with the above sources...")
 add_executable(neutrino ${SOURCES})
 
 message("Setting the directories that should be included in the build command...")
-target_include_directories(neutrino PRIVATE ${CMAKE_HOME_DIRECTORY}/include)
+target_include_directories(
+neutrino PRIVATE ${CMAKE_HOME_DIRECTORY}/include
+${GLAD_PATH}
+${GLFW_PATH}
+)
 
 if(APPLE)
   message("Setting the Mac libraries that should be linked in the build command...")
