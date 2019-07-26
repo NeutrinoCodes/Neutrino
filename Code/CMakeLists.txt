@@ -21,7 +21,7 @@ message("Creating a SOURCES variable with a link to all cpp files to compile..."
 aux_source_directory("src/" SRC_DIR)
 
 message("Creating a SOURCES variable with a link to all cpp files to compile...")
-set(SOURCES ${SRC_DIR})
+set(SOURCES ${SRC_DIR} ${GLAD_PATH}/glad_gl.c)
 
 if(APPLE)
   message("Setting directory for the Mac executable...")
@@ -43,6 +43,10 @@ ${GLAD_PATH}
 ${GLFW_PATH}
 )
 
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
 if(APPLE)
   message("Setting the Mac libraries that should be linked in the build command...")
   target_link_libraries(neutrino "-framework OpenGL" "-framework OpenCL" "-ldl" "-lglfw" "-lm")
@@ -50,7 +54,7 @@ endif(APPLE)
 
 if(LINUX)
   message("Setting the Linux libraries that should be linked in the build command...")
-  target_link_libraries(neutrino "-lOpenGL" "-lOpenCL" "-ldl" "-lglfw" "-lm")
+  target_link_libraries(neutrino "-lOpenGL" "-lOpenCL" "-ldl" glfw "-lm")
 endif(LINUX)
 
 # Type: "make run" to run the executable.
