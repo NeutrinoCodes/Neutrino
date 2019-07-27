@@ -49,7 +49,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 if(APPLE)
   message("Setting the Mac libraries that should be linked in the build command...")
-  target_link_libraries(neutrino "-framework OpenGL" "-framework OpenCL" "-ldl" "-lglfw" "-lm")
+  target_link_libraries(neutrino "-framework OpenGL" "-framework OpenCL" "-ldl" glfw "-lm")
 endif(APPLE)
 
 if(LINUX)
