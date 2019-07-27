@@ -1,0 +1,2 @@
+#!/bin/sh
+cmake -B"./cmake" -H"./" -DGLFW_PATH=/run/media/ezor/LINUX/BookhouseBoys/ezor/glfw-3.3/include -DGLAD_PATH=/run/media/ezor/LINUX/BookhouseBoys/ezor/glfw-3.3/deps
