@@ -3,7 +3,7 @@
 
   #define CL_USE_DEPRECATED_OPENCL_1_2_APIS                                     // Allows the usage of "OpenCL 1.2" functions in newer versions.
 
-  #ifdef __WINDOWS__
+  #ifdef WIN32
     #define GLFW_EXPOSE_NATIVE_WIN32                                            // Enabling Windows native access functions...
     #define GLFW_EXPOSE_NATIVE_WGL                                              // Enabling Windows native access functions...
   #endif
@@ -102,6 +102,31 @@
     #define NU_DPAD_LEFT                    17
   #endif
 
+  #ifdef WIN32
+    #define NU_SQUARE                       0
+    #define NU_CROSS                        1
+    #define NU_CIRCLE                       2
+    #define NU_TRIANGLE                     3
+
+    #define NU_L1                           4
+    #define NU_R1                           5
+    #define NU_L2                           6
+    #define NU_R2                           7
+
+    #define NU_SHARE                        8
+    #define NU_OPTIONS                      9
+    #define NU_L_ANALOG                     10
+    #define NU_R_ANALOG                     11
+
+    #define NU_PS                           12
+    #define NU_TOUCH                        13
+
+    #define NU_DPAD_UP                      14
+    #define NU_DPAD_RIGHT                   15
+    #define NU_DPAD_DOWN                    16
+    #define NU_DPAD_LEFT                    17
+  #endif
+
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// PS4 GAMEPAD AXES //////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
@@ -121,6 +146,15 @@
     #define NU_L2_ANALOG                    2
     #define NU_R_ANALOG_V                   4
     #define NU_R2_ANALOG                    5
+  #endif
+
+  #ifdef WIN32
+    #define NU_L_ANALOG_H                   0
+    #define NU_L_ANALOG_V                   1
+    #define NU_R_ANALOG_H                   2
+    #define NU_R_ANALOG_V                   5
+    #define NU_L2_ANALOG                    3
+    #define NU_R2_ANALOG                    4
   #endif
 
 // Projection mode:
@@ -161,7 +195,21 @@ typedef enum
   #include <stdio.h>
   #include <stdlib.h>
   #include <string.h>
-  #include <math.h>
+
+  #ifdef __APPLE__
+   #include <math.h>
+  #endif
+
+  #ifdef __linux__
+   #include <math.h>
+  #endif
+
+  #ifdef WIN32
+    #include <Windows.h>
+    #define _USE_MATH_DEFINES
+    #include <cmath>
+  #endif
+
   #include <errno.h>
 
 ////////////////////////////////////////////////////////////////////////////////
