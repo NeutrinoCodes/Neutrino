@@ -21,7 +21,7 @@ message("Creating a SOURCES variable with a link to all cpp files to compile..."
 aux_source_directory("src/" SRC_DIR)
 
 message("Creating a SOURCES variable with a link to all cpp files to compile...")
-set(SOURCES ${SRC_DIR} ${GLAD_PATH}/glad_gl.c)
+set(SOURCES ${SRC_DIR} ${GLAD_PATH}/src/glad.c)
 
 if(APPLE)
   message("Setting directory for the Mac executable...")
@@ -39,22 +39,21 @@ add_executable(neutrino ${SOURCES})
 message("Setting the directories that should be included in the build command...")
 target_include_directories(
 neutrino PRIVATE ${CMAKE_HOME_DIRECTORY}/include
-${GLAD_PATH}
-${GLFW_PATH}
+${GLAD_PATH}/include
+${GLFW_PATH}/include
 )
-
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 if(APPLE)
   message("Setting the Mac libraries that should be linked in the build command...")
-  target_link_libraries(neutrino "-framework OpenGL" "-framework OpenCL" "-ldl" glfw "-lm")
+  set(GLFW_LIBRARY ${GLFW_PATH}/lib-macos/libglfw.3.dylib)
+  target_link_libraries(neutrino "-framework OpenGL" "-framework OpenCL" ${GLFW_LIBRARY} "-lm")
 endif(APPLE)
 
 if(LINUX)
   message("Setting the Linux libraries that should be linked in the build command...")
-  target_link_libraries(neutrino "-lOpenGL" "-lOpenCL" "-ldl" glfw "-lm")
+  set(GLFW_LIBRARY ${GLFW_PATH}/lib-macos/libglfw.3.dylib)
+  #target_link_libraries(neutrino "-lOpenGL" "-lOpenCL" "-ldl" "-lglfw" "-lm")  EZOR 28JUL2019: original.
+  target_link_libraries(neutrino "-lOpenGL" "-lOpenCL" ${GLFW_LIBRARY} "-lm")   # To be tested.
 endif(LINUX)
 
 # Type: "make run" to run the executable.

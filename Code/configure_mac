@@ -1,2 +1,2 @@
 #!/bin/sh
-cmake -B"./cmake" -H"./" -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX -DGLFW_PATH=/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/glfw-3.3/include -DGLAD_PATH=/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/glfw-3.3/deps
+cmake -B"./cmake" -H"./" -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX -DGLFW_PATH=$GLFW_PATH -DGLAD_PATH=$GLAD_PATH

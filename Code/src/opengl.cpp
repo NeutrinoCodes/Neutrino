@@ -240,7 +240,7 @@ void opengl::init (
     // Initializing GLAD OpenGL extension loader:
     baseline->action ("initializing GLAD...");                                  // Printing message...
 
-    if(gladLoadGL (glfwGetProcAddress))
+    if(gladLoadGL ())
     {
       baseline->done ();                                                        // Printing message...
     }
