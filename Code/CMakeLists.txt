@@ -5,59 +5,54 @@ message("")
 message("################################################################################")
 message("##################################### GCC ######################################")
 message("################################################################################")
-message("")
-
-# Type: "make" in order to build the project.
 
 if(UNIX AND NOT APPLE)
   message("Setting LINUX variable, according to an existing LINUX (but not APPLE) OS...")
   set(LINUX TRUE)
 endif()
 
-message("Setting project name...")
-project (neutrino)
+project (neutrino)                                                              # Project name.
+message("Project name = ${PROJECT_NAME}")
 
-message("Creating a SOURCES variable with a link to all cpp files to compile...")
-aux_source_directory("src/" SRC_DIR)
-
-message("Creating a SOURCES variable with a link to all cpp files to compile...")
+message("Setting project source directories...")
+aux_source_directory("src/" SRC_DIR)                                            # Project sources.
 set(SOURCES ${SRC_DIR} ${GLAD_PATH}/src/glad.c)
 
 if(APPLE)
-  message("Setting directory for the Mac executable...")
+  message("Setting Mac build directory...")
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build/mac)
 endif(APPLE)
 
 if(LINUX)
-  message("Setting directory for the Linux executable...")
+  message("Setting Linux build directory ...")
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build/linux)
 endif(LINUX)
 
 message("Adding an executable with the above sources...")
-add_executable(neutrino ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES})
 
 if(APPLE)
-message("Setting the directories that should be included in the build command for Mac...")
+message("Setting Mac include directories...")
 target_include_directories(
-neutrino PRIVATE ${CMAKE_HOME_DIRECTORY}/include
+${PROJECT_NAME} PRIVATE ${CMAKE_HOME_DIRECTORY}/include
 ${GLAD_PATH}/include
 ${GLFW_PATH}/include
 )
 endif(APPLE)
 
 if(LINUX)
-message("Setting the directories that should be included in the build command for Linux...")
+message("Setting Linux include directories...")
 target_include_directories(
-neutrino PRIVATE ${CMAKE_HOME_DIRECTORY}/include
+${PROJECT_NAME} PRIVATE ${CMAKE_HOME_DIRECTORY}/include
 ${GLAD_PATH}/include
 ${GLFW_PATH}/include
 )
 endif(LINUX)
 
 if(WIN32)
-message("Setting the directories that should be included in the build command for Windows...")
+message("Setting Windows include directories...")
 target_include_directories(
-neutrino PRIVATE ${CMAKE_HOME_DIRECTORY}/include
+${PROJECT_NAME} PRIVATE ${CMAKE_HOME_DIRECTORY}/include
 ${GLAD_PATH}/include
 ${GLFW_PATH}/include
 ${CL_PATH}/include
@@ -65,44 +60,40 @@ ${CL_PATH}/include
 endif(WIN32)
 
 if(APPLE)
-  message("Setting the libraries that should be linked in the build command for Mac...")
+  message("Setting Mac library directories...")
   set(GLFW_LIBRARY ${GLFW_PATH}/lib-macos/libglfw.3.dylib)
-  target_link_libraries(neutrino "-framework OpenGL" "-framework OpenCL" ${GLFW_LIBRARY} "-lm")
+  target_link_libraries(${PROJECT_NAME} "-framework OpenGL" "-framework OpenCL" ${GLFW_LIBRARY} "-lm")
 endif(APPLE)
 
 if(LINUX)
-  message("Setting the libraries that should be linked in the build command for Linux...")
+  message("Setting Mac library directories...")
   set(GLFW_LIBRARY ${GLFW_PATH}/lib-macos/libglfw.3.dylib)
-  #target_link_libraries(neutrino "-lOpenGL" "-lOpenCL" "-ldl" "-lglfw" "-lm")  EZOR 28JUL2019: original.
-  target_link_libraries(neutrino "-lOpenGL" "-lOpenCL" ${GLFW_LIBRARY} "-lm")   # To be tested.
+  #target_link_libraries(${PROJECT_NAME} "-lOpenGL" "-lOpenCL" "-ldl" "-lglfw" "-lm")  EZOR 28JUL2019: original.
+  target_link_libraries(${PROJECT_NAME} "-lOpenGL" "-lOpenCL" ${GLFW_LIBRARY} "-lm")   # To be tested.
 endif(LINUX)
 
 if(WIN32)
-  message("Setting the libraries that should be linked in the build command for Windows...")
+  message("Setting Mac library directories...")
   set(GLFW_LIBRARY ${GLFW_PATH}/lib-vc2019/glfw3.lib)
   set(CL_LIBRARY ${CL_PATH}/lib/x64/OpenCL.lib)
   target_link_libraries(${PROJECT_NAME} ${CL_LIBRARY} ${GLFW_LIBRARY})
 endif(WIN32)
 
-# Type: "make run" to run the executable.
 add_custom_target(run
     WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-    COMMAND neutrino
+    COMMAND ${PROJECT_NAME}
     VERBATIM )
 
-message("Limiting number of reported gcc errors...[# = 20]")
+message("Limiting number of reported gcc errors (# = 20)...")
 set(GCC_MAX_ERRORS "-fmax-errors=20")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_MAX_ERRORS}")
 
-message("DONE configuring GCC!")
+message("DONE!")
 
 message("")
 message("################################################################################")
 message("#################################### DOXYGEN ###################################")
 message("################################################################################")
-message("")
-
-# Type: "make doc" in order to build the Doxygen documentation of the project.
 
 message("Checking whether Doxygen is installed...")
 find_package(Doxygen)
@@ -113,7 +104,7 @@ if (DOXYGEN_FOUND)
 
     message("Requesting to configure the file...")
     configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-    message("DONE configuring Doxygen!")
+    message("DONE!")
 
     add_custom_target(doc
         COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
@@ -123,3 +114,18 @@ if (DOXYGEN_FOUND)
 else (DOXYGEN_FOUND)
   message("Doxygen need to be installed to generate the doxygen documentation!")
 endif (DOXYGEN_FOUND)
+
+message("")
+message("################################################################################")
+message("################################# INSTRUCTIONS #################################")
+message("################################################################################")
+
+message("Now go to the \"./cmake\" directory created by this command and do one (or more) of the following things:")
+message("")
+message("1. Type: \"make\" in order to build the executable.")
+message("2. Type: \"make run\" in order to build and run the executable.")
+message("3. Type: \"make doc\" in order to build the Doxygen documentation of the project.")
+message("")
+message("################################################################################")
+message("############################# CONFIGURATION REPORT #############################")
+message("################################################################################")
