@@ -36,25 +36,53 @@ endif(LINUX)
 message("Adding an executable with the above sources...")
 add_executable(neutrino ${SOURCES})
 
-message("Setting the directories that should be included in the build command...")
+if(APPLE)
+message("Setting the directories that should be included in the build command for Mac...")
 target_include_directories(
 neutrino PRIVATE ${CMAKE_HOME_DIRECTORY}/include
 ${GLAD_PATH}/include
 ${GLFW_PATH}/include
 )
+endif(APPLE)
+
+if(LINUX)
+message("Setting the directories that should be included in the build command for Linux...")
+target_include_directories(
+neutrino PRIVATE ${CMAKE_HOME_DIRECTORY}/include
+${GLAD_PATH}/include
+${GLFW_PATH}/include
+)
+endif(LINUX)
+
+if(WIN32)
+message("Setting the directories that should be included in the build command for Windows...")
+target_include_directories(
+neutrino PRIVATE ${CMAKE_HOME_DIRECTORY}/include
+${GLAD_PATH}/include
+${GLFW_PATH}/include
+${CL_PATH}/include
+)
+endif(WIN32)
 
 if(APPLE)
-  message("Setting the Mac libraries that should be linked in the build command...")
+  message("Setting the libraries that should be linked in the build command for Mac...")
   set(GLFW_LIBRARY ${GLFW_PATH}/lib-macos/libglfw.3.dylib)
   target_link_libraries(neutrino "-framework OpenGL" "-framework OpenCL" ${GLFW_LIBRARY} "-lm")
 endif(APPLE)
 
 if(LINUX)
-  message("Setting the Linux libraries that should be linked in the build command...")
+  message("Setting the libraries that should be linked in the build command for Linux...")
   set(GLFW_LIBRARY ${GLFW_PATH}/lib-macos/libglfw.3.dylib)
   #target_link_libraries(neutrino "-lOpenGL" "-lOpenCL" "-ldl" "-lglfw" "-lm")  EZOR 28JUL2019: original.
   target_link_libraries(neutrino "-lOpenGL" "-lOpenCL" ${GLFW_LIBRARY} "-lm")   # To be tested.
 endif(LINUX)
+
+if(WIN32)
+  message("Setting the libraries that should be linked in the build command for Windows...")
+  set(GLFW_LIBRARY ${GLFW_PATH}/lib-vc2019/glfw3.lib)
+  set(CL_LIBRARY ${CL_PATH}/lib/x64/OpenCL.lib)
+  target_link_libraries(${PROJECT_NAME} ${CL_LIBRARY} ${GLFW_LIBRARY})
+endif(WIN32)
 
 # Type: "make run" to run the executable.
 add_custom_target(run
