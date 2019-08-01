@@ -16,10 +16,22 @@
  #define GUI_SIZE_X  800                                                        // Window x-size [px].
  #define GUI_SIZE_Y  600                                                        // Window y-size [px].
  #define GUI_NAME    "neutrino 3.0"                                             // Window name.
-//#define SHADER_HOME \
-//  "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/shader"
-#define SHADER_HOME \
-  "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/shader"
+
+ #ifdef __linux__
+   #define SHADER_HOME \
+   "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/shader"
+ #endif
+
+ #ifdef __APPLE__
+   #define SHADER_HOME \
+   "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/shader"
+ #endif
+
+ #ifdef WIN32
+   #define SHADER_HOME \
+   "F:/BookHouseBoys/ezor/neutrino/Code/shader"
+ #endif
+
  #define SHADER_VERT "voxel_vertex.vert"                                        // OpenGL vertex shader.
  #define SHADER_GEOM "voxel_geometry.geom"                                      // OpenGL geometry shader.
  #define SHADER_FRAG "voxel_fragment.frag"                                      // OpenGL fragment shader.
