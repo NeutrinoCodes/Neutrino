@@ -66,23 +66,23 @@ if(APPLE)
 endif(APPLE)
 
 if(LINUX)
-  message("Setting Mac library directories...")
+  message("Setting Linux library directories...")
   set(GLFW_LIBRARY ${GLFW_PATH}/lib-macos/libglfw.3.dylib)
   #target_link_libraries(${PROJECT_NAME} "-lOpenGL" "-lOpenCL" "-ldl" "-lglfw" "-lm")  EZOR 28JUL2019: original.
   target_link_libraries(${PROJECT_NAME} "-lOpenGL" "-lOpenCL" ${GLFW_LIBRARY} "-lm")   # To be tested.
 endif(LINUX)
 
 if(WIN32)
-  message("Setting Mac library directories...")
+  message("Setting Windows library directories...")
   set(GLFW_LIBRARY ${GLFW_PATH}/lib-vc2019/glfw3.lib)
-  set(CL_LIBRARY ${CL_PATH}/lib/x64/OpenCL.lib)
-  target_link_libraries(${PROJECT_NAME} ${CL_LIBRARY} ${GLFW_LIBRARY})
+  #set(CL_LIBRARY $"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/lib/x64/OpenCL.lib")
+  target_link_libraries(${PROJECT_NAME} ${CL_PATH}/lib/x64/OpenCL.lib ${GLFW_LIBRARY})
 endif(WIN32)
 
 add_custom_target(run
     WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
     COMMAND ${PROJECT_NAME}
-    VERBATIM )
+    VERBATIM)
 
 message("Limiting number of reported gcc errors (# = 20)...")
 set(GCC_MAX_ERRORS "-fmax-errors=20")
