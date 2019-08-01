@@ -346,15 +346,15 @@ void opencl::init (
 
     cl_context_properties properties[7];
 
-    if(baseline->use_cl_gl_interop)
+    if(baseline->interop)
     {
       properties[0] = CL_GL_CONTEXT_KHR;                                            // Setting WINDOWS OpenCL context properties with CL-GL interop...
       properties[1] = (cl_context_properties)glfwGetWGLContext (
-                                                                loc_glfw_window
+                                                                loc_gui->glfw_window
                                                                );
       properties[2] = CL_WGL_HDC_KHR;
       properties[3] =
-        (cl_context_properties)GetDC (glfwGetWin32Window (loc_glfw_window));
+        (cl_context_properties)GetDC (glfwGetWin32Window (loc_gui->glfw_window));
       properties[4] = CL_CONTEXT_PLATFORM;
       properties[5] = (cl_context_properties)baseline->platform_id;
       properties[6] = 0;
