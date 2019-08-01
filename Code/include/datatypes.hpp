@@ -6,35 +6,41 @@
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "float4" STRUCTURE //////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-typedef struct __attribute__ ((packed)) _float4_structure
+#pragma pack(push, 1)
+typedef struct _float4_structure
 {
   cl_float x;                                                                   // "x" coordinate.
   cl_float y;                                                                   // "y" coordinate.
   cl_float z;                                                                   // "z" coordinate.
   cl_float w;                                                                   // "w" coordinate.
 } float4_structure;
+#pragma pack(pop)
 
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// "int4" STRUCTURE ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-typedef struct __attribute__ ((packed)) _int4_structure
+#pragma pack(push, 1)
+typedef struct _int4_structure
 {
   cl_long x;                                                                    // "x" coordinate.
   cl_long y;                                                                    // "y" coordinate.
   cl_long z;                                                                    // "z" coordinate.
   cl_long w;                                                                    // "w" coordinate.
 } int4_structure;
+#pragma pack(pop)
 
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "float4G" STRUCTURE /////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-typedef struct __attribute__ ((packed)) _float4G_structure
+#pragma pack(push, 1)
+typedef struct _float4G_structure
 {
   GLfloat x;                                                                    // "x" coordinate.
   GLfloat y;                                                                    // "y" coordinate.
   GLfloat z;                                                                    // "z" coordinate.
   GLfloat w;                                                                    // "w" coordinate.
 } float4G_structure;
+#pragma pack(pop)
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// "float1" CLASS ////////////////////////////////

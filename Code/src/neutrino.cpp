@@ -338,9 +338,9 @@ void neutrino::list (
                      size_t loc_tab
                     )
 {
-  char   buffer[loc_length];
-  size_t i;
-  size_t j;
+  char*   buffer = new char[loc_length];
+  size_t  i;
+  size_t  j;
 
   for(i = 0; i < loc_length; i++)
   {
