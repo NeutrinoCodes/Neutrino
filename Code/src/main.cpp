@@ -19,17 +19,26 @@
 
  #ifdef __linux__
    #define SHADER_HOME \
-   "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/shader"
+   "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/shader"              // Linux OpenGL shaders directory.
+
+   #define KERNEL_HOME \
+   "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/kernel"              // Linux OpenCL kernels directory.
  #endif
 
  #ifdef __APPLE__
    #define SHADER_HOME \
-   "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/shader"
+   "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/shader"     // Mac OpenGL shaders directory.
+
+   #define KERNEL_HOME \
+   "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/kernel"     // Mac OpenCL kernels directory.
  #endif
 
  #ifdef WIN32
    #define SHADER_HOME \
-   "F:/BookHouseBoys/ezor/neutrino/Code/shader"
+   "F:\\BookHouseBoys\\ezor\\neutrino\\Code\\shader"                            // Windows OpenGL shaders directory.
+
+   #define KERNEL_HOME \
+   "F:\\BookHouseBoys\\ezor\\neutrino\\Code\\kernel"                            // Windows OpenCL kernels directory.
  #endif
 
  #define SHADER_VERT "voxel_vertex.vert"                                        // OpenGL vertex shader.
@@ -42,10 +51,6 @@
  #define KERNEL_SX   NODES                                                      // Dimension of OpenCL kernel (i-index).
  #define KERNEL_SY   0                                                          // Dimension of OpenCL kernel (j-index).
  #define KERNEL_SZ   0                                                          // Dimension of OpenCL kernel (k-index).
-//#define KERNEL_HOME \
-//  "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/kernel"               // OpenCL kernel header files directory.
-#define KERNEL_HOME \
-  "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/kernel"
  #define KERNEL_FILE "sine_kernel.cl"                                           // OpenCL kernel.
 
 // INCLUDES:
