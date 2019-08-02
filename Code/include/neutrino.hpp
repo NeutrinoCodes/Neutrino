@@ -195,6 +195,8 @@ typedef enum
   #include <stdio.h>
   #include <stdlib.h>
   #include <string.h>
+  //#include <string>
+  //#include <iostream>
 
   #ifdef __APPLE__
    #include <math.h>

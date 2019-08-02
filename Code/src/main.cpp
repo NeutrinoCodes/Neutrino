@@ -56,8 +56,6 @@
 // INCLUDES:
 #include "opengl.hpp"
 #include "opencl.hpp"
-#include <string>
-#include <iostream>
 
 int main ()
 {
