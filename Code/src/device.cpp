@@ -8,55 +8,45 @@ device::device()
 
 }
 
-/// # Device get information size function
-/// ### Description:
-/// Gets the size of a device information.
-size_t device::get_info_size (
-                              cl_device_id   loc_device_id,                     // OpenCL device ID.
-                              cl_device_info loc_parameter_name                 // Device parameter.
-                             )
-{
-  cl_int loc_error;                                                             // Error code.
-  size_t loc_parameter_size;                                                    // Parameter size.
-
-  // Getting platform information:
-  loc_error = clGetDeviceInfo (
-                               loc_device_id,                                   // Device ID.
-                               loc_parameter_name,                              // Parameter name.
-                               0,                                               // Dummy parameter size: "0" means we ask for the # of parameters.
-                               NULL,                                            // Dummy parameter.
-                               &loc_parameter_size                              // Returned parameter size.
-                              );
-
-  baseline->check_error (loc_error);
-
-  return (loc_parameter_size);                                                  // Returning parameter size...
-}
-
 /// # Device get information value function
 /// ### Description:
 /// Gets the value of a device information.
-char* device::get_info_value (
-                              cl_device_id   loc_device_id,                     // OpenCL device ID.
-                              cl_device_info loc_parameter_name,                // Parameter name.
-                              size_t         loc_parameter_size                 // Parameter size.
-                             )
+string device::get_info (
+                         cl_device_id   loc_device_id,                          // OpenCL device ID.
+                         cl_device_info loc_parameter_name,                     // Parameter name.
+                        )
 {
   cl_int loc_error;                                                             // Error code.
-  parameter_value = new char[loc_parameter_size];                               // Parameter value.
+  size_t loc_parameter_size;                                                    // Parameter size.
+  string loc_parameter_value;                                                   // Parameter value.
 
-  // Getting platform information:
-  loc_error       = clGetDeviceInfo (
-                                     loc_device_id,                             // Device ID.
-                                     loc_parameter_name,                        // Parameter name.
-                                     loc_parameter_size,                        // Parameter size.
-                                     parameter_value,                           // Returned parameter value.
-                                     NULL                                       // Returned parameter size (NULL = ignored).
-                                    );
+  // Getting parameter size:
+  loc_error            = clGetDeviceInfo (
+                                          loc_device_id,                        // Device ID.
+                                          loc_parameter_name,                   // Parameter name.
+                                          0,                                    // Dummy parameter size: "0" means we ask for the # of parameters.
+                                          NULL,                                 // Dummy parameter.
+                                          &loc_parameter_size                   // Returned parameter size.
+                                         );
 
-  baseline->check_error (loc_error);
+  baseline->check_error (loc_error);                                            // Checking error...
 
-  return (parameter_value);                                                     // Returning parameter value...
+  loc_parameter_buffer = new char[loc_parameter_size];                          // Text buffer.
+
+  // Getting parameter information:
+  loc_error            = clGetDeviceInfo (
+                                          loc_device_id,                        // Device ID.
+                                          loc_parameter_name,                   // Parameter name.
+                                          loc_parameter_size,                   // Parameter size.
+                                          loc_parameter_buffer,                 // Returned parameter value.
+                                          NULL                                  // Returned parameter size (NULL = ignored).
+                                         );
+
+  baseline->check_error (loc_error);                                            // Checking error...
+
+  loc_parameter_value  = loc_parameter_buffer;                                  // Setting parameter value...
+
+  return (loc_parameter_value);                                                 // Returning parameter value...
 }
 
 /// # Initialization function
@@ -66,33 +56,19 @@ void device::init (
                    cl_device_id loc_device_id                                   // OpenCL deivce ID.
                   )
 {
-  // Device name info:
-  name           = new info (
-                             get_info_size (
-                                            loc_device_id,
-                                            CL_DEVICE_NAME
-                                           )
-                            );
+  size_t info_size;
 
-  name->value    = get_info_value (
-                                   loc_device_id,
-                                   CL_DEVICE_NAME,
-                                   name->size
-                                  );
+  // Device name info:
+  name    = get_info (
+                      loc_device_id,
+                      CL_DEVICE_NAME
+                     );
 
   // Device platform info:
-  profile        = new info (
-                             get_info_size (
-                                            loc_device_id,
-                                            CL_DEVICE_PROFILE
-                                           )
-                            );
-
-  profile->value = get_info_value (
-                                   loc_device_id,
-                                   CL_DEVICE_PROFILE,
-                                   profile->size
-                                  );
+  profile = get_info (
+                      loc_device_id,
+                      CL_DEVICE_PROFILE
+                     );
 
   /*
      case CL_DEVICE_ADDRESS_BITS:
@@ -296,12 +272,10 @@ void device::init (
      }
    */
 
-  id             = loc_device_id;                                               // Initializing device_id...
+  id      = loc_device_id;                                                      // Initializing device_id...
 }
 
 device::~device()
 {
-  delete name;
-  delete profile;
-  delete parameter_value;
+
 }

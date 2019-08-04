@@ -19,59 +19,42 @@ kernel::kernel()
 /// Creates the OpenCL program from its source. Creates the device ID list.
 /// Builds the OpenCL program. Creates the OpenCL kernel.
 void kernel::init (
-                   neutrino*   loc_baseline,                                    // Neutrino baseline.
-                   const char* loc_kernel_home,                                 // Kernel hoem directory.
-                   const char* loc_kernel_file_name,                            // OpenCL kernel file name.
-                   size_t      loc_kernel_size_i,                               // OpenCL kernel size (i-index).
-                   size_t      loc_kernel_size_j,                               // OpenCL kernel size (j-index).
-                   size_t      loc_kernel_size_k                                // OpenCL kernel size (k-index).
+                   neutrino* loc_baseline,                                      // Neutrino baseline.
+                   string    loc_kernel_home,                                   // Kernel hoem directory.
+                   string    loc_kernel_file_name,                              // OpenCL kernel file name.
+                   size_t    loc_kernel_size_i,                                 // OpenCL kernel size (i-index).
+                   size_t    loc_kernel_size_j,                                 // OpenCL kernel size (j-index).
+                   size_t    loc_kernel_size_k                                  // OpenCL kernel size (k-index).
                   )
 {
   cl_int loc_error;                                                             // Error code.
   size_t loc_kernel_source_size;                                                // Kernel source size [characters].
+  size_t loc_log_size;                                                          // OpenCL JIT compiler log size.
   size_t i;                                                                     // Index.
 
-  baseline = loc_baseline;                                                      // Getting Neutrino baseline...
-  size_i   = loc_kernel_size_i;                                                 // Getting OpenCL kernel size (i-index)...
-  size_j   = loc_kernel_size_j;                                                 // Getting OpenCL kernel size (j-index)...
-  size_k   = loc_kernel_size_k;                                                 // Getting OpenCL kernel size (k-index)...
+  baseline         = loc_baseline;                                              // Getting Neutrino baseline...
+  size_i           = loc_kernel_size_i;                                         // Getting OpenCL kernel size (i-index)...
+  size_j           = loc_kernel_size_j;                                         // Getting OpenCL kernel size (j-index)...
+  size_k           = loc_kernel_size_k;                                         // Getting OpenCL kernel size (k-index)...
 
-  strncpy (kernel_home, loc_kernel_home, NU_MAX_PATH_SIZE);                     // Getting OpenCL kernel hoem directory...
-
-  // Building up vertex file full name:
-  snprintf (
-            kernel_file_name,                                                   // Destination string.
-            NU_MAX_PATH_SIZE,                                                   // Size of destination string.
-            "%s/%s",                                                            // Compiled string.
-            kernel_home,                                                        // Shader home directory.
-            loc_kernel_file_name                                                // Vertex shader file name.
-           );
-
-  // Building up JIT compiler options string:
-  snprintf (
-            compiler_options,                                                   // Destination string.
-            NU_MAX_PATH_SIZE,                                                   // Size of destination string.
-            "%s %s",                                                            // Compiled string.
-            "-I",                                                               // "Include" option.
-            kernel_home                                                         // Kernel home directory.
-           );
+  kernel_home      = loc_kernel_home;                                           // Getting OpenCL kernel home directory...
+  kernel_file_name = kernel_home + "/" + loc_kernel_file_name;                  // Building up vertex file full name...
+  compiler_options = "-I" + kernel_home;                                        // Building up JIT compiler options string...
 
   baseline->action ("loading OpenCL kernel source from file...");               // Printing message...
-
   baseline->load_file (kernel_file_name, &source, &source_size);                // Loading file...
-
   baseline->done ();                                                            // Printing message...
 
   baseline->action ("creating OpenCL program from kernel source...");           // Printing message...
 
   // Creating OpenCL program from its source:
-  program = clCreateProgramWithSource (
-                                       baseline->context_id,                    // OpenCL context ID.
-                                       1,                                       // # of program sources.
-                                       (const char**)&source,                   // Program source.
-                                       &source_size,                            // Source size.
-                                       &loc_error                               // Error code.
-                                      );
+  program          = clCreateProgramWithSource (
+                                                baseline->context_id,           // OpenCL context ID.
+                                                1,                              // # of program sources.
+                                                (const char**)&source,          // Program source.
+                                                &source_size,                   // Source size.
+                                                &loc_error                      // Error code.
+                                               );
 
   baseline->check_error (loc_error);                                            // Checking error.
 
@@ -106,33 +89,28 @@ void kernel::init (
                                        CL_PROGRAM_BUILD_LOG,
                                        0,
                                        NULL,
-                                       &log_size
+                                       &loc_log_size
                                       );
 
     baseline->check_error (loc_error);
 
-    log_value = (char*) calloc (log_size + 1, sizeof(char));                    // Allocating log buffer...
-
-    if(!log_value)
-    {
-      baseline->error ("unable to allocate buffer memory log!");                // Printing message...
-      exit (EXIT_FAILURE);                                                      // Exiting...
-    }
+    char* loc_log_buffer = new char[loc_log_size + 1]();                        // Allocating log buffer...
 
     // Reading OpenCL compiler error log:
     loc_error = clGetProgramBuildInfo (
                                        program,
                                        device_id[0],
                                        CL_PROGRAM_BUILD_LOG,
-                                       log_size + 1,
-                                       log_value,
+                                       loc_log_size + 1,
+                                       loc_log_buffer,
                                        NULL
                                       );
 
     baseline->check_error (loc_error);                                          // Checking error...
 
-    printf ("%s\n", log_value);                                                 // Displaying log...
-    free (log_value);                                                           // Freeing log...
+    compiler_log = loc_log_buffer;                                              // Setting compiler log...
+    cout << compiler_log << endl;                                               // Printing log...
+    delete (loc_log_buffer);                                                    // Deleting log buffer...
     exit (loc_error);                                                           // Exiting...
   }
 
