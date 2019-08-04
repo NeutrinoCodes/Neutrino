@@ -58,43 +58,36 @@ void neutrino::get_tic ()
 /// to the stdout.
 void neutrino::get_toc ()
 {
-  size_t padding;                                                               // Text padding.
   size_t i;                                                                     // Index.
-  char   buffer[NU_MAX_TEXT_SIZE];                                                 // Text buffer.
-  char   text[NU_MAX_TEXT_SIZE];                                                   // Text buffer.
+  string text;                                                                  // Text buffer.
+  string pad;                                                                   // Text pad.
+  size_t pad_size;                                                              // Text pad size.
 
   toc            = glfwGetTime ();
   loop_time      = size_t (round (1000000.0*double(toc - tic)));                // Loop execution time [us].
   terminal_time += loop_time;
 
-  if(terminal_time > NU_TERMINAL_REFRESH)                                          // Checking terminal time...
+  if(terminal_time > NU_TERMINAL_REFRESH)                                       // Checking terminal time...
   {
     terminal_time = 0;                                                          // Resetting terminal time.
     erase ();
 
     // Compiling message string:
-    snprintf (
-              buffer,                                                           // Destination string.
-              NU_MAX_TEXT_SIZE,                                                    // Size of destination string.
-              "%sAction:%s %s%zu us",                                           // Compiled string.
-              NU_COLOR_CYAN,                                                       // Red color.
-              NU_COLOR_NORMAL,                                                     // Normal color.
-              "running host: loop time = ",                                     // Source string.
-              loop_time                                                         // Host loop time [us].
-             );
+    text          = NU_COLOR_CYAN +
+                    "Action: " +
+                    NU_COLOR_NORMAL +
+                    "running host loop time = " +
+                    to_string (loop_time) +
+                    " us";
 
-    printf ("%s", buffer);                                                      // Printing buffer...
+    pad_size      = NU_MAX_MESSAGE_SIZE - text.length;                          // Computing text padding...
 
-    padding = NU_MAX_MESSAGE_SIZE - strlen (buffer);                               // Computing text padding...
-
-    if(padding >= 0)                                                            // Checking padding...
+    if(pad_size >= 0)                                                           // Checking padding...
     {
-      for(i = 0; i < padding; i++)                                              // Compiling padding...
+      for(i = 0; i < pad_size; i++)                                             // Compiling padding...
       {
-        printf (" ");                                                           // Printing padding...
+        pad += " ";
       }
-
-      fflush (stdout);
     }
 
     else                                                                        // Generating error message...
@@ -102,6 +95,8 @@ void neutrino::get_toc ()
       error ("string too big!");                                                // Printing message...
       exit (1);                                                                 // Exiting...
     }
+
+    cout << text + pad << endl;                                                 // Printing buffer...
   }
 }
 
@@ -185,7 +180,7 @@ int neutrino::query_numeric (
                              int         max
                             )
 {
-  char buffer[NU_MAX_TEXT_SIZE];                                                   // Input buffer.
+  char buffer[NU_MAX_TEXT_SIZE];                                                // Input buffer.
   int  numeric;                                                                 // Numeric value.
   bool valid_choice = false;                                                    // User's choice.
 
@@ -193,7 +188,7 @@ int neutrino::query_numeric (
 
   while(!valid_choice)                                                          // Checking choice validity...
   {
-    fgets (buffer, NU_MAX_TEXT_SIZE, stdin);                                       // Reading string from stdin...
+    fgets (buffer, NU_MAX_TEXT_SIZE, stdin);                                    // Reading string from stdin...
     numeric = strtol (buffer, NULL, 10);                                        // Parsing stdin...
 
     if((min <= numeric) && (numeric <= max) && (errno != ERANGE))
@@ -228,22 +223,22 @@ void neutrino::action (
                        const char* loc_text                                     // Message text.
                       )
 {
-  char   buffer[NU_MAX_TEXT_SIZE];                                                 // Text buffer.
+  char   buffer[NU_MAX_TEXT_SIZE];                                              // Text buffer.
   size_t padding;                                                               // Text padding.
   size_t i;                                                                     // Index.
 
   // Compiling message string:
   snprintf (
             buffer,                                                             // Destination string.
-            NU_MAX_TEXT_SIZE,                                                      // Size of destination string.
+            NU_MAX_TEXT_SIZE,                                                   // Size of destination string.
             "%sAction:%s %s",                                                   // Compiled string.
-            NU_COLOR_CYAN,                                                         // Red color.
-            NU_COLOR_NORMAL,                                                       // Normal color.
+            NU_COLOR_CYAN,                                                      // Red color.
+            NU_COLOR_NORMAL,                                                    // Normal color.
             loc_text                                                            // Source string.
            );
 
   printf ("%s", buffer);                                                        // Printing buffer...
-  padding = NU_MAX_MESSAGE_SIZE - strlen (loc_text);                               // Computing text padding...
+  padding = NU_MAX_MESSAGE_SIZE - strlen (loc_text);                            // Computing text padding...
 
   if(padding >= 0)                                                              // Checking padding...
   {
@@ -269,22 +264,22 @@ void neutrino::error (
                       const char* loc_text
                      )
 {
-  char   buffer[NU_MAX_TEXT_SIZE];                                                 // Text buffer.
+  char   buffer[NU_MAX_TEXT_SIZE];                                              // Text buffer.
   size_t padding;                                                               // Text padding.
   size_t i;                                                                     // Index.
-  char   error_of_error[NU_MAX_TEXT_SIZE];                                         // Error message.
+  char   error_of_error[NU_MAX_TEXT_SIZE];                                      // Error message.
 
-  padding = NU_MAX_MESSAGE_SIZE - strlen (loc_text);                               // Computing text padding...
+  padding = NU_MAX_MESSAGE_SIZE - strlen (loc_text);                            // Computing text padding...
 
   printf ("\n");                                                                // Printing new line...
 
   // Compiling message string:
   snprintf (
             buffer,                                                             // Destination string.
-            NU_MAX_TEXT_SIZE,                                                      // Size of destination string.
+            NU_MAX_TEXT_SIZE,                                                   // Size of destination string.
             "%sError:%s  %s",                                                   // Compiled string.
-            NU_COLOR_RED,                                                          // Red color.
-            NU_COLOR_NORMAL,                                                       // Normal color.
+            NU_COLOR_RED,                                                       // Red color.
+            NU_COLOR_NORMAL,                                                    // Normal color.
             loc_text                                                            // Source string.
            );
 
@@ -304,14 +299,14 @@ void neutrino::error (
     // Compiling message string:
     snprintf (
               buffer,                                                           // Destination string.
-              NU_MAX_TEXT_SIZE,                                                    // Size of destination string.
+              NU_MAX_TEXT_SIZE,                                                 // Size of destination string.
               "%sError:%s  %s",                                                 // Compiled string.
-              NU_COLOR_RED,                                                        // Red color.
-              NU_COLOR_NORMAL,                                                     // Normal color.
+              NU_COLOR_RED,                                                     // Red color.
+              NU_COLOR_NORMAL,                                                  // Normal color.
               "string too big!"                                                 // Source string.
              );
 
-    padding = NU_MAX_MESSAGE_SIZE - strlen ("string too big!");                    // Computing text padding...
+    padding = NU_MAX_MESSAGE_SIZE - strlen ("string too big!");                 // Computing text padding...
 
     if(padding >= 0)                                                            // Checking padding...
     {
@@ -338,9 +333,9 @@ void neutrino::list (
                      size_t loc_tab
                     )
 {
-  char*   buffer = new char[loc_length];
-  size_t  i;
-  size_t  j;
+  char*  buffer = new char[loc_length];
+  size_t i;
+  size_t j;
 
   for(i = 0; i < loc_length; i++)
   {
@@ -368,15 +363,15 @@ void neutrino::list (
 /// Formats and prints "done" messages to stdout.
 void neutrino::done ()
 {
-  char buffer[NU_MAX_TEXT_SIZE];                                                   // Text buffer.
+  char buffer[NU_MAX_TEXT_SIZE];                                                // Text buffer.
 
   // Compiling message string:
   snprintf (
             buffer,                                                             // Destination string.
-            NU_MAX_TEXT_SIZE,                                                      // Size of destination string.
+            NU_MAX_TEXT_SIZE,                                                   // Size of destination string.
             "%sDONE!%s",                                                        // Compiled string.
-            NU_COLOR_GREEN,                                                        // Green color.
-            NU_COLOR_NORMAL                                                        // Normal color.
+            NU_COLOR_GREEN,                                                     // Green color.
+            NU_COLOR_NORMAL                                                     // Normal color.
            );
 
   printf ("%s\n", buffer);                                                      // Printing buffer...
@@ -384,15 +379,15 @@ void neutrino::done ()
 
 void neutrino::terminated ()
 {
-  char buffer[NU_MAX_TEXT_SIZE];                                                   // Text buffer.
+  char buffer[NU_MAX_TEXT_SIZE];                                                // Text buffer.
 
   // Compiling message string:
   snprintf (
             buffer,                                                             // Destination string.
-            NU_MAX_TEXT_SIZE,                                                      // Size of destination string.
+            NU_MAX_TEXT_SIZE,                                                   // Size of destination string.
             "%sTERMINATED!%s",                                                  // Compiled string.
-            NU_COLOR_RED,                                                          // Green color.
-            NU_COLOR_NORMAL                                                        // Normal color.
+            NU_COLOR_RED,                                                       // Green color.
+            NU_COLOR_NORMAL                                                     // Normal color.
            );
 
   printf ("%s\n", buffer);                                                      // Printing buffer...

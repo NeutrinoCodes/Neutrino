@@ -13,14 +13,14 @@ class platform
 {
 private:
   neutrino* baseline;                                                           // Neutrino baseline.
-  char*     parameter_value;                                                    // Parameter value.
+  string    parameter_value;                                                    // Parameter value.
   // Gets size information:
   size_t get_info_size (
                         cl_platform_id   loc_platform_id,                       // Platform ID.
                         cl_platform_info loc_parameter_name                     // Paramenter name.
                        );
   // Gets size information:
-  char*  get_info_value (
+  string get_info_value (
                          cl_platform_id   loc_platform_id,                      // Platform ID.
                          cl_platform_info loc_parameter_name,                   // Paramenter name.
                          size_t           loc_parameter_size                    // Parameter size.
