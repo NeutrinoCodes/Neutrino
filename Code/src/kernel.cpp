@@ -5,7 +5,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 kernel::kernel()
 {
-  source    = NULL;                                                             // Initializing kernel source...
+  source    = "";                                                               // Initializing kernel source...
   program   = NULL;                                                             // Initializing kernel program...
   size_i    = 0;                                                                // Initializing kernel size (i-index)...
   size_j    = 0;                                                                // Initializing kernel size (j-index)...
@@ -20,7 +20,7 @@ kernel::kernel()
 /// Builds the OpenCL program. Creates the OpenCL kernel.
 void kernel::init (
                    neutrino* loc_baseline,                                      // Neutrino baseline.
-                   string    loc_kernel_home,                                   // Kernel hoem directory.
+                   string    loc_kernel_home,                                   // Kernel home directory.
                    string    loc_kernel_file_name,                              // OpenCL kernel file name.
                    size_t    loc_kernel_size_i,                                 // OpenCL kernel size (i-index).
                    size_t    loc_kernel_size_j,                                 // OpenCL kernel size (j-index).

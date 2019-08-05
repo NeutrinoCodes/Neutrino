@@ -131,10 +131,10 @@ void opengl::set_shader (
 /// Initialises GLFW context, initialises GLAD context, initialises OpenGL
 /// shaders.
 void opengl::init (
-                   neutrino*   loc_baseline,                                    // Neutrino baseline.
-                   int         loc_window_size_x,                               // Window x-size [px].
-                   int         loc_window_size_y,                               // Window y-size [px].
-                   const char* loc_title                                        // Window title.
+                   neutrino* loc_baseline,                                      // Neutrino baseline.
+                   int       loc_window_size_x,                                 // Window x-size [px].
+                   int       loc_window_size_y,                                 // Window y-size [px].
+                   string    loc_title                                          // Window title.
                   )
 {
   baseline      = loc_baseline;                                                 // Initializing Neutrino baseline...
@@ -164,14 +164,14 @@ void opengl::init (
   zoom_z_old    = NU_INITIAL_ZOOM;
   zoom_z        = 0.0;                                                          // Initializing zoom coefficient...
 
-  int  glfw_ver_major;
-  int  glfw_ver_minor;
-  int  glfw_rev;
-  char glfw_ver_string[NU_MAX_MESSAGE_SIZE];
+  int    glfw_ver_major;
+  int    glfw_ver_minor;
+  int    glfw_rev;
+  string glfw_ver_string;
 
-  int  opengl_ver_major;                                                        // OpenGL version major number.
-  int  opengl_ver_minor;                                                        // OpenGL version minor number.
-  int  opengl_msaa;                                                             // OpenGL multisampling antialiasing factor.
+  int    opengl_ver_major;                                                      // OpenGL version major number.
+  int    opengl_ver_minor;                                                      // OpenGL version minor number.
+  int    opengl_msaa;                                                           // OpenGL multisampling antialiasing factor.
 
   opengl_ver_major = 4;                                                         // EZOR 04NOV2018: to be generalized by iterative search.
   opengl_ver_minor = 1;                                                         // EZOR 04NOV2018: to be generalized by iterative search.
@@ -182,14 +182,10 @@ void opengl::init (
     glfwGetVersion (&glfw_ver_major, &glfw_ver_minor, &glfw_rev);               // Getting GLFW version...
 
     // Building up glfw version string:
-    snprintf (
-              glfw_ver_string,                                                  // Destination string.
-              NU_MAX_MESSAGE_SIZE,                                              // Size of destination string.
-              "initializing GLFW... found version %d.%d.%d!",                   // Compiled string.
-              glfw_ver_major,                                                   // GLFW major version.
-              glfw_ver_minor,                                                   // GLFW minor version.
-              glfw_rev                                                          // GLFW revision.
-             );
+    glfw_ver_string = "initializing GLFW... found version" +
+                      to_string (glfw_ver_major) +                              // GLFW major version.
+                      to_string (glfw_ver_minor) +                              // GLFW minor version.
+                      to_string (glfw_rev);                                     // GLFW revision.
 
     baseline->action (glfw_ver_string);                                         // Printing message...
 
