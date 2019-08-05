@@ -12,69 +12,58 @@ shader::shader ()
 /// ### Description:
 /// Initializes an OpenGL shader.
 void shader::init (
-                   neutrino*   loc_baseline,                                    // Neutrino baseline.
-                   const char* loc_shader_home,                                 // Shader home directory.
-                   const char* loc_vertex_file_name,                            // Vertex shader file name.
-                   const char* loc_geometry_file_name,                          // Geometry shader file name.
-                   const char* loc_fragment_file_name                           // Fragment shader file name.
+                   neutrino* loc_baseline,                                      // Neutrino baseline.
+                   string    loc_shader_home,                                   // Shader home directory.
+                   string    loc_vertex_file_name,                              // Vertex shader file name.
+                   string    loc_geometry_file_name,                            // Geometry shader file name.
+                   string    loc_fragment_file_name                             // Fragment shader file name.
                   )
 {
-  strncpy (shader_home, loc_shader_home, strlen (loc_shader_home));             // Getting shader home directory...
+  shader_home        = loc_shader_home;                                         // Getting shader home directory...
 
   // Building up vertex file full name:
-  snprintf (
-            vertex_file_name,                                                   // Destination string.
-            NU_MAX_PATH_SIZE,                                                   // Size of destination string.
-            "%s/%s",                                                            // Compiled string.
-            shader_home,                                                        // Shader home directory.
-            loc_vertex_file_name                                                // Vertex shader file name.
-           );
+  vertex_file_name   = shader_home +                                            // Shader home directory.
+                       "/" +
+                       loc_vertex_file_name;                                    // Vertex shader file name.
 
   // Building up geometry file full name:
-  snprintf (
-            geometry_file_name,                                                 // Destination string.
-            NU_MAX_PATH_SIZE,                                                   // Size of destination string.
-            "%s/%s",                                                            // Compiled string.
-            shader_home,                                                        // Shader home directory.
-            loc_geometry_file_name                                              // Geometry shader file name.
-           );
+  geometry_file_name = shader_home +                                            // Shader home directory.
+                       "/" +
+                       loc_geometry_file_name;                                  // Geometry shader file name.
 
   // Building up fragment file full name:
-  snprintf (
-            fragment_file_name,                                                 // Destination string.
-            NU_MAX_PATH_SIZE,                                                   // Size of destination string.
-            "%s/%s",                                                            // Compiled string.
-            shader_home,                                                        // Shader home directory.
-            loc_fragment_file_name                                              // Fragment shader file name.
-           );
+  fragment_file_name = shader_home +                                            // Shader home directory.
+                       "/" +
+                       loc_fragment_file_name;                                  // Fragment shader file name.
 
-  vertex   = compile (vertex_file_name, NU_VERTEX);                             // Compiling vertex shader...
-  geometry = compile (geometry_file_name, NU_GEOMETRY);                         // Compiling geometry shader...
-  fragment = compile (fragment_file_name, NU_FRAGMENT);                         // Compiling fragment shader...
-  program  = glCreateProgram ();                                                // Creating program...
+  vertex             = compile (vertex_file_name, NU_VERTEX);                   // Compiling vertex shader...
+  geometry           = compile (geometry_file_name, NU_GEOMETRY);               // Compiling geometry shader...
+  fragment           = compile (fragment_file_name, NU_FRAGMENT);               // Compiling fragment shader...
+  program            = glCreateProgram ();                                      // Creating program...
 }
 
 /// # OpenGL shader compile function
 /// ### Description:
 /// Compiles an OpenGL shader.
 GLuint shader::compile (
-                        const char* loc_shader_filename,                        // GLSL shader file name.
+                        string      loc_shader_filename,                        // GLSL shader file name.
                         shader_type loc_shader_type                             // GLSL shader type.
                        )
 {
   GLuint  shader;                                                               // Shader.
-  char*   shader_source;                                                        // Shader source.
+  string  shader_source;                                                        // Shader source.
   size_t  shader_size;                                                          // Shader size [characters].
   GLint   success;                                                              // "GL_COMPILE_STATUS" flag.
   GLchar* log;                                                                  // Buffer for OpenGL error log.
   GLsizei log_size;                                                             // Size of OpenGL error log.
   char    shader_fullname [NU_MAX_PATH_SIZE];                                   // Shader full file name.
 
+  shader_fullname = loc_shader_filename;                                        // Setting shader full file name...
   strncpy (
            shader_fullname,
            loc_shader_filename,
            strlen (loc_shader_filename)
-          );                                                                    // Setting shader full file name...
+          );
 
   // Loading shader from file:
   baseline->load_file (

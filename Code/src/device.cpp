@@ -11,40 +11,40 @@ device::device()
 /// # Device get information value function
 /// ### Description:
 /// Gets the value of a device information.
-string device::get_info (
-                         cl_device_id   loc_device_id,                          // OpenCL device ID.
-                         cl_device_info loc_parameter_name,                     // Parameter name.
-                        )
+std::string device::get_info (
+                              cl_device_id   loc_device_id,                     // OpenCL device ID.
+                              cl_device_info loc_parameter_name                 // Parameter name.
+                             )
 {
-  cl_int loc_error;                                                             // Error code.
-  size_t loc_parameter_size;                                                    // Parameter size.
-  string loc_parameter_value;                                                   // Parameter value.
+  cl_int      loc_error;                                                        // Error code.
+  size_t      loc_parameter_size;                                               // Parameter size.
+  std::string loc_parameter_value;                                              // Parameter value.
 
   // Getting parameter size:
-  loc_error            = clGetDeviceInfo (
-                                          loc_device_id,                        // Device ID.
-                                          loc_parameter_name,                   // Parameter name.
-                                          0,                                    // Dummy parameter size: "0" means we ask for the # of parameters.
-                                          NULL,                                 // Dummy parameter.
-                                          &loc_parameter_size                   // Returned parameter size.
-                                         );
+  loc_error = clGetDeviceInfo (
+                               loc_device_id,                                   // Device ID.
+                               loc_parameter_name,                              // Parameter name.
+                               0,                                               // Dummy parameter size: "0" means we ask for the # of parameters.
+                               NULL,                                            // Dummy parameter.
+                               &loc_parameter_size                              // Returned parameter size.
+                              );
 
   baseline->check_error (loc_error);                                            // Checking error...
 
-  loc_parameter_buffer = new char[loc_parameter_size];                          // Text buffer.
+  char* loc_parameter_buffer = new char[loc_parameter_size];                    // Text buffer.
 
   // Getting parameter information:
-  loc_error            = clGetDeviceInfo (
-                                          loc_device_id,                        // Device ID.
-                                          loc_parameter_name,                   // Parameter name.
-                                          loc_parameter_size,                   // Parameter size.
-                                          loc_parameter_buffer,                 // Returned parameter value.
-                                          NULL                                  // Returned parameter size (NULL = ignored).
-                                         );
+  loc_error           = clGetDeviceInfo (
+                                         loc_device_id,                         // Device ID.
+                                         loc_parameter_name,                    // Parameter name.
+                                         loc_parameter_size,                    // Parameter size.
+                                         loc_parameter_buffer,                  // Returned parameter value.
+                                         NULL                                   // Returned parameter size (NULL = ignored).
+                                        );
 
   baseline->check_error (loc_error);                                            // Checking error...
 
-  loc_parameter_value  = loc_parameter_buffer;                                  // Setting parameter value...
+  loc_parameter_value = loc_parameter_buffer;                                   // Setting parameter value...
 
   return (loc_parameter_value);                                                 // Returning parameter value...
 }

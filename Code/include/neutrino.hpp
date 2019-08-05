@@ -25,6 +25,7 @@
   #define NU_COLOR_MAGENTA                  "\x1B[35m"                          // Magenta.
   #define NU_COLOR_CYAN                     "\x1B[36m"                          // Cyan.
   #define NU_COLOR_WHITE                    "\x1B[37m"                          // White.
+  #define NU_ERASE                          "\33[2K\r"                          // Erase character.
 
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// WINDOW PARAMETERS ////////////////////////////////
@@ -193,8 +194,11 @@ typedef enum
 //////////////////////////// Standard C header files ///////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
   #include <stdlib.h>
+  #include <errno.h>
   #include <string>
   #include <iostream>
+  #include <fstream>
+  #include <cerrno>
 
   #ifdef __APPLE__
    #include <math.h>
@@ -209,8 +213,6 @@ typedef enum
     #define _USE_MATH_DEFINES
     #include <cmath>
   #endif
-
-  #include <errno.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// GLAD header files //////////////////////////////
@@ -270,60 +272,60 @@ public:
 
   neutrino();
   // Initialization:
-  void   init (
-               size_t loc_q_num,
-               size_t loc_k_num,
-               bool   loc_interop
-              );
+  void        init (
+                    size_t loc_q_num,
+                    size_t loc_k_num,
+                    bool   loc_interop
+                   );
   // Get "tic" time:
-  void   get_tic ();
+  void        get_tic ();
   // Get "toc" time:
-  void   get_toc ();
+  void        get_toc ();
   // Load file:
-  void   load_file (
-                    const char* file_name,                                      // File name.
-                    char**      file_buffer,                                    // File buffer (char array).
-                    size_t*     file_size                                       // File size.
-                   );
+  void        load_file (
+                         const char* file_name,                                 // File name.
+                         char**      file_buffer,                               // File buffer (char array).
+                         size_t*     file_size                                  // File size.
+                        );
   // Write file:
-  void   write_file (
-                     const char* file_name,                                     // File name.
-                     char*       file_buffer                                    // File buffer.
-                    );
+  void        write_file (
+                          const char* file_name,                                // File name.
+                          char*       file_buffer                               // File buffer.
+                         );
   // Free file:
-  void   free_file (
-                    char* buffer                                                // File buffer.
-                   );
+  void        free_file (
+                         char* buffer                                           // File buffer.
+                        );
   // Query numeric input from stdin:
-  int    query_numeric (
-                        string caption,                                         // Text query caption.
-                        int    min,                                             // Minimum queried numeric value.
-                        int    max                                              // Maximum queried numeric value.
-                       );
+  int         query_numeric (
+                             std::string caption,                               // Text query caption.
+                             int         min,                                   // Minimum queried numeric value.
+                             int         max                                    // Maximum queried numeric value.
+                            );
   // Current stdout terminal line erase function:
-  void   erase ();
-  void   action (
-                 string loc_text                                                // Message.
-                );
-  void   error (
-                string loc_text                                                 // Message.
-               );
-  void   list (
-               string loc_text,
-               size_t loc_length,
-               char   loc_delimiter,
-               size_t loc_tab
-              );
-  void   done ();
-  void   terminated ();
-  // OpenCL error get function:
-  string get_error (
-                    cl_int loc_error                                            // Error code.
-                   );
-  // OpenCL error check function:
-  void   check_error (
-                      cl_int loc_error                                          // Error code.
+  void        erase ();
+  void        action (
+                      std::string loc_text                                      // Message.
                      );
+  void        error (
+                     std::string loc_text                                       // Message.
+                    );
+  void        list (
+                    std::string loc_text,
+                    size_t      loc_length,
+                    char        loc_delimiter,
+                    size_t      loc_tab
+                   );
+  void        done ();
+  void        terminated ();
+  // OpenCL error get function:
+  std::string get_error (
+                         cl_int loc_error                                       // Error code.
+                        );
+  // OpenCL error check function:
+  void        check_error (
+                           cl_int loc_error                                     // Error code.
+                          );
 
   ~neutrino();
 };

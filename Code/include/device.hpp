@@ -13,17 +13,17 @@ class device
 {
 private:
   neutrino*    baseline;                                                        // Neutrino baseline.
-  string       parameter_value;                                                 // Parameter value.
+  std::string  parameter_value;                                                 // Parameter value.
   // OpenCL get info value function:
-  string get_info (
-                   cl_device_id   loc_platform_id,                              // Platform ID.
-                   cl_device_info loc_parameter_name                            // Paramenter name.
-                  );
+  std::string get_info (
+                        cl_device_id   loc_platform_id,                         // Platform ID.
+                        cl_device_info loc_parameter_name                       // Paramenter name.
+                       );
 
 public:
   cl_device_id id;                                                              // OpenCL device id.
-  string       name;                                                            // Device name.
-  string       profile;                                                         // Device profile.
+  std::string  name;                                                            // Device name.
+  std::string  profile;                                                         // Device profile.
 
   device        ();
   void init (
