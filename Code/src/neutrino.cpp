@@ -58,9 +58,10 @@ void neutrino::get_tic ()
 /// to the stdout.
 void neutrino::get_toc ()
 {
-  string loc_text;                                                              // Text buffer.
-  string loc_pad;                                                               // Text pad.
-  size_t loc_pad_size;                                                          // Text pad size.
+  std::string loc_text;                                                         // Text buffer.
+  std::string loc_pad;                                                          // Text pad.
+  size_t      loc_pad_size;                                                     // Text pad size.
+  size_t      i;                                                                // Index.
 
   toc            = glfwGetTime ();
   loop_time      = size_t (round (1000000.0*double(toc - tic)));                // Loop execution time [us].
@@ -72,18 +73,21 @@ void neutrino::get_toc ()
     erase ();                                                                   // Erasing terminal line...
 
     // Compiling message string:
-    loc_text      = NU_COLOR_CYAN +
-                    "Action: " +
-                    NU_COLOR_NORMAL +
-                    "running host loop time = " +
-                    to_string (loop_time) +
-                    " us";
+    loc_text      = std::string (NU_COLOR_CYAN) +
+                    std::string ("Action: ") +
+                    std::string (NU_COLOR_NORMAL) +
+                    std::string ("running host loop time = ") +
+                    std::to_string (loop_time) +
+                    std::string (" us");
 
-    loc_pad_size  = NU_MAX_MESSAGE_SIZE - loc_text.length;                      // Computing text padding...
+    loc_pad_size  = NU_MAX_MESSAGE_SIZE - loc_text.size ();                     // Computing text padding...
 
     if(loc_pad_size >= 0)                                                       // Checking padding...
     {
-      loc_pad = blanks (loc_pad_size, ' ');
+      for(i = 0; i < loc_pad_size; i++)
+      {
+        loc_pad += " ";                                                         // Filling pad string...
+      }
     }
 
     else                                                                        // Generating error message...
@@ -92,27 +96,27 @@ void neutrino::get_toc ()
       exit (1);                                                                 // Exiting...
     }
 
-    cout << text + pad << endl;                                                 // Printing buffer...
+    std::cout << loc_text + loc_pad << std::endl;                               // Printing buffer...
   }
 }
 
 /// # Neutrino load file function
 /// ### Description:
 /// Loads a file into a buffer.
-string neutrino::load_file (
-                            string loc_file_name
-                           )
+std::string neutrino::load_file (
+                                 std::string loc_file_name
+                                )
 {
-  string   loc_data;
+  std::string   loc_data;
 
-  ifstream loc_file (loc_file_name, std::ios::in | std::ios::binary);
+  std::ifstream loc_file (loc_file_name, std::ios::in | std::ios::binary);
 
   if(loc_file)
   {
     loc_file.seekg (0, std::ios::end);
     loc_data.resize (loc_file.tellg ());
     loc_file.seekg (0, std::ios::beg);
-    loc_file.read (&data[0], loc_data.size ());
+    loc_file.read (&loc_data[0], loc_data.size ());
     loc_file.close ();
     return(loc_data);
   }
@@ -123,8 +127,7 @@ string neutrino::load_file (
 /// ### Description:
 /// Writes a buffer in a file.
 void neutrino::write_file (
-                           string file_name,
-                           string file_buffer
+                           std::string file_name
                           )
 {
   // EZOR: 05AGU2019: TO BE DONE!
@@ -134,24 +137,24 @@ void neutrino::write_file (
 /// ### Description:
 /// Asks the user for a numeric input choice.
 int neutrino::query_numeric (
-                             string loc_caption,
-                             int    loc_min,
-                             int    loc_max
+                             std::string loc_caption,
+                             int         loc_min,
+                             int         loc_max
                             )
 {
-  string loc_buffer;
-  size_t loc_numeric;                                                           // Numeric value.
-  bool   valid_choice = false;                                                  // User's choice.
+  std::string loc_buffer;
+  size_t      loc_numeric;                                                      // Numeric value.
+  bool        valid_choice = false;                                             // User's choice.
 
-  cout << loc_caption;                                                          // Printing caption...
-  cin >> loc_buffer;                                                            // Getting user input...
+  std::cout << loc_caption;                                                     // Printing caption...
+  std::cin >> loc_buffer;                                                       // Getting user input...
 
   loc_numeric = stoi (loc_buffer);                                              // Converting input string to numeric value...
 
   while(!valid_choice)                                                          // Checking choice validity...
   {
     if((loc_min <= loc_numeric) &&
-       (loc_numeric <= loC_max))
+       (loc_numeric <= loc_max))
     {
       valid_choice = true;                                                      // Setting flag...
     }
@@ -159,7 +162,7 @@ int neutrino::query_numeric (
     else
     {
       error ("invalid input! Please, try again!");                              // Printing message...
-      cout << loc_caption;                                                      // Printing caption...
+      std::cout << loc_caption;                                                 // Printing caption...
     }
   }
 
@@ -178,21 +181,21 @@ void neutrino::erase ()
 /// ### Description:
 /// Formats and prints "action" messages to stdout.
 void neutrino::action (
-                       const char* loc_text                                     // Message text.
+                       std::string loc_text                                     // Message text.
                       )
 {
-  size_t i;                                                                     // Index.
-  string text;                                                                  // Text buffer.
-  string pad;                                                                   // Text pad.
-  size_t pad_size;                                                              // Text pad size.                                                                     // Index.
+  size_t      i;                                                                // Index.
+  std::string text;                                                             // Text buffer.
+  std::string pad;                                                              // Text pad.
+  size_t      pad_size;                                                         // Text pad size.                                                                     // Index.
 
   // Compiling message string:
-  text     = NU_COLOR_CYAN +
-             "Action: " +
-             NU_COLOR_NORMAL +
+  text     = std::string (NU_COLOR_CYAN) +
+             std::string ("Action: ") +
+             std::string (NU_COLOR_NORMAL) +
              loc_text;
 
-  pad_size = NU_MAX_MESSAGE_SIZE - text.length;                                 // Computing text padding...
+  pad_size = NU_MAX_MESSAGE_SIZE - text.size ();                                // Computing text padding...
 
   if(pad_size >= 0)                                                             // Checking padding...
   {
@@ -208,28 +211,28 @@ void neutrino::action (
     exit (1);                                                                   // Exiting...
   }
 
-  cout << text + pad << endl;                                                   // Printing buffer...
+  std::cout << text + pad << std::endl;                                         // Printing buffer...
 }
 
 /// # Neutrino format and print "error" message function
 /// ### Description:
 /// Formats and prints "error" messages to stdout.
 void neutrino::error (
-                      string loc_text
+                      std::string loc_text
                      )
 {
-  size_t i;                                                                     // Index.
-  string text;                                                                  // Text buffer.
-  string pad;                                                                   // Text pad.
-  size_t pad_size;                                                              // Text pad size.                                                                     // Index.
+  size_t      i;                                                                // Index.
+  std::string text;                                                             // Text buffer.
+  std::string pad;                                                              // Text pad.
+  size_t      pad_size;                                                         // Text pad size.                                                                     // Index.
 
   // Compiling message string:
-  text     = NU_COLOR_RED +
-             "Error:  " +
-             NU_COLOR_NORMAL +
+  text     = std::string (NU_COLOR_RED) +
+             std::string ("Error:  ") +
+             std::string (NU_COLOR_NORMAL) +
              loc_text;
 
-  pad_size = NU_MAX_MESSAGE_SIZE - text.length;                                 // Computing text padding...
+  pad_size = NU_MAX_MESSAGE_SIZE - text.size ();                                // Computing text padding...
 
   if(pad_size >= 0)                                                             // Checking padding...
   {
@@ -245,7 +248,7 @@ void neutrino::error (
     exit (1);                                                                   // Exiting...
   }
 
-  cout << text + pad << endl;                                                   // Printing buffer...
+  std::cout << text + pad << std::endl;                                         // Printing buffer...
 
   terminated ();
 
@@ -256,18 +259,24 @@ void neutrino::error (
 /// ### Description:
 /// Justifies and prints messages to stdout.
 void neutrino::list (
-                     string loc_text,
-                     string loc_delimiter,
-                     size_t loc_tab
+                     std::string loc_text,
+                     std::string loc_delimiter,
+                     size_t      loc_tab
                     )
 {
-  size_t loc_pos;                                                               // Position of delimiter.
-  string loc_blanks;                                                            // Blank string.
+  size_t      loc_pos;                                                          // Position of delimiter.
+  std::string loc_pad;                                                          // Blank string.
+  size_t      i;                                                                // Index.
 
-  loc_pos    = loc_text.find (loc_delimiter);                                   // Findig delimiter...
-  loc_blanks = blanks (loc_tab, ' ');                                           // Setting blank string...
-  loc_text.replace (loc_pos, loc_blanks.length, loc_blanks);                    // Inserting tab...
-  cout << loc_text << endl;                                                     // Printing resulting string...
+  loc_pos = loc_text.find (loc_delimiter);                                      // Findig delimiter...
+
+  for(i = 0; i < loc_tab; i++)
+  {
+    loc_pad += " ";                                                             // Filling pad string...
+  }
+
+  loc_text.replace (loc_pos, loc_pad.size (), loc_pad);                         // Inserting tab...
+  std::cout << loc_text << std::endl;                                           // Printing resulting string...
 }
 
 /// # Neutrino format and print "done" message function
@@ -275,32 +284,32 @@ void neutrino::list (
 /// Formats and prints "done" messages to stdout.
 void neutrino::done ()
 {
-  string loc_text;                                                              // Text buffer.
+  std::string loc_text;                                                         // Text buffer.
 
   // Compiling message string:
-  loc_text = NU_COLOR_GREEN +
-             "DONE!" +
-             NU_COLOR_NORMAL;
+  loc_text = std::string (NU_COLOR_GREEN) +
+             std::string ("DONE!") +
+             std::string (NU_COLOR_NORMAL);
 
-  cout << loc_text << endl;                                                     // Printing message...
+  std::cout << loc_text << std::endl;                                           // Printing message...
 }
 
 void neutrino::terminated ()
 {
-  string loc_text;                                                              // Text buffer.
+  std::string loc_text;                                                         // Text buffer.
 
   // Compiling message string:
-  loc_text = NU_COLOR_RED +
-             "TERMINATED!" +
-             NU_COLOR_NORMAL;
+  loc_text = std::string (NU_COLOR_RED) +
+             std::string ("TERMINATED!") +
+             std::string (NU_COLOR_NORMAL);
 
-  cout << loc_text << endl;                                                     // Printing message...
+  std::cout << loc_text << std::endl;                                           // Printing message...
 }
 
 /// # OpenCL error get function
 /// ### Description:
 /// Translates an OpenCL numeric error code into a human-readable string.
-const char* neutrino::get_error (
+std::string neutrino::get_error (
                                  cl_int loc_error                               // Local error code.
                                 )
 {

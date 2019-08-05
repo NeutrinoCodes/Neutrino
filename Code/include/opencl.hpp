@@ -18,7 +18,7 @@ class opencl
 private:
   neutrino*      baseline;                                                      // Neutrino baseline.
   cl_device_type device_type;
-  string         device_type_text;
+  std::string    device_type_text;
   cl_uint        get_platforms_number ();
   cl_platform_id get_platform_id (
                                   cl_uint loc_platform_index

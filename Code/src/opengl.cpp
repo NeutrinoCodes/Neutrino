@@ -131,12 +131,15 @@ void opengl::set_shader (
 /// Initialises GLFW context, initialises GLAD context, initialises OpenGL
 /// shaders.
 void opengl::init (
-                   neutrino* loc_baseline,                                      // Neutrino baseline.
-                   int       loc_window_size_x,                                 // Window x-size [px].
-                   int       loc_window_size_y,                                 // Window y-size [px].
-                   string    loc_title                                          // Window title.
+                   neutrino*   loc_baseline,                                    // Neutrino baseline.
+                   int         loc_window_size_x,                               // Window x-size [px].
+                   int         loc_window_size_y,                               // Window y-size [px].
+                   std::string loc_title                                        // Window title.
                   )
 {
+  char*  loc_title_buffer;
+  size_t loc_title_size;
+
   baseline      = loc_baseline;                                                 // Initializing Neutrino baseline...
   window_size_x = loc_window_size_x;                                            // Initializing window x-size [px]...
   window_size_y = loc_window_size_y;                                            // Initializing window y-size [px]...
@@ -164,18 +167,23 @@ void opengl::init (
   zoom_z_old    = NU_INITIAL_ZOOM;
   zoom_z        = 0.0;                                                          // Initializing zoom coefficient...
 
-  int    glfw_ver_major;
-  int    glfw_ver_minor;
-  int    glfw_rev;
-  string glfw_ver_string;
+  int         glfw_ver_major;
+  int         glfw_ver_minor;
+  int         glfw_rev;
+  std::string glfw_ver_string;
 
-  int    opengl_ver_major;                                                      // OpenGL version major number.
-  int    opengl_ver_minor;                                                      // OpenGL version minor number.
-  int    opengl_msaa;                                                           // OpenGL multisampling antialiasing factor.
+  int         opengl_ver_major;                                                 // OpenGL version major number.
+  int         opengl_ver_minor;                                                 // OpenGL version minor number.
+  int         opengl_msaa;                                                      // OpenGL multisampling antialiasing factor.
 
-  opengl_ver_major = 4;                                                         // EZOR 04NOV2018: to be generalized by iterative search.
-  opengl_ver_minor = 1;                                                         // EZOR 04NOV2018: to be generalized by iterative search.
-  opengl_msaa      = 4;                                                         // EZOR: 3 or 4 sample is good due to the general oversampling-decimation method.
+  opengl_ver_major                 = 4;                                         // EZOR 04NOV2018: to be generalized by iterative search.
+  opengl_ver_minor                 = 1;                                         // EZOR 04NOV2018: to be generalized by iterative search.
+  opengl_msaa                      = 4;                                         // EZOR: 3 or 4 sample is good due to the general oversampling-decimation method.
+
+  loc_title_size                   = loc_title.size ();                         // Getting source size...
+  loc_title_buffer                 = new char[loc_title_size + 1];
+  loc_title.copy (loc_title_buffer, loc_title_size + 1);
+  loc_title_buffer[loc_title_size] = '\0';
 
   if(baseline->interop)
   {
@@ -183,9 +191,9 @@ void opengl::init (
 
     // Building up glfw version string:
     glfw_ver_string = "initializing GLFW... found version" +
-                      to_string (glfw_ver_major) +                              // GLFW major version.
-                      to_string (glfw_ver_minor) +                              // GLFW minor version.
-                      to_string (glfw_rev);                                     // GLFW revision.
+                      std::to_string (glfw_ver_major) +                         // GLFW major version.
+                      std::to_string (glfw_ver_minor) +                         // GLFW minor version.
+                      std::to_string (glfw_rev);                                // GLFW revision.
 
     baseline->action (glfw_ver_string);                                         // Printing message...
 
@@ -209,10 +217,12 @@ void opengl::init (
     glfw_window = glfwCreateWindow (
                                     window_size_x,                              // Window x-size [px].
                                     window_size_y,                              // Window y-size [px].
-                                    title,                                      // Window title.
+                                    loc_title_buffer,                           // Window title.
                                     NULL,                                       // Monitor.
                                     NULL                                        // Share.
                                    );
+    delete loc_title_buffer;
+
     if(!glfw_window)
     {
       baseline->error ("unable to create window!\n");                           // Printing message...
