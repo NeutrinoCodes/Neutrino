@@ -197,7 +197,6 @@ void opencl::init (
   {
     opencl_platform[i] = new platform ();
     opencl_platform[i]->init (get_platform_id (i));
-    std::cout << "pippo" << std::endl;
 
     std::cout << "        PLATFORM #:" +
       std::to_string (i + 1) << std::endl;                                          // Printing message...
@@ -250,7 +249,7 @@ void opencl::init (
     opencl_device[i] = new device ();
     opencl_device[i]->init (get_device_id (i, selected_platform));
 
-    std::cout << "        DEVICE #%d:\n" +
+    std::cout << "        DEVICE #:" +
       std::to_string (i + 1);                                                       // Printing message...
     std::cout << "        --> device name:     " +
       opencl_device[i]->name << std::endl;                                          // Printing message...
