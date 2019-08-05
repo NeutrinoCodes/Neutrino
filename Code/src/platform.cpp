@@ -36,21 +36,24 @@ std::string platform::get_info_value (
                                       size_t           loc_parameter_size       // Parameter size.
                                      )
 {
-  cl_int loc_error;                                                             // Error code.
-  parameter_value = new char[loc_parameter_size];                               // Parameter value.
+  cl_int      loc_error;                                                        // Error code.
+  std::string loc_parameter;
+  char*       loc_parameter_buffer = new char[loc_parameter_size];              // Parameter value.
 
   // Getting platform information:
-  loc_error       = clGetPlatformInfo (
-                                       loc_platform_id,                         // Platform id.
-                                       loc_parameter_name,                      // Parameter name.
-                                       loc_parameter_size,                      // Parameter size.
-                                       &parameter_value,                        // Returned parameter value.
-                                       NULL                                     // Returned parameter size (NULL = ignored).
-                                      );
+  loc_error     = clGetPlatformInfo (
+                                     loc_platform_id,                           // Platform id.
+                                     loc_parameter_name,                        // Parameter name.
+                                     loc_parameter_size,                        // Parameter size.
+                                     loc_parameter_buffer,                      // Returned parameter value.
+                                     NULL                                       // Returned parameter size (NULL = ignored).
+                                    );
 
   baseline->check_error (loc_error);
 
-  return (std::string (parameter_value));                                       // Returning local parameter value...
+  loc_parameter = std::string (loc_parameter_buffer);
+
+  return (loc_parameter);                                                       // Returning local parameter value...
 }
 
 /// # Initialisation function
