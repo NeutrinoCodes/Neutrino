@@ -190,7 +190,7 @@ void opengl::init (
     glfwGetVersion (&glfw_ver_major, &glfw_ver_minor, &glfw_rev);               // Getting GLFW version...
 
     // Building up glfw version string:
-    glfw_ver_string = "initializing GLFW... found version" +
+    glfw_ver_string = "initializing GLFW... found version " +
                       std::to_string (glfw_ver_major) +                         // GLFW major version.
                       std::to_string (glfw_ver_minor) +                         // GLFW minor version.
                       std::to_string (glfw_rev);                                // GLFW revision.

@@ -197,6 +197,7 @@ void opencl::init (
   {
     opencl_platform[i] = new platform ();
     opencl_platform[i]->init (get_platform_id (i));
+    std::cout << "pippo" << std::endl;
 
     std::cout << "        PLATFORM #:" +
       std::to_string (i + 1) << std::endl;                                          // Printing message...

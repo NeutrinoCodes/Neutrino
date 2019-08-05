@@ -13,7 +13,7 @@ class platform
 {
 private:
   neutrino*   baseline;                                                         // Neutrino baseline.
-  std::string parameter_value;                                                  // Parameter value.
+  std::string parameter;                                                        // Parameter value.
   // Gets size information:
   size_t      get_info_size (
                              cl_platform_id   loc_platform_id,                  // Platform ID.
