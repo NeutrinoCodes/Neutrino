@@ -5,11 +5,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 platform::platform()
 {
-  profile    = NULL;
-  version    = NULL;
-  name       = NULL;
-  vendor     = NULL;
-  extensions = NULL;
+
 }
 
 size_t platform::get_info_size (
@@ -34,11 +30,11 @@ size_t platform::get_info_size (
   return (loc_parameter_size);                                                  // Returning local parameter size...
 }
 
-char* platform::get_info_value (
-                                cl_platform_id   loc_platform_id,               // OpenCL platform ID.
-                                cl_platform_info loc_parameter_name,            // Paramenter name.
-                                size_t           loc_parameter_size             // Parameter size.
-                               )
+std::string platform::get_info_value (
+                                      cl_platform_id   loc_platform_id,         // OpenCL platform ID.
+                                      cl_platform_info loc_parameter_name,      // Paramenter name.
+                                      size_t           loc_parameter_size       // Parameter size.
+                                     )
 {
   cl_int loc_error;                                                             // Error code.
   parameter_value = new char[loc_parameter_size];                               // Parameter value.
@@ -54,7 +50,7 @@ char* platform::get_info_value (
 
   baseline->check_error (loc_error);
 
-  return (parameter_value);                                                     // Returning local parameter value...
+  return (std::string (parameter_value));                                       // Returning local parameter value...
 }
 
 /// # Initialisation function

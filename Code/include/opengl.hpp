@@ -46,14 +46,14 @@ private:
   ////////////////////////////////////////////////////////////////////////////////
   // OpenGL shader compilation:
   GLuint      compile_shader (
-                              string      loc_shader_filename,                  // Shader file name.
+                              std::string loc_shader_filename,                  // Shader file name.
                               shader_type loc_shader_type                       // Shader type.
                              );
   // OpenGL shader build:
   GLuint      build_shader (
-                            string loc_vertex_filename,                         // Vertex shader file name.
-                            string loc_geometry_filename,                       // Geometry shader file name.
-                            string loc_fragment_filename                        // Fragment shader file name.
+                            std::string loc_vertex_filename,                    // Vertex shader file name.
+                            std::string loc_geometry_filename,                  // Geometry shader file name.
+                            std::string loc_fragment_filename                   // Fragment shader file name.
                            );
   // Arcball computation:
   void        arcball (
@@ -159,7 +159,7 @@ private:
 
 public:
   GLFWwindow* glfw_window;                                                      // Window handle.
-  string      title;                                                            // Window title.
+  std::string title;                                                            // Window title.
   int         window_size_x;                                                    // Window x-size [screen coordinates].
   int         window_size_y;                                                    // Window y-size [screen coordinates].
   int         framebuffer_size_x;                                               // Window x-size [px].
@@ -279,10 +279,10 @@ public:
   opengl();
   // Window initialization:
   void init (
-             neutrino* loc_baseline,
-             int       loc_window_size_x,                                       // Window x-size [px].
-             int       loc_window_size_y,                                       // Window y-size [px].
-             string    loc_title
+             neutrino*   loc_baseline,
+             int         loc_window_size_x,                                     // Window x-size [px].
+             int         loc_window_size_y,                                     // Window y-size [px].
+             std::string loc_title
             );
   // Window "closed" function:
   bool closed ();

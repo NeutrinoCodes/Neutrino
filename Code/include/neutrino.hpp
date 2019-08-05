@@ -282,20 +282,13 @@ public:
   // Get "toc" time:
   void        get_toc ();
   // Load file:
-  void        load_file (
-                         const char* file_name,                                 // File name.
-                         char**      file_buffer,                               // File buffer (char array).
-                         size_t*     file_size                                  // File size.
+  std::string load_file (
+                         std::string loc_file_name
                         );
   // Write file:
   void        write_file (
-                          const char* file_name,                                // File name.
-                          char*       file_buffer                               // File buffer.
+                          std::string file_name                                 // File name.
                          );
-  // Free file:
-  void        free_file (
-                         char* buffer                                           // File buffer.
-                        );
   // Query numeric input from stdin:
   int         query_numeric (
                              std::string caption,                               // Text query caption.
@@ -312,8 +305,7 @@ public:
                     );
   void        list (
                     std::string loc_text,
-                    size_t      loc_length,
-                    char        loc_delimiter,
+                    std::string loc_delimiter,
                     size_t      loc_tab
                    );
   void        done ();

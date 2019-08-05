@@ -138,14 +138,14 @@ class float1G
 private:
 
 public:
-  GLfloat*     data;                                                            // Data structure.
-  cl_mem       buffer;                                                          // Data memory buffer.
-  GLuint       vao;                                                             // Data VAO.
-  GLuint       vbo;                                                             // Data VBO.
-  GLsizeiptr   size;                                                            // Data size.
-  GLuint       layout;                                                          // Data layout index.
-  std::string* name;                                                            // Data name.
-  bool         ready;                                                           // "ready" flag.
+  GLfloat*    data;                                                             // Data structure.
+  cl_mem      buffer;                                                           // Data memory buffer.
+  GLuint      vao;                                                              // Data VAO.
+  GLuint      vbo;                                                              // Data VBO.
+  GLsizeiptr  size;                                                             // Data size.
+  GLuint      layout;                                                           // Data layout index.
+  std::string name;                                                             // Data name.
+  bool        ready;                                                            // "ready" flag.
 
   float1G ();
   void init (
@@ -169,7 +169,7 @@ public:
   GLuint             vbo;                                                       // Data VBO.
   GLsizeiptr         size;                                                      // Data size.
   GLuint             layout;                                                    // Data layout index.
-  std::string*       name;                                                      // Data name.
+  std::string        name;                                                      // Data name.
   bool               ready;                                                     // "ready" flag.
 
   float4G ();
