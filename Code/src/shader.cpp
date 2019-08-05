@@ -12,28 +12,28 @@ shader::shader ()
 /// ### Description:
 /// Initializes an OpenGL shader.
 void shader::init (
-                   neutrino* loc_baseline,                                      // Neutrino baseline.
-                   string    loc_shader_home,                                   // Shader home directory.
-                   string    loc_vertex_file_name,                              // Vertex shader file name.
-                   string    loc_geometry_file_name,                            // Geometry shader file name.
-                   string    loc_fragment_file_name                             // Fragment shader file name.
+                   neutrino*   loc_baseline,                                    // Neutrino baseline.
+                   std::string loc_shader_home,                                 // Shader home directory.
+                   std::string loc_vertex_file_name,                            // Vertex shader file name.
+                   std::string loc_geometry_file_name,                          // Geometry shader file name.
+                   std::string loc_fragment_file_name                           // Fragment shader file name.
                   )
 {
   shader_home        = loc_shader_home;                                         // Getting shader home directory...
 
   // Building up vertex file full name:
   vertex_file_name   = shader_home +                                            // Shader home directory.
-                       "/" +
+                       std::string ("/") +
                        loc_vertex_file_name;                                    // Vertex shader file name.
 
   // Building up geometry file full name:
   geometry_file_name = shader_home +                                            // Shader home directory.
-                       "/" +
+                       std::string ("/") +
                        loc_geometry_file_name;                                  // Geometry shader file name.
 
   // Building up fragment file full name:
   fragment_file_name = shader_home +                                            // Shader home directory.
-                       "/" +
+                       std::string ("/") +
                        loc_fragment_file_name;                                  // Fragment shader file name.
 
   vertex             = compile (vertex_file_name, NU_VERTEX);                   // Compiling vertex shader...
@@ -46,30 +46,20 @@ void shader::init (
 /// ### Description:
 /// Compiles an OpenGL shader.
 GLuint shader::compile (
-                        string      loc_shader_filename,                        // GLSL shader file name.
+                        std::string loc_shader_filename,                        // GLSL shader file name.
                         shader_type loc_shader_type                             // GLSL shader type.
                        )
 {
-  GLuint  shader;                                                               // Shader.
-  string  shader_source;                                                        // Shader source.
-  size_t  shader_size;                                                          // Shader size [characters].
-  GLint   success;                                                              // "GL_COMPILE_STATUS" flag.
-  GLchar* log;                                                                  // Buffer for OpenGL error log.
-  GLsizei log_size;                                                             // Size of OpenGL error log.
-  char    shader_fullname [NU_MAX_PATH_SIZE];                                   // Shader full file name.
-
-  shader_fullname = loc_shader_filename;                                        // Setting shader full file name...
-  strncpy (
-           shader_fullname,
-           loc_shader_filename,
-           strlen (loc_shader_filename)
-          );
+  GLuint      shader;                                                           // Shader.
+  std::string shader_source;                                                    // Shader source.
+  size_t      shader_size;                                                      // Shader size [characters].
+  GLint       success;                                                          // "GL_COMPILE_STATUS" flag.
+  GLchar*     log;                                                              // Buffer for OpenGL error log.
+  GLsizei     log_size;                                                         // Size of OpenGL error log.
 
   // Loading shader from file:
   baseline->load_file (
-                       loc_shader_filename,                                     // Shader file.
-                       &shader_source,                                          // Shader buffer.
-                       &shader_size                                             // Shader buffer size.
+                       loc_shader_filename                                      // Shader file.
                       );
 
   // Selecting shader type:
@@ -117,8 +107,6 @@ GLuint shader::compile (
     exit (1);                                                                   // Exiting...
   }
 
-  baseline->free_file (shader_source);                                          // Freeing shader source file...
-
   return (shader);                                                              // Returning shader...
 }
 
@@ -141,10 +129,18 @@ void shader::setarg (
                      GLuint   loc_layout_index                                  // Data layout index.
                     )
 {
+  size_t loc_name_size;
+  char*  loc_name_buffer;
+
+  loc_name_size                  = loc_data->name.size ();                      // Getting source size...
+  loc_name_buffer                = new char[loc_name_size + 1];
+  loc_data->name.copy (loc_name_buffer, loc_name_size + 1);
+  loc_name_buffer[loc_name_size] = '\0';
+
   glBindAttribLocation (
                         program,                                                // OpenGL GLSL program.
                         loc_layout_index,                                       // Data layout index.
-                        loc_data->name                                          // Data name.
+                        loc_name_buffer                                         // Data name.
                        );
 
   if(old_size == 0)
@@ -164,6 +160,7 @@ void shader::setarg (
     }
   }
 
+  delete loc_name_buffer;
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -174,10 +171,18 @@ void shader::setarg (
                      GLuint   loc_layout_index                                  // Data layout index.
                     )
 {
+  size_t loc_name_size;
+  char*  loc_name_buffer;
+
+  loc_name_size                  = loc_data->name.size ();                      // Getting source size...
+  loc_name_buffer                = new char[loc_name_size + 1];
+  loc_data->name.copy (loc_name_buffer, loc_name_size + 1);
+  loc_name_buffer[loc_name_size] = '\0';
+
   glBindAttribLocation (
                         program,                                                // OpenGL GLSL program.
                         loc_layout_index,                                       // Data layout index.
-                        loc_data->name                                          // Data name.
+                        loc_name_buffer                                         // Data name.
                        );
 
   if(old_size == 0)
@@ -197,6 +202,7 @@ void shader::setarg (
     }
   }
 
+  delete loc_name_buffer;
 };
 
 //////////////////////////////////////////////////////////////////////////////////

@@ -44,7 +44,7 @@ std::string platform::get_info_value (
                                        loc_platform_id,                         // Platform id.
                                        loc_parameter_name,                      // Parameter name.
                                        loc_parameter_size,                      // Parameter size.
-                                       parameter_value,                         // Returned parameter value.
+                                       &parameter_value,                        // Returned parameter value.
                                        NULL                                     // Returned parameter size (NULL = ignored).
                                       );
 
@@ -61,84 +61,59 @@ void platform::init (
                     )
 {
   // Profile info:
-  profile           = new info (
-                                get_info_size (
-                                               loc_platform_id,
-                                               CL_PLATFORM_PROFILE
-                                              )
-                               );
-
-  profile->value    = get_info_value (
-                                      loc_platform_id,
-                                      CL_PLATFORM_PROFILE,
-                                      profile->size
-                                     );
+  profile    = get_info_value (
+                               loc_platform_id,
+                               CL_PLATFORM_PROFILE,
+                               get_info_size (
+                                              loc_platform_id,
+                                              CL_PLATFORM_PROFILE
+                                             )
+                              );
 
   // Version info:
-  version           = new info (
-                                get_info_size (
-                                               loc_platform_id,
-                                               CL_PLATFORM_VERSION
-                                              )
-                               );
-
-  version->value    = get_info_value (
-                                      loc_platform_id,
-                                      CL_PLATFORM_VERSION,
-                                      version->size
-                                     );
+  version    = get_info_value (
+                               loc_platform_id,
+                               CL_PLATFORM_VERSION,
+                               get_info_size (
+                                              loc_platform_id,
+                                              CL_PLATFORM_VERSION
+                                             )
+                              );
 
   // Name info:
-  name              = new info (
-                                get_info_size (
-                                               loc_platform_id,
-                                               CL_PLATFORM_NAME
-                                              )
-                               );
-
-  name->value       = get_info_value (
-                                      loc_platform_id,
-                                      CL_PLATFORM_NAME,
-                                      name->size
-                                     );
+  name       = get_info_value (
+                               loc_platform_id,
+                               CL_PLATFORM_NAME,
+                               get_info_size (
+                                              loc_platform_id,
+                                              CL_PLATFORM_NAME
+                                             )
+                              );
 
   // Vendor info:
-  vendor            = new info (
-                                get_info_size (
-                                               loc_platform_id,
-                                               CL_PLATFORM_VENDOR
-                                              )
-                               );
-
-  vendor->value     = get_info_value (
-                                      loc_platform_id,
-                                      CL_PLATFORM_VENDOR,
-                                      vendor->size
-                                     );
+  vendor     = get_info_value (
+                               loc_platform_id,
+                               CL_PLATFORM_VENDOR,
+                               get_info_size (
+                                              loc_platform_id,
+                                              CL_PLATFORM_VENDOR
+                                             )
+                              );
 
   // Vendor info:
-  extensions        = new info (
-                                get_info_size (
-                                               loc_platform_id,
-                                               CL_PLATFORM_EXTENSIONS
-                                              )
-                               );
+  extensions = get_info_value (
+                               loc_platform_id,
+                               CL_PLATFORM_EXTENSIONS,
+                               get_info_size (
+                                              loc_platform_id,
+                                              CL_PLATFORM_EXTENSIONS
+                                             )
+                              );
 
-  extensions->value = get_info_value (
-                                      loc_platform_id,
-                                      CL_PLATFORM_EXTENSIONS,
-                                      extensions->size
-                                     );
-
-  id                = loc_platform_id;                                          // Initializing platform id...
+  id         = loc_platform_id;                                                 // Initializing platform id...
 }
 
 platform::~platform()
 {
-  delete profile;
-  delete version;
-  delete name;
-  delete vendor;
-  delete extensions;
-  delete parameter_value;
+
 }
