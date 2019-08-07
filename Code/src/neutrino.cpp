@@ -80,23 +80,7 @@ void neutrino::get_toc ()
                     std::to_string (loop_time) +
                     std::string (" us");
 
-    loc_pad_size  = NU_MAX_MESSAGE_SIZE - loc_text.size ();                     // Computing text padding...
-
-    if(loc_pad_size >= 0)                                                       // Checking padding...
-    {
-      for(i = 0; i < loc_pad_size; i++)
-      {
-        loc_pad += " ";                                                         // Filling pad string...
-      }
-    }
-
-    else                                                                        // Generating error message...
-    {
-      error ("string too big!");                                                // Printing message...
-      exit (1);                                                                 // Exiting...
-    }
-
-    std::cout << loc_text + loc_pad << std::endl;                               // Printing buffer...
+    std::cout << loc_text + loc_pad << std::flush;                              // Printing buffer...
   }
 }
 
@@ -174,7 +158,7 @@ int neutrino::query_numeric (
 /// Erases the stdout current line.
 void neutrino::erase ()
 {
-  printf (NU_ERASE);                                                            // Erasing terminal stdout current line....
+  std::cout << NU_ERASE;                                                        // Erasing terminal stdout current line....
 }
 
 /// # Neutrino format and print "action" message function
@@ -268,6 +252,7 @@ void neutrino::list (
   std::string loc_pad;                                                          // Blank string.
   size_t      i;                                                                // Index.
 
+  //loc_pad = '\n';                                                               // Adding new line...
   loc_pos = loc_text.find (loc_delimiter);                                      // Findig delimiter...
 
   for(i = 0; i < loc_tab; i++)
@@ -275,7 +260,13 @@ void neutrino::list (
     loc_pad += " ";                                                             // Filling pad string...
   }
 
-  loc_text.replace (loc_pos, loc_pad.size (), loc_pad);                         // Inserting tab...
+  // Repeat till end is reached
+  while( loc_pos != std::string::npos)
+  {
+    loc_text.insert (loc_pos, loc_pad);                                         // Inserting tab...
+    loc_pos = loc_text.find (loc_delimiter, loc_pos + loc_pad.size ());         // Getting next occurrence from the current position...
+  }
+
   std::cout << loc_text << std::endl;                                           // Printing resulting string...
 }
 
