@@ -249,25 +249,34 @@ void neutrino::list (
                     )
 {
   size_t      loc_pos;                                                          // Position of delimiter.
+  size_t      loc_pos_new;                                                      // New position of delimiter.
   std::string loc_pad;                                                          // Blank string.
+  std::string loc_token;
   size_t      i;                                                                // Index.
 
-  //loc_pad = '\n';                                                               // Adding new line...
-  loc_pos = loc_text.find (loc_delimiter);                                      // Findig delimiter...
+  loc_pos     = 0;                                                              // Resetting delimiter position...
+  loc_pos_new = 0;
+  loc_pad     = "";                                                             // Resetting pad string...
+  loc_token   = "";                                                             // Resetting token string...
+
 
   for(i = 0; i < loc_tab; i++)
   {
     loc_pad += " ";                                                             // Filling pad string...
   }
 
-  // Repeat till end is reached
-  while( loc_pos != std::string::npos)
+  while(loc_pos_new != std::string::npos)
   {
-    loc_text.insert (loc_pos, loc_pad);                                         // Inserting tab...
-    loc_pos = loc_text.find (loc_delimiter, loc_pos + loc_pad.size ());         // Getting next occurrence from the current position...
+    loc_pos_new = loc_text.find (loc_delimiter, loc_pos);                       // Finding delimiter's position...
+    loc_token   = loc_text.substr (
+                                   loc_pos,
+                                   loc_pos_new - loc_pos
+                                  );                                            // Extracting between delimiters...
+    std::cout << loc_token << std::endl << loc_pad;                             // Printing resulting string...
+    loc_pos     = loc_pos_new + loc_delimiter.size ();
   }
 
-  std::cout << loc_text << std::endl;                                           // Printing resulting string...
+  std::cout << NU_ERASE;
 }
 
 /// # Neutrino format and print "done" message function
