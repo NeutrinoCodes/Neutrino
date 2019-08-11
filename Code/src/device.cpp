@@ -58,221 +58,210 @@ void device::init (
 {
   size_t info_size;
 
-  // Device name info:
-  name    = get_info (
-                      loc_device_id,
-                      CL_DEVICE_NAME
-                     );
+  address_bits                  = std::stoi (
+                                             get_info (
+                                                       loc_device_id,
+                                                       CL_DEVICE_ADDRESS_BITS
+                                                      )
+                                            );
+  available                     = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_AVAILABLE
+                                           );
+  compiler_available            = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_COMPILER_AVAILABLE
+                                           );
+  endian_little                 = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_ENDIAN_LITTLE
+                                           );
+  error_correction_support      = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_ERROR_CORRECTION_SUPPORT
+                                           );
+  execution_capabilities        = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_EXECUTION_CAPABILITIES
+                                           );
+  extensions                    = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_EXTENSIONS
+                                           );
+  global_mem_cache_size         = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_GLOBAL_MEM_CACHE_SIZE
+                                           );
+  global_mem_cache_type         = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_GLOBAL_MEM_CACHE_TYPE
+                                           );
+  global_mem_cacheline_size     = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE
+                                           );
+  global_mem_size               = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_GLOBAL_MEM_SIZE
+                                           );
+  image_support                 = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_IMAGE_SUPPORT
+                                           );
+  image2D_max_height            = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_IMAGE2D_MAX_HEIGHT
+                                           );
+  image2D_max_width             = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_IMAGE2D_MAX_WIDTH
+                                           );
+  image3D_max_depth             = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_IMAGE3D_MAX_DEPTH
+                                           );
+  image3D_max_height            = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_IMAGE3D_MAX_HEIGHT
+                                           );
+  image3D_max_width             = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_IMAGE3D_MAX_WIDTH
+                                           );
+  local_mem_size                = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_LOCAL_MEM_SIZE
+                                           );
+  local_mem_type                = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_LOCAL_MEM_TYPE
+                                           );
+  max_clock_frequency           = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_MAX_CLOCK_FREQUENCY
+                                           );
+  max_compute_units             = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_MAX_COMPUTE_UNITS
+                                           );
+  max_constant_args             = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_MAX_CONSTANT_ARGS
+                                           );
+  max_constant_buffer_size      = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE
+                                           );
+  max_mem_alloc_size            = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_MAX_MEM_ALLOC_SIZE
+                                           );
+  max_parameter_size            = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_MAX_PARAMETER_SIZE
+                                           );
+  max_read_image_args           = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_MAX_READ_IMAGE_ARGS
+                                           );
+  max_samplers                  = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_MAX_SAMPLERS
+                                           );
+  max_work_group_size           = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_MAX_WORK_GROUP_SIZE
+                                           );
+  max_work_item_dimensions      = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS
+                                           );
+  max_work_item_sizes           = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_MAX_WORK_ITEM_SIZES
+                                           );
+  max_write_image_args          = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_MAX_WRITE_IMAGE_ARGS
+                                           );
+  mem_base_addr_align           = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_MEM_BASE_ADDR_ALIGN
+                                           );
+  min_data_type_align_size      = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE
+                                           );
+  name                          = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_NAME
+                                           );
+  platform                      = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_PLATFORM
+                                           );
+  preferred_vector_width_char   = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR
+                                           );
+  preferred_vector_width_double = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE
+                                           );
+  preferred_vector_width_float  = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT
+                                           );
+  preferred_vector_width_int    = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT
+                                           );
+  preferred_vector_width_long   = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG
+                                           );
+  preferred_vector_width_short  = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT
+                                           );
+  profile                       = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_PROFILE
+                                           );
+  profiling_timer_resolution    = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_PROFILING_TIMER_RESOLUTION
+                                           );
+  queue_properties              = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_QUEUE_PROPERTIES
+                                           );
+  single_fp_config              = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_SINGLE_FP_CONFIG
+                                           );
+  type                          = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_TYPE
+                                           );
+  vendor_id                     = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_VENDOR_ID
+                                           );
+  vendor                        = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_VENDOR
+                                           );
+  version                       = get_info (
+                                            loc_device_id,
+                                            CL_DEVICE_VERSION
+                                           );
+  driver_version                = get_info (
+                                            loc_device_id,
+                                            CL_DRIVER_VERSION
+                                           );
 
-  // Device platform info:
-  profile = get_info (
-                      loc_device_id,
-                      CL_DEVICE_PROFILE
-                     );
-
-  /*
-     case CL_DEVICE_ADDRESS_BITS:
-     printf("        CL_DEVICE_ADDRESS_BITS = %s\n", value);
-     break;
-
-     case CL_DEVICE_AVAILABLE:
-     printf("        CL_DEVICE_AVAILABLE = %s\n", value);
-     break;
-
-     case CL_DEVICE_COMPILER_AVAILABLE:
-     printf("        CL_DEVICE_COMPILER_AVAILABLE = %s\n", value);
-     break;
-
-     case CL_DEVICE_ENDIAN_LITTLE:
-     printf("        CL_DEVICE_ENDIAN_LITTLE = %s\n", value);
-     break;
-
-     case CL_DEVICE_ERROR_CORRECTION_SUPPORT:
-     printf("        CL_DEVICE_ERROR_CORRECTION_SUPPORT = %s\n", value);
-     break;
-
-     case CL_DEVICE_EXECUTION_CAPABILITIES:
-     printf("        CL_DEVICE_EXECUTION_CAPABILITIES = %s\n", value);
-     break;
-
-     case CL_DEVICE_EXTENSIONS:
-     printf("        CL_DEVICE_EXTENSIONS = %s\n", value);
-     break;
-
-     case CL_DEVICE_GLOBAL_MEM_CACHE_SIZE:
-     printf("        CL_DEVICE_GLOBAL_MEM_CACHE_SIZE = %s\n", value);
-     break;
-
-     case CL_DEVICE_GLOBAL_MEM_CACHE_TYPE:
-     printf("        CL_DEVICE_GLOBAL_MEM_CACHE_TYPE = %s\n", value);
-     break;
-
-     case CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE:
-     printf("        CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE = %s\n", value);
-     break;
-
-     case CL_DEVICE_GLOBAL_MEM_SIZE:
-     printf("        CL_DEVICE_GLOBAL_MEM_SIZE = %s\n", value);
-     break;
-
-     case CL_DEVICE_IMAGE_SUPPORT:
-     printf("        CL_DEVICE_IMAGE_SUPPORT = %s\n", value);
-     break;
-
-     case CL_DEVICE_IMAGE2D_MAX_HEIGHT:
-     printf("        CL_DEVICE_IMAGE2D_MAX_HEIGHT = %s\n", value);
-     break;
-
-     case CL_DEVICE_IMAGE2D_MAX_WIDTH:
-     printf("        CL_DEVICE_IMAGE2D_MAX_WIDTH = %s\n", value);
-     break;
-
-     case CL_DEVICE_IMAGE3D_MAX_DEPTH:
-     printf("        CL_DEVICE_IMAGE3D_MAX_DEPTH = %s\n", value);
-     break;
-
-     case CL_DEVICE_IMAGE3D_MAX_HEIGHT:
-     printf("        CL_DEVICE_IMAGE3D_MAX_HEIGHT = %s\n", value);
-     break;
-
-     case CL_DEVICE_IMAGE3D_MAX_WIDTH:
-     printf("        CL_DEVICE_IMAGE3D_MAX_WIDTH = %s\n", value);
-     break;
-
-     case CL_DEVICE_LOCAL_MEM_SIZE:
-     printf("        CL_DEVICE_LOCAL_MEM_SIZE = %s\n", value);
-     break;
-
-     case CL_DEVICE_LOCAL_MEM_TYPE:
-     printf("        CL_DEVICE_LOCAL_MEM_TYPE = %s\n", value);
-     break;
-
-     case CL_DEVICE_MAX_CLOCK_FREQUENCY:
-     printf("        CL_DEVICE_MAX_CLOCK_FREQUENCY = %s\n", value);
-     break;
-
-     case CL_DEVICE_MAX_COMPUTE_UNITS:
-     printf("        CL_DEVICE_MAX_COMPUTE_UNITS = %d\n", (int)*value);
-     break;
-
-     case CL_DEVICE_MAX_CONSTANT_ARGS:
-     printf("        CL_DEVICE_MAX_CONSTANT_ARGS = %s\n", value);
-     break;
-
-     case CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE:
-     printf("        CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE = %s\n", value);
-     break;
-
-     case CL_DEVICE_MAX_MEM_ALLOC_SIZE:
-     printf("        CL_DEVICE_MAX_MEM_ALLOC_SIZE = %s\n", value);
-     break;
-
-     case CL_DEVICE_MAX_PARAMETER_SIZE:
-     printf("        CL_DEVICE_MAX_PARAMETER_SIZE = %s\n", value);
-     break;
-
-     case CL_DEVICE_MAX_READ_IMAGE_ARGS:
-     printf("        CL_DEVICE_MAX_READ_IMAGE_ARGS = %s\n", value);
-     break;
-
-     case CL_DEVICE_MAX_SAMPLERS:
-     printf("        CL_DEVICE_MAX_SAMPLERS = %s\n", value);
-     break;
-
-     case CL_DEVICE_MAX_WORK_GROUP_SIZE:
-     printf("        CL_DEVICE_MAX_WORK_GROUP_SIZE = %s\n", value);
-     break;
-
-     case CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS:
-     printf("        CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS = %s\n", value);
-     break;
-
-     case CL_DEVICE_MAX_WORK_ITEM_SIZES:
-     printf("        CL_DEVICE_MAX_WORK_ITEM_SIZES = %s\n", value);
-     break;
-
-     case CL_DEVICE_MAX_WRITE_IMAGE_ARGS:
-     printf("        CL_DEVICE_MAX_WRITE_IMAGE_ARGS = %s\n", value);
-     break;
-
-     case CL_DEVICE_MEM_BASE_ADDR_ALIGN:
-     printf("        CL_DEVICE_MEM_BASE_ADDR_ALIGN = %s\n", value);
-     break;
-
-     case CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE:
-     printf("        CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE = %s\n", value);
-     break;
-
-     case CL_DEVICE_NAME:
-     printf("        CL_DEVICE_NAME = %s\n", value);
-     break;
-
-     case CL_DEVICE_PLATFORM:
-     printf("        CL_DEVICE_PLATFORM = %s\n", value);
-     break;
-
-     case CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR:
-     printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR = %s\n", value);
-     break;
-
-     case CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE:
-     printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE = %s\n", value);
-     break;
-
-     case CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT:
-     printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT = %s\n", value);
-     break;
-
-     case CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT:
-     printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT = %s\n", value);
-     break;
-
-     case CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG:
-     printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG = %s\n", value);
-     break;
-
-     case CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT:
-     printf("        CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT = %s\n", value);
-     break;
-
-     case CL_DEVICE_PROFILE:
-     printf("        CL_DEVICE_PROFILE = %s\n", value);
-     break;
-
-     case CL_DEVICE_PROFILING_TIMER_RESOLUTION:
-     printf("        CL_DEVICE_PROFILING_TIMER_RESOLUTION = %s\n", value);
-     break;
-
-     case CL_DEVICE_QUEUE_PROPERTIES:
-     printf("        CL_DEVICE_QUEUE_PROPERTIES = %s\n", value);
-     break;
-
-     case CL_DEVICE_SINGLE_FP_CONFIG:
-     printf("        CL_DEVICE_SINGLE_FP_CONFIG = %s\n", value);
-     break;
-
-     case CL_DEVICE_TYPE:
-     printf("        CL_DEVICE_TYPE = %s\n", value);
-     break;
-
-     case CL_DEVICE_VENDOR_ID:
-     printf("        CL_DEVICE_VENDOR_ID = %s\n", value);
-     break;
-
-     case CL_DEVICE_VENDOR:
-     printf("        CL_DEVICE_VENDOR = %s\n", value);
-     break;
-
-     case CL_DEVICE_VERSION:
-     printf("        CL_DEVICE_VERSION = %s\n", value);
-     break;
-
-     case CL_DRIVER_VERSION:
-     printf("        CL_DRIVER_VERSION = %s\n", value);
-     }
-   */
-
-  id      = loc_device_id;                                                      // Initializing device_id...
+  id                            = loc_device_id;                                // Initializing device_id...
 }
 
 device::~device()
