@@ -138,7 +138,7 @@ void shader::setarg (
 
   loc_name_size                  = loc_data->name.size ();                      // Getting source size...
   loc_name_buffer                = new char[loc_name_size + 1];
-  loc_data->name.copy (loc_name_buffer, loc_name_size + 1);
+  loc_data->name.copy (loc_name_buffer, loc_name_size);
   loc_name_buffer[loc_name_size] = '\0';
 
   glBindAttribLocation (
@@ -151,7 +151,6 @@ void shader::setarg (
   {
     size     = loc_data->size;
     old_size = size;
-
   }
 
   else
@@ -180,7 +179,7 @@ void shader::setarg (
 
   loc_name_size                  = loc_data->name.size ();                      // Getting source size...
   loc_name_buffer                = new char[loc_name_size + 1];
-  loc_data->name.copy (loc_name_buffer, loc_name_size + 1);
+  loc_data->name.copy (loc_name_buffer, loc_name_size);
   loc_name_buffer[loc_name_size] = '\0';
 
   glBindAttribLocation (
@@ -193,7 +192,6 @@ void shader::setarg (
   {
     size     = loc_data->size;
     old_size = size;
-
   }
 
   else
