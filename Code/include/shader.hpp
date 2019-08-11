@@ -31,6 +31,9 @@ public:
   std::string vertex_file_name;                                                 // [NU_MAX_PATH_SIZE]; // Vertex source file name.
   std::string geometry_file_name;                                               // [NU_MAX_PATH_SIZE]; // Geometry source file name.
   std::string fragment_file_name;                                               // [NU_MAX_PATH_SIZE]; // Fragment source file name.
+  std::string vertex_source;
+  std::string geometry_source;
+  std::string fragment_source;
   GLuint      vertex;                                                           // Vertex shader id.
   GLuint      geometry;                                                         // Geometry shader id.
   GLuint      fragment;                                                         // Fragment shader id.
