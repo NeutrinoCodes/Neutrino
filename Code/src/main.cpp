@@ -84,10 +84,6 @@ int main ()
   Q->init (bas);                                                                // Initializing OpenCL queue...
   K->init (bas, KERNEL_HOME, KERNEL_FILE, KERNEL_SX, KERNEL_SY, KERNEL_SZ);     // Initializing OpenCL kernel...
 
-  std::cout << "pippo" << std::endl;
-  std::cout << K->source << std::endl;
-  std::cout << "pippo" << std::endl;
-
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// SETTING POINTS DATA /////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////

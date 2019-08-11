@@ -50,65 +50,68 @@ GLuint shader::compile (
                         shader_type loc_shader_type                             // GLSL shader type.
                        )
 {
-  GLuint      shader;                                                           // Shader.
-  std::string shader_source;                                                    // Shader source.
-  size_t      shader_size;                                                      // Shader size [characters].
-  GLint       success;                                                          // "GL_COMPILE_STATUS" flag.
-  GLchar*     log;                                                              // Buffer for OpenGL error log.
-  GLsizei     log_size;                                                         // Size of OpenGL error log.
+  GLuint      loc_shader;                                                       // Shader.
+  std::string loc_shader_source;                                                // Shader source.
+  size_t      loc_shader_size;                                                  // Shader size [characters].
+  GLint       loc_success;                                                      // "GL_COMPILE_STATUS" flag.
+  GLchar*     loc_log;                                                          // Buffer for OpenGL error log.
+  GLsizei     loc_log_size;                                                     // Size of OpenGL error log.
 
   // Loading shader from file:
-  baseline->load_file (
-                       loc_shader_filename                                      // Shader file.
-                      );
+  loc_shader_source = baseline->load_file (
+                                           loc_shader_filename                  // Shader file.
+                                          );
 
   // Selecting shader type:
   switch(loc_shader_type)
   {
     case NU_VERTEX:
-      shader = glCreateShader (GL_VERTEX_SHADER);                               // Creating shader...
+      vertex_source   = loc_shader_source;
+      loc_shader      = glCreateShader (GL_VERTEX_SHADER);                      // Creating shader...
       break;
 
     case NU_FRAGMENT:
-      shader = glCreateShader (GL_FRAGMENT_SHADER);                             // Creating shader...
+      fragment_source = loc_shader_source;
+      loc_shader      = glCreateShader (GL_FRAGMENT_SHADER);                    // Creating shader...
       break;
 
     case NU_GEOMETRY:
-      shader = glCreateShader (GL_GEOMETRY_SHADER);                             // Creating shader...
+      geometry_source = loc_shader_source;
+      loc_shader      = glCreateShader (GL_GEOMETRY_SHADER);                    // Creating shader...
       break;
   }
 
   // Attaching source code to shader:
   glShaderSource (
-                  shader,                                                       // GLSL shader.
+                  loc_shader,                                                   // GLSL shader.
                   1,                                                            // # of shaders.
-                  (const char**)&shader_source,                                 // Shader source.
-                  (GLint*)&shader_size                                          // Shader size.
+                  (const char**)&loc_shader_source,                             // Shader source.
+                  (GLint*)&loc_shader_size                                      // Shader size.
                  );
 
-  glCompileShader (shader);                                                     // Compiling shader...
+  glCompileShader (loc_shader);                                                 // Compiling shader...
 
   // Reading "GL_COMPILE_STATUS" flag:
   glGetShaderiv (
-                 shader,                                                        // GLSL shader.
+                 loc_shader,                                                    // GLSL shader.
                  GL_COMPILE_STATUS,                                             // Requested shader parameter.
-                 &success                                                       // Success status flag.
+                 &loc_success                                                   // Success status flag.
                 );
 
   // Checking compiled shader code:
-  if(!success)
+  if(!loc_success)
   {
-    glGetShaderiv (shader, GL_INFO_LOG_LENGTH, &log_size);                      // Getting log length...
-    log           = (char*) malloc (log_size + 1);                              // Allocating temporary buffer for log...
-    log[log_size] = '\0';                                                       // Null-terminating log buffer...
-    glGetShaderInfoLog (shader, log_size + 1, NULL, log);                       // Getting log...
-    std::string log_string (log);
-    std::cout << log_string << std::endl;                                       // Printing log...
-    free (log);                                                                 // Freeing log...
+    glGetShaderiv (loc_shader, GL_INFO_LOG_LENGTH, &loc_log_size);              // Getting log length...
+    loc_log               = (char*) malloc (loc_log_size + 1);                  // Allocating temporary buffer for log...
+    loc_log[loc_log_size] = '\0';                                               // Null-terminating log buffer...
+    glGetShaderInfoLog (loc_shader, loc_log_size + 1, NULL, loc_log);           // Getting log...
+    std::string loc_log_string (loc_log);
+    std::cout << loc_log_string << std::endl;                                   // Printing log...
+    free (loc_log);                                                             // Freeing log...
     exit (1);                                                                   // Exiting...
   }
 
-  return (shader);                                                              // Returning shader...
+  return (loc_shader);                                                          // Returning shader...
 }
 
 /// # OpenGL shader init function
