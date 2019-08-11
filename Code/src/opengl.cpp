@@ -442,12 +442,12 @@ void opengl::joystick_connected_callback (
      if(event == GLFW_CONNECTED)
      {
      // The joystick was connected:
-     printf ("Joystick connected!\n");
+     std::cout << "Joystick connected!" << std::endl;
      }
      else if(event == GLFW_DISCONNECTED)
      {
      // The joystick was disconnected:
-     printf ("Joystick disconnected!\n");
+      std::cout << "Joystick disconnected!" << std::endl;
      }*/
 }
 
@@ -768,7 +768,7 @@ void opengl::poll_events ()
 
     if( GLFW_PRESS == button[NU_SQUARE] )
     {
-      printf ("Button NU_SQUARE pressed\n");
+      std::cout << "Button NU_SQUARE pressed" << std::endl;
     }
 
     if( GLFW_PRESS == button[NU_CROSS] )
@@ -778,82 +778,82 @@ void opengl::poll_events ()
 
     if( GLFW_PRESS == button[NU_CIRCLE] )
     {
-      printf ("Button NU_CIRCLE pressed\n");
+      std::cout << "Button NU_CIRCLE pressed" << std::endl;
     }
 
     if( GLFW_PRESS == button[NU_TRIANGLE] )
     {
-      printf ("Button NU_TRIANGLE pressed\n");
+      std::cout << "Button NU_TRIANGLE pressed" << std::endl;
     }
 
     if( GLFW_PRESS == button[NU_L1] )
     {
-      printf ("Button NU_L1 pressed\n");
+      std::cout << "Button NU_L1 pressed" << std::endl;
     }
 
     if( GLFW_PRESS == button[NU_R1] )
     {
-      printf ("Button NU_R1 pressed\n");
+      std::cout << "Button NU_R1 pressed" << std::endl;
     }
 
     if( GLFW_PRESS == button[NU_L2] )
     {
-      printf ("Button NU_L2 pressed\n");
+      std::cout << "Button NU_L2 pressed" << std::endl;
     }
 
     if( GLFW_PRESS == button[NU_R2] )
     {
-      printf ("Button NU_R2 pressed\n");
+      std::cout << "Button NU_R2 pressed" << std::endl;
     }
 
     if( GLFW_PRESS == button[NU_SHARE] )
     {
-      printf ("Button NU_SHARE pressed\n");
+      std::cout << "Button NU_SHARE pressed" << std::endl;
     }
 
     if( GLFW_PRESS == button[NU_OPTIONS] )
     {
-      printf ("Button NU_OPTIONS pressed\n");
+      std::cout << "Button NU_OPTIONS pressed" << std::endl;
     }
 
     if( GLFW_PRESS == button[NU_PS] )
     {
-      printf ("Button NU_PS pressed\n");
+      std::cout << "Button NU_PS pressed" << std::endl;
     }
 
     if( GLFW_PRESS == button[NU_TOUCH] )
     {
-      printf ("Button NU_TOUCH pressed\n");
+      std::cout << "Button NU_TOUCH pressed" << std::endl;
     }
 
     if( GLFW_PRESS == button[NU_L_ANALOG] )
     {
-      printf ("Button NU_L_ANALOG pressed\n");
+      std::cout << "Button NU_L_ANALOG pressed" << std::endl;
     }
 
     if( GLFW_PRESS == button[NU_R_ANALOG] )
     {
-      printf ("Button NU_R_ANALOG pressed\n");
+      std::cout << "Button NU_R_ANALOG pressed" << std::endl;
     }
 
     if( GLFW_PRESS == button[NU_DPAD_LEFT] )
     {
-      printf ("Button NU_DPAD_LEFT pressed\n");
+      std::cout << "Button NU_DPAD_LEFT pressed" << std::endl;
     }
 
     if( GLFW_PRESS == button[NU_DPAD_DOWN] )
     {
-      printf ("Button NU_DPAD_DOWN pressed\n");
+      std::cout << "Button NU_DPAD_DOWN pressed" << std::endl;
     }
 
     if( GLFW_PRESS == button[NU_DPAD_RIGHT] )
     {
-      printf ("Button NU_DPAD_RIGHT pressed\n");
+      std::cout << "Button NU_DPAD_RIGHT pressed" << std::endl;
     }
 
     if( GLFW_PRESS == button[NU_DPAD_UP] )
     {
-      printf ("Button NU_DPAD_UP pressed\n");
+      std::cout << "Button NU_DPAD_UP pressed" << std::endl;
     }
   }
 }
