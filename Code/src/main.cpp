@@ -1,44 +1,44 @@
 /// @file
 
 // MESH:
- #define XMIN        -1.0                                                       // XMIN spatial boundary [m].
- #define XMAX        +1.0                                                       // XMAX spatial boundary [m].
- #define YMIN        -1.0                                                       // YMIN spatial boundary [m].
- #define YMAX        +1.0                                                       // YMAX spatial boundary [m].
- #define NODES_X     100                                                        // Number of nodes in "X" direction [#].
- #define NODES_Y     100                                                        // Number of nodes in "Y" direction [#].
- #define NODES       NODES_X* NODES_Y                                           // Total number of nodes [#].
- #define DX          (float)((XMAX - XMIN)/(NODES_X - 1))                       // DX mesh spatial size [m].
- #define DY          (float)((YMAX - YMIN)/(NODES_Y - 1))                       // DY mesh spatial size [m].
+ #define XMIN       -1.0                                                        // XMIN spatial boundary [m].
+ #define XMAX       +1.0                                                        // XMAX spatial boundary [m].
+ #define YMIN       -1.0                                                        // YMIN spatial boundary [m].
+ #define YMAX       +1.0                                                        // YMAX spatial boundary [m].
+ #define NODES_X    100                                                         // Number of nodes in "X" direction [#].
+ #define NODES_Y    100                                                         // Number of nodes in "Y" direction [#].
+ #define NODES      NODES_X* NODES_Y                                            // Total number of nodes [#].
+ #define DX         (float)((XMAX - XMIN)/(NODES_X - 1))                        // DX mesh spatial size [m].
+ #define DY         (float)((YMAX - YMIN)/(NODES_Y - 1))                        // DY mesh spatial size [m].
 
 // OPENGL:
- #define INTEROP     true                                                       // "true" = use OpenGL-OpenCL interoperability.
- #define GUI_SIZE_X  800                                                        // Window x-size [px].
- #define GUI_SIZE_Y  600                                                        // Window y-size [px].
- #define GUI_NAME    "neutrino 3.0"                                             // Window name.
+ #define INTEROP    true                                                        // "true" = use OpenGL-OpenCL interoperability.
+ #define GUI_SIZE_X 800                                                         // Window x-size [px].
+ #define GUI_SIZE_Y 600                                                         // Window y-size [px].
+ #define GUI_NAME   "neutrino 3.0"                                              // Window name.
 
  #ifdef __linux__
    #define SHADER_HOME \
-   "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/shader"              // Linux OpenGL shaders directory.
+  "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/shader"               // Linux OpenGL shaders directory.
 
    #define KERNEL_HOME \
-   "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/kernel"              // Linux OpenCL kernels directory.
+  "/run/media/ezor/LINUX/BookhouseBoys/ezor/Neutrino/Code/kernel"               // Linux OpenCL kernels directory.
  #endif
 
  #ifdef __APPLE__
    #define SHADER_HOME \
-   "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/shader"     // Mac OpenGL shaders directory.
+  "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/shader"      // Mac OpenGL shaders directory.
 
    #define KERNEL_HOME \
-   "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/kernel"     // Mac OpenCL kernels directory.
+  "/Users/Erik/Documents/PROJECTS/BookhouseBoys/ezor/Neutrino/Code/kernel"      // Mac OpenCL kernels directory.
  #endif
 
  #ifdef WIN32
    #define SHADER_HOME \
-   "F:\\BookHouseBoys\\ezor\\neutrino\\Code\\shader"                            // Windows OpenGL shaders directory.
+  "F:\\BookHouseBoys\\ezor\\neutrino\\Code\\shader"                             // Windows OpenGL shaders directory.
 
    #define KERNEL_HOME \
-   "F:\\BookHouseBoys\\ezor\\neutrino\\Code\\kernel"                            // Windows OpenCL kernels directory.
+  "F:\\BookHouseBoys\\ezor\\neutrino\\Code\\kernel"                             // Windows OpenCL kernels directory.
  #endif
 
  #define SHADER_VERT "voxel_vertex.vert"                                        // OpenGL vertex shader.
@@ -83,6 +83,10 @@ int main ()
   t->init (NODES);                                                              // Initializing time...
   Q->init (bas);                                                                // Initializing OpenCL queue...
   K->init (bas, KERNEL_HOME, KERNEL_FILE, KERNEL_SX, KERNEL_SY, KERNEL_SZ);     // Initializing OpenCL kernel...
+
+  std::cout << "pippo" << std::endl;
+  std::cout << K->source << std::endl;
+  std::cout << "pippo" << std::endl;
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// SETTING POINTS DATA /////////////////////////////
