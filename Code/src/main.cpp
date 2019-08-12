@@ -153,8 +153,6 @@ int main ()
 
     Q->read (t, 2);
 
-    std::cout << t->data[0] << std::endl;
-
     gui->refresh ();                                                            // Refreshing gui...
     bas->get_toc ();                                                            // Getting "toc" [us]...
   }
