@@ -67,7 +67,7 @@ endif(APPLE)
 
 if(LINUX)
   message("Setting Linux library directories...")
-  set(GLFW_LIBRARY ${GLFW_PATH}/lib-macos/libglfw.3.dylib)
+  set(GLFW_LIBRARY ${GLFW_PATH}/src/libglfw3.a)
   #target_link_libraries(${PROJECT_NAME} "-lOpenGL" "-lOpenCL" "-ldl" "-lglfw" "-lm")  EZOR 28JUL2019: original.
   target_link_libraries(${PROJECT_NAME} "-lOpenGL" "-lOpenCL" ${GLFW_LIBRARY} "-lm")   # To be tested.
 endif(LINUX)
