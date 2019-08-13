@@ -155,6 +155,8 @@ void shader::setarg (
                         loc_name_buffer                                         // Data name.
                        );
 
+  size                           = loc_data->size;
+
   delete loc_name_buffer;
 };
 
@@ -179,6 +181,8 @@ void shader::setarg (
                         loc_layout_index,                                       // Data layout index.
                         loc_name_buffer                                         // Data name.
                        );
+
+  size                           = loc_data->size;
 
   delete loc_name_buffer;
 };
