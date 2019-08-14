@@ -698,6 +698,19 @@ void opengl::poll_events ()
 
   if(glfwJoystickPresent ( GLFW_JOYSTICK_1 ))                                   // Checking joystick...
   {
+    if(glfwJoystickIsGamepad (GLFW_JOYSTICK_1))
+    {
+      GLFWgamepadstate state;
+      if(glfwGetGamepadState (GLFW_JOYSTICK_1, &state))
+      {
+        if(state.buttons[GLFW_GAMEPAD_BUTTON_A])
+        {
+          std::cout << "button A" << std::endl;
+        }
+        std::cout << state.axes[GLFW_GAMEPAD_AXIS_RIGHT_X] << std::endl;
+      }
+    }
+
     int                  num_buttons;
     const unsigned char* button = glfwGetJoystickButtons (
                                                           GLFW_JOYSTICK_1,
