@@ -12,60 +12,60 @@
 class device
 {
 private:
-  neutrino*   baseline;                                                                          // Neutrino baseline.
-  std::string parameter_value;                                                                   // Parameter value.
+  neutrino*   baseline;                                                                             // Neutrino baseline.
+  std::string parameter_value;                                                                      // Parameter value.
   // OpenCL get info value function:
   std::string                 get_string (
-                                          cl_device_id   loc_platform_id,                        // Platform ID.
-                                          cl_device_info loc_parameter_name                      // Paramenter name.
+                                          cl_device_id   loc_platform_id,                           // Platform ID.
+                                          cl_device_info loc_parameter_name                         // Paramenter name.
                                          );
   cl_uint                     get_cl_uint (
-                                           cl_device_id   loc_device_id,                         // OpenCL device ID.
-                                           cl_device_info loc_parameter_name                     // Parameter name.
+                                           cl_device_id   loc_device_id,                            // OpenCL device ID.
+                                           cl_device_info loc_parameter_name                        // Parameter name.
                                           );
   cl_bool                     get_cl_bool (
-                                           cl_device_id   loc_device_id,                         // OpenCL device ID.
-                                           cl_device_info loc_parameter_name                     // Parameter name.
+                                           cl_device_id   loc_device_id,                            // OpenCL device ID.
+                                           cl_device_info loc_parameter_name                        // Parameter name.
                                           );
   cl_device_fp_config         get_cl_device_fp_config (
-                                                       cl_device_id   loc_device_id,             // OpenCL device ID.
-                                                       cl_device_info loc_parameter_name         // Parameter name.
+                                                       cl_device_id   loc_device_id,                // OpenCL device ID.
+                                                       cl_device_info loc_parameter_name            // Parameter name.
                                                       );
   cl_device_exec_capabilities get_cl_device_exec_capabilities (
-                                                               cl_device_id   loc_device_id,     // OpenCL device ID.
-                                                               cl_device_info loc_parameter_name // Parameter name.
+                                                               cl_device_id   loc_device_id,        // OpenCL device ID.
+                                                               cl_device_info loc_parameter_name    // Parameter name.
                                                               );
   cl_ulong                    get_cl_ulong (
-                                            cl_device_id   loc_device_id,                        // OpenCL device ID.
-                                            cl_device_info loc_parameter_name                    // Parameter name.
+                                            cl_device_id   loc_device_id,                           // OpenCL device ID.
+                                            cl_device_info loc_parameter_name                       // Parameter name.
                                            );
   cl_device_mem_cache_type    get_cl_device_mem_cache_type (
-                                                            cl_device_id   loc_device_id,        // OpenCL device ID.
-                                                            cl_device_info loc_parameter_name    // Parameter name.
+                                                            cl_device_id   loc_device_id,           // OpenCL device ID.
+                                                            cl_device_info loc_parameter_name       // Parameter name.
                                                            );
   size_t                      get_size_t (
-                                          cl_device_id   loc_device_id,                          // OpenCL device ID.
-                                          cl_device_info loc_parameter_name                      // Parameter name.
+                                          cl_device_id   loc_device_id,                             // OpenCL device ID.
+                                          cl_device_info loc_parameter_name                         // Parameter name.
                                          );
   cl_device_local_mem_type    get_cl_device_local_mem_type (
-                                                            cl_device_id   loc_device_id,        // OpenCL device ID.
-                                                            cl_device_info loc_parameter_name    // Parameter name.
+                                                            cl_device_id   loc_device_id,           // OpenCL device ID.
+                                                            cl_device_info loc_parameter_name       // Parameter name.
                                                            );
   cl_platform_id              get_cl_platform_id (
-                                                  cl_device_id   loc_device_id,                  // OpenCL device ID.
-                                                  cl_device_info loc_parameter_name              // Parameter name.
+                                                  cl_device_id   loc_device_id,                     // OpenCL device ID.
+                                                  cl_device_info loc_parameter_name                 // Parameter name.
                                                  );
   cl_device_type              get_cl_device_type (
-                                                  cl_device_id   loc_device_id,                  // OpenCL device ID.
-                                                  cl_device_info loc_parameter_name              // Parameter name.
+                                                  cl_device_id   loc_device_id,                     // OpenCL device ID.
+                                                  cl_device_info loc_parameter_name                 // Parameter name.
                                                  );
   cl_command_queue_properties get_cl_command_queue_properties (
-                                                               cl_device_id   loc_device_id,     // OpenCL device ID.
-                                                               cl_device_info loc_parameter_name // Parameter name.
+                                                               cl_device_id   loc_device_id,        // OpenCL device ID.
+                                                               cl_device_info loc_parameter_name    // Parameter name.
                                                               );
 
 public:
-  cl_device_id                id;                                                                // OpenCL device id.
+  cl_device_id                id;                                                                   // OpenCL device id.
   cl_uint                     address_bits;
   cl_bool                     available;
   cl_bool                     compiler_available;
@@ -121,7 +121,7 @@ public:
 
   device        ();
   void init (
-             cl_device_id loc_device_id                                                          // Device ID.
+             cl_device_id loc_device_id                                                             // Device ID.
             );
 
   ~device();

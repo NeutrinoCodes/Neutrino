@@ -12,10 +12,10 @@
 class opengl
 {
 private:
-  neutrino*        baseline;                                                    // Neutrino baseline.
-  bool             orbit_on;                                                    // Orbit activation flag.
-  bool             pan_on;                                                      // Pan activation flag.
-  GLFWgamepadstate gamepad;                                                     // Gamepad state.
+  neutrino*        baseline;                                                                        // Neutrino baseline.
+  bool             orbit_on;                                                                        // Orbit activation flag.
+  bool             pan_on;                                                                          // Pan activation flag.
+  GLFWgamepadstate gamepad;                                                                         // Gamepad state.
 
   // Translation matrix backup:
   float            T_mat_old[16]             = {1.0, 0.0, 0.0, 0.0,
@@ -35,31 +35,31 @@ private:
   // Initial scene position:
   float            initial_scene_position[3] = NU_INITIAL_SCENE_POSITION;
 
-  GLuint           point_shader;                                                // Point shader program.
-  GLuint           voxel_shader;                                                // Voxel shader program.
-  GLuint           wireframe_shader;                                            // Wireframe shader program.
-  GLuint           shaded_shader;                                               // Shaded shader program.
-  GLuint           text_shader;                                                 // Point shader program.
-  projection_mode  PR_mode;                                                     // Projection mode.
+  GLuint           point_shader;                                                                    // Point shader program.
+  GLuint           voxel_shader;                                                                    // Voxel shader program.
+  GLuint           wireframe_shader;                                                                // Wireframe shader program.
+  GLuint           shaded_shader;                                                                   // Shaded shader program.
+  GLuint           text_shader;                                                                     // Point shader program.
+  projection_mode  PR_mode;                                                                         // Projection mode.
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////// PRIVATE METHODS ///////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   // OpenGL shader compilation:
   GLuint      compile_shader (
-                              std::string loc_shader_filename,                  // Shader file name.
-                              shader_type loc_shader_type                       // Shader type.
+                              std::string loc_shader_filename,                                      // Shader file name.
+                              shader_type loc_shader_type                                           // Shader type.
                              );
   // OpenGL shader build:
   GLuint      build_shader (
-                            std::string loc_vertex_filename,                    // Vertex shader file name.
-                            std::string loc_geometry_filename,                  // Geometry shader file name.
-                            std::string loc_fragment_filename                   // Fragment shader file name.
+                            std::string loc_vertex_filename,                                        // Vertex shader file name.
+                            std::string loc_geometry_filename,                                      // Geometry shader file name.
+                            std::string loc_fragment_filename                                       // Fragment shader file name.
                            );
   // Arcball computation:
   void        arcball (
-                       float* p,                                                // Point on unitary ball.
-                       double x,                                                // "Near clipping-plane" x-coordinate.
-                       double y                                                 // "Near clipping-plane" y-coordinate.
+                       float* p,                                                                    // Point on unitary ball.
+                       double x,                                                                    // "Near clipping-plane" x-coordinate.
+                       double y                                                                     // "Near clipping-plane" y-coordinate.
                       );
   // Orbit movement:
   void        orbit ();
@@ -75,97 +75,97 @@ private:
   void        zoom ();
   // Plot style:
   void        set_shader (
-                          shader* loc_shader,                                   // Shader.
-                          float   view_matrix[16],                              // View matrix.
-                          float   projection_matrix[16]                         // Projection matrix.
+                          shader* loc_shader,                                                       // Shader.
+                          float   view_matrix[16],                                                  // View matrix.
+                          float   projection_matrix[16]                                             // Projection matrix.
                          );
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// CALLBACKS ///////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   // Refresh callback:
   static void refresh_callback (
-                                GLFWwindow* loc_window                          // Window.
+                                GLFWwindow* loc_window                                              // Window.
                                );
   // Window resize callback:
   static void window_resize_callback (
-                                      GLFWwindow* loc_window,                   // Window.
-                                      int         loc_x_size,                   // Window x-size [screen coordinates].
-                                      int         loc_y_size                    // Window y-size [screen coordinates].
+                                      GLFWwindow* loc_window,                                       // Window.
+                                      int         loc_x_size,                                       // Window x-size [screen coordinates].
+                                      int         loc_y_size                                        // Window y-size [screen coordinates].
                                      );
   // Framebuffer resize callback:
   static void framebuffer_resize_callback (
-                                           GLFWwindow* loc_window,              // Window.
-                                           int         loc_x_size,              // Framebuffer x-size [px].
-                                           int         loc_y_size               // Framebuffer y-size [px].
+                                           GLFWwindow* loc_window,                                  // Window.
+                                           int         loc_x_size,                                  // Framebuffer x-size [px].
+                                           int         loc_y_size                                   // Framebuffer y-size [px].
                                           );
   // Key-pressed callback:
   static void key_pressed_callback (
-                                    GLFWwindow* loc_window,                     // Window.
-                                    int         loc_key,                        // Key.
-                                    int         loc_scancode,                   // Scancode.
-                                    int         loc_action,                     // Action.
-                                    int         loc_mods                        // Mods.
+                                    GLFWwindow* loc_window,                                         // Window.
+                                    int         loc_key,                                            // Key.
+                                    int         loc_scancode,                                       // Scancode.
+                                    int         loc_action,                                         // Action.
+                                    int         loc_mods                                            // Mods.
                                    );
   // Mouse-pressed callback:
   static void mouse_button_callback (
-                                     GLFWwindow* loc_window,                    // Window.
-                                     int         loc_button,                    // Button.
-                                     int         loc_action,                    // Action.
-                                     int         loc_mods                       // Mods.
+                                     GLFWwindow* loc_window,                                        // Window.
+                                     int         loc_button,                                        // Button.
+                                     int         loc_action,                                        // Action.
+                                     int         loc_mods                                           // Mods.
                                     );
   // Mouse-moved callback:
   static void mouse_moved_callback (
-                                    GLFWwindow* loc_window,                     // Window.
-                                    double      loc_xpos,                       // Mouse x-position [px].
-                                    double      loc_ypos                        // Mouse y-position [px].
+                                    GLFWwindow* loc_window,                                         // Window.
+                                    double      loc_xpos,                                           // Mouse x-position [px].
+                                    double      loc_ypos                                            // Mouse y-position [px].
                                    );
   // Mouse-scrolled callback:
   static void mouse_scrolled_callback (
-                                       GLFWwindow* loc_window,                  // Window.
-                                       double      loc_xoffset,                 // Mouse scroll x-offset [px].
-                                       double      loc_yoffset                  // Mouse scroll y-offset [px].
+                                       GLFWwindow* loc_window,                                      // Window.
+                                       double      loc_xoffset,                                     // Mouse scroll x-offset [px].
+                                       double      loc_yoffset                                      // Mouse scroll y-offset [px].
                                       );
   // Joystick-connected callback:
   void        joystick_connected_callback (
-                                           int loc_joystick,                    // Joystick.
-                                           int loc_event                        // Joystick-connected event.
+                                           int loc_joystick,                                        // Joystick.
+                                           int loc_event                                            // Joystick-connected event.
                                           );
   ////////////////////////////////////////////////////////////////////////////
   //////////////////////////// PRIVATE RETPOLINES ////////////////////////////
   ////////////////////////////////////////////////////////////////////////////
   // Key-pressed retpoline:
   void        key_pressed (
-                           int loc_key,                                         // Key.
-                           int loc_scancode,                                    // Scancode.
-                           int loc_action,                                      // Action.
-                           int loc_mods                                         // Mods.
+                           int loc_key,                                                             // Key.
+                           int loc_scancode,                                                        // Scancode.
+                           int loc_action,                                                          // Action.
+                           int loc_mods                                                             // Mods.
                           );
   // Mouse-pressed retpoline:
   void        mouse_button (
-                            int loc_button,                                     // Button.
-                            int loc_action,                                     // Action.
-                            int loc_mods                                        // Mods.
+                            int loc_button,                                                         // Button.
+                            int loc_action,                                                         // Action.
+                            int loc_mods                                                            // Mods.
                            );
   // Mouse-moved retpoline:
   void        mouse_moved (
-                           double loc_xpos,                                     // Mouse x-position [px].
-                           double loc_ypos                                      // Mouse y-position [px].
+                           double loc_xpos,                                                         // Mouse x-position [px].
+                           double loc_ypos                                                          // Mouse y-position [px].
                           );
   // Mouse-scrolled retpoline:
   void        mouse_scrolled (
-                              double loc_xoffset,                               // Mouse scroll x-offset [px].
-                              double loc_yoffset                                // Mouse scroll y-offset [px].
+                              double loc_xoffset,                                                   // Mouse scroll x-offset [px].
+                              double loc_yoffset                                                    // Mouse scroll y-offset [px].
                              );
 
 public:
-  GLFWwindow* glfw_window;                                                      // Window handle.
-  std::string title;                                                            // Window title.
-  int         window_size_x;                                                    // Window x-size [screen coordinates].
-  int         window_size_y;                                                    // Window y-size [screen coordinates].
-  int         framebuffer_size_x;                                               // Window x-size [px].
-  int         framebuffer_size_y;                                               // Window y-size [px].
+  GLFWwindow* glfw_window;                                                                          // Window handle.
+  std::string title;                                                                                // Window title.
+  int         window_size_x;                                                                        // Window x-size [screen coordinates].
+  int         window_size_y;                                                                        // Window y-size [screen coordinates].
+  int         framebuffer_size_x;                                                                   // Window x-size [px].
+  int         framebuffer_size_y;                                                                   // Window y-size [px].
 
-  double      aspect_ratio;                                                     // Window aspect ratio [].
+  double      aspect_ratio;                                                                         // Window aspect ratio [].
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////// GAMEPAD ///////////////////////////////////
@@ -175,10 +175,10 @@ public:
   bool        button_B;
   bool        button_X;
   bool        button_Y;
-  bool        button_CROSS;                                                     // = A;
-  bool        button_CIRCLE;                                                    // = B;
-  bool        button_SQUARE;                                                    // = X;
-  bool        button_TRIANGLE;                                                  // = Y;
+  bool        button_CROSS;                                                                         // = A;
+  bool        button_CIRCLE;                                                                        // = B;
+  bool        button_SQUARE;                                                                        // = X;
+  bool        button_TRIANGLE;                                                                      // = Y;
   bool        button_LEFT_BUMPER;
   bool        button_RIGHT_BUMPER;
   bool        button_BACK;
@@ -199,11 +199,11 @@ public:
   double      axis_LEFT_Y;
   double      axis_LEFT_TRIGGER;
 
-  double      mouse_x;                                                          // Mouse x-coordinate [px].
-  double      mouse_y;                                                          // Mouse y-coordinate [px].
+  double      mouse_x;                                                                              // Mouse x-coordinate [px].
+  double      mouse_y;                                                                              // Mouse y-coordinate [px].
 
-  double      scroll_x;                                                         // Scroll x-coordinate [px].
-  double      scroll_y;                                                         // Scroll y-coordinate [px].
+  double      scroll_x;                                                                             // Scroll x-coordinate [px].
+  double      scroll_y;                                                                             // Scroll y-coordinate [px].
 
   double      orbit_x_old;
   double      orbit_y_old;
@@ -216,7 +216,7 @@ public:
   double      pan_y;
 
   double      zoom_z_old;
-  double      zoom_z;                                                           // Zoom coefficient.
+  double      zoom_z;                                                                               // Zoom coefficient.
 
   // Arcball quaternion:
   float       q[4]       = {1.0, 0.0, 0.0, 0.0};
@@ -294,13 +294,13 @@ public:
   void refresh ();
   // Window resize retpoline:
   void window_resize (
-                      int loc_x_size,                                           // Window x-size [screen coordinates].
-                      int loc_y_size                                            // Window y-size [screen coordinates].
+                      int loc_x_size,                                                               // Window x-size [screen coordinates].
+                      int loc_y_size                                                                // Window y-size [screen coordinates].
                      );
   // Framebuffer resize retpoline:
   void framebuffer_resize (
-                           int loc_x_size,                                      // Framebuffer x-size [px].
-                           int loc_y_size                                       // Framebuffer y-size [px].
+                           int loc_x_size,                                                          // Framebuffer x-size [px].
+                           int loc_y_size                                                           // Framebuffer y-size [px].
                           );
   // Event polling retpoline:
   void poll_events ();
@@ -312,15 +312,15 @@ public:
   // Window initialization:
   void init (
              neutrino*   loc_baseline,
-             int         loc_window_size_x,                                     // Window x-size [px].
-             int         loc_window_size_y,                                     // Window y-size [px].
+             int         loc_window_size_x,                                                         // Window x-size [px].
+             int         loc_window_size_y,                                                         // Window y-size [px].
              std::string loc_title
             );
   // Window "closed" function:
   bool closed ();
   // Window "plot" function:
   void plot (
-             shader* loc_shader                                                 // OpenGL shader.
+             shader* loc_shader                                                                     // OpenGL shader.
             );
 
   ~opengl();

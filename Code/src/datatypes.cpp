@@ -5,11 +5,11 @@
 //////////////////////////////////////////////////////////////////////////////////
 float1::float1()
 {
-  ready = false;                                                                // Resetting "ready" flag...
+  ready = false;                                                                                    // Resetting "ready" flag...
 }
 
 void float1::init (
-                   size_t loc_size                                              // Data size.
+                   size_t loc_size                                                                  // Data size.
                   )
 {
   data = new cl_float[loc_size];
@@ -27,11 +27,11 @@ float1::~float1()
 //////////////////////////////////////////////////////////////////////////////////
 int1::int1()
 {
-  ready = false;                                                                // Resetting "ready" flag...
+  ready = false;                                                                                    // Resetting "ready" flag...
 }
 
 void int1::init (
-                 size_t loc_size                                                // Data size.
+                 size_t loc_size                                                                    // Data size.
                 )
 {
   data = new cl_long[loc_size];
@@ -48,11 +48,11 @@ int1::~int1()
 //////////////////////////////////////////////////////////////////////////////////
 float4::float4()
 {
-  ready = false;                                                                // Resetting "ready" flag...
+  ready = false;                                                                                    // Resetting "ready" flag...
 }
 
 void float4::init (
-                   size_t loc_size                                              // Data size.
+                   size_t loc_size                                                                  // Data size.
                   )
 {
   data = new float4_structure[loc_size];
@@ -69,11 +69,11 @@ float4::~float4()
 //////////////////////////////////////////////////////////////////////////////////
 int4::int4()
 {
-  ready = false;                                                                // Resetting "ready" flag...
+  ready = false;                                                                                    // Resetting "ready" flag...
 }
 
 void int4::init (
-                 size_t loc_size                                                // Data size.
+                 size_t loc_size                                                                    // Data size.
                 )
 {
   data = new int4_structure[loc_size];
@@ -90,11 +90,11 @@ int4::~int4()
 //////////////////////////////////////////////////////////////////////////////////
 float1G::float1G()
 {
-  ready = false;                                                                // Resetting "ready" flag...
+  ready = false;                                                                                    // Resetting "ready" flag...
 }
 
 void float1G::init (
-                    GLsizeiptr loc_size                                         // Data size.
+                    GLsizeiptr loc_size                                                             // Data size.
                    )
 {
   data = new GLfloat[loc_size];
@@ -111,11 +111,11 @@ float1G::~float1G()
 //////////////////////////////////////////////////////////////////////////////////
 float4G::float4G()
 {
-  ready = false;                                                                // Resetting "ready" flag...
+  ready = false;                                                                                    // Resetting "ready" flag...
 }
 
 void float4G::init (
-                    GLsizeiptr loc_size                                         // Data size.
+                    GLsizeiptr loc_size                                                             // Data size.
                    )
 {
   data = new float4G_structure[loc_size];

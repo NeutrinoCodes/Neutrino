@@ -9,58 +9,58 @@ platform::platform()
 }
 
 size_t platform::get_info_size (
-                                cl_platform_id   loc_platform_id,               // OpenCL platform ID.
-                                cl_platform_info loc_parameter_name             // Parameter name.
+                                cl_platform_id   loc_platform_id,                                   // OpenCL platform ID.
+                                cl_platform_info loc_parameter_name                                 // Parameter name.
                                )
 {
-  cl_int loc_error;                                                             // Error code.
-  size_t loc_parameter_size;                                                    // Parameter size.
+  cl_int loc_error;                                                                                 // Error code.
+  size_t loc_parameter_size;                                                                        // Parameter size.
 
   // Getting platform information:
   loc_error = clGetPlatformInfo (
-                                 loc_platform_id,                               // Platform id.
-                                 loc_parameter_name,                            // Parameter name.
-                                 0,                                             // Dummy parameter size: "0" means we ask for the # of parameters.
-                                 NULL,                                          // Dummy parameter.
-                                 &loc_parameter_size                            // Returned parameter size.
+                                 loc_platform_id,                                                   // Platform id.
+                                 loc_parameter_name,                                                // Parameter name.
+                                 0,                                                                 // Dummy parameter size: "0" means we ask for the # of parameters.
+                                 NULL,                                                              // Dummy parameter.
+                                 &loc_parameter_size                                                // Returned parameter size.
                                 );
 
   baseline->check_error (loc_error);
 
-  return (loc_parameter_size);                                                  // Returning local parameter size...
+  return (loc_parameter_size);                                                                      // Returning local parameter size...
 }
 
 std::string platform::get_info_value (
-                                      cl_platform_id   loc_platform_id,         // OpenCL platform ID.
-                                      cl_platform_info loc_parameter_name,      // Paramenter name.
-                                      size_t           loc_parameter_size       // Parameter size.
+                                      cl_platform_id   loc_platform_id,                             // OpenCL platform ID.
+                                      cl_platform_info loc_parameter_name,                          // Paramenter name.
+                                      size_t           loc_parameter_size                           // Parameter size.
                                      )
 {
-  cl_int      loc_error;                                                        // Error code.
+  cl_int      loc_error;                                                                            // Error code.
   std::string loc_parameter;
-  char*       loc_parameter_buffer = new char[loc_parameter_size];              // Parameter value.
+  char*       loc_parameter_buffer = new char[loc_parameter_size];                                  // Parameter value.
 
   // Getting platform information:
   loc_error     = clGetPlatformInfo (
-                                     loc_platform_id,                           // Platform id.
-                                     loc_parameter_name,                        // Parameter name.
-                                     loc_parameter_size,                        // Parameter size.
-                                     loc_parameter_buffer,                      // Returned parameter value.
-                                     NULL                                       // Returned parameter size (NULL = ignored).
+                                     loc_platform_id,                                               // Platform id.
+                                     loc_parameter_name,                                            // Parameter name.
+                                     loc_parameter_size,                                            // Parameter size.
+                                     loc_parameter_buffer,                                          // Returned parameter value.
+                                     NULL                                                           // Returned parameter size (NULL = ignored).
                                     );
 
   baseline->check_error (loc_error);
 
   loc_parameter = std::string (loc_parameter_buffer);
 
-  return (loc_parameter);                                                       // Returning local parameter value...
+  return (loc_parameter);                                                                           // Returning local parameter value...
 }
 
 /// # Initialisation function
 /// ### Description:
 /// Gets platform information.
 void platform::init (
-                     cl_platform_id loc_platform_id                             // Platform ID.
+                     cl_platform_id loc_platform_id                                                 // Platform ID.
                     )
 {
   // Profile info:
@@ -113,7 +113,7 @@ void platform::init (
                                              )
                               );
 
-  id         = loc_platform_id;                                                 // Initializing platform id...
+  id         = loc_platform_id;                                                                     // Initializing platform id...
 }
 
 platform::~platform()

@@ -16,7 +16,7 @@
 class opencl
 {
 private:
-  neutrino*      baseline;                                                      // Neutrino baseline.
+  neutrino*      baseline;                                                                          // Neutrino baseline.
   cl_device_type device_type;
   std::string    device_type_text;
   cl_uint        get_platforms_number ();
@@ -32,13 +32,13 @@ private:
                                );
 
 public:
-  cl_uint                platforms_number;                                      // Existing OpenCL platforms number.
-  cl_uint                selected_platform;                                     // Selected platform index.
-  platform**             opencl_platform;                                       // OpenCL platform array.
+  cl_uint                platforms_number;                                                          // Existing OpenCL platforms number.
+  cl_uint                selected_platform;                                                         // Selected platform index.
+  platform**             opencl_platform;                                                           // OpenCL platform array.
 
-  cl_uint                devices_number;                                        // Existing OpenCL device number.
-  cl_uint                selected_device;                                       // Selected device index.
-  device**               opencl_device;                                         // OpenCL device array.
+  cl_uint                devices_number;                                                            // Existing OpenCL device number.
+  cl_uint                selected_device;                                                           // Selected device index.
+  device**               opencl_device;                                                             // OpenCL device array.
 
   cl_context_properties* properties;
   cl_context             context_id;
@@ -51,9 +51,9 @@ public:
             );
   // Kernel execution:
   void execute (
-                kernel*     loc_kernel,                                         // OpenCL kernel.
-                queue*      loc_queue,                                          // OpenCL queue.
-                kernel_mode loc_kernel_mode                                     // OpenCL kernel mode.
+                kernel*     loc_kernel,                                                             // OpenCL kernel.
+                queue*      loc_queue,                                                              // OpenCL queue.
+                kernel_mode loc_kernel_mode                                                         // OpenCL kernel mode.
                );
 
   ~opencl();

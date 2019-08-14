@@ -644,7 +644,7 @@ void device::init (
                                               CL_DRIVER_VERSION
                                              );
 
-  id                            = loc_device_id;                                // Initializing device_id...
+  id                            = loc_device_id;                                                    // Initializing device_id...
 }
 
 device::~device()
