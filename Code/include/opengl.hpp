@@ -61,8 +61,6 @@ private:
                        double x,                                                                    // "Near clipping-plane" x-coordinate.
                        double y                                                                     // "Near clipping-plane" y-coordinate.
                       );
-  // Orbit movement:
-  void        orbit ();
   // Grasp computation:
   void        grasp (
                      float  position[3],
@@ -198,6 +196,13 @@ public:
   double      axis_LEFT_X;
   double      axis_LEFT_Y;
   double      axis_LEFT_TRIGGER;
+  // Orbit movement:
+  void orbit (
+              double loc_orbit_x,                                                                   // "Near clipping-plane" x-coordinate.
+              double loc_orbit_y,                                                                   // "Near clipping-plane" y-coordinate.
+              double loc_orbit_gain,                                                                // Orbit gain coefficient.
+              double loc_orbit_threshold                                                            // Orbit threshold coefficient.
+             );
 
   double      mouse_x;                                                                              // Mouse x-coordinate [px].
   double      mouse_y;                                                                              // Mouse y-coordinate [px].
