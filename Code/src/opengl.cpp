@@ -30,24 +30,51 @@ void opengl::arcball (
 /// # Window orbit function
 /// ### Description:
 /// Rotates the view matrix according to an orbit movement.
-void opengl::orbit ()
+void opengl::orbit (
+                    double loc_orbit_x,                                                             // "Near clipping-plane" x-coordinate.
+                    double loc_orbit_y,                                                             // "Near clipping-plane" y-coordinate.
+                    double loc_orbit_gain,                                                          // Orbit gain coefficient.
+                    double loc_orbit_threshold                                                      // Orbit threshold coefficient.
+                   )
 {
   float a[3];                                                                                       // Mouse vector, world coordinates.
   float b[3];                                                                                       // Mouse vector, world coordinates.
   float axis[3];                                                                                    // Arcball axis of rotation.
   float theta;                                                                                      // Arcball angle of rotation.
 
-  arcball (a, orbit_x_old, orbit_y_old);                                                            // Building mouse world vector (old)...
-  arcball (b, orbit_x, orbit_y);                                                                    // Building mouse world vector...
-  theta = NU_ROTATION_FACTOR*angle (a, b);                                                          // Computing orbit angle...
-
-  if(orbit_on && (theta > 0.0))                                                                     // If mouse has been dragged (= left click + move):
+  // Preparing for orbit movement:
+  if((abs (loc_orbit_x) <= loc_orbit_threshold) &&
+     (abs (loc_orbit_y) <= loc_orbit_threshold))
   {
-    cross (axis, a, b);                                                                             // Computing orbit axis of rotation...
-    normalize (axis);                                                                               // Normalizing rotation 3D axis...
-    quaternion (q, axis, theta);                                                                    // Computing rotation quaternion...
-    rotate (R_mat, R_mat_old, q);                                                                   // Computing rotation matrix...
-    euler (&roll, &pitch, &yaw, q);                                                                 // Computing Euler (Tait-Bryan) angles...
+    //orbit_on    = false;                                                                            // Turning off orbit...
+    orbit_x_old = loc_orbit_gain*loc_orbit_x;
+    orbit_y_old = loc_orbit_gain*loc_orbit_y;
+    backup (R_mat_old, R_mat);                                                                      // Backing up rotation matrix...
+  }
+
+  // Setting orbit movement:
+  if((abs (loc_orbit_x) > loc_orbit_threshold) ||
+     (abs (loc_orbit_y) > loc_orbit_threshold))
+  {
+    //orbit_on = true;
+    orbit_x = loc_orbit_gain*loc_orbit_x;
+    orbit_y = loc_orbit_gain*loc_orbit_y;
+
+    arcball (a, orbit_x_old, orbit_y_old);                                                          // Building mouse world vector (old)...
+    arcball (b, orbit_x, orbit_y);                                                                  // Building mouse world vector...
+    theta   = NU_ROTATION_FACTOR*angle (a, b);                                                      // Computing orbit angle...
+
+    //if(orbit_on && (theta > 0.0))                                                                   // If mouse has been dragged (= left click + move):
+    if(theta > 0.0)
+    {
+      cross (axis, a, b);                                                                           // Computing orbit axis of rotation...
+      normalize (axis);                                                                             // Normalizing rotation 3D axis...
+      quaternion (q, axis, theta);                                                                  // Computing rotation quaternion...
+      rotate (R_mat, R_mat_old, q);                                                                 // Computing rotation matrix...
+      euler (&roll, &pitch, &yaw, q);                                                               // Computing Euler (Tait-Bryan) angles...
+    }
+
+    backup (R_mat_old, R_mat);                                                                      // Backing up rotation matrix...
   }
 }
 
@@ -582,7 +609,7 @@ void opengl::mouse_moved (
               0.5f;                                                                                 // Computing OpenGL pixel x-coordinates...
     orbit_y = (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
               0.5f;                                                                                 // Computing OpenGL pixel y-coordinates...
-    orbit ();                                                                                       // Computing orbit...
+    //EZOR: orbit ();                                                                                       // Computing orbit...
   }
 
   if(pan_on)
@@ -759,26 +786,28 @@ void opengl::poll_events ()
       zoom ();                                                                                      // Zooming...
     }
 
-    // Preparing for orbit movement:
-    if((abs (axes[NU_L_ANALOG_H]) <= NU_ROTATION_THRESHOLD_PS4) &&
+    /*
+       // Preparing for orbit movement:
+       if((abs (axes[NU_L_ANALOG_H]) <= NU_ROTATION_THRESHOLD_PS4) &&
        (abs (axes[NU_L_ANALOG_V]) <= NU_ROTATION_THRESHOLD_PS4))
-    {
-      orbit_on    = false;                                                                          // Turning off orbit...
-      orbit_x_old = NU_ROTATION_FACTOR_PS4*axes[NU_L_ANALOG_H];
-      orbit_y_old = NU_ROTATION_FACTOR_PS4*axes[NU_L_ANALOG_V];
-      backup (R_mat_old, R_mat);                                                                    // Backing up rotation matrix...
-    }
+       {
+       orbit_on    = false;                                                                          // Turning off orbit...
+       orbit_x_old = NU_ROTATION_FACTOR_PS4*axes[NU_L_ANALOG_H];
+       orbit_y_old = NU_ROTATION_FACTOR_PS4*axes[NU_L_ANALOG_V];
+       backup (R_mat_old, R_mat);                                                                    // Backing up rotation matrix...
+       }
 
-    // Setting orbit movement:
-    if((abs (axes[NU_L_ANALOG_H]) > NU_ROTATION_THRESHOLD_PS4) ||
+       // Setting orbit movement:
+       if((abs (axes[NU_L_ANALOG_H]) > NU_ROTATION_THRESHOLD_PS4) ||
        (abs (axes[NU_L_ANALOG_V]) > NU_ROTATION_THRESHOLD_PS4))
-    {
-      orbit_on = true;
-      orbit_x  = NU_ROTATION_FACTOR_PS4*axes[NU_L_ANALOG_H];
-      orbit_y  = NU_ROTATION_FACTOR_PS4*axes[NU_L_ANALOG_V];
-      orbit ();                                                                                     // Computing orbit...
-      backup (R_mat_old, R_mat);                                                                    // Backing up rotation matrix...
-    }
+       {
+       orbit_on = true;
+       orbit_x  = NU_ROTATION_FACTOR_PS4*axes[NU_L_ANALOG_H];
+       orbit_y  = NU_ROTATION_FACTOR_PS4*axes[NU_L_ANALOG_V];
+       //EZOR: orbit ();                                                                                     // Computing orbit...
+       backup (R_mat_old, R_mat);                                                                    // Backing up rotation matrix...
+       }
+     */
 
     // Preparing for pan movement:
     if((abs (axes[NU_R_ANALOG_H]) <= NU_ROTATION_THRESHOLD_PS4) &&
@@ -790,7 +819,7 @@ void opengl::poll_events ()
       backup (T_mat_old, T_mat);                                                                    // Backing up rotation matrix...
     }
 
-    // Setting orbit movement:
+    // Setting pan movement:
     if((abs (axes[NU_R_ANALOG_H]) > NU_ROTATION_THRESHOLD_PS4) ||
        (abs (axes[NU_R_ANALOG_V]) > NU_ROTATION_THRESHOLD_PS4))
     {
