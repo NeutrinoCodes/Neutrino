@@ -12,35 +12,35 @@
 class opengl
 {
 private:
-  neutrino*       baseline;                                                     // Neutrino baseline.
-  bool            orbit_on;                                                     // Orbit activation flag.
-  bool            pan_on;                                                       // Pan activation flag.
-
+  neutrino*        baseline;                                                    // Neutrino baseline.
+  bool             orbit_on;                                                    // Orbit activation flag.
+  bool             pan_on;                                                      // Pan activation flag.
+  GLFWgamepadstate gamepad;                                                     // Gamepad state.
 
   // Translation matrix backup:
-  float           T_mat_old[16]             = {1.0, 0.0, 0.0, 0.0,
-                                               0.0, 1.0, 0.0, 0.0,
-                                               0.0, 0.0, 1.0, 0.0,
-                                               0.0, 0.0, 0.0, 1.0};
+  float            T_mat_old[16]             = {1.0, 0.0, 0.0, 0.0,
+                                                0.0, 1.0, 0.0, 0.0,
+                                                0.0, 0.0, 1.0, 0.0,
+                                                0.0, 0.0, 0.0, 1.0};
 
   // Rotation matrix backup:
-  float           R_mat_old[16]             = {1.0, 0.0, 0.0, 0.0,
-                                               0.0, 1.0, 0.0, 0.0,
-                                               0.0, 0.0, 1.0, 0.0,
-                                               0.0, 0.0, 0.0, 1.0};
+  float            R_mat_old[16]             = {1.0, 0.0, 0.0, 0.0,
+                                                0.0, 1.0, 0.0, 0.0,
+                                                0.0, 0.0, 1.0, 0.0,
+                                                0.0, 0.0, 0.0, 1.0};
 
   // Rotation quaternion backup:
-  float           q_old[4]                  = {1.0, 0.0, 0.0, 0.0};
+  float            q_old[4]                  = {1.0, 0.0, 0.0, 0.0};
 
   // Initial scene position:
-  float           initial_scene_position[3] = NU_INITIAL_SCENE_POSITION;
+  float            initial_scene_position[3] = NU_INITIAL_SCENE_POSITION;
 
-  GLuint          point_shader;                                                 // Point shader program.
-  GLuint          voxel_shader;                                                 // Voxel shader program.
-  GLuint          wireframe_shader;                                             // Wireframe shader program.
-  GLuint          shaded_shader;                                                // Shaded shader program.
-  GLuint          text_shader;                                                  // Point shader program.
-  projection_mode PR_mode;                                                      // Projection mode.
+  GLuint           point_shader;                                                // Point shader program.
+  GLuint           voxel_shader;                                                // Voxel shader program.
+  GLuint           wireframe_shader;                                            // Wireframe shader program.
+  GLuint           shaded_shader;                                               // Shaded shader program.
+  GLuint           text_shader;                                                 // Point shader program.
+  projection_mode  PR_mode;                                                     // Projection mode.
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////// PRIVATE METHODS ///////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
@@ -166,6 +166,38 @@ public:
   int         framebuffer_size_y;                                               // Window y-size [px].
 
   double      aspect_ratio;                                                     // Window aspect ratio [].
+
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////// GAMEPAD ///////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  // BUTTONS:
+  bool        button_A;
+  bool        button_B;
+  bool        button_X;
+  bool        button_Y;
+  bool        button_CROSS;                                                     // = A;
+  bool        button_CIRCLE;                                                    // = B;
+  bool        button_SQUARE;                                                    // = X;
+  bool        button_TRIANGLE;                                                  // = Y;
+  bool        button_LEFT_BUMPER;
+  bool        button_RIGHT_BUMPER;
+  bool        button_BACK;
+  bool        button_START;
+  bool        button_GUIDE;
+  bool        button_LEFT_THUMB;
+  bool        button_RIGHT_THUMB;
+  bool        button_DPAD_UP;
+  bool        button_DPAD_RIGHT;
+  bool        button_DPAD_DOWN;
+  bool        button_DPAD_LEFT;
+
+  // AXES:
+  double      axis_RIGHT_X;
+  double      axis_RIGHT_Y;
+  double      axis_RIGHT_TRIGGER;
+  double      axis_LEFT_X;
+  double      axis_LEFT_Y;
+  double      axis_LEFT_TRIGGER;
 
   double      mouse_x;                                                          // Mouse x-coordinate [px].
   double      mouse_y;                                                          // Mouse y-coordinate [px].
