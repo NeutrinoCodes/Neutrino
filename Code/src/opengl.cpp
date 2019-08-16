@@ -106,15 +106,54 @@ void opengl::orbit (
   }
 }
 
-void opengl::grasp (
-                    float  position[3],
-                    double x,
-                    double y
-                   )
+float3 opengl::grasp (
+                      double loc_x,
+                      double loc_y,
+                      double loc_z,
+                      double loc_deadzone,                                                          // Orbit deadzone threshold coefficient.
+                      double loc_decaytime                                                          // Orbit low pass decay time [s].
+                     )
 {
-  position[0] = +x;                                                                                 // Building translation vector...
-  position[1] = -y;                                                                                 // Building translation vector (OpenGL sign convention)...
-  position[2] = +0.0;                                                                               // Building translation vector...                                          // Building translation matrix...
+  float3 loc_position;
+  double loc_alpha;
+
+  // Constraining input values:
+  loc_position.x = baseline->constrain (
+                                        loc_x,                                                      // Initial x-pan.
+                                        NU_GAMEPAD_MIN_X_PAN,                                       // Minimum x-pan.
+                                        NU_GAMEPAD_MAX_X_PAN                                        // Maximum x-pan.
+                                       );
+  loc_position.y = baseline->constrain (
+                                        loc_y,                                                      // Initial y-pan.
+                                        NU_GAMEPAD_MIN_Y_PAN,                                       // Minimum y-pan.
+                                        NU_GAMEPAD_MAX_Y_PAN                                        // Maximum y-pan.
+                                       );
+  loc_position.z = baseline->constrain (
+                                        loc_z,                                                      // Initial z-pan.
+                                        NU_GAMEPAD_MIN_Z_PAN,                                       // Minimum z-pan.
+                                        NU_GAMEPAD_MAX_Z_PAN                                        // Maximum z-pan.
+                                       );
+
+  // Applying deadzone:
+  if((abs (loc_position.x) <= loc_deadzone) &&
+     (abs (loc_position.y) <= loc_deadzone) &&
+     (abs (loc_position.z) <= loc_deadzone))
+  {
+    loc_position.x = 0;                                                                             // Justifying value...
+    loc_position.y = 0;                                                                             // Justifying value...
+    loc_position.z = 0;                                                                             // Justifying value...
+  }
+
+  // Computing LP filter:
+  loc_alpha      = exp (-2*M_PI*(baseline->loop_time/1000000.0)/loc_decaytime);                     // Computing filter parameter "alpha"...
+  position.x     = loc_position.x + loc_alpha*(position_old.x - loc_position.x);                    // Filtering...
+  position.y     = loc_position.y + loc_alpha*(position_old.y - loc_position.y);                    // Filtering...
+  position.z     = loc_position.z + loc_alpha*(position_old.z - loc_position.z);                    // Filtering...
+  position_old.x = position.x;                                                                      // Backing up...
+  position_old.y = position.y;                                                                      // Backing up...
+  position_old.z = position.z;                                                                      // Backing up...
+
+  return position;
 }
 
 void opengl::pan ()
