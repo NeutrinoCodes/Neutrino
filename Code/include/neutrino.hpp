@@ -50,7 +50,12 @@
   #define NU_MAX_MESSAGE_SIZE               64                                                      // Maximum # of characters in a text message.
   #define NU_MAX_PATH_SIZE                  32768                                                   // Maximum # of characters in a text file path.
 
-  #define NU_LP_MIN_DECAYTIME               0.01                                                    // Minimum decay time for LP filter [s].
+  #define NU_GAMEPAD_MIN_DECAYTIME          0.01                                                    // Minimum decay time for LP filter [s].
+  #define NU_GAMEPAD_MAX_DECAYTIME          10.0                                                    // Maximum decay time for LP filter [s].
+  #define NU_GAMEPAD_MIN_AXES               -1.0                                                    // Minimum axes value.
+  #define NU_GAMEPAD_MAX_AXES               +1.0                                                    // Maximum axes value.
+  #define NU_GAMEPAD_MIN_ORBIT_RATE         0.01                                                    // Minimum orbit angular rate [rev/s].
+  #define NU_GAMEPAD_MAX_ORBIT_RATE         10.0                                                    // Maximum orbit angular rate [rev/s].
 
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// PS4 GAMEPAD BUTTONS //////////////////////////////
@@ -315,6 +320,16 @@ public:
                    );
   void        done ();
   void        terminated ();
+  double      constrain (
+                         double loc_input,
+                         double loc_min,
+                         double loc_max
+                        );
+  float       constrain (
+                         float loc_input,
+                         float loc_min,
+                         float loc_max
+                        );
   // OpenCL error get function:
   std::string get_error (
                          cl_int loc_error                                                           // Error code.

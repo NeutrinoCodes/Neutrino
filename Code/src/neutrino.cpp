@@ -306,6 +306,60 @@ void neutrino::terminated ()
   std::cout << loc_text << std::endl;                                                               // Printing message...
 }
 
+double neutrino::constrain (
+                            double loc_input,
+                            double loc_min,
+                            double loc_max
+                           )
+{
+  double loc_output;
+
+  if((loc_min <= loc_input) &&
+     (loc_input <= loc_max))
+  {
+    loc_output = loc_input;
+  }
+
+  if(loc_input < loc_min)
+  {
+    loc_output = loc_min;
+  }
+
+  if(loc_max < loc_input)
+  {
+    loc_output = loc_max;
+  }
+
+  return loc_output;
+}
+
+float neutrino::constrain (
+                           float loc_input,
+                           float loc_min,
+                           float loc_max
+                          )
+{
+  float loc_output;
+
+  if((loc_min <= loc_input) &&
+     (loc_input <= loc_max))
+  {
+    loc_output = loc_input;
+  }
+
+  if(loc_input < loc_min)
+  {
+    loc_output = loc_min;
+  }
+
+  if(loc_max < loc_input)
+  {
+    loc_output = loc_max;
+  }
+
+  return loc_output;
+}
+
 /// # OpenCL error get function
 /// ### Description:
 /// Translates an OpenCL numeric error code into a human-readable string.

@@ -224,6 +224,8 @@ public:
   double      zoom_z_old;
   double      zoom_z;                                                                               // Zoom coefficient.
 
+  double      orbit_rate;
+  double      orbit_deadzone;
   double      orbit_decaytime;                                                                      // LP filter decay time [s].
 
   // Arcball quaternion:

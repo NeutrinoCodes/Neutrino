@@ -57,38 +57,28 @@ void opengl::orbit (
   double alpha;
 
   // Preparing for orbit movement:
-  orbit_rate = loc_orbit_rate;
+  orbit_rate      = baseline->constrain (
+                                         loc_orbit_rate,
+                                         NU_GAMEPAD_MIN_ORBIT_RATE,
+                                         NU_GAMEPAD_MAX_ORBIT_RATE
+                                        );
+  orbit_deadzone  = baseline->constrain (
+                                         loc_orbit_deadzone,
+                                         NU_GAMEPAD_MIN_AXES,
+                                         NU_GAMEPAD_MAX_AXES
+                                        );
 
-  if((-1.0 <= loc_orbit_deadzone) &&
-     (loc_orbit_deadzone <= +1.0))
-  {
-    orbit_deadzone = loc_orbit_deadzone;
-  }
-
-  if(loc_orbit_deadzone < -1.0)
-  {
-    orbit_deadzone = -1.0;
-  }
-
-  if(loc_orbit_deadzone > +1.0)
-  {
-    orbit_deadzone = +1.0;
-  }
+  orbit_decaytime = baseline->constrain (
+                                         loc_orbit_decaytime,
+                                         NU_GAMEPAD_MIN_DECAYTIME,
+                                         NU_GAMEPAD_MAX_DECAYTIME
+                                        );
 
   if((abs (loc_orbit_x) <= orbit_deadzone) &&
      (abs (loc_orbit_y) <= orbit_deadzone))
   {
     loc_orbit_x = 0;
     loc_orbit_y = 0;
-  }
-
-  if(loc_orbit_decaytime >= NU_LP_MIN_DECAYTIME)
-  {
-    orbit_decaytime = loc_orbit_decaytime;
-  }
-  else
-  {
-    orbit_decaytime = NU_LP_MIN_DECAYTIME;
   }
 
   alpha       = exp (-2*M_PI*(baseline->loop_time/1000000.0)/orbit_decaytime);                      // Computing filter parameter "alpha"...
