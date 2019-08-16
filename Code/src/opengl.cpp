@@ -56,41 +56,45 @@ void opengl::orbit (
   float  theta;                                                                                     // Arcball angle of rotation.
   double alpha;
 
-  // Preparing for orbit movement:
+  // Constraining input values:
   orbit_rate      = baseline->constrain (
-                                         loc_orbit_rate,
-                                         NU_GAMEPAD_MIN_ORBIT_RATE,
-                                         NU_GAMEPAD_MAX_ORBIT_RATE
+                                         loc_orbit_rate,                                            // Orbit angula rate [rev/s].
+                                         NU_GAMEPAD_MIN_ORBIT_RATE,                                 // Minimum orbit angular rate [rev/s].
+                                         NU_GAMEPAD_MAX_ORBIT_RATE                                  // Maximum orbit angular rate [rev/s].
                                         );
   orbit_deadzone  = baseline->constrain (
-                                         loc_orbit_deadzone,
-                                         NU_GAMEPAD_MIN_AXES,
-                                         NU_GAMEPAD_MAX_AXES
+                                         loc_orbit_deadzone,                                        // Orbit deadzone.
+                                         NU_GAMEPAD_MIN_AXES,                                       // Minimum gampad axes value.
+                                         NU_GAMEPAD_MAX_AXES                                        // Maximum gampad axes value.
                                         );
 
   orbit_decaytime = baseline->constrain (
-                                         loc_orbit_decaytime,
-                                         NU_GAMEPAD_MIN_DECAYTIME,
-                                         NU_GAMEPAD_MAX_DECAYTIME
+                                         loc_orbit_decaytime,                                       // Orbit LP filter decay time [s].
+                                         NU_GAMEPAD_MIN_DECAYTIME,                                  // Minimum orbit LP filter decay time [s].
+                                         NU_GAMEPAD_MAX_DECAYTIME                                   // Maximum orbit LP filter decay time [s].
                                         );
 
+  // Applying deadzone:
   if((abs (loc_orbit_x) <= orbit_deadzone) &&
      (abs (loc_orbit_y) <= orbit_deadzone))
   {
-    loc_orbit_x = 0;
-    loc_orbit_y = 0;
+    loc_orbit_x = 0;                                                                                // Justifying value...
+    loc_orbit_y = 0;                                                                                // Justifying value...
   }
 
+  // Computing LP filter:
   alpha       = exp (-2*M_PI*(baseline->loop_time/1000000.0)/orbit_decaytime);                      // Computing filter parameter "alpha"...
   orbit_x     = loc_orbit_x + alpha*(orbit_x_old - loc_orbit_x);                                    // Computing x movement...
   orbit_y     = loc_orbit_y + alpha*(orbit_y_old - loc_orbit_y);                                    // Computing y movement...
   orbit_x_old = orbit_x;                                                                            // Backing up x movement...
   orbit_y_old = orbit_y;                                                                            // Backing up y movement...
 
+  // Computing arcball:
   arcball (a, 0, 0);                                                                                // Building initial mouse world vector...
   arcball (b, orbit_x, orbit_y);                                                                    // Building current mouse world vector...
   theta       = orbit_rate*2*M_PI*(baseline->loop_time/1000000.0)*angle (a, b);                     // Computing orbit angle for a rate of 2*pi rad/s...
 
+  // Doing rotation:
   if(theta > 0)                                                                                     // Checking for valid rotation angle...
   {
     cross (axis, a, b);                                                                             // Computing orbit axis of rotation...
