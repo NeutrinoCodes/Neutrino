@@ -200,8 +200,9 @@ public:
   void orbit (
               double loc_orbit_x,                                                                   // "Near clipping-plane" x-coordinate.
               double loc_orbit_y,                                                                   // "Near clipping-plane" y-coordinate.
-              double loc_orbit_gain,                                                                // Orbit gain coefficient.
-              double loc_orbit_threshold                                                            // Orbit threshold coefficient.
+              double loc_orbit_rate,                                                                // Orbit gain coefficient.
+              double loc_orbit_deadzone,                                                            // Orbit deadzone threshold coefficient.
+              double loc_orbit_decaytime                                                            // Orbit low pass decay time [s].
              );
 
   double      mouse_x;                                                                              // Mouse x-coordinate [px].
@@ -222,6 +223,8 @@ public:
 
   double      zoom_z_old;
   double      zoom_z;                                                                               // Zoom coefficient.
+
+  double      orbit_decaytime;                                                                      // LP filter decay time [s].
 
   // Arcball quaternion:
   float       q[4]       = {1.0, 0.0, 0.0, 0.0};

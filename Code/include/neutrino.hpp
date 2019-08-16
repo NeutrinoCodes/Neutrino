@@ -50,6 +50,8 @@
   #define NU_MAX_MESSAGE_SIZE               64                                                      // Maximum # of characters in a text message.
   #define NU_MAX_PATH_SIZE                  32768                                                   // Maximum # of characters in a text file path.
 
+  #define NU_LP_MIN_DECAYTIME               0.01                                                    // Minimum decay time for LP filter [s].
+
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// PS4 GAMEPAD BUTTONS //////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
