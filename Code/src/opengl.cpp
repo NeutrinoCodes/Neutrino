@@ -58,7 +58,7 @@ void opengl::orbit (
 
   // Constraining input values:
   orbit_rate      = baseline->constrain (
-                                         loc_orbit_rate,                                            // Orbit angula rate [rev/s].
+                                         loc_orbit_rate,                                            // Orbit angular rate [rev/s].
                                          NU_GAMEPAD_MIN_ORBIT_RATE,                                 // Minimum orbit angular rate [rev/s].
                                          NU_GAMEPAD_MAX_ORBIT_RATE                                  // Maximum orbit angular rate [rev/s].
                                         );
@@ -119,16 +119,50 @@ void opengl::grasp (
 
 void opengl::pan ()
 {
-  float initial_position[3];
-  float final_position[3];
-  float translation[3];
+  float  loc_initial_position[3];
+  float  loc_final_position[3];
+  float  translation[3];
+  float  loc_theta;                                                                                 // Arcball angle of rotation.
+  double loc_alpha;
 
   grasp (initial_position, pan_x_old, pan_y_old);
   grasp (final_position, pan_x, pan_y);
 
-  translation[0] = NU_PAN_FACTOR*(final_position[0] - initial_position[0]);
-  translation[1] = NU_PAN_FACTOR*(final_position[1] - initial_position[1]);
-  translation[2] = NU_PAN_FACTOR*(final_position[2] - initial_position[2]);
+  // Constraining input values:
+  initial_position = baseline->constrain (
+                                          loc_initial_position[0],                                  // Initial x-pan.
+                                          NU_GAMEPAD_MIN_X_PAN,                                     // Minimum x-pan.
+                                          NU_GAMEPAD_MAX_X_PAN                                      // Maximum x-pan.
+                                         );
+  initial_position = baseline->constrain (
+                                          loc_initial_position[1],                                  // Initial y-pan.
+                                          NU_GAMEPAD_MIN_Y_PAN,                                     // Minimum y-pan.
+                                          NU_GAMEPAD_MAX_Y_PAN                                      // Maximum y-pan.
+                                         );
+  initial_position = baseline->constrain (
+                                          loc_initial_position[2],                                  // Initial z-pan.
+                                          NU_GAMEPAD_MIN_Z_PAN,                                     // Minimum z-pan.
+                                          NU_GAMEPAD_MAX_Z_PAN                                      // Maximum z-pan.
+                                         );
+  final_position   = baseline->constrain (
+                                          loc_final_position[0],                                    // Final x-pan.
+                                          NU_GAMEPAD_MIN_X_PAN,                                     // Minimum x-pan.
+                                          NU_GAMEPAD_MAX_X_PAN                                      // Maximum x-pan.
+                                         );
+  final_position   = baseline->constrain (
+                                          loc_final_position[1],                                    // Final y-pan.
+                                          NU_GAMEPAD_MIN_Y_PAN,                                     // Minimum y-pan.
+                                          NU_GAMEPAD_MAX_Y_PAN                                      // Maximum y-pan.
+                                         );
+  final_position   = baseline->constrain (
+                                          loc_final_position[2],                                    // Final z-pan.
+                                          NU_GAMEPAD_MIN_Z_PAN,                                     // Minimum z-pan.
+                                          NU_GAMEPAD_MAX_Z_PAN                                      // Maximum z-pan.
+                                         );
+
+  translation[0]   = NU_PAN_FACTOR*(final_position[0] - initial_position[0]);
+  translation[1]   = NU_PAN_FACTOR*(final_position[1] - initial_position[1]);
+  translation[2]   = NU_PAN_FACTOR*(final_position[2] - initial_position[2]);
 
   translate (T_mat, T_mat_old, translation);
 }
