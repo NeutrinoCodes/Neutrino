@@ -50,17 +50,23 @@
 
 int main ()
 {
-  neutrino* bas = new neutrino ();                                                                  // Neutrino baseline.
-  opengl*   gui = new opengl ();                                                                    // OpenGL context.
-  opencl*   ctx = new opencl ();                                                                    // OpenCL context.
-  shader*   S   = new shader ();                                                                    // OpenGL shader program.
-  float4G*  P   = new float4G ();                                                                   // OpenGL float4G.
-  float4G*  C   = new float4G ();                                                                   // OpenGL float4G.
-  float1*   t   = new float1 ();                                                                    // Time [s].
-  queue*    Q   = new queue ();                                                                     // OpenCL queue.
-  kernel*   K   = new kernel ();                                                                    // OpenCL kernel array.
+  neutrino* bas                = new neutrino ();                                                   // Neutrino baseline.
+  opengl*   gui                = new opengl ();                                                     // OpenGL context.
+  opencl*   ctx                = new opencl ();                                                     // OpenCL context.
+  shader*   S                  = new shader ();                                                     // OpenGL shader program.
+  float4G*  P                  = new float4G ();                                                    // OpenGL float4G.
+  float4G*  C                  = new float4G ();                                                    // OpenGL float4G.
+  float1*   t                  = new float1 ();                                                     // Time [s].
+  queue*    Q                  = new queue ();                                                      // OpenCL queue.
+  kernel*   K                  = new kernel ();                                                     // OpenCL kernel array.
   size_t    i;                                                                                      // "x" direction index.
   size_t    j;                                                                                      // "y" direction index.
+
+  double    rotation_x;                                                                             // x-axis rotation.
+  double    rotation_y;                                                                             // y-axis rotation.
+  double    rotation_decaytime = 1.25;                                                              // LP filter decay time [s].
+  double    rotation_deadzone  = 0.1;                                                               // Rotation deadzone [0...1].
+  double    rotation_rate      = 1.0;                                                               // Maximum rotation rate [rev/s].
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// INITIALIZATION ///////////////////////////////
@@ -140,7 +146,15 @@ int main ()
     Q->release (P, 0);                                                                              // Releasing OpenGL/CL shared argument...
     Q->release (C, 1);                                                                              // Releasing OpenGL/CL shared argument...
 
-    gui->orbit (gui->axis_LEFT_X, gui->axis_LEFT_Y, 1.0, 0.1);
+    rotation_x = gui->axis_LEFT_X;
+    rotation_y = gui->axis_LEFT_Y;
+    gui->orbit (
+                rotation_x,
+                rotation_y,
+                rotation_rate,
+                rotation_rate,
+                rotation_decay
+               );
 
     gui->plot (S);                                                                                  // Plotting shared arguments...
 

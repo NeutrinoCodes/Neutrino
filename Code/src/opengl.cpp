@@ -45,27 +45,53 @@ void opengl::arcball (
 void opengl::orbit (
                     double loc_orbit_x,                                                             // "Near clipping-plane" x-coordinate.
                     double loc_orbit_y,                                                             // "Near clipping-plane" y-coordinate.
-                    double loc_orbit_gain,                                                          // Orbit gain coefficient.
-                    double loc_orbit_threshold                                                      // Orbit threshold coefficient.
+                    double loc_orbit_rate,                                                          // Orbit angular rate coefficient [rev/s].
+                    double loc_orbit_deadzone,                                                      // Orbit deadzone threshold coefficient.
+                    double loc_orbit_decaytime                                                      // Orbit low pass decay time [s].
                    )
 {
   float  a[3];                                                                                      // Mouse vector, world coordinates.
   float  b[3];                                                                                      // Mouse vector, world coordinates.
   float  axis[3];                                                                                   // Arcball axis of rotation.
   float  theta;                                                                                     // Arcball angle of rotation.
-  double f_cut;
   double alpha;
 
   // Preparing for orbit movement:
-  if((abs (loc_orbit_x) <= loc_orbit_threshold) &&
-     (abs (loc_orbit_y) <= loc_orbit_threshold))
+  orbit_rate = loc_orbit_rate;
+
+  if((-1.0 <= loc_orbit_deadzone) &&
+     (loc_orbit_deadzone <= +1.0))
+  {
+    orbit_deadzone = loc_orbit_deadzone;
+  }
+
+  if(loc_orbit_deadzone < -1.0)
+  {
+    orbit_deadzone = -1.0;
+  }
+
+  if(loc_orbit_deadzone > +1.0)
+  {
+    orbit_deadzone = +1.0;
+  }
+
+  if((abs (loc_orbit_x) <= orbit_deadzone) &&
+     (abs (loc_orbit_y) <= orbit_deadzone))
   {
     loc_orbit_x = 0;
     loc_orbit_y = 0;
   }
 
-  f_cut       = 0.8;                                                                                // Setting LP cut off frequency [Hz]...
-  alpha       = exp (-2*M_PI*f_cut*(baseline->loop_time/1000000.0));                                // Computing filter parameter "alpha"...
+  if(loc_orbit_decaytime >= NU_LP_MIN_DECAYTIME)
+  {
+    orbit_decaytime = loc_orbit_decaytime;
+  }
+  else
+  {
+    orbit_decaytime = NU_LP_MIN_DECAYTIME;
+  }
+
+  alpha       = exp (-2*M_PI*(baseline->loop_time/1000000.0)/orbit_decaytime);                      // Computing filter parameter "alpha"...
   orbit_x     = loc_orbit_x + alpha*(orbit_x_old - loc_orbit_x);                                    // Computing x movement...
   orbit_y     = loc_orbit_y + alpha*(orbit_y_old - loc_orbit_y);                                    // Computing y movement...
   orbit_x_old = orbit_x;                                                                            // Backing up x movement...
@@ -73,7 +99,7 @@ void opengl::orbit (
 
   arcball (a, 0, 0);                                                                                // Building initial mouse world vector...
   arcball (b, orbit_x, orbit_y);                                                                    // Building current mouse world vector...
-  theta       = (baseline->loop_time/1000000.0)*4.0*angle (a, b);                                   // Computing orbit angle...
+  theta       = orbit_rate*2*M_PI*(baseline->loop_time/1000000.0)*angle (a, b);                     // Computing orbit angle for a rate of 2*pi rad/s...
 
   if(theta > 0)                                                                                     // Checking for valid rotation angle...
   {
