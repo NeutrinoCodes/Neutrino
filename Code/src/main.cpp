@@ -152,8 +152,8 @@ int main ()
                 rotation_x,
                 rotation_y,
                 rotation_rate,
-                rotation_rate,
-                rotation_decay
+                rotation_deadzone,
+                rotation_decaytime
                );
 
     gui->plot (S);                                                                                  // Plotting shared arguments...
