@@ -4,7 +4,6 @@
 #define opengl_hpp
 
   #include "neutrino.hpp"
-  #include "datatypes.hpp"
   #include "shader.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -183,27 +182,33 @@ public:
   double      axis_LEFT_TRIGGER;
   // Orbit movement:
   void orbit (
-              float2 loc_orbit,                                                                     // "Near clipping-plane" xy-coordinates.
-              float  loc_orbit_rate,                                                                // Orbit angular rate coefficient [rev/s].
-              float  loc_orbit_deadzone,                                                            // Orbit deadzone threshold coefficient.
-              float  loc_orbit_decaytime                                                            // Orbit low pass decay time [s].
+              float loc_orbit_x,                                                                    // "Near clipping-plane" x-coordinates.
+              float loc_orbit_y,                                                                    // "Near clipping-plane" y-coordinates.
+              float loc_orbit_rate,                                                                 // Orbit angular rate coefficient [rev/s].
+              float loc_orbit_deadzone,                                                             // Orbit deadzone threshold coefficient.
+              float loc_orbit_decaytime                                                             // Orbit low pass decay time [s].
              );
 
-  float       orbit_x_old;
-  float       orbit_y_old;
   float       orbit_x;
   float       orbit_y;
+  float       orbit_x_old;
+  float       orbit_y_old;
   // Pan movement:
   void pan (
-            float3 loc_position,                                                                    // Position.
-            float  loc_pan_rate,                                                                    // Pan rate [units/s].
-            float  loc_pan_deadzone,                                                                // Pan deadzone threshold coefficient.
-            float  loc_pan_decaytime                                                                // Pan low pass decay time [s].
+            float loc_pan_x,                                                                        // World x-pan.
+            float loc_pan_y,                                                                        // World y-pan.
+            float loc_pan_z,                                                                        // World z-pan.
+            float loc_pan_rate,                                                                     // Pan rate [units/s].
+            float loc_pan_deadzone,                                                                 // Pan deadzone threshold coefficient.
+            float loc_pan_decaytime                                                                 // Pan low pass decay time [s].
            );
-  float       pan_x_old;
-  float       pan_y_old;
   float       pan_x;
   float       pan_y;
+  float       pan_z;
+  float       pan_x_old;
+  float       pan_y_old;
+  float       pan_z_old;
+
 
   double      mouse_x;                                                                              // Mouse x-coordinate [px].
   double      mouse_y;                                                                              // Mouse y-coordinate [px].

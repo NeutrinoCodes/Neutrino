@@ -62,7 +62,8 @@ int main ()
   size_t    i;                                                                                      // "x" direction index.
   size_t    j;                                                                                      // "y" direction index.
 
-  float2    rotation;                                                                               // xy-axis rotation.
+  float     rotation_x;                                                                             // x-axis rotation.
+  float     rotation_y;                                                                             // y-axis rotation.
   float     rotation_decaytime = 1.25;                                                              // LP filter decay time [s].
   float     rotation_deadzone  = 0.1;                                                               // Rotation deadzone [0...1].
   float     rotation_rate      = 1.0;                                                               // Maximum rotation rate [rev/s].
@@ -145,10 +146,11 @@ int main ()
     Q->release (P, 0);                                                                              // Releasing OpenGL/CL shared argument...
     Q->release (C, 1);                                                                              // Releasing OpenGL/CL shared argument...
 
-    rotation.x = gui->axis_LEFT_X;
-    rotation.y = gui->axis_LEFT_Y;
+    rotation_x = gui->axis_LEFT_X;
+    rotation_y = gui->axis_LEFT_Y;
     gui->orbit (
-                rotation,
+                rotation_x,
+                rotation_y,
                 rotation_rate,
                 rotation_deadzone,
                 rotation_decaytime

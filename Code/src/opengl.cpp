@@ -15,69 +15,71 @@ opengl::opengl()
 /// ### Description:
 /// Rotates the view matrix according to an orbit movement.
 void opengl::orbit (
-                    float2 loc_orbit,                                                               // "Near clipping-plane" xy-coordinates.
-                    float  loc_orbit_rate,                                                          // Orbit angular rate coefficient [rev/s].
-                    float  loc_orbit_deadzone,                                                      // Orbit deadzone threshold coefficient.
-                    float  loc_orbit_decaytime                                                      // Orbit low pass decay time [s].
+                    float loc_orbit_x,                                                              // "Near clipping-plane" x-coordinates.
+                    float loc_orbit_y,                                                              // "Near clipping-plane" y-coordinates.
+                    float loc_orbit_rate,                                                           // Orbit angular rate coefficient [rev/s].
+                    float loc_orbit_deadzone,                                                       // Orbit deadzone threshold coefficient.
+                    float loc_orbit_decaytime                                                       // Orbit low pass decay time [s].
                    )
 {
   float loc_initial_world[3];                                                                       // Initial world vector.
   float loc_final_world[3];                                                                         // Final world vector.
   float loc_axis[3];                                                                                // Arcball axis of rotation.
   float loc_theta;                                                                                  // Arcball angle of rotation.
-  float loc_OP_squared;
+  float loc_OP_squared;                                                                             // Center to arcball surface vector length.
+  float loc_alpha;                                                                                  // LP filter decay constant.
 
   loc_initial_world[0] = 0.0;                                                                       // Building initial world vector...
   loc_initial_world[1] = 0.0;                                                                       // Building initial world vector...
   loc_initial_world[2] = 1.0;                                                                       // Building initial world vector...
 
   // Constraining input values:
-  loc_orbit.x          = baseline->constrain (
-                                              loc_orbit.x,                                          // Initial x-orbit.
-                                              NU_GAMEPAD_MIN_AXES,                                  // Minimum x-orbit.
-                                              NU_GAMEPAD_MIN_AXES                                   // Maximum x-orbit.
+  loc_orbit_x          = baseline->constrain (
+                                              loc_orbit_x,                                          // Initial x-orbit.
+                                              (float)NU_GAMEPAD_MIN_AXES,                           // Minimum x-orbit.
+                                              (float)NU_GAMEPAD_MIN_AXES                            // Maximum x-orbit.
                                              );
-  loc_orbit.y          = baseline->constrain (
-                                              loc_orbit.y,                                          // Initial y-orbit.
-                                              NU_GAMEPAD_MIN_AXES,                                  // Minimum y-orbit.
-                                              NU_GAMEPAD_MIN_AXES                                   // Maximum y-orbit.
+  loc_orbit_y          = baseline->constrain (
+                                              loc_orbit_y,                                          // Initial y-orbit.
+                                              (float)NU_GAMEPAD_MIN_AXES,                           // Minimum y-orbit.
+                                              (float)NU_GAMEPAD_MIN_AXES                            // Maximum y-orbit.
                                              );
 
   loc_orbit_rate       = baseline->constrain (
                                               loc_orbit_rate,                                       // Orbit angular rate [rev/s].
-                                              NU_GAMEPAD_MIN_ORBIT_RATE,                            // Minimum orbit angular rate [rev/s].
-                                              NU_GAMEPAD_MAX_ORBIT_RATE                             // Maximum orbit angular rate [rev/s].
+                                              (float)NU_GAMEPAD_MIN_ORBIT_RATE,                     // Minimum orbit angular rate [rev/s].
+                                              (float)NU_GAMEPAD_MAX_ORBIT_RATE                      // Maximum orbit angular rate [rev/s].
                                              );
   loc_orbit_deadzone   = baseline->constrain (
                                               loc_orbit_deadzone,                                   // Orbit deadzone.
-                                              NU_GAMEPAD_MIN_AXES,                                  // Minimum gampad axes value.
-                                              NU_GAMEPAD_MIN_AXES                                   // Maximum gampad axes value.
+                                              (float)NU_GAMEPAD_MIN_AXES,                           // Minimum gampad axes value.
+                                              (float)NU_GAMEPAD_MIN_AXES                            // Maximum gampad axes value.
                                              );
 
   loc_orbit_decaytime  = baseline->constrain (
                                               loc_orbit_decaytime,                                  // Orbit LP filter decay time [s].
-                                              NU_GAMEPAD_MIN_DECAYTIME,                             // Minimum orbit LP filter decay time [s].
-                                              NU_GAMEPAD_MAX_DECAYTIME                              // Maximum orbit LP filter decay time [s].
+                                              (float)NU_GAMEPAD_MIN_DECAYTIME,                      // Minimum orbit LP filter decay time [s].
+                                              (float)NU_GAMEPAD_MAX_DECAYTIME                       // Maximum orbit LP filter decay time [s].
                                              );
 
   // Applying deadzone:
-  if((abs (loc_orbit.x) <= loc_orbit_deadzone) &&
-     (abs (loc_orbit.y) <= loc_orbit_deadzone))
+  if((abs (loc_orbit_x) <= loc_orbit_deadzone) &&
+     (abs (loc_orbit_y) <= loc_orbit_deadzone))
   {
-    loc_orbit.x = 0.0;                                                                              // Justifying value...
-    loc_orbit.y = 0.0;                                                                              // Justifying value...
+    loc_orbit_x = 0.0;                                                                              // Justifying value...
+    loc_orbit_y = 0.0;                                                                              // Justifying value...
   }
 
   // Computing LP filter:
   loc_alpha          = exp (-2*M_PI*(baseline->loop_time/1000000.0)/loc_orbit_decaytime);           // Computing filter parameter "alpha"...
-  orbit.x            = loc_orbit.x + loc_alpha*(orbit_old.x - loc_orbit.x);                         // Filtering...
-  orbit.y            = loc_orbit.y + loc_alpha*(orbit_old.y - loc_orbit.y);                         // Filtering...
-  orbit_old.x        = orbit.x;                                                                     // Backing up...
-  orbit_old.y        = orbit.y;                                                                     // Backing up...
+  orbit_x            = loc_orbit_x + loc_alpha*(orbit_x_old - loc_orbit_x);                         // Filtering...
+  orbit_y            = loc_orbit_y + loc_alpha*(orbit_y_old - loc_orbit_y);                         // Filtering...
+  orbit_x_old        = orbit_x;                                                                     // Backing up...
+  orbit_y_old        = orbit_y;                                                                     // Backing up...
 
   // Computing arcball:
-  loc_final_world[0] = orbit.x;                                                                     // Setting x-point on arcball...
-  loc_final_world[1] = orbit.y;                                                                     // Setting y-point on arcball...
+  loc_final_world[0] = orbit_x;                                                                     // Setting x-point on arcball...
+  loc_final_world[1] = orbit_y;                                                                     // Setting y-point on arcball...
   loc_OP_squared     = loc_final_world[0]*loc_final_world[0] +
                        loc_final_world[1]*loc_final_world[1];                                       // Computing OP segment...
 
@@ -87,7 +89,7 @@ void opengl::orbit (
   }
   else
   {
-    normalize (loc_b);                                                                              // Computing z-point on arcball (in case too far)...
+    normalize (loc_final_world);                                                                    // Computing z-point on arcball (in case too far)...
   }
 
   loc_theta          = loc_orbit_rate*2*M_PI*(baseline->loop_time/1000000.0)*angle (
@@ -111,66 +113,68 @@ void opengl::orbit (
 /// ### Description:
 /// Translate the view matrix according to an pan movement.
 void opengl::pan (
-                  float3 loc_position,                                                              // Position.
-                  float  loc_pan_rate,                                                              // Pan rate [units/s].
-                  float  loc_pan_deadzone,                                                          // Pan deadzone threshold coefficient.
-                  float  loc_pan_decaytime                                                          // Pan low pass decay time [s].
+                  float loc_pan_x,                                                                  // World x-pan.
+                  float loc_pan_y,                                                                  // World y-pan.
+                  float loc_pan_z,                                                                  // World z-pan.
+                  float loc_pan_rate,                                                               // Pan rate [units/s].
+                  float loc_pan_deadzone,                                                           // Pan deadzone threshold coefficient.
+                  float loc_pan_decaytime                                                           // Pan low pass decay time [s].
                  )
 {
-  float loc_initial_position[3];
-  float loc_final_position[3];
+  float loc_initial_pan[3];
+  float loc_final_pan[3];
   float translation[3];
   float loc_alpha;
 
-  loc_initial_position[0] = 0.0;                                                                    // Building initial position vector...
-  loc_initial_position[1] = 0.0;                                                                    // Building initial position vector...
-  loc_initial_position[2] = 0.0;                                                                    // Building initial position vector...
+  loc_initial_pan[0] = 0.0;                                                                         // Building initial pan vector...
+  loc_initial_pan[1] = 0.0;                                                                         // Building initial pan vector...
+  loc_initial_pan[2] = 0.0;                                                                         // Building initial pan vector...
 
   // Constraining input values:
-  loc_position.x          = baseline->constrain (
-                                                 loc_position.x,                                    // Initial x-pan.
-                                                 NU_GAMEPAD_MIN_AXES,                               // Minimum x-pan.
-                                                 NU_GAMEPAD_MAX_AXES                                // Maximum x-pan.
-                                                );
-  loc_position.y          = baseline->constrain (
-                                                 loc_position.y,                                    // Initial y-pan.
-                                                 NU_GAMEPAD_MIN_AXES,                               // Minimum y-pan.
-                                                 NU_GAMEPAD_MAX_AXES                                // Maximum y-pan.
-                                                );
-  loc_position.z          = baseline->constrain (
-                                                 loc_position.z,                                    // Initial z-pan.
-                                                 NU_GAMEPAD_MIN_AXES,                               // Minimum z-pan.
-                                                 NU_GAMEPAD_MAX_AXES                                // Maximum z-pan.
-                                                );
+  loc_pan_x          = baseline->constrain (
+                                            loc_pan_x,                                              // Initial x-pan.
+                                            (float)NU_GAMEPAD_MIN_AXES,                             // Minimum x-pan.
+                                            (float)NU_GAMEPAD_MAX_AXES                              // Maximum x-pan.
+                                           );
+  loc_pan_y          = baseline->constrain (
+                                            loc_pan_y,                                              // Initial y-pan.
+                                            (float)NU_GAMEPAD_MIN_AXES,                             // Minimum y-pan.
+                                            (float)NU_GAMEPAD_MAX_AXES                              // Maximum y-pan.
+                                           );
+  loc_pan_z          = baseline->constrain (
+                                            loc_pan_z,                                              // Initial z-pan.
+                                            (float)NU_GAMEPAD_MIN_AXES,                             // Minimum z-pan.
+                                            (float)NU_GAMEPAD_MAX_AXES                              // Maximum z-pan.
+                                           );
 
   // Applying deadzone:
-  if((abs (loc_position.x) <= loc_pan_deadzone) &&
-     (abs (loc_position.y) <= loc_pan_deadzone) &&
-     (abs (loc_position.z) <= loc_pan_deadzone))
+  if((abs (loc_pan_x) <= loc_pan_deadzone) &&
+     (abs (loc_pan_y) <= loc_pan_deadzone) &&
+     (abs (loc_pan_z) <= loc_pan_deadzone))
   {
-    loc_position.x = 0.0;                                                                           // Justifying value...
-    loc_position.y = 0.0;                                                                           // Justifying value...
-    loc_position.z = 0.0;                                                                           // Justifying value...
+    loc_pan_x = 0.0;                                                                                // Justifying value...
+    loc_pan_y = 0.0;                                                                                // Justifying value...
+    loc_pan_z = 0.0;                                                                                // Justifying value...
   }
 
   // Computing LP filter:
-  loc_alpha             = exp (-2*M_PI*(baseline->loop_time/1000000.0)/loc_pan_decaytime);          // Computing filter parameter "alpha"...
-  position.x            = loc_position.x + loc_alpha*(position_old.x - loc_position.x);             // Filtering...
-  position.y            = loc_position.y + loc_alpha*(position_old.y - loc_position.y);             // Filtering...
-  position.z            = loc_position.z + loc_alpha*(position_old.z - loc_position.z);             // Filtering...
+  loc_alpha        = exp (-2*M_PI*(baseline->loop_time/1000000.0)/loc_pan_decaytime);               // Computing filter parameter "alpha"...
+  pan_x            = loc_pan_x + loc_alpha*(pan_x_old - loc_pan_x);                                 // Filtering...
+  pan_y            = loc_pan_y + loc_alpha*(pan_y_old - loc_pan_y);                                 // Filtering...
+  pan_z            = loc_pan_z + loc_alpha*(pan_z_old - loc_pan_z);                                 // Filtering...
 
-  position_old.x        = position.x;                                                               // Backing up...
-  position_old.y        = position.y;                                                               // Backing up...
-  position_old.z        = position.z;                                                               // Backing up...
+  pan_x_old        = pan_x;                                                                         // Backing up...
+  pan_y_old        = pan_y;                                                                         // Backing up...
+  pan_z_old        = pan_z;                                                                         // Backing up...
 
-  loc_final_position[0] = position.x;                                                               // Setting up final position...
-  loc_final_position[1] = position.y;                                                               // Setting up final position...
-  loc_final_position[2] = position.z;                                                               // Setting up final position...
+  loc_final_pan[0] = pan_x;                                                                         // Setting up final x-pan...
+  loc_final_pan[1] = pan_y;                                                                         // Setting up final y-pan...
+  loc_final_pan[2] = pan_z;                                                                         // Setting up final z-pan...
 
   // Doing translation:
-  translation[0]        = loc_pan_rate*(final_position[0] - initial_position[0]);                   // Computing translation vector...
-  translation[1]        = loc_pan_rate*(final_position[1] - initial_position[1]);                   // Computing translation vector...
-  translation[2]        = loc_pan_rate*(final_position[2] - initial_position[2]);                   // Computing translation vector...
+  translation[0]   = loc_pan_rate*(loc_final_pan[0] - loc_initial_pan[0]);                          // Computing translation vector...
+  translation[1]   = loc_pan_rate*(loc_final_pan[1] - loc_initial_pan[1]);                          // Computing translation vector...
+  translation[2]   = loc_pan_rate*(loc_final_pan[2] - loc_initial_pan[2]);                          // Computing translation vector...
   translate (T_mat, T_mat_old, translation);                                                        // Computing translation matrix...
   backup (T_mat_old, T_mat);                                                                        // Backing up translation matrix...
 }
@@ -697,16 +701,16 @@ void opengl::mouse_scrolled (
   // Checking y-position:
   if(scroll_y > 0)
   {
-    zoom_z = +NU_ZOOM_INCREMENT;                                                                    // Setting zoom-in...
+    //zoom_z = +NU_ZOOM_INCREMENT;                                                                    // Setting zoom-in...
   }
 
   // Checking y-position:
   if(scroll_y < 0)
   {
-    zoom_z = -NU_ZOOM_INCREMENT;                                                                    // Setting zoom-out...
+    //zoom_z = -NU_ZOOM_INCREMENT;                                                                    // Setting zoom-out...
   }
 
-  zoom ();                                                                                          // Zooming...
+  //zoom ();                                                                                          // Zooming...
 }
 
 //////////////////////////////////////////////////////////////////////////////////
