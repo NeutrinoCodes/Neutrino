@@ -166,7 +166,7 @@ int main ()
 
     pan_x   = gui->axis_RIGHT_X;
     pan_y   = -gui->axis_RIGHT_Y;
-    pan_z   = 0.0;
+    pan_z   = (gui->axis_RIGHT_TRIGGER + 1.0)/2.0 - (gui->axis_LEFT_TRIGGER + 1.0)/2.0;
 
     gui->pan (
               pan_x,                                                                                // World x-pan.
