@@ -214,16 +214,16 @@ public:
                    );
   void        done ();
   void        terminated ();
-  double      constrain (
-                         double loc_input,
-                         double loc_min,
-                         double loc_max
-                        );
-  float       constrain (
-                         float loc_input,
-                         float loc_min,
-                         float loc_max
-                        );
+  double      constrain_double (
+                                double loc_input,
+                                double loc_min,
+                                double loc_max
+                               );
+  float       constrain_float (
+                               float loc_input,
+                               float loc_min,
+                               float loc_max
+                              );
   // OpenCL error get function:
   std::string get_error (
                          cl_int loc_error                                                           // Error code.

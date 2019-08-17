@@ -148,6 +148,7 @@ int main ()
 
     rotation_x = gui->axis_LEFT_X;
     rotation_y = gui->axis_LEFT_Y;
+
     gui->orbit (
                 rotation_x,
                 rotation_y,
