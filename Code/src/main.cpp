@@ -62,11 +62,10 @@ int main ()
   size_t    i;                                                                                      // "x" direction index.
   size_t    j;                                                                                      // "y" direction index.
 
-  double    rotation_x;                                                                             // x-axis rotation.
-  double    rotation_y;                                                                             // y-axis rotation.
-  double    rotation_decaytime = 1.25;                                                              // LP filter decay time [s].
-  double    rotation_deadzone  = 0.1;                                                               // Rotation deadzone [0...1].
-  double    rotation_rate      = 1.0;                                                               // Maximum rotation rate [rev/s].
+  float2    rotation;                                                                               // xy-axis rotation.
+  float     rotation_decaytime = 1.25;                                                              // LP filter decay time [s].
+  float     rotation_deadzone  = 0.1;                                                               // Rotation deadzone [0...1].
+  float     rotation_rate      = 1.0;                                                               // Maximum rotation rate [rev/s].
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// INITIALIZATION ///////////////////////////////
@@ -146,11 +145,10 @@ int main ()
     Q->release (P, 0);                                                                              // Releasing OpenGL/CL shared argument...
     Q->release (C, 1);                                                                              // Releasing OpenGL/CL shared argument...
 
-    rotation_x = gui->axis_LEFT_X;
-    rotation_y = gui->axis_LEFT_Y;
+    rotation.x = gui->axis_LEFT_X;
+    rotation.y = gui->axis_LEFT_Y;
     gui->orbit (
-                rotation_x,
-                rotation_y,
+                rotation,
                 rotation_rate,
                 rotation_deadzone,
                 rotation_decaytime
