@@ -153,20 +153,20 @@ int main ()
     Q->release (P, 0);                                                                              // Releasing OpenGL/CL shared argument...
     Q->release (C, 1);                                                                              // Releasing OpenGL/CL shared argument...
 
-    orbit_x = gui->axis_LEFT_X;
-    orbit_y = -gui->axis_LEFT_Y;
+    orbit_x = gui->axis_LEFT_X;                                                                     // Setting "Near clipping-plane" x-coordinate...
+    orbit_y = -gui->axis_LEFT_Y;                                                                    // Setting "Near clipping-plane" y-coordinate...
 
     gui->orbit (
-                orbit_x,
-                orbit_y,
-                orbit_rate,
-                orbit_deadzone,
-                orbit_decaytime
+                orbit_x,                                                                            // "Near clipping-plane" x-coordinate.
+                orbit_y,                                                                            // "Near clipping-plane" y-coordinate.
+                orbit_rate,                                                                         // Orbit angular rate coefficient [rev/s].
+                orbit_deadzone,                                                                     // Orbit deadzone threshold coefficient.
+                orbit_decaytime                                                                     // Orbit low pass decay time [s].
                );
 
-    pan_x   = gui->axis_RIGHT_X;
-    pan_y   = -gui->axis_RIGHT_Y;
-    pan_z   = (gui->axis_RIGHT_TRIGGER + 1.0)/2.0 - (gui->axis_LEFT_TRIGGER + 1.0)/2.0;
+    pan_x   = gui->axis_RIGHT_X;                                                                    // Setting world x-pan...
+    pan_y   = -gui->axis_RIGHT_Y;                                                                   // Setting world y-pan...
+    pan_z   = (gui->axis_RIGHT_TRIGGER + 1.0)/2.0 - (gui->axis_LEFT_TRIGGER + 1.0)/2.0;             // Setting world z-pan...
 
     gui->pan (
               pan_x,                                                                                // World x-pan.
