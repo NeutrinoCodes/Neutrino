@@ -50,23 +50,30 @@
 
 int main ()
 {
-  neutrino* bas                = new neutrino ();                                                   // Neutrino baseline.
-  opengl*   gui                = new opengl ();                                                     // OpenGL context.
-  opencl*   ctx                = new opencl ();                                                     // OpenCL context.
-  shader*   S                  = new shader ();                                                     // OpenGL shader program.
-  float4G*  P                  = new float4G ();                                                    // OpenGL float4G.
-  float4G*  C                  = new float4G ();                                                    // OpenGL float4G.
-  float1*   t                  = new float1 ();                                                     // Time [s].
-  queue*    Q                  = new queue ();                                                      // OpenCL queue.
-  kernel*   K                  = new kernel ();                                                     // OpenCL kernel array.
+  neutrino* bas             = new neutrino ();                                                      // Neutrino baseline.
+  opengl*   gui             = new opengl ();                                                        // OpenGL context.
+  opencl*   ctx             = new opencl ();                                                        // OpenCL context.
+  shader*   S               = new shader ();                                                        // OpenGL shader program.
+  float4G*  P               = new float4G ();                                                       // OpenGL float4G.
+  float4G*  C               = new float4G ();                                                       // OpenGL float4G.
+  float1*   t               = new float1 ();                                                        // Time [s].
+  queue*    Q               = new queue ();                                                         // OpenCL queue.
+  kernel*   K               = new kernel ();                                                        // OpenCL kernel array.
   size_t    i;                                                                                      // "x" direction index.
   size_t    j;                                                                                      // "y" direction index.
 
-  float     rotation_x;                                                                             // x-axis rotation.
-  float     rotation_y;                                                                             // y-axis rotation.
-  float     rotation_decaytime = 1.25;                                                              // LP filter decay time [s].
-  float     rotation_deadzone  = 0.1;                                                               // Rotation deadzone [0...1].
-  float     rotation_rate      = 1.0;                                                               // Maximum rotation rate [rev/s].
+  float     orbit_x;                                                                                // x-axis orbit rotation.
+  float     orbit_y;                                                                                // y-axis orbit rotation.
+  float     orbit_decaytime = 1.25;                                                                 // Orbit LP filter decay time [s].
+  float     orbit_deadzone  = 0.1;                                                                  // Orbit rotation deadzone [0...1].
+  float     orbit_rate      = 1.0;                                                                  // Orbit rotation rate [rev/s].
+
+  float     pan_x;                                                                                  // x-axis pan translation.
+  float     pan_y;                                                                                  // y-axis pan translation.
+  float     pan_z;                                                                                  // z-axis pan translation.
+  float     pan_decaytime   = 1.25;                                                                 // Pan LP filter decay time [s].
+  float     pan_deadzone    = 0.1;                                                                  // Pan rotation deadzone [0...1].
+  float     pan_rate        = 1.0;                                                                  // Pan rotation rate [rev/s].
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// INITIALIZATION ///////////////////////////////
@@ -146,16 +153,29 @@ int main ()
     Q->release (P, 0);                                                                              // Releasing OpenGL/CL shared argument...
     Q->release (C, 1);                                                                              // Releasing OpenGL/CL shared argument...
 
-    rotation_x = gui->axis_LEFT_X;
-    rotation_y = gui->axis_LEFT_Y;
+    orbit_x = gui->axis_LEFT_X;
+    orbit_y = -gui->axis_LEFT_Y;
 
     gui->orbit (
-                rotation_x,
-                rotation_y,
-                rotation_rate,
-                rotation_deadzone,
-                rotation_decaytime
+                orbit_x,
+                orbit_y,
+                orbit_rate,
+                orbit_deadzone,
+                orbit_decaytime
                );
+
+    pan_x   = gui->axis_RIGHT_X;
+    pan_y   = -gui->axis_RIGHT_Y;
+    pan_z   = 0.0;
+
+    gui->pan (
+              pan_x,                                                                                // World x-pan.
+              pan_y,                                                                                // World y-pan.
+              pan_z,                                                                                // World z-pan.
+              pan_rate,                                                                             // Pan rate [length/s].
+              pan_deadzone,                                                                         // Pan deadzone threshold coefficient.
+              pan_decaytime                                                                         // Pan low pass decay time [s].
+             );
 
     gui->plot (S);                                                                                  // Plotting shared arguments...
 
