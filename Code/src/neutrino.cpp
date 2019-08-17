@@ -306,11 +306,11 @@ void neutrino::terminated ()
   std::cout << loc_text << std::endl;                                                               // Printing message...
 }
 
-double neutrino::constrain (
-                            double loc_input,
-                            double loc_min,
-                            double loc_max
-                           )
+double neutrino::constrain_double (
+                                   double loc_input,
+                                   double loc_min,
+                                   double loc_max
+                                  )
 {
   double loc_output;
 
@@ -333,11 +333,11 @@ double neutrino::constrain (
   return loc_output;
 }
 
-float neutrino::constrain (
-                           float loc_input,
-                           float loc_min,
-                           float loc_max
-                          )
+float neutrino::constrain_float (
+                                 float loc_input,
+                                 float loc_min,
+                                 float loc_max
+                                )
 {
   float loc_output;
 

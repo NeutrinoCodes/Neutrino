@@ -22,45 +22,45 @@ void opengl::orbit (
                     float loc_orbit_decaytime                                                       // Orbit low pass decay time [s].
                    )
 {
-  float loc_initial_world[3];                                                                       // Initial world vector.
-  float loc_final_world[3];                                                                         // Final world vector.
+  float loc_orbit_initial[3];                                                                       // Initial orbit vector.
+  float loc_orbit_final[3];                                                                         // Final orbit vector.
   float loc_axis[3];                                                                                // Arcball axis of rotation.
   float loc_theta;                                                                                  // Arcball angle of rotation.
   float loc_OP_squared;                                                                             // Center to arcball surface vector length.
   float loc_alpha;                                                                                  // LP filter decay constant.
 
-  loc_initial_world[0] = 0.0;                                                                       // Building initial world vector...
-  loc_initial_world[1] = 0.0;                                                                       // Building initial world vector...
-  loc_initial_world[2] = 1.0;                                                                       // Building initial world vector...
+  loc_orbit_initial[0] = 0.0;                                                                       // Building initial world vector...
+  loc_orbit_initial[1] = 0.0;                                                                       // Building initial world vector...
+  loc_orbit_initial[2] = 1.0;                                                                       // Building initial world vector...
 
   // Constraining input values:
-  loc_orbit_x          = baseline->constrain (
-                                              loc_orbit_x,                                          // Initial x-orbit.
-                                              (float)NU_GAMEPAD_MIN_AXES,                           // Minimum x-orbit.
-                                              (float)NU_GAMEPAD_MIN_AXES                            // Maximum x-orbit.
-                                             );
-  loc_orbit_y          = baseline->constrain (
-                                              loc_orbit_y,                                          // Initial y-orbit.
-                                              (float)NU_GAMEPAD_MIN_AXES,                           // Minimum y-orbit.
-                                              (float)NU_GAMEPAD_MIN_AXES                            // Maximum y-orbit.
-                                             );
+  loc_orbit_x          = baseline->constrain_float (
+                                                    loc_orbit_x,                                    // Initial x-orbit.
+                                                    NU_GAMEPAD_MIN_AXES,                            // Minimum x-orbit.
+                                                    NU_GAMEPAD_MAX_AXES                             // Maximum x-orbit.
+                                                   );
+  loc_orbit_y          = baseline->constrain_float (
+                                                    loc_orbit_y,                                    // Initial y-orbit.
+                                                    NU_GAMEPAD_MIN_AXES,                            // Minimum y-orbit.
+                                                    NU_GAMEPAD_MAX_AXES                             // Maximum y-orbit.
+                                                   );
 
-  loc_orbit_rate       = baseline->constrain (
-                                              loc_orbit_rate,                                       // Orbit angular rate [rev/s].
-                                              (float)NU_GAMEPAD_MIN_ORBIT_RATE,                     // Minimum orbit angular rate [rev/s].
-                                              (float)NU_GAMEPAD_MAX_ORBIT_RATE                      // Maximum orbit angular rate [rev/s].
-                                             );
-  loc_orbit_deadzone   = baseline->constrain (
-                                              loc_orbit_deadzone,                                   // Orbit deadzone.
-                                              (float)NU_GAMEPAD_MIN_AXES,                           // Minimum gampad axes value.
-                                              (float)NU_GAMEPAD_MIN_AXES                            // Maximum gampad axes value.
-                                             );
+  loc_orbit_rate       = baseline->constrain_float (
+                                                    loc_orbit_rate,                                 // Orbit angular rate [rev/s].
+                                                    NU_GAMEPAD_MIN_ORBIT_RATE,                      // Minimum orbit angular rate [rev/s].
+                                                    NU_GAMEPAD_MAX_ORBIT_RATE                       // Maximum orbit angular rate [rev/s].
+                                                   );
+  loc_orbit_deadzone   = baseline->constrain_float (
+                                                    loc_orbit_deadzone,                             // Orbit deadzone.
+                                                    NU_GAMEPAD_MIN_AXES,                            // Minimum gampad axes value.
+                                                    NU_GAMEPAD_MAX_AXES                             // Maximum gampad axes value.
+                                                   );
 
-  loc_orbit_decaytime  = baseline->constrain (
-                                              loc_orbit_decaytime,                                  // Orbit LP filter decay time [s].
-                                              (float)NU_GAMEPAD_MIN_DECAYTIME,                      // Minimum orbit LP filter decay time [s].
-                                              (float)NU_GAMEPAD_MAX_DECAYTIME                       // Maximum orbit LP filter decay time [s].
-                                             );
+  loc_orbit_decaytime  = baseline->constrain_float (
+                                                    loc_orbit_decaytime,                            // Orbit LP filter decay time [s].
+                                                    NU_GAMEPAD_MIN_DECAYTIME,                       // Minimum orbit LP filter decay time [s].
+                                                    NU_GAMEPAD_MAX_DECAYTIME                        // Maximum orbit LP filter decay time [s].
+                                                   );
 
   // Applying deadzone:
   if((abs (loc_orbit_x) <= loc_orbit_deadzone) &&
@@ -78,29 +78,29 @@ void opengl::orbit (
   orbit_y_old        = orbit_y;                                                                     // Backing up...
 
   // Computing arcball:
-  loc_final_world[0] = orbit_x;                                                                     // Setting x-point on arcball...
-  loc_final_world[1] = orbit_y;                                                                     // Setting y-point on arcball...
-  loc_OP_squared     = loc_final_world[0]*loc_final_world[0] +
-                       loc_final_world[1]*loc_final_world[1];                                       // Computing OP segment...
+  loc_orbit_final[0] = orbit_x;                                                                     // Setting x-point on arcball...
+  loc_orbit_final[1] = orbit_y;                                                                     // Setting y-point on arcball...
+  loc_OP_squared     = loc_orbit_final[0]*loc_orbit_final[0] +
+                       loc_orbit_final[1]*loc_orbit_final[1];                                       // Computing OP segment...
 
-  if(loc_OP_squared <= 1)
+  if(loc_OP_squared <= 1.0)
   {
-    loc_final_world[2] = sqrt (1 - loc_OP_squared);                                                 // Computing z-point on arcball...
+    loc_orbit_final[2] = sqrt (1.0 - loc_OP_squared);                                               // Computing z-point on arcball...
   }
   else
   {
-    normalize (loc_final_world);                                                                    // Computing z-point on arcball (in case too far)...
+    normalize (loc_orbit_final);                                                                    // Computing z-point on arcball (in case too far)...
   }
 
   loc_theta          = loc_orbit_rate*2*M_PI*(baseline->loop_time/1000000.0)*angle (
-                                                                                    loc_initial_world,
-                                                                                    loc_final_world
+                                                                                    loc_orbit_initial,
+                                                                                    loc_orbit_final
                                                                                    );               // Computing orbit angle for a rate of 2*pi rad/s...
 
   // Doing rotation:
   if(loc_theta > 0)                                                                                 // Checking for valid rotation angle...
   {
-    cross (loc_axis, loc_initial_world, loc_final_world);                                           // Computing orbit axis of rotation...
+    cross (loc_axis, loc_orbit_initial, loc_orbit_final);                                           // Computing orbit axis of rotation...
     normalize (loc_axis);                                                                           // Normalizing rotation 3D axis...
     quaternion (q, loc_axis, loc_theta);                                                            // Computing rotation quaternion...
     rotate (R_mat, R_mat_old, q);                                                                   // Computing rotation matrix...
@@ -131,21 +131,21 @@ void opengl::pan (
   loc_initial_pan[2] = 0.0;                                                                         // Building initial pan vector...
 
   // Constraining input values:
-  loc_pan_x          = baseline->constrain (
-                                            loc_pan_x,                                              // Initial x-pan.
-                                            (float)NU_GAMEPAD_MIN_AXES,                             // Minimum x-pan.
-                                            (float)NU_GAMEPAD_MAX_AXES                              // Maximum x-pan.
-                                           );
-  loc_pan_y          = baseline->constrain (
-                                            loc_pan_y,                                              // Initial y-pan.
-                                            (float)NU_GAMEPAD_MIN_AXES,                             // Minimum y-pan.
-                                            (float)NU_GAMEPAD_MAX_AXES                              // Maximum y-pan.
-                                           );
-  loc_pan_z          = baseline->constrain (
-                                            loc_pan_z,                                              // Initial z-pan.
-                                            (float)NU_GAMEPAD_MIN_AXES,                             // Minimum z-pan.
-                                            (float)NU_GAMEPAD_MAX_AXES                              // Maximum z-pan.
-                                           );
+  loc_pan_x          = baseline->constrain_float (
+                                                  loc_pan_x,                                        // Initial x-pan.
+                                                  NU_GAMEPAD_MIN_AXES,                              // Minimum x-pan.
+                                                  NU_GAMEPAD_MAX_AXES                               // Maximum x-pan.
+                                                 );
+  loc_pan_y          = baseline->constrain_float (
+                                                  loc_pan_y,                                        // Initial y-pan.
+                                                  NU_GAMEPAD_MIN_AXES,                              // Minimum y-pan.
+                                                  NU_GAMEPAD_MAX_AXES                               // Maximum y-pan.
+                                                 );
+  loc_pan_z          = baseline->constrain_float (
+                                                  loc_pan_z,                                        // Initial z-pan.
+                                                  NU_GAMEPAD_MIN_AXES,                              // Minimum z-pan.
+                                                  NU_GAMEPAD_MAX_AXES                               // Maximum z-pan.
+                                                 );
 
   // Applying deadzone:
   if((abs (loc_pan_x) <= loc_pan_deadzone) &&
