@@ -4,6 +4,7 @@
 #define opengl_hpp
 
   #include "neutrino.hpp"
+  #include "datatypes.hpp"
   #include "shader.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -55,22 +56,6 @@ private:
                             std::string loc_geometry_filename,                                      // Geometry shader file name.
                             std::string loc_fragment_filename                                       // Fragment shader file name.
                            );
-  // Arcball computation:
-  void        arcball (
-                       float* p,                                                                    // Point on unitary ball.
-                       double x,                                                                    // "Near clipping-plane" x-coordinate.
-                       double y                                                                     // "Near clipping-plane" y-coordinate.
-                      );
-  // Grasp computation:
-  void        grasp (
-                     float  position[3],
-                     double x,
-                     double y
-                    );
-  // Pan movement:
-  void        pan ();
-  // Zoom movement:
-  void        zoom ();
   // Plot style:
   void        set_shader (
                           shader* loc_shader,                                                       // Shader.
@@ -198,12 +183,27 @@ public:
   double      axis_LEFT_TRIGGER;
   // Orbit movement:
   void orbit (
-              double loc_orbit_x,                                                                   // "Near clipping-plane" x-coordinate.
-              double loc_orbit_y,                                                                   // "Near clipping-plane" y-coordinate.
-              double loc_orbit_rate,                                                                // Orbit gain coefficient.
-              double loc_orbit_deadzone,                                                            // Orbit deadzone threshold coefficient.
-              double loc_orbit_decaytime                                                            // Orbit low pass decay time [s].
+              float2 loc_orbit,                                                                     // "Near clipping-plane" xy-coordinates.
+              float  loc_orbit_rate,                                                                // Orbit angular rate coefficient [rev/s].
+              float  loc_orbit_deadzone,                                                            // Orbit deadzone threshold coefficient.
+              float  loc_orbit_decaytime                                                            // Orbit low pass decay time [s].
              );
+
+  float       orbit_x_old;
+  float       orbit_y_old;
+  float       orbit_x;
+  float       orbit_y;
+  // Pan movement:
+  void pan (
+            float3 loc_position,                                                                    // Position.
+            float  loc_pan_rate,                                                                    // Pan rate [units/s].
+            float  loc_pan_deadzone,                                                                // Pan deadzone threshold coefficient.
+            float  loc_pan_decaytime                                                                // Pan low pass decay time [s].
+           );
+  float       pan_x_old;
+  float       pan_y_old;
+  float       pan_x;
+  float       pan_y;
 
   double      mouse_x;                                                                              // Mouse x-coordinate [px].
   double      mouse_y;                                                                              // Mouse y-coordinate [px].
@@ -211,22 +211,8 @@ public:
   double      scroll_x;                                                                             // Scroll x-coordinate [px].
   double      scroll_y;                                                                             // Scroll y-coordinate [px].
 
-  double      orbit_x_old;
-  double      orbit_y_old;
-  double      orbit_x;
-  double      orbit_y;
-
-  double      pan_x_old;
-  double      pan_y_old;
-  double      pan_x;
-  double      pan_y;
-
   double      zoom_z_old;
   double      zoom_z;                                                                               // Zoom coefficient.
-
-  double      orbit_rate;
-  double      orbit_deadzone;
-  double      orbit_decaytime;                                                                      // LP filter decay time [s].
 
   // Arcball quaternion:
   float       q[4]       = {1.0, 0.0, 0.0, 0.0};

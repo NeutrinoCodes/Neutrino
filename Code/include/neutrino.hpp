@@ -1,169 +1,63 @@
 #ifndef neutrino_hpp
 #define neutrino_hpp
 
-  #define CL_USE_DEPRECATED_OPENCL_1_2_APIS                                                         // Allows the usage of "OpenCL 1.2" functions in newer versions.
+#define CL_USE_DEPRECATED_OPENCL_1_2_APIS                                                           // Allows the usage of "OpenCL 1.2" functions in newer versions.
 
-  #ifdef WIN32
-    #define GLFW_EXPOSE_NATIVE_WIN32                                                                // Enabling Windows native access functions...
-    #define GLFW_EXPOSE_NATIVE_WGL                                                                  // Enabling Windows native access functions...
-  #endif
+#ifdef WIN32
+  #define GLFW_EXPOSE_NATIVE_WIN32                                                                  // Enabling Windows native access functions...
+  #define GLFW_EXPOSE_NATIVE_WGL                                                                    // Enabling Windows native access functions...
+#endif
 
-  #ifdef __linux__
-    #define GLFW_EXPOSE_NATIVE_X11                                                                  // Enabling Linux native access functions...
-    #define GLFW_EXPOSE_NATIVE_GLX                                                                  // Enabling Linux native access functions...
-  #endif
+#ifdef __linux__
+  #define GLFW_EXPOSE_NATIVE_X11                                                                    // Enabling Linux native access functions...
+  #define GLFW_EXPOSE_NATIVE_GLX                                                                    // Enabling Linux native access functions...
+#endif
 
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// TERMINAL PARAMETERS //////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-  #define NU_TERMINAL_REFRESH               20000                                                   // Terminal refresh time [us].
-  #define NU_COLOR_NORMAL                   "\x1B[0m"                                               // Default terminal color.
-  #define NU_COLOR_RED                      "\x1B[31m"                                              // Red.
-  #define NU_COLOR_GREEN                    "\x1B[32m"                                              // Green.
-  #define NU_COLOR_YELLOW                   "\x1B[33m"                                              // Yellow.
-  #define NU_COLOR_BLUE                     "\x1B[34m"                                              // Blue.
-  #define NU_COLOR_MAGENTA                  "\x1B[35m"                                              // Magenta.
-  #define NU_COLOR_CYAN                     "\x1B[36m"                                              // Cyan.
-  #define NU_COLOR_WHITE                    "\x1B[37m"                                              // White.
-  #define NU_ERASE                          "\33[2K\r"                                              // Erase character.
+#define NU_TERMINAL_REFRESH               20000                                                     // Terminal refresh time [us].
+#define NU_COLOR_NORMAL                   "\x1B[0m"                                                 // Default terminal color.
+#define NU_COLOR_RED                      "\x1B[31m"                                                // Red.
+#define NU_COLOR_GREEN                    "\x1B[32m"                                                // Green.
+#define NU_COLOR_YELLOW                   "\x1B[33m"                                                // Yellow.
+#define NU_COLOR_BLUE                     "\x1B[34m"                                                // Blue.
+#define NU_COLOR_MAGENTA                  "\x1B[35m"                                                // Magenta.
+#define NU_COLOR_CYAN                     "\x1B[36m"                                                // Cyan.
+#define NU_COLOR_WHITE                    "\x1B[37m"                                                // White.
+#define NU_ERASE                          "\33[2K\r"                                                // Erase character.
 
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// WINDOW PARAMETERS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-  #define NU_ZOOM_INCREMENT                 0.1                                                     // Mouse wheel zoom increment [].
-  #define NU_ZOOM_INCREMENT_PS4             0.02                                                    // PS4 gamepad zoom increment [].
-  #define NU_ZOOM_THRESHOLD_PS4             -0.95                                                   // PS4 gamepad zoom threshold [].
-  #define NU_INITIAL_ZOOM                   -3.0                                                    // Initial zoom factor [+.]
-  #define NU_PAN_FACTOR                     0.01                                                    // Mouse pan translation factor [].
-  #define NU_ROTATION_FACTOR                2.0                                                     // Mouse orbit rotation factor [].
-  #define NU_ROTATION_FACTOR_PS4            4.0                                                     // PS4 gampad rotation factor [].
-  #define NU_ROTATION_THRESHOLD_PS4         0.1                                                     // PS4 gampad rotation thrshold [].
-  #define NU_NEAR_Z_CLIP                    0.1                                                     // Near z-clipping distance [small, but > 0.0].
-  #define NU_FAR_Z_CLIP                     100.0                                                   // Far z-clipping distance [big, but < +inf].
-  #define NU_FOV                            60.0                                                    // Field of view [deg].
-  #define NU_IOD                            0.02                                                    // Intraocular distance.
-  #define NU_SCREEN_DISTANCE                -2.5                                                    // Screen distance.
-  #define NU_INITIAL_SCENE_POSITION         {0.0, 0.0, NU_INITIAL_ZOOM}                             // Initial scene position.
-  #define NU_LINE_WIDTH                     3                                                       // Line width [px].
-  #define NU_KERNEL_NAME                    "thekernel"                                             // OpenCL kernel function name.
-  #define NU_MAX_TEXT_SIZE                  128                                                     // Maximum # of characters in a text string.
-  #define NU_MAX_MESSAGE_SIZE               64                                                      // Maximum # of characters in a text message.
-  #define NU_MAX_PATH_SIZE                  32768                                                   // Maximum # of characters in a text file path.
+#define NU_ZOOM_INCREMENT                 0.1                                                       // Mouse wheel zoom increment [].
+#define NU_ZOOM_INCREMENT_PS4             0.02                                                      // PS4 gamepad zoom increment [].
+#define NU_ZOOM_THRESHOLD_PS4             -0.95                                                     // PS4 gamepad zoom threshold [].
+#define NU_INITIAL_ZOOM                   -3.0                                                      // Initial zoom factor [+.]
+#define NU_PAN_FACTOR                     0.01                                                      // Mouse pan translation factor [].
+#define NU_ROTATION_FACTOR                2.0                                                       // Mouse orbit rotation factor [].
+#define NU_ROTATION_FACTOR_PS4            4.0                                                       // PS4 gampad rotation factor [].
+#define NU_ROTATION_THRESHOLD_PS4         0.1                                                       // PS4 gampad rotation thrshold [].
+#define NU_NEAR_Z_CLIP                    0.1                                                       // Near z-clipping distance [small, but > 0.0].
+#define NU_FAR_Z_CLIP                     100.0                                                     // Far z-clipping distance [big, but < +inf].
+#define NU_FOV                            60.0                                                      // Field of view [deg].
+#define NU_IOD                            0.02                                                      // Intraocular distance.
+#define NU_SCREEN_DISTANCE                -2.5                                                      // Screen distance.
+#define NU_INITIAL_SCENE_POSITION         {0.0, 0.0, NU_INITIAL_ZOOM}                               // Initial scene position.
+#define NU_LINE_WIDTH                     3                                                         // Line width [px].
+#define NU_KERNEL_NAME                    "thekernel"                                               // OpenCL kernel function name.
+#define NU_MAX_TEXT_SIZE                  128                                                       // Maximum # of characters in a text string.
+#define NU_MAX_MESSAGE_SIZE               64                                                        // Maximum # of characters in a text message.
+#define NU_MAX_PATH_SIZE                  32768                                                     // Maximum # of characters in a text file path.
 
-  #define NU_GAMEPAD_MIN_DECAYTIME          0.01                                                    // Minimum decay time for LP filter [s].
-  #define NU_GAMEPAD_MAX_DECAYTIME          10.0                                                    // Maximum decay time for LP filter [s].
-  #define NU_GAMEPAD_MIN_AXES               -1.0                                                    // Minimum axes value.
-  #define NU_GAMEPAD_MAX_AXES               +1.0                                                    // Maximum axes value.
-  #define NU_GAMEPAD_MIN_ORBIT_RATE         0.01                                                    // Minimum orbit angular rate [rev/s].
-  #define NU_GAMEPAD_MAX_ORBIT_RATE         10.0                                                    // Maximum orbit angular rate [rev/s].
-
-//////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////// PS4 GAMEPAD BUTTONS //////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-  #ifdef __APPLE__
-    #define NU_SQUARE                       0
-    #define NU_CROSS                        1
-    #define NU_CIRCLE                       2
-    #define NU_TRIANGLE                     3
-
-    #define NU_L1                           4
-    #define NU_R1                           5
-    #define NU_L2                           6
-    #define NU_R2                           7
-
-    #define NU_SHARE                        8
-    #define NU_OPTIONS                      9
-    #define NU_L_ANALOG                     10
-    #define NU_R_ANALOG                     11
-
-    #define NU_PS                           12
-    #define NU_TOUCH                        13
-
-    #define NU_DPAD_UP                      14
-    #define NU_DPAD_RIGHT                   15
-    #define NU_DPAD_DOWN                    16
-    #define NU_DPAD_LEFT                    17
-  #endif
-
-  #ifdef __linux__
-    #define NU_SQUARE                       3
-    #define NU_CROSS                        0
-    #define NU_CIRCLE                       1
-    #define NU_TRIANGLE                     2
-
-    #define NU_L1                           4
-    #define NU_R1                           5
-    #define NU_L2                           6
-    #define NU_R2                           7
-
-    #define NU_SHARE                        8
-    #define NU_OPTIONS                      9
-    #define NU_L_ANALOG                     11
-    #define NU_R_ANALOG                     12
-
-    #define NU_PS                           10
-    #define NU_TOUCH                        13
-
-    #define NU_DPAD_UP                      14
-    #define NU_DPAD_RIGHT                   15
-    #define NU_DPAD_DOWN                    16
-    #define NU_DPAD_LEFT                    17
-  #endif
-
-  #ifdef WIN32
-    #define NU_SQUARE                       0
-    #define NU_CROSS                        1
-    #define NU_CIRCLE                       2
-    #define NU_TRIANGLE                     3
-
-    #define NU_L1                           4
-    #define NU_R1                           5
-    #define NU_L2                           6
-    #define NU_R2                           7
-
-    #define NU_SHARE                        8
-    #define NU_OPTIONS                      9
-    #define NU_L_ANALOG                     10
-    #define NU_R_ANALOG                     11
-
-    #define NU_PS                           12
-    #define NU_TOUCH                        13
-
-    #define NU_DPAD_UP                      14
-    #define NU_DPAD_RIGHT                   15
-    #define NU_DPAD_DOWN                    16
-    #define NU_DPAD_LEFT                    17
-  #endif
-
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// PS4 GAMEPAD AXES //////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-  #ifdef __APPLE__
-    #define NU_L_ANALOG_H                   0
-    #define NU_L_ANALOG_V                   1
-    #define NU_R_ANALOG_H                   2
-    #define NU_L2_ANALOG                    3
-    #define NU_R_ANALOG_V                   5
-    #define NU_R2_ANALOG                    4
-  #endif
-
-  #ifdef __linux__
-    #define NU_L_ANALOG_H                   0
-    #define NU_L_ANALOG_V                   1
-    #define NU_R_ANALOG_H                   3
-    #define NU_L2_ANALOG                    2
-    #define NU_R_ANALOG_V                   4
-    #define NU_R2_ANALOG                    5
-  #endif
-
-  #ifdef WIN32
-    #define NU_L_ANALOG_H                   0
-    #define NU_L_ANALOG_V                   1
-    #define NU_R_ANALOG_H                   2
-    #define NU_R_ANALOG_V                   5
-    #define NU_L2_ANALOG                    3
-    #define NU_R2_ANALOG                    4
-  #endif
+#define NU_GAMEPAD_MIN_DECAYTIME          0.01                                                      // Minimum decay time for LP filter [s].
+#define NU_GAMEPAD_MAX_DECAYTIME          10.0                                                      // Maximum decay time for LP filter [s].
+#define NU_GAMEPAD_MIN_AXES               -1.0                                                      // Minimum axes value.
+#define NU_GAMEPAD_MAX_AXES               +1.0                                                      // Maximum axes value.
+#define NU_GAMEPAD_MIN_ORBIT_RATE         0.01                                                      // Minimum orbit angular rate [rev/s].
+#define NU_GAMEPAD_MAX_ORBIT_RATE         10.0                                                      // Maximum orbit angular rate [rev/s].
+#define NU_GAMEPAD_MIN_PAN_RATE           0.01                                                      // Minimum orbit angular rate [rev/s].
+#define NU_GAMEPAD_MAX_PAN_RATE           10.0                                                      // Maximum orbit angular rate [rev/s].
 
 // Projection mode:
 typedef enum
@@ -200,65 +94,65 @@ typedef enum
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////// Standard C header files ///////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-  #include <stdlib.h>
-  #include <errno.h>
-  #include <string>
-  #include <iostream>
-  #include <fstream>
-  #include <cerrno>
+#include <stdlib.h>
+#include <errno.h>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <cerrno>
 
-  #ifdef __APPLE__
-   #include <math.h>
-  #endif
+#ifdef __APPLE__
+  #include <math.h>
+#endif
 
-  #ifdef __linux__
-   #include <math.h>
-  #endif
+#ifdef __linux__
+  #include <math.h>
+#endif
 
-  #ifdef WIN32
+#ifdef WIN32
   //#include <Windows.h>
   //#define _USE_MATH_DEFINES
-    #include <cmath>
-    #ifndef M_PI
-      #define M_PI 3.14159265358979323846
-    #endif
+#include <cmath>
+  #ifndef M_PI
+    #define M_PI 3.14159265358979323846
   #endif
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// GLAD header files //////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-  #include <glad/glad.h>                                                                            // https://glad.dav1d.de
+#include <glad/glad.h>                                                                              // https://glad.dav1d.de
 
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// GLFW header files //////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-  #include <GLFW/glfw3.h>                                                                           // https://www.glfw.org
-  #include <GLFW/glfw3native.h>                                                                     // https://www.glfw.org
+#include <GLFW/glfw3.h>                                                                             // https://www.glfw.org
+#include <GLFW/glfw3native.h>                                                                       // https://www.glfw.org
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// OpenGL header files /////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-  #ifdef __APPLE__
-    #include <OpenGL/OpenGL.h>                                                                      // Apple deprecated the OpenGL framework in 2018, OS-X 10.14 Mojave.
-  #else
-    #include <GL/gl.h>                                                                              // https://www.opengl.org
-  #endif
+#ifdef __APPLE__
+  #include <OpenGL/OpenGL.h>                                                                        // Apple deprecated the OpenGL framework in 2018, OS-X 10.14 Mojave.
+#else
+  #include <GL/gl.h>                                                                                // https://www.opengl.org
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// OpenCL header files /////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-  #ifdef __APPLE__
-    #include <OpenCL/opencl.h>                                                                      // Apple deprecated the OpenCL framework in 2018, OS-X 10.14 Mojave.
-  #else
-    #include <CL/cl.h>                                                                              // https://www.opengl.org
-    #include <CL/cl_gl.h>                                                                           // https://www.opengl.org
-  #endif
+#ifdef __APPLE__
+  #include <OpenCL/opencl.h>                                                                        // Apple deprecated the OpenCL framework in 2018, OS-X 10.14 Mojave.
+#else
+  #include <CL/cl.h>                                                                                // https://www.opengl.org
+  #include <CL/cl_gl.h>                                                                             // https://www.opengl.org
+#endif
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// Geometry header files /////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-  #include "linear_algebra.hpp"
-  #include "projective_geometry.hpp"
+#include "linear_algebra.hpp"
+#include "projective_geometry.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// "NEUTRINO" CLASS ////////////////////////////////
