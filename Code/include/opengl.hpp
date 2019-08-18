@@ -216,9 +216,6 @@ public:
   double      scroll_x;                                                                             // Scroll x-coordinate [px].
   double      scroll_y;                                                                             // Scroll y-coordinate [px].
 
-  double      zoom_z_old;
-  double      zoom_z;                                                                               // Zoom coefficient.
-
   // Arcball quaternion:
   float       q[4]       = {1.0, 0.0, 0.0, 0.0};
 
@@ -317,6 +314,8 @@ public:
              int         loc_window_size_y,                                                         // Window y-size [px].
              std::string loc_title
             );
+  // Window close function:
+  bool close ();
   // Window "closed" function:
   bool closed ();
   // Window "plot" function:

@@ -183,6 +183,11 @@ int main ()
 
     gui->refresh ();                                                                                // Refreshing gui...
     bas->get_toc ();                                                                                // Getting "toc" [us]...
+
+    if(gui->button_CROSS)
+    {
+      gui->close ();
+    }
   }
 
   ////////////////////////////////////////////////////////////////////////////////
