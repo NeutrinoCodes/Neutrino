@@ -209,6 +209,8 @@ public:
   float       pan_y_old;
   float       pan_z_old;
 
+  bool        mouse_left;
+  bool        mouse_right;
 
   double      mouse_x;                                                                              // Mouse x-coordinate [px].
   double      mouse_y;                                                                              // Mouse y-coordinate [px].
