@@ -606,26 +606,11 @@ void opengl::mouse_button (
       switch(loc_action)
       {
         case GLFW_PRESS:
-          if(orbit_on == false)
-          {
-            /*
-               orbit_x_old =
-               (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
-               0.5f;                                                                                 // Backing up orbit_x position...
-               orbit_y_old =
-               (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
-               0.5f;                                                                                 // Backing up orbit_y position...
-             */
-            orbit_on = true;                                                                        // Turning on orbit...
-          }
+          mouse_left = true;
           break;
 
         case GLFW_RELEASE:
-          if(orbit_on == true)
-          {
-            //backup (R_mat_old, R_mat);                                                              // Backing up rotation matrix...
-            orbit_on = false;                                                                       // Turning off orbit...
-          }
+          mouse_left = false;
           break;
       }
 
@@ -636,26 +621,11 @@ void opengl::mouse_button (
       switch(loc_action)
       {
         case GLFW_PRESS:
-          if(pan_on == false)
-          {
-            /*
-               pan_x_old =
-               (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
-               0.5f;                                                                                 // Backing up orbit_x position...
-               pan_y_old =
-               (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
-               0.5f;                                                                                 // Backing up orbit_y position...
-             */
-            pan_on = true;                                                                          // Turning on orbit...
-          }
+          mouse_right = true;
           break;
 
         case GLFW_RELEASE:
-          if(pan_on == true)
-          {
-            //backup (T_mat_old, T_mat);                                                              // Backing up translation matrix...
-            pan_on = false;
-          }
+          mouse_right = false;
           break;
       }
 

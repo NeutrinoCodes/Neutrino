@@ -186,7 +186,7 @@ int main ()
 
     if(gui->button_CROSS)
     {
-      gui->close ();
+      gui->close ();                                                                                // Closing gui...
     }
   }
 
