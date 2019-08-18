@@ -177,17 +177,17 @@ int main ()
               pan_decaytime                                                                         // Pan low pass decay time [s].
              );
 
+    if(gui->button_CROSS)
+    {
+      gui->close ();                                                                                // Closing gui...
+    }
+
     gui->plot (S);                                                                                  // Plotting shared arguments...
 
     Q->read (t, 2);
 
     gui->refresh ();                                                                                // Refreshing gui...
     bas->get_toc ();                                                                                // Getting "toc" [us]...
-
-    if(gui->button_CROSS)
-    {
-      gui->close ();                                                                                // Closing gui...
-    }
   }
 
   ////////////////////////////////////////////////////////////////////////////////
