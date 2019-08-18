@@ -257,9 +257,6 @@ void opengl::init (
   pan_y_old     = 0.0;
   pan_on        = false;
 
-  zoom_z_old    = NU_INITIAL_ZOOM;
-  zoom_z        = 0.0;                                                                              // Initializing zoom coefficient...
-
   int         glfw_ver_major;
   int         glfw_ver_minor;
   int         glfw_rev;
@@ -394,8 +391,6 @@ void opengl::init (
     translate (T_mat, T_mat_old, initial_scene_position);                                           // Setting initial scene position...
     backup (T_mat_old, T_mat);                                                                      // Backing up translation matrix...
 
-    zoom_z = zoom_z_old;                                                                            // Setting initial zoom...
-
     glfwSwapInterval (1);                                                                           // Enabling screen vertical retrace synchronization (vsync)...
     glfwSwapBuffers (glfw_window);                                                                  // Swapping front and back buffers...
     glfwPollEvents ();                                                                              // Polling GLFW events...
@@ -406,6 +401,14 @@ void opengl::init (
   {
     baseline->action ("OpenCL/GL interoperability disabled by user...");                            // Printing message...
   }
+}
+
+/// # Window close function
+/// ### Description:
+/// Closes the window.
+bool opengl::close ()
+{
+  glfwSetWindowShouldClose (glfw_window, GL_TRUE);                                                  // Setting window "closed" flag...
 }
 
 /// # Window closed function
@@ -670,27 +673,6 @@ void opengl::mouse_moved (
 {
   mouse_x = loc_xpos;                                                                               // Getting mouse position...
   mouse_y = loc_ypos;                                                                               // Getting mouse position...
-
-  /*
-     if(orbit_on)
-     {
-     orbit_x = (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
-              0.5f;                                                                                 // Computing OpenGL pixel x-coordinates...
-     orbit_y = (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
-              0.5f;                                                                                 // Computing OpenGL pixel y-coordinates...
-     //EZOR: orbit ();                                                                                       // Computing orbit...
-     }
-
-     if(pan_on)
-     {
-     pan_x = (mouse_x*(double)framebuffer_size_x/(double)window_size_x) +
-            0.5f;                                                                                   // Computing OpenGL pixel x-coordinates...
-     pan_y = (mouse_y*(double)framebuffer_size_y/(double)window_size_y) +
-            0.5f;                                                                                   // Computing OpenGL pixel y-coordinates...
-     pan ();
-     }
-   */
-
 }
 
 /// # Window mouse-scrolled retpoline function
@@ -703,20 +685,6 @@ void opengl::mouse_scrolled (
 {
   scroll_x = loc_xoffset;                                                                           // Getting scroll position...
   scroll_y = loc_yoffset;                                                                           // Getting scroll position...
-
-  // Checking y-position:
-  if(scroll_y > 0)
-  {
-    //zoom_z = +NU_ZOOM_INCREMENT;                                                                    // Setting zoom-in...
-  }
-
-  // Checking y-position:
-  if(scroll_y < 0)
-  {
-    //zoom_z = -NU_ZOOM_INCREMENT;                                                                    // Setting zoom-out...
-  }
-
-  //zoom ();                                                                                          // Zooming...
 }
 
 //////////////////////////////////////////////////////////////////////////////////
