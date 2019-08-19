@@ -1,2 +1,2 @@
 #!/bin/sh
-cmake -B"./cmake" -H"./" -DGLFW_PATH=/run/media/ezor/LINUX/BookhouseBoys/ezor/glfw -DGLAD_PATH=/run/media/ezor/LINUX/BookhouseBoys/ezor/glad
+cmake -B"./cmake" -H"./" -DGLAD_PATH=/run/media/ezor/LINUX/BookhouseBoys/ezor/glad
