@@ -317,7 +317,7 @@ public:
              std::string loc_title
             );
   // Window close function:
-  bool close ();
+  void close ();
   // Window "closed" function:
   bool closed ();
   // Window "plot" function:

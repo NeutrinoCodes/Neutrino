@@ -406,7 +406,7 @@ void opengl::init (
 /// # Window close function
 /// ### Description:
 /// Closes the window.
-bool opengl::close ()
+void opengl::close ()
 {
   glfwSetWindowShouldClose (glfw_window, GL_TRUE);                                                  // Setting window "closed" flag...
 }
