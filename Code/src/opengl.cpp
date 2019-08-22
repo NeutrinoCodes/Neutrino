@@ -233,29 +233,57 @@ void opengl::init (
   char*  loc_title_buffer;
   size_t loc_title_size;
 
-  baseline      = loc_baseline;                                                                     // Initializing Neutrino baseline...
-  window_size_x = loc_window_size_x;                                                                // Initializing window x-size [px]...
-  window_size_y = loc_window_size_y;                                                                // Initializing window y-size [px]...
-  title         = loc_title;                                                                        // Initializing window title...
-  aspect_ratio  = (double)window_size_x/(double)window_size_y;                                      // Initializing window aspect ration []...
+  baseline            = loc_baseline;                                                               // Initializing Neutrino baseline...
+  window_size_x       = loc_window_size_x;                                                          // Initializing window x-size [px]...
+  window_size_y       = loc_window_size_y;                                                          // Initializing window y-size [px]...
+  title               = loc_title;                                                                  // Initializing window title...
+  aspect_ratio        = (double)window_size_x/(double)window_size_y;                                // Initializing window aspect ration []...
 
-  mouse_x       = 0;                                                                                // Initializing mouse x-coordinate [px]...
-  mouse_y       = 0;                                                                                // Initializing mouse y-coordinate [px]...
+  mouse_x             = 0;                                                                          // Initializing mouse x-coordinate [px]...
+  mouse_y             = 0;                                                                          // Initializing mouse y-coordinate [px]...
 
-  scroll_x      = 0;                                                                                // Initializing scroll x-coordinate [px]...
-  scroll_y      = 0;                                                                                // Initializing scroll y-coordinate [px]...
+  scroll_x            = 0;                                                                          // Initializing scroll x-coordinate [px]...
+  scroll_y            = 0;                                                                          // Initializing scroll y-coordinate [px]...
 
-  orbit_x       = 0.0;
-  orbit_y       = 0.0;
-  orbit_x_old   = 0.0;
-  orbit_y_old   = 0.0;
-  orbit_on      = false;                                                                            // Initializing orbit activation flag...
+  orbit_x             = 0.0;
+  orbit_y             = 0.0;
+  orbit_x_old         = 0.0;
+  orbit_y_old         = 0.0;
+  orbit_on            = false;                                                                      // Initializing orbit activation flag...
 
-  pan_x         = 0.0;
-  pan_y         = 0.0;
-  pan_x_old     = 0.0;
-  pan_y_old     = 0.0;
-  pan_on        = false;
+  pan_x               = 0.0;
+  pan_y               = 0.0;
+  pan_x_old           = 0.0;
+  pan_y_old           = 0.0;
+  pan_on              = false;
+
+  button_A            = false;
+  button_B            = false;
+  button_X            = false;
+  button_Y            = false;
+  button_CROSS        = false;                                                                      // = A;
+  button_CIRCLE       = false;                                                                      // = B;
+  button_SQUARE       = false;                                                                      // = X;
+  button_TRIANGLE     = false;                                                                      // = Y;
+  button_LEFT_BUMPER  = false;
+  button_RIGHT_BUMPER = false;
+  button_BACK         = false;
+  button_START        = false;
+  button_GUIDE        = false;
+  button_LEFT_THUMB   = false;
+  button_RIGHT_THUMB  = false;
+  button_DPAD_UP      = false;
+  button_DPAD_RIGHT   = false;
+  button_DPAD_DOWN    = false;
+  button_DPAD_LEFT    = false;
+
+  // AXES:
+  axis_RIGHT_X        = 0.0;
+  axis_RIGHT_Y        = 0.0;
+  axis_RIGHT_TRIGGER  = -1.0;
+  axis_LEFT_X         = 0.0;
+  axis_LEFT_Y         = 0.0;
+  axis_LEFT_TRIGGER   = -1.0;
 
   int         glfw_ver_major;
   int         glfw_ver_minor;
