@@ -465,6 +465,8 @@ void queue::acquire (
   // Setting layout index in vertex shader...
   glFinish ();                                                                                      // Ensuring that all OpenGL routines have completed all operations...
 
+  glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
+
   // Acquiring OpenCL buffer:
   loc_error = clEnqueueAcquireGLObjects (
                                          queue_id,                                                  // Queue.
@@ -490,6 +492,8 @@ void queue::acquire (
 
   // Setting layout index in vertex shader...
   glFinish ();                                                                                      // Ensuring that all OpenGL routines have completed all operations...
+
+  glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
 
   // Acquiring OpenCL buffer:
   loc_error = clEnqueueAcquireGLObjects (
@@ -526,7 +530,7 @@ void queue::release (
 
   clFinish (queue_id);                                                                              // Ensuring that all OpenCL routines have completed all operations...
 
-  glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
+  glEnableVertexAttribArray (loc_layout_index);
 
   baseline->check_error (loc_error);                                                                // Checking returned error code...
 
@@ -540,7 +544,6 @@ void queue::release (
                          0,                                                                         // Data stride.
                          0                                                                          // Data offset.
                         );
-  glEnableVertexAttribArray (loc_layout_index);
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -565,7 +568,7 @@ void queue::release (
 
   clFinish (queue_id);                                                                              // Ensuring that all OpenCL routines have completed all operations...
 
-  glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
+  glEnableVertexAttribArray (loc_layout_index);
 
   baseline->check_error (loc_error);                                                                // Checking returned error code...
 
@@ -579,7 +582,6 @@ void queue::release (
                          0,                                                                         // Data stride.
                          0                                                                          // Data offset.
                         );
-  glEnableVertexAttribArray (loc_layout_index);
 };
 
 //////////////////////////////////////////////////////////////////////////////////
