@@ -61,6 +61,8 @@ void kernel::init (
   loc_source.copy (loc_source_buffer, source_size + 1);
   loc_source_buffer[source_size]               = '\0';
 
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+
   // Creating OpenCL program from its source:
   program                                      = clCreateProgramWithSource (
                                                                             baseline->context_id,   // OpenCL context ID.
@@ -159,8 +161,6 @@ void kernel::init (
     }
   }
 
-  clFinish();                                                                                       // Waiting for OpenCL to finish...
-
   baseline->done ();                                                                                // Printing message...
 }
 //////////////////////////////////////////////////////////////////////////////////
@@ -172,6 +172,8 @@ void kernel::setarg (
                     )
 {
   cl_int loc_error;                                                                                 // Error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
 
   baseline->action ("setting kernel argument...");                                                  // Printing message...
 
@@ -214,6 +216,8 @@ void kernel::setarg (
 {
   cl_int loc_error;                                                                                 // Error code.
 
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+
   baseline->action ("setting kernel argument...");                                                  // Printing message...
 
   loc_data->layout = loc_layout_index;                                                              // Setting layout index.
@@ -253,6 +257,8 @@ void kernel::setarg (
                     )
 {
   cl_int loc_error;                                                                                 // Error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
 
   baseline->action ("setting kernel argument...");                                                  // Printing message...
 
@@ -295,6 +301,8 @@ void kernel::setarg (
 {
   cl_int loc_error;                                                                                 // Error code.
 
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+
   baseline->action ("setting kernel argument...");                                                  // Printing message...
 
   loc_data->layout = loc_layout_index;                                                              // Setting layout index.
@@ -335,6 +343,8 @@ void kernel::setarg (
                     )
 {
   cl_int loc_error;                                                                                 // Error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
 
   baseline->action ("setting kernel argument...");                                                  // Printing message...
 
@@ -390,6 +400,8 @@ void kernel::setarg (
                   loc_data->vbo                                                                     // VBO to bind.
                  );
 
+    glFinish();                                                                                       // Waiting for OpenGL to finish...
+
     // Creating OpenCL buffer from OpenGL buffer:
     loc_data->buffer = clCreateFromGLBuffer (
                                              baseline->context_id,                                  // OpenCL context.
@@ -423,12 +435,11 @@ void kernel::setarg (
 {
   cl_int loc_error;                                                                                 // Error code.
 
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+
   baseline->action ("setting kernel argument...");                                                  // Printing message...
 
   loc_data->layout = loc_layout_index;                                                              // Setting layout index.
-
-  clFinish();
-  glFinish();
 
   if(!loc_data->ready)
   {
@@ -480,6 +491,8 @@ void kernel::setarg (
                   loc_data->vbo                                                                     // VBO to bind.
                  );
 
+    glFinish();                                                                                       // Waiting for OpenGL to finish...
+
     // Creating OpenCL buffer from OpenGL buffer:
     loc_data->buffer = clCreateFromGLBuffer (
                                              baseline->context_id,                                  // OpenCL context.
@@ -509,6 +522,8 @@ void kernel::setarg (
 kernel::~kernel()
 {
   cl_int loc_error;                                                                                 // Error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
 
   baseline->action ("releasing OpenCL kernel...");                                                  // Printing message...
   loc_error = clReleaseKernel (kernel_id);                                                          // Releasing OpenCL kernel...

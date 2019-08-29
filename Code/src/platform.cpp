@@ -16,6 +16,8 @@ size_t platform::get_info_size (
   cl_int loc_error;                                                                                 // Error code.
   size_t loc_parameter_size;                                                                        // Parameter size.
 
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+
   // Getting platform information:
   loc_error = clGetPlatformInfo (
                                  loc_platform_id,                                                   // Platform id.
@@ -40,6 +42,8 @@ std::string platform::get_info_value (
   std::string loc_parameter;
   char*       loc_parameter_buffer = new char[loc_parameter_size];                                  // Parameter value.
 
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+
   // Getting platform information:
   loc_error     = clGetPlatformInfo (
                                      loc_platform_id,                                               // Platform id.
@@ -63,6 +67,8 @@ void platform::init (
                      cl_platform_id loc_platform_id                                                 // Platform ID.
                     )
 {
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+
   // Profile info:
   profile    = get_info_value (
                                loc_platform_id,
