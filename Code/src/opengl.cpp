@@ -254,8 +254,10 @@ void opengl::init (
 
   pan_x               = 0.0;
   pan_y               = 0.0;
+  pan_z               = 0.0;
   pan_x_old           = 0.0;
   pan_y_old           = 0.0;
+  pan_z_old           = 0.0;
   pan_on              = false;
 
   button_A            = false;
