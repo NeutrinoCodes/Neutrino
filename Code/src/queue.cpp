@@ -22,6 +22,8 @@ void queue::init (
   baseline   = loc_baseline;                                                                        // Getting Neutrino baseline...
   baseline->action ("creating OpenCL command queue...");                                            // Printing message...
 
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+
   context_id = baseline->context_id;                                                                // Initializing context id...
   device_id  = baseline->device_id;                                                                 // Initializing device id...
 
@@ -35,7 +37,7 @@ void queue::init (
 
   baseline->check_error (loc_error);                                                                // Checking error...
 
-  clFinish();                                                                                       // Waiting for OpenCL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
   baseline->done ();                                                                                // Printing message...
 }
@@ -48,6 +50,9 @@ void queue::read (
                  )
 {
   cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
@@ -70,6 +75,8 @@ void queue::read (
                                   );
 
   baseline->check_error (loc_error);
+
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 };
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// READ "int1" overload /////////////////////////////
@@ -80,6 +87,9 @@ void queue::read (
                  )
 {
   cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
@@ -102,6 +112,8 @@ void queue::read (
                                   );
 
   baseline->check_error (loc_error);
+
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 };
 //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////// READ "float4" overload /////////////////////////////
@@ -112,6 +124,9 @@ void queue::read (
                  )
 {
   cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
@@ -134,6 +149,8 @@ void queue::read (
                                   );
 
   baseline->check_error (loc_error);
+
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 };
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// READ "int4" overload /////////////////////////////
@@ -144,6 +161,9 @@ void queue::read (
                  )
 {
   cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
@@ -166,6 +186,8 @@ void queue::read (
                                   );
 
   baseline->check_error (loc_error);
+
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -177,6 +199,9 @@ void queue::read (
                  )
 {
   cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
@@ -199,6 +224,8 @@ void queue::read (
                                   );
 
   baseline->check_error (loc_error);
+
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -210,6 +237,9 @@ void queue::read (
                  )
 {
   cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
@@ -232,6 +262,8 @@ void queue::read (
                                   );
 
   baseline->check_error (loc_error);
+
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -243,6 +275,9 @@ void queue::write (
                   )
 {
   cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
@@ -265,6 +300,8 @@ void queue::write (
                                    );
 
   baseline->check_error (loc_error);
+
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -276,6 +313,9 @@ void queue::write (
                   )
 {
   cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
@@ -298,6 +338,8 @@ void queue::write (
                                    );
 
   baseline->check_error (loc_error);
+
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -309,6 +351,9 @@ void queue::write (
                   )
 {
   cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
@@ -331,6 +376,8 @@ void queue::write (
                                    );
 
   baseline->check_error (loc_error);
+
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -342,6 +389,9 @@ void queue::write (
                   )
 {
   cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
@@ -364,6 +414,8 @@ void queue::write (
                                    );
 
   baseline->check_error (loc_error);
+
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -375,6 +427,9 @@ void queue::write (
                   )
 {
   cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
@@ -408,6 +463,8 @@ void queue::write (
            loc_data,                                                                                // Data object.
            loc_layout_index                                                                         // OpenGL shader layout index.
           );
+
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -419,6 +476,9 @@ void queue::write (
                   )
 {
   cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
@@ -452,6 +512,8 @@ void queue::write (
            loc_data,                                                                                // Data object.
            loc_layout_index                                                                         // OpenGL shader layout index.
           );
+
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -464,10 +526,13 @@ void queue::acquire (
 {
   cl_int loc_error;                                                                                 // Local error code.
 
-  // Setting layout index in vertex shader...
-  glFinish ();                                                                                      // Ensuring that all OpenGL routines have completed all operations...
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
+  // Setting layout index in vertex shader...
   glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
 
   // Acquiring OpenCL buffer:
   loc_error = clEnqueueAcquireGLObjects (
@@ -480,6 +545,8 @@ void queue::acquire (
                                         );
 
   baseline->check_error (loc_error);                                                                // Checking returned error code...
+
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -492,10 +559,13 @@ void queue::acquire (
 {
   cl_int loc_error;                                                                                 // Local error code.
 
-  // Setting layout index in vertex shader...
-  glFinish ();                                                                                      // Ensuring that all OpenGL routines have completed all operations...
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
+  // Setting layout index in vertex shader...
   glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
 
   // Acquiring OpenCL buffer:
   loc_error = clEnqueueAcquireGLObjects (
@@ -508,6 +578,8 @@ void queue::acquire (
                                         );
 
   baseline->check_error (loc_error);                                                                // Checking returned error code...
+
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -520,6 +592,9 @@ void queue::release (
 {
   cl_int loc_error;                                                                                 // Local error code.
 
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
+
   // Releasing openCL buffer:
   loc_error = clEnqueueReleaseGLObjects (
                                          queue_id,                                                  // Queue.
@@ -530,7 +605,7 @@ void queue::release (
                                          NULL                                                       // Event.
                                         );
 
-  clFinish (queue_id);                                                                              // Ensuring that all OpenCL routines have completed all operations...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
   glEnableVertexAttribArray (loc_layout_index);
 
@@ -546,6 +621,8 @@ void queue::release (
                          0,                                                                         // Data stride.
                          0                                                                          // Data offset.
                         );
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -557,6 +634,9 @@ void queue::release (
                     )
 {
   cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
   // Releasing openCL buffer:
   loc_error = clEnqueueReleaseGLObjects (
@@ -584,6 +664,8 @@ void queue::release (
                          0,                                                                         // Data stride.
                          0                                                                          // Data offset.
                         );
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -593,11 +675,16 @@ queue::~queue()
 {
   cl_int loc_error;                                                                                 // Local error code.
 
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
+
   baseline->action ("releasing OpenCL command queue...");                                           // Printing message...
 
   loc_error = clReleaseCommandQueue (queue_id);                                                     // Releasing OpenCL queue...
 
   baseline->check_error (loc_error);                                                                // Checking error...
+
+  clFinish(queue_id);                                                                               // Waiting for OpenCL to finish...
 
   baseline->done ();                                                                                // Printing message...
 }

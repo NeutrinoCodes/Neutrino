@@ -19,6 +19,8 @@ void shader::init (
                    std::string loc_fragment_file_name                                               // Fragment shader file name.
                   )
 {
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+
   shader_home        = loc_shader_home;                                                             // Getting shader home directory...
 
   // Building up vertex file full name:
@@ -58,6 +60,8 @@ GLuint shader::compile (
   GLint       loc_success;                                                                          // "GL_COMPILE_STATUS" flag.
   GLchar*     loc_log;                                                                              // Buffer for OpenGL error log.
   GLsizei     loc_log_size;                                                                         // Size of OpenGL error log.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
 
   // Loading shader from file:
   loc_shader_source = baseline->load_file (
@@ -120,6 +124,8 @@ GLuint shader::compile (
 
   delete loc_shader_buffer;
 
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+
   return (loc_shader);                                                                              // Returning shader...
 }
 
@@ -128,10 +134,14 @@ GLuint shader::compile (
 /// Initializes an OpenGL shader.
 void shader::build ()
 {
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+
   glAttachShader (program, vertex);                                                                 // Attaching vertex shader to program...
   glAttachShader (program, geometry);                                                               // Attaching geometry shader to program...
   glAttachShader (program, fragment);                                                               // Attaching fragment shader to program...
   glLinkProgram (program);                                                                          // Linking program...
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -145,6 +155,8 @@ void shader::setarg (
   size_t loc_name_size;
   char*  loc_name_buffer;
 
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+
   loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
   loc_name_buffer                = new char[loc_name_size + 1];
   loc_data->name.copy (loc_name_buffer, loc_name_size);
@@ -157,6 +169,8 @@ void shader::setarg (
                        );
 
   size                           = loc_data->size;
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
 
   delete loc_name_buffer;
 };
@@ -172,6 +186,8 @@ void shader::setarg (
   size_t loc_name_size;
   char*  loc_name_buffer;
 
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+
   loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
   loc_name_buffer                = new char[loc_name_size + 1];
   loc_data->name.copy (loc_name_buffer, loc_name_size);
@@ -184,6 +200,8 @@ void shader::setarg (
                        );
 
   size                           = loc_data->size;
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
 
   delete loc_name_buffer;
 };

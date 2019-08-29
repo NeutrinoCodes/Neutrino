@@ -20,6 +20,8 @@ cl_uint opencl::get_platforms_number ()
   cl_int  loc_error;                                                                                // Error code.
   cl_uint loc_platforms_number;                                                                     // # of platforms.
 
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+
   // Getting number of existing OpenCL platforms:
   loc_error = clGetPlatformIDs (
                                 0,                                                                  // Dummy # of platforms ("0" means we are asking for the # of platfomrs).
@@ -42,6 +44,8 @@ cl_platform_id opencl::get_platform_id (
   cl_int          loc_error;                                                                        // Error code.
   cl_platform_id* loc_platform_id;                                                                  // Platform IDs array.
   cl_platform_id  loc_selected_platform_id;
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
 
   baseline->action ("getting OpenCL platform ID...");                                               // Printing message...
 
@@ -74,6 +78,8 @@ cl_uint opencl::get_devices_number (
   cl_int  loc_error;                                                                                // Error code.
   cl_uint loc_devices_number;                                                                       // # of devices.
 
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+
   // Getting number of existing OpenCL devices:
   loc_error = clGetDeviceIDs (
                               opencl_platform[loc_platform_index]->id,                              // Platform ID.
@@ -99,6 +105,8 @@ cl_device_id opencl::get_device_id (
   cl_int        loc_error;
   cl_device_id* loc_device_id;
   cl_device_id  loc_selected_device_id;
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
 
   devices_number         = get_devices_number (loc_platform_index);                                 // Getting # of existing devices...
   loc_device_id          = new cl_device_id[devices_number];                                        // Allocating platform array...
@@ -137,9 +145,9 @@ void opencl::init (
   cl_int loc_error;                                                                                 // Error code.
   cl_int i;                                                                                         // Index.
 
-  baseline->action ("initializing OpenCL...");                                                      // Printing message...
-
   glFinish();                                                                                       // Waiting for OpenGL to finish...
+
+  baseline->action ("initializing OpenCL...");                                                      // Printing message...
 
   baseline         = loc_baseline;                                                                  // Getting Neutrino baseline...
   device_type_text = new char[NU_MAX_TEXT_SIZE];                                                    // Device type text [string].
@@ -437,6 +445,8 @@ void opencl::init (
   ////////////////////////////////////////////////////////////////////////////////
   baseline->action ("identifying operating system...");                                             // Printing message...
 
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+
   #ifdef __APPLE__                                                                                  // Checking for APPLE system...
     baseline->done ();
     std::cout << "        --> OS: APPLE" << std::endl;                                              // Printing message...
@@ -533,8 +543,6 @@ void opencl::init (
   baseline->check_error (loc_error);                                                                // Checking returned error code...
   baseline->context_id = context_id;                                                                // Setting neutrino OpenCL context ID...
 
-  clFinish();                                                                                       // Waiting for OpenCL to finish...
-
   baseline->done ();                                                                                // Printing message...
 }
 
@@ -551,6 +559,9 @@ void opencl::execute (
   cl_uint kernel_dimension;                                                                         // Kernel dimension.
   size_t* kernel_size;                                                                              // Kernel size array.
   bool    kernel_valid = false;                                                                     // Validity flag.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  clFinish(loc_queue->queue_id);                                                                    // Waiting for OpenCL to finish...
 
   // Selecting kernel size:
   if(
@@ -613,6 +624,8 @@ void opencl::execute (
 
   baseline->check_error (loc_error);                                                                // Checking error...
 
+  clFinish(loc_queue->queue_id);                                                                    // Waiting for OpenCL to finish...
+
   // Selecting kernel mode:
   switch(loc_kernel_mode)
   {
@@ -635,6 +648,8 @@ void opencl::execute (
 opencl::~opencl()
 {
   cl_int loc_error;                                                                                 // Error code.
+
+  glFinish();                                                                                       // Waiting for OpenGL to finish...
 
   baseline->action ("releasing OpenCL context...");                                                 // Printing message...
 
