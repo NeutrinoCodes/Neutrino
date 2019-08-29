@@ -159,6 +159,8 @@ void kernel::init (
     }
   }
 
+  clFinish();                                                                                       // Waiting for OpenCL to finish...
+
   baseline->done ();                                                                                // Printing message...
 }
 //////////////////////////////////////////////////////////////////////////////////
@@ -424,6 +426,9 @@ void kernel::setarg (
   baseline->action ("setting kernel argument...");                                                  // Printing message...
 
   loc_data->layout = loc_layout_index;                                                              // Setting layout index.
+
+  clFinish();
+  glFinish();
 
   if(!loc_data->ready)
   {
