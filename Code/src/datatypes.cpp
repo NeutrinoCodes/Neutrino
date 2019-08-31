@@ -12,9 +12,15 @@ void float1::init (
                    size_t loc_size                                                                  // Data size.
                   )
 {
+  int i;                                                                                            // Index.
+
   data = new cl_float[loc_size];
   size = loc_size;
 
+  for(i = 0; i < loc_size; i++)
+  {
+    data[i] = 0.0;                                                                                  // Resetting data...
+  }
 }
 
 float1::~float1()
@@ -34,8 +40,15 @@ void int1::init (
                  size_t loc_size                                                                    // Data size.
                 )
 {
+  int i;                                                                                            // Index.
+
   data = new cl_long[loc_size];
   size = loc_size;
+
+  for(i = 0; i < loc_size; i++)
+  {
+    data[i] = 0;                                                                                    // Resetting data...
+  }
 }
 
 int1::~int1()
@@ -55,8 +68,18 @@ void float4::init (
                    size_t loc_size                                                                  // Data size.
                   )
 {
+  int i;                                                                                            // Index.
+
   data = new float4_structure[loc_size];
   size = loc_size;
+
+  for(i = 0; i < loc_size; i++)
+  {
+    data[i].x = 0.0;                                                                                // Resetting data...
+    data[i].y = 0.0;                                                                                // Resetting data...
+    data[i].z = 0.0;                                                                                // Resetting data...
+    data[i].w = 0.0;                                                                                // Resetting data...
+  }
 }
 
 float4::~float4()
@@ -76,8 +99,18 @@ void int4::init (
                  size_t loc_size                                                                    // Data size.
                 )
 {
+  int i;                                                                                            // Index.
+
   data = new int4_structure[loc_size];
   size = loc_size;
+
+  for(i = 0; i < loc_size; i++)
+  {
+    data[i].x = 0;                                                                                  // Resetting data...
+    data[i].y = 0;                                                                                  // Resetting data...
+    data[i].z = 0;                                                                                  // Resetting data...
+    data[i].w = 0;                                                                                  // Resetting data...
+  }
 }
 
 int4::~int4()
@@ -97,8 +130,15 @@ void float1G::init (
                     GLsizeiptr loc_size                                                             // Data size.
                    )
 {
+  int i;                                                                                            // Index.
+
   data = new GLfloat[loc_size];
   size = loc_size;
+
+  for(i = 0; i < loc_size; i++)
+  {
+    data[i] = 0.0;                                                                                  // Resetting data...
+  }
 }
 
 float1G::~float1G()
@@ -118,8 +158,18 @@ void float4G::init (
                     GLsizeiptr loc_size                                                             // Data size.
                    )
 {
+  int i;                                                                                            // Index.
+
   data = new float4G_structure[loc_size];
   size = loc_size;
+
+  for(i = 0; i < loc_size; i++)
+  {
+    data[i].x = 0.0;                                                                                // Resetting data...
+    data[i].y = 0.0;                                                                                // Resetting data...
+    data[i].z = 0.0;                                                                                // Resetting data...
+    data[i].w = 0.0;                                                                                // Resetting data...
+  }
 }
 
 float4G::~float4G()
