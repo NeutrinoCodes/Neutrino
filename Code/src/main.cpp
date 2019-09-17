@@ -1,16 +1,5 @@
 /// @file
 
-// MESH:
- #define XMIN          -1.0                                                                         // XMIN spatial boundary [m].
- #define XMAX          +1.0                                                                         // XMAX spatial boundary [m].
- #define YMIN          -1.0                                                                         // YMIN spatial boundary [m].
- #define YMAX          +1.0                                                                         // YMAX spatial boundary [m].
- #define NODES_X       100                                                                          // Number of nodes in "X" direction [#].
- #define NODES_Y       100                                                                          // Number of nodes in "Y" direction [#].
- #define NODES         NODES_X* NODES_Y                                                             // Total number of nodes [#].
- #define DX            (float)((XMAX - XMIN)/(NODES_X - 1))                                         // DX mesh spatial size [m].
- #define DY            (float)((YMAX - YMIN)/(NODES_Y - 1))                                         // DY mesh spatial size [m].
-
 // OPENGL:
  #define INTEROP       true                                                                         // "true" = use OpenGL-OpenCL interoperability.
  #define GUI_SIZE_X    800                                                                          // Window x-size [px].
@@ -50,6 +39,17 @@
 
 int main ()
 {
+  // MESH:
+  float     x_min           = -1.0;                                                                 // "x_min" spatial boundary [m].
+  float     x_max           = +1.0;                                                                 // "x_max" spatial boundary [m].
+  float     y_min           = -1.0;                                                                 // "y_min" spatial boundary [m].
+  float     y_max           = +1.0;                                                                 // "y_max" spatial boundary [m].
+  size_t    nodes_x         = 100;                                                                  // # of nodes in "X" direction [#].
+  size_t    nodes_y         = 100;                                                                  // # of nodes in "Y" direction [#].
+  size_t    nodes           = nodes_x*nodes_y;                                                      // Total # of nodes [#].
+  float     dx              = (x_max - x_min)/(nodes_x - 1);                                        // x-axis mesh spatial size [m].
+  float     dy              = (y_max - y_min)/(nodes_y - 1);                                        // y-axis mesh spatial size [m].
+
   neutrino* bas             = new neutrino ();                                                      // Neutrino baseline.
   opengl*   gui             = new opengl ();                                                        // OpenGL context.
   opencl*   ctx             = new opencl ();                                                        // OpenCL context.
@@ -82,7 +82,7 @@ int main ()
   gui->init (bas, GUI_SIZE_X, GUI_SIZE_Y, GUI_NAME);                                                // Initializing OpenGL context...
   ctx->init (bas, gui, NU_GPU);                                                                     // Initializing OpenCL context...
   S->init (bas, SHADER_HOME, SHADER_VERT, SHADER_GEOM, SHADER_FRAG);                                // Initializing OpenGL shader...
-  P->init (NODES);                                                                                  // Initializing OpenGL point array...
+  position->init (nodes);                                                                           // Initializing OpenGL point array...
   C->init (NODES);                                                                                  // Initializing OpenGL color array...
   t->init (NODES);                                                                                  // Initializing time...
   Q->init (bas);                                                                                    // Initializing OpenCL queue...
@@ -115,30 +115,30 @@ int main ()
     }
   }
 
-  ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////// SETTING OPENCL KERNEL ARGUMENTS ///////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////// SETTING OPENCL KERNEL ARGUMENTS /////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
   K->setarg (P, 0);                                                                                 // Setting kernel argument "0"...
   K->setarg (C, 1);                                                                                 // Setting kernel argument "1"...
   K->setarg (t, 2);                                                                                 // Setting kernel argument "2"...
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////// WRITING DATA ON OPENCL QUEUE ////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////// WRITING DATA ON OPENCL QUEUE //////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
   Q->write (P, 0);                                                                                  // Uploading argument "0" on kernel...
   Q->write (C, 1);                                                                                  // Uploading argument "1" on kernel...
   Q->write (t, 2);                                                                                  // Uploading argument "2" on kernel...
 
-  ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////// SETTING OPENGL SHADER ARGUMENTS ///////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////// SETTING OPENGL SHADER ARGUMENTS ////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
   S->setarg (P, 0);                                                                                 // Setting shader argument "0"...
   S->setarg (C, 1);                                                                                 // Setting shader argument "1"...
   S->build ();                                                                                      // Building shader program...
 
-  ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////// APPLICATION LOOP //////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////// APPLICATION LOOP ////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
   while(!gui->closed ())                                                                            // Opening gui...
   {
     bas->get_tic ();                                                                                // Getting "tic" [us]...
@@ -153,7 +153,7 @@ int main ()
     Q->release (P, 0);                                                                              // Releasing OpenGL/CL shared argument...
     Q->release (C, 1);                                                                              // Releasing OpenGL/CL shared argument...
 
-    orbit_x = gui->axis_LEFT_X;                                                                     // Setting "Near clipping-plane" x-coordinate...
+    orbit_x = +gui->axis_LEFT_X;                                                                    // Setting "Near clipping-plane" x-coordinate...
     orbit_y = -gui->axis_LEFT_Y;                                                                    // Setting "Near clipping-plane" y-coordinate...
 
     gui->orbit (
@@ -191,9 +191,9 @@ int main ()
     bas->get_toc ();                                                                                // Getting "toc" [us]...
   }
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////// CLEANUP //////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////// CLEANUP ////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
   delete bas;                                                                                       // Deleting Neutrino baseline...
   delete gui;                                                                                       // Deleting OpenGL gui ...
   delete ctx;                                                                                       // Deleting OpenCL context...
