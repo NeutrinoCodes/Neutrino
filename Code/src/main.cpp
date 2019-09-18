@@ -37,10 +37,10 @@
 int main ()
 {
   // MESH:
-  float     x_min           = -1.0;                                                                 // "x_min" spatial boundary [m].
-  float     x_max           = +1.0;                                                                 // "x_max" spatial boundary [m].
-  float     y_min           = -1.0;                                                                 // "y_min" spatial boundary [m].
-  float     y_max           = +1.0;                                                                 // "y_max" spatial boundary [m].
+  float     x_min           = -1.0f;                                                                // "x_min" spatial boundary [m].
+  float     x_max           = +1.0f;                                                                // "x_max" spatial boundary [m].
+  float     y_min           = -1.0f;                                                                // "y_min" spatial boundary [m].
+  float     y_max           = +1.0f;                                                                // "y_max" spatial boundary [m].
   size_t    nodes_x         = 100;                                                                  // # of nodes in "X" direction [#].
   size_t    nodes_y         = 100;                                                                  // # of nodes in "Y" direction [#].
   size_t    nodes           = nodes_x*nodes_y;                                                      // Total # of nodes [#].
@@ -65,19 +65,19 @@ int main ()
   size_t    kernel_sz       = 0;                                                                    // Kernel dimension "z" [#].
 
   // GUI PARAMETERS (orbit):
-  float     orbit_x         = 0.0;                                                                  // x-axis orbit rotation.
-  float     orbit_y         = 0.0;                                                                  // y-axis orbit rotation.
-  float     orbit_decaytime = 1.25;                                                                 // Orbit LP filter decay time [s].
-  float     orbit_deadzone  = 0.1;                                                                  // Orbit rotation deadzone [0...1].
-  float     orbit_rate      = 1.0;                                                                  // Orbit rotation rate [rev/s].
+  float     orbit_x         = 0.0f;                                                                 // x-axis orbit rotation.
+  float     orbit_y         = 0.0f;                                                                 // y-axis orbit rotation.
+  float     orbit_decaytime = 1.25f;                                                                // Orbit LP filter decay time [s].
+  float     orbit_deadzone  = 0.1f;                                                                 // Orbit rotation deadzone [0...1].
+  float     orbit_rate      = 1.0f;                                                                 // Orbit rotation rate [rev/s].
 
   // GUI PARAMETERS (pan):
-  float     pan_x           = 0.0;                                                                  // x-axis pan translation.
-  float     pan_y           = 0.0;                                                                  // y-axis pan translation.
-  float     pan_z           = 0.0;                                                                  // z-axis pan translation.
-  float     pan_decaytime   = 1.25;                                                                 // Pan LP filter decay time [s].
-  float     pan_deadzone    = 0.1;                                                                  // Pan rotation deadzone [0...1].
-  float     pan_rate        = 1.0;                                                                  // Pan rotation rate [rev/s].
+  float     pan_x           = 0.0f;                                                                 // x-axis pan translation.
+  float     pan_y           = 0.0f;                                                                 // y-axis pan translation.
+  float     pan_z           = 0.0f;                                                                 // z-axis pan translation.
+  float     pan_decaytime   = 1.25f;                                                                // Pan LP filter decay time [s].
+  float     pan_deadzone    = 0.1f;                                                                 // Pan rotation deadzone [0...1].
+  float     pan_rate        = 1.0f;                                                                 // Pan rotation rate [rev/s].
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////// INITIALIZATION /////////////////////////////////////////
@@ -108,17 +108,17 @@ int main ()
       // Setting point coordinates:
       position->data[gid].x = x_min + i*dx;                                                         // Setting "x" position...
       position->data[gid].y = y_min + j*dy;                                                         // Setting "y" position...
-      position->data[gid].z = 0.0;                                                                  // Setting "z" position...
-      position->data[gid].w = 1.0;                                                                  // Setting "w" position...
+      position->data[gid].z = 0.0f;                                                                 // Setting "z" position...
+      position->data[gid].w = 1.0f;                                                                 // Setting "w" position...
 
       // Setting point colors:
-      color->data[gid].x    = 0.01*(rand () % 100);                                                 // Setting "r" color coordinate...
-      color->data[gid].y    = 0.01*(rand () % 100);                                                 // Setting "g" color coordinate...
-      color->data[gid].z    = 0.01*(rand () % 100);                                                 // Setting "b" color coordinate...
-      color->data[gid].w    = 1.0;                                                                  // Setting "a" color coordinate...
+      color->data[gid].x    = 0.01f*(rand () % 100);                                                // Setting "r" color coordinate...
+      color->data[gid].y    = 0.01f*(rand () % 100);                                                // Setting "g" color coordinate...
+      color->data[gid].z    = 0.01f*(rand () % 100);                                                // Setting "b" color coordinate...
+      color->data[gid].w    = 1.0f;                                                                 // Setting "a" color coordinate...
 
       // Setting time:
-      t->data[gid]          = 0.0;                                                                  // Setting time...
+      t->data[gid]          = 0.0f;                                                                 // Setting time...
     }
   }
 
@@ -173,7 +173,7 @@ int main ()
 
     pan_x   = +gui->axis_RIGHT_X;                                                                   // Setting world x-pan...
     pan_y   = -gui->axis_RIGHT_Y;                                                                   // Setting world y-pan...
-    pan_z   = (gui->axis_RIGHT_TRIGGER + 1.0)/2.0 - (gui->axis_LEFT_TRIGGER + 1.0)/2.0;             // Setting world z-pan...
+    pan_z   = (gui->axis_RIGHT_TRIGGER + 1.0f)/2.0f - (gui->axis_LEFT_TRIGGER + 1.0f)/2.0f;         // Setting world z-pan...
 
     gui->pan (
               pan_x,                                                                                // World x-pan.

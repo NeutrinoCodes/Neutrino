@@ -8,9 +8,10 @@ float1::float1()
   ready = false;                                                                                    // Resetting "ready" flag...
 }
 
-void float1::init (
-                   size_t loc_size                                                                  // Data size.
-                  )
+void float1::init
+(
+ size_t loc_size                                                                                    // Data size.
+)
 {
   int i;                                                                                            // Index.
 
@@ -19,7 +20,7 @@ void float1::init (
 
   for(i = 0; i < loc_size; i++)
   {
-    data[i] = 0.0;                                                                                  // Resetting data...
+    data[i] = 0.0f;                                                                                 // Resetting data...
   }
 }
 
@@ -64,9 +65,10 @@ float4::float4()
   ready = false;                                                                                    // Resetting "ready" flag...
 }
 
-void float4::init (
-                   size_t loc_size                                                                  // Data size.
-                  )
+void float4::init
+(
+ size_t loc_size                                                                                    // Data size.
+)
 {
   int i;                                                                                            // Index.
 
@@ -75,10 +77,10 @@ void float4::init (
 
   for(i = 0; i < loc_size; i++)
   {
-    data[i].x = 0.0;                                                                                // Resetting data...
-    data[i].y = 0.0;                                                                                // Resetting data...
-    data[i].z = 0.0;                                                                                // Resetting data...
-    data[i].w = 0.0;                                                                                // Resetting data...
+    data[i].x = 0.0f;                                                                               // Resetting data...
+    data[i].y = 0.0f;                                                                               // Resetting data...
+    data[i].z = 0.0f;                                                                               // Resetting data...
+    data[i].w = 0.0f;                                                                               // Resetting data...
   }
 }
 
@@ -95,9 +97,10 @@ int4::int4()
   ready = false;                                                                                    // Resetting "ready" flag...
 }
 
-void int4::init (
-                 size_t loc_size                                                                    // Data size.
-                )
+void int4::init
+(
+ size_t loc_size                                                                                    // Data size.
+)
 {
   int i;                                                                                            // Index.
 
@@ -126,9 +129,10 @@ float1G::float1G()
   ready = false;                                                                                    // Resetting "ready" flag...
 }
 
-void float1G::init (
-                    GLsizeiptr loc_size                                                             // Data size.
-                   )
+void float1G::init
+(
+ GLsizeiptr loc_size                                                                                // Data size.
+)
 {
   int i;                                                                                            // Index.
 
@@ -137,7 +141,7 @@ void float1G::init (
 
   for(i = 0; i < loc_size; i++)
   {
-    data[i] = 0.0;                                                                                  // Resetting data...
+    data[i] = 0.0f;                                                                                 // Resetting data...
   }
 }
 
@@ -154,9 +158,10 @@ float4G::float4G()
   ready = false;                                                                                    // Resetting "ready" flag...
 }
 
-void float4G::init (
-                    GLsizeiptr loc_size                                                             // Data size.
-                   )
+void float4G::init
+(
+ GLsizeiptr loc_size                                                                                // Data size.
+)
 {
   int i;                                                                                            // Index.
 
@@ -165,10 +170,10 @@ void float4G::init (
 
   for(i = 0; i < loc_size; i++)
   {
-    data[i].x = 0.0;                                                                                // Resetting data...
-    data[i].y = 0.0;                                                                                // Resetting data...
-    data[i].z = 0.0;                                                                                // Resetting data...
-    data[i].w = 0.0;                                                                                // Resetting data...
+    data[i].x = 0.0f;                                                                               // Resetting data...
+    data[i].y = 0.0f;                                                                               // Resetting data...
+    data[i].z = 0.0f;                                                                               // Resetting data...
+    data[i].w = 0.0f;                                                                               // Resetting data...
   }
 }
 

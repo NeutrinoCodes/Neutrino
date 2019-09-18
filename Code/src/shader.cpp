@@ -11,15 +11,16 @@ shader::shader ()
 /// # OpenGL shader init function
 /// ### Description:
 /// Initializes an OpenGL shader.
-void shader::init (
-                   neutrino*   loc_baseline,                                                        // Neutrino baseline.
-                   std::string loc_shader_home,                                                     // Shader home directory.
-                   std::string loc_vertex_file_name,                                                // Vertex shader file name.
-                   std::string loc_geometry_file_name,                                              // Geometry shader file name.
-                   std::string loc_fragment_file_name                                               // Fragment shader file name.
-                  )
+void shader::init
+(
+ neutrino*   loc_baseline,                                                                          // Neutrino baseline.
+ std::string loc_shader_home,                                                                       // Shader home directory.
+ std::string loc_vertex_file_name,                                                                  // Vertex shader file name.
+ std::string loc_geometry_file_name,                                                                // Geometry shader file name.
+ std::string loc_fragment_file_name                                                                 // Fragment shader file name.
+)
 {
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   shader_home        = loc_shader_home;                                                             // Getting shader home directory...
 
@@ -42,16 +43,17 @@ void shader::init (
   geometry           = compile (geometry_file_name, NU_GEOMETRY);                                   // Compiling geometry shader...
   fragment           = compile (fragment_file_name, NU_FRAGMENT);                                   // Compiling fragment shader...
   program            = glCreateProgram ();                                                          // Creating program...
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 }
 
 /// # OpenGL shader compile function
 /// ### Description:
 /// Compiles an OpenGL shader.
-GLuint shader::compile (
-                        std::string loc_shader_filename,                                            // GLSL shader file name.
-                        shader_type loc_shader_type                                                 // GLSL shader type.
-                       )
+GLuint shader::compile
+(
+ std::string loc_shader_filename,                                                                   // GLSL shader file name.
+ shader_type loc_shader_type                                                                        // GLSL shader type.
+)
 {
   GLuint      loc_shader;                                                                           // Shader.
   std::string loc_shader_source;                                                                    // Shader source.
@@ -61,7 +63,7 @@ GLuint shader::compile (
   GLchar*     loc_log;                                                                              // Buffer for OpenGL error log.
   GLsizei     loc_log_size;                                                                         // Size of OpenGL error log.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   // Loading shader from file:
   loc_shader_source = baseline->load_file (
@@ -93,21 +95,23 @@ GLuint shader::compile (
   }
 
   // Attaching source code to shader:
-  glShaderSource (
-                  loc_shader,                                                                       // GLSL shader.
-                  1,                                                                                // # of shaders.
-                  (const char**)&loc_shader_source,                                                 // Shader source.
-                  (GLint*)&loc_shader_size                                                          // Shader size.
-                 );
+  glShaderSource
+  (
+   loc_shader,                                                                                      // GLSL shader.
+   1,                                                                                               // # of shaders.
+   (const char**)&loc_shader_source,                                                                // Shader source.
+   (GLint*)&loc_shader_size                                                                         // Shader size.
+  );
 
   glCompileShader (loc_shader);                                                                     // Compiling shader...
 
   // Reading "GL_COMPILE_STATUS" flag:
-  glGetShaderiv (
-                 loc_shader,                                                                        // GLSL shader.
-                 GL_COMPILE_STATUS,                                                                 // Requested shader parameter.
-                 &loc_success                                                                       // Success status flag.
-                );
+  glGetShaderiv
+  (
+   loc_shader,                                                                                      // GLSL shader.
+   GL_COMPILE_STATUS,                                                                               // Requested shader parameter.
+   &loc_success                                                                                     // Success status flag.
+  );
 
   // Checking compiled shader code:
   if(!loc_success)
@@ -124,7 +128,7 @@ GLuint shader::compile (
 
   delete loc_shader_buffer;
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   return (loc_shader);                                                                              // Returning shader...
 }
@@ -134,28 +138,29 @@ GLuint shader::compile (
 /// Initializes an OpenGL shader.
 void shader::build ()
 {
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   glAttachShader (program, vertex);                                                                 // Attaching vertex shader to program...
   glAttachShader (program, geometry);                                                               // Attaching geometry shader to program...
   glAttachShader (program, fragment);                                                               // Attaching fragment shader to program...
   glLinkProgram (program);                                                                          // Linking program...
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 }
 
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// SETARG "float1G" overload /////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void shader::setarg (
-                     float1G* loc_data,                                                             // Data object.
-                     GLuint   loc_layout_index                                                      // Data layout index.
-                    )
+void shader::setarg
+(
+ float1G* loc_data,                                                                                 // Data object.
+ GLuint   loc_layout_index                                                                          // Data layout index.
+)
 {
   size_t loc_name_size;
   char*  loc_name_buffer;
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
   loc_name_buffer                = new char[loc_name_size + 1];
@@ -170,7 +175,7 @@ void shader::setarg (
 
   size                           = loc_data->size;
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   delete loc_name_buffer;
 };
@@ -178,15 +183,16 @@ void shader::setarg (
 //////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// SETARG "float4G" overload /////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-void shader::setarg (
-                     float4G* loc_data,                                                             // Data object.
-                     GLuint   loc_layout_index                                                      // Data layout index.
-                    )
+void shader::setarg
+(
+ float4G* loc_data,                                                                                 // Data object.
+ GLuint   loc_layout_index                                                                          // Data layout index.
+)
 {
   size_t loc_name_size;
   char*  loc_name_buffer;
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
   loc_name_buffer                = new char[loc_name_size + 1];
@@ -201,7 +207,7 @@ void shader::setarg (
 
   size                           = loc_data->size;
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   delete loc_name_buffer;
 };
