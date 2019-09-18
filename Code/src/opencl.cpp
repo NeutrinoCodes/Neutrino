@@ -20,14 +20,15 @@ cl_uint opencl::get_platforms_number ()
   cl_int  loc_error;                                                                                // Error code.
   cl_uint loc_platforms_number;                                                                     // # of platforms.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   // Getting number of existing OpenCL platforms:
-  loc_error = clGetPlatformIDs (
-                                0,                                                                  // Dummy # of platforms ("0" means we are asking for the # of platfomrs).
-                                NULL,                                                               // Dummy platfomrs id.
-                                &loc_platforms_number                                               // Returned local # of existing platforms.
-                               );
+  loc_error = clGetPlatformIDs
+              (
+               0,                                                                                   // Dummy # of platforms ("0" means we are asking for the # of platfomrs).
+               NULL,                                                                                // Dummy platfomrs id.
+               &loc_platforms_number                                                                // Returned local # of existing platforms.
+              );
 
   baseline->check_error (loc_error);                                                                // Checking returned error code...
 
@@ -37,26 +38,28 @@ cl_uint opencl::get_platforms_number ()
 /// # OpenCL get platform id function
 /// ### Description:
 /// Gets the OpenCL platform id.
-cl_platform_id opencl::get_platform_id (
-                                        cl_uint loc_platform_index                                  // OpenCL platform index.
-                                       )
+cl_platform_id opencl::get_platform_id
+(
+ cl_uint loc_platform_index                                                                         // OpenCL platform index.
+)
 {
   cl_int          loc_error;                                                                        // Error code.
   cl_platform_id* loc_platform_id;                                                                  // Platform IDs array.
   cl_platform_id  loc_selected_platform_id;
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   baseline->action ("getting OpenCL platform ID...");                                               // Printing message...
 
   loc_platform_id          = new cl_platform_id[platforms_number];                                  // Allocating platform array...
 
   // Getting OpenCL platform IDs:
-  loc_error                = clGetPlatformIDs (
-                                               platforms_number,                                    // # of existing platforms.
-                                               loc_platform_id,                                     // Platform IDs array.
-                                               NULL                                                 // Dummy # of platforms.
-                                              );
+  loc_error                = clGetPlatformIDs
+                             (
+                              platforms_number,                                                     // # of existing platforms.
+                              loc_platform_id,                                                      // Platform IDs array.
+                              NULL                                                                  // Dummy # of platforms.
+                             );
 
   baseline->check_error (loc_error);                                                                // Checking returned error code...
 
@@ -71,23 +74,25 @@ cl_platform_id opencl::get_platform_id (
 /// # OpenCL get devices function
 /// ### Description:
 /// Gets the number of OpenCL devices.
-cl_uint opencl::get_devices_number (
-                                    cl_uint loc_platform_index                                      // OpenCL platform index.
-                                   )
+cl_uint opencl::get_devices_number
+(
+ cl_uint loc_platform_index                                                                         // OpenCL platform index.
+)
 {
   cl_int  loc_error;                                                                                // Error code.
   cl_uint loc_devices_number;                                                                       // # of devices.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   // Getting number of existing OpenCL devices:
-  loc_error = clGetDeviceIDs (
-                              opencl_platform[loc_platform_index]->id,                              // Platform ID.
-                              device_type,                                                          // Device type.
-                              0,                                                                    // Dummy # of devices ("0" means we are asking for the # of devices).
-                              NULL,                                                                 // Dummy device.
-                              &loc_devices_number                                                   // Returned local # of existing devices.
-                             );
+  loc_error = clGetDeviceIDs
+              (
+               opencl_platform[loc_platform_index]->id,                                             // Platform ID.
+               device_type,                                                                         // Device type.
+               0,                                                                                   // Dummy # of devices ("0" means we are asking for the # of devices).
+               NULL,                                                                                // Dummy device.
+               &loc_devices_number                                                                  // Returned local # of existing devices.
+              );
 
   baseline->check_error (loc_error);                                                                // Checking returned error code...
 
@@ -97,30 +102,32 @@ cl_uint opencl::get_devices_number (
 /// # OpenCL error check function
 /// ### Description:
 /// Gets the OpenCL device id.
-cl_device_id opencl::get_device_id (
-                                    cl_uint loc_device_index,                                       // OpenCL platform index.
-                                    cl_uint loc_platform_index                                      // OpenCL device index.
-                                   )
+cl_device_id opencl::get_device_id
+(
+ cl_uint loc_device_index,                                                                          // OpenCL platform index.
+ cl_uint loc_platform_index                                                                         // OpenCL device index.
+)
 {
   cl_int        loc_error;
   cl_device_id* loc_device_id;
   cl_device_id  loc_selected_device_id;
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
-  devices_number         = get_devices_number (loc_platform_index);                                 // Getting # of existing devices...
-  loc_device_id          = new cl_device_id[devices_number];                                        // Allocating platform array...
+  devices_number = get_devices_number (loc_platform_index);                                         // Getting # of existing devices...
+  loc_device_id  = new cl_device_id[devices_number];                                                // Allocating platform array...
 
   baseline->action ("getting OpenCL device ID...");                                                 // Printing message...
 
   // Getting OpenCL device IDs:
-  loc_error              = clGetDeviceIDs (
-                                           opencl_platform[loc_platform_index]->id,                 // Platform ID.
-                                           device_type,                                             // Device type.
-                                           platforms_number,                                        // # of existing platforms.
-                                           loc_device_id,                                           // Device IDs array.
-                                           NULL                                                     // Dummy # of platforms.
-                                          );
+  loc_error      = clGetDeviceIDs
+                   (
+                    opencl_platform[loc_platform_index]->id,                                        // Platform ID.
+                    device_type,                                                                    // Device type.
+                    platforms_number,                                                               // # of existing platforms.
+                    loc_device_id,                                                                  // Device IDs array.
+                    NULL                                                                            // Dummy # of platforms.
+                   );
 
   baseline->check_error (loc_error);                                                                // Checking returned error code...
 
@@ -136,16 +143,17 @@ cl_device_id opencl::get_device_id (
 /// ### Description:
 /// Selects the device type, sets the OpenCL platform, sets the OpenCL device,
 /// identifies the operating system, creates the OpenCL context.
-void opencl::init (
-                   neutrino*           loc_baseline,                                                // Neutrino baseline.
-                   opengl*             loc_gui,                                                     // OpenGL gui.
-                   compute_device_type loc_device_type                                              // OpenCL device type.
-                  )
+void opencl::init
+(
+ neutrino*           loc_baseline,                                                                  // Neutrino baseline.
+ opengl*             loc_gui,                                                                       // OpenGL gui.
+ compute_device_type loc_device_type                                                                // OpenCL device type.
+)
 {
   cl_int loc_error;                                                                                 // Error code.
   cl_int i;                                                                                         // Index.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   baseline->action ("initializing OpenCL...");                                                      // Printing message...
 
@@ -233,11 +241,12 @@ void opencl::init (
     std::cout << "Action: please select a platform [1..." +
       std::to_string (platforms_number);                                                            // Formulating query...
     selected_platform = (
-                         baseline->query_numeric (
-                                                  " + enter]: ",                                    // Query text.
-                                                  1,                                                // Minimum numeric choice in query answer.
-                                                  platforms_number                                  // Maximum numeric choice in query answer.
-                                                 )
+                         baseline->query_numeric
+                         (
+                          " + enter]: ",                                                            // Query text.
+                          1,                                                                        // Minimum numeric choice in query answer.
+                          platforms_number                                                          // Maximum numeric choice in query answer.
+                         )
                         ) - 1;                                                                      // Setting selected platform index [0...platforms_number - 1]...
   }
 
@@ -291,11 +300,12 @@ void opencl::init (
 
     // Listing device extensions:
     std::cout << "        --> extensions: ";
-    baseline->list (
-                    opencl_device[i]->extensions,                                                   // Extension value.
-                    " ",                                                                            // Extension delimiter.
-                    24                                                                              // Previous text string padding.
-                   );
+    baseline->list
+    (
+     opencl_device[i]->extensions,                                                                  // Extension value.
+     " ",                                                                                           // Extension delimiter.
+     24                                                                                             // Previous text string padding.
+    );
 
     std::cout << "        --> address bits: ";
     std::cout << opencl_device[i]->address_bits << std::endl;                                       // Printing message...
@@ -425,11 +435,12 @@ void opencl::init (
     std::cout << "Action: please select a device [1..." +
       std::to_string (devices_number);                                                              // Formulating query...
     selected_device = (
-                       baseline->query_numeric (
-                                                " + enter]: ",                                      // Query text.
-                                                1,                                                  // Minimum numeric choice in query answer.
-                                                devices_number                                      // Maximum numeric choice in query answer.
-                                               )
+                       baseline->query_numeric
+                       (
+                        " + enter]: ",                                                              // Query text.
+                        1,                                                                          // Minimum numeric choice in query answer.
+                        devices_number                                                              // Maximum numeric choice in query answer.
+                       )
                       ) - 1;                                                                        // Setting selected device index [0...platforms_number - 1]...
   }
 
@@ -445,7 +456,7 @@ void opencl::init (
   ////////////////////////////////////////////////////////////////////////////////
   baseline->action ("identifying operating system...");                                             // Printing message...
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   #ifdef __APPLE__                                                                                  // Checking for APPLE system...
     baseline->done ();
@@ -478,9 +489,10 @@ void opencl::init (
     if(baseline->interop)
     {
       properties[0] = CL_GL_CONTEXT_KHR;                                                            // Setting LINUX OpenCL context properties with CL-GL interop...
-      properties[1] = (cl_context_properties)glfwGetGLXContext (
-                                                                loc_gui->glfw_window
-                                                               );
+      properties[1] = (cl_context_properties)glfwGetGLXContext
+                      (
+                       loc_gui->glfw_window
+                      );
       properties[2] = CL_GLX_DISPLAY_KHR;
       properties[3] = (cl_context_properties)glfwGetX11Display ();
       properties[4] = CL_CONTEXT_PLATFORM;
@@ -504,16 +516,18 @@ void opencl::init (
     if(baseline->interop)
     {
       properties[0] = CL_GL_CONTEXT_KHR;                                                            // Setting WINDOWS OpenCL context properties with CL-GL interop...
-      properties[1] = (cl_context_properties)glfwGetWGLContext (
-                                                                loc_gui->glfw_window
-                                                               );
+      properties[1] = (cl_context_properties)glfwGetWGLContext
+                      (
+                       loc_gui->glfw_window
+                      );
       properties[2] = CL_WGL_HDC_KHR;
-      properties[3] =
-        (cl_context_properties)GetDC (
-                                      glfwGetWin32Window (
-                                                          loc_gui->glfw_window
-                                                         )
-                                     );
+      properties[3] = (cl_context_properties)GetDC
+                      (
+                       glfwGetWin32Window
+                       (
+                        loc_gui->glfw_window
+                       )
+                      );
       properties[4] = CL_CONTEXT_PLATFORM;
       properties[5] = (cl_context_properties)baseline->platform_id;
       properties[6] = 0;
@@ -531,14 +545,15 @@ void opencl::init (
   ////////////////////////////////////////////////////////////////////////////////
   baseline->action ("creating OpenCL context...");                                                  // Printing message...
 
-  context_id           = clCreateContext (
-                                          properties,                                               // Context properties.
-                                          1,                                                        // # of devices on selected platform.
-                                          &opencl_device[selected_device]->id,                      // Pointer to the selected device on selected platform.
-                                          NULL,                                                     // Context error report callback function.
-                                          NULL,                                                     // Context error report callback function argument.
-                                          &loc_error                                                // Error code.
-                                         );
+  context_id = clCreateContext
+               (
+                properties,                                                                         // Context properties.
+                1,                                                                                  // # of devices on selected platform.
+                &opencl_device[selected_device]->id,                                                // Pointer to the selected device on selected platform.
+                NULL,                                                                               // Context error report callback function.
+                NULL,                                                                               // Context error report callback function argument.
+                &loc_error                                                                          // Error code.
+               );
 
   baseline->check_error (loc_error);                                                                // Checking returned error code...
   baseline->context_id = context_id;                                                                // Setting neutrino OpenCL context ID...
@@ -549,19 +564,20 @@ void opencl::init (
 /// # OpenCL kernel execute function
 /// ### Description:
 /// Enqueues the OpenCL kernel (as a single task). Selects the kernel mode.
-void opencl::execute (
-                      kernel*     loc_kernel,                                                       // OpenCL kernel.
-                      queue*      loc_queue,                                                        // OpenCL queue.
-                      kernel_mode loc_kernel_mode                                                   // Kernel mode.
-                     )
+void opencl::execute
+(
+ kernel*     loc_kernel,                                                                            // OpenCL kernel.
+ queue*      loc_queue,                                                                             // OpenCL queue.
+ kernel_mode loc_kernel_mode                                                                        // Kernel mode.
+)
 {
   cl_int  loc_error;                                                                                // Error code.
   cl_uint kernel_dimension;                                                                         // Kernel dimension.
   size_t* kernel_size;                                                                              // Kernel size array.
   bool    kernel_valid = false;                                                                     // Validity flag.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
-  clFinish(loc_queue->queue_id);                                                                    // Waiting for OpenCL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  clFinish (loc_queue->queue_id);                                                                   // Waiting for OpenCL to finish...
 
   // Selecting kernel size:
   if(
@@ -610,21 +626,22 @@ void opencl::execute (
   }
 
   // Enqueueing OpenCL kernel (as a single task):
-  loc_error = clEnqueueNDRangeKernel (
-                                      loc_queue->queue_id,                                          // Queue ID.
-                                      loc_kernel->kernel_id,                                        // Kernel ID.
-                                      kernel_dimension,                                             // Kernel dimension.
-                                      NULL,                                                         // Global work offset.
-                                      kernel_size,                                                  // Global work size.
-                                      NULL,                                                         // Local work size.
-                                      0,                                                            // # of events.
-                                      NULL,                                                         // Event list.
-                                      &loc_kernel->event                                            // Event.
-                                     );
+  loc_error = clEnqueueNDRangeKernel
+              (
+               loc_queue->queue_id,                                                                 // Queue ID.
+               loc_kernel->kernel_id,                                                               // Kernel ID.
+               kernel_dimension,                                                                    // Kernel dimension.
+               NULL,                                                                                // Global work offset.
+               kernel_size,                                                                         // Global work size.
+               NULL,                                                                                // Local work size.
+               0,                                                                                   // # of events.
+               NULL,                                                                                // Event list.
+               &loc_kernel->event                                                                   // Event.
+              );
 
   baseline->check_error (loc_error);                                                                // Checking error...
 
-  clFinish(loc_queue->queue_id);                                                                    // Waiting for OpenCL to finish...
+  clFinish (loc_queue->queue_id);                                                                   // Waiting for OpenCL to finish...
 
   // Selecting kernel mode:
   switch(loc_kernel_mode)
@@ -649,7 +666,7 @@ opencl::~opencl()
 {
   cl_int loc_error;                                                                                 // Error code.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   baseline->action ("releasing OpenCL context...");                                                 // Printing message...
 
