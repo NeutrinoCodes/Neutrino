@@ -38,7 +38,7 @@ public:
   GLuint      geometry;                                                                             // Geometry shader id.
   GLuint      fragment;                                                                             // Fragment shader id.
   GLuint      program;                                                                              // OpenGL program.
-  GLsizei     size;                                                                                 // Shader argument size.
+  GLsizeiptr  size;                                                                                 // Shader argument size.
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////// CONSTRUCTOR ///////////////////////////////

@@ -150,8 +150,8 @@ void opencl::init
  compute_device_type loc_device_type                                                                // OpenCL device type.
 )
 {
-  cl_int loc_error;                                                                                 // Error code.
-  cl_int i;                                                                                         // Index.
+  cl_int  loc_error;                                                                                // Error code.
+  cl_uint i;                                                                                        // Index.
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
@@ -238,10 +238,10 @@ void opencl::init
 
   if(platforms_number > 1)                                                                          // Asking to select a platform, in case many have been found...
   {
-    std::cout << "Action: please select a platform [1..." +
-      std::to_string (platforms_number);                                                            // Formulating query...
+    std::cout << "Action: please select a platform [1..." + std::to_string (platforms_number);      // Formulating query...
+
     selected_platform = (
-                         baseline->query_numeric
+                         (cl_uint)baseline->query_numeric
                          (
                           " + enter]: ",                                                            // Query text.
                           1,                                                                        // Minimum numeric choice in query answer.
@@ -435,7 +435,7 @@ void opencl::init
     std::cout << "Action: please select a device [1..." +
       std::to_string (devices_number);                                                              // Formulating query...
     selected_device = (
-                       baseline->query_numeric
+                       (cl_uint) baseline->query_numeric
                        (
                         " + enter]: ",                                                              // Query text.
                         1,                                                                          // Minimum numeric choice in query answer.

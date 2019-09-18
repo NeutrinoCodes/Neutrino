@@ -30,34 +30,34 @@
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// WINDOW PARAMETERS ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-#define NU_ZOOM_INCREMENT                 0.1                                                       // Mouse wheel zoom increment [].
-#define NU_ZOOM_INCREMENT_PS4             0.02                                                      // PS4 gamepad zoom increment [].
-#define NU_ZOOM_THRESHOLD_PS4             -0.95                                                     // PS4 gamepad zoom threshold [].
-#define NU_INITIAL_ZOOM                   -3.0                                                      // Initial zoom factor [+.]
-#define NU_PAN_FACTOR                     0.01                                                      // Mouse pan translation factor [].
-#define NU_ROTATION_FACTOR                2.0                                                       // Mouse orbit rotation factor [].
-#define NU_ROTATION_FACTOR_PS4            4.0                                                       // PS4 gampad rotation factor [].
-#define NU_ROTATION_THRESHOLD_PS4         0.1                                                       // PS4 gampad rotation thrshold [].
-#define NU_NEAR_Z_CLIP                    0.1                                                       // Near z-clipping distance [small, but > 0.0].
-#define NU_FAR_Z_CLIP                     100.0                                                     // Far z-clipping distance [big, but < +inf].
-#define NU_FOV                            60.0                                                      // Field of view [deg].
-#define NU_IOD                            0.02                                                      // Intraocular distance.
-#define NU_SCREEN_DISTANCE                -2.5                                                      // Screen distance.
-#define NU_INITIAL_SCENE_POSITION         {0.0, 0.0, NU_INITIAL_ZOOM}                               // Initial scene position.
+#define NU_ZOOM_INCREMENT                 0.1f                                                      // Mouse wheel zoom increment [].
+#define NU_ZOOM_INCREMENT_PS4             0.02f                                                     // PS4 gamepad zoom increment [].
+#define NU_ZOOM_THRESHOLD_PS4             -0.95f                                                    // PS4 gamepad zoom threshold [].
+#define NU_INITIAL_ZOOM                   -3.0f                                                     // Initial zoom factor [+.]
+#define NU_PAN_FACTOR                     0.01f                                                     // Mouse pan translation factor [].
+#define NU_ROTATION_FACTOR                2.0f                                                      // Mouse orbit rotation factor [].
+#define NU_ROTATION_FACTOR_PS4            4.0f                                                      // PS4 gampad rotation factor [].
+#define NU_ROTATION_THRESHOLD_PS4         0.1f                                                      // PS4 gampad rotation thrshold [].
+#define NU_NEAR_Z_CLIP                    0.1f                                                      // Near z-clipping distance [small, but > 0.0].
+#define NU_FAR_Z_CLIP                     100.0f                                                    // Far z-clipping distance [big, but < +inf].
+#define NU_FOV                            60.0f                                                     // Field of view [deg].
+#define NU_IOD                            0.02f                                                     // Intraocular distance.
+#define NU_SCREEN_DISTANCE                -2.5f                                                     // Screen distance.
+#define NU_INITIAL_SCENE_POSITION         {0.0f, 0.0f, NU_INITIAL_ZOOM}                             // Initial scene position.
 #define NU_LINE_WIDTH                     3                                                         // Line width [px].
 #define NU_KERNEL_NAME                    "thekernel"                                               // OpenCL kernel function name.
 #define NU_MAX_TEXT_SIZE                  128                                                       // Maximum # of characters in a text string.
 #define NU_MAX_MESSAGE_SIZE               64                                                        // Maximum # of characters in a text message.
 #define NU_MAX_PATH_SIZE                  32768                                                     // Maximum # of characters in a text file path.
 
-#define NU_GAMEPAD_MIN_DECAYTIME          0.01                                                      // Minimum decay time for LP filter [s].
-#define NU_GAMEPAD_MAX_DECAYTIME          10.0                                                      // Maximum decay time for LP filter [s].
-#define NU_GAMEPAD_MIN_AXES               -1.0                                                      // Minimum axes value.
-#define NU_GAMEPAD_MAX_AXES               +1.0                                                      // Maximum axes value.
-#define NU_GAMEPAD_MIN_ORBIT_RATE         0.01                                                      // Minimum orbit angular rate [rev/s].
-#define NU_GAMEPAD_MAX_ORBIT_RATE         10.0                                                      // Maximum orbit angular rate [rev/s].
-#define NU_GAMEPAD_MIN_PAN_RATE           0.01                                                      // Minimum orbit angular rate [rev/s].
-#define NU_GAMEPAD_MAX_PAN_RATE           10.0                                                      // Maximum orbit angular rate [rev/s].
+#define NU_GAMEPAD_MIN_DECAYTIME          0.01f                                                     // Minimum decay time for LP filter [s].
+#define NU_GAMEPAD_MAX_DECAYTIME          10.0f                                                     // Maximum decay time for LP filter [s].
+#define NU_GAMEPAD_MIN_AXES               -1.0f                                                     // Minimum axes value.
+#define NU_GAMEPAD_MAX_AXES               +1.0f                                                     // Maximum axes value.
+#define NU_GAMEPAD_MIN_ORBIT_RATE         0.01f                                                     // Minimum orbit angular rate [rev/s].
+#define NU_GAMEPAD_MAX_ORBIT_RATE         10.0f                                                     // Maximum orbit angular rate [rev/s].
+#define NU_GAMEPAD_MIN_PAN_RATE           0.01f                                                     // Minimum orbit angular rate [rev/s].
+#define NU_GAMEPAD_MAX_PAN_RATE           10.0f                                                     // Maximum orbit angular rate [rev/s].
 
 // Projection mode:
 typedef enum
@@ -117,7 +117,7 @@ typedef enum
 //#define _USE_MATH_DEFINES
 #include <cmath>
   #ifndef M_PI
-    #define M_PI                             3.14159265358979323846
+    #define M_PI                             3.14159265358979323846f
   #endif
 #endif
 
@@ -169,7 +169,7 @@ public:
   bool           interop;                                                                           // Use OpenCL-OpenGL interop.
   double         tic;                                                                               // Tic time [us].
   double         toc;                                                                               // Toc time [us].
-  size_t         loop_time;                                                                         // Loop time [us].
+  double         loop_time;                                                                         // Loop time [us].
   size_t         q_num;                                                                             // # of OpenCL queues.
   size_t         k_num;                                                                             // # of OpenCL kernels.
   cl_context     context_id;                                                                        // OpenCL context id.

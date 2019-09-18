@@ -13,7 +13,7 @@ void float1::init
  size_t loc_size                                                                                    // Data size.
 )
 {
-  int i;                                                                                            // Index.
+  size_t i;                                                                                         // Index.
 
   data = new cl_float[loc_size];
   size = loc_size;
@@ -41,7 +41,7 @@ void int1::init (
                  size_t loc_size                                                                    // Data size.
                 )
 {
-  int i;                                                                                            // Index.
+  size_t i;                                                                                         // Index.
 
   data = new cl_long[loc_size];
   size = loc_size;
@@ -70,7 +70,7 @@ void float4::init
  size_t loc_size                                                                                    // Data size.
 )
 {
-  int i;                                                                                            // Index.
+  size_t i;                                                                                         // Index.
 
   data = new float4_structure[loc_size];
   size = loc_size;
@@ -102,7 +102,7 @@ void int4::init
  size_t loc_size                                                                                    // Data size.
 )
 {
-  int i;                                                                                            // Index.
+  size_t i;                                                                                         // Index.
 
   data = new int4_structure[loc_size];
   size = loc_size;
@@ -134,7 +134,7 @@ void float1G::init
  GLsizeiptr loc_size                                                                                // Data size.
 )
 {
-  int i;                                                                                            // Index.
+  GLsizeiptr i;                                                                                     // Index.
 
   data = new GLfloat[loc_size];
   size = loc_size;
@@ -163,7 +163,7 @@ void float4G::init
  GLsizeiptr loc_size                                                                                // Data size.
 )
 {
-  int i;                                                                                            // Index.
+  GLsizeiptr i;                                                                                     // Index.
 
   data = new float4G_structure[loc_size];
   size = loc_size;
