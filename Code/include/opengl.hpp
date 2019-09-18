@@ -146,8 +146,7 @@ public:
   int         window_size_y;                                                                        // Window y-size [screen coordinates].
   int         framebuffer_size_x;                                                                   // Window x-size [px].
   int         framebuffer_size_y;                                                                   // Window y-size [px].
-
-  double      aspect_ratio;                                                                         // Window aspect ratio [].
+  float       aspect_ratio;                                                                         // Window aspect ratio [].
 
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////// GAMEPAD ///////////////////////////////////

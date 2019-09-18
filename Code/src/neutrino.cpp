@@ -10,7 +10,7 @@ neutrino::neutrino()
   interop     = false;                                                                              // Use OpenCL-OpenGL interop.
   tic         = 0.0;                                                                                // Tic time [us].
   toc         = 0.0;                                                                                // Toc time [us].
-  loop_time   = 0;                                                                                  // Loop time [ms].
+  loop_time   = 0.0;                                                                                // Loop time [us].
 
   context_id  = NULL;                                                                               // OpenCL context ID.
   platform_id = NULL;                                                                               // OpenCL platform ID.
@@ -48,7 +48,7 @@ void neutrino::init
   interop       = loc_interop;                                                                      // Getting OpenCL/GL interoperability flag...
   kernel_id     = new cl_kernel[k_num];                                                             // Initializing OpenCL kernel ID array...
   terminal_time = 0;                                                                                // Resetting terminal time...
-  loop_time     = 0;                                                                                // Resetting loop time...
+  loop_time     = 0.0;                                                                              // Resetting loop time...
   tic           = 0.0;                                                                              // Resetting tic time...
   toc           = 0.0;                                                                              // Resetting toc time...
   size_t i;                                                                                         // Index.
@@ -79,8 +79,8 @@ void neutrino::get_toc ()
   std::string loc_pad;                                                                              // Text pad.
 
   toc            = glfwGetTime ();
-  loop_time      = size_t (round (1000000.0*double(toc - tic)));                                    // Loop execution time [us].
-  terminal_time += loop_time;
+  loop_time      = toc - tic;                                                                       // Loop execution time [us].
+  terminal_time += (size_t) round (loop_time);
 
   if(terminal_time > NU_TERMINAL_REFRESH)                                                           // Checking terminal time...
   {
@@ -92,7 +92,7 @@ void neutrino::get_toc ()
                     std::string ("Action: ") +
                     std::string (NU_COLOR_NORMAL) +
                     std::string ("running host loop time = ") +
-                    std::to_string (loop_time) +
+                    std::to_string ((size_t) round (1000000.0*loop_time)) +
                     std::string (" us");
 
     std::cout << loc_text + loc_pad << std::flush;                                                  // Printing buffer...
