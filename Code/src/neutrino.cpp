@@ -26,6 +26,19 @@ void neutrino::init (
                      bool   loc_interop
                     )
 {
+  // Setting ANSI color modality for Windows:
+  #ifdef WIN32
+    DWORD  l_mode;
+    HANDLE hStdout = GetStdHandle (STD_OUTPUT_HANDLE);
+    GetConsoleMode (hStdout,&l_mode);
+    SetConsoleMode (
+                    hStdout,
+                    l_mode |
+                    ENABLE_VIRTUAL_TERMINAL_PROCESSING |
+                    DISABLE_NEWLINE_AUTO_RETURN
+                   );
+  #endif
+
   // Initializing neutrino object:
   action ("initializing NEUTRINO...");                                                              // Printing message...
 

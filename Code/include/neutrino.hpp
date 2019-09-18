@@ -110,11 +110,14 @@ typedef enum
 #endif
 
 #ifdef WIN32
-  //#include <Windows.h>
-  //#define _USE_MATH_DEFINES
+  #include <windows.h>
+  #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
+  #define DISABLE_NEWLINE_AUTO_RETURN        0x0008
+
+//#define _USE_MATH_DEFINES
 #include <cmath>
   #ifndef M_PI
-    #define M_PI 3.14159265358979323846
+    #define M_PI                             3.14159265358979323846
   #endif
 #endif
 
