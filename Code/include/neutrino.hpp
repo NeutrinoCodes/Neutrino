@@ -33,7 +33,6 @@
 #define NU_ZOOM_INCREMENT                 0.1f                                                      // Mouse wheel zoom increment [].
 #define NU_ZOOM_INCREMENT_PS4             0.02f                                                     // PS4 gamepad zoom increment [].
 #define NU_ZOOM_THRESHOLD_PS4             -0.95f                                                    // PS4 gamepad zoom threshold [].
-#define NU_INITIAL_ZOOM                   -3.0f                                                     // Initial zoom factor [+.]
 #define NU_PAN_FACTOR                     0.01f                                                     // Mouse pan translation factor [].
 #define NU_ROTATION_FACTOR                2.0f                                                      // Mouse orbit rotation factor [].
 #define NU_ROTATION_FACTOR_PS4            4.0f                                                      // PS4 gampad rotation factor [].
@@ -43,7 +42,6 @@
 #define NU_FOV                            60.0f                                                     // Field of view [deg].
 #define NU_IOD                            0.02f                                                     // Intraocular distance.
 #define NU_SCREEN_DISTANCE                -2.5f                                                     // Screen distance.
-#define NU_INITIAL_SCENE_POSITION         {0.0f, 0.0f, NU_INITIAL_ZOOM}                             // Initial scene position.
 #define NU_LINE_WIDTH                     3                                                         // Line width [px].
 #define NU_KERNEL_NAME                    "thekernel"                                               // OpenCL kernel function name.
 #define NU_MAX_TEXT_SIZE                  128                                                       // Maximum # of characters in a text string.
@@ -167,9 +165,9 @@ private:
 
 public:
   bool           interop;                                                                           // Use OpenCL-OpenGL interop.
-  double         tic;                                                                               // Tic time [us].
-  double         toc;                                                                               // Toc time [us].
-  double         loop_time;                                                                         // Loop time [us].
+  double         tic;                                                                               // Tic time [s].
+  double         toc;                                                                               // Toc time [s].
+  double         loop_time;                                                                         // Loop time [s].
   size_t         q_num;                                                                             // # of OpenCL queues.
   size_t         k_num;                                                                             // # of OpenCL kernels.
   cl_context     context_id;                                                                        // OpenCL context id.

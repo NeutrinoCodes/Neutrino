@@ -74,7 +74,7 @@ int main ()
   // GUI PARAMETERS (pan):
   float     pan_x           = 0.0f;                                                                 // x-axis pan translation.
   float     pan_y           = 0.0f;                                                                 // y-axis pan translation.
-  float     pan_z           = 0.0f;                                                                 // z-axis pan translation.
+  float     pan_z           = -2.0f;                                                                // z-axis pan translation.
   float     pan_decaytime   = 1.25f;                                                                // Pan LP filter decay time [s].
   float     pan_deadzone    = 0.1f;                                                                 // Pan rotation deadzone [0...1].
   float     pan_rate        = 1.0f;                                                                 // Pan rotation rate [rev/s].
@@ -83,7 +83,21 @@ int main ()
   /////////////////////////////////////////// INITIALIZATION /////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   bas->init (QUEUE_NUM, KERNEL_NUM, INTEROP);                                                       // Initializing Neutrino baseline...
-  gui->init (bas, GUI_SIZE_X, GUI_SIZE_Y, GUI_NAME);                                                // Initializing OpenGL context...
+
+// Initializing OpenGL context...
+  gui->init
+  (
+   bas,
+   GUI_SIZE_X,
+   GUI_SIZE_Y,
+   GUI_NAME,
+   orbit_x,
+   orbit_y,
+   pan_x,
+   pan_y,
+   pan_z
+  );
+
   ctx->init (bas, gui, NU_GPU);                                                                     // Initializing OpenCL context...
   S->init (bas, SHADER_HOME, SHADER_VERT, SHADER_GEOM, SHADER_FRAG);                                // Initializing OpenGL shader...
   position->init (nodes);                                                                           // Initializing OpenGL point array...

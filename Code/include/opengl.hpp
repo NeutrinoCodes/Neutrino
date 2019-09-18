@@ -18,22 +18,22 @@ private:
   GLFWgamepadstate gamepad;                                                                         // Gamepad state.
 
   // Translation matrix backup:
-  float            T_mat_old[16]             = {1.0, 0.0, 0.0, 0.0,
-                                                0.0, 1.0, 0.0, 0.0,
-                                                0.0, 0.0, 1.0, 0.0,
-                                                0.0, 0.0, 0.0, 1.0};
+  float            T_mat_old[16]             = {1.0f, 0.0f, 0.0f, 0.0f,
+                                                0.0f, 1.0f, 0.0f, 0.0f,
+                                                0.0f, 0.0f, 1.0f, 0.0f,
+                                                0.0f, 0.0f, 0.0f, 1.0f};
 
   // Rotation matrix backup:
-  float            R_mat_old[16]             = {1.0, 0.0, 0.0, 0.0,
-                                                0.0, 1.0, 0.0, 0.0,
-                                                0.0, 0.0, 1.0, 0.0,
-                                                0.0, 0.0, 0.0, 1.0};
+  float            R_mat_old[16]             = {1.0f, 0.0f, 0.0f, 0.0f,
+                                                0.0f, 1.0f, 0.0f, 0.0f,
+                                                0.0f, 0.0f, 1.0f, 0.0f,
+                                                0.0f, 0.0f, 0.0f, 1.0f};
 
   // Rotation quaternion backup:
-  float            q_old[4]                  = {1.0, 0.0, 0.0, 0.0};
+  float            q_old[4]                  = {1.0f, 0.0f, 0.0f, 0.0f};
 
   // Initial scene position:
-  float            initial_scene_position[3] = NU_INITIAL_SCENE_POSITION;
+  float            initial_scene_position[3] = {0.0f, 0.0f, 0.0f};
 
   GLuint           point_shader;                                                                    // Point shader program.
   GLuint           voxel_shader;                                                                    // Voxel shader program.
@@ -313,7 +313,12 @@ public:
              neutrino*   loc_baseline,
              int         loc_window_size_x,                                                         // Window x-size [px].
              int         loc_window_size_y,                                                         // Window y-size [px].
-             std::string loc_title
+             std::string loc_title,
+             float       loc_orbit_x_initial,
+             float       loc_orbit_y_initial,
+             float       loc_pan_x_initial,
+             float       loc_pan_y_initial,
+             float       loc_pan_z_initial
             );
   // Window close function:
   void close ();
