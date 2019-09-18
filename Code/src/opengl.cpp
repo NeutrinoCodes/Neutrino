@@ -31,7 +31,7 @@ void opengl::orbit
   float loc_alpha;                                                                                  // LP filter decay constant.
   float loc_dt;                                                                                     // Baseline loop time [s].
 
-  loc_dt               = (float) (baseline->loop_time/1000000.0);                                   // Getting loop time [s]...
+  loc_dt               = float (baseline->loop_time);                                               // Getting loop time [s]...
 
   loc_orbit_initial[0] = 0.0f;                                                                      // Building initial world vector...
   loc_orbit_initial[1] = 0.0f;                                                                      // Building initial world vector...
@@ -138,7 +138,7 @@ void opengl::pan
   float loc_alpha;
   float loc_dt;                                                                                     // Baseline loop time [s].
 
-  loc_dt             = (float) (baseline->loop_time/1000000.0);                                     // Getting loop time [s]...
+  loc_dt             = float (baseline->loop_time);                                                 // Getting loop time [s]...
 
   loc_initial_pan[0] = 0.0f;                                                                        // Building initial pan vector...
   loc_initial_pan[1] = 0.0f;                                                                        // Building initial pan vector...
@@ -176,6 +176,9 @@ void opengl::pan
 
   // Computing LP filter:
   loc_alpha        = (float) exp (-2.0f*M_PI*loc_dt/loc_pan_decaytime);                             // Computing filter parameter "alpha"...
+
+  //std::cout << loc_dt << std::endl;
+
   pan_x            = loc_pan_x + loc_alpha*(pan_x_old - loc_pan_x);                                 // Filtering...
   pan_y            = loc_pan_y + loc_alpha*(pan_y_old - loc_pan_y);                                 // Filtering...
   pan_z            = loc_pan_z + loc_alpha*(pan_z_old - loc_pan_z);                                 // Filtering...
@@ -255,65 +258,74 @@ void opengl::init
  neutrino*   loc_baseline,                                                                          // Neutrino baseline.
  int         loc_window_size_x,                                                                     // Window x-size [px].
  int         loc_window_size_y,                                                                     // Window y-size [px].
- std::string loc_title                                                                              // Window title.
+ std::string loc_title,                                                                             // Window title.
+ float       loc_orbit_x_initial,
+ float       loc_orbit_y_initial,
+ float       loc_pan_x_initial,
+ float       loc_pan_y_initial,
+ float       loc_pan_z_initial
 )
 {
   char*  loc_title_buffer;
   size_t loc_title_size;
 
-  baseline            = loc_baseline;                                                               // Initializing Neutrino baseline...
-  window_size_x       = loc_window_size_x;                                                          // Initializing window x-size [px]...
-  window_size_y       = loc_window_size_y;                                                          // Initializing window y-size [px]...
-  title               = loc_title;                                                                  // Initializing window title...
-  aspect_ratio        = (float)window_size_x/(float)window_size_y;                                  // Initializing window aspect ration []...
+  baseline                  = loc_baseline;                                                         // Initializing Neutrino baseline...
+  window_size_x             = loc_window_size_x;                                                    // Initializing window x-size [px]...
+  window_size_y             = loc_window_size_y;                                                    // Initializing window y-size [px]...
+  title                     = loc_title;                                                            // Initializing window title...
+  aspect_ratio              = (float)window_size_x/(float)window_size_y;                            // Initializing window aspect ration []...
 
-  mouse_x             = 0;                                                                          // Initializing mouse x-coordinate [px]...
-  mouse_y             = 0;                                                                          // Initializing mouse y-coordinate [px]...
+  initial_scene_position[0] = loc_pan_x_initial;
+  initial_scene_position[1] = loc_pan_y_initial;
+  initial_scene_position[2] = loc_pan_z_initial;
 
-  scroll_x            = 0;                                                                          // Initializing scroll x-coordinate [px]...
-  scroll_y            = 0;                                                                          // Initializing scroll y-coordinate [px]...
+  mouse_x                   = 0;                                                                    // Initializing mouse x-coordinate [px]...
+  mouse_y                   = 0;                                                                    // Initializing mouse y-coordinate [px]...
 
-  orbit_x             = 0.0f;
-  orbit_y             = 0.0f;
-  orbit_x_old         = 0.0f;
-  orbit_y_old         = 0.0f;
-  orbit_on            = false;                                                                      // Initializing orbit activation flag...
+  scroll_x                  = 0;                                                                    // Initializing scroll x-coordinate [px]...
+  scroll_y                  = 0;                                                                    // Initializing scroll y-coordinate [px]...
 
-  pan_x               = 0.0f;
-  pan_y               = 0.0f;
-  pan_z               = 0.0f;
-  pan_x_old           = 0.0f;
-  pan_y_old           = 0.0f;
-  pan_z_old           = 0.0f;
-  pan_on              = false;
+  orbit_x                   = 0.0f;
+  orbit_y                   = 0.0f;
+  orbit_x_old               = 0.0f;
+  orbit_y_old               = 0.0f;
+  orbit_on                  = false;                                                                // Initializing orbit activation flag...
 
-  button_A            = false;
-  button_B            = false;
-  button_X            = false;
-  button_Y            = false;
-  button_CROSS        = false;                                                                      // = A;
-  button_CIRCLE       = false;                                                                      // = B;
-  button_SQUARE       = false;                                                                      // = X;
-  button_TRIANGLE     = false;                                                                      // = Y;
-  button_LEFT_BUMPER  = false;
-  button_RIGHT_BUMPER = false;
-  button_BACK         = false;
-  button_START        = false;
-  button_GUIDE        = false;
-  button_LEFT_THUMB   = false;
-  button_RIGHT_THUMB  = false;
-  button_DPAD_UP      = false;
-  button_DPAD_RIGHT   = false;
-  button_DPAD_DOWN    = false;
-  button_DPAD_LEFT    = false;
+  pan_x                     = 0.0f;
+  pan_y                     = 0.0f;
+  pan_z                     = 0.0f;
+  pan_x_old                 = 0.0f;
+  pan_y_old                 = 0.0f;
+  pan_z_old                 = 0.0f;
+  pan_on                    = false;
+
+  button_A                  = false;
+  button_B                  = false;
+  button_X                  = false;
+  button_Y                  = false;
+  button_CROSS              = false;                                                                // = A;
+  button_CIRCLE             = false;                                                                // = B;
+  button_SQUARE             = false;                                                                // = X;
+  button_TRIANGLE           = false;                                                                // = Y;
+  button_LEFT_BUMPER        = false;
+  button_RIGHT_BUMPER       = false;
+  button_BACK               = false;
+  button_START              = false;
+  button_GUIDE              = false;
+  button_LEFT_THUMB         = false;
+  button_RIGHT_THUMB        = false;
+  button_DPAD_UP            = false;
+  button_DPAD_RIGHT         = false;
+  button_DPAD_DOWN          = false;
+  button_DPAD_LEFT          = false;
 
   // AXES:
-  axis_RIGHT_X        = 0.0f;
-  axis_RIGHT_Y        = 0.0f;
-  axis_RIGHT_TRIGGER  = -1.0f;
-  axis_LEFT_X         = 0.0f;
-  axis_LEFT_Y         = 0.0f;
-  axis_LEFT_TRIGGER   = -1.0f;
+  axis_RIGHT_X              = 0.0f;
+  axis_RIGHT_Y              = 0.0f;
+  axis_RIGHT_TRIGGER        = -1.0f;
+  axis_LEFT_X               = 0.0f;
+  axis_LEFT_Y               = 0.0f;
+  axis_LEFT_TRIGGER         = -1.0f;
 
   int         glfw_ver_major;
   int         glfw_ver_minor;

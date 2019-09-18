@@ -63,7 +63,7 @@ void neutrino::init
 
 /// # Neutrino get "tic" function
 /// ### Description:
-/// Gets the host NU_CPU time "tic" [us].
+/// Gets the host NU_CPU time "tic" [s].
 void neutrino::get_tic ()
 {
   tic = glfwGetTime ();
@@ -71,7 +71,7 @@ void neutrino::get_tic ()
 
 /// # Neutrino get "toc" function
 /// ### Description:
-/// Gets the host NU_CPU time "toc" [us]. Prints the "toc - tic" time difference
+/// Gets the host NU_CPU time "toc" [s]. Prints the "toc - tic" time difference
 /// to the stdout.
 void neutrino::get_toc ()
 {
@@ -79,8 +79,8 @@ void neutrino::get_toc ()
   std::string loc_pad;                                                                              // Text pad.
 
   toc            = glfwGetTime ();
-  loop_time      = toc - tic;                                                                       // Loop execution time [us].
-  terminal_time += (size_t) round (loop_time);
+  loop_time      = toc - tic;                                                                       // Loop execution time [s].
+  terminal_time += size_t (round (loop_time*1000000.0f));                                           // Terminal time [us].
 
   if(terminal_time > NU_TERMINAL_REFRESH)                                                           // Checking terminal time...
   {
@@ -92,7 +92,7 @@ void neutrino::get_toc ()
                     std::string ("Action: ") +
                     std::string (NU_COLOR_NORMAL) +
                     std::string ("running host loop time = ") +
-                    std::to_string ((size_t) round (1000000.0*loop_time)) +
+                    std::to_string (long (round (1000000.0*loop_time))) +
                     std::string (" us");
 
     std::cout << loc_text + loc_pad << std::flush;                                                  // Printing buffer...
