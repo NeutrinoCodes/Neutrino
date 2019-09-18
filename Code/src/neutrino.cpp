@@ -10,7 +10,7 @@ neutrino::neutrino()
   interop     = false;                                                                              // Use OpenCL-OpenGL interop.
   tic         = 0.0;                                                                                // Tic time [ms].
   toc         = 0.0;                                                                                // Toc time [ms].
-  loop_time   = 0.0;                                                                                // Loop time [ms].
+  loop_time   = 0;                                                                                  // Loop time [ms].
 
   context_id  = NULL;                                                                               // OpenCL context ID.
   platform_id = NULL;                                                                               // OpenCL platform ID.
@@ -76,8 +76,6 @@ void neutrino::get_toc ()
 {
   std::string loc_text;                                                                             // Text buffer.
   std::string loc_pad;                                                                              // Text pad.
-  size_t      loc_pad_size;                                                                         // Text pad size.
-  size_t      i;                                                                                    // Index.
 
   toc            = glfwGetTime ();
   loop_time      = size_t (round (1000000.0*double(toc - tic)));                                    // Loop execution time [us].
@@ -136,11 +134,11 @@ void neutrino::write_file (
 /// # Neutrino query numeric input function
 /// ### Description:
 /// Asks the user for a numeric input choice.
-int neutrino::query_numeric (
-                             std::string loc_caption,
-                             int         loc_min,
-                             int         loc_max
-                            )
+size_t neutrino::query_numeric (
+                                std::string loc_caption,
+                                int         loc_min,
+                                int         loc_max
+                               )
 {
   std::string loc_buffer;
   size_t      loc_numeric;                                                                          // Numeric value.

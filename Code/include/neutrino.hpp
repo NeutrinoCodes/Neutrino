@@ -197,7 +197,7 @@ public:
                           std::string file_name                                                     // File name.
                          );
   // Query numeric input from stdin:
-  int         query_numeric (
+  size_t      query_numeric (
                              std::string caption,                                                   // Text query caption.
                              int         min,                                                       // Minimum queried numeric value.
                              int         max                                                        // Maximum queried numeric value.

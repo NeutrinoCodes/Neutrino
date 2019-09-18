@@ -28,7 +28,6 @@ void kernel::init (
                   )
 {
   cl_int      loc_error;                                                                            // Error code.
-  size_t      loc_kernel_source_size;                                                               // Kernel source size [characters].
   size_t      loc_log_size;                                                                         // OpenCL JIT compiler log size.
   std::string loc_source;
   char*       loc_source_buffer;
@@ -61,7 +60,7 @@ void kernel::init (
   loc_source.copy (loc_source_buffer, source_size + 1);
   loc_source_buffer[source_size]               = '\0';
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   // Creating OpenCL program from its source:
   program                                      = clCreateProgramWithSource (
@@ -173,7 +172,7 @@ void kernel::setarg (
 {
   cl_int loc_error;                                                                                 // Error code.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   baseline->action ("setting kernel argument...");                                                  // Printing message...
 
@@ -216,7 +215,7 @@ void kernel::setarg (
 {
   cl_int loc_error;                                                                                 // Error code.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   baseline->action ("setting kernel argument...");                                                  // Printing message...
 
@@ -258,7 +257,7 @@ void kernel::setarg (
 {
   cl_int loc_error;                                                                                 // Error code.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   baseline->action ("setting kernel argument...");                                                  // Printing message...
 
@@ -301,7 +300,7 @@ void kernel::setarg (
 {
   cl_int loc_error;                                                                                 // Error code.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   baseline->action ("setting kernel argument...");                                                  // Printing message...
 
@@ -344,7 +343,7 @@ void kernel::setarg (
 {
   cl_int loc_error;                                                                                 // Error code.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   baseline->action ("setting kernel argument...");                                                  // Printing message...
 
@@ -400,7 +399,7 @@ void kernel::setarg (
                   loc_data->vbo                                                                     // VBO to bind.
                  );
 
-    glFinish();                                                                                       // Waiting for OpenGL to finish...
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
 
     // Creating OpenCL buffer from OpenGL buffer:
     loc_data->buffer = clCreateFromGLBuffer (
@@ -435,7 +434,7 @@ void kernel::setarg (
 {
   cl_int loc_error;                                                                                 // Error code.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   baseline->action ("setting kernel argument...");                                                  // Printing message...
 
@@ -491,7 +490,7 @@ void kernel::setarg (
                   loc_data->vbo                                                                     // VBO to bind.
                  );
 
-    glFinish();                                                                                       // Waiting for OpenGL to finish...
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
 
     // Creating OpenCL buffer from OpenGL buffer:
     loc_data->buffer = clCreateFromGLBuffer (
@@ -523,7 +522,7 @@ kernel::~kernel()
 {
   cl_int loc_error;                                                                                 // Error code.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   baseline->action ("releasing OpenCL kernel...");                                                  // Printing message...
   loc_error = clReleaseKernel (kernel_id);                                                          // Releasing OpenCL kernel...
