@@ -20,7 +20,7 @@ std::string device::get_string (
   size_t      loc_parameter_size;                                                                      // Parameter size.
   std::string loc_parameter_value;                                                                     // Parameter value.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                         // Waiting for OpenGL to finish...
 
   // Getting parameter size:
   loc_error = clGetDeviceInfo (
@@ -60,7 +60,7 @@ cl_uint device::get_cl_uint (
   size_t  loc_parameter_size;                                                                          // Parameter size.
   cl_uint loc_parameter_value;                                                                         // Parameter value.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                         // Waiting for OpenGL to finish...
 
   // Getting parameter size:
   loc_error = clGetDeviceInfo (
@@ -96,7 +96,7 @@ cl_uint device::get_cl_bool (
   size_t  loc_parameter_size;                                                                          // Parameter size.
   cl_bool loc_parameter_value;                                                                         // Parameter value.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                         // Waiting for OpenGL to finish...
 
   // Getting parameter size:
   loc_error = clGetDeviceInfo (
@@ -132,7 +132,7 @@ cl_device_fp_config device::get_cl_device_fp_config (
   size_t              loc_parameter_size;                                                              // Parameter size.
   cl_device_fp_config loc_parameter_value;                                                             // Parameter value.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                         // Waiting for OpenGL to finish...
 
   // Getting parameter size:
   loc_error = clGetDeviceInfo (
@@ -168,7 +168,7 @@ cl_device_exec_capabilities device::get_cl_device_exec_capabilities (
   size_t                      loc_parameter_size;                                                      // Parameter size.
   cl_device_exec_capabilities loc_parameter_value;                                                     // Parameter value.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                         // Waiting for OpenGL to finish...
 
   // Getting parameter size:
   loc_error = clGetDeviceInfo (
@@ -204,7 +204,7 @@ cl_ulong device::get_cl_ulong (
   size_t   loc_parameter_size;                                                                         // Parameter size.
   cl_ulong loc_parameter_value;                                                                        // Parameter value.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                         // Waiting for OpenGL to finish...
 
   // Getting parameter size:
   loc_error = clGetDeviceInfo (
@@ -240,7 +240,7 @@ cl_device_mem_cache_type device::get_cl_device_mem_cache_type (
   size_t                   loc_parameter_size;                                                         // Parameter size.
   cl_device_mem_cache_type loc_parameter_value;                                                        // Parameter value.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                         // Waiting for OpenGL to finish...
 
   // Getting parameter size:
   loc_error = clGetDeviceInfo (
@@ -276,7 +276,7 @@ size_t device::get_size_t (
   size_t loc_parameter_size;                                                                           // Parameter size.
   size_t loc_parameter_value;                                                                          // Parameter value.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                         // Waiting for OpenGL to finish...
 
   // Getting parameter size:
   loc_error = clGetDeviceInfo (
@@ -312,7 +312,7 @@ cl_device_local_mem_type device::get_cl_device_local_mem_type (
   size_t                   loc_parameter_size;                                                         // Parameter size.
   cl_device_local_mem_type loc_parameter_value;                                                        // Parameter value.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                         // Waiting for OpenGL to finish...
 
   // Getting parameter size:
   loc_error = clGetDeviceInfo (
@@ -348,7 +348,7 @@ cl_platform_id device::get_cl_platform_id (
   size_t         loc_parameter_size;                                                                   // Parameter size.
   cl_platform_id loc_parameter_value;                                                                  // Parameter value.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                         // Waiting for OpenGL to finish...
 
   // Getting parameter size:
   loc_error = clGetDeviceInfo (
@@ -384,7 +384,7 @@ cl_device_type device::get_cl_device_type (
   size_t         loc_parameter_size;                                                                   // Parameter size.
   cl_device_type loc_parameter_value;                                                                  // Parameter value.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                         // Waiting for OpenGL to finish...
 
   // Getting parameter size:
   loc_error = clGetDeviceInfo (
@@ -420,7 +420,7 @@ cl_command_queue_properties device::get_cl_command_queue_properties (
   size_t                      loc_parameter_size;                                                      // Parameter size.
   cl_command_queue_properties loc_parameter_value;                                                     // Parameter value.
 
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                         // Waiting for OpenGL to finish...
 
   // Getting parameter size:
   loc_error = clGetDeviceInfo (
@@ -454,9 +454,7 @@ void device::init (
                    cl_device_id loc_device_id                                                          // OpenCL deivce ID.
                   )
 {
-  size_t info_size;
-
-  glFinish();                                                                                       // Waiting for OpenGL to finish...
+  glFinish ();                                                                                         // Waiting for OpenGL to finish...
 
   address_bits                  = get_cl_uint (
                                                loc_device_id,
