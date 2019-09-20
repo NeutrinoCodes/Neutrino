@@ -74,7 +74,7 @@ int main ()
   // GUI PARAMETERS (pan):
   float     pan_x           = 0.0f;                                                                 // x-axis pan translation.
   float     pan_y           = 0.0f;                                                                 // y-axis pan translation.
-  float     pan_z           = -2.0f;                                                                // z-axis pan translation.
+  float     pan_z           = 0.0f;                                                                 // z-axis pan translation.
   float     pan_decaytime   = 1.25f;                                                                // Pan LP filter decay time [s].
   float     pan_deadzone    = 0.1f;                                                                 // Pan rotation deadzone [0...1].
   float     pan_rate        = 1.0f;                                                                 // Pan rotation rate [rev/s].
@@ -91,11 +91,11 @@ int main ()
    GUI_SIZE_X,
    GUI_SIZE_Y,
    GUI_NAME,
-   orbit_x,
-   orbit_y,
-   pan_x,
-   pan_y,
-   pan_z
+   0.0f,
+   0.0f,
+   0.0f,
+   0.0f,
+   -2.0f
   );
 
   ctx->init (bas, gui, NU_GPU);                                                                     // Initializing OpenCL context...
@@ -185,9 +185,11 @@ int main ()
                 orbit_decaytime                                                                     // Orbit low pass decay time [s].
                );
 
-    pan_x   = +gui->axis_RIGHT_X;                                                                   // Setting world x-pan...
-    pan_y   = -gui->axis_RIGHT_Y;                                                                   // Setting world y-pan...
-    pan_z   = (gui->axis_RIGHT_TRIGGER + 1.0f)/2.0f - (gui->axis_LEFT_TRIGGER + 1.0f)/2.0f;         // Setting world z-pan...
+    std::cout << "ox = " << orbit_x << "oy = " << orbit_y << std::endl;
+
+    pan_x = +gui->axis_RIGHT_X;                                                                     // Setting world x-pan...
+    pan_y = -gui->axis_RIGHT_Y;                                                                     // Setting world y-pan...
+    pan_z = (gui->axis_RIGHT_TRIGGER + 1.0f)/2.0f - (gui->axis_LEFT_TRIGGER + 1.0f)/2.0f;           // Setting world z-pan...
 
     gui->pan (
               pan_x,                                                                                // World x-pan.
