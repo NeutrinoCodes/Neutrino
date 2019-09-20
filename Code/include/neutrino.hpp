@@ -51,7 +51,7 @@
 #define NU_GAMEPAD_MIN_DECAYTIME          0.01f                                                     // Minimum decay time for LP filter [s].
 #define NU_GAMEPAD_MAX_DECAYTIME          10.0f                                                     // Maximum decay time for LP filter [s].
 #define NU_GAMEPAD_MIN_AXES               -1.0f                                                     // Minimum axes value.
-#define NU_GAMEPAD_MAX_AXES               +1.0f                                                     // Maximum axes value.
+#define NU_GAMEPAD_MAX_AXES               1.0f                                                      // Maximum axes value.
 #define NU_GAMEPAD_MIN_ORBIT_RATE         0.01f                                                     // Minimum orbit angular rate [rev/s].
 #define NU_GAMEPAD_MAX_ORBIT_RATE         10.0f                                                     // Maximum orbit angular rate [rev/s].
 #define NU_GAMEPAD_MIN_PAN_RATE           0.01f                                                     // Minimum orbit angular rate [rev/s].
