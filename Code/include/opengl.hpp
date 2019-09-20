@@ -173,12 +173,12 @@ public:
   bool        button_DPAD_LEFT;
 
   // AXES:
-  double      axis_RIGHT_X;
-  double      axis_RIGHT_Y;
-  double      axis_RIGHT_TRIGGER;
-  double      axis_LEFT_X;
-  double      axis_LEFT_Y;
-  double      axis_LEFT_TRIGGER;
+  float       axis_RIGHT_X;
+  float       axis_RIGHT_Y;
+  float       axis_RIGHT_TRIGGER;
+  float       axis_LEFT_X;
+  float       axis_LEFT_Y;
+  float       axis_LEFT_TRIGGER;
   // Orbit movement:
   void orbit (
               float loc_orbit_x,                                                                    // "Near clipping-plane" x-coordinates.

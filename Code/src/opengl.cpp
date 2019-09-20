@@ -113,7 +113,7 @@ void opengl::orbit
   std::cout << "lof_x = " << loc_orbit_final[0] << std::endl;
   std::cout << "lof_y = " << loc_orbit_final[1] << std::endl;
   std::cout << "lof_z = " << loc_orbit_final[2] << std::endl;
-  std::cout << "angle " << angle (loc_orbit_initial, loc_orbit_final) << std::endl;
+  std::cout << "angle " << loc_theta << std::endl;
 
 
   // Doing rotation:
@@ -867,12 +867,12 @@ void opengl::poll_events ()
         button_DPAD_LEFT    = gamepad.buttons[GLFW_GAMEPAD_BUTTON_DPAD_LEFT];
 
         // AXES:
-        axis_RIGHT_X        = gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_X];
-        axis_RIGHT_Y        = gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_Y];
-        axis_RIGHT_TRIGGER  = gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER];
-        axis_LEFT_X         = gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_X];
-        axis_LEFT_Y         = gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_Y];
-        axis_LEFT_TRIGGER   = gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER];
+        axis_RIGHT_X        = float (gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_X]);
+        axis_RIGHT_Y        = float (gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_Y]);
+        axis_RIGHT_TRIGGER  = float (gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER]);
+        axis_LEFT_X         = float (gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_X]);
+        axis_LEFT_Y         = float (gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_Y]);
+        axis_LEFT_TRIGGER   = float (gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER]);
       }
     }
   }
