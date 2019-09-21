@@ -65,6 +65,8 @@ int main ()
   size_t    kernel_sz       = 0;                                                                    // Kernel dimension "z" [#].
 
   // GUI PARAMETERS (orbit):
+  float     orbit_x_init    = 0.0f;                                                                 // x-axis orbit initial rotation.
+  float     orbit_y_init    = 0.0f;                                                                 // y-axis orbit initial rotation.
   float     orbit_x         = 0.0f;                                                                 // x-axis orbit rotation.
   float     orbit_y         = 0.0f;                                                                 // y-axis orbit rotation.
   float     orbit_decaytime = 1.25f;                                                                // Orbit LP filter decay time [s].
@@ -72,6 +74,9 @@ int main ()
   float     orbit_rate      = 1.0f;                                                                 // Orbit rotation rate [rev/s].
 
   // GUI PARAMETERS (pan):
+  float     pan_x_init      = 0.0f;                                                                 // x-axis pan initial translation.
+  float     pan_y_init      = 0.0f;                                                                 // y-axis pan initial translation.
+  float     pan_z_init      = -2.0f;                                                                // z-axis pan initial translation.
   float     pan_x           = 0.0f;                                                                 // x-axis pan translation.
   float     pan_y           = 0.0f;                                                                 // y-axis pan translation.
   float     pan_z           = 0.0f;                                                                 // z-axis pan translation.
@@ -87,15 +92,15 @@ int main ()
 // Initializing OpenGL context...
   gui->init
   (
-   bas,
-   GUI_SIZE_X,
-   GUI_SIZE_Y,
-   GUI_NAME,
-   0.0f,
-   0.0f,
-   0.0f,
-   0.0f,
-   -2.0f
+   bas,                                                                                             // Neutrino baseline.
+   GUI_SIZE_X,                                                                                      // GUI x-size [px].
+   GUI_SIZE_Y,                                                                                      // GUI y-size [px.]
+   GUI_NAME,                                                                                        // GUI name.
+   orbit_x_init,                                                                                    // Initial x-orbit.
+   orbit_y_init,                                                                                    // Initial y-orbit.
+   pan_x_init,                                                                                      // Initial x-pan.
+   pan_y_init,                                                                                      // Initial y-pan.
+   pan_z_init                                                                                       // Initial z-pan.
   );
 
   ctx->init (bas, gui, NU_GPU);                                                                     // Initializing OpenCL context...
