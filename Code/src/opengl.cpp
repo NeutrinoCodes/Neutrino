@@ -89,10 +89,11 @@ void opengl::orbit
   // Computing arcball:
   loc_orbit_final[0] = orbit_x;                                                                     // Setting x-point on arcball...
   loc_orbit_final[1] = orbit_y;                                                                     // Setting y-point on arcball...
+  loc_orbit_final[2] = 0.0f;                                                                        // Setting z-point on arcball...
   loc_OP_squared     = loc_orbit_final[0]*loc_orbit_final[0] +
                        loc_orbit_final[1]*loc_orbit_final[1];                                       // Computing OP segment...
 
-  if(loc_OP_squared <= 1.0)
+  if(loc_OP_squared <= 1.0f)
   {
     loc_orbit_final[2] = sqrt (1.0f - loc_OP_squared);                                              // Computing z-point on arcball...
   }
@@ -106,15 +107,6 @@ void opengl::orbit
                         loc_orbit_initial,
                         loc_orbit_final
                        );                                                                           // Computing orbit angle for a rate of 2*pi rad/s...
-
-  std::cout << "loi_x = " << loc_orbit_initial[0] << std::endl;
-  std::cout << "loi_y = " << loc_orbit_initial[1] << std::endl;
-  std::cout << "loi_z = " << loc_orbit_initial[2] << std::endl;
-  std::cout << "lof_x = " << loc_orbit_final[0] << std::endl;
-  std::cout << "lof_y = " << loc_orbit_final[1] << std::endl;
-  std::cout << "lof_z = " << loc_orbit_final[2] << std::endl;
-  std::cout << "angle " << loc_theta << std::endl;
-
 
   // Doing rotation:
   if(loc_theta > 0.0f)                                                                              // Checking for valid rotation angle...
