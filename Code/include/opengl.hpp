@@ -201,89 +201,90 @@ public:
             float loc_pan_deadzone,                                                                 // Pan deadzone threshold coefficient.
             float loc_pan_decaytime                                                                 // Pan low pass decay time [s].
            );
-  float       pan_x;
-  float       pan_y;
-  float       pan_z;
-  float       pan_x_old;
-  float       pan_y_old;
-  float       pan_z_old;
 
-  bool        mouse_left;
-  bool        mouse_right;
+  float  pan_x;
+  float  pan_y;
+  float  pan_z;
+  float  pan_x_old;
+  float  pan_y_old;
+  float  pan_z_old;
 
-  double      mouse_x;                                                                              // Mouse x-coordinate [px].
-  double      mouse_y;                                                                              // Mouse y-coordinate [px].
+  bool   mouse_left;
+  bool   mouse_right;
 
-  double      scroll_x;                                                                             // Scroll x-coordinate [px].
-  double      scroll_y;                                                                             // Scroll y-coordinate [px].
+  double mouse_x;                                                                                   // Mouse x-coordinate [px].
+  double mouse_y;                                                                                   // Mouse y-coordinate [px].
+
+  double scroll_x;                                                                                  // Scroll x-coordinate [px].
+  double scroll_y;                                                                                  // Scroll y-coordinate [px].
 
   // Arcball quaternion:
-  float       q[4]       = {1.0, 0.0, 0.0, 0.0};
+  float  q[4]       = {1.0, 0.0, 0.0, 0.0};
 
   // Euler (Tait-Byran) angles:
-  float       roll       = 0.0;
-  float       pitch      = 0.0;
-  float       yaw        = 0.0;
+  float  roll       = 0.0;
+  float  pitch      = 0.0;
+  float  yaw        = 0.0;
 
   // Rotation matrix:
-  float       R_mat[16]  = {1.0, 0.0, 0.0, 0.0,
-                            0.0, 1.0, 0.0, 0.0,
-                            0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+  float  R_mat[16]  = {1.0, 0.0, 0.0, 0.0,
+                       0.0, 1.0, 0.0, 0.0,
+                       0.0, 0.0, 1.0, 0.0,
+                       0.0, 0.0, 0.0, 1.0};
 
   // Translation matrix:
-  float       T_mat[16]  = {1.0, 0.0, 0.0, 0.0,
-                            0.0, 1.0, 0.0, 0.0,
-                            0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+  float  T_mat[16]  = {1.0, 0.0, 0.0, 0.0,
+                       0.0, 1.0, 0.0, 0.0,
+                       0.0, 0.0, 1.0, 0.0,
+                       0.0, 0.0, 0.0, 1.0};
 
   // View matrix:
-  float       V_mat[16]  = {1.0, 0.0, 0.0, 0.0,
-                            0.0, 1.0, 0.0, 0.0,
-                            0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+  float  V_mat[16]  = {1.0, 0.0, 0.0, 0.0,
+                       0.0, 1.0, 0.0, 0.0,
+                       0.0, 0.0, 1.0, 0.0,
+                       0.0, 0.0, 0.0, 1.0};
 
   // Projection matrix:
-  float       P_mat[16]  = {1.0, 0.0, 0.0, 0.0,
-                            0.0, 1.0, 0.0, 0.0,
-                            0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+  float  P_mat[16]  = {1.0, 0.0, 0.0, 0.0,
+                       0.0, 1.0, 0.0, 0.0,
+                       0.0, 0.0, 1.0, 0.0,
+                       0.0, 0.0, 0.0, 1.0};
 
   // Left eye stereoscopic translation matrix:
-  float       TL_mat[16] = {1.0, 0.0, 0.0, 0.0,
-                            0.0, 1.0, 0.0, 0.0,
-                            0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+  float  TL_mat[16] = {1.0, 0.0, 0.0, 0.0,
+                       0.0, 1.0, 0.0, 0.0,
+                       0.0, 0.0, 1.0, 0.0,
+                       0.0, 0.0, 0.0, 1.0};
 
   // Right eye stereoscopic translation matrix:
-  float       TR_mat[16] = {1.0, 0.0, 0.0, 0.0,
-                            0.0, 1.0, 0.0, 0.0,
-                            0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+  float  TR_mat[16] = {1.0, 0.0, 0.0, 0.0,
+                       0.0, 1.0, 0.0, 0.0,
+                       0.0, 0.0, 1.0, 0.0,
+                       0.0, 0.0, 0.0, 1.0};
 
   // Left eye stereoscopic view matrix:
-  float       VL_mat[16] = {1.0, 0.0, 0.0, 0.0,
-                            0.0, 1.0, 0.0, 0.0,
-                            0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+  float  VL_mat[16] = {1.0, 0.0, 0.0, 0.0,
+                       0.0, 1.0, 0.0, 0.0,
+                       0.0, 0.0, 1.0, 0.0,
+                       0.0, 0.0, 0.0, 1.0};
 
   // Right eye stereoscopic view matrix:
-  float       VR_mat[16] = {1.0, 0.0, 0.0, 0.0,
-                            0.0, 1.0, 0.0, 0.0,
-                            0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+  float  VR_mat[16] = {1.0, 0.0, 0.0, 0.0,
+                       0.0, 1.0, 0.0, 0.0,
+                       0.0, 0.0, 1.0, 0.0,
+                       0.0, 0.0, 0.0, 1.0};
 
   // Left eye stereoscopic projection matrix:
-  float       PL_mat[16] = {1.0, 0.0, 0.0, 0.0,
-                            0.0, 1.0, 0.0, 0.0,
-                            0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+  float  PL_mat[16] = {1.0, 0.0, 0.0, 0.0,
+                       0.0, 1.0, 0.0, 0.0,
+                       0.0, 0.0, 1.0, 0.0,
+                       0.0, 0.0, 0.0, 1.0};
 
   // Right eye stereoscopic projection matrix:
-  float       PR_mat[16] = {1.0, 0.0, 0.0, 0.0,
-                            0.0, 1.0, 0.0, 0.0,
-                            0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+  float  PR_mat[16] = {1.0, 0.0, 0.0, 0.0,
+                       0.0, 1.0, 0.0, 0.0,
+                       0.0, 0.0, 1.0, 0.0,
+                       0.0, 0.0, 0.0, 1.0};
   ////////////////////////////////////////////////////////////////////////////
   ///////////////////////////// PUBLIC RETPOLINES ////////////////////////////
   ////////////////////////////////////////////////////////////////////////////
