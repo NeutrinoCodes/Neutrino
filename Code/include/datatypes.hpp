@@ -1,23 +1,26 @@
+/// @file
+
 #ifndef datatypes_hpp
 #define datatypes_hpp
 
 #include "neutrino.hpp"
 
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////// "float2" STRUCTURE //////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////// DATA STRUCTURES /////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/// #"float2" structure
+/// ## 2D vector of "cl_float" data.
 #pragma pack(push, 1)
-typedef struct _float2_structure
+typedef struct _float2_structure                                                                    // Packing data in 1 column...
 {
   cl_float x;                                                                                       // "x" coordinate.
   cl_float y;                                                                                       // "y" coordinate.
 } float2_structure;
 #pragma pack(pop)
 
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// "int2" STRUCTURE ///////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-#pragma pack(push, 1)
+/// # **int2** structure
+/// ## 2D CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT of **cl_long** data.
+#pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _int2_structure
 {
   cl_long x;                                                                                        // "x" coordinate.
@@ -25,10 +28,9 @@ typedef struct _int2_structure
 } int2_structure;
 #pragma pack(pop)
 
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////// "float3" STRUCTURE //////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-#pragma pack(push, 1)
+/// # **float3** structure
+/// ## 3D vector of **cl_float** data.
+#pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _float3_structure
 {
   cl_float x;                                                                                       // "x" coordinate.
@@ -37,10 +39,9 @@ typedef struct _float3_structure
 } float3_structure;
 #pragma pack(pop)
 
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// "int3" STRUCTURE ///////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-#pragma pack(push, 1)
+/// # **int3** structure
+/// ## 3D vector of **cl_long** data.
+#pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _int3_structure
 {
   cl_long x;                                                                                        // "x" coordinate.
@@ -49,10 +50,9 @@ typedef struct _int3_structure
 } int3_structure;
 #pragma pack(pop)
 
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////// "float4" STRUCTURE //////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-#pragma pack(push, 1)
+/// # **float4** structure
+/// ## 4D vector of **cl_float** data.
+#pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _float4_structure
 {
   cl_float x;                                                                                       // "x" coordinate.
@@ -62,10 +62,9 @@ typedef struct _float4_structure
 } float4_structure;
 #pragma pack(pop)
 
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// "int4" STRUCTURE ///////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-#pragma pack(push, 1)
+/// # **int4** structure
+/// ## 4D vector of **cl_long** data.
+#pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _int4_structure
 {
   cl_long x;                                                                                        // "x" coordinate.
@@ -75,10 +74,9 @@ typedef struct _int4_structure
 } int4_structure;
 #pragma pack(pop)
 
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////// "float4G" STRUCTURE /////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-#pragma pack(push, 1)
+/// # **float4G** structure
+/// ## 4D vector of **GLfloat** data
+#pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _float4G_structure
 {
   GLfloat x;                                                                                        // "x" coordinate.
@@ -88,9 +86,10 @@ typedef struct _float4G_structure
 } float4G_structure;
 #pragma pack(pop)
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// "float1" CLASS ////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////// DATA CLASSES ////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/// # **float1** class
 class float1
 {
 private:

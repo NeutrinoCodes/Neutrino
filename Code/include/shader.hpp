@@ -1,3 +1,5 @@
+/// @file
+
 #ifndef shader_hpp
 #define shader_hpp
 
