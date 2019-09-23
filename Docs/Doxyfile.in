@@ -4,6 +4,8 @@ PROJECT_NAME            = "NEUTRINO"
 # Setting project caption description...
 PROJECT_BRIEF           = "Fast and light solid OpenCL/GL coding."
 
+PROJECT_LOGO            = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen/Logos/neutrino_logo_text.png
+
 # Setting Doxygen documentation output directory...
 OUTPUT_DIRECTORY        = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen
 
