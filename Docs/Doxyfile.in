@@ -8,18 +8,21 @@ PROJECT_BRIEF           = "Fast and light solid OpenCL/GL coding."
 OUTPUT_DIRECTORY        = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen
 
 # Setting Doxygen input directories...
-INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/main_page.md \
+INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/ \
+                          @CMAKE_CURRENT_SOURCE_DIR@/../Logos/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/src/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/include/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/kernel/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/shader/ \
-                          @CMAKE_CURRENT_SOURCE_DIR@/../Docs/neutrino_doc.md
 # Others doc files: e.g.  @CMAKE_CURRENT_SOURCE_DIR@/../Docs/some_documentation.md
 # 1. Remember to put "\" before adding a file in this list.
 # 2. Latex code in mardown files in Doxygen is accepted between "\f...latex...\f".
 
+HTML_EXTRA_STYLESHEET   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/customdoxygen.css
+LAYOUT_FILE             = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/DoxygenLayout.xml
+
 # Defining valid file types to be considered in Doxygen...
-FILE_PATTERNS           = *.cpp *.hpp *.cl *.frag *.vert *.geom
+FILE_PATTERNS           = *.cpp *.hpp *.cl *.frag *.vert *.geom *.md
 
 # Enabling Markdown syntax in Doxygen comments...
 MARKDOWN_SUPPORT        = YES
@@ -38,6 +41,8 @@ SORT_MEMBER_DOCS        = NO
 EXTRACT_ALL             = YES
 EXTRACT_PRIVATE         = YES
 EXTRACT_STATIC          = YES
+SOURCE_BROWSER          = YES
+VERBATIM_HEADERS        = YES
 
 # Excluding full path file names during include-diagram generation...
 FULL_PATH_NAMES         = YES
@@ -54,7 +59,8 @@ INCLUDE_GRAPH           = NO
 
 USE_MDFILE_AS_MAINPAGE  = main_page.md
 
-# Enabling Latex generation...
+# Enabling HTML generation...
+GENERATE_HTML           = YES
 GENERATE_LATEX          = NO
 
 # Setting MathJax path (relative to the Doxygen output directory)...
