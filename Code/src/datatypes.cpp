@@ -2,38 +2,9 @@
 
 #include "datatypes.hpp"
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// "float1" CLASS ////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-float1::float1()
-{
-  ready = false;                                                                                    // Resetting "ready" flag...
-}
-
-void float1::init
-(
- size_t loc_size                                                                                    // Data size.
-)
-{
-  size_t i;                                                                                         // Index.
-
-  data = new cl_float[loc_size];
-  size = loc_size;
-
-  for(i = 0; i < loc_size; i++)
-  {
-    data[i] = 0.0f;                                                                                 // Resetting data...
-  }
-}
-
-float1::~float1()
-{
-  delete[] data;
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////// "int1" CLASS /////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////// "int1" CLASS ///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 int1::int1()
 {
   ready = false;                                                                                    // Resetting "ready" flag...
@@ -45,8 +16,8 @@ void int1::init (
 {
   size_t i;                                                                                         // Index.
 
-  data = new cl_long[loc_size];
-  size = loc_size;
+  data = new cl_long[loc_size];                                                                     // "1 x size" data storage [cl_long].
+  size = loc_size;                                                                                  // Data size [#].
 
   for(i = 0; i < loc_size; i++)
   {
@@ -56,44 +27,71 @@ void int1::init (
 
 int1::~int1()
 {
-  delete[] data;
+  delete[] data;                                                                                    // Deleting data storage...
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// "float4" CLASS ////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-float4::float4()
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////// "int2" CLASS ///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+int2::int2()
 {
   ready = false;                                                                                    // Resetting "ready" flag...
 }
 
-void float4::init
-(
- size_t loc_size                                                                                    // Data size.
-)
+void int2::init (
+                 size_t loc_size                                                                    // Data size.
+                )
 {
   size_t i;                                                                                         // Index.
 
-  data = new float4_structure[loc_size];
-  size = loc_size;
+  data = new int2_structure[loc_size];                                                              // "2 x size" data storage [cl_long].
+  size = loc_size;                                                                                  // Data size [#].
 
   for(i = 0; i < loc_size; i++)
   {
-    data[i].x = 0.0f;                                                                               // Resetting data...
-    data[i].y = 0.0f;                                                                               // Resetting data...
-    data[i].z = 0.0f;                                                                               // Resetting data...
-    data[i].w = 0.0f;                                                                               // Resetting data...
+    data[i].x = 0;                                                                                  // Resetting data...
+    data[i].y = 0;                                                                                  // Resetting data...
   }
 }
 
-float4::~float4()
+int2::~int2()
 {
-  delete[] data;
+  delete[] data;                                                                                    // Deleting data storage...
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////// "int4" CLASS /////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////// "int3" CLASS ///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+int3::int3()
+{
+  ready = false;                                                                                    // Resetting "ready" flag...
+}
+
+void int3::init (
+                 size_t loc_size                                                                    // Data size.
+                )
+{
+  size_t i;                                                                                         // Index.
+
+  data = new int3_structure[loc_size];                                                              // "3 x size" data storage [cl_long].
+  size = loc_size;                                                                                  // Data size [#].
+
+  for(i = 0; i < loc_size; i++)
+  {
+    data[i].x = 0;                                                                                  // Resetting data...
+    data[i].y = 0;                                                                                  // Resetting data...
+    data[i].z = 0;                                                                                  // Resetting data...
+  }
+}
+
+int3::~int3()
+{
+  delete[] data;                                                                                    // Deleting data storage...
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////// "int4" CLASS ///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 int4::int4()
 {
   ready = false;                                                                                    // Resetting "ready" flag...
@@ -106,8 +104,8 @@ void int4::init
 {
   size_t i;                                                                                         // Index.
 
-  data = new int4_structure[loc_size];
-  size = loc_size;
+  data = new int4_structure[loc_size];                                                              // "4 x size" data storage [cl_long].
+  size = loc_size;                                                                                  // Data size [#].
 
   for(i = 0; i < loc_size; i++)
   {
@@ -120,12 +118,41 @@ void int4::init
 
 int4::~int4()
 {
-  delete[] data;
+  delete[] data;                                                                                    // Deleting data storage...
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// "float1G" CLASS ///////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////// "float1" CLASS /////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+float1::float1()
+{
+  ready = false;                                                                                    // Resetting "ready" flag...
+}
+
+void float1::init
+(
+ size_t loc_size                                                                                    // Data size.
+)
+{
+  size_t i;                                                                                         // Index.
+
+  data = new cl_float[loc_size];                                                                    // "1 x size" data storage [cl_float].
+  size = loc_size;                                                                                  // Data size [#].
+
+  for(i = 0; i < loc_size; i++)
+  {
+    data[i] = 0.0f;                                                                                 // Resetting data...
+  }
+}
+
+float1::~float1()
+{
+  delete[] data;                                                                                    // Deleting data storage...
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////// "float1G" CLASS ////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 float1G::float1G()
 {
   ready = false;                                                                                    // Resetting "ready" flag...
@@ -138,8 +165,8 @@ void float1G::init
 {
   GLsizeiptr i;                                                                                     // Index.
 
-  data = new GLfloat[loc_size];
-  size = loc_size;
+  data = new GLfloat[loc_size];                                                                     // "1 x size" data storage [GLfloat].
+  size = loc_size;                                                                                  // Data size [#].
 
   for(i = 0; i < loc_size; i++)
   {
@@ -149,12 +176,105 @@ void float1G::init
 
 float1G::~float1G()
 {
-  delete[] data;
+  delete[] data;                                                                                    // Deleting data storage...
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// "float4G" CLASS ///////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////// "float2" CLASS ///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+float2::float2()
+{
+  ready = false;                                                                                    // Resetting "ready" flag...
+}
+
+void float2::init
+(
+ size_t loc_size                                                                                    // Data size.
+)
+{
+  size_t i;                                                                                         // Index.
+
+  data = new float2_structure[loc_size];                                                            // "2 x size" data storage [cl_float].
+  size = loc_size;                                                                                  // Data size [#].
+
+  for(i = 0; i < loc_size; i++)
+  {
+    data[i].x = 0.0f;                                                                               // Resetting data...
+    data[i].y = 0.0f;                                                                               // Resetting data...
+  }
+}
+
+float2::~float2()
+{
+  delete[] data;                                                                                    // Deleting data storage...
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////// "float3" CLASS ///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+float3::float3()
+{
+  ready = false;                                                                                    // Resetting "ready" flag...
+}
+
+void float3::init
+(
+ size_t loc_size                                                                                    // Data size.
+)
+{
+  size_t i;                                                                                         // Index.
+
+  data = new float3_structure[loc_size];                                                            // "3 x size" data storage [cl_float].
+  size = loc_size;                                                                                  // Data size [#].
+
+  for(i = 0; i < loc_size; i++)
+  {
+    data[i].x = 0.0f;                                                                               // Resetting data...
+    data[i].y = 0.0f;                                                                               // Resetting data...
+    data[i].z = 0.0f;                                                                               // Resetting data...
+  }
+}
+
+float3::~float3()
+{
+  delete[] data;                                                                                    // Deleting data storage...
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////// "float4" CLASS //////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+float4::float4()
+{
+  ready = false;                                                                                    // Resetting "ready" flag...
+}
+
+void float4::init
+(
+ size_t loc_size                                                                                    // Data size.
+)
+{
+  size_t i;                                                                                         // Index.
+
+  data = new float4_structure[loc_size];                                                            // "4 x size" data storage [cl_float].
+  size = loc_size;                                                                                  // Data size [#].
+
+  for(i = 0; i < loc_size; i++)
+  {
+    data[i].x = 0.0f;                                                                               // Resetting data...
+    data[i].y = 0.0f;                                                                               // Resetting data...
+    data[i].z = 0.0f;                                                                               // Resetting data...
+    data[i].w = 0.0f;                                                                               // Resetting data...
+  }
+}
+
+float4::~float4()
+{
+  delete[] data;                                                                                    // Deleting data storage...
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////// "float4G" CLASS /////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 float4G::float4G()
 {
   ready = false;                                                                                    // Resetting "ready" flag...
@@ -167,8 +287,8 @@ void float4G::init
 {
   GLsizeiptr i;                                                                                     // Index.
 
-  data = new float4G_structure[loc_size];
-  size = loc_size;
+  data = new float4G_structure[loc_size];                                                           // "4 x size" data storage [GLfloat].
+  size = loc_size;                                                                                  // Data size [#].
 
   for(i = 0; i < loc_size; i++)
   {
@@ -181,5 +301,5 @@ void float4G::init
 
 float4G::~float4G()
 {
-  delete[] data;
+  delete[] data;                                                                                    // Deleting data storage...
 }
