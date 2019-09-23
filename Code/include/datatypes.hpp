@@ -8,18 +8,10 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////// DATA STRUCTURES ////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/// # "float2" structure
-/// ## 2D vector of "cl_float" data.
-#pragma pack(push, 1)                                                                               // Packing data in 1 column...
-typedef struct _float2_structure
-{
-  cl_float x;                                                                                       // "x" coordinate.
-  cl_float y;                                                                                       // "y" coordinate.
-} float2_structure;
-#pragma pack(pop)
-
 /// # "int2" structure
-/// ## 2D CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT of "cl_long" data.
+/// ## 2D vector of "cl_long" data.
+/// This structure is as data storage in the "int2" class. It is tightly packed to be compatible
+/// with the OpenCL requirement of having a contiguous data arrangement without padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _int2_structure
 {
@@ -28,19 +20,10 @@ typedef struct _int2_structure
 } int2_structure;
 #pragma pack(pop)
 
-/// # "float3" structure
-/// ## 3D vector of "cl_float" data.
-#pragma pack(push, 1)                                                                               // Packing data in 1 column...
-typedef struct _float3_structure
-{
-  cl_float x;                                                                                       // "x" coordinate.
-  cl_float y;                                                                                       // "y" coordinate.
-  cl_float z;                                                                                       // "z" coordinate.
-} float3_structure;
-#pragma pack(pop)
-
 /// # "int3" structure
 /// ## 3D vector of "cl_long" data.
+/// This structure is as data storage in the "int3" class. It is tightly packed to be compatible
+/// with the OpenCL requirement of having a contiguous data arrangement without padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _int3_structure
 {
@@ -50,20 +33,10 @@ typedef struct _int3_structure
 } int3_structure;
 #pragma pack(pop)
 
-/// # float4 structure
-/// ## 4D vector of cl_float data.
-#pragma pack(push, 1)                                                                               // Packing data in 1 column...
-typedef struct _float4_structure
-{
-  cl_float x;                                                                                       // "x" coordinate.
-  cl_float y;                                                                                       // "y" coordinate.
-  cl_float z;                                                                                       // "z" coordinate.
-  cl_float w;                                                                                       // "w" coordinate.
-} float4_structure;
-#pragma pack(pop)
-
-/// # **int4** structure
-/// ## 4D vector of **cl_long** data.
+/// # "int4" structure
+/// ## 4D vector of "cl_long" data.
+/// This structure is as data storage in the "int4" class. It is tightly packed to be compatible
+/// with the OpenCL requirement of having a contiguous data arrangement without padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _int4_structure
 {
@@ -74,8 +47,49 @@ typedef struct _int4_structure
 } int4_structure;
 #pragma pack(pop)
 
-/// # **float4G** structure
-/// ## 4D vector of **GLfloat** data
+/// # "float2" structure
+/// ## 2D vector of "cl_float" data.
+/// This structure is as data storage in the "float2" class. It is tightly packed to be compatible
+/// with the OpenCL requirement of having a contiguous data arrangement without padding.
+#pragma pack(push, 1)                                                                               // Packing data in 1 column...
+typedef struct _float2_structure
+{
+  cl_float x;                                                                                       // "x" coordinate.
+  cl_float y;                                                                                       // "y" coordinate.
+} float2_structure;
+#pragma pack(pop)
+
+/// # "float3" structure
+/// ## 3D vector of "cl_float" data.
+/// This structure is as data storage in the "float3" class. It is tightly packed to be compatible
+/// with the OpenCL requirement of having a contiguous data arrangement without padding.
+#pragma pack(push, 1)                                                                               // Packing data in 1 column...
+typedef struct _float3_structure
+{
+  cl_float x;                                                                                       // "x" coordinate.
+  cl_float y;                                                                                       // "y" coordinate.
+  cl_float z;                                                                                       // "z" coordinate.
+} float3_structure;
+#pragma pack(pop)
+
+/// # float4 structure
+/// ## 4D vector of cl_float data.
+/// This structure is as data storage in the "float4" class. It is tightly packed to be compatible
+/// with the OpenCL requirement of having a contiguous data arrangement without padding.
+#pragma pack(push, 1)                                                                               // Packing data in 1 column...
+typedef struct _float4_structure
+{
+  cl_float x;                                                                                       // "x" coordinate.
+  cl_float y;                                                                                       // "y" coordinate.
+  cl_float z;                                                                                       // "z" coordinate.
+  cl_float w;                                                                                       // "w" coordinate.
+} float4_structure;
+#pragma pack(pop)
+
+/// # "float4G" structure
+/// ## 4D vector of "GLfloat" data.
+/// This structure is as data storage in the "float4G" class. It is tightly packed to be compatible
+/// with the OpenCL requirement of having a contiguous data arrangement without padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _float4G_structure
 {
@@ -89,7 +103,8 @@ typedef struct _float4G_structure
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////// DATA CLASSES ////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/// # **float1** class
+/// # "float1" class
+/// ## 1D
 class float1
 {
 private:
