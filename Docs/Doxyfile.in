@@ -9,7 +9,6 @@ OUTPUT_DIRECTORY        = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen
 
 # Setting Doxygen input directories...
 INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/ \
-                          @CMAKE_CURRENT_SOURCE_DIR@/../Logos/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/src/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/include/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/kernel/ \
@@ -18,8 +17,12 @@ INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/ \
 # 1. Remember to put "\" before adding a file in this list.
 # 2. Latex code in mardown files in Doxygen is accepted between "\f...latex...\f".
 
+# Enabling HTML generation...
+GENERATE_HTML           = YES
+GENERATE_LATEX          = NO
+HTML_HEADER             = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/header.html
+HTML_FOOTER             = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/footer.html
 HTML_EXTRA_STYLESHEET   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/customdoxygen.css
-LAYOUT_FILE             = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/DoxygenLayout.xml
 
 # Defining valid file types to be considered in Doxygen...
 FILE_PATTERNS           = *.cpp *.hpp *.cl *.frag *.vert *.geom *.md
@@ -58,10 +61,6 @@ CALL_GRAPH              = YES
 INCLUDE_GRAPH           = NO
 
 USE_MDFILE_AS_MAINPAGE  = main_page.md
-
-# Enabling HTML generation...
-GENERATE_HTML           = YES
-GENERATE_LATEX          = NO
 
 # Setting MathJax path (relative to the Doxygen output directory)...
 MATHJAX_RELPATH         = ../../MathJax
