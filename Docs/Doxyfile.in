@@ -25,6 +25,8 @@ GENERATE_LATEX          = NO
 HTML_HEADER             = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/header.html
 HTML_FOOTER             = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/footer.html
 HTML_EXTRA_STYLESHEET   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/customdoxygen.css
+HTML_COLORSTYLE_HUE     = 240
+HTML_COLORSTYLE_SAT     = 255
 
 # Defining valid file types to be considered in Doxygen...
 FILE_PATTERNS           = *.cpp *.hpp *.cl *.frag *.vert *.geom *.md
