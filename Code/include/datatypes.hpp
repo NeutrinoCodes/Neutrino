@@ -14,6 +14,7 @@
 /// ### 2D vector of "cl_long" data.
 /// This structure is used as data storage in the "int2" class. It is tightly packed to be
 /// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
+/// @f$ e^{\pi i}+1 = 0 @f$
 #pragma pack(push, 1)                                                                               ///< Packing data in 1 column...
 typedef struct _int2_structure
 {
@@ -105,6 +106,7 @@ typedef struct _float4G_structure
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////// DATA CLASSES ////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @class
 /// # "int1" class
 /// ## 1D vector of "cl_long" data.
 /// To be used in OpenCL kernels when graphics is not necessary. It does not have graphics OpenGL
@@ -252,7 +254,6 @@ public:
   ~float1G();
 };
 
-/// @class
 /// # "float2" class
 /// ## 2D vector of "cl_float" data.
 /// To be used in OpenCL kernels when graphics is not necessary. It does not have graphics OpenGL
