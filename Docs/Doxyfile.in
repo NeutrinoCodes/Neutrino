@@ -53,6 +53,8 @@ SOURCE_BROWSER          = YES
 VERBATIM_HEADERS        = YES
 STRIP_CODE_COMMENTS     = NO
 ENABLE_PREPROCESSING    = YES
+OPTIMIZE_OUTPUT_FOR_C   = YES
+#DISABLE_INDEX           = YES
 
 # Excluding full path file names during include-diagram generation...
 FULL_PATH_NAMES         = YES
