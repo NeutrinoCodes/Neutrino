@@ -71,7 +71,7 @@ out VS_OUT
 uniform mat4 V_mat;                                                             // View matrix.
 uniform mat4 P_mat;                                                             // Projection matrix.
 
-/// @function
+/// @function main
 // Computing rendering point coordinates:
 void main(void)
 {
