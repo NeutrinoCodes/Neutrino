@@ -1,7 +1,7 @@
 /// @file   data_classes.hpp
-/// @brief  This header file contains definitions of structures and classes used for data storage.
 /// @author Erik ZORZIN
 /// @date   24OCT2019
+/// @brief  This header file contains definitions of structures and classes used for data storage.
 
 #ifndef data_classes_hpp
 #define data_classes_hpp
@@ -9,38 +9,36 @@
 #include "neutrino.hpp"
 #include "data_structs.hpp"
 
-/// @class
-/// # "int1" class
-/// ## 1D vector of "cl_long" data.
-/// To be used in OpenCL kernels when graphics is not necessary. It does not have graphics OpenGL
-/// bindings for interoperability.
+/// @class int1
+/// ### 1xN vector of "cl_long" data.
+/// Defines a 1xN vector (N = data size) of "cl_long" data numbers.
+/// To be used to transfer memory between host and client. It does not have bindings for
+/// OpenGL/CL interoperability. Not intended for graphics rendering.
 class int1
 {
 private:
 
 public:
-  cl_long* data;                                                                                    // Data.
-  cl_mem   buffer;                                                                                  // Data memory buffer.
-  size_t   size;                                                                                    // Data size.
-  cl_uint  layout;                                                                                  // Data layout index.
-  bool     ready;                                                                                   // "ready" flag.
+  cl_long* data;                                                                                    ///< Data.
+  cl_mem   buffer;                                                                                  ///< Data memory buffer.
+  size_t   size;                                                                                    ///< Data size.
+  cl_uint  layout;                                                                                  ///< Data layout index.
+  bool     ready;                                                                                   ///< "ready" flag.
 
-  /// Constructor.
-  int1
+  int1                                                                                              /// Constructor.
     ();
-  /// Initializer.
-  void init
+  void init                                                                                         /// Initializer.
   (
-   size_t loc_size                                                                                  // Data size.
+   size_t loc_size                                                                                  /// Data size.
   );
 
-  /// Destructor.
-  ~int1
+
+  ~int1                                                                                             /// Destructor.
     ();
 };
 
-/// # "int2" class
-/// ## 2D vector of "cl_long" data.
+/// @class int2
+/// ### 2D vector of "cl_long" data.
 /// To be used in OpenCL kernels when graphics is not necessary. It does not have graphics OpenGL
 /// bindings for interoperability.
 class int2
@@ -48,11 +46,11 @@ class int2
 private:
 
 public:
-  int2_structure* data;                                                                             // Data.
-  cl_mem          buffer;                                                                           // Data memory buffer.
-  size_t          size;                                                                             // Data size.
-  cl_uint         layout;                                                                           // Data layout index.
-  bool            ready;                                                                            // "ready" flag.
+  int2_structure* data;                                                                             ///< Data.
+  cl_mem          buffer;                                                                           ///< Data memory buffer.
+  size_t          size;                                                                             ///< Data size.
+  cl_uint         layout;                                                                           ///< Data layout index.
+  bool            ready;                                                                            ///< "ready" flag.
 
   int2 ();
   void init (
@@ -62,8 +60,8 @@ public:
   ~int2();
 };
 
-/// # "int3" class
-/// ## 3D vector of "cl_long" data.
+/// @class int3
+/// ### 3D vector of "cl_long" data.
 /// To be used in OpenCL kernels when graphics is not necessary. It does not have graphics OpenGL
 /// bindings for interoperability.
 class int3

@@ -9,6 +9,9 @@ PROJECT_LOGO            = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen/Logos/neutr
 # Setting Doxygen documentation output directory...
 OUTPUT_DIRECTORY        = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen
 
+# Defining valid file types to be considered in Doxygen...
+FILE_PATTERNS           = *.cpp *.hpp *.cl *.frag *.vert *.geom *.md
+
 # Setting Doxygen input directories...
 INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/src/ \
@@ -28,9 +31,6 @@ HTML_EXTRA_STYLESHEET   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/customdoxygen.css
 HTML_COLORSTYLE_HUE     = 240
 HTML_COLORSTYLE_SAT     = 255
 
-# Defining valid file types to be considered in Doxygen...
-FILE_PATTERNS           = *.cpp *.hpp *.cl *.frag *.vert *.geom *.md
-
 # Enabling Markdown syntax in Doxygen comments...
 MARKDOWN_SUPPORT        = YES
 
@@ -44,17 +44,19 @@ INLINE_SOURCES          = YES
 # Members will appear in declaration order as like as they appear in the source code.
 SORT_MEMBER_DOCS        = NO
 
-# Enabling documentation of all entities...
+# Enabling documentation of desired entities...
+ALWAYS_DETAILED_SEC     = NO
+BRIEF_MEMBER_DESC       = YES
+REPEAT_BRIEF            = YES
 EXTRACT_ALL             = YES
 EXTRACT_PRIVATE         = YES
 EXTRACT_STATIC          = YES
 EXTRACT_LOCAL_CLASSES   = YES
+EXTRACT_LOCAL_METHODS   = YES
 SOURCE_BROWSER          = YES
 VERBATIM_HEADERS        = YES
 STRIP_CODE_COMMENTS     = NO
 ENABLE_PREPROCESSING    = YES
-OPTIMIZE_OUTPUT_FOR_C   = YES
-#DISABLE_INDEX           = YES
 
 # Excluding full path file names during include-diagram generation...
 FULL_PATH_NAMES         = YES
