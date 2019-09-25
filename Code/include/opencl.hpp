@@ -1,4 +1,7 @@
-/// @file
+/// @file   opencl.hpp
+/// @author Erik ZORZIN
+/// @date   24OCT2019
+/// @brief  Declaration of the "opencl" class.
 
 #ifndef opencl_hpp
 #define opencl_hpp

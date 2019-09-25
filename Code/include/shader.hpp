@@ -1,4 +1,7 @@
-/// @file
+/// @file   shader.hpp
+/// @author Erik ZORZIN
+/// @date   24OCT2019
+/// @brief  Declaration of an OpenGL "shader" class.
 
 #ifndef shader_hpp
 #define shader_hpp

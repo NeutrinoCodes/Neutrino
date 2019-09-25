@@ -1,7 +1,7 @@
 /// @file   kernel.hpp
 /// @author Erik ZORZIN
 /// @date   24OCT2019
-/// @brief  This header file contains the declaration of an "OpenCL kernel" class.
+/// @brief  Declaration of an OpenCL "kernel" class.
 
 #ifndef kernel_hpp
 #define kernel_hpp

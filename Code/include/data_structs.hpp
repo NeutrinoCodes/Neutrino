@@ -1,7 +1,7 @@
-/// @file   data_structs.hpp
-/// @brief  This header file contains declarations of structures used for data storage.
-/// @author Erik ZORZIN
-/// @date   24OCT2019
+/// @file     data_structs.hpp
+/// @author   Erik ZORZIN
+/// @date     24OCT2019
+/// @brief    Declarations of structures used for data storage.
 
 #ifndef data_structs_hpp
 #define data_structs_hpp

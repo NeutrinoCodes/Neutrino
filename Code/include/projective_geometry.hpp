@@ -1,4 +1,7 @@
-/// @file
+/// @file   projective_geometry.hpp
+/// @author Erik ZORZIN
+/// @date   24OCT2019
+/// @brief  Declarations of an various projective geometry functions.
 
 #ifndef projective_geometry_hpp
 #define projective_geometry_hpp

@@ -1,7 +1,7 @@
 /// @file   linear_algebra.hpp
 /// @author Erik ZORZIN
 /// @date   24OCT2019
-/// @brief  This header file contains declarations of an various linear algebra functions.
+/// @brief  Declarations of an various linear algebra functions.
 
 #ifndef linear_algebra_hpp
 #define linear_algebra_hpp

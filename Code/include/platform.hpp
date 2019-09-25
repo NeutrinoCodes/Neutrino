@@ -1,4 +1,7 @@
-/// @file
+/// @file   platform.hpp
+/// @author Erik ZORZIN
+/// @date   24OCT2019
+/// @brief  Declaration of an OpenCL "platform" class.
 
 #ifndef platform_hpp
 #define platform_hpp

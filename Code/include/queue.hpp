@@ -1,4 +1,7 @@
-/// @file
+/// @file   queue.hpp
+/// @author Erik ZORZIN
+/// @date   24OCT2019
+/// @brief  Declaration of an OpenCL "queue" class.
 
 #ifndef queue_hpp
 #define queue_hpp

@@ -1,4 +1,7 @@
-/// @file
+/// @file   neutrino.hpp
+/// @author Erik ZORZIN
+/// @date   24OCT2019
+/// @brief  Declaration of the "neutrino" class and some macros.
 
 #ifndef neutrino_hpp
 #define neutrino_hpp
