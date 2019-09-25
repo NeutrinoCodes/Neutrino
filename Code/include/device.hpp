@@ -1,4 +1,7 @@
-/// @file
+/// @file   device.hpp
+/// @author Erik ZORZIN
+/// @date   24OCT2019
+/// @brief  This header file contains the declaration of an "OpenCL device" class.
 
 #ifndef device_hpp
 #define device_hpp

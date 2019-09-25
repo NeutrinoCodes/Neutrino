@@ -1,18 +1,25 @@
+# @file   Doxyfile.in
+# @author Erik ZORZIN
+# @date   25OCT2019
+# @brief  This is the main configuration file for Doxygen. Invoked by "make doc" in CMakeLists.txt.
+
 # Setting project name...
 PROJECT_NAME            = "NEUTRINO"
 
 # Setting project caption description...
 PROJECT_BRIEF           = "A fast and light library for GPU-based computation."
 
+# Setting project logo...
 PROJECT_LOGO            = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen/Logos/neutrino_logo_enso.png
 
 # Setting Doxygen documentation output directory...
 OUTPUT_DIRECTORY        = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen
 
-# Defining valid file types to be considered in Doxygen...
-FILE_PATTERNS           = *.cpp *.hpp *.cl *.frag *.vert *.geom *.md
+# Setting valid file types to be considered in Doxygen...
+FILE_PATTERNS           = *.cpp *.hpp *.cl *.frag *.vert *.geom *.tess *.md
 
-EXTENSION_MAPPING      = frag=C++ vert=C++
+# Setting code mapping grammatics for GLSL and OpenCL languages...
+EXTENSION_MAPPING       = frag=C++ vert=C++ geom=C++ tess=C++ cl=C++
 
 # Setting Doxygen input directories...
 INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/ \
@@ -24,9 +31,14 @@ INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/ \
 # 1. Remember to put "\" before adding a file in this list.
 # 2. Latex code in mardown files in Doxygen is accepted between "\f...latex...\f".
 
-# Enabling HTML generation...
-GENERATE_HTML           = YES
+# Enabling search on input subdirectories...
+RECURSIVE               = YES
+
+# Disabling LATEX documentation generation...
 GENERATE_LATEX          = NO
+
+# Enabling HTML documentation generation...
+GENERATE_HTML           = YES
 HTML_HEADER             = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/header.html
 HTML_FOOTER             = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/footer.html
 HTML_EXTRA_STYLESHEET   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/customdoxygen.css
@@ -47,14 +59,14 @@ INLINE_SOURCES          = YES
 SORT_MEMBER_DOCS        = NO
 
 # Enabling documentation of desired entities...
-ALWAYS_DETAILED_SEC     = NO
-BRIEF_MEMBER_DESC       = YES
-REPEAT_BRIEF            = YES
-EXTRACT_ALL             = YES
+EXTRACT_ALL             = NO
 EXTRACT_PRIVATE         = YES
 EXTRACT_STATIC          = YES
 EXTRACT_LOCAL_CLASSES   = YES
 EXTRACT_LOCAL_METHODS   = YES
+ALWAYS_DETAILED_SEC     = NO
+BRIEF_MEMBER_DESC       = YES
+REPEAT_BRIEF            = YES
 SOURCE_BROWSER          = YES
 VERBATIM_HEADERS        = YES
 STRIP_CODE_COMMENTS     = NO
@@ -73,6 +85,7 @@ CALL_GRAPH              = YES
 # Disabling Include-graphs...
 INCLUDE_GRAPH           = NO
 
+# Setting main page...
 USE_MDFILE_AS_MAINPAGE  = main_page.md
 
 # Setting MathJax path (relative to the Doxygen output directory)...
