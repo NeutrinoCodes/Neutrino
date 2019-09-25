@@ -1,5 +1,5 @@
 /// @file   data_structs.hpp
-/// @brief  This header file contains definitions of structures and classes used for data storage.
+/// @brief  This header file contains declarations of structures used for data storage.
 /// @author Erik ZORZIN
 /// @date   24OCT2019
 
