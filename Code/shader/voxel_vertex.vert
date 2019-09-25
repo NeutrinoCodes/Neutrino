@@ -1,4 +1,8 @@
-/// @file
+/// @file   voxel_vertex.vert
+/// @author Erik ZORZIN
+/// @date   24OCT2019
+/// @brief  This vertex file creates a voxel out of a 4D point coordinates.
+/// @class  voxel
 
 #version 410 core
 
@@ -72,7 +76,7 @@ uniform mat4 V_mat;                                                             
 uniform mat4 P_mat;                                                             // Projection matrix.
 
 /// @function main
-// Computing rendering point coordinates:
+/// Computing rendering point coordinates:
 void main(void)
 {
   vec3 light;                                                                   // Light direction.

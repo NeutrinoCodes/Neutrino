@@ -12,6 +12,8 @@ OUTPUT_DIRECTORY        = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen
 # Defining valid file types to be considered in Doxygen...
 FILE_PATTERNS           = *.cpp *.hpp *.cl *.frag *.vert *.geom *.md
 
+EXTENSION_MAPPING      = frag=C++ vert=C++
+
 # Setting Doxygen input directories...
 INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/src/ \
