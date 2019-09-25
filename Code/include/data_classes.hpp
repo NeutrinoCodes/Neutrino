@@ -1,7 +1,22 @@
-/// @file   data_classes.hpp
-/// @author Erik ZORZIN
-/// @date   24OCT2019
-/// @brief  This header file contains declarations of classes used for data storage.
+/// @file     data_classes.hpp
+/// @author   Erik ZORZIN
+/// @date     24OCT2019
+/// @brief    Declarations of classes used for data storage.
+///
+/// @details  In Neutrino, data storage occurs in both the OpenCL host PC and the client
+///           GPU device. These classes are used to transfer data between the host the client.
+///           Data can be organized in various formats: **intX** classes are for sharing
+///           **integer** (cl_long) data, while **floatX** are for **float** (cl_float) data.
+///           Both type of classes do not have bindings for OpenGL/CL interoperability, therefore
+///           they cannot be used for direct GPU 3D rendering. The reason of this is that OpenGL
+///           is better designed to do graphics using GLSL **vec4** **float** numbers.
+///           For this reason, a specific **float4G** ("G" stands for "graphics") class has been
+///           declared in order to represent 4xN vectors of
+///           [homogeneous coordinates](https://en.wikipedia.org/wiki/Homogeneous_coordinates)
+///           **float** numbers which are commonly used in
+///           [projective geometry](https://en.wikipedia.org/wiki/Projective_geometry) to
+///           describe points in a 3D
+///           [projective space](https://en.wikipedia.org/wiki/Projective_space).
 
 #ifndef data_classes_hpp
 #define data_classes_hpp

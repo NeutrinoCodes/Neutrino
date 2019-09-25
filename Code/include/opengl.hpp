@@ -1,4 +1,7 @@
-/// @file
+/// @file   opengl.hpp
+/// @author Erik ZORZIN
+/// @date   24OCT2019
+/// @brief  Declaration of the "opengl" class.
 
 #ifndef opengl_hpp
 #define opengl_hpp
