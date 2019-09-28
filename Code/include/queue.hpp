@@ -26,22 +26,20 @@ public:
 
   /// @brief pippo
   /// @details poppo
-  queue();
+  queue ();
 
   /// @brief Class initializer.
   /// @details peppo.
-  void init
-  (
-   neutrino* loc_baseline                                                                           ///< Neutrino object.
-  );
+  void init (
+             neutrino* loc_baseline                                                                 ///< Neutrino object.
+            );
 
   /// @brief read
   /// @details My read.
-  void read
-  (
-   float1* loc_data,                                                                                ///< float1 object.
-   cl_uint loc_layout_index                                                                         ///< Layout index.
-  );
+  void read (
+             float1* loc_data,                                                                      ///< float1 object.
+             cl_uint loc_layout_index                                                               ///< Layout index.
+            );
 
   /// @overload read(int1* loc_data, cl_uint loc_layout_index)
   /// Pippo.

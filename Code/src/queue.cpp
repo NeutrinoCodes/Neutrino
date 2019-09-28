@@ -12,9 +12,6 @@ queue::queue()
   device_id  = NULL;                                                                                // Initializing device id...
 }
 
-/// # Initialisation function
-/// ### Description:
-/// Creates the OpenCL command queue.
 void queue::init
 (
  neutrino* loc_baseline
