@@ -5,15 +5,17 @@
 ///
 /// @details  In Neutrino, data storage occurs in both the OpenCL host PC and the client
 ///           GPU device. These classes are used to transfer data between the host the client.
-///           Data can be organized in various formats: **intX** classes are for sharing
-///           **integer** (cl_long) data, while **floatX** are for **float** (cl_float) data.
+///           Data can be organized in various formats: **int1**, **int2**, **int3** and **int4**
+///           classes are for sharing **cl_long** data, while **float1**, **float2**, **float3**
+///           and **float4** are for **cl_float** data.
 ///           Both type of classes do not have bindings for OpenGL/CL interoperability, therefore
 ///           they cannot be used for direct GPU 3D rendering. The reason of this is that OpenGL
-///           is better designed to do graphics using GLSL **vec4** **float** numbers.
+///           is better designed to do graphics using GLSL's **vec4** 4xN vectors of **GLfloat**
+///           numbers.
 ///           For this reason, a specific **float4G** ("G" stands for "graphics") class has been
 ///           declared in order to represent 4xN vectors of
 ///           [homogeneous coordinates](https://en.wikipedia.org/wiki/Homogeneous_coordinates)
-///           **float** numbers which are commonly used in
+///           **GLfloat** numbers which are commonly used in
 ///           [projective geometry](https://en.wikipedia.org/wiki/Projective_geometry) to
 ///           describe points in a 3D
 ///           [projective space](https://en.wikipedia.org/wiki/Projective_space).
@@ -26,7 +28,7 @@
 
 /// @class int1
 /// ### 1xN vector of "cl_long" data.
-/// Defines a 1xN vector (N = data size) of "cl_long" data numbers.
+/// Declares a 1xN vector (N = data size) of **cl_long** data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended for graphics rendering.
 class int1
@@ -34,7 +36,11 @@ class int1
 private:
 
 public:
-  cl_long* data;                                                                                    ///< Data.
+  /// @details 1xN (N = data size) **cl_long** data storage. These data are stored in the host PC
+  /// memory. They can be eventually exchanged between the client GPU by using the @link queue::init
+  /// @endlink and @link write @endlink methods of the @link queue @endlink class.
+  cl_long* data;                                                                                    ///< @brief **Data.**
+
   cl_mem   buffer;                                                                                  ///< Data memory buffer.
   size_t   size;                                                                                    ///< Data size.
   cl_uint  layout;                                                                                  ///< Data layout index.
@@ -54,7 +60,7 @@ public:
 
 /// @class int2
 /// ### 2xN vector of "cl_long" data.
-/// Defines a 3xN vector (N = data size) of "cl_long" data numbers.
+/// Declares a 2xN vector (N = data size) of "cl_long" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended for graphics rendering.
 class int2
@@ -78,7 +84,7 @@ public:
 
 /// @class int3
 /// ### 3xN vector of "cl_long" data.
-/// Defines a 3xN vector (N = data size) of "cl_long" data numbers.
+/// Declares a 3xN vector (N = data size) of "cl_long" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended for graphics rendering.
 class int3
@@ -102,7 +108,7 @@ public:
 
 /// @class int4
 /// ### 4xN vector of "cl_long" data.
-/// Defines a 4xN vector (N = data size) of "cl_long" data numbers.
+/// Declares a 4xN vector (N = data size) of "cl_long" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended for graphics rendering.
 class int4
@@ -126,7 +132,7 @@ public:
 
 /// @class float1
 /// ### 1xN vector of "cl_float" data.
-/// Defines a 1xN vector (N = data size) of "cl_float" data numbers.
+/// Declares a 1xN vector (N = data size) of "cl_float" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended for graphics rendering.
 class float1
@@ -150,7 +156,7 @@ public:
 
 /// @class float1G
 /// ### 1xN vector of "GLfloat" data.
-/// Defines a 1xN vector (N = data size) of "GLfloat" data numbers.
+/// Declares a 1xN vector (N = data size) of "GLfloat" data numbers.
 /// To be used to transfer memory between host and client. It has bindings for
 /// OpenGL/CL interoperability. Intended for graphics rendering.
 class float1G
@@ -177,7 +183,7 @@ public:
 
 /// @class float2
 /// ### 2xN vector of "cl_float" data.
-/// Defines a 2xN vector (N = data size) of "cl_float" data numbers.
+/// Declares a 2xN vector (N = data size) of "cl_float" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended for graphics rendering.
 class float2
@@ -201,7 +207,7 @@ public:
 
 /// @class float3
 /// ### 3xN vector of "cl_float" data.
-/// Defines a 3xN vector (N = data size) of "cl_float" data numbers.
+/// Declares a 3xN vector (N = data size) of "cl_float" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended for graphics rendering.
 class float3
@@ -225,7 +231,7 @@ public:
 
 /// @class float4
 /// ### 4xN vector of "cl_float" data.
-/// Defines a 4xN vector (N = data size) of "cl_float" data numbers.
+/// Declares a 4xN vector (N = data size) of "cl_float" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended for graphics rendering.
 class float4
@@ -249,7 +255,7 @@ public:
 
 /// @class float4G
 /// ### 4xN vector of "GLfloat" data.
-/// Defines a 4xN vector (N = data size) of "GLfloat" data numbers.
+/// Declares a 4xN vector (N = data size) of "GLfloat" data numbers.
 /// To be used to transfer memory between host and client. It has bindings for
 /// OpenGL/CL interoperability. Intended for graphics rendering.
 class float4G
