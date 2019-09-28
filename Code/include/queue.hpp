@@ -24,124 +24,158 @@ public:
   cl_context       context_id;                                                                      // OpenCL context.
   cl_device_id     device_id;                                                                       // OpenCL device id.
 
-  /// @fn queue
-  /// My constructor.
+  /// @brief pippo
+  /// @details poppo
   queue();
-  /// @fn init
-  /// My init.
-  void init (
-             neutrino* loc_baseline
-            );
-  /// @fn read(float1* loc_data, cl_uint loc_layout_index)
-  /// My read.
-  void read (
-             float1* loc_data,                                                                      // float1 object.
-             cl_uint loc_layout_index                                                               // Layout index.
-            );
+
+  /// @brief Class initializer.
+  /// @details peppo.
+  void init
+  (
+   neutrino* loc_baseline                                                                           ///< Neutrino object.
+  );
+
+  /// @brief read
+  /// @details My read.
+  void read
+  (
+   float1* loc_data,                                                                                ///< float1 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
+  );
+
   /// @overload read(int1* loc_data, cl_uint loc_layout_index)
   /// Pippo.
-  void read (
-             int1*   loc_data,                                                                      // int1 object.
-             cl_uint loc_layout_index                                                               // Layout index.
-            );
+  void read
+  (
+   int1*   loc_data,                                                                                // int1 object.
+   cl_uint loc_layout_index                                                                         // Layout index.
+  );
+
   /// @overload read(float4* loc_data, cl_uint loc_layout_index)
   /// ghgfgh
-  void read (
-             float4* loc_data,                                                                      // Data object.
-             cl_uint loc_layout_index                                                               // Layout index.
-            );
+  void read
+  (
+   float4* loc_data,                                                                                // Data object.
+   cl_uint loc_layout_index                                                                         // Layout index.
+  );
+
   /// @overload read(int4* loc_data, cl_uint loc_layout_index)
   /// fgdfg
-  void read (
-             int4*   loc_data,                                                                      // Data object.
-             cl_uint loc_layout_index                                                               // Layout index.
-            );
+  void read
+  (
+   int4*   loc_data,                                                                                // Data object.
+   cl_uint loc_layout_index                                                                         // Layout index.
+  );
+
   /// @overload read(float1G* loc_data, cl_uint loc_layout_index)
   /// gsdfg
-  void read (
-             float1G* loc_data,                                                                     // Data object.
-             cl_uint  loc_layout_index                                                              // Layout index.
-            );
+  void read
+  (
+   float1G* loc_data,                                                                               // Data object.
+   cl_uint  loc_layout_index                                                                        // Layout index.
+  );
+
   /// @overload read(float4G* loc_data, cl_uint loc_layout_index)
   /// tatdrt
-  void read (
-             float4G* loc_data,                                                                     // Data object.
-             cl_uint  loc_layout_index                                                              // Layout index.
-            );
+  void read
+  (
+   float4G* loc_data,                                                                               // Data object.
+   cl_uint  loc_layout_index                                                                        // Layout index.
+  );
+
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////// WRITE "float1" overload //////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  void write (
-              float1* loc_data,                                                                     // float1 object.
-              cl_uint loc_layout_index                                                              // Layout index.
-             );
+  void write
+  (
+   float1* loc_data,                                                                                // float1 object.
+   cl_uint loc_layout_index                                                                         // Layout index.
+  );
+
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////// WRITE "int1" overload //////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  void write (
-              int1*   loc_data,                                                                     // int1 object.
-              cl_uint loc_layout_index                                                              // Layout index.
-             );
+  void write
+  (
+   int1*   loc_data,                                                                                // int1 object.
+   cl_uint loc_layout_index                                                                         // Layout index.
+  );
+
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////// WRITE "float4" overload //////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  void write (
-              float4* loc_data,                                                                     // Data object.
-              cl_uint loc_layout_index                                                              // Layout index.
-             );
+  void write
+  (
+   float4* loc_data,                                                                                // Data object.
+   cl_uint loc_layout_index                                                                         // Layout index.
+  );
+
   ////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////// WRITE "int4" overload //////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  void write (
-              int4*   loc_data,                                                                     // Data object.
-              cl_uint loc_layout_index                                                              // Layout index.
-             );
+  void write
+  (
+   int4*   loc_data,                                                                                // Data object.
+   cl_uint loc_layout_index                                                                         // Layout index.
+  );
+
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// WRITE "float1G" overload ////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  void write (
-              float1G* loc_data,                                                                    // Data object.
-              GLuint   loc_layout_index                                                             // Layout index.
-             );
+  void write
+  (
+   float1G* loc_data,                                                                               // Data object.
+   GLuint   loc_layout_index                                                                        // Layout index.
+  );
+
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// WRITE "float4G" overload ////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  void write (
-              float4G* loc_data,                                                                    // Data object.
-              GLuint   loc_layout_index                                                             // Layout index.
-             );
+  void write
+  (
+   float4G* loc_data,                                                                               // Data object.
+   GLuint   loc_layout_index                                                                        // Layout index.
+  );
+
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////// ACQUIRE "float1G" overload ///////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  void acquire (
-                float1G* loc_data,                                                                  // Data object.
-                GLuint   loc_layout_index                                                           // OpenGL shader layout index.
-               );
+  void acquire
+  (
+   float1G* loc_data,                                                                               // Data object.
+   GLuint   loc_layout_index                                                                        // OpenGL shader layout index.
+  );
+
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////// ACQUIRE "float4G" overload ///////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  void acquire (
-                float4G* loc_data,                                                                  // Data object.
-                GLuint   loc_layout_index                                                           // OpenGL shader layout index.
-               );
+  void acquire
+  (
+   float4G* loc_data,                                                                               // Data object.
+   GLuint   loc_layout_index                                                                        // OpenGL shader layout index.
+  );
+
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////// RELEASE "float1G" overload //////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  void release (
-                float1G* loc_data,                                                                  // Data object.
-                GLuint   loc_layout_index                                                           // OpenGL shader layout index.
-               );
+  void release
+  (
+   float1G* loc_data,                                                                               // Data object.
+   GLuint   loc_layout_index                                                                        // OpenGL shader layout index.
+  );
+
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////// RELEASE "float4G" overload //////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  void release (
-                float4G* loc_data,                                                                  // Data object.
-                GLuint   loc_layout_index                                                           // OpenGL shader layout index.
-               );
+  void release
+  (
+   float4G* loc_data,                                                                               // Data object.
+   GLuint   loc_layout_index                                                                        // OpenGL shader layout index.
+  );
+
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////// DESTRUCTOR ////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-
   ~queue();
 };
 
