@@ -33,62 +33,85 @@ private:
   neutrino*   baseline;                                                                             ///< @brief **Neutrino baseline.**
   std::string parameter_value;                                                                      ///< @brief **Parameter value.**
 
-  // OpenCL get info value function:
+  /// @brief **string** getter function.
+  /// @details It gets a **string** parameter from the device's information.
   std::string                 get_string (
                                           cl_device_id   loc_platform_id,                           ///< @brief **Platform ID.**
                                           cl_device_info loc_parameter_name                         ///< @brief **Paramenter name.**
                                          );
 
+  /// @brief **cl_uint** getter function.
+  /// @details It gets a **cl_uint** parameter from the device's information.
   cl_uint                     get_cl_uint (
                                            cl_device_id   loc_device_id,                            ///< @brief **OpenCL device ID.**
                                            cl_device_info loc_parameter_name                        ///< @brief **Parameter name.**
                                           );
 
+  /// @brief **cl_bool** getter function.
+  /// @details It gets a **cl_bool** parameter from the device's information.
   cl_bool                     get_cl_bool (
                                            cl_device_id   loc_device_id,                            ///< @brief **OpenCL device ID.**
                                            cl_device_info loc_parameter_name                        ///< @brief **Parameter name.**
                                           );
 
+  /// @brief **cl_device_fp_config** getter function.
+  /// @details It gets a **cl_device_fp_config** parameter from the device's information.
   cl_device_fp_config         get_cl_device_fp_config (
                                                        cl_device_id   loc_device_id,                ///< @brief **OpenCL device ID.**
                                                        cl_device_info loc_parameter_name            ///< @brief **Parameter name.**
                                                       );
 
+  /// @brief **cl_device_exec_capabilities** getter function.
+  /// @details It gets a **cl_device_exec_capabilities** parameter from the device's information.
   cl_device_exec_capabilities get_cl_device_exec_capabilities (
                                                                cl_device_id   loc_device_id,        ///< @brief **OpenCL device ID.**
                                                                cl_device_info loc_parameter_name    ///< @brief **Parameter name.**
                                                               );
 
+  /// @brief **cl_ulong** getter function.
+  /// @details It gets a **cl_ulong** parameter from the device's information.
   cl_ulong                    get_cl_ulong (
                                             cl_device_id   loc_device_id,                           ///< @brief **OpenCL device ID.**
                                             cl_device_info loc_parameter_name                       ///< @brief **Parameter name.**
                                            );
 
+  /// @brief **cl_device_mem_cache_type** getter function.
+  /// @details It gets a **cl_device_mem_cache_type** parameter from the device's information.
   cl_device_mem_cache_type    get_cl_device_mem_cache_type (
                                                             cl_device_id   loc_device_id,           ///< @brief **OpenCL device ID.**
                                                             cl_device_info loc_parameter_name       ///< @brief **Parameter name.**
                                                            );
 
+  /// @brief **size_t** getter function.
+  /// @details It gets a **size_t** parameter from the device's information.
   size_t                      get_size_t (
                                           cl_device_id   loc_device_id,                             ///< @brief **OpenCL device ID.**
                                           cl_device_info loc_parameter_name                         ///< @brief **Parameter name.**
                                          );
 
+  /// @brief **cl_device_local_mem_type** getter function.
+  /// @details It gets a **cl_device_local_mem_type** parameter from the device's information.
   cl_device_local_mem_type    get_cl_device_local_mem_type (
                                                             cl_device_id   loc_device_id,           ///< @brief **OpenCL device ID.**
                                                             cl_device_info loc_parameter_name       ///< @brief **Parameter name.**
                                                            );
 
+  /// @brief **cl_platform_id** getter function.
+  /// @details It gets a **cl_platform_id** parameter from the device's information.
   cl_platform_id              get_cl_platform_id (
                                                   cl_device_id   loc_device_id,                     ///< @brief **OpenCL device ID.**
                                                   cl_device_info loc_parameter_name                 ///< @brief **Parameter name.**
                                                  );
 
+  /// @brief **cl_device_type** getter function.
+  /// @details It gets a **cl_device_type** parameter from the device's information.
   cl_device_type              get_cl_device_type (
                                                   cl_device_id   loc_device_id,                     ///< @brief **OpenCL device ID.**
                                                   cl_device_info loc_parameter_name                 ///< @brief **Parameter name.**
                                                  );
 
+  /// @brief **cl_command_queue_properties** getter function.
+  /// @details It gets a **cl_command_queue_properties** parameter from the device's information.
   cl_command_queue_properties get_cl_command_queue_properties (
                                                                cl_device_id   loc_device_id,        ///< @brief **OpenCL device ID.**
                                                                cl_device_info loc_parameter_name    ///< @brief **Parameter name.**
@@ -373,12 +396,19 @@ public:
   /// @details OpenCL software driver version string in the form major_number.minor_number.
   std::string         driver_version;                                                               ///< @brief **OpenCL device driver_version [std::string].**
 
+  /// @brief Class constructor.
+  /// @details It does nothing.
   device        ();
 
+  /// @brief Class initializer.
+  /// @details It gets all information from the OpenCL hardware client GPU device and store it
+  /// in the corresponding public variables.
   void init (
-             cl_device_id loc_device_id                                                             // Device ID.
+             cl_device_id loc_device_id                                                             ///< Device ID.
             );
 
+  /// @brief Class destructor.
+  /// @details It does nothing.
   ~device();
 };
 
