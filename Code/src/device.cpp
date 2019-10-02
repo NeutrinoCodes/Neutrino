@@ -2,17 +2,14 @@
 
 #include "device.hpp"
 
-//////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////// "DEVICE" CLASS ///////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// "device" class ///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 device::device()
 {
 
 }
 
-/// # Device get information value function
-/// ### Description:
-/// Gets the value of a device information.
 std::string device::get_string
 (
  cl_device_id   loc_device_id,                                                                      // OpenCL device ID.
@@ -486,9 +483,6 @@ cl_command_queue_properties device::get_cl_command_queue_properties
   return (loc_parameter_value);                                                                     // Returning parameter value...
 }
 
-/// # Initialization function
-/// ### Description:
-/// Gets all the device information.
 void device::init
 (
  cl_device_id loc_device_id                                                                         // OpenCL deivce ID.
@@ -496,267 +490,267 @@ void device::init
 {
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
-  address_bits                  = get_cl_uint
+  address_bits                  = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_ADDRESS_BITS
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_ADDRESS_BITS                                           // Parameter of interest [cl_device_info].
                                   );
-  available                     = get_cl_bool
+  available                     = get_cl_bool                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_AVAILABLE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_AVAILABLE                                              // Parameter of interest [cl_device_info].
                                   );
-  compiler_available            = get_cl_bool
+  compiler_available            = get_cl_bool                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_COMPILER_AVAILABLE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_COMPILER_AVAILABLE                                     // Parameter of interest [cl_device_info].
                                   );
-  double_fp_config              = get_cl_device_fp_config
+  double_fp_config              = get_cl_device_fp_config                                           // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_COMPILER_AVAILABLE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_COMPILER_AVAILABLE                                     // Parameter of interest [cl_device_info].
                                   );
-  endian_little                 = get_cl_bool
+  endian_little                 = get_cl_bool                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_ENDIAN_LITTLE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_ENDIAN_LITTLE                                          // Parameter of interest [cl_device_info].
                                   );
-  error_correction_support      = get_cl_bool
+  error_correction_support      = get_cl_bool                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_ERROR_CORRECTION_SUPPORT
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_ERROR_CORRECTION_SUPPORT                               // Parameter of interest [cl_device_info].
                                   );
-  execution_capabilities        = get_cl_device_exec_capabilities
+  execution_capabilities        = get_cl_device_exec_capabilities                                   // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_EXECUTION_CAPABILITIES
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_EXECUTION_CAPABILITIES                                 // Parameter of interest [cl_device_info].
                                   );
-  extensions                    = get_string
+  extensions                    = get_string                                                        // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_EXTENSIONS
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_EXTENSIONS                                             // Parameter of interest [cl_device_info].
                                   );
-  global_mem_cache_size         = get_cl_ulong
+  global_mem_cache_size         = get_cl_ulong                                                      // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_GLOBAL_MEM_CACHE_SIZE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_GLOBAL_MEM_CACHE_SIZE                                  // Parameter of interest [cl_device_info].
                                   );
-  global_mem_cache_type         = get_cl_device_mem_cache_type
+  global_mem_cache_type         = get_cl_device_mem_cache_type                                      // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_GLOBAL_MEM_CACHE_TYPE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_GLOBAL_MEM_CACHE_TYPE                                  // Parameter of interest [cl_device_info].
                                   );
-  global_mem_cacheline_size     = get_cl_uint
+  global_mem_cacheline_size     = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE                              // Parameter of interest [cl_device_info].
                                   );
-  global_mem_size               = get_cl_ulong
+  global_mem_size               = get_cl_ulong                                                      // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_GLOBAL_MEM_SIZE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_GLOBAL_MEM_SIZE                                        // Parameter of interest [cl_device_info].
                                   );
-  half_fp_config                = get_cl_device_fp_config
+  half_fp_config                = get_cl_device_fp_config                                           // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_GLOBAL_MEM_SIZE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_GLOBAL_MEM_SIZE                                        // Parameter of interest [cl_device_info].
                                   );
-  image_support                 = get_cl_bool
+  image_support                 = get_cl_bool                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_IMAGE_SUPPORT
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_IMAGE_SUPPORT                                          // Parameter of interest [cl_device_info].
                                   );
-  image2D_max_height            = get_size_t
+  image2D_max_height            = get_size_t                                                        // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_IMAGE2D_MAX_HEIGHT
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_IMAGE2D_MAX_HEIGHT                                     // Parameter of interest [cl_device_info].
                                   );
-  image2D_max_width             = get_size_t
+  image2D_max_width             = get_size_t                                                        // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_IMAGE2D_MAX_WIDTH
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_IMAGE2D_MAX_WIDTH                                      // Parameter of interest [cl_device_info].
                                   );
-  image3D_max_depth             = get_size_t
+  image3D_max_depth             = get_size_t                                                        // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_IMAGE3D_MAX_DEPTH
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_IMAGE3D_MAX_DEPTH                                      // Parameter of interest [cl_device_info].
                                   );
-  image3D_max_height            = get_size_t
+  image3D_max_height            = get_size_t                                                        // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_IMAGE3D_MAX_HEIGHT
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_IMAGE3D_MAX_HEIGHT                                     // Parameter of interest [cl_device_info].
                                   );
-  image3D_max_width             = get_size_t
+  image3D_max_width             = get_size_t                                                        // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_IMAGE3D_MAX_WIDTH
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_IMAGE3D_MAX_WIDTH                                      // Parameter of interest [cl_device_info].
                                   );
-  local_mem_size                = get_cl_ulong
+  local_mem_size                = get_cl_ulong                                                      // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_LOCAL_MEM_SIZE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_LOCAL_MEM_SIZE                                         // Parameter of interest [cl_device_info].
                                   );
-  local_mem_type                = get_cl_device_local_mem_type
+  local_mem_type                = get_cl_device_local_mem_type                                      // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_LOCAL_MEM_TYPE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_LOCAL_MEM_TYPE                                         // Parameter of interest [cl_device_info].
                                   );
-  max_clock_frequency           = get_cl_uint
+  max_clock_frequency           = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_MAX_CLOCK_FREQUENCY
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_MAX_CLOCK_FREQUENCY                                    // Parameter of interest [cl_device_info].
                                   );
-  max_compute_units             = get_cl_uint
+  max_compute_units             = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_MAX_COMPUTE_UNITS
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_MAX_COMPUTE_UNITS                                      // Parameter of interest [cl_device_info].
                                   );
-  max_constant_args             = get_cl_uint
+  max_constant_args             = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_MAX_CONSTANT_ARGS
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_MAX_CONSTANT_ARGS                                      // Parameter of interest [cl_device_info].
                                   );
-  max_constant_buffer_size      = get_cl_ulong
+  max_constant_buffer_size      = get_cl_ulong                                                      // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE                               // Parameter of interest [cl_device_info].
                                   );
-  max_mem_alloc_size            = get_cl_ulong
+  max_mem_alloc_size            = get_cl_ulong                                                      // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_MAX_MEM_ALLOC_SIZE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_MAX_MEM_ALLOC_SIZE                                     // Parameter of interest [cl_device_info].
                                   );
-  max_parameter_size            = get_size_t
+  max_parameter_size            = get_size_t                                                        // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_MAX_PARAMETER_SIZE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_MAX_PARAMETER_SIZE                                     // Parameter of interest [cl_device_info].
                                   );
-  max_read_image_args           = get_cl_uint
+  max_read_image_args           = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_MAX_READ_IMAGE_ARGS
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_MAX_READ_IMAGE_ARGS                                    // Parameter of interest [cl_device_info].
                                   );
-  max_samplers                  = get_cl_uint
+  max_samplers                  = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_MAX_SAMPLERS
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_MAX_SAMPLERS                                           // Parameter of interest [cl_device_info].
                                   );
-  max_work_group_size           = get_size_t
+  max_work_group_size           = get_size_t                                                        // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_MAX_WORK_GROUP_SIZE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_MAX_WORK_GROUP_SIZE                                    // Parameter of interest [cl_device_info].
                                   );
-  max_work_item_dimensions      = get_cl_uint
+  max_work_item_dimensions      = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS                               // Parameter of interest [cl_device_info].
                                   );
 /*
-   max_work_item_sizes           = get_info (
-                                            loc_device_id,
-                                            CL_DEVICE_MAX_WORK_ITEM_SIZES
+   max_work_item_sizes           = get_info (// Getting device information...
+                                            loc_device_id,// OpenCL device id [cl_device_id].
+                                            CL_DEVICE_MAX_WORK_ITEM_SIZES// Parameter of interest [cl_device_info].
                                            );
  */
-  max_write_image_args          = get_cl_uint
+  max_write_image_args          = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_MAX_WRITE_IMAGE_ARGS
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_MAX_WRITE_IMAGE_ARGS                                   // Parameter of interest [cl_device_info].
                                   );
-  mem_base_addr_align           = get_cl_uint
+  mem_base_addr_align           = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_MEM_BASE_ADDR_ALIGN
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_MEM_BASE_ADDR_ALIGN                                    // Parameter of interest [cl_device_info].
                                   );
-  min_data_type_align_size      = get_cl_uint
+  min_data_type_align_size      = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE                               // Parameter of interest [cl_device_info].
                                   );
-  name                          = get_string
+  name                          = get_string                                                        // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_NAME
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_NAME                                                   // Parameter of interest [cl_device_info].
                                   );
-  platform                      = get_cl_platform_id
+  platform                      = get_cl_platform_id                                                // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_PLATFORM
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_PLATFORM                                               // Parameter of interest [cl_device_info].
                                   );
-  preferred_vector_width_char   = get_cl_uint
+  preferred_vector_width_char   = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR                            // Parameter of interest [cl_device_info].
                                   );
-  preferred_vector_width_short  = get_cl_uint
+  preferred_vector_width_short  = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT                           // Parameter of interest [cl_device_info].
                                   );
-  preferred_vector_width_int    = get_cl_uint
+  preferred_vector_width_int    = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT                             // Parameter of interest [cl_device_info].
                                   );
-  preferred_vector_width_long   = get_cl_uint
+  preferred_vector_width_long   = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG                            // Parameter of interest [cl_device_info].
                                   );
-  preferred_vector_width_float  = get_cl_uint
+  preferred_vector_width_float  = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT                           // Parameter of interest [cl_device_info].
                                   );
-  preferred_vector_width_double = get_cl_uint
+  preferred_vector_width_double = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE                          // Parameter of interest [cl_device_info].
                                   );
 
-  profile                       = get_string
+  profile                       = get_string                                                        // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_PROFILE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_PROFILE                                                // Parameter of interest [cl_device_info].
                                   );
-  profiling_timer_resolution    = get_size_t
+  profiling_timer_resolution    = get_size_t                                                        // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_PROFILING_TIMER_RESOLUTION
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_PROFILING_TIMER_RESOLUTION                             // Parameter of interest [cl_device_info].
                                   );
-  queue_properties              = get_cl_command_queue_properties
+  queue_properties              = get_cl_command_queue_properties                                   // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_QUEUE_PROPERTIES
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_QUEUE_PROPERTIES                                       // Parameter of interest [cl_device_info].
                                   );
-  single_fp_config              = get_cl_device_fp_config
+  single_fp_config              = get_cl_device_fp_config                                           // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_SINGLE_FP_CONFIG
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_SINGLE_FP_CONFIG                                       // Parameter of interest [cl_device_info].
                                   );
-  type                          = get_cl_device_type
+  type                          = get_cl_device_type                                                // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_TYPE
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_TYPE                                                   // Parameter of interest [cl_device_info].
                                   );
-  vendor                        = get_string
+  vendor                        = get_string                                                        // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_VENDOR
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_VENDOR                                                 // Parameter of interest [cl_device_info].
                                   );
-  vendor_id                     = get_cl_uint
+  vendor_id                     = get_cl_uint                                                       // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_VENDOR_ID
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_VENDOR_ID                                              // Parameter of interest [cl_device_info].
                                   );
-  version                       = get_string
+  version                       = get_string                                                        // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DEVICE_VERSION
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DEVICE_VERSION                                                // Parameter of interest [cl_device_info].
                                   );
-  driver_version                = get_string
+  driver_version                = get_string                                                        // Getting device information...
                                   (
-                                   loc_device_id,
-                                   CL_DRIVER_VERSION
+                                   loc_device_id,                                                   // OpenCL device id [cl_device_id].
+                                   CL_DRIVER_VERSION                                                // Parameter of interest [cl_device_info].
                                   );
 
   id                            = loc_device_id;                                                    // Initializing device_id...
