@@ -11,9 +11,6 @@ float   dot
   return(a[0]*b[0] + a[1]*b[1] + a[2]*b[2]);                                                        // Returning dot product...
 }
 
-/// # Magnitude of a 3D vector
-/// ### Description:
-/// Returns the magnitude of the 3D input vector.
 float   magnitude
 (
  float a[3]                                                                                         // 3D Vector.
@@ -22,9 +19,6 @@ float   magnitude
   return sqrt (dot (a, a));                                                                         // Returning magnitude...
 }
 
-/// # Normalization of a 3D vector
-/// ### Description:
-/// Normalises the 3D input vector.
 void    normalize
 (
  float a[3]                                                                                         // 3D Vector.
@@ -49,9 +43,6 @@ void    normalize
   }
 }
 
-/// # Angle between two 3D vectors
-/// ### Description:
-/// Returns the angle [rad] between the two 3D input vectors.
 float   angle
 (
  float a[3],                                                                                        // 3D Vector.
@@ -92,9 +83,6 @@ float   angle
   return theta;                                                                                     // Returning cos_theta...
 }
 
-/// # Cross product between two 3D vectors
-/// ### Description:
-/// Returns the cross product between the two 3D input vectors.
 void  cross
 (
  float v[3],                                                                                        // 3D cross product vector.
@@ -107,7 +95,6 @@ void  cross
   v[2] = +(a[0]*b[1] - a[1]*b[0]);                                                                  // Computing cross product...
 }
 
-// Conversion from 3D axis and rotation angle to rotation quaternion:
 void  quaternion
 (
  float q[4],                                                                                        // Rotation quaternion.
@@ -129,11 +116,6 @@ void  quaternion
   q[3]           = cos_theta_half;                                                                  // Computing rotation quaternion...
 }
 
-
-/// # Associated 3x3 matrix representing the quaternion rotation
-/// ### Description:
-/// Normalises the input quaternion, computes the intermediate helper products
-/// and computes the rotation matrix associated to the rotation quaternion.
 void  rotation_matrix
 (
  float M[9],                                                                                        // 3x3 rotation matrix.
