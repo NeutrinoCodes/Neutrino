@@ -2,9 +2,6 @@
 
 #include "linear_algebra.hpp"
 
-/// # Dot product of two 3D vectors
-/// ### Description:
-/// Returns the dot product between the two 3D input vectors.
 float   dot
 (
  float a[3],                                                                                        // 3D Vector.
