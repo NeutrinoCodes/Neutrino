@@ -79,7 +79,10 @@ void rotation_matrix (
                       float q[4]                                                                    // Rotation quaternion.
                      );
 
-// Conversion from rotation quaternion to Euler (Tait-Bryan) angles:
+/// @brief **Conversion from rotation quaternion to Euler (Tait-Bryan) angles**
+/// @details Computes the Euler angles from the rotation quaternion:
+/// @f$ roll = \arctan{(2(q_w q_x + q_))} ...@f$
+/// EZOR: 03OCT2019 q0, q1, q2, q3 quaternion naming convention should be adopted.
 void euler (
             float* roll,                                                                            // Roll angle [rad].
             float* pitch,                                                                           // Pitch angle [rad].
