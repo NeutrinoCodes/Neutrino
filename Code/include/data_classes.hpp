@@ -91,7 +91,7 @@ public:
   /// @details Creates a "1 x size" data storage of **cl_long** allocated on the host PC memory
   /// and initializes all data to 0.
   void init (
-             size_t loc_size                                                                        ///< @brief **Data size [#].**
+             size_t loc_size                                                                        ///< Data size [#].
             );
 
   /// @brief Class destructor.
@@ -160,7 +160,7 @@ public:
   /// @details Creates a "2 x size" data storage of **cl_long** allocated on the host PC memory
   /// and initializes all data to 0.
   void init (
-             size_t loc_size                                                                        ///< @brief **Data size [#].**
+             size_t loc_size                                                                        ///< Data size [#].
             );
 
   /// @brief Class destructor.
@@ -222,7 +222,7 @@ public:
   /// @details Creates a "3 x size" data storage of **cl_long** allocated on the host PC memory
   /// and initializes all data to 0.
   void init (
-             size_t loc_size                                                                        ///< @brief **Data size [#].**
+             size_t loc_size                                                                        ///< Data size [#].
             );
 
   /// @brief Class destructor.
@@ -284,7 +284,7 @@ public:
   /// @details Creates a "4 x size" data storage of **cl_long** allocated on the host PC memory
   /// and initializes all data to 0.
   void init (
-             size_t loc_size                                                                        ///< @brief **Data size [#].**
+             size_t loc_size                                                                        ///< Data size [#].
             );
 
   /// @brief Class destructor.
@@ -346,7 +346,7 @@ public:
   /// @details Creates a "1 x size" data storage of **cl_float** allocated on the host PC memory
   /// and initializes all data to 0.0f.
   void init (
-             size_t loc_size                                                                        ///< @brief **Data size [#].**
+             size_t loc_size                                                                        ///< Data size [#].
             );
 
   /// @brief Class destructor.
@@ -421,7 +421,7 @@ public:
   /// @details Creates a "1 x size" data storage of **GLfloat** allocated on the host PC memory
   /// and initializes all data to 0.0f.
   void init (
-             GLsizeiptr loc_size                                                                    ///< @brief **Data size [#].**
+             GLsizeiptr loc_size                                                                    ///< Data size [#].
             );
 
   /// @brief Class destructor.
@@ -483,7 +483,7 @@ public:
   /// @details Creates a "2 x size" data storage of **GLfloat** allocated on the host PC memory
   /// and initializes all data to 0.0f.
   void init (
-             size_t loc_size                                                                        ///< @brief **Data size [#].**
+             size_t loc_size                                                                        ///< Data size [#].
             );
 
   /// @brief Class destructor.
@@ -545,7 +545,7 @@ public:
   /// @details Creates a "3 x size" data storage of **GLfloat** allocated on the host PC memory
   /// and initializes all data to 0.0f.
   void init (
-             size_t loc_size                                                                        ///< @brief **Data size [#].**
+             size_t loc_size                                                                        ///< Data size [#].
             );
 
   /// @brief Class destructor.
@@ -607,7 +607,7 @@ public:
   /// @details Creates a "4 x size" data storage of **GLfloat** allocated on the host PC memory
   /// and initializes all data to 0.0f.
   void init (
-             size_t loc_size                                                                        ///< @brief **Data size [#].**
+             size_t loc_size                                                                        ///< Data size [#].
             );
 
   /// @brief Class destructor.
@@ -682,7 +682,7 @@ public:
   /// @details Creates a "4 x size" data storage of **GLfloat** allocated on the host PC memory
   /// and initializes all data to 0.0f.
   void init (
-             GLsizeiptr loc_size                                                                    ///< @brief **Data size [#].**
+             GLsizeiptr loc_size                                                                    ///< Data size [#].
             );
 
   /// @brief Class destructor.
