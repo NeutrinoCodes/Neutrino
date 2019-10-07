@@ -3,7 +3,7 @@
 #include "neutrino.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// "NEUTRINO" CLASS ///////////////////////////////
+///////////////////////////////// "neutrino" class ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 neutrino::neutrino()
 {
@@ -17,9 +17,6 @@ neutrino::neutrino()
   device_id   = NULL;                                                                               // OpenCL device ID.
 }
 
-/// # Initialization function
-/// ### Description:
-/// Initialises the neutrino object.
 void neutrino::init
 (
  size_t loc_q_num,
@@ -61,24 +58,17 @@ void neutrino::init
   done ();                                                                                          // Printing message...
 }
 
-/// # Neutrino get "tic" function
-/// ### Description:
-/// Gets the host NU_CPU time "tic" [s].
 void neutrino::get_tic ()
 {
-  tic = glfwGetTime ();
+  tic = glfwGetTime ();                                                                             // Getting "tic"...
 }
 
-/// # Neutrino get "toc" function
-/// ### Description:
-/// Gets the host NU_CPU time "toc" [s]. Prints the "toc - tic" time difference
-/// to the stdout.
 void neutrino::get_toc ()
 {
   std::string loc_text;                                                                             // Text buffer.
   std::string loc_pad;                                                                              // Text pad.
 
-  toc            = glfwGetTime ();
+  toc            = glfwGetTime ();                                                                  // Getting "toc"...
   loop_time      = toc - tic;                                                                       // Loop execution time [s].
   terminal_time += size_t (round (loop_time*1000000.0f));                                           // Terminal time [us].
 
@@ -99,17 +89,14 @@ void neutrino::get_toc ()
   }
 }
 
-/// # Neutrino load file function
-/// ### Description:
-/// Loads a file into a buffer.
 std::string neutrino::load_file
 (
- std::string loc_file_name
+ std::string loc_file_name                                                                          // File name.
 )
 {
-  std::string   loc_data;
+  std::string   loc_data;                                                                           // File data.
 
-  std::ifstream loc_file (loc_file_name, std::ios::in | std::ios::binary);
+  std::ifstream loc_file (loc_file_name, std::ios::in | std::ios::binary);                          // File.
 
   if(loc_file)
   {
@@ -118,33 +105,27 @@ std::string neutrino::load_file
     loc_file.seekg (0, std::ios::beg);
     loc_file.read (&loc_data[0], loc_data.size ());
     loc_file.close ();
-    return(loc_data);
+    return(loc_data);                                                                               // Returning file content as string...
   }
-  throw(errno);
+  throw(errno);                                                                                     // Throwing error in case of a reading problem...
 }
 
-/// # Neutrino write file function
-/// ### Description:
-/// Writes a buffer in a file.
 void neutrino::write_file
 (
- std::string file_name
+ std::string file_name                                                                              // File name.
 )
 {
   // EZOR: 05AGU2019: TO BE DONE!
 }
 
-/// # Neutrino query numeric input function
-/// ### Description:
-/// Asks the user for a numeric input choice.
 size_t neutrino::query_numeric
 (
- std::string loc_caption,
- int         loc_min,
- int         loc_max
+ std::string loc_caption,                                                                           // Text query caption.
+ int         loc_min,                                                                               // Minimum queried numeric value.
+ int         loc_max                                                                                // Maximum queried numeric value.
 )
 {
-  std::string loc_buffer;
+  std::string loc_buffer;                                                                           // Text buffer.
   size_t      loc_numeric;                                                                          // Numeric value.
   bool        valid_choice = false;                                                                 // User's choice.
 
@@ -171,17 +152,11 @@ size_t neutrino::query_numeric
   return(loc_numeric);                                                                              // Returning numeric choice...
 }
 
-/// # Neutrino erase stdout current line function
-/// ### Description:
-/// Erases the stdout current line.
 void neutrino::erase ()
 {
   std::cout << NU_ERASE;                                                                            // Erasing terminal stdout current line....
 }
 
-/// # Neutrino format and print "action" message function
-/// ### Description:
-/// Formats and prints "action" messages to stdout.
 void neutrino::action
 (
  std::string loc_text                                                                               // Message text.
@@ -204,7 +179,7 @@ void neutrino::action
   {
     for(i = 0; i < pad_size; i++)                                                                   // Compiling padding...
     {
-      pad += " ";
+      pad += " ";                                                                                   // Adding pad...
     }
   }
 
@@ -217,12 +192,9 @@ void neutrino::action
   std::cout << text + pad;                                                                          // Printing buffer...
 }
 
-/// # Neutrino format and print "error" message function
-/// ### Description:
-/// Formats and prints "error" messages to stdout.
 void neutrino::error
 (
- std::string loc_text
+ std::string loc_text                                                                               // User defined text message.
 )
 {
   size_t      i;                                                                                    // Index.
@@ -259,20 +231,17 @@ void neutrino::error
   exit (1);                                                                                         // Exiting...
 }
 
-/// # Neutrino list message function
-/// ### Description:
-/// Justifies and prints messages to stdout.
 void neutrino::list
 (
- std::string loc_text,
- std::string loc_delimiter,
- size_t      loc_tab
+ std::string loc_text,                                                                              // User defined text message.
+ std::string loc_delimiter,                                                                         // User defined text delimiter.
+ size_t      loc_tab                                                                                // User defined text tab size.
 )
 {
   size_t      loc_pos;                                                                              // Position of delimiter.
   size_t      loc_pos_new;                                                                          // New position of delimiter.
   std::string loc_pad;                                                                              // Blank string.
-  std::string loc_token;
+  std::string loc_token;                                                                            // Token string.
   size_t      i;                                                                                    // Index.
 
   loc_pos     = 0;                                                                                  // Resetting delimiter position...
@@ -300,15 +269,12 @@ void neutrino::list
                    loc_pos_new - loc_pos
                   );                                                                                // Extracting between delimiters...
     std::cout << loc_token << std::endl << loc_pad;                                                 // Printing resulting string...
-    loc_pos     = loc_pos_new + loc_delimiter.size ();
+    loc_pos     = loc_pos_new + loc_delimiter.size ();                                              // Updating delimiter position...
   }
 
-  std::cout << NU_ERASE;
+  std::cout << NU_ERASE;                                                                            // Erasing current text line...
 }
 
-/// # Neutrino format and print "done" message function
-/// ### Description:
-/// Formats and prints "done" messages to stdout.
 void neutrino::done ()
 {
   std::string loc_text;                                                                             // Text buffer.
@@ -335,63 +301,60 @@ void neutrino::terminated ()
 
 double neutrino::constrain_double
 (
- double loc_input,
- double loc_min,
- double loc_max
+ double loc_input,                                                                                  // Input number to be constrained.
+ double loc_min,                                                                                    // Minimum constraint.
+ double loc_max                                                                                     // Maximum constraint.
 )
 {
-  double loc_output;
+  double loc_output;                                                                                // Output value.
 
   if((loc_min <= loc_input) &&
      (loc_input <= loc_max))
   {
-    loc_output = loc_input;
+    loc_output = loc_input;                                                                         // Setting output...
   }
 
   if(loc_input < loc_min)
   {
-    loc_output = loc_min;
+    loc_output = loc_min;                                                                           // Constraining output towards minimum...
   }
 
   if(loc_max < loc_input)
   {
-    loc_output = loc_max;
+    loc_output = loc_max;                                                                           // Constraining output towards maximum...
   }
 
-  return loc_output;
+  return loc_output;                                                                                // Returning output...
 }
 
 float neutrino::constrain_float
 (
- float loc_input,
- float loc_min,
- float loc_max
+ float loc_input,                                                                                   // Input number to be constrained.
+ float loc_min,                                                                                     // Minimum constraint.
+ float loc_max                                                                                      // Maximum constraint.
 )
 {
-  float loc_output;
+  float loc_output;                                                                                 // Output value.
 
   if((loc_min <= loc_input) &&
      (loc_input <= loc_max))
   {
-    loc_output = loc_input;
+    loc_output = loc_input;                                                                         // Setting output...
   }
 
   if(loc_input < loc_min)
   {
-    loc_output = loc_min;
+    loc_output = loc_min;                                                                           // Constraining output towards minimum...
   }
 
   if(loc_max < loc_input)
   {
-    loc_output = loc_max;
+    loc_output = loc_max;                                                                           // Constraining output towards maximum...
   }
 
-  return loc_output;
+  return loc_output;                                                                                // Returning output...
 }
 
-/// # OpenCL error get function
-/// ### Description:
-/// Translates an OpenCL numeric error code into a human-readable string.
 std::string neutrino::get_error
 (
  cl_int loc_error                                                                                   // Local error code.
@@ -474,9 +437,6 @@ std::string neutrino::get_error
   }
 }
 
-/// # OpenCL error check function
-/// ### Description:
-/// Checks for an OpenCL error code and print it to stdout.
 void neutrino::check_error
 (
  cl_int loc_error                                                                                   // Error code.
@@ -491,5 +451,5 @@ void neutrino::check_error
 
 neutrino::~neutrino()
 {
-  delete[]  kernel_id;
+  delete[]  kernel_id;                                                                              // Deleting kernel ID array...
 }
