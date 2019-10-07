@@ -2,9 +2,9 @@
 
 #include "kernel.hpp"
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// "KERNEL" CLASS ////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////// "kernel" class /////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 kernel::kernel()
 {
   source    = "";                                                                                   // Initializing kernel source...
@@ -16,10 +16,6 @@ kernel::kernel()
   kernel_id = NULL;                                                                                 // Initializing kernel id...
 }
 
-/// # Initialization function
-/// ### Description:
-/// Creates the OpenCL program from its source. Creates the device ID list.
-/// Builds the OpenCL program. Creates the OpenCL kernel.
 void kernel::init
 (
  neutrino*   loc_baseline,                                                                          // Neutrino baseline.
@@ -170,58 +166,13 @@ void kernel::init
 
   baseline->done ();                                                                                // Printing message...
 }
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////// SETARG "float1" overload ////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// setarg "int1" overload ///////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 void kernel::setarg
 (
- float1* loc_data,                                                                                  // float1 object
- cl_uint loc_layout_index                                                                           // Layout index.
-)
-{
-  cl_int loc_error;                                                                                 // Error code.
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  baseline->action ("setting kernel argument...");                                                  // Printing message...
-
-  loc_data->layout = loc_layout_index;                                                              // Setting layout index.
-
-  if(!loc_data->ready)
-  {
-    // Creating OpenCL memory buffer:
-    loc_data->buffer = clCreateBuffer
-                       (
-                        baseline->context_id,                                                       // OpenCL context.
-                        CL_MEM_READ_WRITE |
-                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flags.
-                        sizeof(cl_float)*loc_data->size,                                            // Data buffer size.
-                        loc_data->data,                                                             // Data buffer.
-                        &loc_error                                                                  // Error code.
-                       );
-
-    baseline->check_error (loc_error);                                                              // Checking returned error code...
-
-    loc_data->ready = true;                                                                         // Setting "ready" flag...
-  }
-
-  loc_error = clSetKernelArg
-              (
-               kernel_id,                                                                           // Kernel id.
-               (cl_uint)loc_layout_index,                                                           // Layout index.
-               sizeof(cl_mem),                                                                      // Data size.
-               &loc_data->buffer                                                                    // Data value.
-              );
-
-  baseline->done ();                                                                                // Printing message...
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// SETARG "int1" overload ////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-void kernel::setarg
-(
- int1*   loc_data,                                                                                  // int1 object.
+ int1*   loc_data,                                                                                  // int1 data.
  cl_uint loc_layout_index                                                                           // Layout index.
 )
 {
@@ -261,12 +212,13 @@ void kernel::setarg
 
   baseline->done ();                                                                                // Printing message...
 }
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////// SETARG "float4" overload ////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// setarg "int2" overload ///////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 void kernel::setarg
 (
- float4* loc_data,                                                                                  // Float4 object.
+ int2*   loc_data,                                                                                  // int2 data.
  cl_uint loc_layout_index                                                                           // Layout index.
 )
 {
@@ -286,7 +238,7 @@ void kernel::setarg
                         baseline->context_id,                                                       // OpenCL context.
                         CL_MEM_READ_WRITE |
                         CL_MEM_COPY_HOST_PTR,                                                       // Memory flags.
-                        sizeof(float4_structure)*loc_data->size,                                    // Data buffer size.
+                        sizeof(int2_structure)*loc_data->size,                                      // Data buffer size.
                         loc_data->data,                                                             // Data buffer.
                         &loc_error                                                                  // Error code.
                        );
@@ -307,12 +259,58 @@ void kernel::setarg
   baseline->done ();                                                                                // Printing message...
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// SETARG "int4" overload ////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// setarg "int3" overload ///////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 void kernel::setarg
 (
- int4*   loc_data,                                                                                  // Int4 object.
+ int3*   loc_data,                                                                                  // int3 data.
+ cl_uint loc_layout_index                                                                           // Layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  baseline->action ("setting kernel argument...");                                                  // Printing message...
+
+  loc_data->layout = loc_layout_index;                                                              // Setting layout index.
+
+  if(!loc_data->ready)
+  {
+    // Creating OpenCL memory buffer:
+    loc_data->buffer = clCreateBuffer
+                       (
+                        baseline->context_id,                                                       // OpenCL context.
+                        CL_MEM_READ_WRITE |
+                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flags.
+                        sizeof(int3_structure)*loc_data->size,                                      // Data buffer size.
+                        loc_data->data,                                                             // Data buffer.
+                        &loc_error                                                                  // Error code.
+                       );
+
+    baseline->check_error (loc_error);                                                              // Checking returned error code...
+
+    loc_data->ready = true;                                                                         // Setting "ready" flag...
+  }
+
+  loc_error = clSetKernelArg
+              (
+               kernel_id,                                                                           // Kernel id.
+               (cl_uint)loc_layout_index,                                                           // Layout index.
+               sizeof(cl_mem),                                                                      // Data size.
+               &loc_data->buffer                                                                    // Data value.
+              );
+
+  baseline->done ();                                                                                // Printing message...
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// setarg "int4" overload ///////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+void kernel::setarg
+(
+ int4*   loc_data,                                                                                  // int4 data.
  cl_uint loc_layout_index                                                                           // Layout index.
 )
 {
@@ -353,12 +351,58 @@ void kernel::setarg
   baseline->done ();                                                                                // Printing message...
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////// SETARG "float1G" overload //////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////// setarg "float1" overload ////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 void kernel::setarg
 (
- float1G* loc_data,                                                                                 // Data object.
+ float1* loc_data,                                                                                  // float1 data.
+ cl_uint loc_layout_index                                                                           // Layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  baseline->action ("setting kernel argument...");                                                  // Printing message...
+
+  loc_data->layout = loc_layout_index;                                                              // Setting layout index.
+
+  if(!loc_data->ready)
+  {
+    // Creating OpenCL memory buffer:
+    loc_data->buffer = clCreateBuffer
+                       (
+                        baseline->context_id,                                                       // OpenCL context.
+                        CL_MEM_READ_WRITE |
+                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flags.
+                        sizeof(cl_float)*loc_data->size,                                            // Data buffer size.
+                        loc_data->data,                                                             // Data buffer.
+                        &loc_error                                                                  // Error code.
+                       );
+
+    baseline->check_error (loc_error);                                                              // Checking returned error code...
+
+    loc_data->ready = true;                                                                         // Setting "ready" flag...
+  }
+
+  loc_error = clSetKernelArg
+              (
+               kernel_id,                                                                           // Kernel id.
+               (cl_uint)loc_layout_index,                                                           // Layout index.
+               sizeof(cl_mem),                                                                      // Data size.
+               &loc_data->buffer                                                                    // Data value.
+              );
+
+  baseline->done ();                                                                                // Printing message...
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// setarg "float1G" overload ////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+void kernel::setarg
+(
+ float1G* loc_data,                                                                                 // float1G data.
  GLuint   loc_layout_index                                                                          // Layout index.
 )
 {
@@ -459,12 +503,150 @@ void kernel::setarg
   baseline->done ();                                                                                // Printing message...
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////// SETARG "float4G" overload //////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// setarg "float2" overload /////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 void kernel::setarg
 (
- float4G* loc_data,                                                                                 // Data object.
+ float2* loc_data,                                                                                  // float2 data.
+ cl_uint loc_layout_index                                                                           // Layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  baseline->action ("setting kernel argument...");                                                  // Printing message...
+
+  loc_data->layout = loc_layout_index;                                                              // Setting layout index.
+
+  if(!loc_data->ready)
+  {
+    // Creating OpenCL memory buffer:
+    loc_data->buffer = clCreateBuffer
+                       (
+                        baseline->context_id,                                                       // OpenCL context.
+                        CL_MEM_READ_WRITE |
+                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flags.
+                        sizeof(float2_structure)*loc_data->size,                                    // Data buffer size.
+                        loc_data->data,                                                             // Data buffer.
+                        &loc_error                                                                  // Error code.
+                       );
+
+    baseline->check_error (loc_error);                                                              // Checking returned error code...
+
+    loc_data->ready = true;                                                                         // Setting "ready" flag...
+  }
+
+  loc_error = clSetKernelArg
+              (
+               kernel_id,                                                                           // Kernel id.
+               (cl_uint)loc_layout_index,                                                           // Layout index.
+               sizeof(cl_mem),                                                                      // Data size.
+               &loc_data->buffer                                                                    // Data value.
+              );
+
+  baseline->done ();                                                                                // Printing message...
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// setarg "float3" overload /////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+void kernel::setarg
+(
+ float3* loc_data,                                                                                  // float3 data.
+ cl_uint loc_layout_index                                                                           // Layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  baseline->action ("setting kernel argument...");                                                  // Printing message...
+
+  loc_data->layout = loc_layout_index;                                                              // Setting layout index.
+
+  if(!loc_data->ready)
+  {
+    // Creating OpenCL memory buffer:
+    loc_data->buffer = clCreateBuffer
+                       (
+                        baseline->context_id,                                                       // OpenCL context.
+                        CL_MEM_READ_WRITE |
+                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flags.
+                        sizeof(float3_structure)*loc_data->size,                                    // Data buffer size.
+                        loc_data->data,                                                             // Data buffer.
+                        &loc_error                                                                  // Error code.
+                       );
+
+    baseline->check_error (loc_error);                                                              // Checking returned error code...
+
+    loc_data->ready = true;                                                                         // Setting "ready" flag...
+  }
+
+  loc_error = clSetKernelArg
+              (
+               kernel_id,                                                                           // Kernel id.
+               (cl_uint)loc_layout_index,                                                           // Layout index.
+               sizeof(cl_mem),                                                                      // Data size.
+               &loc_data->buffer                                                                    // Data value.
+              );
+
+  baseline->done ();                                                                                // Printing message...
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// setarg "float4" overload /////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+void kernel::setarg
+(
+ float4* loc_data,                                                                                  // float4 data.
+ cl_uint loc_layout_index                                                                           // Layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  baseline->action ("setting kernel argument...");                                                  // Printing message...
+
+  loc_data->layout = loc_layout_index;                                                              // Setting layout index.
+
+  if(!loc_data->ready)
+  {
+    // Creating OpenCL memory buffer:
+    loc_data->buffer = clCreateBuffer
+                       (
+                        baseline->context_id,                                                       // OpenCL context.
+                        CL_MEM_READ_WRITE |
+                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flags.
+                        sizeof(float4_structure)*loc_data->size,                                    // Data buffer size.
+                        loc_data->data,                                                             // Data buffer.
+                        &loc_error                                                                  // Error code.
+                       );
+
+    baseline->check_error (loc_error);                                                              // Checking returned error code...
+
+    loc_data->ready = true;                                                                         // Setting "ready" flag...
+  }
+
+  loc_error = clSetKernelArg
+              (
+               kernel_id,                                                                           // Kernel id.
+               (cl_uint)loc_layout_index,                                                           // Layout index.
+               sizeof(cl_mem),                                                                      // Data size.
+               &loc_data->buffer                                                                    // Data value.
+              );
+
+  baseline->done ();                                                                                // Printing message...
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////// setarg "float4G" overload /////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+void kernel::setarg
+(
+ float4G* loc_data,                                                                                 // float4G data.
  GLuint   loc_layout_index                                                                          // Layout index.
 )
 {
@@ -565,9 +747,9 @@ void kernel::setarg
   baseline->done ();                                                                                // Printing message...
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////// DESTRUCTOR ///////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////// DESTRUCTOR ////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 kernel::~kernel()
 {
   cl_int loc_error;                                                                                 // Error code.

@@ -81,20 +81,20 @@ public:
   /// calls of the @link kernel::setarg @endlink method. It is internally managed by Neutrino.
   bool    ready;                                                                                    ///< @brief **Buffer "ready" flag.**
 
-  /// @brief Class constructor.
+  /// @brief **Class constructor.**
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link int1::init @endlink method.
   int1 ();
 
-  /// @brief Class initializer.
+  /// @brief **Class initializer.**
   /// @details Creates a "1 x size" data storage of **cl_long** allocated on the host PC memory
   /// and initializes all data to 0.
   void init (
              size_t loc_size                                                                        ///< Data size [#].
             );
 
-  /// @brief Class destructor.
+  /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
   /// @link int1::init @endlink as data storage.
   ~int1  ();
@@ -150,20 +150,20 @@ public:
   /// calls of the @link kernel::setarg @endlink method. It is internally managed by Neutrino.
   bool    ready;                                                                                    ///< @brief **Buffer "ready" flag.**
 
-  /// @brief Class constructor.
+  /// @brief **Class constructor.**
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link int2::init @endlink method.
   int2 ();
 
-  /// @brief Class initializer.
+  /// @brief **Class initializer.**
   /// @details Creates a "2 x size" data storage of **cl_long** allocated on the host PC memory
   /// and initializes all data to 0.
   void init (
              size_t loc_size                                                                        ///< Data size [#].
             );
 
-  /// @brief Class destructor.
+  /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
   /// @link int2::init @endlink as data storage.
   ~int2();
@@ -212,20 +212,20 @@ public:
   /// calls of the @link kernel::setarg @endlink method. It is internally managed by Neutrino.
   bool            ready;                                                                            ///< @brief **Buffer "ready" flag.**
 
-  /// @brief Class constructor.
+  /// @brief **Class constructor.**
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link int3::init @endlink method.
   int3 ();
 
-  /// @brief Class initializer.
+  /// @brief **Class initializer.**
   /// @details Creates a "3 x size" data storage of **cl_long** allocated on the host PC memory
   /// and initializes all data to 0.
   void init (
              size_t loc_size                                                                        ///< Data size [#].
             );
 
-  /// @brief Class destructor.
+  /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
   /// @link int3::init @endlink as data storage.
   ~int3();
@@ -274,20 +274,20 @@ public:
   /// calls of the @link kernel::setarg @endlink method. It is internally managed by Neutrino.
   bool            ready;                                                                            ///< @brief **Buffer "ready" flag.**
 
-  /// @brief Class constructor.
+  /// @brief **Class constructor.**
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link int4::init @endlink method.
   int4 ();
 
-  /// @brief Class initializer.
+  /// @brief **Class initializer.**
   /// @details Creates a "4 x size" data storage of **cl_long** allocated on the host PC memory
   /// and initializes all data to 0.
   void init (
              size_t loc_size                                                                        ///< Data size [#].
             );
 
-  /// @brief Class destructor.
+  /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
   /// @link int4::init @endlink as data storage.
   ~int4();
@@ -336,20 +336,20 @@ public:
   /// calls of the @link kernel::setarg @endlink method. It is internally managed by Neutrino.
   bool      ready;                                                                                  ///< @brief **Buffer "ready" flag.**
 
-  /// @brief Class constructor.
+  /// @brief **Class constructor.**
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link float1::init @endlink method.
   float1 ();
 
-  /// @brief Class initializer.
+  /// @brief **Class initializer.**
   /// @details Creates a "1 x size" data storage of **cl_float** allocated on the host PC memory
   /// and initializes all data to 0.0f.
   void init (
              size_t loc_size                                                                        ///< Data size [#].
             );
 
-  /// @brief Class destructor.
+  /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
   /// @link float1::init @endlink as data storage.
   ~float1();
@@ -411,20 +411,20 @@ public:
   /// calls of the @link kernel::setarg @endlink method. It is internally managed by Neutrino.
   bool        ready;                                                                                ///< @brief **Buffer "ready" flag.**
 
-  /// @brief Class constructor.
+  /// @brief **Class constructor.**
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link float1G::init @endlink method.
   float1G ();
 
-  /// @brief Class initializer.
+  /// @brief **Class initializer.**
   /// @details Creates a "1 x size" data storage of **GLfloat** allocated on the host PC memory
   /// and initializes all data to 0.0f.
   void init (
              GLsizeiptr loc_size                                                                    ///< Data size [#].
             );
 
-  /// @brief Class destructor.
+  /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
   /// @link float1G::init @endlink as data storage.
   ~float1G();
@@ -473,20 +473,20 @@ public:
   /// calls of the @link kernel::setarg @endlink method. It is internally managed by Neutrino.
   bool              ready;                                                                          ///< @brief **Buffer "ready" flag.**
 
-  /// @brief Class constructor.
+  /// @brief **Class constructor.**
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link float2::init @endlink method.
   float2 ();
 
-  /// @brief Class initializer.
+  /// @brief **Class initializer.**
   /// @details Creates a "2 x size" data storage of **GLfloat** allocated on the host PC memory
   /// and initializes all data to 0.0f.
   void init (
              size_t loc_size                                                                        ///< Data size [#].
             );
 
-  /// @brief Class destructor.
+  /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
   /// @link float2::init @endlink as data storage.
   ~float2();
@@ -535,20 +535,20 @@ public:
   /// calls of the @link kernel::setarg @endlink method. It is internally managed by Neutrino.
   bool              ready;                                                                          ///< @brief **Buffer "ready" flag.**
 
-  /// @brief Class constructor.
+  /// @brief **Class constructor.**
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link float3::init @endlink method.
   float3 ();
 
-  /// @brief Class initializer.
+  /// @brief **Class initializer.**
   /// @details Creates a "3 x size" data storage of **GLfloat** allocated on the host PC memory
   /// and initializes all data to 0.0f.
   void init (
              size_t loc_size                                                                        ///< Data size [#].
             );
 
-  /// @brief Class destructor.
+  /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
   /// @link float3::init @endlink as data storage.
   ~float3();
@@ -597,20 +597,20 @@ public:
   /// calls of the @link kernel::setarg @endlink method. It is internally managed by Neutrino.
   bool              ready;                                                                          ///< @brief **Buffer "ready" flag.**
 
-  /// @brief Class constructor.
+  /// @brief **Class constructor.**
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link float4::init @endlink method.
   float4 ();
 
-  /// @brief Class initializer.
+  /// @brief **Class initializer.**
   /// @details Creates a "4 x size" data storage of **GLfloat** allocated on the host PC memory
   /// and initializes all data to 0.0f.
   void init (
              size_t loc_size                                                                        ///< Data size [#].
             );
 
-  /// @brief Class destructor.
+  /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
   /// @link float4::init @endlink as data storage.
   ~float4();
@@ -672,20 +672,20 @@ public:
   /// calls of the @link kernel::setarg @endlink method. It is internally managed by Neutrino.
   bool               ready;                                                                         ///< @brief **Buffer "ready" flag.**
 
-  /// @brief Class constructor.
+  /// @brief **Class constructor.**
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link float4G::init @endlink method.
   float4G ();
 
-  /// @brief Class initializer.
+  /// @brief **Class initializer.**
   /// @details Creates a "4 x size" data storage of **GLfloat** allocated on the host PC memory
   /// and initializes all data to 0.0f.
   void init (
              GLsizeiptr loc_size                                                                    ///< Data size [#].
             );
 
-  /// @brief Class destructor.
+  /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
   /// @link float4G::init @endlink as data storage.
   ~float4G();
