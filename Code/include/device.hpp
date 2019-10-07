@@ -396,18 +396,18 @@ public:
   /// @details OpenCL software driver version string in the form major_number.minor_number.
   std::string         driver_version;                                                               ///< @brief **OpenCL device driver_version [std::string].**
 
-  /// @brief Class constructor.
+  /// @brief **Class constructor.**
   /// @details It does nothing.
   device        ();
 
-  /// @brief Class initializer.
+  /// @brief **Class initializer.**
   /// @details It gets all information from the OpenCL hardware client GPU device and store it
   /// in the corresponding public variables.
   void init (
              cl_device_id loc_device_id                                                             ///< Device ID.
             );
 
-  /// @brief Class destructor.
+  /// @brief **Class destructor.**
   /// @details It does nothing.
   ~device();
 };
