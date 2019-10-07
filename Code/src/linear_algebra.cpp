@@ -163,14 +163,14 @@ void  euler
  float  q[4]                                                                                        // Rotation quaternion.
 )
 {
-  float sinr_cosp = +0.0f + 2.0f*(q[3]*q[0] + q[1]*q[2]);
-  float cosr_cosp = +1.0f - 2.0f*(q[0]*q[0] + q[1]*q[1]);
-  float siny_cosp = +0.0f + 2.0f*(q[3]*q[2] + q[0]*q[1]);
-  float cosy_cosp = +1.0f - 2.0f*(q[1]*q[1] + q[2]*q[2]);
-  float sinp      = +0.0f + 2.0f*(q[3]*q[1] - q[2]*q[0]);
+  float sinr_cosp = +0.0f + 2.0f*(q[3]*q[0] + q[1]*q[2]);                                           // Computing intermediate result...
+  float cosr_cosp = +1.0f - 2.0f*(q[0]*q[0] + q[1]*q[1]);                                           // Computing intermediate result...
+  float siny_cosp = +0.0f + 2.0f*(q[3]*q[2] + q[0]*q[1]);                                           // Computing intermediate result...
+  float cosy_cosp = +1.0f - 2.0f*(q[1]*q[1] + q[2]*q[2]);                                           // Computing intermediate result...
+  float sinp      = +0.0f + 2.0f*(q[3]*q[1] - q[2]*q[0]);                                           // Computing intermediate result...
 
   // Roll (x-axis rotation):
-  *roll = atan2 (sinr_cosp, cosr_cosp);
+  *roll = atan2 (sinr_cosp, cosr_cosp);                                                             // Computing roll...
 
   // Pitch (y-axis rotation):
   if(fabs (sinp) >= 1.0f)
@@ -184,5 +184,5 @@ void  euler
   }
 
   // Yaw (z-axis rotation):
-  *yaw = atan2 (siny_cosp, cosy_cosp);
+  *yaw = atan2 (siny_cosp, cosy_cosp);                                                              // Computing yaw...
 }

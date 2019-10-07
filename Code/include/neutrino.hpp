@@ -1,102 +1,117 @@
-/// @file   neutrino.hpp
-/// @author Erik ZORZIN
-/// @date   24OCT2019
-/// @brief  Declaration of the "neutrino" class and some macros.
+/// @file     neutrino.hpp
+/// @author   Erik ZORZIN
+/// @date     24OCT2019
+/// @brief    Declaration of the "neutrino" class and some macros.
+///
+/// @details  Neutrino needs a common object to store some information that has to be exchanged
+/// between different objects. This class also contains common definitions and common utility
+/// member functions. The neutrino.hpp file must be include in all other Neutrino's classes, as it
+/// contains a core declaration which are essential to everything in this framework.
+///
+/// **Cells interlinked within cells interlinked
+/// within one stem. And, dreadfully distinct
+/// against the dark, a tall white fountain played.**
 
 #ifndef neutrino_hpp
 #define neutrino_hpp
 
-#define CL_USE_DEPRECATED_OPENCL_1_2_APIS                                                           // Allows the usage of "OpenCL 1.2" functions in newer versions.
+#define CL_USE_DEPRECATED_OPENCL_1_2_APIS                                                           ///< Allows the usage of "OpenCL 1.2" functions in newer versions.
 
-#ifdef WIN32
-  #define GLFW_EXPOSE_NATIVE_WIN32                                                                  // Enabling Windows native access functions...
-  #define GLFW_EXPOSE_NATIVE_WGL                                                                    // Enabling Windows native access functions...
+#ifdef WIN32                                                                                        // Detecting Windows...
+  #define GLFW_EXPOSE_NATIVE_WIN32                                                                  ///< Enabling Windows native access functions...
+  #define GLFW_EXPOSE_NATIVE_WGL                                                                    ///< Enabling Windows native access functions...
 #endif
 
-#ifdef __linux__
-  #define GLFW_EXPOSE_NATIVE_X11                                                                    // Enabling Linux native access functions...
-  #define GLFW_EXPOSE_NATIVE_GLX                                                                    // Enabling Linux native access functions...
+#ifdef __linux__                                                                                    // Detecting Linux...
+  #define GLFW_EXPOSE_NATIVE_X11                                                                    ///< Enabling Linux native access functions...
+  #define GLFW_EXPOSE_NATIVE_GLX                                                                    ///< Enabling Linux native access functions...
 #endif
 
-//////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////// TERMINAL PARAMETERS //////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-#define NU_TERMINAL_REFRESH               20000                                                     // Terminal refresh time [us].
-#define NU_COLOR_NORMAL                   "\x1B[0m"                                                 // Default terminal color.
-#define NU_COLOR_RED                      "\x1B[31m"                                                // Red.
-#define NU_COLOR_GREEN                    "\x1B[32m"                                                // Green.
-#define NU_COLOR_YELLOW                   "\x1B[33m"                                                // Yellow.
-#define NU_COLOR_BLUE                     "\x1B[34m"                                                // Blue.
-#define NU_COLOR_MAGENTA                  "\x1B[35m"                                                // Magenta.
-#define NU_COLOR_CYAN                     "\x1B[36m"                                                // Cyan.
-#define NU_COLOR_WHITE                    "\x1B[37m"                                                // White.
-#define NU_ERASE                          "\33[2K\r"                                                // Erase character.
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////// TERMINAL PARAMETERS ////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+#define NU_TERMINAL_REFRESH               20000                                                     ///< Terminal refresh time [us].
+#define NU_COLOR_NORMAL                   "\x1B[0m"                                                 ///< Default terminal color.
+#define NU_COLOR_RED                      "\x1B[31m"                                                ///< Red.
+#define NU_COLOR_GREEN                    "\x1B[32m"                                                ///< Green.
+#define NU_COLOR_YELLOW                   "\x1B[33m"                                                ///< Yellow.
+#define NU_COLOR_BLUE                     "\x1B[34m"                                                ///< Blue.
+#define NU_COLOR_MAGENTA                  "\x1B[35m"                                                ///< Magenta.
+#define NU_COLOR_CYAN                     "\x1B[36m"                                                ///< Cyan.
+#define NU_COLOR_WHITE                    "\x1B[37m"                                                ///< White.
+#define NU_ERASE                          "\33[2K\r"                                                ///< Erase character.
 
-//////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////// WINDOW PARAMETERS ////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-#define NU_ZOOM_INCREMENT                 0.1f                                                      // Mouse wheel zoom increment [].
-#define NU_ZOOM_INCREMENT_PS4             0.02f                                                     // PS4 gamepad zoom increment [].
-#define NU_ZOOM_THRESHOLD_PS4             -0.95f                                                    // PS4 gamepad zoom threshold [].
-#define NU_PAN_FACTOR                     0.01f                                                     // Mouse pan translation factor [].
-#define NU_ROTATION_FACTOR                2.0f                                                      // Mouse orbit rotation factor [].
-#define NU_ROTATION_FACTOR_PS4            4.0f                                                      // PS4 gampad rotation factor [].
-#define NU_ROTATION_THRESHOLD_PS4         0.1f                                                      // PS4 gampad rotation thrshold [].
-#define NU_NEAR_Z_CLIP                    0.1f                                                      // Near z-clipping distance [small, but > 0.0].
-#define NU_FAR_Z_CLIP                     100.0f                                                    // Far z-clipping distance [big, but < +inf].
-#define NU_FOV                            60.0f                                                     // Field of view [deg].
-#define NU_IOD                            0.02f                                                     // Intraocular distance.
-#define NU_SCREEN_DISTANCE                -2.5f                                                     // Screen distance.
-#define NU_LINE_WIDTH                     3                                                         // Line width [px].
-#define NU_KERNEL_NAME                    "thekernel"                                               // OpenCL kernel function name.
-#define NU_MAX_TEXT_SIZE                  128                                                       // Maximum # of characters in a text string.
-#define NU_MAX_MESSAGE_SIZE               64                                                        // Maximum # of characters in a text message.
-#define NU_MAX_PATH_SIZE                  32768                                                     // Maximum # of characters in a text file path.
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// WINDOW PARAMETERS /////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+#define NU_ZOOM_INCREMENT                 0.1f                                                      ///< Mouse wheel zoom increment [].
+#define NU_ZOOM_INCREMENT_PS4             0.02f                                                     ///< PS4 gamepad zoom increment [].
+#define NU_ZOOM_THRESHOLD_PS4             -0.95f                                                    ///< PS4 gamepad zoom threshold [].
+#define NU_PAN_FACTOR                     0.01f                                                     ///< Mouse pan translation factor [].
+#define NU_ROTATION_FACTOR                2.0f                                                      ///< Mouse orbit rotation factor [].
+#define NU_ROTATION_FACTOR_PS4            4.0f                                                      ///< PS4 gampad rotation factor [].
+#define NU_ROTATION_THRESHOLD_PS4         0.1f                                                      ///< PS4 gampad rotation thrshold [].
+#define NU_NEAR_Z_CLIP                    0.1f                                                      ///< Near z-clipping distance [small, but > 0.0].
+#define NU_FAR_Z_CLIP                     100.0f                                                    ///< Far z-clipping distance [big, but < +inf].
+#define NU_FOV                            60.0f                                                     ///< Field of view [deg].
+#define NU_IOD                            0.02f                                                     ///< Intraocular distance.
+#define NU_SCREEN_DISTANCE                -2.5f                                                     ///< Screen distance.
+#define NU_LINE_WIDTH                     3                                                         ///< Line width [px].
+#define NU_KERNEL_NAME                    "thekernel"                                               ///< OpenCL kernel function name.
+#define NU_MAX_TEXT_SIZE                  128                                                       ///< Maximum # of characters in a text string.
+#define NU_MAX_MESSAGE_SIZE               64                                                        ///< Maximum # of characters in a text message.
+#define NU_MAX_PATH_SIZE                  32768                                                     ///< Maximum # of characters in a text file path.
 
-#define NU_GAMEPAD_MIN_DECAYTIME          0.01f                                                     // Minimum decay time for LP filter [s].
-#define NU_GAMEPAD_MAX_DECAYTIME          10.0f                                                     // Maximum decay time for LP filter [s].
-#define NU_GAMEPAD_MIN_AXES               -1.0f                                                     // Minimum axes value.
-#define NU_GAMEPAD_MAX_AXES               1.0f                                                      // Maximum axes value.
-#define NU_GAMEPAD_MIN_ORBIT_RATE         0.01f                                                     // Minimum orbit angular rate [rev/s].
-#define NU_GAMEPAD_MAX_ORBIT_RATE         10.0f                                                     // Maximum orbit angular rate [rev/s].
-#define NU_GAMEPAD_MIN_PAN_RATE           0.01f                                                     // Minimum orbit angular rate [rev/s].
-#define NU_GAMEPAD_MAX_PAN_RATE           10.0f                                                     // Maximum orbit angular rate [rev/s].
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// GAMEPAD PARAMETERS ////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+#define NU_GAMEPAD_MIN_DECAYTIME          0.01f                                                     ///< Minimum decay time for LP filter [s].
+#define NU_GAMEPAD_MAX_DECAYTIME          10.0f                                                     ///< Maximum decay time for LP filter [s].
+#define NU_GAMEPAD_MIN_AXES               -1.0f                                                     ///< Minimum axes value.
+#define NU_GAMEPAD_MAX_AXES               1.0f                                                      ///< Maximum axes value.
+#define NU_GAMEPAD_MIN_ORBIT_RATE         0.01f                                                     ///< Minimum orbit angular rate [rev/s].
+#define NU_GAMEPAD_MAX_ORBIT_RATE         10.0f                                                     ///< Maximum orbit angular rate [rev/s].
+#define NU_GAMEPAD_MIN_PAN_RATE           0.01f                                                     ///< Minimum orbit angular rate [rev/s].
+#define NU_GAMEPAD_MAX_PAN_RATE           10.0f                                                     ///< Maximum orbit angular rate [rev/s].
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////// ENUMS /////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 // Projection mode:
 typedef enum
 {
-  NU_MODE_MONO,                                                                                     // Projection mode set as 2D.
-  NU_MODE_STEREO                                                                                    // Projection mode set as 3D.
+  NU_MODE_MONO,                                                                                     ///< Projection mode set as 2D.
+  NU_MODE_STEREO                                                                                    ///< Projection mode set as 3D.
 } projection_mode;
 
 // Shader types:
 typedef enum
 {
-  NU_VERTEX,                                                                                        // GLSL shader interpretation set as vertex.
-  NU_FRAGMENT,                                                                                      // GLSL shader interpretation set as fragment.
-  NU_GEOMETRY                                                                                       // GLSL shader interpretation set as geometry.
+  NU_VERTEX,                                                                                        ///< GLSL shader interpretation set as vertex.
+  NU_FRAGMENT,                                                                                      ///< GLSL shader interpretation set as fragment.
+  NU_GEOMETRY                                                                                       ///< GLSL shader interpretation set as geometry.
 } shader_type;
 
 // Kernel modes:
 typedef enum
 {
-  NU_WAIT,                                                                                          // OpenCL kernel set as blocking mode.
-  NU_DONT_WAIT                                                                                      // OpenCL kernel set as non-blocking mode.
+  NU_WAIT,                                                                                          ///< OpenCL kernel set as blocking mode.
+  NU_DONT_WAIT                                                                                      ///< OpenCL kernel set as non-blocking mode.
 } kernel_mode;
 
 // Compute device types:
 typedef enum
 {
-  NU_CPU,                                                                                           // OpenCL NU_CPU device.
-  NU_GPU,                                                                                           // OpenCL NU_GPU device.
-  NU_ACCELERATOR,                                                                                   // OpenCL NU_ACCELERATOR device.
-  NU_DEFAULT,                                                                                       // OpenCL NU_DEFAULT device.
-  NU_ALL                                                                                            // OpenCL NU_ALL devices.
+  NU_CPU,                                                                                           ///< OpenCL NU_CPU device.
+  NU_GPU,                                                                                           ///< OpenCL NU_GPU device.
+  NU_ACCELERATOR,                                                                                   ///< OpenCL NU_ACCELERATOR device.
+  NU_DEFAULT,                                                                                       ///< OpenCL NU_DEFAULT device.
+  NU_ALL                                                                                            ///< OpenCL NU_ALL devices.
 } compute_device_type;
 
-////////////////////////////////////////////////////////////////////////////////
-//////////////////////////// Standard C header files ///////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// Standard C/C++ header files //////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <stdlib.h>
 #include <errno.h>
 #include <string>
@@ -104,49 +119,48 @@ typedef enum
 #include <fstream>
 #include <cerrno>
 
-#ifdef __APPLE__
+#ifdef __APPLE__                                                                                    // Detecting Mac OS...
   #include <math.h>
 #endif
 
-#ifdef __linux__
+#ifdef __linux__                                                                                    // Detecting Linux...
   #include <math.h>
 #endif
 
-#ifdef WIN32
+#ifdef WIN32                                                                                        // Detecting Windows...
   #include <windows.h>
-  #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
-  #define DISABLE_NEWLINE_AUTO_RETURN        0x0008
+  #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004                                                 ///< Enabling ANSI terminal in Windows...
+  #define DISABLE_NEWLINE_AUTO_RETURN        0x0008                                                 ///< Disabling new line auto return in Windows terminal...
 
-//#define _USE_MATH_DEFINES
-#include <cmath>
+  #include <cmath>
   #ifndef M_PI
     #define M_PI                             3.14159265358979323846f
   #endif
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////// GLAD header files //////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// GLAD header files ////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <glad/glad.h>                                                                              // https://glad.dav1d.de
 
-////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////// GLFW header files //////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// GLFW header files ////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <GLFW/glfw3.h>                                                                             // https://www.glfw.org
 #include <GLFW/glfw3native.h>                                                                       // https://www.glfw.org
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// OpenGL header files /////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// OpenGL header files ///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef __APPLE__
   #include <OpenGL/OpenGL.h>                                                                        // Apple deprecated the OpenGL framework in 2018, OS-X 10.14 Mojave.
 #else
   #include <GL/gl.h>                                                                                // https://www.opengl.org
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// OpenCL header files /////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// OpenCL header files ///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef __APPLE__
   #include <OpenCL/opencl.h>                                                                        // Apple deprecated the OpenCL framework in 2018, OS-X 10.14 Mojave.
 #else
@@ -154,91 +168,151 @@ typedef enum
   #include <CL/cl_gl.h>                                                                             // https://www.opengl.org
 #endif
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// Geometry header files /////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// Geometry header files /////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "linear_algebra.hpp"
 #include "projective_geometry.hpp"
 
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////// "NEUTRINO" CLASS ////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////// "neutrino" class ///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @class neutrino
+/// ### Neutrino baseline.
+/// Declares a Neutrino baseline object.
+/// This class contains common definitions and utility functions which are used in various points
+/// in the code.
 class neutrino
 {
 private:
-  size_t         terminal_time;                                                                     // Terminal time (for refresh) [us].
+  size_t         terminal_time;                                                                     ///< @brief **Terminal time (for refresh) [us].**
 
 public:
-  bool           interop;                                                                           // Use OpenCL-OpenGL interop.
-  double         tic;                                                                               // Tic time [s].
-  double         toc;                                                                               // Toc time [s].
-  double         loop_time;                                                                         // Loop time [s].
-  size_t         q_num;                                                                             // # of OpenCL queues.
-  size_t         k_num;                                                                             // # of OpenCL kernels.
-  cl_context     context_id;                                                                        // OpenCL context id.
-  cl_platform_id platform_id;                                                                       // OpenCL platform ID.
-  cl_device_id   device_id;                                                                         // OpenCL device id.
-  cl_kernel*     kernel_id;                                                                         // OpenCL kernel ID array.
+  bool           interop;                                                                           ///< @brief **Use OpenCL-OpenGL interop.**
+  double         tic;                                                                               ///< @brief **Tic time [s].**
+  double         toc;                                                                               ///< @brief **Toc time [s].**
+  double         loop_time;                                                                         ///< @brief **Loop time [s].**
+  size_t         q_num;                                                                             ///< @brief **# of OpenCL queues.**
+  size_t         k_num;                                                                             ///< @brief **# of OpenCL kernels.**
+  cl_context     context_id;                                                                        ///< @brief **OpenCL context id.**
+  cl_platform_id platform_id;                                                                       ///< @brief **OpenCL platform ID.**
+  cl_device_id   device_id;                                                                         ///< @brief **OpenCL device id.**
+  cl_kernel*     kernel_id;                                                                         ///< @brief **OpenCL kernel ID array.**
 
+  /// @brief **Class constructor.**
+  /// @details Resets interop, tic, toc, loop_time, context_id, platform_id and device_id to their
+  /// default values.
   neutrino();
-  // Initialization:
-  void        init (
-                    size_t loc_q_num,
-                    size_t loc_k_num,
-                    bool   loc_interop
-                   );
-  // Get "tic" time:
+
+  /// @brief **Class initializer.**
+  /// @details Initializes Neutrino.
+  void init (
+             size_t loc_q_num,                                                                      ///< # of OpenCL queues.
+             size_t loc_k_num,                                                                      ///< # of OpenCL kernels.
+             bool   loc_interop                                                                     ///< Interoperability flag.
+            );
+
+  /// @brief **Getter of "tic" time.**
+  /// @details Gets a "tic" time, which is the value of operating system precision timer at the
+  /// beginning of the application loop. To be used in combination with the "toc" time in order
+  /// to measure the duration of the host PC processes during the application loop.
+  /// This time is also used to manage timing-related operations within the Neutrino GUI, such as
+  /// the low-pass filtering of the gamepad inputs.
+  /// It does not measure the execution time of the kernel on the client GPU.
   void        get_tic ();
-  // Get "toc" time:
+
+  /// @brief **Getter of "toc" time.**
+  /// @details Gets a "toc" time, which is the value of operating system precision timer at the
+  /// end of the application loop. To be used in combination with the "tic" time in order
+  /// to measure the duration of the host PC processes during the application loop.
+  /// This time is also used to manage timing-related operations within the Neutrino GUI, such as
+  /// the low-pass filtering of the gamepad inputs.
+  /// It does not measure the execution time of the kernel on the client GPU.
   void        get_toc ();
-  // Load file:
+
+  /// @brief **Loader file function.**
+  /// @details Loads a file.
   std::string load_file (
-                         std::string loc_file_name
+                         std::string loc_file_name                                                  ///< File name.
                         );
-  // Write file:
+
+  /// @brief **Writer file function.**
+  /// @details Writes a file.
   void        write_file (
-                          std::string file_name                                                     // File name.
+                          std::string file_name                                                     ///< File name.
                          );
-  // Query numeric input from stdin:
+
+  /// @brief **Query numeric input from stdin function.**
+  /// @details Parses a user numeric input from stdin on a terminal console.
+  /// The input number is constrained to stay within a minimum and a maximum.
   size_t      query_numeric (
-                             std::string caption,                                                   // Text query caption.
-                             int         min,                                                       // Minimum queried numeric value.
-                             int         max                                                        // Maximum queried numeric value.
+                             std::string caption,                                                   ///< Text query caption.
+                             int         min,                                                       ///< Minimum queried numeric value.
+                             int         max                                                        ///< Maximum queried numeric value.
                             );
-  // Current stdout terminal line erase function:
+
+  /// @brief **Current stdout terminal line erase function.**
+  /// @details Erases the current line from the stdout of the terminal console.
   void        erase ();
+
+  /// @brief **Action message function.**
+  /// @details Prints an "action" message on the terminal console.
   void        action (
-                      std::string loc_text                                                          // Message.
+                      std::string loc_text                                                          ///< User defined text message.
                      );
+
+  /// @brief **Error message function.**
+  /// @details Prints an "error" message on the terminal console.
   void        error (
-                     std::string loc_text                                                           // Message.
+                     std::string loc_text                                                           ///< User defined text message.
                     );
+
+  /// @brief **List message function.**
+  /// @details Prints a "list" message on the terminal console.
   void        list (
-                    std::string loc_text,
-                    std::string loc_delimiter,
-                    size_t      loc_tab
+                    std::string loc_text,                                                           ///< User defined text message.
+                    std::string loc_delimiter,                                                      ///< User defined text delimiter.
+                    size_t      loc_tab                                                             ///< User defined text tab size.
                    );
+
+  /// @brief **Done message function.**
+  /// @details Prints a "done" message on the terminal console.
   void        done ();
+
+  /// @brief **Terminated message function.**
+  /// @details Prints a "terminated" message on the terminal console.
   void        terminated ();
+
+  /// @brief **Constrainer function for double numbers.**
+  /// @details Constrains a double number to stay within a minimum and a maximum value.
   double      constrain_double (
-                                double loc_input,
-                                double loc_min,
-                                double loc_max
+                                double loc_input,                                                   ///< Input number to be constrained.
+                                double loc_min,                                                     ///< Minimum constraint.
+                                double loc_max                                                      ///< Maximum constraint.
                                );
+
+  /// @brief **Constrainer function for float3_structure numbers.**
+  /// @details Constrains a float number to stay within a minimum and a maximum value.
   float       constrain_float (
-                               float loc_input,
-                               float loc_min,
-                               float loc_max
+                               float loc_input,                                                     ///< Input number to be constrained.
+                               float loc_min,                                                       ///< Minimum constraint.
+                               float loc_max                                                        ///< Maximum constraint.
                               );
-  // OpenCL error get function:
+
+  /// @brief **OpenCL error get function.**
+  /// @details Translates an OpenCL numeric error code into a human-readable string.
   std::string get_error (
-                         cl_int loc_error                                                           // Error code.
+                         cl_int loc_error                                                           ///< OpenCL Error code.
                         );
-  // OpenCL error check function:
+
+  /// @brief **OpenCL error check function.**
+  /// @details Checks for an OpenCL error code and print it to stdout.
   void        check_error (
-                           cl_int loc_error                                                         // Error code.
+                           cl_int loc_error                                                         ///< OpenCL Error code.
                           );
 
+  /// @brief **Class destructor.**
+  /// @details It deletes the kernel ID array.
   ~neutrino();
 };
 

@@ -1,7 +1,14 @@
-/// @file   kernel.hpp
-/// @author Erik ZORZIN
-/// @date   24OCT2019
-/// @brief  Declaration of an OpenCL "kernel" class.
+/// @file     kernel.hpp
+/// @author   Erik ZORZIN
+/// @date     24OCT2019
+/// @brief    Declaration of an OpenCL "kernel" class.
+///
+/// @details  A Neutrino "kernel" is an [OpenCL kernel]
+/// (https://en.wikipedia.org/wiki/OpenCL#OpenCL_C_language). The @link kernel @endlink class has
+/// got methods to set arguments on the OpenCL kernel: this operation tells Neutrino which are the
+/// arguments present in the @link thekernel @endlink function of the kernel source file.
+/// The argument in the kernel object must correspond to the argument in the OpenCL kernel
+/// source file.
 
 #ifndef kernel_hpp
 #define kernel_hpp
@@ -67,7 +74,7 @@ public:
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
   /// function of the kernel source file.
-  /// The getter function has two arguments:
+  /// The setter function has two arguments:
   /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
   ///   client GPU.
   /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
@@ -83,7 +90,7 @@ public:
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
   /// function of the kernel source file.
-  /// The getter function has two arguments:
+  /// The setter function has two arguments:
   /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
   ///   client GPU.
   /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
@@ -99,7 +106,7 @@ public:
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
   /// function of the kernel source file.
-  /// The getter function has two arguments:
+  /// The setter function has two arguments:
   /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
   ///   client GPU.
   /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
@@ -115,7 +122,7 @@ public:
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
   /// function of the kernel source file.
-  /// The getter function has two arguments:
+  /// The setter function has two arguments:
   /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
   ///   client GPU.
   /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
@@ -131,7 +138,7 @@ public:
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
   /// function of the kernel source file.
-  /// The getter function has two arguments:
+  /// The setter function has two arguments:
   /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
   ///   client GPU.
   /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
@@ -147,7 +154,7 @@ public:
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
   /// function of the kernel source file.
-  /// The getter function has two arguments:
+  /// The setter function has two arguments:
   /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
   ///   client GPU.
   /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
@@ -163,7 +170,7 @@ public:
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
   /// function of the kernel source file.
-  /// The getter function has two arguments:
+  /// The setter function has two arguments:
   /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
   ///   client GPU.
   /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
@@ -179,7 +186,7 @@ public:
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
   /// function of the kernel source file.
-  /// The getter function has two arguments:
+  /// The setter function has two arguments:
   /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
   ///   client GPU.
   /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
@@ -195,7 +202,7 @@ public:
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
   /// function of the kernel source file.
-  /// The getter function has two arguments:
+  /// The setter function has two arguments:
   /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
   ///   client GPU.
   /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
@@ -211,7 +218,7 @@ public:
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
   /// function of the kernel source file.
-  /// The getter function has two arguments:
+  /// The setter function has two arguments:
   /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
   ///   client GPU.
   /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified

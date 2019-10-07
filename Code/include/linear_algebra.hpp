@@ -1,7 +1,9 @@
-/// @file   linear_algebra.hpp
-/// @author Erik ZORZIN
-/// @date   24OCT2019
-/// @brief  Declarations of an various linear algebra functions.
+/// @file     linear_algebra.hpp
+/// @author   Erik ZORZIN
+/// @date     24OCT2019
+/// @brief    Declarations of various linear algebra functions.
+///
+/// @details  Various functions regarding 3D vectors and quaternions.
 
 #ifndef linear_algebra_hpp
 #define linear_algebra_hpp

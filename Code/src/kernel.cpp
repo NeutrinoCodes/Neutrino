@@ -28,9 +28,9 @@ void kernel::init
 {
   cl_int      loc_error;                                                                            // Error code.
   size_t      loc_log_size;                                                                         // OpenCL JIT compiler log size.
-  std::string loc_source;
-  char*       loc_source_buffer;
-  char*       loc_options_buffer;
+  std::string loc_source;                                                                           // Source file as string.
+  char*       loc_source_buffer;                                                                    // Source file temporary char buffer.
+  char*       loc_options_buffer;                                                                   // Options temporary char buffer.
   size_t      i;                                                                                    // Index.
 
   baseline                                     = loc_baseline;                                      // Getting Neutrino baseline...
@@ -42,10 +42,10 @@ void kernel::init
   kernel_file_name                             = kernel_home + "/" +
                                                  loc_kernel_file_name;                              // Building up vertex file full name...
   compiler_options                             = "-I" + kernel_home;                                // Building up JIT compiler options string...
-  loc_options_buffer                           =
-    new char[compiler_options.size () + 1];
-  compiler_options.copy (loc_options_buffer, compiler_options.size () + 1);
-  loc_options_buffer[compiler_options.size ()] = '\0';
+  loc_options_buffer                           =                                                    // Building temporary char options buffer...
+                                                 new char[compiler_options.size () + 1];
+  compiler_options.copy (loc_options_buffer, compiler_options.size () + 1);                         // Building options string...
+  loc_options_buffer[compiler_options.size ()] = '\0';                                              // Null terminating options string...
 
   baseline->action ("loading OpenCL kernel source from file...");                                   // Printing message...
   loc_source                                   =
@@ -55,9 +55,9 @@ void kernel::init
   baseline->done ();                                                                                // Printing message...
 
   baseline->action ("creating OpenCL program from kernel source...");                               // Printing message...
-  loc_source_buffer                            = new char[source_size + 1];
-  loc_source.copy (loc_source_buffer, source_size + 1);
-  loc_source_buffer[source_size]               = '\0';
+  loc_source_buffer                            = new char[source_size + 1];                         // Building temporary source char buffer...
+  loc_source.copy (loc_source_buffer, source_size + 1);                                             // Building string source buffer...
+  loc_source_buffer[source_size]               = '\0';                                              // Null terminateing buffer string...
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
@@ -105,27 +105,27 @@ void kernel::init
     // Getting OpenCL compiler information:
     loc_error = clGetProgramBuildInfo
                 (
-                 program,
-                 device_id[0],
-                 CL_PROGRAM_BUILD_LOG,
-                 0,
-                 NULL,
-                 &loc_log_size
+                 program,                                                                           // Program.
+                 device_id[0],                                                                      // Device ID.
+                 CL_PROGRAM_BUILD_LOG,                                                              // Build log parameter.
+                 0,                                                                                 // Dummy parameter size.
+                 NULL,                                                                              // Dummy parameter value.
+                 &loc_log_size                                                                      // Size of log.
                 );
 
-    baseline->check_error (loc_error);
+    baseline->check_error (loc_error);                                                              // Checking error...
 
     char* loc_log_buffer = new char[loc_log_size + 1]();                                            // Allocating log buffer...
 
     // Reading OpenCL compiler error log:
     loc_error = clGetProgramBuildInfo
                 (
-                 program,
-                 device_id[0],
-                 CL_PROGRAM_BUILD_LOG,
-                 loc_log_size + 1,
-                 loc_log_buffer,
-                 NULL
+                 program,                                                                           // Program.
+                 device_id[0],                                                                      // Device ID.
+                 CL_PROGRAM_BUILD_LOG,                                                              // Build log parameter.
+                 loc_log_size + 1,                                                                  // Log size.
+                 loc_log_buffer,                                                                    // The log.
+                 NULL                                                                               // Dummy size parameter.
                 );
 
     baseline->check_error (loc_error);                                                              // Checking error...
@@ -153,7 +153,7 @@ void kernel::init
   baseline->done ();                                                                                // Printing message...
 
   // Initializing kernel object:
-  baseline->action ("initializing kernel object...");
+  baseline->action ("initializing kernel object...");                                               // Printing message...
 
   for(i = 0; i < baseline->k_num; i++)                                                              // Scanning OpenCL kernel argument array...
   {
@@ -190,8 +190,8 @@ void kernel::setarg
     loc_data->buffer = clCreateBuffer
                        (
                         baseline->context_id,                                                       // OpenCL context.
-                        CL_MEM_READ_WRITE |
-                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flags.
+                        CL_MEM_READ_WRITE |                                                         // Memory flag.
+                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flag.
                         sizeof(cl_long)*loc_data->size,                                             // Data buffer size.
                         loc_data->data,                                                             // Data buffer.
                         &loc_error                                                                  // Error code.
@@ -236,8 +236,8 @@ void kernel::setarg
     loc_data->buffer = clCreateBuffer
                        (
                         baseline->context_id,                                                       // OpenCL context.
-                        CL_MEM_READ_WRITE |
-                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flags.
+                        CL_MEM_READ_WRITE |                                                         // Memory flag.
+                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flag.
                         sizeof(int2_structure)*loc_data->size,                                      // Data buffer size.
                         loc_data->data,                                                             // Data buffer.
                         &loc_error                                                                  // Error code.
@@ -282,8 +282,8 @@ void kernel::setarg
     loc_data->buffer = clCreateBuffer
                        (
                         baseline->context_id,                                                       // OpenCL context.
-                        CL_MEM_READ_WRITE |
-                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flags.
+                        CL_MEM_READ_WRITE |                                                         // Memory flag.
+                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flag.
                         sizeof(int3_structure)*loc_data->size,                                      // Data buffer size.
                         loc_data->data,                                                             // Data buffer.
                         &loc_error                                                                  // Error code.
@@ -328,8 +328,8 @@ void kernel::setarg
     loc_data->buffer = clCreateBuffer
                        (
                         baseline->context_id,                                                       // OpenCL context.
-                        CL_MEM_READ_WRITE |
-                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flags.
+                        CL_MEM_READ_WRITE |                                                         // Memory flag.
+                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flag.
                         sizeof(int4_structure)*loc_data->size,                                      // Data buffer size.
                         loc_data->data,                                                             // Data buffer.
                         &loc_error                                                                  // Error code.
@@ -374,8 +374,8 @@ void kernel::setarg
     loc_data->buffer = clCreateBuffer
                        (
                         baseline->context_id,                                                       // OpenCL context.
-                        CL_MEM_READ_WRITE |
-                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flags.
+                        CL_MEM_READ_WRITE |                                                         // Memory flag.
+                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flag.
                         sizeof(cl_float)*loc_data->size,                                            // Data buffer size.
                         loc_data->data,                                                             // Data buffer.
                         &loc_error                                                                  // Error code.
@@ -426,7 +426,7 @@ void kernel::setarg
     // Binding node VAO...
     glBindVertexArray
     (
-     loc_data->vao
+     loc_data->vao                                                                                  // VAOs array.
     );
 
     // Generating VBO:
@@ -526,8 +526,8 @@ void kernel::setarg
     loc_data->buffer = clCreateBuffer
                        (
                         baseline->context_id,                                                       // OpenCL context.
-                        CL_MEM_READ_WRITE |
-                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flags.
+                        CL_MEM_READ_WRITE |                                                         // Memory flag.
+                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flag.
                         sizeof(float2_structure)*loc_data->size,                                    // Data buffer size.
                         loc_data->data,                                                             // Data buffer.
                         &loc_error                                                                  // Error code.
@@ -572,8 +572,8 @@ void kernel::setarg
     loc_data->buffer = clCreateBuffer
                        (
                         baseline->context_id,                                                       // OpenCL context.
-                        CL_MEM_READ_WRITE |
-                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flags.
+                        CL_MEM_READ_WRITE |                                                         // Memory flag.
+                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flag.
                         sizeof(float3_structure)*loc_data->size,                                    // Data buffer size.
                         loc_data->data,                                                             // Data buffer.
                         &loc_error                                                                  // Error code.
@@ -618,8 +618,8 @@ void kernel::setarg
     loc_data->buffer = clCreateBuffer
                        (
                         baseline->context_id,                                                       // OpenCL context.
-                        CL_MEM_READ_WRITE |
-                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flags.
+                        CL_MEM_READ_WRITE |                                                         // Memory flag.
+                        CL_MEM_COPY_HOST_PTR,                                                       // Memory flag.
                         sizeof(float4_structure)*loc_data->size,                                    // Data buffer size.
                         loc_data->data,                                                             // Data buffer.
                         &loc_error                                                                  // Error code.
@@ -670,7 +670,7 @@ void kernel::setarg
     // Binding node VAO...
     glBindVertexArray
     (
-     loc_data->vao
+     loc_data->vao                                                                                  // VAOs array.
     );
 
     // Generating VBO:
