@@ -1,4 +1,7 @@
-/// @file
+/// @file     kernel.cpp
+/// @author   Erik ZORZIN
+/// @date     24OCT2019
+/// @brief    Definition of an OpenCL "kernel" class.
 
 #include "kernel.hpp"
 
