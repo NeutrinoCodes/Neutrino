@@ -1,4 +1,7 @@
-/// @file
+/// @file     device.cpp
+/// @author   Erik ZORZIN
+/// @date     24OCT2019
+/// @brief    Definitions of of an OpenCL "device" class.
 
 #include "device.hpp"
 

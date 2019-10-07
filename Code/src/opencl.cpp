@@ -1,10 +1,13 @@
-/// @file
+/// @file     opencl.cpp
+/// @author   Erik ZORZIN
+/// @date     24OCT2019
+/// @brief    Definition of the "opencl" class.
 
 #include "opencl.hpp"
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// "OPENCL" CLASS ////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////// "opencl" class /////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 opencl::opencl()
 {
   opencl_platform  = NULL;                                                                          // Initializing platforms IDs array...
@@ -35,9 +38,6 @@ cl_uint opencl::get_platforms_number ()
   return loc_platforms_number;                                                                      // Returning # of existing platforms...
 }
 
-/// # OpenCL get platform id function
-/// ### Description:
-/// Gets the OpenCL platform id.
 cl_platform_id opencl::get_platform_id
 (
  cl_uint loc_platform_index                                                                         // OpenCL platform index.
@@ -45,7 +45,7 @@ cl_platform_id opencl::get_platform_id
 {
   cl_int          loc_error;                                                                        // Error code.
   cl_platform_id* loc_platform_id;                                                                  // Platform IDs array.
-  cl_platform_id  loc_selected_platform_id;
+  cl_platform_id  loc_selected_platform_id;                                                         // Selected platform ID.
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
@@ -71,9 +71,6 @@ cl_platform_id opencl::get_platform_id
   return(loc_selected_platform_id);                                                                 // Returning selected platform ID...
 }
 
-/// # OpenCL get devices function
-/// ### Description:
-/// Gets the number of OpenCL devices.
 cl_uint opencl::get_devices_number
 (
  cl_uint loc_platform_index                                                                         // OpenCL platform index.
@@ -99,18 +96,15 @@ cl_uint opencl::get_devices_number
   return(loc_devices_number);                                                                       // Returning # of existing devices...
 }
 
-/// # OpenCL error check function
-/// ### Description:
-/// Gets the OpenCL device id.
 cl_device_id opencl::get_device_id
 (
  cl_uint loc_device_index,                                                                          // OpenCL platform index.
  cl_uint loc_platform_index                                                                         // OpenCL device index.
 )
 {
-  cl_int        loc_error;
-  cl_device_id* loc_device_id;
-  cl_device_id  loc_selected_device_id;
+  cl_int        loc_error;                                                                          // OpenCL error code.
+  cl_device_id* loc_device_id;                                                                      // Opencl device ID.
+  cl_device_id  loc_selected_device_id;                                                             // OpenCL selected device ID.
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
@@ -139,10 +133,6 @@ cl_device_id opencl::get_device_id
   return(loc_selected_device_id);                                                                   // Returning selected device ID...
 }
 
-/// # Initialisation function
-/// ### Description:
-/// Selects the device type, sets the OpenCL platform, sets the OpenCL device,
-/// identifies the operating system, creates the OpenCL context.
 void opencl::init
 (
  neutrino*           loc_baseline,                                                                  // Neutrino baseline.
@@ -162,14 +152,14 @@ void opencl::init
 
   if(!(baseline->interop))
   {
-    loc_gui->glfw_window = NULL;
+    loc_gui->glfw_window = NULL;                                                                    // Setting a NULL graphics window...
 
     baseline->action ("using OpenCL without OpenGL interoperability...");                           // Printing message...
   }
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////// SETTING TARGET DEVICE TYPE //////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////// SETTING TARGET DEVICE TYPE ///////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
   switch(loc_device_type)                                                                           // Selecting device type...
   {
     case NU_CPU:
@@ -205,9 +195,9 @@ void opencl::init
 
   baseline->done ();                                                                                // Printing message...
 
-  ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////// SETTING OPENCL PLATFORM ///////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////// SETTING OPENCL PLATFORM /////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
   platforms_number = get_platforms_number ();                                                       // Getting # of existing platforms [#]...
   opencl_platform  = new platform*[platforms_number];                                               // Initializing platform...
 
@@ -257,16 +247,16 @@ void opencl::init
 
   baseline->platform_id = opencl_platform[selected_platform]->id;                                   // Setting neutrino OpenCL platform ID...
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////// SETTING OPENCL DEVICE ////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////// SETTING OPENCL DEVICE ////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
   devices_number        = get_devices_number (selected_platform);                                   // Getting # of existing NU_GPU devices on selected platform [#]...
   opencl_device         = new device*[devices_number];                                              // Initializing platform...
 
   for(i = 0; i < devices_number; i++)                                                               // Checking all devices:
   {
     opencl_device[i] = new device ();
-    opencl_device[i]->init (get_device_id (i, selected_platform));
+    opencl_device[i]->init (get_device_id (i, selected_platform));                                  // Initializing OpenCL device...
 
     std::cout << "        DEVICE #: ";
     std::cout << std::to_string (i + 1) << std::endl;                                               // Printing message...
@@ -451,9 +441,9 @@ void opencl::init
 
   baseline->device_id = opencl_device[selected_device]->id;                                         // Setting neutrino OpenCL device ID...
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////// IDENTIFYING OS //////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////// IDENTIFYING OS //////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
   baseline->action ("identifying operating system...");                                             // Printing message...
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
@@ -540,9 +530,9 @@ void opencl::init
     }
   #endif
 
-  ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////// CREATING OPENCL CONTEXT ///////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////// CREATING OPENCL CONTEXT ///////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
   baseline->action ("creating OpenCL context...");                                                  // Printing message...
 
   context_id = clCreateContext
@@ -561,9 +551,6 @@ void opencl::init
   baseline->done ();                                                                                // Printing message...
 }
 
-/// # OpenCL kernel execute function
-/// ### Description:
-/// Enqueues the OpenCL kernel (as a single task). Selects the kernel mode.
 void opencl::execute
 (
  kernel*     loc_kernel,                                                                            // OpenCL kernel.

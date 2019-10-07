@@ -1,4 +1,7 @@
-/// @file
+/// @file     neutrino.cpp
+/// @author   Erik ZORZIN
+/// @date     24OCT2019
+/// @brief    Definition of the "neutrino" class and some macros.
 
 #include "neutrino.hpp"
 

@@ -1,4 +1,7 @@
-/// @file
+/// @file     linear_algebra.cpp
+/// @author   Erik ZORZIN
+/// @date     24OCT2019
+/// @brief    Definition of various linear algebra functions.
 
 #include "linear_algebra.hpp"
 
