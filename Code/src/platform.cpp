@@ -1,7 +1,7 @@
 /// @file     platform.cpp
 /// @author   Erik ZORZIN
 /// @date     24OCT2019
-/// @brief    Declaration of an OpenCL "platform" class.
+/// @brief    Definition of an OpenCL "platform" class.
 
 #include "platform.hpp"
 
