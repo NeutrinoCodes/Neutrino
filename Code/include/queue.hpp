@@ -17,131 +17,196 @@
 class queue
 {
 private:
-  neutrino*        baseline;                                                                        // Neutrino baseline.
+  neutrino*        baseline;                                                                        ///< @brief **Neutrino baseline.**
 
 public:
-  cl_command_queue queue_id;                                                                        // OpenCL queue.
-  cl_context       context_id;                                                                      // OpenCL context.
-  cl_device_id     device_id;                                                                       // OpenCL device id.
+  cl_command_queue queue_id;                                                                        ///< @brief **OpenCL queue.**
+  cl_context       context_id;                                                                      ///< @brief **OpenCL context.**
+  cl_device_id     device_id;                                                                       ///< @brief **OpenCL device id.**
 
-  /// @brief pippo
-  /// @details poppo
+  /// @brief **Class constructor.**
+  /// @details Sets queue_id, context_id and device_id to NULL default values.
   queue ();
 
-  /// @brief Class initializer.
-  /// @details peppo.
+  /// @brief **Class initializer.**
+  /// @details It creates the OpenCL queue.
   void init (
              neutrino* loc_baseline                                                                 ///< Neutrino object.
             );
 
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////// "read" functions ///////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
   /// @brief read
-  /// @details My read.
-  void read (
-             float1* loc_data,                                                                      ///< float1 object.
-             cl_uint loc_layout_index                                                               ///< Layout index.
-            );
-
-  /// @overload read(int1* loc_data, cl_uint loc_layout_index)
-  /// Pippo.
+  /// @details Reads data from the OpenCL queue.
   void read
   (
-   int1*   loc_data,                                                                                // int1 object.
-   cl_uint loc_layout_index                                                                         // Layout index.
+   int1*   loc_data,                                                                                ///< int1 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
   );
 
-  /// @overload read(float4* loc_data, cl_uint loc_layout_index)
-  /// ghgfgh
+  /// @overload read(int2* loc_data, cl_uint loc_layout_index)
+  /// @details Reads data from the OpenCL queue.
   void read
   (
-   float4* loc_data,                                                                                // Data object.
-   cl_uint loc_layout_index                                                                         // Layout index.
+   int2*   loc_data,                                                                                ///< int2 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
+  );
+
+  /// @overload read(int3* loc_data, cl_uint loc_layout_index)
+  /// @details Reads data from the OpenCL queue.
+  void read
+  (
+   int3*   loc_data,                                                                                ///< int3 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
   );
 
   /// @overload read(int4* loc_data, cl_uint loc_layout_index)
-  /// fgdfg
+  /// @details Reads data from the OpenCL queue.
   void read
   (
-   int4*   loc_data,                                                                                // Data object.
-   cl_uint loc_layout_index                                                                         // Layout index.
+   int4*   loc_data,                                                                                ///< int4 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
   );
 
-  /// @overload read(float1G* loc_data, cl_uint loc_layout_index)
-  /// gsdfg
+  /// @overload read(float1* loc_data, cl_uint loc_layout_index)
+  /// @details Reads data from the OpenCL queue.
   void read
   (
-   float1G* loc_data,                                                                               // Data object.
-   cl_uint  loc_layout_index                                                                        // Layout index.
+   float1* loc_data,                                                                                ///< float1 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
   );
 
-  /// @overload read(float4G* loc_data, cl_uint loc_layout_index)
-  /// tatdrt
+  /// @overload read(float1G* loc_data, GLuint loc_layout_index)
+  /// @details Reads data from the OpenCL queue.
   void read
   (
-   float4G* loc_data,                                                                               // Data object.
-   cl_uint  loc_layout_index                                                                        // Layout index.
+   float1G* loc_data,                                                                               ///< float1G object.
+   GLuint   loc_layout_index                                                                        ///< Layout index.
   );
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////// WRITE "float1" overload //////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  /// @overload read(float2* loc_data, cl_uint loc_layout_index)
+  /// @details Reads data from the OpenCL queue.
+  void read
+  (
+   float2* loc_data,                                                                                ///< float2 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
+  );
+
+  /// @overload read(float3* loc_data, cl_uint loc_layout_index)
+  /// @details Reads data from the OpenCL queue.
+  void read
+  (
+   float3* loc_data,                                                                                ///< float3 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
+  );
+
+  /// @overload read(float4* loc_data, cl_uint loc_layout_index)
+  /// @details Reads data from the OpenCL queue.
+  void read
+  (
+   float4* loc_data,                                                                                ///< float4 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
+  );
+
+  /// @overload read(float4G* loc_data, GLuint loc_layout_index)
+  /// @details Reads data from the OpenCL queue.
+  void read
+  (
+   float4G* loc_data,                                                                               ///< float4G object.
+   GLuint   loc_layout_index                                                                        ///< Layout index.
+  );
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////// write "functions" ////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  /// @brief write
+  /// @details Writes data to the OpenCL queue.
   void write
   (
-   float1* loc_data,                                                                                // float1 object.
-   cl_uint loc_layout_index                                                                         // Layout index.
+   int1*   loc_data,                                                                                ///< int1 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
   );
 
-  ////////////////////////////////////////////////////////////////////////////////
-  /////////////////////////////// WRITE "int1" overload //////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  /// @overload write(int2* loc_data, cl_uint loc_layout_index)
+  /// @details Writes data from the OpenCL queue.
   void write
   (
-   int1*   loc_data,                                                                                // int1 object.
-   cl_uint loc_layout_index                                                                         // Layout index.
+   int2*   loc_data,                                                                                ///< int2 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
   );
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////// WRITE "float4" overload //////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  /// @overload write(int3* loc_data, cl_uint loc_layout_index)
+  /// @details Writes data from the OpenCL queue.
   void write
   (
-   float4* loc_data,                                                                                // Data object.
-   cl_uint loc_layout_index                                                                         // Layout index.
+   int3*   loc_data,                                                                                ///< int3 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
   );
 
-  ////////////////////////////////////////////////////////////////////////////////
-  /////////////////////////////// WRITE "int4" overload //////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  /// @overload write(int4* loc_data, cl_uint loc_layout_index)
+  /// @details Writes data from the OpenCL queue.
   void write
   (
-   int4*   loc_data,                                                                                // Data object.
-   cl_uint loc_layout_index                                                                         // Layout index.
+   int4*   loc_data,                                                                                ///< int4 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
   );
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////// WRITE "float1G" overload ////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  /// @overload write(float1* loc_data, cl_uint loc_layout_index)
+  /// @details Writes data from the OpenCL queue.
   void write
   (
-   float1G* loc_data,                                                                               // Data object.
-   GLuint   loc_layout_index                                                                        // Layout index.
+   float1* loc_data,                                                                                ///< float1 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
   );
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////// WRITE "float4G" overload ////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  /// @overload write(float1G* loc_data, GLuint loc_layout_index)
+  /// @details Writes data from the OpenCL queue.
   void write
   (
-   float4G* loc_data,                                                                               // Data object.
-   GLuint   loc_layout_index                                                                        // Layout index.
+   float1G* loc_data,                                                                               ///< float1G object.
+   GLuint   loc_layout_index                                                                        ///< Layout index.
   );
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////// ACQUIRE "float1G" overload ///////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  /// @overload write(float2* loc_data, cl_uint loc_layout_index)
+  /// @details Writes data from the OpenCL queue.
+  void write
+  (
+   float2* loc_data,                                                                                ///< float2 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
+  );
+
+  /// @overload write(float3* loc_data, cl_uint loc_layout_index)
+  /// @details Writes data from the OpenCL queue.
+  void write
+  (
+   float3* loc_data,                                                                                ///< float3 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
+  );
+
+  /// @overload write(float4* loc_data, cl_uint loc_layout_index)
+  /// @details Writes data from the OpenCL queue.
+  void write
+  (
+   float4* loc_data,                                                                                ///< float4 object.
+   cl_uint loc_layout_index                                                                         ///< Layout index.
+  );
+
+  /// @overload write(float4G* loc_data, GLuint loc_layout_index)
+  /// @details Writes data from the OpenCL queue.
+  void write
+  (
+   float4G* loc_data,                                                                               ///< float4G object.
+   GLuint   loc_layout_index                                                                        ///< Layout index.
+  );
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////// acquire "functions" ///////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
   void acquire
   (
-   float1G* loc_data,                                                                               // Data object.
-   GLuint   loc_layout_index                                                                        // OpenGL shader layout index.
+   float1G* loc_data,                                                                               ///< Data object.
+   GLuint   loc_layout_index                                                                        ///< OpenGL shader layout index.
   );
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -149,8 +214,8 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   void acquire
   (
-   float4G* loc_data,                                                                               // Data object.
-   GLuint   loc_layout_index                                                                        // OpenGL shader layout index.
+   float4G* loc_data,                                                                               ///< Data object.
+   GLuint   loc_layout_index                                                                        ///< OpenGL shader layout index.
   );
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -158,8 +223,8 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   void release
   (
-   float1G* loc_data,                                                                               // Data object.
-   GLuint   loc_layout_index                                                                        // OpenGL shader layout index.
+   float1G* loc_data,                                                                               ///< Data object.
+   GLuint   loc_layout_index                                                                        ///< OpenGL shader layout index.
   );
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -167,8 +232,8 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   void release
   (
-   float4G* loc_data,                                                                               // Data object.
-   GLuint   loc_layout_index                                                                        // OpenGL shader layout index.
+   float4G* loc_data,                                                                               ///< Data object.
+   GLuint   loc_layout_index                                                                        ///< OpenGL shader layout index.
   );
 
   ////////////////////////////////////////////////////////////////////////////////
