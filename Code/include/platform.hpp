@@ -14,19 +14,28 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////// "platform" class ////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @class platform
+/// ### OpenCL platform.
+/// Declares an OpenCL platform.
+/// To be used to run OpenCL computation. Also used to get specific hardware information about the
+/// platform. See also the OpenCL [platform]
+/// (https://www.sciencedirect.com/topics/computer-science/platform-model)
+/// description.
 class platform
 {
 private:
   neutrino*   baseline;                                                                             ///< @brief **Neutrino baseline.**
   std::string parameter;                                                                            ///< @brief **Parameter value.**
 
-  // Gets size information:
+  /// @brief **info_size** getter function.
+  /// @details It gets the size of a platform information.
   size_t      get_info_size (
                              cl_platform_id   loc_platform_id,                                      ///< Platform ID.
                              cl_platform_info loc_parameter_name                                    ///< Paramenter name.
                             );
 
-  // Gets size information:
+  /// @brief **info_value** getter function.
+  /// @details It gets the value of a platform information.
   std::string get_info_value (
                               cl_platform_id   loc_platform_id,                                     ///< Platform ID.
                               cl_platform_info loc_parameter_name,                                  ///< Paramenter name.

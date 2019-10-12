@@ -1,10 +1,11 @@
-/// @file
+/// @file     projective_geometry.hpp
+/// @author   Erik ZORZIN
+/// @date     24OCT2019
+/// @brief    Definition of various projective geometry functions.
+/// @details  Various functions related to projective geometry.
 
 #include "projective_geometry.hpp"
 
-/// # Backup matrix function
-/// ### Description:
-/// Copies "old" matrix into "new" matrix.
 void backup
 (
  float M_mat[16],                                                                                   // New matrix: takes values from old matrix.
@@ -23,9 +24,6 @@ void backup
   M_mat[15] = M_mat_old[15];                                                                        // Backing up matrix...
 }
 
-/// # Multiplication matrix function
-/// ### Description:
-/// Computes the multiplication of two matrices.
 void multiplicate
 (
  float C_mat[16],                                                                                   // 4x4 matrix result.
@@ -71,9 +69,6 @@ void multiplicate
   C_mat[15] = a41*b14 + a42*b24 + a43*b34 + a44*b44;                                                // Computing matrix multiplication...
 }
 
-/// # Translation matrix function
-/// ### Description:
-/// Computes the translation matrix.
 void translate
 (
  float T_mat[16],                                                                                   // 4x4 translation matrix.
@@ -91,9 +86,6 @@ void translate
   multiplicate (T_mat, T_mat_old, M_mat);                                                           // Rotating matrix...
 }
 
-/// # Rotation matrix function
-/// ### Description:
-/// Computes the rotation matrix.
 void rotate
 (
  float R[16],                                                                                       // 4x4 rotation matrix.
@@ -150,9 +142,6 @@ void rotate
   R[15] = q41*r14 + q42*r24 + q43*r34 + q44*r44;                                                    // Computing rotation matrix...
 }
 
-/// # Perspective frustum function
-/// ### Description:
-/// Computes the perspective frustum given the projective screen boudaries.
 void frustum
 (
  float F_mat[16],                                                                                   // 4x4 frustum matrix.
@@ -177,9 +166,6 @@ void frustum
   F_mat[3] = 0.0f;   F_mat[7] = 0.0f;  F_mat[11] = -1.0f;   F_mat[15] = 0.0f;                       // Setting frustum matrix...
 }
 
-/// # Perspective matrix function
-/// ### Description:
-/// Computes the perspective matrix given the projective screen boundaries.
 void perspective_mono
 (
  float P_mat[16],                                                                                   // 4x4 perspective matrix.
@@ -207,9 +193,6 @@ void perspective_mono
           );
 }
 
-/// # Perspective matrix function
-/// ### Description:
-/// Computes the perspective matrix given the projective screen boundaries.
 void perspective_stereo
 (
  float PL_mat[16],                                                                                  // 4x4 right eye perspective matrix.
