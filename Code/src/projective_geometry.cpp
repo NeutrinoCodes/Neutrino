@@ -2,7 +2,6 @@
 /// @author   Erik ZORZIN
 /// @date     24OCT2019
 /// @brief    Definition of various projective geometry functions.
-/// @details  Various functions related to projective geometry.
 
 #include "projective_geometry.hpp"
 
