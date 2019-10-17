@@ -230,9 +230,8 @@ public:
    GLuint   loc_layout_index                                                                        ///< OpenGL shader layout index.
   );
 
-  ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////// RELEASE "float4G" overload //////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  /// @overload release(float4G* loc_data, GLuint loc_layout_index)
+  /// @details Disables OpenCL exclusive data access. It opens data access to OpenGL.
   void release
   (
    float4G* loc_data,                                                                               ///< Data object.

@@ -43,43 +43,9 @@ void queue::init
   baseline->done ();                                                                                // Printing message...
 }
 
-void queue::read
-(
- float1* loc_data,                                                                                  // float1 object.
- cl_uint loc_layout_index                                                                           // Layout index.
-)
-{
-  cl_int loc_error;                                                                                 // Local error code.
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
-
-  // Checking layout index:
-  if(loc_layout_index != loc_data->layout)
-  {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
-    exit (EXIT_FAILURE);                                                                            // Exiting...
-  }
-
-  // Reading OpenCL buffer:
-  loc_error = clEnqueueReadBuffer
-              (
-               queue_id,                                                                            // OpenCL queue ID.
-               loc_data->buffer,                                                                    // Data buffer.
-               CL_TRUE,                                                                             // Blocking write flag.
-               0,                                                                                   // Data buffer offset.
-               sizeof(cl_float)*loc_data->size,                                                     // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
-               0,                                                                                   // Number of events in the list.
-               NULL,                                                                                // Event list.
-               NULL                                                                                 // Event.
-              );
-
-  baseline->check_error (loc_error);
-
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
-};
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////// "read" functions ///////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 void queue::read
 (
  int1*   loc_data,                                                                                  // int1 object.
@@ -119,7 +85,7 @@ void queue::read
 
 void queue::read
 (
- float4* loc_data,                                                                                  // Data object.
+ int2*   loc_data,                                                                                  // int2 object.
  cl_uint loc_layout_index                                                                           // Layout index.
 )
 {
@@ -142,7 +108,7 @@ void queue::read
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(float4_structure)*loc_data->size,                                             // Data buffer size.
+               sizeof(int2_structure)*loc_data->size,                                               // Data buffer size.
                loc_data->data,                                                                      // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
@@ -156,7 +122,44 @@ void queue::read
 
 void queue::read
 (
- int4*   loc_data,                                                                                  // Data object.
+ int3*   loc_data,                                                                                  // int3 object.
+ cl_uint loc_layout_index                                                                           // Layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    exit (EXIT_FAILURE);                                                                            // Exiting...
+  }
+
+  // Reading OpenCL buffer:
+  loc_error = clEnqueueReadBuffer
+              (
+               queue_id,                                                                            // OpenCL queue ID.
+               loc_data->buffer,                                                                    // Data buffer.
+               CL_TRUE,                                                                             // Blocking write flag.
+               0,                                                                                   // Data buffer offset.
+               sizeof(int3_structure)*loc_data->size,                                               // Data buffer size.
+               loc_data->data,                                                                      // Data buffer.
+               0,                                                                                   // Number of events in the list.
+               NULL,                                                                                // Event list.
+               NULL                                                                                 // Event.
+              );
+
+  baseline->check_error (loc_error);
+
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+};
+
+void queue::read
+(
+ int4*   loc_data,                                                                                  // int4 object.
  cl_uint loc_layout_index                                                                           // Layout index.
 )
 {
@@ -180,6 +183,43 @@ void queue::read
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
                sizeof(int4_structure)*loc_data->size,                                               // Data buffer size.
+               loc_data->data,                                                                      // Data buffer.
+               0,                                                                                   // Number of events in the list.
+               NULL,                                                                                // Event list.
+               NULL                                                                                 // Event.
+              );
+
+  baseline->check_error (loc_error);
+
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+};
+
+void queue::read
+(
+ float1* loc_data,                                                                                  // float1 object.
+ cl_uint loc_layout_index                                                                           // Layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    exit (EXIT_FAILURE);                                                                            // Exiting...
+  }
+
+  // Reading OpenCL buffer:
+  loc_error = clEnqueueReadBuffer
+              (
+               queue_id,                                                                            // OpenCL queue ID.
+               loc_data->buffer,                                                                    // Data buffer.
+               CL_TRUE,                                                                             // Blocking write flag.
+               0,                                                                                   // Data buffer offset.
+               sizeof(cl_float)*loc_data->size,                                                     // Data buffer size.
                loc_data->data,                                                                      // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
@@ -230,6 +270,117 @@ void queue::read
 
 void queue::read
 (
+ float2* loc_data,                                                                                  // float2 object.
+ cl_uint loc_layout_index                                                                           // Layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    exit (EXIT_FAILURE);                                                                            // Exiting...
+  }
+
+  // Reading OpenCL buffer:
+  loc_error = clEnqueueReadBuffer
+              (
+               queue_id,                                                                            // OpenCL queue ID.
+               loc_data->buffer,                                                                    // Data buffer.
+               CL_TRUE,                                                                             // Blocking write flag.
+               0,                                                                                   // Data buffer offset.
+               sizeof(float2_structure)*loc_data->size,                                             // Data buffer size.
+               loc_data->data,                                                                      // Data buffer.
+               0,                                                                                   // Number of events in the list.
+               NULL,                                                                                // Event list.
+               NULL                                                                                 // Event.
+              );
+
+  baseline->check_error (loc_error);
+
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+};
+
+void queue::read
+(
+ float3* loc_data,                                                                                  // float3 object.
+ cl_uint loc_layout_index                                                                           // Layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    exit (EXIT_FAILURE);                                                                            // Exiting...
+  }
+
+  // Reading OpenCL buffer:
+  loc_error = clEnqueueReadBuffer
+              (
+               queue_id,                                                                            // OpenCL queue ID.
+               loc_data->buffer,                                                                    // Data buffer.
+               CL_TRUE,                                                                             // Blocking write flag.
+               0,                                                                                   // Data buffer offset.
+               sizeof(float3_structure)*loc_data->size,                                             // Data buffer size.
+               loc_data->data,                                                                      // Data buffer.
+               0,                                                                                   // Number of events in the list.
+               NULL,                                                                                // Event list.
+               NULL                                                                                 // Event.
+              );
+
+  baseline->check_error (loc_error);
+
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+};
+
+void queue::read
+(
+ float4* loc_data,                                                                                  // Data object.
+ cl_uint loc_layout_index                                                                           // Layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    exit (EXIT_FAILURE);                                                                            // Exiting...
+  }
+
+  // Reading OpenCL buffer:
+  loc_error = clEnqueueReadBuffer
+              (
+               queue_id,                                                                            // OpenCL queue ID.
+               loc_data->buffer,                                                                    // Data buffer.
+               CL_TRUE,                                                                             // Blocking write flag.
+               0,                                                                                   // Data buffer offset.
+               sizeof(float4_structure)*loc_data->size,                                             // Data buffer size.
+               loc_data->data,                                                                      // Data buffer.
+               0,                                                                                   // Number of events in the list.
+               NULL,                                                                                // Event list.
+               NULL                                                                                 // Event.
+              );
+
+  baseline->check_error (loc_error);
+
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+};
+
+void queue::read
+(
  float4G* loc_data,                                                                                 // Data object.
  cl_uint  loc_layout_index                                                                          // Layout index.
 )
@@ -265,43 +416,9 @@ void queue::read
   clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
 };
 
-void queue::write
-(
- float1* loc_data,                                                                                  // float1 object.
- cl_uint loc_layout_index                                                                           // Layout index.
-)
-{
-  cl_int loc_error;                                                                                 // Local error code.
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
-
-  // Checking layout index:
-  if(loc_layout_index != loc_data->layout)
-  {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
-    exit (EXIT_FAILURE);                                                                            // Exiting...
-  }
-
-  // Writing OpenCL buffer:
-  loc_error = clEnqueueWriteBuffer
-              (
-               queue_id,                                                                            // OpenCL queue ID.
-               loc_data->buffer,                                                                    // Data buffer.
-               CL_TRUE,                                                                             // Blocking write flag.
-               0,                                                                                   // Data buffer offset.
-               sizeof(cl_float)*loc_data->size,                                                     // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
-               0,                                                                                   // Number of events in the list.
-               NULL,                                                                                // Event list.
-               NULL                                                                                 // Event.
-              );
-
-  baseline->check_error (loc_error);
-
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
-};
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// write "functions" ////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 void queue::write
 (
  int1*   loc_data,                                                                                  // int1 object.
@@ -341,7 +458,7 @@ void queue::write
 
 void queue::write
 (
- float4* loc_data,                                                                                  // Data object.
+ int2*   loc_data,                                                                                  // int2 object.
  cl_uint loc_layout_index                                                                           // Layout index.
 )
 {
@@ -364,7 +481,44 @@ void queue::write
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(float4_structure)*loc_data->size,                                             // Data buffer size.
+               sizeof(int2_structure)*loc_data->size,                                               // Data buffer size.
+               loc_data->data,                                                                      // Data buffer.
+               0,                                                                                   // Number of events in the list.
+               NULL,                                                                                // Event list.
+               NULL                                                                                 // Event.
+              );
+
+  baseline->check_error (loc_error);
+
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+};
+
+void queue::write
+(
+ int3*   loc_data,                                                                                  // int3 object.
+ cl_uint loc_layout_index                                                                           // Layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    exit (EXIT_FAILURE);                                                                            // Exiting...
+  }
+
+  // Writing OpenCL buffer:
+  loc_error = clEnqueueWriteBuffer
+              (
+               queue_id,                                                                            // OpenCL queue ID.
+               loc_data->buffer,                                                                    // Data buffer.
+               CL_TRUE,                                                                             // Blocking write flag.
+               0,                                                                                   // Data buffer offset.
+               sizeof(int3_structure)*loc_data->size,                                               // Data buffer size.
                loc_data->data,                                                                      // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
@@ -402,6 +556,43 @@ void queue::write
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
                sizeof(int4_structure)*loc_data->size,                                               // Data buffer size.
+               loc_data->data,                                                                      // Data buffer.
+               0,                                                                                   // Number of events in the list.
+               NULL,                                                                                // Event list.
+               NULL                                                                                 // Event.
+              );
+
+  baseline->check_error (loc_error);
+
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+};
+
+void queue::write
+(
+ float1* loc_data,                                                                                  // float1 object.
+ cl_uint loc_layout_index                                                                           // Layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    exit (EXIT_FAILURE);                                                                            // Exiting...
+  }
+
+  // Writing OpenCL buffer:
+  loc_error = clEnqueueWriteBuffer
+              (
+               queue_id,                                                                            // OpenCL queue ID.
+               loc_data->buffer,                                                                    // Data buffer.
+               CL_TRUE,                                                                             // Blocking write flag.
+               0,                                                                                   // Data buffer offset.
+               sizeof(cl_float)*loc_data->size,                                                     // Data buffer size.
                loc_data->data,                                                                      // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
@@ -458,6 +649,117 @@ void queue::write
    loc_data,                                                                                        // Data object.
    loc_layout_index                                                                                 // OpenGL shader layout index.
   );
+
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+};
+
+void queue::write
+(
+ float2* loc_data,                                                                                  // float2 object.
+ cl_uint loc_layout_index                                                                           // Layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    exit (EXIT_FAILURE);                                                                            // Exiting...
+  }
+
+  // Writing OpenCL buffer:
+  loc_error = clEnqueueWriteBuffer
+              (
+               queue_id,                                                                            // OpenCL queue ID.
+               loc_data->buffer,                                                                    // Data buffer.
+               CL_TRUE,                                                                             // Blocking write flag.
+               0,                                                                                   // Data buffer offset.
+               sizeof(float2_structure)*loc_data->size,                                             // Data buffer size.
+               loc_data->data,                                                                      // Data buffer.
+               0,                                                                                   // Number of events in the list.
+               NULL,                                                                                // Event list.
+               NULL                                                                                 // Event.
+              );
+
+  baseline->check_error (loc_error);
+
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+};
+
+void queue::write
+(
+ float3* loc_data,                                                                                  // float3 object.
+ cl_uint loc_layout_index                                                                           // Layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    exit (EXIT_FAILURE);                                                                            // Exiting...
+  }
+
+  // Writing OpenCL buffer:
+  loc_error = clEnqueueWriteBuffer
+              (
+               queue_id,                                                                            // OpenCL queue ID.
+               loc_data->buffer,                                                                    // Data buffer.
+               CL_TRUE,                                                                             // Blocking write flag.
+               0,                                                                                   // Data buffer offset.
+               sizeof(float3_structure)*loc_data->size,                                             // Data buffer size.
+               loc_data->data,                                                                      // Data buffer.
+               0,                                                                                   // Number of events in the list.
+               NULL,                                                                                // Event list.
+               NULL                                                                                 // Event.
+              );
+
+  baseline->check_error (loc_error);
+
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+};
+
+void queue::write
+(
+ float4* loc_data,                                                                                  // Data object.
+ cl_uint loc_layout_index                                                                           // Layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    exit (EXIT_FAILURE);                                                                            // Exiting...
+  }
+
+  // Writing OpenCL buffer:
+  loc_error = clEnqueueWriteBuffer
+              (
+               queue_id,                                                                            // OpenCL queue ID.
+               loc_data->buffer,                                                                    // Data buffer.
+               CL_TRUE,                                                                             // Blocking write flag.
+               0,                                                                                   // Data buffer offset.
+               sizeof(float4_structure)*loc_data->size,                                             // Data buffer size.
+               loc_data->data,                                                                      // Data buffer.
+               0,                                                                                   // Number of events in the list.
+               NULL,                                                                                // Event list.
+               NULL                                                                                 // Event.
+              );
+
+  baseline->check_error (loc_error);
 
   clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
 };
