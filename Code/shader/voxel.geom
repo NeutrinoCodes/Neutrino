@@ -1,4 +1,4 @@
-/// @file   voxel_geometry.geom
+/// @file   voxel.geom
 /// @author Erik ZORZIN
 /// @date   24OCT2019
 /// @brief  This geometry file creates a voxel out of a 4D point coordinates.

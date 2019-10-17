@@ -1,4 +1,4 @@
-/// @file   voxel_fragment.frag
+/// @file   voxel.frag
 /// @author Erik ZORZIN
 /// @date   24OCT2019
 /// @brief  This fragment file creates a voxel out of a 4D point coordinates.
