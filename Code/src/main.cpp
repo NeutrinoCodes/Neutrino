@@ -30,9 +30,9 @@
   #define KERNEL_HOME "F:\\BookHouseBoys\\ezor\\neutrino\\Code\\kernel"                             // Windows OpenCL kernels directory.
 #endif
 
-#define SHADER_VERT   "voxel_vertex.vert"                                                           // OpenGL vertex shader.
-#define SHADER_GEOM   "voxel_geometry.geom"                                                         // OpenGL geometry shader.
-#define SHADER_FRAG   "voxel_fragment.frag"                                                         // OpenGL fragment shader.
+#define SHADER_VERT   "voxel.vert"                                                                  // OpenGL vertex shader.
+#define SHADER_GEOM   "voxel.geom"                                                                  // OpenGL geometry shader.
+#define SHADER_FRAG   "voxel.frag"                                                                  // OpenGL fragment shader.
 
 int main ()
 {
