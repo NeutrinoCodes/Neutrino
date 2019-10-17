@@ -1,4 +1,4 @@
-/// @file   voxel_vertex.vert
+/// @file   voxel.vert
 /// @author Erik ZORZIN
 /// @date   24OCT2019
 /// @brief  This vertex file creates a voxel out of a 4D point coordinates.
