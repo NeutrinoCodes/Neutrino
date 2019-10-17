@@ -1,7 +1,15 @@
-/// @file   shader.hpp
-/// @author Erik ZORZIN
-/// @date   24OCT2019
-/// @brief  Declaration of an OpenGL "shader" class.
+/// @file     shader.hpp
+/// @author   Erik ZORZIN
+/// @date     24OCT2019
+/// @brief    Declaration of an OpenGL "shader" class.
+///
+/// @details  This class has got methods for initializing and build an OpenGL shader of
+/// [vertex](https://www.khronos.org/opengl/wiki/Vertex_Shader),
+/// [geometry](https://www.khronos.org/opengl/wiki/Geometry_Shader) or
+/// [fragment](https://www.khronos.org/opengl/wiki/Fragment_Shader)
+/// type for graphics rendition of OpenCL data. The @link setarg @endlink methods of this class
+/// is used to tell Neutrino which arguments are presents in the source file of each shader of
+/// interest.
 
 #ifndef shader_hpp
 #define shader_hpp
@@ -9,77 +17,75 @@
 #include "neutrino.hpp"
 #include "data_classes.hpp"
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// "SHADER" CLASS ////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// "shader" class ////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @class shader
+/// ### OpenCL shader class.
+/// Declares an OpenCL shader class. To be used in order to do graphics rendition of OpenCL data.
 class shader
 {
 private:
-  neutrino* baseline;                                                                               // Neutrino baseline.
-  // OpenGL shader compilation:
-  GLuint compile (
-                  std::string loc_shader_filename,                                                  // Shader file name.
-                  shader_type loc_shader_type                                                       // Shader type.
-                 );
-  // OpenGL shader build:
-  GLuint build (
-                std::string loc_vertex_filename,                                                    // Vertex shader file name.
-                std::string loc_geometry_filename,                                                  // Geometry shader file name.
-                std::string loc_fragment_filename                                                   // Fragment shader file name.
-               );
+  neutrino*   baseline;                                                                             ///< @brief **Neutrino baseline.**
 
-  // Shader argument size: temporary variable for mismatch detection.
-  GLsizei     old_size;
+  /// @brief    **OpenGL shader compilation.**
+  /// @details  It compiles an OpenGL shader.
+  GLuint compile (
+                  std::string loc_shader_filename,                                                  ///< Shader file name.
+                  shader_type loc_shader_type                                                       ///< Shader type.
+                 );
 
 public:
-  std::string shader_home;                                                                          // [NU_MAX_PATH_SIZE]; // Shader home directory.
-  std::string vertex_file_name;                                                                     // [NU_MAX_PATH_SIZE]; // Vertex source file name.
-  std::string geometry_file_name;                                                                   // [NU_MAX_PATH_SIZE]; // Geometry source file name.
-  std::string fragment_file_name;                                                                   // [NU_MAX_PATH_SIZE]; // Fragment source file name.
-  std::string vertex_source;
-  std::string geometry_source;
-  std::string fragment_source;
-  GLuint      vertex;                                                                               // Vertex shader id.
-  GLuint      geometry;                                                                             // Geometry shader id.
-  GLuint      fragment;                                                                             // Fragment shader id.
-  GLuint      program;                                                                              // OpenGL program.
-  GLsizeiptr  size;                                                                                 // Shader argument size.
+  std::string shader_home;                                                                          ///< @brief **OpenGL shader home directory.**
+  std::string vertex_file_name;                                                                     ///< @brief **OpenGL vertex shader source file name.**
+  std::string geometry_file_name;                                                                   ///< @brief **OpenGL geometry shader source file name.**
+  std::string fragment_file_name;                                                                   ///< @brief **OpenGL fragment shader source file name.**
+  std::string vertex_source;                                                                        ///< @brief **OpenGL vertex shader source file.**
+  std::string geometry_source;                                                                      ///< @brief **OpenGL geometry shader source file.**
+  std::string fragment_source;                                                                      ///< @brief **OpenGL vertex shader source file.**
+  GLuint      vertex;                                                                               ///< @brief **OpenGL vertex shader id.**
+  GLuint      geometry;                                                                             ///< @brief **OpenGL geometry shader id.**
+  GLuint      fragment;                                                                             ///< @brief **OpenGL fragment shader id.**
+  GLuint      program;                                                                              ///< @brief **OpenGL program.**
+  GLsizeiptr  size;                                                                                 ///< @brief **OpenGL shader argument size.**
 
-  ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////// CONSTRUCTOR ///////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  /// @brief **Class constructor.**
+  /// @details It does nothing.
   shader ();
-  ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////// INIT /////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+
+  /// @brief **Class initializer.**
+  /// @details It compiles the OpenGL vertex, geometry and fragment shader into an OpenGL program.
   void init (
-             neutrino*   loc_baseline,                                                              // Neutrino baseline.
-             std::string loc_shader_home,                                                           // Shader home directory.
-             std::string loc_vertex_file_name,                                                      // Vertex shader file name.
-             std::string loc_geometry_file_name,                                                    // Geometry shader file name.
-             std::string loc_fragment_file_name                                                     // Fragment shader file name.
+             neutrino*   loc_baseline,                                                              ///< Neutrino baseline.
+             std::string loc_shader_home,                                                           ///< Shader home directory.
+             std::string loc_vertex_file_name,                                                      ///< Vertex shader file name.
+             std::string loc_geometry_file_name,                                                    ///< Geometry shader file name.
+             std::string loc_fragment_file_name                                                     ///< Fragment shader file name.
             );
-  ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////// BUILD /////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+
+  /// @brief    **OpenGL shader builder.**
+  /// @details  It builds an OpenGL shader.
   void build ();
-  ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////// SETARG "float1G" overload ////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////// setarg "functions" //////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  /// @brief **OpenGL shader argument setter function.**
+  /// @details Sets an argument in the OpenGL shader.
   void setarg (
-               float1G* loc_data,                                                                   // Data object.
-               GLuint   loc_layout_index                                                            // Data layout index.
+               float1G* loc_data,                                                                   ///< Data object.
+               GLuint   loc_layout_index                                                            ///< Data layout index.
               );
-  ////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////// SETARG "float4G" overload ////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+
+  /// @overload setarg(float4G* loc_data, GLuint loc_layout_index)
+  /// @details Sets an argument in the OpenGL shader.
   void setarg (
-               float4G* loc_data,                                                                   // Data object.
-               GLuint   loc_layout_index                                                            // Data layout index.
+               float4G* loc_data,                                                                   ///< Data object.
+               GLuint   loc_layout_index                                                            ///< Data layout index.
               );
-  ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////// DESTRUCTOR ////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+
+  /// @brief **Class destructor.**
+  /// @details It does nothing.
   ~shader ();
 };
 

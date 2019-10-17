@@ -2,17 +2,11 @@
 
 #include "shader.hpp"
 
-////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////// CONSTRUCTOR ///////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
 shader::shader ()
 {
   // Doing nothing.
 }
 
-/// # OpenGL shader init function
-/// ### Description:
-/// Initializes an OpenGL shader.
 void shader::init
 (
  neutrino*   loc_baseline,                                                                          // Neutrino baseline.
@@ -48,9 +42,6 @@ void shader::init
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 }
 
-/// # OpenGL shader compile function
-/// ### Description:
-/// Compiles an OpenGL shader.
 GLuint shader::compile
 (
  std::string loc_shader_filename,                                                                   // GLSL shader file name.
@@ -135,9 +126,6 @@ GLuint shader::compile
   return (loc_shader);                                                                              // Returning shader...
 }
 
-/// # OpenGL shader init function
-/// ### Description:
-/// Initializes an OpenGL shader.
 void shader::build ()
 {
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
@@ -150,9 +138,9 @@ void shader::build ()
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// SETARG "float1G" overload /////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////// setarg "functions" //////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 void shader::setarg
 (
  float1G* loc_data,                                                                                 // Data object.
@@ -182,9 +170,6 @@ void shader::setarg
   delete loc_name_buffer;
 };
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// SETARG "float4G" overload /////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
 void shader::setarg
 (
  float4G* loc_data,                                                                                 // Data object.
@@ -214,9 +199,6 @@ void shader::setarg
   delete loc_name_buffer;
 };
 
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////// DESTRUCTOR /////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
 shader::~shader ()
 {
   // Doing nothing.
