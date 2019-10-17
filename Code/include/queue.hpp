@@ -1,7 +1,19 @@
-/// @file   queue.hpp
-/// @author Erik ZORZIN
-/// @date   24OCT2019
-/// @brief  Declaration of an OpenCL "queue" class.
+/// @file     queue.hpp
+/// @author   Erik ZORZIN
+/// @date     24OCT2019
+/// @brief    Declaration of an OpenCL "queue" class.
+///
+/// @details  A Neutrino "queue" is an [OpenCL queue]
+/// (https://en.wikipedia.org/wiki/OpenCL#OpenCL_C_language). The @link queue @endlink class has
+/// got methods to @link read @endlink or @link write @endlink arguments from or to the OpenCL
+/// queue: these operations tell Neutrino what commands to execute. The @link acquire @endlink
+/// and @link release @endlink methods are reserved for the @link float1G @endlink and the
+/// @link float4G @endlink data classes. These last two are the ones used for rendering graphics
+/// using OpenGL from the corresponding data on the GPU client managed by the OpenCL kernel.
+/// Before the invocation of the @link opencl::execute @endlink method, the @link acquire @endlink
+/// method must be used on all data objects of interest. Similarly, the @link release @endlink
+/// methods must be used afterwards. They do some operations which are necessary to the Neutrino
+/// framework.
 
 #ifndef queue_hpp
 #define queue_hpp
@@ -9,6 +21,9 @@
 #include "neutrino.hpp"
 #include "data_classes.hpp"
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// "queue" class /////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @class queue
 /// ### OpenCL queue class.
 /// Declares an OpenCL queue. The queue is a system to accumulate OpenCL commands in a list that
@@ -37,7 +52,7 @@ public:
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////// "read" functions ///////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////////////////////////
-  /// @brief read
+  /// @brief **OpenCL queue read function.**
   /// @details Reads data from the OpenCL queue.
   void read
   (
@@ -120,7 +135,7 @@ public:
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////// write "functions" ////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////////////////////////
-  /// @brief write
+  /// @brief **OpenCL queue write function.**
   /// @details Writes data to the OpenCL queue.
   void write
   (
@@ -203,7 +218,7 @@ public:
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////// acquire "functions" ///////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////////////////////////
-  /// @brief acquire
+  /// @brief **OpenCL queue acquire function.**
   /// @details Enables OpenCL exclusive data access. It locks data access to OpenGL.
   void acquire
   (
@@ -222,7 +237,7 @@ public:
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////// release "functions" ///////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////////////////////////
-  /// @brief release
+  /// @brief **OpenCL queue release function.**
   /// @details Disables OpenCL exclusive data access. It opens data access to OpenGL.
   void release
   (
@@ -238,9 +253,8 @@ public:
    GLuint   loc_layout_index                                                                        ///< OpenGL shader layout index.
   );
 
-  ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////// DESTRUCTOR ////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  /// @brief **Class destructor.**
+  /// @details Releases the OpenCL queue.
   ~queue();
 };
 

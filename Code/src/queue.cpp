@@ -1,4 +1,7 @@
-/// @file
+/// @file     queue.cpp
+/// @author   Erik ZORZIN
+/// @date     24OCT2019
+/// @brief    Definition of an OpenCL "queue" class.
 
 #include "queue.hpp"
 

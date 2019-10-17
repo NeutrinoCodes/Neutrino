@@ -9,11 +9,9 @@
 #include "neutrino.hpp"
 
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
-/// @typedef @struct int2_structure
-/// ### 2D vector of "cl_long" data.
-/// This structure is used as data storage in the "int2" class. It is tightly packed to be
+/// @brief    **2D vector of "cl_long" data.**
+/// @details  This structure is used as data storage in the "int2" class. It is tightly packed to be
 /// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
-/// @f$ e^{\pi i}+1 = 0 @f$
 typedef struct _int2_structure
 {
   cl_long x;                                                                                        ///< "x" coordinate.
@@ -21,9 +19,8 @@ typedef struct _int2_structure
 } int2_structure;
 #pragma pack(pop)                                                                                   // End of packing.
 
-/// # int3 structure
-/// ## 3D vector of "cl_long" data.
-/// This structure is used as data storage in the "int3" class. It is tightly packed to be
+/// @brief    **3D vector of "cl_long" data.**
+/// @details  This structure is used as data storage in the "int3" class. It is tightly packed to be
 /// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _int3_structure
@@ -34,9 +31,8 @@ typedef struct _int3_structure
 } int3_structure;
 #pragma pack(pop)
 
-/// # int4 structure
-/// ## 4D vector of "cl_long" data.
-/// This structure is used as data storage in the "int4" class. It is tightly packed to be
+/// @brief    **4D vector of "cl_long" data.**
+/// @details  This structure is used as data storage in the "int4" class. It is tightly packed to be
 /// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _int4_structure
@@ -48,10 +44,10 @@ typedef struct _int4_structure
 } int4_structure;
 #pragma pack(pop)
 
-/// # float2 structure
-/// ## 2D vector of "cl_float" data.
-/// This structure is used as data storage in the "float2" class. It is tightly packed to be
-/// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
+/// @brief    **2D vector of "cl_float" data.**
+/// @details  This structure is used as data storage in the "float2" class. It is tightly packed to
+/// be compatible with the OpenCL requirement of having a contiguous data arrangement without
+/// padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _float2_structure
 {
@@ -60,10 +56,10 @@ typedef struct _float2_structure
 } float2_structure;
 #pragma pack(pop)
 
-/// # float3 structure
-/// ## 3D vector of "cl_float" data.
-/// This structure is used as data storage in the "float3" class. It is tightly packed to be
-/// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
+/// @brief    **3D vector of "cl_float" data.**
+/// @details  This structure is used as data storage in the "float3" class. It is tightly packed to
+/// be compatible with the OpenCL requirement of having a contiguous data arrangement without
+/// padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _float3_structure
 {
@@ -73,10 +69,10 @@ typedef struct _float3_structure
 } float3_structure;
 #pragma pack(pop)
 
-/// # float4 structure
-/// ## 4D vector of cl_float data.
-/// This structure is used as data storage in the "float4" class. It is tightly packed to be
-/// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
+/// @brief    **4D vector of cl_float data.**
+/// @details  This structure is used as data storage in the "float4" class. It is tightly packed to
+/// be compatible with the OpenCL requirement of having a contiguous data arrangement without
+/// padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _float4_structure
 {
@@ -87,10 +83,10 @@ typedef struct _float4_structure
 } float4_structure;
 #pragma pack(pop)
 
-/// # float4G structure
-/// ## 4D vector of "GLfloat" data.
-/// This structure is used as data storage in the "float4G" class. It is tightly packed to be
-/// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
+/// @brief    **4D vector of "GLfloat" data.**
+/// @details  This structure is used as data storage in the "float4G" class. It is tightly packed to
+/// be compatible with the OpenCL requirement of having a contiguous data arrangement without
+/// padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _float4G_structure
 {
