@@ -3,7 +3,6 @@
 /// @date     24OCT2019
 /// @brief    Definitions of classes used for data storage.
 
-#include "data_structs.hpp"
 #include "data_classes.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
