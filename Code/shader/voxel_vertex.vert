@@ -2,13 +2,13 @@
 /// @author Erik ZORZIN
 /// @date   24OCT2019
 /// @brief  This vertex file creates a voxel out of a 4D point coordinates.
-/// @class  voxel
+// @class  voxel
 
 #version 410 core
 
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////// VOXEL: 3D binary hypercube //////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////// VOXEL: 3D binary hypercube //////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //       (-1.0, +1.0, -1.0)    C--------G  (+1.0, +1.0, -1.0)
 //                            /|       /|
@@ -31,28 +31,28 @@
 //                       FRONT / |
 //                              DOWN
 //
-//////////////////////////////////////////////////////////////////////////////////
-#define A vec3(-1.0, -1.0, -1.0)                                                // Vertex "A".
-#define B vec3(-1.0, -1.0, +1.0)                                                // Vertex "B".
-#define C vec3(-1.0, +1.0, -1.0)                                                // Vertex "C".
-#define D vec3(-1.0, +1.0, +1.0)                                                // Vertex "D".
-#define E vec3(+1.0, -1.0, -1.0)                                                // Vertex "E".
-#define F vec3(+1.0, -1.0, +1.0)                                                // Vertex "F".
-#define G vec3(+1.0, +1.0, -1.0)                                                // Vertex "G".
-#define H vec3(+1.0, +1.0, +1.0)                                                // Vertex "H".
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+const vec3 A = vec3(-1.0, -1.0, -1.0);                                                              ///< @brief Vertex "A".
+const vec3 B = vec3(-1.0, -1.0, +1.0);                                                              // Vertex "B".
+const vec3 C = vec3(-1.0, +1.0, -1.0);                                                              // Vertex "C".
+const vec3 D = vec3(-1.0, +1.0, +1.0);                                                              // Vertex "D".
+const vec3 E = vec3(+1.0, -1.0, -1.0);                                                              // Vertex "E".
+const vec3 F = vec3(+1.0, -1.0, +1.0);                                                              // Vertex "F".
+const vec3 G = vec3(+1.0, +1.0, -1.0);                                                              // Vertex "G".
+const vec3 H = vec3(+1.0, +1.0, +1.0);                                                              // Vertex "H".
 
-#define nL vec3(-1.0, +0.0, +0.0)                                               // Normal "LEFT".
-#define nR vec3(+1.0, +0.0, +0.0)                                               // Normal "RIGHT".
-#define nD vec3(+0.0, -1.0, +0.0)                                               // Normal "DOWN".
-#define nU vec3(+0.0, +1.0, +0.0)                                               // Normal "UP".
-#define nB vec3(+0.0, +0.0, -1.0)                                               // Normal "BACK".
-#define nF vec3(+0.0, +0.0, +1.0)                                               // Normal "FRONT".
+const vec3 nL = vec3(-1.0, +0.0, +0.0);                                                             // Normal "LEFT".
+const vec3 nR = vec3(+1.0, +0.0, +0.0);                                                             // Normal "RIGHT".
+const vec3 nD = vec3(+0.0, -1.0, +0.0);                                                             // Normal "DOWN".
+const vec3 nU = vec3(+0.0, +1.0, +0.0);                                                             // Normal "UP".
+const vec3 nB = vec3(+0.0, +0.0, -1.0);                                                             // Normal "BACK".
+const vec3 nF = vec3(+0.0, +0.0, +1.0);                                                             // Normal "FRONT".
 
-#define s 0.008                                                                 // Voxel side.
-#define l vec3(0.0, -1.0, 0.0)                                                  // Light direction.
+const float s = 0.008;                                                                              // Voxel side.
+const vec3 l = vec3(0.0, -1.0, 0.0);                                                                // Light direction.
 
-layout (location = 0) in vec4 voxel_center;                                     // Voxel center.
-layout (location = 1) in vec4 voxel_color;                                      // Voxel color.
+layout (location = 0) in vec4 voxel_center;                                                         // Voxel center.
+layout (location = 1) in vec4 voxel_color;                                                          // Voxel color.
 
 out VS_OUT
 {
