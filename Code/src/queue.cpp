@@ -945,7 +945,7 @@ void queue::release
                NULL                                                                                 // Event.
               );
 
-  clFinish (queue_id);                                                                              // Ensuring that all OpenCL routines have completed all operations...
+  clFinish (queue_id);                                                                              // Ensuring that all OpenCL has completed all operations...
 
   glEnableVertexAttribArray (loc_layout_index);
 

@@ -168,7 +168,7 @@ void neutrino::action
   size_t      i;                                                                                    // Index.
   std::string text;                                                                                 // Text buffer.
   std::string pad;                                                                                  // Text pad.
-  size_t      pad_size;                                                                             // Text pad size.                                                                     // Index.
+  size_t      pad_size;                                                                             // Text pad size.
 
   // Compiling message string:
   text     = std::string (NU_COLOR_CYAN) +
@@ -203,7 +203,7 @@ void neutrino::error
   size_t      i;                                                                                    // Index.
   std::string text;                                                                                 // Text buffer.
   std::string pad;                                                                                  // Text pad.
-  size_t      pad_size;                                                                             // Text pad size.                                                                     // Index.
+  size_t      pad_size;                                                                             // Text pad size.
 
   // Compiling message string:
   text     = std::string (NU_COLOR_RED) +

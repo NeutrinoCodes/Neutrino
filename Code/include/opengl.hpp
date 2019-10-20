@@ -30,15 +30,15 @@ private:
   float            pan_y_old;                                                                       ///< @brief **Pan y movement (previous).**
   float            pan_z_old;                                                                       ///< @brief **Pan z movement (previous).**
 
-  float            T_mat_old[16]             = {1.0f, 0.0f, 0.0f, 0.0f,                             ///< @brief **Translation matrix backup.**
+  float            T_mat_old[16]             = {1.0f, 0.0f, 0.0f, 0.0f,
                                                 0.0f, 1.0f, 0.0f, 0.0f,
                                                 0.0f, 0.0f, 1.0f, 0.0f,
-                                                0.0f, 0.0f, 0.0f, 1.0f};
+                                                0.0f, 0.0f, 0.0f, 1.0f};                            ///< @brief **Translation matrix backup.**
 
-  float            R_mat_old[16]             = {1.0f, 0.0f, 0.0f, 0.0f,                             ///< @brief **Rotation matrix backup.**
+  float            R_mat_old[16]             = {1.0f, 0.0f, 0.0f, 0.0f,
                                                 0.0f, 1.0f, 0.0f, 0.0f,
                                                 0.0f, 0.0f, 1.0f, 0.0f,
-                                                0.0f, 0.0f, 0.0f, 1.0f};
+                                                0.0f, 0.0f, 0.0f, 1.0f};                            ///< @brief **Rotation matrix backup.**
 
   float            q_old[4]                  = {1.0f, 0.0f, 0.0f, 0.0f};                            ///< @brief **Rotation quaternion backup.**
 
@@ -185,73 +185,73 @@ public:
   float       pitch      = 0.0;                                                                     ///< @brief **Euler (Tait-Byran) "pitch" view angle [rad].**
   float       yaw        = 0.0;                                                                     ///< @brief **Euler (Tait-Byran) "yaw" view angle [rad].**
 
-  float       R_mat[16]  = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **Rotation matrix.**
+  float       R_mat[16]  = {1.0, 0.0, 0.0, 0.0,
                             0.0, 1.0, 0.0, 0.0,
                             0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+                            0.0, 0.0, 0.0, 1.0};                                                    ///< @brief **Rotation matrix.**
 
-  float       T_mat[16]  = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **Translation matrix.**
+  float       T_mat[16]  = {1.0, 0.0, 0.0, 0.0,
                             0.0, 1.0, 0.0, 0.0,
                             0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+                            0.0, 0.0, 0.0, 1.0};                                                    ///< @brief **Translation matrix.**
 
   /// @details OpenGL [view matrix]
   /// (https://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/).
   /// @f$ V = T \cdot R @f$
-  float       V_mat[16]  = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **View matrix.**
+  float       V_mat[16]  = {1.0, 0.0, 0.0, 0.0,
                             0.0, 1.0, 0.0, 0.0,
                             0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+                            0.0, 0.0, 0.0, 1.0};                                                    ///< @brief **View matrix.**
 
   /// @details Monoscopic [perspective]
   /// (https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix)
   /// projection matrix.
-  float       P_mat[16]  = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **Perspective projection matrix.**
+  float       P_mat[16]  = {1.0, 0.0, 0.0, 0.0,
                             0.0, 1.0, 0.0, 0.0,
                             0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+                            0.0, 0.0, 0.0, 1.0};                                                    ///< @brief **Perspective projection matrix.**
 
   /// @details To be used in stereoscopic vision modality.
-  float       TL_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **Left eye stereoscopic translation matrix.**
+  float       TL_mat[16] = {1.0, 0.0, 0.0, 0.0,
                             0.0, 1.0, 0.0, 0.0,
                             0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+                            0.0, 0.0, 0.0, 1.0};                                                    ///< @brief **Left eye stereoscopic translation matrix.**
 
   /// @details To be used in stereoscopic vision modality.
-  float       TR_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **Right eye stereoscopic translation matrix.**
+  float       TR_mat[16] = {1.0, 0.0, 0.0, 0.0,
                             0.0, 1.0, 0.0, 0.0,
                             0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+                            0.0, 0.0, 0.0, 1.0};                                                    ///< @brief **Right eye stereoscopic translation matrix.**
 
   /// @details To be used in stereoscopic vision modality.
   /// @f$ VL = TL \cdot V @f$
-  float       VL_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **Left eye stereoscopic view matrix.**
+  float       VL_mat[16] = {1.0, 0.0, 0.0, 0.0,
                             0.0, 1.0, 0.0, 0.0,
                             0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+                            0.0, 0.0, 0.0, 1.0};                                                    ///< @brief **Left eye stereoscopic view matrix.**
 
   /// @details To be used in stereoscopic vision modality.
   /// @f$ VR = TR \cdot V @f$
-  float       VR_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief  **Right eye stereoscopic view matrix.**
+  float       VR_mat[16] = {1.0, 0.0, 0.0, 0.0,
                             0.0, 1.0, 0.0, 0.0,
                             0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+                            0.0, 0.0, 0.0, 1.0};                                                    ///< @brief  **Right eye stereoscopic view matrix.**
 
   /// @details [Perspective]
   /// (https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix)
   /// projection matrix to be used in stereoscopic vision modality for the left eye.
-  float       PL_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **Left eye stereoscopic perspective projection matrix.**
+  float       PL_mat[16] = {1.0, 0.0, 0.0, 0.0,
                             0.0, 1.0, 0.0, 0.0,
                             0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+                            0.0, 0.0, 0.0, 1.0};                                                    ///< @brief **Left eye stereoscopic perspective projection matrix.**
 
   /// @details [Perspective]
   /// (https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix)
   /// projection matrix to be used in stereoscopic vision modality for the right eye.
-  float       PR_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **Right eye stereoscopic perspective projection matrix.**
+  float       PR_mat[16] = {1.0, 0.0, 0.0, 0.0,
                             0.0, 1.0, 0.0, 0.0,
                             0.0, 0.0, 1.0, 0.0,
-                            0.0, 0.0, 0.0, 1.0};
+                            0.0, 0.0, 0.0, 1.0};                                                    ///< @brief **Right eye stereoscopic perspective projection matrix.**
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////// GAMEPAD //////////////////////////////////////////////
@@ -292,10 +292,10 @@ public:
   bool        mouse_RIGHT;                                                                          ///< @brief **Mouse "RIGHT" button.**
 
   double      mouse_X;                                                                              ///< @brief **Mouse x-coordinate [px].**
-  double      mouse_Y;                                                                              ///< @biref **Mouse y-coordinate [px].**
+  double      mouse_Y;                                                                              ///< @brief **Mouse y-coordinate [px].**
 
-  double      scroll_X;                                                                             ///< Mouse scroll x-coordinate [px].**
-  double      scroll_Y;                                                                             ///< Mouse scroll y-coordinate [px].**
+  double      scroll_X;                                                                             ///< @brief **Mouse scroll x-coordinate [px].**
+  double      scroll_Y;                                                                             ///< @brief **Mouse scroll y-coordinate [px].**
 
   /// @brief **Class constructor.**
   /// @details It does nothing.
@@ -310,12 +310,12 @@ public:
              neutrino*   loc_baseline,
              int         loc_window_size_x,                                                         ///< Window x-size [px].
              int         loc_window_size_y,                                                         ///< Window y-size [px].
-             std::string loc_title,
-             float       loc_orbit_x_initial,
-             float       loc_orbit_y_initial,
-             float       loc_pan_x_initial,
-             float       loc_pan_y_initial,
-             float       loc_pan_z_initial
+             std::string loc_title,                                                                 ///< Windows title.
+             float       loc_orbit_x_initial,                                                       ///< Initial "near clipping-plane" x-coordinate.
+             float       loc_orbit_y_initial,                                                       ///< Initial "near clipping-plane" y-coordinate.
+             float       loc_pan_x_initial,                                                         ///< Initial pan-x coordinate.
+             float       loc_pan_y_initial,                                                         ///< Initial pan-x coordinate.
+             float       loc_pan_z_initial                                                          ///< Initial pan-x coordinate.
             );
 
   /// @brief **GUI poll events function.**
@@ -333,7 +333,7 @@ public:
              );
 
   /// @brief **Pan movement.**
-  /// @details Translates the view matrix according to an pan movement.
+  /// @details Translates the view matrix according to a pan movement.
   void pan (
             float loc_pan_x,                                                                        ///< World x-pan.
             float loc_pan_y,                                                                        ///< World y-pan.

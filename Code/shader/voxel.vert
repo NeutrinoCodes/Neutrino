@@ -98,9 +98,6 @@ void main(void)
   gl_Position = P_mat*V_mat*voxel_center;                                                           // Setting voxel position...
   light = -normalize(l);                                                                            // Normalizing and inverting light direction...
 
-  //voxel_color = vec4(1.0, 0.0, 0.0, 1.0);
-  //voxel_center = vec4(0.0, 0.0, 0.0, 1.0);
-
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////// VOXEL'S FACE BARICENTRIC NORMALS //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////

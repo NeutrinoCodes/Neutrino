@@ -28,7 +28,7 @@ cl_uint opencl::get_platforms_number ()
   // Getting number of existing OpenCL platforms:
   loc_error = clGetPlatformIDs
               (
-               0,                                                                                   // Dummy # of platforms ("0" means we are asking for the # of platfomrs).
+               0,                                                                                   // "0" = we are asking for the # of platforms.
                NULL,                                                                                // Dummy platfomrs id.
                &loc_platforms_number                                                                // Returned local # of existing platforms.
               );
@@ -86,7 +86,7 @@ cl_uint opencl::get_devices_number
               (
                opencl_platform[loc_platform_index]->id,                                             // Platform ID.
                device_type,                                                                         // Device type.
-               0,                                                                                   // Dummy # of devices ("0" means we are asking for the # of devices).
+               0,                                                                                   // "0" means we are asking for the # of devices.
                NULL,                                                                                // Dummy device.
                &loc_devices_number                                                                  // Returned local # of existing devices.
               );
@@ -226,7 +226,7 @@ void opencl::init
                    );
   }
 
-  if(platforms_number > 1)                                                                          // Asking to select a platform, in case many have been found...
+  if(platforms_number > 1)                                                                          // Asking to select a platform...
   {
     std::cout << "Action: please select a platform [1..." + std::to_string (platforms_number);      // Formulating query...
 
@@ -237,7 +237,7 @@ void opencl::init
                           1,                                                                        // Minimum numeric choice in query answer.
                           platforms_number                                                          // Maximum numeric choice in query answer.
                          )
-                        ) - 1;                                                                      // Setting selected platform index [0...platforms_number - 1]...
+                        ) - 1;                                                                      // Setting selected platform index...
   }
 
   else
@@ -250,7 +250,7 @@ void opencl::init
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// SETTING OPENCL DEVICE ////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////
-  devices_number        = get_devices_number (selected_platform);                                   // Getting # of existing NU_GPU devices on selected platform [#]...
+  devices_number        = get_devices_number (selected_platform);                                   // Getting # of existing NU_GPU devices [#]...
   opencl_device         = new device*[devices_number];                                              // Initializing platform...
 
   for(i = 0; i < devices_number; i++)                                                               // Checking all devices:
@@ -420,7 +420,7 @@ void opencl::init
     std::cout << opencl_device[i]->queue_properties << std::endl;                                   // Printing message...
   }
 
-  if(devices_number > 1)                                                                            // Asking to select a platform, in case many have been found...
+  if(devices_number > 1)                                                                            // Asking to select a platform...
   {
     std::cout << "Action: please select a device [1..." +
       std::to_string (devices_number);                                                              // Formulating query...
@@ -431,7 +431,7 @@ void opencl::init
                         1,                                                                          // Minimum numeric choice in query answer.
                         devices_number                                                              // Maximum numeric choice in query answer.
                        )
-                      ) - 1;                                                                        // Setting selected device index [0...platforms_number - 1]...
+                      ) - 1;                                                                        // Setting selected device index...
   }
 
   else
@@ -458,13 +458,13 @@ void opencl::init
     {
       CGLContextObj    kCGLContext    = CGLGetCurrentContext ();
       CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup (kCGLContext);
-      properties[0] = CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE;                                 // Setting APPLE OpenCL context properties with CL-GL interop...
+      properties[0] = CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE;                                 // Setting APPLE with CL-GL interop...
       properties[1] = (cl_context_properties) kCGLShareGroup;
       properties[2] = 0;
     }
     else
     {
-      properties[0] = CL_CONTEXT_PLATFORM;                                                          // Setting APPLE OpenCL context properties without CL-GL interop...
+      properties[0] = CL_CONTEXT_PLATFORM;                                                          // Setting APPLE without CL-GL interop...
       properties[1] = (cl_context_properties)baseline->platform_id;
       properties[2] = 0;
     }
@@ -478,7 +478,7 @@ void opencl::init
 
     if(baseline->interop)
     {
-      properties[0] = CL_GL_CONTEXT_KHR;                                                            // Setting LINUX OpenCL context properties with CL-GL interop...
+      properties[0] = CL_GL_CONTEXT_KHR;                                                            // Setting LINUX with CL-GL interop...
       properties[1] = (cl_context_properties)glfwGetGLXContext
                       (
                        loc_gui->glfw_window
@@ -491,7 +491,7 @@ void opencl::init
     }
     else
     {
-      properties[0] = CL_CONTEXT_PLATFORM;                                                          // Setting LINUX OpenCL context properties without CL-GL interop...
+      properties[0] = CL_CONTEXT_PLATFORM;                                                          // Setting LINUX without CL-GL interop...
       properties[1] = (cl_context_properties)baseline->platform_id;
       properties[2] = 0;
     }
@@ -505,7 +505,7 @@ void opencl::init
 
     if(baseline->interop)
     {
-      properties[0] = CL_GL_CONTEXT_KHR;                                                            // Setting WINDOWS OpenCL context properties with CL-GL interop...
+      properties[0] = CL_GL_CONTEXT_KHR;                                                            // Setting WINDOWS with CL-GL interop...
       properties[1] = (cl_context_properties)glfwGetWGLContext
                       (
                        loc_gui->glfw_window
@@ -524,7 +524,7 @@ void opencl::init
     }
     else
     {
-      properties[0] = CL_CONTEXT_PLATFORM;                                                          // Setting WINDOWS OpenCL context properties without CL-GL interop...
+      properties[0] = CL_CONTEXT_PLATFORM;                                                          // Setting WINDOWS without CL-GL interop...
       properties[1] = (cl_context_properties)baseline->platform_id;
       properties[2] = 0;
     }
@@ -634,7 +634,7 @@ void opencl::execute
   switch(loc_kernel_mode)
   {
     case NU_WAIT:
-      loc_error = clWaitForEvents (1, &loc_kernel->event);                                          // Waiting for kernel execution to be completed (host blocking)...
+      loc_error = clWaitForEvents (1, &loc_kernel->event);                                          // Waiting for kernel to be completed (host blocking)...
       baseline->check_error (loc_error);                                                            // Checking error...
       break;
 
@@ -643,7 +643,7 @@ void opencl::execute
       break;
 
     default:
-      loc_error = clWaitForEvents (1, &loc_kernel->event);                                          // Waiting for kernel execution to be completed (host blocking)...
+      loc_error = clWaitForEvents (1, &loc_kernel->event);                                          // Waiting for kernel to be completed (host blocking)...
       baseline->check_error (loc_error);                                                            // Checking error...
       break;
   }
