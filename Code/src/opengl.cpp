@@ -2,20 +2,14 @@
 
 #include "opengl.hpp"
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// "WINDOW" CLASS ////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////// "opengl" class /////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 opengl::opengl()
 {
 
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// PRIVATE METHODS ////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-/// # Orbit function
-/// ### Description:
-/// Rotates the view matrix according to an orbit movement.
 void opengl::orbit
 (
  float loc_orbit_x,                                                                                 // "Near clipping-plane" x-coordinates.
@@ -122,9 +116,6 @@ void opengl::orbit
   }
 }
 
-/// # Pan function
-/// ### Description:
-/// Translate the view matrix according to an pan movement.
 void opengl::pan
 (
  float loc_pan_x,                                                                                   // World x-pan.
@@ -180,8 +171,6 @@ void opengl::pan
   // Computing LP filter:
   loc_alpha        = (float) exp (-2.0f*M_PI*loc_dt/loc_pan_decaytime);                             // Computing filter parameter "alpha"...
 
-  //std::cout << loc_dt << std::endl;
-
   pan_x            = loc_pan_x + loc_alpha*(pan_x_old - loc_pan_x);                                 // Filtering...
   pan_y            = loc_pan_y + loc_alpha*(pan_y_old - loc_pan_y);                                 // Filtering...
   pan_z            = loc_pan_z + loc_alpha*(pan_z_old - loc_pan_z);                                 // Filtering...
@@ -213,6 +202,9 @@ void opengl::pan
   );                                                                                                // Backing up translation matrix...
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// PRIVATE METHODS ///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 void opengl::set_shader
 (
  shader* loc_shader,                                                                                // Shader.
@@ -252,10 +244,6 @@ void opengl::set_shader
   );
 }
 
-/// # Initialisation function
-/// ### Description:
-/// Initialises GLFW context, initialises GLAD context, initialises OpenGL
-/// shaders.
 void opengl::init
 (
  neutrino*   loc_baseline,                                                                          // Neutrino baseline.
@@ -282,11 +270,11 @@ void opengl::init
   initial_scene_position[1] = loc_pan_y_initial;
   initial_scene_position[2] = loc_pan_z_initial;
 
-  mouse_x                   = 0;                                                                    // Initializing mouse x-coordinate [px]...
-  mouse_y                   = 0;                                                                    // Initializing mouse y-coordinate [px]...
+  mouse_X                   = 0;                                                                    // Initializing mouse x-coordinate [px]...
+  mouse_Y                   = 0;                                                                    // Initializing mouse y-coordinate [px]...
 
-  scroll_x                  = 0;                                                                    // Initializing scroll x-coordinate [px]...
-  scroll_y                  = 0;                                                                    // Initializing scroll y-coordinate [px]...
+  scroll_X                  = 0;                                                                    // Initializing scroll x-coordinate [px]...
+  scroll_Y                  = 0;                                                                    // Initializing scroll y-coordinate [px]...
 
   orbit_x                   = 0.0f;
   orbit_y                   = 0.0f;
@@ -483,17 +471,11 @@ void opengl::init
   }
 }
 
-/// # Window close function
-/// ### Description:
-/// Closes the window.
 void opengl::close ()
 {
   glfwSetWindowShouldClose (glfw_window, GL_TRUE);                                                  // Setting window "closed" flag...
 }
 
-/// # Window closed function
-/// ### Description:
-/// Returns "true" if graphics window has been closed.
 bool opengl::closed ()
 {
   if(baseline->interop)
@@ -514,12 +496,9 @@ bool opengl::closed ()
   }
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////// CALLBACKS ////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-/// # Window refresh callback function
-/// ### Description:
-/// Invokes the refresh retpoline function.
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// CALLBACKS /////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 void opengl::refresh_callback
 (
  GLFWwindow* loc_window                                                                             // Window.
@@ -529,9 +508,6 @@ void opengl::refresh_callback
   win->refresh ();                                                                                  // Calling refresh retpoline...
 }
 
-/// # Window resize callback function
-/// ### Description:
-/// Invokes the window resize retpoline function.
 void opengl::window_resize_callback
 (
  GLFWwindow* loc_window,                                                                            // Window.
@@ -543,9 +519,6 @@ void opengl::window_resize_callback
   win->window_resize (loc_x_size, loc_y_size);                                                      // Calling window resize retpoline...
 }
 
-/// # Framebuffer resize callback function
-/// ### Description:
-/// Invokes the framebuffer resize retpoline function.
 void opengl::framebuffer_resize_callback
 (
  GLFWwindow* loc_window,                                                                            // Window.
@@ -557,9 +530,6 @@ void opengl::framebuffer_resize_callback
   win->framebuffer_resize (loc_x_size, loc_y_size);                                                 // Calling framebuffer resize retpoline...
 }
 
-/// # Window key-pressed callback function
-/// ### Description:
-/// Invokes the key-pressed retpoline function.
 void opengl::key_pressed_callback
 (
  GLFWwindow* loc_window,                                                                            // Window.
@@ -573,9 +543,6 @@ void opengl::key_pressed_callback
   win->key_pressed (loc_key, loc_scancode, loc_action, loc_mods);                                   // Calling key pressed retpoline...
 }
 
-/// # Window mouse-pressed callback function
-/// ### Description:
-/// Invokes the mouse-pressed retpoline function.
 void opengl::mouse_button_callback
 (
  GLFWwindow* loc_window,                                                                            // Window.
@@ -588,9 +555,6 @@ void opengl::mouse_button_callback
   win->mouse_button (loc_button, loc_action, loc_mods);                                             // Calling mouse pressed retpoline...
 }
 
-/// # Window mouse-moved callback function
-/// ### Description:
-/// Invokes the mouse-moved retpoline function.
 void opengl::mouse_moved_callback
 (
  GLFWwindow* loc_window,                                                                            // Window.
@@ -602,9 +566,6 @@ void opengl::mouse_moved_callback
   win->mouse_moved (loc_xpos, loc_ypos);                                                            // Calling mouse moved retpoline...
 }
 
-/// # Window mouse-scrolled callback function
-/// ### Description:
-/// Invokes the mouse-scrolled retpoline function.
 void opengl::mouse_scrolled_callback
 (
  GLFWwindow* loc_window,                                                                            // Window.
@@ -635,12 +596,9 @@ void opengl::joystick_connected_callback
      }*/
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////// PRIVATE RETPOLINES /////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-/// # Window key-pressed retpoline function
-/// ### Description:
-/// On ESC, closes the graphics window.
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////// PRIVATE RETPOLINES ////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 void opengl::key_pressed
 (
  int loc_key,                                                                                       // Key.
@@ -676,9 +634,6 @@ void opengl::key_pressed
 
 }
 
-/// # Window mouse-button retpoline function
-/// ### Description:
-/// Gets the mouse coordinates, checks the orbit status.
 void opengl::mouse_button
 (
  int loc_button,                                                                                    // Button.
@@ -686,9 +641,7 @@ void opengl::mouse_button
  int loc_mods                                                                                       // Mods.
 )
 {
-  ////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////// READING MOUSE BUTTONS: ////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
+  // Reading mouse buttons:
   switch(loc_button)
   {
     case GLFW_MOUSE_BUTTON_LEFT:
@@ -696,11 +649,11 @@ void opengl::mouse_button
       switch(loc_action)
       {
         case GLFW_PRESS:
-          mouse_left = true;
+          mouse_LEFT = true;
           break;
 
         case GLFW_RELEASE:
-          mouse_left = false;
+          mouse_LEFT = false;
           break;
       }
 
@@ -711,11 +664,11 @@ void opengl::mouse_button
       switch(loc_action)
       {
         case GLFW_PRESS:
-          mouse_right = true;
+          mouse_RIGHT = true;
           break;
 
         case GLFW_RELEASE:
-          mouse_right = false;
+          mouse_RIGHT = false;
           break;
       }
 
@@ -723,48 +676,29 @@ void opengl::mouse_button
   }
 }
 
-/// # Window mouse-moved retpoline function
-/// ### Description:
-/// Gets the mouse coordinates.
 void opengl::mouse_moved
 (
  double loc_xpos,                                                                                   // Mouse position [px].
  double loc_ypos                                                                                    // Mouse position [px].
 )
 {
-  mouse_x = loc_xpos;                                                                               // Getting mouse position...
-  mouse_y = loc_ypos;                                                                               // Getting mouse position...
+  mouse_X = loc_xpos;                                                                               // Getting mouse position...
+  mouse_Y = loc_ypos;                                                                               // Getting mouse position...
 }
 
-/// # Window mouse-scrolled retpoline function
-/// ### Description:
-/// Gets the mouse scroll. Sets the zoom factor.
 void opengl::mouse_scrolled
 (
  double loc_xoffset,                                                                                // Mouse scrolled x-position [px].
  double loc_yoffset                                                                                 // Mouse scrolled y-position [px].
 )
 {
-  scroll_x = loc_xoffset;                                                                           // Getting scroll position...
-  scroll_y = loc_yoffset;                                                                           // Getting scroll position...
+  scroll_X = loc_xoffset;                                                                           // Getting scroll position...
+  scroll_Y = loc_yoffset;                                                                           // Getting scroll position...
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// PUBLIC RETPOLINES /////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-/// # Window clear retpoline function
-/// ### Description:
-/// Clears the window.
-void opengl::clear ()
-{
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-  glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                                              // Clearing window...
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-}
-
-/// # Window refresh retpoline function
-/// ### Description:
-/// Refresh the window.
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// PUBLIC RETPOLINES /////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 void opengl::refresh ()
 {
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
@@ -772,9 +706,6 @@ void opengl::refresh ()
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 }
 
-/// # Window resize retpoline function
-/// ### Description:
-/// Resizes the window, according to the perspective and aspect ratio.
 void opengl::window_resize
 (
  int loc_x_size,                                                                                    // Window x-size [screen coordinates].
@@ -785,9 +716,6 @@ void opengl::window_resize
   window_size_y = loc_y_size;                                                                       // Setting window_size_y...
 }
 
-/// # Framebuffer resize retpoline function
-/// ### Description:
-/// Resizes the framebuffer, according to the perspective and aspect ratio.
 void opengl::framebuffer_resize
 (
  int loc_x_size,                                                                                    // Window x-size [screen coordinates].
@@ -825,9 +753,16 @@ void opengl::framebuffer_resize
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 }
 
-/// # Window poll events function
-/// ### Description:
-/// Polls GLFW events.
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////// PUBLIC METHODS //////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+void opengl::clear ()
+{
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                                              // Clearing window...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+}
+
 void opengl::poll_events ()
 {
 
@@ -872,12 +807,6 @@ void opengl::poll_events ()
   }
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// PUBLIC METHODS ////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-/// # Window plot function
-/// ### Description:
-/// Selects a plot style and plots data.
 void opengl::plot
 (
  shader* loc_shader                                                                                 // OpenGL shader.
@@ -909,18 +838,15 @@ void opengl::plot
       multiplicate (VL_mat, TL_mat, V_mat);                                                         // Setting left eye stereoscopic view matrix...
       multiplicate (VR_mat, TR_mat, V_mat);                                                         // Setting right eye stereoscopic view matrix...
 
-      ////////////////////////////////////////////////////////////////////////////
-      ///////////////////////////////// LEFT EYE /////////////////////////////////
-      ////////////////////////////////////////////////////////////////////////////
+      // Left eye:
       set_shader (loc_shader, VL_mat, PL_mat);                                                      // Setting plot style...
 
-      // Drawing:
       glViewport (
                   0,
                   0,
                   window_size_x/2,
                   window_size_y
-                 );
+                 );                                                                                 // Setting viewport...
       glDrawArrays (
                     GL_POINTS,
                     0,
@@ -929,18 +855,15 @@ void opengl::plot
 
       glFinish ();                                                                                  // Waiting for OpenGL to finish...
 
-      ////////////////////////////////////////////////////////////////////////////
-      //////////////////////////////// RIGHT EYE /////////////////////////////////
-      ////////////////////////////////////////////////////////////////////////////
+      // Right eye:
       set_shader (loc_shader, VR_mat, PR_mat);                                                      // Setting plot style...
 
-      // Drawing:
       glViewport (
                   window_size_x/2,
                   0,
                   window_size_x/2,
                   window_size_y
-                 );
+                 );                                                                                 // Setting viewport...
       glDrawArrays (
                     GL_POINTS,
                     0,
