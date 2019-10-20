@@ -1,9 +1,9 @@
-# @file   Doxyfile.in
-# @author Erik ZORZIN
-# @date   25OCT2019
-# @brief  This is the main configuration file for Doxygen. Invoked by "make doc" in CMakeLists.txt.
+## @file   Doxyfile.in
+## @author Erik ZORZIN
+## @date   25OCT2019
+## @brief  This is the main configuration file for Doxygen. Invoked by "make doc" in CMakeLists.txt.
 
-# Setting project name...
+## Setting project name...
 PROJECT_NAME            = "NEUTRINO"
 
 # Setting project caption description...
@@ -16,10 +16,10 @@ PROJECT_LOGO            = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen/Logos/neutr
 OUTPUT_DIRECTORY        = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen
 
 # Setting valid file types to be considered in Doxygen...
-FILE_PATTERNS           = *.cpp *.hpp *.cl *.frag *.vert *.geom *.tess *.md
+FILE_PATTERNS           = *.cpp *.hpp *.cl *.frag *.vert *.geom *.tess *.md *.in
 
 # Setting code mapping grammatics for GLSL and OpenCL languages...
-EXTENSION_MAPPING       = frag=C++ vert=C++ geom=C++ tess=C++ cl=C++
+EXTENSION_MAPPING       = frag=C++ vert=C++ geom=C++ tess=C++ cl=C++ in=Python
 
 # Setting Doxygen input directories...
 INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/ \
