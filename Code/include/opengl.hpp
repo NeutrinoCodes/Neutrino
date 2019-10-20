@@ -177,6 +177,82 @@ public:
   int         framebuffer_size_y;                                                                   ///< @brief **Window y-size [px].**
   float       aspect_ratio;                                                                         ///< @brief **Window aspect ratio [].**
 
+  /// @details Quaternion used in the implementation of an [arcball]
+  /// (https://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Tutorial_Arcball) pointing the
+  /// current rotation of the view.
+  float       q[4]       = {1.0, 0.0, 0.0, 0.0};                                                    ///< @brief **Arcball quaternion.**
+  float       roll       = 0.0;                                                                     ///< @brief **Euler (Tait-Byran) "roll" view angle [rad].**
+  float       pitch      = 0.0;                                                                     ///< @brief **Euler (Tait-Byran) "pitch" view angle [rad].**
+  float       yaw        = 0.0;                                                                     ///< @brief **Euler (Tait-Byran) "yaw" view angle [rad].**
+
+  float       R_mat[16]  = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **Rotation matrix.**
+                            0.0, 1.0, 0.0, 0.0,
+                            0.0, 0.0, 1.0, 0.0,
+                            0.0, 0.0, 0.0, 1.0};
+
+  float       T_mat[16]  = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **Translation matrix.**
+                            0.0, 1.0, 0.0, 0.0,
+                            0.0, 0.0, 1.0, 0.0,
+                            0.0, 0.0, 0.0, 1.0};
+
+  /// @details OpenGL [view matrix]
+  /// (https://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/).
+  /// @f$ V = T \cdot R @f$
+  float       V_mat[16]  = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **View matrix.**
+                            0.0, 1.0, 0.0, 0.0,
+                            0.0, 0.0, 1.0, 0.0,
+                            0.0, 0.0, 0.0, 1.0};
+
+  /// @details Monoscopic [perspective]
+  /// (https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix)
+  /// projection matrix.
+  float       P_mat[16]  = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **Perspective projection matrix.**
+                            0.0, 1.0, 0.0, 0.0,
+                            0.0, 0.0, 1.0, 0.0,
+                            0.0, 0.0, 0.0, 1.0};
+
+  /// @details To be used in stereoscopic vision modality.
+  float       TL_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **Left eye stereoscopic translation matrix.**
+                            0.0, 1.0, 0.0, 0.0,
+                            0.0, 0.0, 1.0, 0.0,
+                            0.0, 0.0, 0.0, 1.0};
+
+  /// @details To be used in stereoscopic vision modality.
+  float       TR_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **Right eye stereoscopic translation matrix.**
+                            0.0, 1.0, 0.0, 0.0,
+                            0.0, 0.0, 1.0, 0.0,
+                            0.0, 0.0, 0.0, 1.0};
+
+  /// @details To be used in stereoscopic vision modality.
+  /// @f$ VL = TL \cdot V @f$
+  float       VL_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **Left eye stereoscopic view matrix.**
+                            0.0, 1.0, 0.0, 0.0,
+                            0.0, 0.0, 1.0, 0.0,
+                            0.0, 0.0, 0.0, 1.0};
+
+  /// @details To be used in stereoscopic vision modality.
+  /// @f$ VR = TR \cdot V @f$
+  float       VR_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief  **Right eye stereoscopic view matrix.**
+                            0.0, 1.0, 0.0, 0.0,
+                            0.0, 0.0, 1.0, 0.0,
+                            0.0, 0.0, 0.0, 1.0};
+
+  /// @details [Perspective]
+  /// (https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix)
+  /// projection matrix to be used in stereoscopic vision modality for the left eye.
+  float       PL_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **Left eye stereoscopic perspective projection matrix.**
+                            0.0, 1.0, 0.0, 0.0,
+                            0.0, 0.0, 1.0, 0.0,
+                            0.0, 0.0, 0.0, 1.0};
+
+  /// @details [Perspective]
+  /// (https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix)
+  /// projection matrix to be used in stereoscopic vision modality for the right eye.
+  float       PR_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                     ///< @brief **Right eye stereoscopic perspective projection matrix.**
+                            0.0, 1.0, 0.0, 0.0,
+                            0.0, 0.0, 1.0, 0.0,
+                            0.0, 0.0, 0.0, 1.0};
+
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////// GAMEPAD //////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -221,6 +297,31 @@ public:
   double      scroll_X;                                                                             ///< Mouse scroll x-coordinate [px].**
   double      scroll_Y;                                                                             ///< Mouse scroll y-coordinate [px].**
 
+  /// @brief **Class constructor.**
+  /// @details It does nothing.
+  opengl();
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////// PUBLIC METHODS //////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  /// @brief **GUI initialization.**
+  /// @details Initializes GLFW, GLAD and OpenGL contexts.
+  void init (
+             neutrino*   loc_baseline,
+             int         loc_window_size_x,                                                         ///< Window x-size [px].
+             int         loc_window_size_y,                                                         ///< Window y-size [px].
+             std::string loc_title,
+             float       loc_orbit_x_initial,
+             float       loc_orbit_y_initial,
+             float       loc_pan_x_initial,
+             float       loc_pan_y_initial,
+             float       loc_pan_z_initial
+            );
+
+  /// @brief **GUI poll events function.**
+  /// @details **Polls GLFW events.** To be inkoved by the user.
+  void poll_events ();
+
   /// @brief **Orbit movement.**
   /// @details Rotates the view matrix according to an orbit movement.
   void orbit (
@@ -242,82 +343,28 @@ public:
             float loc_pan_decaytime                                                                 ///< Pan low pass decay time [s].
            );
 
-  /// @details Quaternion used in the implementation of an [arcball]
-  /// (https://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Tutorial_Arcball) pointing the
-  /// current rotation of the view.
-  float q[4]       = {1.0, 0.0, 0.0, 0.0};                                                          ///< @brief **Arcball quaternion.**
-  float roll       = 0.0;                                                                           ///< @brief **Euler (Tait-Byran) "roll" view angle [rad].**
-  float pitch      = 0.0;                                                                           ///< @brief **Euler (Tait-Byran) "pitch" view angle [rad].**
-  float yaw        = 0.0;                                                                           ///< @brief **Euler (Tait-Byran) "yaw" view angle [rad].**
+  /// @brief **GUI close function.**
+  /// @details Closes the GUI. To be invoked by the user.
+  void close ();
 
-  float R_mat[16]  = {1.0, 0.0, 0.0, 0.0,                                                           ///< @brief **Rotation matrix.**
-                      0.0, 1.0, 0.0, 0.0,
-                      0.0, 0.0, 1.0, 0.0,
-                      0.0, 0.0, 0.0, 1.0};
+  /// @brief **GUI "closed" function.**
+  /// @details Checks whether the GUI is closed or not. To be invoked by the user.
+  bool closed ();
 
-  float T_mat[16]  = {1.0, 0.0, 0.0, 0.0,                                                           ///< @brief **Translation matrix.**
-                      0.0, 1.0, 0.0, 0.0,
-                      0.0, 0.0, 1.0, 0.0,
-                      0.0, 0.0, 0.0, 1.0};
+  /// @brief **Clear method.**
+  /// @details To be invoked by the user in order to clear the window. It deletes all graphics
+  /// present in the framebuffer.
+  void clear ();
 
-  /// @details OpenGL [view matrix]
-  /// (https://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/).
-  /// @f$ V = T \cdot R @f$
-  float V_mat[16]  = {1.0, 0.0, 0.0, 0.0,                                                           ///< @brief **View matrix.**
-                      0.0, 1.0, 0.0, 0.0,
-                      0.0, 0.0, 1.0, 0.0,
-                      0.0, 0.0, 0.0, 1.0};
+  /// @brief **GUI "plot" function.**
+  /// Plots graphics in the GUI. TO be invoked by the user.
+  void plot (
+             shader* loc_shader                                                                     ///< OpenGL shader.
+            );
 
-  /// @details Monoscopic [perspective]
-  /// (https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix)
-  /// projection matrix.
-  float P_mat[16]  = {1.0, 0.0, 0.0, 0.0,                                                           ///< @brief **Perspective projection matrix.**
-                      0.0, 1.0, 0.0, 0.0,
-                      0.0, 0.0, 1.0, 0.0,
-                      0.0, 0.0, 0.0, 1.0};
-
-  /// @details To be used in stereoscopic vision modality.
-  float TL_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                           ///< @brief **Left eye stereoscopic translation matrix.**
-                      0.0, 1.0, 0.0, 0.0,
-                      0.0, 0.0, 1.0, 0.0,
-                      0.0, 0.0, 0.0, 1.0};
-
-  /// @details To be used in stereoscopic vision modality.
-  float TR_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                           ///< @brief **Right eye stereoscopic translation matrix.**
-                      0.0, 1.0, 0.0, 0.0,
-                      0.0, 0.0, 1.0, 0.0,
-                      0.0, 0.0, 0.0, 1.0};
-
-  /// @details To be used in stereoscopic vision modality.
-  /// @f$ VL = TL \cdot V @f$
-  float VL_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                           ///< @brief **Left eye stereoscopic view matrix.**
-                      0.0, 1.0, 0.0, 0.0,
-                      0.0, 0.0, 1.0, 0.0,
-                      0.0, 0.0, 0.0, 1.0};
-
-  /// @details To be used in stereoscopic vision modality.
-  /// @f$ VR = TR \cdot V @f$
-  float VR_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                           ///< @brief  **Right eye stereoscopic view matrix.**
-                      0.0, 1.0, 0.0, 0.0,
-                      0.0, 0.0, 1.0, 0.0,
-                      0.0, 0.0, 0.0, 1.0};
-
-  /// @details [Perspective]
-  /// (https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix)
-  /// projection matrix to be used in stereoscopic vision modality for the left eye.
-  float PL_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                           ///< @brief **Left eye stereoscopic perspective projection matrix.**
-                      0.0, 1.0, 0.0, 0.0,
-                      0.0, 0.0, 1.0, 0.0,
-                      0.0, 0.0, 0.0, 1.0};
-
-  /// @details [Perspective]
-  /// (https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix)
-  /// projection matrix to be used in stereoscopic vision modality for the right eye.
-  float PR_mat[16] = {1.0, 0.0, 0.0, 0.0,                                                           ///< @brief **Right eye stereoscopic perspective projection matrix.**
-                      0.0, 1.0, 0.0, 0.0,
-                      0.0, 0.0, 1.0, 0.0,
-                      0.0, 0.0, 0.0, 1.0};
-
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////// PUBLIC RETPOLINES /////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
   /// @brief **Refresh retpoline.**
   /// @details ** To be invoked by the user in order to refresh the window. It redraws the current
   /// graphics in the framebuffer. Also automatically invoked by the @link refresh_callback @endlink
@@ -340,50 +387,10 @@ public:
                            int loc_y_size                                                           ///< Framebuffer y-size [px].
                           );
 
-  /// @brief **Clear method.**
-  /// @details To be invoked by the user in order to clear the window. It deletes all graphics
-  /// present in the framebuffer.
-  void clear ();
-
-  /// @brief **GUI poll events function.**
-  /// @details **Polls GLFW events.** To be inkoved by the user.
-  void poll_events ();
-
-  /// @brief **Class constructor.**
-  /// @details It does nothing.
-  opengl();
-
-  /// @brief **GUI initialization.**
-  /// @details Initializes GLFW, GLAD and OpenGL contexts.
-  void init (
-             neutrino*   loc_baseline,
-             int         loc_window_size_x,                                                         ///< Window x-size [px].
-             int         loc_window_size_y,                                                         ///< Window y-size [px].
-             std::string loc_title,
-             float       loc_orbit_x_initial,
-             float       loc_orbit_y_initial,
-             float       loc_pan_x_initial,
-             float       loc_pan_y_initial,
-             float       loc_pan_z_initial
-            );
-
-  /// @brief **GUI close function.**
-  /// @details Closes the GUI. To be invoked by the user.
-  void close ();
-
-  /// @brief **GUI "closed" function.**
-  /// @details Checks whether the GUI is closed or not. To be invoked by the user.
-  bool closed ();
-
-  /// @brief **GUI "plot" function.**
-  /// Plots graphics in the GUI. TO be invoked by the user.
-  void plot (
-             shader* loc_shader                                                                     ///< OpenGL shader.
-            );
-
   /// @brief **Class destructor.**
   /// @details Terminates the GLFW context.
   ~opengl();
+
 };
 
 #endif

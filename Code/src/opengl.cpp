@@ -10,198 +10,6 @@ opengl::opengl()
 
 }
 
-void opengl::orbit
-(
- float loc_orbit_x,                                                                                 // "Near clipping-plane" x-coordinates.
- float loc_orbit_y,                                                                                 // "Near clipping-plane" y-coordinates.
- float loc_orbit_rate,                                                                              // Orbit angular rate coefficient [rev/s].
- float loc_orbit_deadzone,                                                                          // Orbit deadzone threshold coefficient.
- float loc_orbit_decaytime                                                                          // Orbit low pass decay time [s].
-)
-{
-  float loc_orbit_initial[3];                                                                       // Initial orbit vector.
-  float loc_orbit_final[3];                                                                         // Final orbit vector.
-  float loc_axis[3];                                                                                // Arcball axis of rotation.
-  float loc_theta;                                                                                  // Arcball angle of rotation.
-  float loc_OP_squared;                                                                             // Center to arcball surface vector length.
-  float loc_alpha;                                                                                  // LP filter decay constant.
-  float loc_dt;                                                                                     // Baseline loop time [s].
-
-  loc_dt               = float (baseline->loop_time);                                               // Getting loop time [s]...
-
-  loc_orbit_initial[0] = 0.0f;                                                                      // Building initial world vector...
-  loc_orbit_initial[1] = 0.0f;                                                                      // Building initial world vector...
-  loc_orbit_initial[2] = 1.0f;                                                                      // Building initial world vector...
-
-  // Constraining input values:
-  loc_orbit_x          = baseline->constrain_float
-                         (
-                          loc_orbit_x,                                                              // Initial x-orbit.
-                          NU_GAMEPAD_MIN_AXES,                                                      // Minimum x-orbit.
-                          NU_GAMEPAD_MAX_AXES                                                       // Maximum x-orbit.
-                         );
-  loc_orbit_y          = baseline->constrain_float
-                         (
-                          loc_orbit_y,                                                              // Initial y-orbit.
-                          NU_GAMEPAD_MIN_AXES,                                                      // Minimum y-orbit.
-                          NU_GAMEPAD_MAX_AXES                                                       // Maximum y-orbit.
-                         );
-
-  loc_orbit_rate       = baseline->constrain_float
-                         (
-                          loc_orbit_rate,                                                           // Orbit angular rate [rev/s].
-                          NU_GAMEPAD_MIN_ORBIT_RATE,                                                // Minimum orbit angular rate [rev/s].
-                          NU_GAMEPAD_MAX_ORBIT_RATE                                                 // Maximum orbit angular rate [rev/s].
-                         );
-  loc_orbit_deadzone   = baseline->constrain_float
-                         (
-                          loc_orbit_deadzone,                                                       // Orbit deadzone.
-                          NU_GAMEPAD_MIN_AXES,                                                      // Minimum gampad axes value.
-                          NU_GAMEPAD_MAX_AXES                                                       // Maximum gampad axes value.
-                         );
-
-  loc_orbit_decaytime  = baseline->constrain_float
-                         (
-                          loc_orbit_decaytime,                                                      // Orbit LP filter decay time [s].
-                          NU_GAMEPAD_MIN_DECAYTIME,                                                 // Minimum orbit LP filter decay time [s].
-                          NU_GAMEPAD_MAX_DECAYTIME                                                  // Maximum orbit LP filter decay time [s].
-                         );
-
-  // Applying deadzone:
-  if((abs (loc_orbit_x) <= loc_orbit_deadzone) &&
-     (abs (loc_orbit_y) <= loc_orbit_deadzone))
-  {
-    loc_orbit_x = 0.0f;                                                                             // Justifying value...
-    loc_orbit_y = 0.0f;                                                                             // Justifying value...
-  }
-
-  // Computing LP filter:
-  loc_alpha          = (float) exp (-2.0f*M_PI*loc_dt/loc_orbit_decaytime);                         // Computing filter parameter "alpha"...
-  orbit_x            = loc_orbit_x + loc_alpha*(orbit_x_old - loc_orbit_x);                         // Filtering...
-  orbit_y            = loc_orbit_y + loc_alpha*(orbit_y_old - loc_orbit_y);                         // Filtering...
-  orbit_x_old        = orbit_x;                                                                     // Backing up...
-  orbit_y_old        = orbit_y;                                                                     // Backing up...
-
-  // Computing arcball:
-  loc_orbit_final[0] = orbit_x;                                                                     // Setting x-point on arcball...
-  loc_orbit_final[1] = orbit_y;                                                                     // Setting y-point on arcball...
-  loc_orbit_final[2] = 0.0f;                                                                        // Setting z-point on arcball...
-  loc_OP_squared     = loc_orbit_final[0]*loc_orbit_final[0] +
-                       loc_orbit_final[1]*loc_orbit_final[1];                                       // Computing OP segment...
-
-  if(loc_OP_squared <= 1.0f)
-  {
-    loc_orbit_final[2] = sqrt (1.0f - loc_OP_squared);                                              // Computing z-point on arcball...
-  }
-  else
-  {
-    normalize (loc_orbit_final);                                                                    // Computing z-point on arcball (in case too far)...
-  }
-
-  loc_theta          = loc_orbit_rate*2.0f*M_PI*loc_dt*angle
-                       (
-                        loc_orbit_initial,
-                        loc_orbit_final
-                       );                                                                           // Computing orbit angle for a rate of 2*pi rad/s...
-
-  // Doing rotation:
-  if(loc_theta > 0.0f)                                                                              // Checking for valid rotation angle...
-  {
-    cross (loc_axis, loc_orbit_initial, loc_orbit_final);                                           // Computing orbit axis of rotation...
-    normalize (loc_axis);                                                                           // Normalizing rotation 3D axis...
-    quaternion (q, loc_axis, loc_theta);                                                            // Computing rotation quaternion...
-    rotate (R_mat, R_mat_old, q);                                                                   // Computing rotation matrix...
-    euler (&roll, &pitch, &yaw, q);                                                                 // Computing Euler (Tait-Bryan) angles...
-    backup (R_mat_old, R_mat);                                                                      // Backing up rotation matrix...
-  }
-}
-
-void opengl::pan
-(
- float loc_pan_x,                                                                                   // World x-pan.
- float loc_pan_y,                                                                                   // World y-pan.
- float loc_pan_z,                                                                                   // World z-pan.
- float loc_pan_rate,                                                                                // Pan rate [units/s].
- float loc_pan_deadzone,                                                                            // Pan deadzone threshold coefficient.
- float loc_pan_decaytime                                                                            // Pan low pass decay time [s].
-)
-{
-  float loc_initial_pan[3];
-  float loc_final_pan[3];
-  float translation[3];
-  float loc_alpha;
-  float loc_dt;                                                                                     // Baseline loop time [s].
-
-  loc_dt             = float (baseline->loop_time);                                                 // Getting loop time [s]...
-
-  loc_initial_pan[0] = 0.0f;                                                                        // Building initial pan vector...
-  loc_initial_pan[1] = 0.0f;                                                                        // Building initial pan vector...
-  loc_initial_pan[2] = 0.0f;                                                                        // Building initial pan vector...
-
-  // Constraining input values:
-  loc_pan_x          = baseline->constrain_float
-                       (
-                        loc_pan_x,                                                                  // Initial x-pan.
-                        NU_GAMEPAD_MIN_AXES,                                                        // Minimum x-pan.
-                        NU_GAMEPAD_MAX_AXES                                                         // Maximum x-pan.
-                       );
-  loc_pan_y          = baseline->constrain_float
-                       (
-                        loc_pan_y,                                                                  // Initial y-pan.
-                        NU_GAMEPAD_MIN_AXES,                                                        // Minimum y-pan.
-                        NU_GAMEPAD_MAX_AXES                                                         // Maximum y-pan.
-                       );
-  loc_pan_z          = baseline->constrain_float
-                       (
-                        loc_pan_z,                                                                  // Initial z-pan.
-                        NU_GAMEPAD_MIN_AXES,                                                        // Minimum z-pan.
-                        NU_GAMEPAD_MAX_AXES                                                         // Maximum z-pan.
-                       );
-
-  // Applying deadzone:
-  if((abs (loc_pan_x) <= loc_pan_deadzone) &&
-     (abs (loc_pan_y) <= loc_pan_deadzone) &&
-     (abs (loc_pan_z) <= loc_pan_deadzone))
-  {
-    loc_pan_x = 0.0f;                                                                               // Justifying value...
-    loc_pan_y = 0.0f;                                                                               // Justifying value...
-    loc_pan_z = 0.0f;                                                                               // Justifying value...
-  }
-
-  // Computing LP filter:
-  loc_alpha        = (float) exp (-2.0f*M_PI*loc_dt/loc_pan_decaytime);                             // Computing filter parameter "alpha"...
-
-  pan_x            = loc_pan_x + loc_alpha*(pan_x_old - loc_pan_x);                                 // Filtering...
-  pan_y            = loc_pan_y + loc_alpha*(pan_y_old - loc_pan_y);                                 // Filtering...
-  pan_z            = loc_pan_z + loc_alpha*(pan_z_old - loc_pan_z);                                 // Filtering...
-
-  pan_x_old        = pan_x;                                                                         // Backing up...
-  pan_y_old        = pan_y;                                                                         // Backing up...
-  pan_z_old        = pan_z;                                                                         // Backing up...
-
-  loc_final_pan[0] = pan_x;                                                                         // Setting up final x-pan...
-  loc_final_pan[1] = pan_y;                                                                         // Setting up final y-pan...
-  loc_final_pan[2] = pan_z;                                                                         // Setting up final z-pan...
-
-  // Doing translation:
-  translation[0]   = loc_pan_rate*loc_dt*(loc_final_pan[0] - loc_initial_pan[0]);                   // Computing translation vector...
-  translation[1]   = loc_pan_rate*loc_dt*(loc_final_pan[1] - loc_initial_pan[1]);                   // Computing translation vector...
-  translation[2]   = loc_pan_rate*loc_dt*(loc_final_pan[2] - loc_initial_pan[2]);                   // Computing translation vector...
-
-  translate
-  (
-   T_mat,
-   T_mat_old,
-   translation
-  );                                                                                                // Computing translation matrix...
-
-  backup
-  (
-   T_mat_old,
-   T_mat
-  );                                                                                                // Backing up translation matrix...
-}
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// PRIVATE METHODS ///////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -244,6 +52,209 @@ void opengl::set_shader
   );
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// CALLBACKS /////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+void opengl::refresh_callback
+(
+ GLFWwindow* loc_window                                                                             // Window.
+)
+{
+  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
+  win->refresh ();                                                                                  // Calling refresh retpoline...
+}
+
+void opengl::window_resize_callback
+(
+ GLFWwindow* loc_window,                                                                            // Window.
+ int         loc_x_size,                                                                            // Window x-size [screen coordinates].
+ int         loc_y_size                                                                             // Window y-size [screen coordinates].
+)
+{
+  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
+  win->window_resize (loc_x_size, loc_y_size);                                                      // Calling window resize retpoline...
+}
+
+void opengl::framebuffer_resize_callback
+(
+ GLFWwindow* loc_window,                                                                            // Window.
+ int         loc_x_size,                                                                            // Framebuffer x-size [px].
+ int         loc_y_size                                                                             // Framebuffer y-size [px].
+)
+{
+  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
+  win->framebuffer_resize (loc_x_size, loc_y_size);                                                 // Calling framebuffer resize retpoline...
+}
+
+void opengl::key_pressed_callback
+(
+ GLFWwindow* loc_window,                                                                            // Window.
+ int         loc_key,                                                                               // Key.
+ int         loc_scancode,                                                                          // Scancode.
+ int         loc_action,                                                                            // Action.
+ int         loc_mods                                                                               // Mods.
+)
+{
+  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
+  win->key_pressed (loc_key, loc_scancode, loc_action, loc_mods);                                   // Calling key pressed retpoline...
+}
+
+void opengl::mouse_button_callback
+(
+ GLFWwindow* loc_window,                                                                            // Window.
+ int         loc_button,                                                                            // Button.
+ int         loc_action,                                                                            // Action.
+ int         loc_mods                                                                               // Mods.
+)
+{
+  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
+  win->mouse_button (loc_button, loc_action, loc_mods);                                             // Calling mouse pressed retpoline...
+}
+
+void opengl::mouse_moved_callback
+(
+ GLFWwindow* loc_window,                                                                            // Window.
+ double      loc_xpos,                                                                              // Mouse x-position [px].
+ double      loc_ypos                                                                               // Mouse y-position [px].
+)
+{
+  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
+  win->mouse_moved (loc_xpos, loc_ypos);                                                            // Calling mouse moved retpoline...
+}
+
+void opengl::mouse_scrolled_callback
+(
+ GLFWwindow* loc_window,                                                                            // Window.
+ double      loc_xoffset,                                                                           // Mouse scroll x-offset [px].
+ double      loc_yoffset                                                                            // Mouse scroll y-offset [px].
+)
+{
+  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
+  win->mouse_scrolled (loc_xoffset, loc_yoffset);                                                   // Calling mouse scrolled retpoline...
+}
+
+void opengl::joystick_connected_callback
+(
+ int loc_joystick,                                                                                  // Joystick.
+ int loc_event                                                                                      // Joystick-connected event.
+)
+{
+  /*
+     if(event == GLFW_CONNECTED)
+     {
+     // The joystick was connected:
+     std::cout << "Joystick connected!" << std::endl;
+     }
+     else if(event == GLFW_DISCONNECTED)
+     {
+     // The joystick was disconnected:
+      std::cout << "Joystick disconnected!" << std::endl;
+     }*/
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////// PRIVATE RETPOLINES ////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+void opengl::key_pressed
+(
+ int loc_key,                                                                                       // Key.
+ int loc_scancode,                                                                                  // Scancode.
+ int loc_action,                                                                                    // Action.
+ int loc_mods                                                                                       // Mods.
+)
+{
+  // Checking key pressed:
+  switch(loc_key)
+  {
+    case GLFW_KEY_ESCAPE:
+      if(loc_action == GLFW_PRESS)
+      {
+        glfwSetWindowShouldClose (glfw_window, GL_TRUE);                                            // Setting window "closed" flag...
+      }
+      break;
+
+    case GLFW_KEY_2:
+      if(loc_action == GLFW_PRESS)
+      {
+        PR_mode = NU_MODE_MONO;                                                                     // Switching to monoscopic mode...
+      }
+      break;
+
+    case GLFW_KEY_3:
+      if(loc_action == GLFW_PRESS)
+      {
+        PR_mode = NU_MODE_STEREO;                                                                   // Switching to stereoscopic mode...
+      }
+      break;
+  }
+
+}
+
+void opengl::mouse_button
+(
+ int loc_button,                                                                                    // Button.
+ int loc_action,                                                                                    // Action.
+ int loc_mods                                                                                       // Mods.
+)
+{
+  // Reading mouse buttons:
+  switch(loc_button)
+  {
+    case GLFW_MOUSE_BUTTON_LEFT:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          mouse_LEFT = true;
+          break;
+
+        case GLFW_RELEASE:
+          mouse_LEFT = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_MOUSE_BUTTON_RIGHT:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          mouse_RIGHT = true;
+          break;
+
+        case GLFW_RELEASE:
+          mouse_RIGHT = false;
+          break;
+      }
+
+      break;
+  }
+}
+
+void opengl::mouse_moved
+(
+ double loc_xpos,                                                                                   // Mouse position [px].
+ double loc_ypos                                                                                    // Mouse position [px].
+)
+{
+  mouse_X = loc_xpos;                                                                               // Getting mouse position...
+  mouse_Y = loc_ypos;                                                                               // Getting mouse position...
+}
+
+void opengl::mouse_scrolled
+(
+ double loc_xoffset,                                                                                // Mouse scrolled x-position [px].
+ double loc_yoffset                                                                                 // Mouse scrolled y-position [px].
+)
+{
+  scroll_X = loc_xoffset;                                                                           // Getting scroll position...
+  scroll_Y = loc_yoffset;                                                                           // Getting scroll position...
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// PUBLIC METHODS ///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 void opengl::init
 (
  neutrino*   loc_baseline,                                                                          // Neutrino baseline.
@@ -471,298 +482,6 @@ void opengl::init
   }
 }
 
-void opengl::close ()
-{
-  glfwSetWindowShouldClose (glfw_window, GL_TRUE);                                                  // Setting window "closed" flag...
-}
-
-bool opengl::closed ()
-{
-  if(baseline->interop)
-  {
-    if(glfwWindowShouldClose (glfw_window))
-    {
-      baseline->erase ();                                                                           // Printing message...
-      baseline->action ("terminating graphics context...");                                         // Printing message...
-      baseline->done ();                                                                            // Printing message...
-    }
-
-    return(glfwWindowShouldClose (glfw_window));                                                    // Returning window closure status...
-  }
-  else
-  {
-    baseline->action ("terminating text context...");                                               // Printing message...
-    return (true);
-  }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// CALLBACKS /////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-void opengl::refresh_callback
-(
- GLFWwindow* loc_window                                                                             // Window.
-)
-{
-  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
-  win->refresh ();                                                                                  // Calling refresh retpoline...
-}
-
-void opengl::window_resize_callback
-(
- GLFWwindow* loc_window,                                                                            // Window.
- int         loc_x_size,                                                                            // Window x-size [screen coordinates].
- int         loc_y_size                                                                             // Window y-size [screen coordinates].
-)
-{
-  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
-  win->window_resize (loc_x_size, loc_y_size);                                                      // Calling window resize retpoline...
-}
-
-void opengl::framebuffer_resize_callback
-(
- GLFWwindow* loc_window,                                                                            // Window.
- int         loc_x_size,                                                                            // Framebuffer x-size [px].
- int         loc_y_size                                                                             // Framebuffer y-size [px].
-)
-{
-  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
-  win->framebuffer_resize (loc_x_size, loc_y_size);                                                 // Calling framebuffer resize retpoline...
-}
-
-void opengl::key_pressed_callback
-(
- GLFWwindow* loc_window,                                                                            // Window.
- int         loc_key,                                                                               // Key.
- int         loc_scancode,                                                                          // Scancode.
- int         loc_action,                                                                            // Action.
- int         loc_mods                                                                               // Mods.
-)
-{
-  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
-  win->key_pressed (loc_key, loc_scancode, loc_action, loc_mods);                                   // Calling key pressed retpoline...
-}
-
-void opengl::mouse_button_callback
-(
- GLFWwindow* loc_window,                                                                            // Window.
- int         loc_button,                                                                            // Button.
- int         loc_action,                                                                            // Action.
- int         loc_mods                                                                               // Mods.
-)
-{
-  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
-  win->mouse_button (loc_button, loc_action, loc_mods);                                             // Calling mouse pressed retpoline...
-}
-
-void opengl::mouse_moved_callback
-(
- GLFWwindow* loc_window,                                                                            // Window.
- double      loc_xpos,                                                                              // Mouse x-position [px].
- double      loc_ypos                                                                               // Mouse y-position [px].
-)
-{
-  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
-  win->mouse_moved (loc_xpos, loc_ypos);                                                            // Calling mouse moved retpoline...
-}
-
-void opengl::mouse_scrolled_callback
-(
- GLFWwindow* loc_window,                                                                            // Window.
- double      loc_xoffset,                                                                           // Mouse scroll x-offset [px].
- double      loc_yoffset                                                                            // Mouse scroll y-offset [px].
-)
-{
-  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
-  win->mouse_scrolled (loc_xoffset, loc_yoffset);                                                   // Calling mouse scrolled retpoline...
-}
-
-void opengl::joystick_connected_callback
-(
- int loc_joystick,                                                                                  // Joystick.
- int loc_event                                                                                      // Joystick-connected event.
-)
-{
-  /*
-     if(event == GLFW_CONNECTED)
-     {
-     // The joystick was connected:
-     std::cout << "Joystick connected!" << std::endl;
-     }
-     else if(event == GLFW_DISCONNECTED)
-     {
-     // The joystick was disconnected:
-      std::cout << "Joystick disconnected!" << std::endl;
-     }*/
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////// PRIVATE RETPOLINES ////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-void opengl::key_pressed
-(
- int loc_key,                                                                                       // Key.
- int loc_scancode,                                                                                  // Scancode.
- int loc_action,                                                                                    // Action.
- int loc_mods                                                                                       // Mods.
-)
-{
-  // Checking key pressed:
-  switch(loc_key)
-  {
-    case GLFW_KEY_ESCAPE:
-      if(loc_action == GLFW_PRESS)
-      {
-        glfwSetWindowShouldClose (glfw_window, GL_TRUE);                                            // Setting window "closed" flag...
-      }
-      break;
-
-    case GLFW_KEY_2:
-      if(loc_action == GLFW_PRESS)
-      {
-        PR_mode = NU_MODE_MONO;                                                                     // Switching to monoscopic mode...
-      }
-      break;
-
-    case GLFW_KEY_3:
-      if(loc_action == GLFW_PRESS)
-      {
-        PR_mode = NU_MODE_STEREO;                                                                   // Switching to stereoscopic mode...
-      }
-      break;
-  }
-
-}
-
-void opengl::mouse_button
-(
- int loc_button,                                                                                    // Button.
- int loc_action,                                                                                    // Action.
- int loc_mods                                                                                       // Mods.
-)
-{
-  // Reading mouse buttons:
-  switch(loc_button)
-  {
-    case GLFW_MOUSE_BUTTON_LEFT:
-
-      switch(loc_action)
-      {
-        case GLFW_PRESS:
-          mouse_LEFT = true;
-          break;
-
-        case GLFW_RELEASE:
-          mouse_LEFT = false;
-          break;
-      }
-
-      break;
-
-    case GLFW_MOUSE_BUTTON_RIGHT:
-
-      switch(loc_action)
-      {
-        case GLFW_PRESS:
-          mouse_RIGHT = true;
-          break;
-
-        case GLFW_RELEASE:
-          mouse_RIGHT = false;
-          break;
-      }
-
-      break;
-  }
-}
-
-void opengl::mouse_moved
-(
- double loc_xpos,                                                                                   // Mouse position [px].
- double loc_ypos                                                                                    // Mouse position [px].
-)
-{
-  mouse_X = loc_xpos;                                                                               // Getting mouse position...
-  mouse_Y = loc_ypos;                                                                               // Getting mouse position...
-}
-
-void opengl::mouse_scrolled
-(
- double loc_xoffset,                                                                                // Mouse scrolled x-position [px].
- double loc_yoffset                                                                                 // Mouse scrolled y-position [px].
-)
-{
-  scroll_X = loc_xoffset;                                                                           // Getting scroll position...
-  scroll_Y = loc_yoffset;                                                                           // Getting scroll position...
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// PUBLIC RETPOLINES /////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-void opengl::refresh ()
-{
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-  glfwSwapBuffers (glfw_window);                                                                    // Swapping front and back buffers...
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-}
-
-void opengl::window_resize
-(
- int loc_x_size,                                                                                    // Window x-size [screen coordinates].
- int loc_y_size                                                                                     // Window y-size [screen coordinates].
-)
-{
-  window_size_x = loc_x_size;                                                                       // Setting window_size_x...
-  window_size_y = loc_y_size;                                                                       // Setting window_size_y...
-}
-
-void opengl::framebuffer_resize
-(
- int loc_x_size,                                                                                    // Window x-size [screen coordinates].
- int loc_y_size                                                                                     // Window y-size [screen coordinates].
-)
-{
-  framebuffer_size_x = loc_x_size;                                                                  // Setting framebuffer_size_x...
-  framebuffer_size_y = loc_y_size;                                                                  // Setting framebuffer_size_y...
-  aspect_ratio       = (float)framebuffer_size_x/(float)framebuffer_size_y;                         // Setting window aspect ration []...
-  perspective_mono
-  (
-   P_mat,
-   NU_FOV*M_PI/180.0f,
-   aspect_ratio,
-   NU_NEAR_Z_CLIP,
-   NU_FAR_Z_CLIP
-  );                                                                                                // Setting Projection_matrix matrix...
-
-  // Setting stereoscopic perspective and translation matrices:
-  perspective_stereo
-  (
-   PL_mat,                                                                                          // 4x4 right eye perspective matrix.
-   PR_mat,                                                                                          // 4x4 left eye perspective matrix.
-   TL_mat,                                                                                          // 4x4 right eye translation matrix.
-   TR_mat,                                                                                          // 4x4 left eye translation matrix.
-   NU_IOD,                                                                                          // Intraocular distance.
-   NU_FOV*M_PI/180.0f,                                                                              // Field of view [rad].
-   aspect_ratio/2.0f,                                                                               // Projective screen aspect ratio.
-   NU_NEAR_Z_CLIP,                                                                                  // Projective screen near depth...
-   NU_FAR_Z_CLIP                                                                                    // Projective screen far depth...
-  );
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-  glViewport (0, 0, framebuffer_size_x, framebuffer_size_y);                                        // Resizing OpenGL viewport...
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////// PUBLIC METHODS //////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-void opengl::clear ()
-{
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-  glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                                              // Clearing window...
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-}
-
 void opengl::poll_events ()
 {
 
@@ -805,6 +524,230 @@ void opengl::poll_events ()
       }
     }
   }
+}
+
+void opengl::orbit
+(
+ float loc_orbit_x,                                                                                 // "Near clipping-plane" x-coordinates.
+ float loc_orbit_y,                                                                                 // "Near clipping-plane" y-coordinates.
+ float loc_orbit_rate,                                                                              // Orbit angular rate coefficient [rev/s].
+ float loc_orbit_deadzone,                                                                          // Orbit deadzone threshold coefficient.
+ float loc_orbit_decaytime                                                                          // Orbit low pass decay time [s].
+)
+{
+  float loc_orbit_initial[3];                                                                       // Initial orbit vector.
+  float loc_orbit_final[3];                                                                         // Final orbit vector.
+  float loc_axis[3];                                                                                // Arcball axis of rotation.
+  float loc_theta;                                                                                  // Arcball angle of rotation.
+  float loc_OP_squared;                                                                             // Center to arcball surface vector length.
+  float loc_alpha;                                                                                  // LP filter decay constant.
+  float loc_dt;                                                                                     // Baseline loop time [s].
+
+  loc_dt               = float (baseline->loop_time);                                               // Getting loop time [s]...
+
+  loc_orbit_initial[0] = 0.0f;                                                                      // Building initial world vector...
+  loc_orbit_initial[1] = 0.0f;                                                                      // Building initial world vector...
+  loc_orbit_initial[2] = 1.0f;                                                                      // Building initial world vector...
+
+  // Constraining input values:
+  loc_orbit_x          = baseline->constrain_float
+                         (
+                          loc_orbit_x,                                                              // Initial x-orbit.
+                          NU_GAMEPAD_MIN_AXES,                                                      // Minimum x-orbit.
+                          NU_GAMEPAD_MAX_AXES                                                       // Maximum x-orbit.
+                         );
+  loc_orbit_y          = baseline->constrain_float
+                         (
+                          loc_orbit_y,                                                              // Initial y-orbit.
+                          NU_GAMEPAD_MIN_AXES,                                                      // Minimum y-orbit.
+                          NU_GAMEPAD_MAX_AXES                                                       // Maximum y-orbit.
+                         );
+
+  loc_orbit_rate       = baseline->constrain_float
+                         (
+                          loc_orbit_rate,                                                           // Orbit angular rate [rev/s].
+                          NU_GAMEPAD_MIN_ORBIT_RATE,                                                // Minimum orbit angular rate [rev/s].
+                          NU_GAMEPAD_MAX_ORBIT_RATE                                                 // Maximum orbit angular rate [rev/s].
+                         );
+  loc_orbit_deadzone   = baseline->constrain_float
+                         (
+                          loc_orbit_deadzone,                                                       // Orbit deadzone.
+                          NU_GAMEPAD_MIN_AXES,                                                      // Minimum gampad axes value.
+                          NU_GAMEPAD_MAX_AXES                                                       // Maximum gampad axes value.
+                         );
+
+  loc_orbit_decaytime  = baseline->constrain_float
+                         (
+                          loc_orbit_decaytime,                                                      // Orbit LP filter decay time [s].
+                          NU_GAMEPAD_MIN_DECAYTIME,                                                 // Minimum orbit LP filter decay time [s].
+                          NU_GAMEPAD_MAX_DECAYTIME                                                  // Maximum orbit LP filter decay time [s].
+                         );
+
+  // Applying deadzone:
+  if((abs (loc_orbit_x) <= loc_orbit_deadzone) &&
+     (abs (loc_orbit_y) <= loc_orbit_deadzone))
+  {
+    loc_orbit_x = 0.0f;                                                                             // Justifying value...
+    loc_orbit_y = 0.0f;                                                                             // Justifying value...
+  }
+
+  // Computing LP filter:
+  loc_alpha          = (float) exp (-2.0f*M_PI*loc_dt/loc_orbit_decaytime);                         // Computing filter parameter "alpha"...
+  orbit_x            = loc_orbit_x + loc_alpha*(orbit_x_old - loc_orbit_x);                         // Filtering...
+  orbit_y            = loc_orbit_y + loc_alpha*(orbit_y_old - loc_orbit_y);                         // Filtering...
+  orbit_x_old        = orbit_x;                                                                     // Backing up...
+  orbit_y_old        = orbit_y;                                                                     // Backing up...
+
+  // Computing arcball:
+  loc_orbit_final[0] = orbit_x;                                                                     // Setting x-point on arcball...
+  loc_orbit_final[1] = orbit_y;                                                                     // Setting y-point on arcball...
+  loc_orbit_final[2] = 0.0f;                                                                        // Setting z-point on arcball...
+  loc_OP_squared     = loc_orbit_final[0]*loc_orbit_final[0] +
+                       loc_orbit_final[1]*loc_orbit_final[1];                                       // Computing OP segment...
+
+  if(loc_OP_squared <= 1.0f)
+  {
+    loc_orbit_final[2] = sqrt (1.0f - loc_OP_squared);                                              // Computing z-point on arcball...
+  }
+  else
+  {
+    normalize (loc_orbit_final);                                                                    // Computing z-point on arcball (in case too far)...
+  }
+
+  loc_theta          = loc_orbit_rate*2.0f*M_PI*loc_dt*angle
+                       (
+                        loc_orbit_initial,
+                        loc_orbit_final
+                       );                                                                           // Computing orbit angle for a rate of 2*pi rad/s...
+
+  // Doing rotation:
+  if(loc_theta > 0.0f)                                                                              // Checking for valid rotation angle...
+  {
+    cross (loc_axis, loc_orbit_initial, loc_orbit_final);                                           // Computing orbit axis of rotation...
+    normalize (loc_axis);                                                                           // Normalizing rotation 3D axis...
+    quaternion (q, loc_axis, loc_theta);                                                            // Computing rotation quaternion...
+    rotate (R_mat, R_mat_old, q);                                                                   // Computing rotation matrix...
+    euler (&roll, &pitch, &yaw, q);                                                                 // Computing Euler (Tait-Bryan) angles...
+    backup (R_mat_old, R_mat);                                                                      // Backing up rotation matrix...
+  }
+}
+
+void opengl::pan
+(
+ float loc_pan_x,                                                                                   // World x-pan.
+ float loc_pan_y,                                                                                   // World y-pan.
+ float loc_pan_z,                                                                                   // World z-pan.
+ float loc_pan_rate,                                                                                // Pan rate [units/s].
+ float loc_pan_deadzone,                                                                            // Pan deadzone threshold coefficient.
+ float loc_pan_decaytime                                                                            // Pan low pass decay time [s].
+)
+{
+  float loc_initial_pan[3];
+  float loc_final_pan[3];
+  float translation[3];
+  float loc_alpha;
+  float loc_dt;                                                                                     // Baseline loop time [s].
+
+  loc_dt             = float (baseline->loop_time);                                                 // Getting loop time [s]...
+
+  loc_initial_pan[0] = 0.0f;                                                                        // Building initial pan vector...
+  loc_initial_pan[1] = 0.0f;                                                                        // Building initial pan vector...
+  loc_initial_pan[2] = 0.0f;                                                                        // Building initial pan vector...
+
+  // Constraining input values:
+  loc_pan_x          = baseline->constrain_float
+                       (
+                        loc_pan_x,                                                                  // Initial x-pan.
+                        NU_GAMEPAD_MIN_AXES,                                                        // Minimum x-pan.
+                        NU_GAMEPAD_MAX_AXES                                                         // Maximum x-pan.
+                       );
+  loc_pan_y          = baseline->constrain_float
+                       (
+                        loc_pan_y,                                                                  // Initial y-pan.
+                        NU_GAMEPAD_MIN_AXES,                                                        // Minimum y-pan.
+                        NU_GAMEPAD_MAX_AXES                                                         // Maximum y-pan.
+                       );
+  loc_pan_z          = baseline->constrain_float
+                       (
+                        loc_pan_z,                                                                  // Initial z-pan.
+                        NU_GAMEPAD_MIN_AXES,                                                        // Minimum z-pan.
+                        NU_GAMEPAD_MAX_AXES                                                         // Maximum z-pan.
+                       );
+
+  // Applying deadzone:
+  if((abs (loc_pan_x) <= loc_pan_deadzone) &&
+     (abs (loc_pan_y) <= loc_pan_deadzone) &&
+     (abs (loc_pan_z) <= loc_pan_deadzone))
+  {
+    loc_pan_x = 0.0f;                                                                               // Justifying value...
+    loc_pan_y = 0.0f;                                                                               // Justifying value...
+    loc_pan_z = 0.0f;                                                                               // Justifying value...
+  }
+
+  // Computing LP filter:
+  loc_alpha        = (float) exp (-2.0f*M_PI*loc_dt/loc_pan_decaytime);                             // Computing filter parameter "alpha"...
+
+  pan_x            = loc_pan_x + loc_alpha*(pan_x_old - loc_pan_x);                                 // Filtering...
+  pan_y            = loc_pan_y + loc_alpha*(pan_y_old - loc_pan_y);                                 // Filtering...
+  pan_z            = loc_pan_z + loc_alpha*(pan_z_old - loc_pan_z);                                 // Filtering...
+
+  pan_x_old        = pan_x;                                                                         // Backing up...
+  pan_y_old        = pan_y;                                                                         // Backing up...
+  pan_z_old        = pan_z;                                                                         // Backing up...
+
+  loc_final_pan[0] = pan_x;                                                                         // Setting up final x-pan...
+  loc_final_pan[1] = pan_y;                                                                         // Setting up final y-pan...
+  loc_final_pan[2] = pan_z;                                                                         // Setting up final z-pan...
+
+  // Doing translation:
+  translation[0]   = loc_pan_rate*loc_dt*(loc_final_pan[0] - loc_initial_pan[0]);                   // Computing translation vector...
+  translation[1]   = loc_pan_rate*loc_dt*(loc_final_pan[1] - loc_initial_pan[1]);                   // Computing translation vector...
+  translation[2]   = loc_pan_rate*loc_dt*(loc_final_pan[2] - loc_initial_pan[2]);                   // Computing translation vector...
+
+  translate
+  (
+   T_mat,
+   T_mat_old,
+   translation
+  );                                                                                                // Computing translation matrix...
+
+  backup
+  (
+   T_mat_old,
+   T_mat
+  );                                                                                                // Backing up translation matrix...
+}
+
+void opengl::close ()
+{
+  glfwSetWindowShouldClose (glfw_window, GL_TRUE);                                                  // Setting window "closed" flag...
+}
+
+bool opengl::closed ()
+{
+  if(baseline->interop)
+  {
+    if(glfwWindowShouldClose (glfw_window))
+    {
+      baseline->erase ();                                                                           // Printing message...
+      baseline->action ("terminating graphics context...");                                         // Printing message...
+      baseline->done ();                                                                            // Printing message...
+    }
+
+    return(glfwWindowShouldClose (glfw_window));                                                    // Returning window closure status...
+  }
+  else
+  {
+    baseline->action ("terminating text context...");                                               // Printing message...
+    return (true);
+  }
+}
+
+void opengl::clear ()
+{
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                                              // Clearing window...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 }
 
 void opengl::plot
@@ -873,6 +816,63 @@ void opengl::plot
       glFinish ();                                                                                  // Waiting for OpenGL to finish...
       break;
   }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// PUBLIC RETPOLINES /////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+void opengl::refresh ()
+{
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  glfwSwapBuffers (glfw_window);                                                                    // Swapping front and back buffers...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+}
+
+void opengl::window_resize
+(
+ int loc_x_size,                                                                                    // Window x-size [screen coordinates].
+ int loc_y_size                                                                                     // Window y-size [screen coordinates].
+)
+{
+  window_size_x = loc_x_size;                                                                       // Setting window_size_x...
+  window_size_y = loc_y_size;                                                                       // Setting window_size_y...
+}
+
+void opengl::framebuffer_resize
+(
+ int loc_x_size,                                                                                    // Window x-size [screen coordinates].
+ int loc_y_size                                                                                     // Window y-size [screen coordinates].
+)
+{
+  framebuffer_size_x = loc_x_size;                                                                  // Setting framebuffer_size_x...
+  framebuffer_size_y = loc_y_size;                                                                  // Setting framebuffer_size_y...
+  aspect_ratio       = (float)framebuffer_size_x/(float)framebuffer_size_y;                         // Setting window aspect ration []...
+  perspective_mono
+  (
+   P_mat,
+   NU_FOV*M_PI/180.0f,
+   aspect_ratio,
+   NU_NEAR_Z_CLIP,
+   NU_FAR_Z_CLIP
+  );                                                                                                // Setting Projection_matrix matrix...
+
+  // Setting stereoscopic perspective and translation matrices:
+  perspective_stereo
+  (
+   PL_mat,                                                                                          // 4x4 right eye perspective matrix.
+   PR_mat,                                                                                          // 4x4 left eye perspective matrix.
+   TL_mat,                                                                                          // 4x4 right eye translation matrix.
+   TR_mat,                                                                                          // 4x4 left eye translation matrix.
+   NU_IOD,                                                                                          // Intraocular distance.
+   NU_FOV*M_PI/180.0f,                                                                              // Field of view [rad].
+   aspect_ratio/2.0f,                                                                               // Projective screen aspect ratio.
+   NU_NEAR_Z_CLIP,                                                                                  // Projective screen near depth...
+   NU_FAR_Z_CLIP                                                                                    // Projective screen far depth...
+  );
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  glViewport (0, 0, framebuffer_size_x, framebuffer_size_y);                                        // Resizing OpenGL viewport...
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
 }
 
 opengl::~opengl()
