@@ -31,7 +31,7 @@ std::string device::get_string
               (
                loc_device_id,                                                                       // Device ID.
                loc_parameter_name,                                                                  // Parameter name.
-               0,                                                                                   // Dummy parameter size: "0" means we ask for the # of parameters.
+               0,                                                                                   // "0" = we ask for the # of parameters.
                NULL,                                                                                // Dummy parameter.
                &loc_parameter_size                                                                  // Returned parameter size.
               );
@@ -74,7 +74,7 @@ cl_uint device::get_cl_uint
               (
                loc_device_id,                                                                       // Device ID.
                loc_parameter_name,                                                                  // Parameter name.
-               0,                                                                                   // Dummy parameter size: "0" means we ask for the # of parameters.
+               0,                                                                                   // "0" = we ask for the # of parameters.
                NULL,                                                                                // Dummy parameter.
                &loc_parameter_size                                                                  // Returned parameter size.
               );
@@ -113,7 +113,7 @@ cl_uint device::get_cl_bool
               (
                loc_device_id,                                                                       // Device ID.
                loc_parameter_name,                                                                  // Parameter name.
-               0,                                                                                   // Dummy parameter size: "0" means we ask for the # of parameters.
+               0,                                                                                   // "0" = we ask for the # of parameters.
                NULL,                                                                                // Dummy parameter.
                &loc_parameter_size                                                                  // Returned parameter size.
               );
@@ -152,7 +152,7 @@ cl_device_fp_config device::get_cl_device_fp_config
               (
                loc_device_id,                                                                       // Device ID.
                loc_parameter_name,                                                                  // Parameter name.
-               0,                                                                                   // Dummy parameter size: "0" means we ask for the # of parameters.
+               0,                                                                                   // "0" = we ask for the # of parameters.
                NULL,                                                                                // Dummy parameter.
                &loc_parameter_size                                                                  // Returned parameter size.
               );
@@ -191,7 +191,7 @@ cl_device_exec_capabilities device::get_cl_device_exec_capabilities
               (
                loc_device_id,                                                                       // Device ID.
                loc_parameter_name,                                                                  // Parameter name.
-               0,                                                                                   // Dummy parameter size: "0" means we ask for the # of parameters.
+               0,                                                                                   // "0" = we ask for the # of parameters.
                NULL,                                                                                // Dummy parameter.
                &loc_parameter_size                                                                  // Returned parameter size.
               );
@@ -230,7 +230,7 @@ cl_ulong device::get_cl_ulong
               (
                loc_device_id,                                                                       // Device ID.
                loc_parameter_name,                                                                  // Parameter name.
-               0,                                                                                   // Dummy parameter size: "0" means we ask for the # of parameters.
+               0,                                                                                   // "0" = we ask for the # of parameters.
                NULL,                                                                                // Dummy parameter.
                &loc_parameter_size                                                                  // Returned parameter size.
               );
@@ -269,7 +269,7 @@ cl_device_mem_cache_type device::get_cl_device_mem_cache_type
               (
                loc_device_id,                                                                       // Device ID.
                loc_parameter_name,                                                                  // Parameter name.
-               0,                                                                                   // Dummy parameter size: "0" means we ask for the # of parameters.
+               0,                                                                                   // "0" = we ask for the # of parameters.
                NULL,                                                                                // Dummy parameter.
                &loc_parameter_size                                                                  // Returned parameter size.
               );
@@ -308,7 +308,7 @@ size_t device::get_size_t
               (
                loc_device_id,                                                                       // Device ID.
                loc_parameter_name,                                                                  // Parameter name.
-               0,                                                                                   // Dummy parameter size: "0" means we ask for the # of parameters.
+               0,                                                                                   // "0" = we ask for the # of parameters.
                NULL,                                                                                // Dummy parameter.
                &loc_parameter_size                                                                  // Returned parameter size.
               );
@@ -347,7 +347,7 @@ cl_device_local_mem_type device::get_cl_device_local_mem_type
               (
                loc_device_id,                                                                       // Device ID.
                loc_parameter_name,                                                                  // Parameter name.
-               0,                                                                                   // Dummy parameter size: "0" means we ask for the # of parameters.
+               0,                                                                                   // "0" = we ask for the # of parameters.
                NULL,                                                                                // Dummy parameter.
                &loc_parameter_size                                                                  // Returned parameter size.
               );
@@ -386,7 +386,7 @@ cl_platform_id device::get_cl_platform_id
               (
                loc_device_id,                                                                       // Device ID.
                loc_parameter_name,                                                                  // Parameter name.
-               0,                                                                                   // Dummy parameter size: "0" means we ask for the # of parameters.
+               0,                                                                                   // "0" = we ask for the # of parameters.
                NULL,                                                                                // Dummy parameter.
                &loc_parameter_size                                                                  // Returned parameter size.
               );
@@ -425,7 +425,7 @@ cl_device_type device::get_cl_device_type
               (
                loc_device_id,                                                                       // Device ID.
                loc_parameter_name,                                                                  // Parameter name.
-               0,                                                                                   // Dummy parameter size: "0" means we ask for the # of parameters.
+               0,                                                                                   // "0" = we ask for the # of parameters.
                NULL,                                                                                // Dummy parameter.
                &loc_parameter_size                                                                  // Returned parameter size.
               );
@@ -464,7 +464,7 @@ cl_command_queue_properties device::get_cl_command_queue_properties
               (
                loc_device_id,                                                                       // Device ID.
                loc_parameter_name,                                                                  // Parameter name.
-               0,                                                                                   // Dummy parameter size: "0" means we ask for the # of parameters.
+               0,                                                                                   // "0" = we ask for the # of parameters.
                NULL,                                                                                // Dummy parameter.
                &loc_parameter_size                                                                  // Returned parameter size.
               );
