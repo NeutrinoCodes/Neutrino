@@ -68,7 +68,7 @@ void kernel::init
   program                                      = clCreateProgramWithSource
                                                  (
                                                   baseline->context_id,                             // OpenCL context ID.
-                                                  1,                                                // # of program sources.
+                                                  1,                                                // Number of program sources.
                                                   (
                                                    const
                                                    char
@@ -92,7 +92,7 @@ void kernel::init
   loc_error    = clBuildProgram
                  (
                   program,                                                                          // Program.
-                  1,                                                                                // # of devices.
+                  1,                                                                                // Number of devices.
                   device_id,                                                                        // Device ID.
                   loc_options_buffer,                                                               // Including header files from kernel's directory.
                   NULL,                                                                             // Notification routine.
@@ -422,7 +422,7 @@ void kernel::setarg
     // Generating VAO...
     glGenVertexArrays
     (
-     1,                                                                                             // # of VAOs to generate.
+     1,                                                                                             // Number of VAOs to generate.
      &loc_data->vao                                                                                 // VAOs array.
     );
 
@@ -435,7 +435,7 @@ void kernel::setarg
     // Generating VBO:
     glGenBuffers
     (
-     1,                                                                                             // # of VBOs to generate.
+     1,                                                                                             // Number of VBOs to generate.
      &loc_data->vbo                                                                                 // VBOs array.
     );
 
@@ -459,7 +459,7 @@ void kernel::setarg
     glVertexAttribPointer
     (
      loc_layout_index,                                                                              // VAO index.
-     1,                                                                                             // VAO's # of components.
+     1,                                                                                             // VAO's number of components.
      GL_FLOAT,                                                                                      // Data type.
      GL_FALSE,                                                                                      // Not using normalized numbers.
      0,                                                                                             // Data stride.
@@ -666,7 +666,7 @@ void kernel::setarg
     // Generating VAO...
     glGenVertexArrays
     (
-     1,                                                                                             // # of VAOs to generate.
+     1,                                                                                             // Number of VAOs to generate.
      &loc_data->vao                                                                                 // VAOs array.
     );
 
@@ -679,7 +679,7 @@ void kernel::setarg
     // Generating VBO:
     glGenBuffers
     (
-     1,                                                                                             // # of VBOs to generate.
+     1,                                                                                             // Number of VBOs to generate.
      &loc_data->vbo                                                                                 // VBOs array.
     );
 
@@ -703,7 +703,7 @@ void kernel::setarg
     glVertexAttribPointer
     (
      loc_layout_index,                                                                              // VAO index.
-     4,                                                                                             // VAO's # of components.
+     4,                                                                                             // VAO's number of components.
      GL_FLOAT,                                                                                      // Data type.
      GL_FALSE,                                                                                      // Not using normalized numbers.
      0,                                                                                             // Data stride.
