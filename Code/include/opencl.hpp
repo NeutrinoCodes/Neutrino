@@ -27,7 +27,7 @@
 /// ### OpenCL class.
 /// Declares an OpenCL class.
 /// To be used to run OpenCL computation.
-class opencl
+class opencl                                                                                        /// @brief **OpenCL context.**
 {
 private:
   neutrino*      baseline;                                                                          ///< @brief **Neutrino baseline.**

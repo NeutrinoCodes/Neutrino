@@ -36,7 +36,6 @@ INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/include/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/kernel/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/shader/ \
-                          @CMAKE_CURRENT_SOURCE_DIR@/uncrustify/ \
 
 ## Search on input subdirectories.
 #  This option tells Doxygen whether to do a recursive search in the input directories.

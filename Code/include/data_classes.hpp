@@ -32,7 +32,7 @@
 #include "neutrino.hpp"
 
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
-/// @brief    **2D vector of "cl_long" data.**
+/// @brief    **Data structure. Internally used by Neutrino.**
 /// @details  This structure is used as data storage in the "int2" class. It is tightly packed to be
 /// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
 typedef struct _int2_structure
@@ -42,7 +42,7 @@ typedef struct _int2_structure
 } int2_structure;
 #pragma pack(pop)                                                                                   // End of packing.
 
-/// @brief    **3D vector of "cl_long" data.**
+/// @brief    **Data structure. Internally used by Neutrino.**
 /// @details  This structure is used as data storage in the "int3" class. It is tightly packed to be
 /// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
@@ -54,7 +54,7 @@ typedef struct _int3_structure
 } int3_structure;
 #pragma pack(pop)
 
-/// @brief    **4D vector of "cl_long" data.**
+/// @brief    **Data structure. Internally used by Neutrino.**
 /// @details  This structure is used as data storage in the "int4" class. It is tightly packed to be
 /// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
@@ -67,7 +67,7 @@ typedef struct _int4_structure
 } int4_structure;
 #pragma pack(pop)
 
-/// @brief    **2D vector of "cl_float" data.**
+/// @brief    **Data structure. Internally used by Neutrino.**
 /// @details  This structure is used as data storage in the "float2" class. It is tightly packed to
 /// be compatible with the OpenCL requirement of having a contiguous data arrangement without
 /// padding.
@@ -79,7 +79,7 @@ typedef struct _float2_structure
 } float2_structure;
 #pragma pack(pop)
 
-/// @brief    **3D vector of "cl_float" data.**
+/// @brief    **Data structure. Internally used by Neutrino.**
 /// @details  This structure is used as data storage in the "float3" class. It is tightly packed to
 /// be compatible with the OpenCL requirement of having a contiguous data arrangement without
 /// padding.
@@ -92,7 +92,7 @@ typedef struct _float3_structure
 } float3_structure;
 #pragma pack(pop)
 
-/// @brief    **4D vector of cl_float data.**
+/// @brief    **Data structure. Internally used by Neutrino.**
 /// @details  This structure is used as data storage in the "float4" class. It is tightly packed to
 /// be compatible with the OpenCL requirement of having a contiguous data arrangement without
 /// padding.
@@ -106,7 +106,7 @@ typedef struct _float4_structure
 } float4_structure;
 #pragma pack(pop)
 
-/// @brief    **4D vector of "GLfloat" data.**
+/// @brief    **Data structure. Internally used by Neutrino.**
 /// @details  This structure is used as data storage in the "float4G" class. It is tightly packed to
 /// be compatible with the OpenCL requirement of having a contiguous data arrangement without
 /// padding.
@@ -128,7 +128,7 @@ typedef struct _float4G_structure
 /// Declares a 1xN vector (N = data size) of **cl_long** data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended to be used for graphics rendering.
-class int1
+class int1                                                                                          /// @brief **1xN vector of "cl_long" data.**
 {
 private:
 
@@ -197,7 +197,7 @@ public:
 /// Declares a 2xN vector (N = data size) of "cl_long" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended to be used for graphics rendering.
-class int2
+class int2                                                                                          /// @brief **2xN vector of "cl_long" data.**
 {
 private:
 
@@ -265,7 +265,7 @@ public:
 /// Declares a 3xN vector (N = data size) of "cl_long" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended to be used for graphics rendering.
-class int3
+class int3                                                                                          /// @brief **3xN vector of "cl_long" data.**
 {
 private:
 
@@ -327,7 +327,7 @@ public:
 /// Declares a 4xN vector (N = data size) of "cl_long" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended to be used for graphics rendering.
-class int4
+class int4                                                                                          /// @brief **4xN vector of "cl_long" data.**
 {
 private:
 
@@ -389,7 +389,7 @@ public:
 /// Declares a 1xN vector (N = data size) of "cl_float" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended to be used for graphics rendering.
-class float1
+class float1                                                                                        /// @brief **1xN vector of "cl_float" data.**
 {
 private:
 
@@ -451,7 +451,7 @@ public:
 /// Declares a 1xN vector (N = data size) of "GLfloat" data numbers.
 /// To be used to transfer memory between host and client. It has bindings for
 /// OpenGL/CL interoperability. Intended to be usde for graphics rendering.
-class float1G
+class float1G                                                                                       /// @brief **1xN vector of "GLfloat" data.**
 {
 private:
 
@@ -526,7 +526,7 @@ public:
 /// Declares a 2xN vector (N = data size) of "cl_float" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended for graphics rendering.
-class float2
+class float2                                                                                        /// @brief **2xN vector of "cl_float" data.**
 {
 private:
 
@@ -588,7 +588,7 @@ public:
 /// Declares a 3xN vector (N = data size) of "cl_float" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended for graphics rendering.
-class float3
+class float3                                                                                        /// @brief **3xN vector of "cl_float" data.**
 {
 private:
 
@@ -650,7 +650,7 @@ public:
 /// Declares a 4xN vector (N = data size) of "cl_float" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended for graphics rendering.
-class float4
+class float4                                                                                        /// @brief **4xN vector of "cl_float" data.**
 {
 private:
 
@@ -712,7 +712,7 @@ public:
 /// Declares a 4xN vector (N = data size) of "GLfloat" data numbers.
 /// To be used to transfer memory between host and client. It has bindings for
 /// OpenGL/CL interoperability. Intended for graphics rendering.
-class float4G
+class float4G                                                                                       /// @brief **4xN vector of "GLfloat" data.**
 {
 private:
 

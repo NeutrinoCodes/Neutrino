@@ -21,7 +21,7 @@
 /// platform. See also the OpenCL [platform]
 /// (https://www.sciencedirect.com/topics/computer-science/platform-model)
 /// description.
-class platform
+class platform                                                                                      /// @brief **OpenCL platform.**
 {
 private:
   neutrino*   baseline;                                                                             ///< @brief **Neutrino baseline.**

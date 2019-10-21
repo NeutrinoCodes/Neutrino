@@ -27,7 +27,7 @@
 /// device. See also the OpenCL [clDeviceInfo]
 /// (https://www.khronos.org/registry/OpenCL/sdk/1.2/docs/man/xhtml/clGetDeviceInfo.html)
 /// specifications.
-class device
+class device                                                                                        /// @brief **OpenCL device.**
 {
 private:
   neutrino*   baseline;                                                                             ///< @brief **Neutrino baseline.**
