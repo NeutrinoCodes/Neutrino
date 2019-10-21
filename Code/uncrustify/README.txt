@@ -1,4 +1,8 @@
-EZOR: 01JAN2019
+## @file   Doxyfile.in
+## @author Erik ZORZIN
+## @date   25OCT2019
+## @brief  This is the main configuration file for Doxygen. Invoked by "make doc" in CMakeLists.txt.
+
 
 This folder contains:
 - the configuration file for uncrustify:
