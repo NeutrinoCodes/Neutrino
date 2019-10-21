@@ -11,8 +11,8 @@
 opencl::opencl()
 {
   opencl_platform  = NULL;                                                                          // Initializing platforms IDs array...
-  platforms_number = 0;                                                                             // Initializing # of platforms...
-  devices_number   = 0;                                                                             // Initializing # of devices...
+  platforms_number = 0;                                                                             // Initializing number of platforms...
+  devices_number   = 0;                                                                             // Initializing number of devices...
   properties       = NULL;                                                                          // Initializing platforms' properties...
   context_id       = NULL;                                                                          // Initializing platforms' context...
   device_type      = NU_DEFAULT;                                                                    // Initializing device type...
@@ -21,21 +21,21 @@ opencl::opencl()
 cl_uint opencl::get_platforms_number ()
 {
   cl_int  loc_error;                                                                                // Error code.
-  cl_uint loc_platforms_number;                                                                     // # of platforms.
+  cl_uint loc_platforms_number;                                                                     // Number of platforms.
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   // Getting number of existing OpenCL platforms:
   loc_error = clGetPlatformIDs
               (
-               0,                                                                                   // "0" = we are asking for the # of platforms.
+               0,                                                                                   // "0" = we are asking for the number of platforms.
                NULL,                                                                                // Dummy platfomrs id.
-               &loc_platforms_number                                                                // Returned local # of existing platforms.
+               &loc_platforms_number                                                                // Returned local number of existing platforms.
               );
 
   baseline->check_error (loc_error);                                                                // Checking returned error code...
 
-  return loc_platforms_number;                                                                      // Returning # of existing platforms...
+  return loc_platforms_number;                                                                      // Returning number of existing platforms...
 }
 
 cl_platform_id opencl::get_platform_id
@@ -56,9 +56,9 @@ cl_platform_id opencl::get_platform_id
   // Getting OpenCL platform IDs:
   loc_error                = clGetPlatformIDs
                              (
-                              platforms_number,                                                     // # of existing platforms.
+                              platforms_number,                                                     // Number of existing platforms.
                               loc_platform_id,                                                      // Platform IDs array.
-                              NULL                                                                  // Dummy # of platforms.
+                              NULL                                                                  // Dummy number of platforms.
                              );
 
   baseline->check_error (loc_error);                                                                // Checking returned error code...
@@ -77,7 +77,7 @@ cl_uint opencl::get_devices_number
 )
 {
   cl_int  loc_error;                                                                                // Error code.
-  cl_uint loc_devices_number;                                                                       // # of devices.
+  cl_uint loc_devices_number;                                                                       // Number of devices.
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
@@ -86,14 +86,14 @@ cl_uint opencl::get_devices_number
               (
                opencl_platform[loc_platform_index]->id,                                             // Platform ID.
                device_type,                                                                         // Device type.
-               0,                                                                                   // "0" means we are asking for the # of devices.
+               0,                                                                                   // "0" means we are asking for the number of devices.
                NULL,                                                                                // Dummy device.
-               &loc_devices_number                                                                  // Returned local # of existing devices.
+               &loc_devices_number                                                                  // Returned local number of existing devices.
               );
 
   baseline->check_error (loc_error);                                                                // Checking returned error code...
 
-  return(loc_devices_number);                                                                       // Returning # of existing devices...
+  return(loc_devices_number);                                                                       // Returning number of existing devices...
 }
 
 cl_device_id opencl::get_device_id
@@ -108,7 +108,7 @@ cl_device_id opencl::get_device_id
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
-  devices_number = get_devices_number (loc_platform_index);                                         // Getting # of existing devices...
+  devices_number = get_devices_number (loc_platform_index);                                         // Getting number of existing devices...
   loc_device_id  = new cl_device_id[devices_number];                                                // Allocating platform array...
 
   baseline->action ("getting OpenCL device ID...");                                                 // Printing message...
@@ -118,9 +118,9 @@ cl_device_id opencl::get_device_id
                    (
                     opencl_platform[loc_platform_index]->id,                                        // Platform ID.
                     device_type,                                                                    // Device type.
-                    platforms_number,                                                               // # of existing platforms.
+                    platforms_number,                                                               // Number of existing platforms.
                     loc_device_id,                                                                  // Device IDs array.
-                    NULL                                                                            // Dummy # of platforms.
+                    NULL                                                                            // Dummy number of platforms.
                    );
 
   baseline->check_error (loc_error);                                                                // Checking returned error code...
@@ -198,7 +198,7 @@ void opencl::init
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////// SETTING OPENCL PLATFORM /////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////
-  platforms_number = get_platforms_number ();                                                       // Getting # of existing platforms [#]...
+  platforms_number = get_platforms_number ();                                                       // Getting number of existing platforms [#]...
   opencl_platform  = new platform*[platforms_number];                                               // Initializing platform...
 
   for(i = 0; i < platforms_number; i++)                                                             // Checking all platforms:
@@ -250,7 +250,7 @@ void opencl::init
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// SETTING OPENCL DEVICE ////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////
-  devices_number        = get_devices_number (selected_platform);                                   // Getting # of existing NU_GPU devices [#]...
+  devices_number        = get_devices_number (selected_platform);                                   // Getting number of existing NU_GPU devices [#]...
   opencl_device         = new device*[devices_number];                                              // Initializing platform...
 
   for(i = 0; i < devices_number; i++)                                                               // Checking all devices:
@@ -538,7 +538,7 @@ void opencl::init
   context_id = clCreateContext
                (
                 properties,                                                                         // Context properties.
-                1,                                                                                  // # of devices on selected platform.
+                1,                                                                                  // Number of devices on selected platform.
                 &opencl_device[selected_device]->id,                                                // Pointer to the selected device on selected platform.
                 NULL,                                                                               // Context error report callback function.
                 NULL,                                                                               // Context error report callback function argument.
@@ -621,7 +621,7 @@ void opencl::execute
                NULL,                                                                                // Global work offset.
                kernel_size,                                                                         // Global work size.
                NULL,                                                                                // Local work size.
-               0,                                                                                   // # of events.
+               0,                                                                                   // Number of events.
                NULL,                                                                                // Event list.
                &loc_kernel->event                                                                   // Event.
               );

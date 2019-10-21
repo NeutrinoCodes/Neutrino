@@ -14,8 +14,8 @@
 #define GUI_NAME      "neutrino 3.0"                                                                // Window name.
 
 // OPENCL:
-#define QUEUE_NUM     1                                                                             // # of OpenCL queues [#].
-#define KERNEL_NUM    1                                                                             // # of OpenCL kernel [#].
+#define QUEUE_NUM     1                                                                             // Number of OpenCL queues [#].
+#define KERNEL_NUM    1                                                                             // Number of OpenCL kernel [#].
 #define KERNEL_FILE   "sine_kernel.cl"                                                              // OpenCL kernel.
 
 #ifdef __linux__
@@ -44,9 +44,9 @@ int main ()
   float     x_max           = +1.0f;                                                                // "x_max" spatial boundary [m].
   float     y_min           = -1.0f;                                                                // "y_min" spatial boundary [m].
   float     y_max           = +1.0f;                                                                // "y_max" spatial boundary [m].
-  size_t    nodes_x         = 100;                                                                  // # of nodes in "X" direction [#].
-  size_t    nodes_y         = 100;                                                                  // # of nodes in "Y" direction [#].
-  size_t    nodes           = nodes_x*nodes_y;                                                      // Total # of nodes [#].
+  size_t    nodes_x         = 100;                                                                  // Number of nodes in "X" direction [#].
+  size_t    nodes_y         = 100;                                                                  // Number of nodes in "Y" direction [#].
+  size_t    nodes           = nodes_x*nodes_y;                                                      // Total number of nodes [#].
   float     dx              = (x_max - x_min)/(nodes_x - 1);                                        // x-axis mesh spatial size [m].
   float     dy              = (y_max - y_min)/(nodes_y - 1);                                        // y-axis mesh spatial size [m].
   size_t    i               = 0;                                                                    // "x" direction index.

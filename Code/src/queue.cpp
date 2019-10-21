@@ -836,9 +836,9 @@ void queue::acquire
   loc_error = clEnqueueAcquireGLObjects
               (
                queue_id,                                                                            // Queue.
-               1,                                                                                   // # of memory objects.
+               1,                                                                                   // Number of memory objects.
                &loc_data->buffer,                                                                   // Memory object array.
-               0,                                                                                   // # of events in event list.
+               0,                                                                                   // Number of events in event list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
               );
@@ -868,9 +868,9 @@ void queue::acquire
   loc_error = clEnqueueAcquireGLObjects
               (
                queue_id,                                                                            // Queue.
-               1,                                                                                   // # of memory objects.
+               1,                                                                                   // Number of memory objects.
                &loc_data->buffer,                                                                   // Memory object array.
-               0,                                                                                   // # of events in event list.
+               0,                                                                                   // Number of events in event list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
               );
@@ -895,9 +895,9 @@ void queue::release
   loc_error = clEnqueueReleaseGLObjects
               (
                queue_id,                                                                            // Queue.
-               1,                                                                                   // # of memory objects.
+               1,                                                                                   // Number of memory objects.
                &loc_data->buffer,                                                                   // Memory object array.
-               0,                                                                                   // # of events in event list.
+               0,                                                                                   // Number of events in event list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
               );
@@ -938,9 +938,9 @@ void queue::release
   loc_error = clEnqueueReleaseGLObjects
               (
                queue_id,                                                                            // Queue.
-               1,                                                                                   // # of memory objects.
+               1,                                                                                   // Number of memory objects.
                &loc_data->buffer,                                                                   // Memory object array.
-               0,                                                                                   // # of events in event list.
+               0,                                                                                   // Number of events in event list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
               );

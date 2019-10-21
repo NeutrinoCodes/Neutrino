@@ -58,9 +58,9 @@
 #define NU_SCREEN_DISTANCE                -2.5f                                                     ///< Screen distance.
 #define NU_LINE_WIDTH                     3                                                         ///< Line width [px].
 #define NU_KERNEL_NAME                    "thekernel"                                               ///< OpenCL kernel function name.
-#define NU_MAX_TEXT_SIZE                  128                                                       ///< Maximum # of characters in a text string.
-#define NU_MAX_MESSAGE_SIZE               64                                                        ///< Maximum # of characters in a text message.
-#define NU_MAX_PATH_SIZE                  32768                                                     ///< Maximum # of characters in a text file path.
+#define NU_MAX_TEXT_SIZE                  128                                                       ///< Maximum number of characters in a text string.
+#define NU_MAX_MESSAGE_SIZE               64                                                        ///< Maximum number of characters in a text message.
+#define NU_MAX_PATH_SIZE                  32768                                                     ///< Maximum number of characters in a text file path.
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// GAMEPAD PARAMETERS ////////////////////////////////////////
@@ -192,8 +192,8 @@ public:
   double         tic;                                                                               ///< @brief **Tic time [s].**
   double         toc;                                                                               ///< @brief **Toc time [s].**
   double         loop_time;                                                                         ///< @brief **Loop time [s].**
-  size_t         q_num;                                                                             ///< @brief **# of OpenCL queues.**
-  size_t         k_num;                                                                             ///< @brief **# of OpenCL kernels.**
+  size_t         q_num;                                                                             ///< @brief **Number of OpenCL queues.**
+  size_t         k_num;                                                                             ///< @brief **Number of OpenCL kernels.**
   cl_context     context_id;                                                                        ///< @brief **OpenCL context id.**
   cl_platform_id platform_id;                                                                       ///< @brief **OpenCL platform ID.**
   cl_device_id   device_id;                                                                         ///< @brief **OpenCL device id.**
@@ -207,8 +207,8 @@ public:
   /// @brief **Class initializer.**
   /// @details Initializes Neutrino.
   void init (
-             size_t loc_q_num,                                                                      ///< # of OpenCL queues.
-             size_t loc_k_num,                                                                      ///< # of OpenCL kernels.
+             size_t loc_q_num,                                                                      ///Number of OpenCL queues.
+             size_t loc_k_num,                                                                      ///Number of OpenCL kernels.
              bool   loc_interop                                                                     ///< Interoperability flag.
             );
 

@@ -29,7 +29,7 @@ size_t platform::get_info_size
               (
                loc_platform_id,                                                                     // Platform id.
                loc_parameter_name,                                                                  // Parameter name.
-               0,                                                                                   // "0" = we ask for the # of parameters.
+               0,                                                                                   // "0" = we ask for the number of parameters.
                NULL,                                                                                // Dummy parameter.
                &loc_parameter_size                                                                  // Returned parameter size.
               );

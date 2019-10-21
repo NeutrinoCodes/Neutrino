@@ -94,7 +94,7 @@ GLuint shader::compile
   glShaderSource
   (
    loc_shader,                                                                                      // GLSL shader.
-   1,                                                                                               // # of shaders.
+   1,                                                                                               // Number of shaders.
    (const char**)&loc_shader_source,                                                                // Shader source.
    (GLint*)&loc_shader_size                                                                         // Shader size.
   );

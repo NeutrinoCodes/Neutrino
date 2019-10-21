@@ -36,7 +36,7 @@ void opengl::set_shader
     loc_shader->program,                                                                            // Program.
     "V_mat"                                                                                         // Variable.
    ),
-   1,                                                                                               // # of matrices to be modified.
+   1,                                                                                               // Number of matrices to be modified.
    GL_FALSE,                                                                                        // FALSE = column major.
    &view_matrix[0]                                                                                  // View matrix.
   );
@@ -49,7 +49,7 @@ void opengl::set_shader
     loc_shader->program,                                                                            // Program.
     "P_mat"                                                                                         // Variable.
    ),
-   1,                                                                                               // # of matrices to be modified.
+   1,                                                                                               // Number of matrices to be modified.
    GL_FALSE,                                                                                        // FALSE = column major.
    &projection_matrix[0]                                                                            // Projection matrix.
   );
