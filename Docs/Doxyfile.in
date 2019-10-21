@@ -3,93 +3,208 @@
 ## @date   25OCT2019
 ## @brief  This is the main configuration file for Doxygen. Invoked by "make doc" in CMakeLists.txt.
 
-## Setting project name...
+## Project name.
+#  This name will appear on the headline of each page of the documentation.
 PROJECT_NAME            = "NEUTRINO"
 
-# Setting project caption description...
+## Project caption description.
+#  This caption will appear on the headline of each page of the documentation.
 PROJECT_BRIEF           = "A fast and light library for GPU-based computation."
 
-# Setting project logo...
+## Project logo.
+#  This logo will appear on the headline of each page of the documentation.
 PROJECT_LOGO            = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen/Logos/neutrino_logo_enso.png
 
-# Setting Doxygen documentation output directory...
+## Doxygen documentation output directory.
+#  This is the directory where Doxygen puts all documentation files it generates.
 OUTPUT_DIRECTORY        = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen
 
-# Setting valid file types to be considered in Doxygen...
+## Valid file types to be considered in Doxygen.
+#  These are the file types Doxygen will consider for generating the documentation.
 FILE_PATTERNS           = *.cpp *.hpp *.cl *.frag *.vert *.geom *.tess *.md *.in
 
-# Setting code mapping grammatics for GLSL and OpenCL languages...
+## Code mapping grammatics for GLSL and OpenCL languages.
+#  These associations tell Doxygen which grammatics to apply for each file type to be documented.
 EXTENSION_MAPPING       = frag=C++ vert=C++ geom=C++ tess=C++ cl=C++ in=Python
 
-# Setting Doxygen input directories...
+## Doxygen input directories.
+#  Others doc files: e.g.  @CMAKE_CURRENT_SOURCE_DIR@/../Docs/some_documentation.md
+#  1. Remember to put "\" before adding a file in this list.
+#  2. Latex code in mardown files in Doxygen is accepted between "\f...latex...\f".
 INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/src/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/include/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/kernel/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/shader/ \
-# Others doc files: e.g.  @CMAKE_CURRENT_SOURCE_DIR@/../Docs/some_documentation.md
-# 1. Remember to put "\" before adding a file in this list.
-# 2. Latex code in mardown files in Doxygen is accepted between "\f...latex...\f".
 
-# Enabling search on input subdirectories...
+
+## Search on input subdirectories.
+#  This option tells Doxygen whether to do a recursive search in the input directories.
 RECURSIVE               = YES
 
-# Disabling LATEX documentation generation...
+## @f$ \LaTeX @f$ documentation generation.
+#  This option tells Doxygen whether to generate documentation also in @f$ \LaTeX @f$ format.
 GENERATE_LATEX          = NO
 
-# Enabling HTML documentation generation...
+## HTML documentation generation.
+#  This option tells Doxygen whether to generate documentation also in HTML format.
 GENERATE_HTML           = YES
+
+## HTML header.
+#  Sets HTML header on each documentation page.
 HTML_HEADER             = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/header.html
+
+## HTML footer.
+#  Sets HTML footer on each documentation page.
 HTML_FOOTER             = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/footer.html
+
+## HTML custom settings.
+#  Contains extra settings for the generation of the style of the HTML documentation.
 HTML_EXTRA_STYLESHEET   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/customdoxygen.css
+
+## HTML hue color style.
+#  Tells Doxygen the hue of the color of the menu bars.
 HTML_COLORSTYLE_HUE     = 240
+
+## HTML saturation color style.
+#  Tells Doxygen the saturation of the color of the menu bars.
 HTML_COLORSTYLE_SAT     = 255
 
-# Enabling Markdown syntax in Doxygen comments...
+## Markdown syntax in Doxygen comments.
+#  This option tells Doxygen whether to enable the support for MARKDOWN.
 MARKDOWN_SUPPORT        = YES
 
-# Enabling html left-side tree file navigation tree...
+## HTML left-side tree file navigation tree.
+#  This option tells Doxygen whether to generate a file tree view.
 GENERATE_TREEVIEW       = NO
 
-# Enabling the body of functions, classes and enums directly into the documentation...
+## Body of functions, classes and enums directly into the documentation.
+#  This option tells Doxygen whether to put the body of functions, classes and enums directly into
+#  the documentation.
 INLINE_SOURCES          = YES
 
-# Disabling alphabetical order of members in documentation...
-# Members will appear in declaration order as like as they appear in the source code.
+## Alphabetical order of members in documentation.
+#  This option tells Doxygen whether members will appear in declaration order as like as they
+#  appear in the source code.
 SORT_MEMBER_DOCS        = NO
 
-# Enabling documentation of desired entities...
+## Extraction of all documentation.
+#  This option tells Doxygen whether extract all comments.
 EXTRACT_ALL             = NO
+
+## Extraction of private members.
+#  This option tells Doxygen whether extract private members.
 EXTRACT_PRIVATE         = YES
+
+## Extraction of static members.
+#  This option tells Doxygen whether extract static members.
 EXTRACT_STATIC          = YES
+
+## Extraction of local classes.
+#  This option tells Doxygen whether extract local classes.
 EXTRACT_LOCAL_CLASSES   = YES
+
+## Extraction of local methods.
+#  This option tells Doxygen whether extract local methods.
 EXTRACT_LOCAL_METHODS   = YES
+
+## Detailed description.
+#  If the ALWAYS_DETAILED_SEC and REPEAT_BRIEF tags are both set to YES then doxygen will generate
+#  a detailed section even if there is only a brief description.
 ALWAYS_DETAILED_SEC     = NO
+
+## Brief description.
+#  If the BRIEF_MEMBER_DESC tag is set to YES, doxygen will include brief member descriptions after
+#  the members that are listed in the file and class documentation (similar to Javadoc).
 BRIEF_MEMBER_DESC       = YES
+
+## Repeat brief description.
+#  If the REPEAT_BRIEF tag is set to YES, doxygen will prepend the brief description of a member or
+#  function before the detailed description.
+#  Note: If both HIDE_UNDOC_MEMBERS and BRIEF_MEMBER_DESC are set to NO, the brief descriptions
+#  will be completely suppressed.
 REPEAT_BRIEF            = YES
+
+## Source browser.
+#  If the SOURCE_BROWSER tag is set to YES then a list of source files will be generated.
+#  Documented entities will be cross-referenced with these sources.
+#  Note: To get rid of all source code in the generated output, make sure that also
+#  VERBATIM_HEADERS is set to NO.
 SOURCE_BROWSER          = YES
+
+## Verbatim headers.
+#  If the VERBATIM_HEADERS tag is set the YES then doxygen will generate a verbatim copy of the
+#  header file for each class for which an include is specified.
 VERBATIM_HEADERS        = YES
+
+## Strip code comments.
+#  Setting the STRIP_CODE_COMMENTS tag to YES will instruct doxygen to hide any special comment
+#  blocks from generated source code fragments. Normal C, C++ and Fortran comments will always
+#  remain visible.
 STRIP_CODE_COMMENTS     = NO
+
+## Enabled preprocessing.
+#  If the ENABLE_PREPROCESSING tag is set to YES, doxygen will evaluate all C-preprocessor
+#  directives found in the sources and include files.
 ENABLE_PREPROCESSING    = YES
 
-# Excluding full path file names during include-diagram generation...
+## Full path file names during include-diagram generation.
+#  If the FULL_PATH_NAMES tag is set to YES, doxygen will prepend the full path before files name
+#  in the file list and in the header files. If set to NO the shortest path that makes the file
+#  name unique will be used.
 FULL_PATH_NAMES         = YES
+
+## Strip from path.
+#  The STRIP_FROM_PATH tag can be used to strip a user-defined part of the path. Stripping is only
+#  done if one of the specified strings matches the left-hand part of the path. The tag can be used
+#  to show relative paths in the file list. If left blank the directory from which doxygen is run
+#  is used as the path to strip.
+#  Note that you can specify absolute paths here, but also relative paths, which will be relative
+#  from the directory where doxygen is started.
 STRIP_FROM_PATH         = ../..
 
-# Enabling GraphViz support...
+## GraphViz support.
+#  This option tells Doxygen whether [GraphViz](https://graphviz.org/) is installed.
 HAVE_DOT                = YES
 
-# Enabling Call-graphs...
+## Call-graphs.
+#  If the CALL_GRAPH tag is set to YES then doxygen will generate a call dependency graph for every
+#  global function or class method.
+#  Note that enabling this option will significantly increase the time of a run. So in most cases
+#  it will be better to enable call graphs for selected functions only using the \callgraph command.
+#  Disabling a call graph can be accomplished by means of the command \hidecallgraph.
 CALL_GRAPH              = YES
 
-# Disabling Include-graphs...
+## Include-graphs.
+#  If the INCLUDE_GRAPH, ENABLE_PREPROCESSING and SEARCH_INCLUDES tags are set to YES then doxygen
+#  will generate a graph for each documented file showing the direct and indirect include
+#  dependencies of the file with other documented files.
 INCLUDE_GRAPH           = NO
 
-# Setting main page...
+## Main page.
+#  If the USE_MDFILE_AS_MAINPAGE tag refers to the name of a markdown file that is part of the
+#  input, its contents will be placed on the main page (index.html). This can be useful if you have
+#  a project on for instance GitHub and want to reuse the introduction page also for the doxygen
+#  output.
 USE_MDFILE_AS_MAINPAGE  = main_page.md
 
-# Setting MathJax path (relative to the Doxygen output directory)...
+## MathJax path (relative to the Doxygen output directory).
+#  When MathJax is enabled you need to specify the location relative to the HTML output directory
+#  using the MATHJAX_RELPATH option. The destination directory should contain the MathJax.js script.
+#  For instance, if the mathjax directory is located at the same level as the HTML output directory,
+#  then MATHJAX_RELPATH should be ../mathjax. The default value points to the MathJax Content
+#  Delivery Network so you can quickly see the result without installing MathJax.
+#  However, it is strongly recommended to install a local copy of [MathJax](https://www.mathjax.org)
+#  from https://www.mathjax.org before deployment.
+#
+#  The default value is: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/.
+#  This tag requires that the tag USE_MATHJAX is set to YES.
 MATHJAX_RELPATH         = ../../MathJax
 
-# Enabling MathJax rendering...
+## MathJax rendering.
+#  Enable the USE_MATHJAX option to render @f$ \LaTeX @f$ formulas using [MathJax]
+#  (https://www.mathjax.org) which uses client side Javascript for the rendering instead of using
+#  pre-rendered bitmaps. Use this if you do not have @f$ \LaTeX @f$ installed or if you want to
+#  formulas look prettier in the HTML output. When enabled you may also need to install MathJax
+#  separately and configure the path to it using the MATHJAX_RELPATH option.
 USE_MATHJAX             = YES
