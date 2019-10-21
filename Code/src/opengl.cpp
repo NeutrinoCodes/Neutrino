@@ -1,4 +1,7 @@
-/// @file
+/// @file     opengl.cpp
+/// @author   Erik ZORZIN
+/// @date     24OCT2019
+/// @brief    Definition of the "opengl" class.
 
 #include "opengl.hpp"
 
