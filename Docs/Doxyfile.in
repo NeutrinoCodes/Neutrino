@@ -21,11 +21,11 @@ OUTPUT_DIRECTORY        = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen
 
 ## Valid file types to be considered in Doxygen.
 #  These are the file types Doxygen will consider for generating the documentation.
-FILE_PATTERNS           = *.cpp *.hpp *.cl *.frag *.vert *.geom *.tess *.md *.in
+FILE_PATTERNS           = *.cpp *.hpp *.cl *.frag *.vert *.geom *.tess *.md *.in *.txt *.cfg *.bat
 
 ## Code mapping grammatics for GLSL and OpenCL languages.
 #  These associations tell Doxygen which grammatics to apply for each file type to be documented.
-EXTENSION_MAPPING       = frag=C++ vert=C++ geom=C++ tess=C++ cl=C++ in=Python
+EXTENSION_MAPPING       = frag=C++ vert=C++ geom=C++ tess=C++ cl=C++ in=Python txt=md cfg=Python bat=Python
 
 ## Doxygen input directories.
 #  Others doc files: e.g.  @CMAKE_CURRENT_SOURCE_DIR@/../Docs/some_documentation.md
@@ -36,7 +36,7 @@ INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/include/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/kernel/ \
                           @CMAKE_CURRENT_SOURCE_DIR@/shader/ \
-
+                          @CMAKE_CURRENT_SOURCE_DIR@/uncrustify/ \
 
 ## Search on input subdirectories.
 #  This option tells Doxygen whether to do a recursive search in the input directories.
