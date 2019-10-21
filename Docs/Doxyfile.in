@@ -9,7 +9,7 @@ PROJECT_NAME            = "NEUTRINO"
 
 ## Project caption description.
 #  This caption will appear on the headline of each page of the documentation.
-PROJECT_BRIEF           = "A fast and light library for GPU-based computation."
+PROJECT_BRIEF           = "A fast and light library for GPU-based parallel computation."
 
 ## Project logo.
 #  This logo will appear on the headline of each page of the documentation.
