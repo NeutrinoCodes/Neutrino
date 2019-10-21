@@ -23,7 +23,7 @@
 /// ### OpenCL kernel.
 /// Declares an OpenCL kernel.
 /// To be used to run OpenCL computation.
-class kernel
+class kernel                                                                                        /// @brief **OpenCL kernel.**
 {
 private:
   neutrino*     baseline;                                                                           ///< @brief **Neutrino baseline.**

@@ -1,14 +1,14 @@
 # Neutrino documentation {#Neutrino_documentation}
 
 # 1. Neutrino in a nutshell {#Neutrino_in_a_nutshell}
-*Neutrino* is a C++ software environment for NU_GPU-accelerated parallel computing,
+*Neutrino* is a C++ software environment for GPU-accelerated parallel computing,
 based on the [OpenCL](https://en.wikipedia.org/wiki/OpenCL) and
 the [OpenGL](https://en.wikipedia.org/wiki/OpenGL) frameworks.
 The aim of Neutrino is to reduce the code overhead, due to the complexity of
-the NU_GPU-accelerated coding paradigm, in order to let the users concentrate on the
+the GPU-accelerated coding paradigm, in order to let the users concentrate on the
 implementation of their algorithms.
 The architecture of this computational paradigm is based on a parallel execution of routines
-running on a OpenCL *client* computing device (e.g. NU_GPU card) and scheduled by a C++ *program* running
+running on a OpenCL *client* computing device (e.g. GPU card) and scheduled by a C++ *program* running
 on the *host* device carrying the client (e.g. a PC).
 The mathematical computation of interest is first prepared on the host device
 starting by the `main.cpp` file and then run, by means further code written in so called OpenCL
@@ -21,7 +21,7 @@ thanks to a modality called OpenCL/GL *interoperability*. The interoperability
 allows the data buffers used for the computation within the OpenCL framework and
 already allocated on the client to be directly shared with the OpenGL framework
 in order to be used for the graphics rendition by the client itself: the advantage
-of this is the usage of the fast NU_GPU memory of the client for both computational and
+of this is the usage of the fast GPU memory of the client for both computational and
 graphics purposes, without using the memory space of the host.
 
 Moreover, the host can also directly render some graphics on the OpenGL GUI via the OpenGL
@@ -30,10 +30,10 @@ framework, if necessary.
 @dot
 graph neutrino_nutshell
 {
-  "host program\n(NU_CPU)" -- "client kernel\n(NU_GPU)" [label = " OpenCL"]
+  "host program\n(NU_CPU)" -- "client kernel\n(GPU)" [label = " OpenCL"]
   "host program\n(NU_CPU)" -- "OpenGL GUI" [label = " OpenGL"]
-  "client kernel\n(NU_GPU)" -- "OpenGL GUI" [label = " OpenCL/GL\ninteroperability"]
-  {rank=same; "client kernel\n(NU_GPU)", "OpenGL GUI"}
+  "client kernel\n(GPU)" -- "OpenGL GUI" [label = " OpenCL/GL\ninteroperability"]
+  {rank=same; "client kernel\n(GPU)", "OpenGL GUI"}
 }
 @enddot
 
@@ -42,10 +42,12 @@ The Neutrino software is divided into two hierarchical layers:
 - the high level *user* layer.
 - the low level *core* layer.
 
-The user level simply consists of:
+The user level consists of:
 - the C++ host program, implemented starting from the `main.cpp` file of their
 application.
 - the OpenCL client kernels, implemented in one or more `kernel.cl` files.
+- the OpenGL client shaders, implemented in 3 files: the vertex, the geometry and the
+fragment shader.
 
 The core level instead is made of all the necessary C++/OpenGL/OpenCL infrastructure
 that makes the user able to concentrate only on the two aforementioned aspects.
@@ -54,7 +56,7 @@ must do in the host implementation of their application:
 - a `neutrino` object is instantiated. This serves as a common object, later included in
 all others as argument in their initialisation methods, for the exchange of common properties
 they need (e.g. common libraries, common macro definitions, common variables, etc...).
-- a `window` object is instantiated. It's initialisation sets up the OpenGL framework.
+- an `opengl` object is instantiated. It's initialisation sets up the OpenGL framework.
 This opens the window where all graphics can be displayed. In case no graphics is needed,
 or the available client does not support the OpenCL/GL interoperability modality, this
 step can be entirely avoided; of course no graphics plot would be possible in this case, but
@@ -63,9 +65,10 @@ In the latter minimal situation, the output of the computation might be saved on
 later analysis.
 - an `opencl` object is instantiated. Later on, the initialisation of this object
 will be responsible of setting up the OpenCL framework for the computation.
-- an array of `queue` objects is instantiated. It has to have at least one element.
-The queue is the OpenCL mechanism for scheduling the execution the kernels.
-- an array of `kernel` objects is instantiated. It has to have at least one element.
+- a `shader` object is instantiated.
+- a `queue` objects is instantiated. The queue is the OpenCL mechanism for scheduling the
+execution the kernels.
+- one or more `kernel` objects are instantiated.
 Each kernel contains the routines, written in the OpenCL language, the user developed
 in order to solve the mathematical problem of interest.
 
@@ -73,24 +76,24 @@ After their instantiation, these object must be initialised in the same sequence
 they depend each other in this hierarchy. The number of queues and kernels depends on the
 user's application.
 
-# 3. OpenCL/GL NU_GPU-accelerated parallel computing paradigm {#OpenCL_GL_GPU-accelerated_parallel_computing_paradigm}
+# 3. OpenCL/GL GPU-accelerated parallel computing paradigm {#OpenCL_GL_GPU-accelerated_parallel_computing_paradigm}
 Modern GPUs are not made of a single, monolithic, processor. Instead they are organised as an
 array of multiple identical elementary *compute units*.
 OpenCL is a software framework that let the user taking control of all those
 compute units within a *parallel computing* paradigm, taking advantage of the
-underlying NU_GPU's hardware architecture.
+underlying GPU's hardware architecture.
 OpenCL abstracts and generalises the particular hardware implementation of each
 different type of GPUs by means of its dedicated drivers, making possible
 to program different GPUs by a same common programming language.
 It is therefore not necessary to know how the hardware architecture is implemented
-at a low level inside the NU_GPU: it is sufficient to know there is an *array of
+at a low level inside the GPU: it is sufficient to know there is an *array of
 compute units* available to the user. Each of the compute units can be functionally
 considered as like as an individual NU_CPU.
 
 @dot
 digraph Modern_GPU
 {
-  graph [label = "Modern NU_GPU architecture:", labelloc = t]
+  graph [label = "Modern GPU architecture:", labelloc = t]
   node [shape = record]
   struct1 [label = "{CPU_1|CPU_1|CPU_3|CPU_4}|
                     {CPU_5|CPU_6|CPU_7|CPU_8}|
@@ -181,7 +184,7 @@ a *1D-kernel* because only one global index is used.
 A variable *c* is defined for later use.
 The function *barrier(CLK_GLOBAL_MEM_FENCE)* serves as a
 synchronisation of this process of instantiation: for reasons depending on both
-the OpenCL software and the NU_GPU underlying hardware it might be that this kind of
+the OpenCL software and the GPU underlying hardware it might be that this kind of
 operation *will not occur exactly simultaneously* on all compute units. There
 could be a little *time jitter*, therefore the program *must wait* for all compute
 units to complete all the local operations before proceeding with the next steps.
@@ -199,8 +202,8 @@ containing the result of that operation.
 
 What about the number of element *N*? How big can it be?
 
-It depends on the available NU_GPU. There are big and small OpenCL-compatible
-GPUs. In case a given NU_GPU is too small to comply with a big *N*, OpenCL has got
+It depends on the available GPU. There are big and small OpenCL-compatible
+GPUs. In case a given GPU is too small to comply with a big *N*, OpenCL has got
 methods to split the computation in sequential time slots: it first fills all
 available compute units and performs a first computation, later it continues with
 the remaining part of the dataset. This generates a considerable *memory swapping*
@@ -208,6 +211,16 @@ overhead and must be taken into account in terms of speed optimisation.
 It is always better to make the dataset matching the maximum capacity of
 available compute units, at the cost of *padding* the dataset: this approach
 remains valid also at a local level inside the OpenCL kernel.
+
+NOTE:
+Sometimes it is not possible to code a parallel algorithm in a single kernel.
+This happens for instance when a certain computation is required to be completely done before a
+subsequent one can start. The parallel computation is done concurrently: which means that, because
+the aforementioned time jitter, it is not guarantee all operations will start nor finish at the same
+time on all compute units. The barrier synchronization works among computes units within the same
+*workgroup*. Outside that paradigm, there is no other methods of synchronisation but splitting the
+code in one or more kernels, which will be executed *sequentially* one after the other one if the
+*kernel_mode* modality will be specified during the execution of the kernels.
 
 NOTE:
 A *2D kernel* would be something that would unwrap a C++ loop like this one:
@@ -260,7 +273,7 @@ memory, as opposed to ordinary client PC memory.
 @dot
 graph client_host_memory
 {
-  "client (e.g. NU_GPU) memory" -- "host (e.g. PC) memory"
+  "client (e.g. GPU) memory" -- "host (e.g. PC) memory"
 }
 @enddot
 
@@ -269,16 +282,31 @@ In Neutrino, we achieve this as follows:
 - data objects can be initialised once by the host. For instance, in case of a
 time varying simulation application, the initial data can be prepared at this step (e.g. by
 assembling the data arrays, or by loading them from a file). This is done by means of
-the several *set* methods of the data objects.
+the several *setarg* method of the kernel objects.
 - once this has been done, the data prepared on the host can be loaded on the client
-memory by means of the *push* object methods. This also creates, in case the OpenCL/GL
+memory by means of the *write* method of the queue object. This also creates, in case the OpenCL/GL
 interoperability is supported by the client, a memory share between the OpenCL and the
 OpenGL frameworks. This means the OpenGL frame buffer would be directly able to render the
-special *point* and *color* data types which have been already allocated on the client
-by the push methods and constantly updated by the results of the execution of the OpenCL kernels.
+special *float1G* and *float4G* data types which have been already allocated on the client
+by the write methods and constantly updated by the results of the execution of the OpenCL kernels.
 More specifically, if something has to be plot, the user is supposed to implement the kernels
 in a ways the point and color data contains such information (e.g. a cloud of points
 representing a 3D object, etc...).
 - in case the output of the computation is needed elsewhere outside the graphics, it can be
 retrieved from the client by the host, and therefore copied in the host's memory, by means of the
-*pop* data object methods. This can be used, for instance, in order to save the results on a file.
+*read* data method of the queue object. This can be used, for instance, in order to save the results
+on a file.
+
+Among the various data types, the float1G and float4G are special: they are the only data types
+that can be used for direct graphics rendition of OpenCL data by the OpenGL without passing back
+and forth between the GPU client and PC host memory, therefore the graphics rendition is very fast.
+For these special data types, an *acquire* and a *release* method of the queue class is provided and
+must be used in order to prevent memory leakages between OpenCL and OpenGL: they serves as blocking
+mechanism for the GPU direct memory access (DMA).
+
+The *graphics user interface* (GUI) is implemented by the instantiation of the opengl object.
+This class has got a *plot* method for plotting the data as well as an *orbit* and *pan* methods
+in order to navigate the 3D plotting environment and visualizing the graphics from different points
+of view. This can be done in either 3D monographic or stereographic perspective projection, the
+latter one offering *virtual reality* (VR) side-by-side display splitting. All this is automagically
+done by Neutrino meanwhile the parallel computation is performed.

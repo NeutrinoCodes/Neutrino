@@ -23,7 +23,7 @@
 /// @class shader
 /// ### OpenCL shader class.
 /// Declares an OpenCL shader class. To be used in order to do graphics rendition of OpenCL data.
-class shader
+class shader                                                                                        /// @brief **OpenGL shader.**
 {
 private:
   neutrino*   baseline;                                                                             ///< @brief **Neutrino baseline.**

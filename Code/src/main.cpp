@@ -36,7 +36,7 @@
 
 int main ()
 {
-  // MESH:
+  // DATA:
   float     x_min           = -1.0f;                                                                // "x_min" spatial boundary [m].
   float     x_max           = +1.0f;                                                                // "x_max" spatial boundary [m].
   float     y_min           = -1.0f;                                                                // "y_min" spatial boundary [m].
@@ -49,20 +49,9 @@ int main ()
   size_t    i               = 0;                                                                    // "x" direction index.
   size_t    j               = 0;                                                                    // "y" direction index.
   size_t    gid             = 0;                                                                    // Global index [#].
-
-  // NEUTRINO:
-  neutrino* bas             = new neutrino ();                                                      // Neutrino baseline.
-  opengl*   gui             = new opengl ();                                                        // OpenGL context.
-  opencl*   ctx             = new opencl ();                                                        // OpenCL context.
-  shader*   S               = new shader ();                                                        // OpenGL shader program.
   float4G*  position        = new float4G ();                                                       // OpenGL float4G.
   float4G*  color           = new float4G ();                                                       // OpenGL float4G.
   float1*   t               = new float1 ();                                                        // Time [s].
-  queue*    Q               = new queue ();                                                         // OpenCL queue.
-  kernel*   K               = new kernel ();                                                        // OpenCL kernel array.
-  size_t    kernel_sx       = nodes;                                                                // Kernel dimension "x" [#].
-  size_t    kernel_sy       = 0;                                                                    // Kernel dimension "y" [#].
-  size_t    kernel_sz       = 0;                                                                    // Kernel dimension "z" [#].
 
   // GUI PARAMETERS (orbit):
   float     orbit_x_init    = 0.0f;                                                                 // x-axis orbit initial rotation.
@@ -84,36 +73,24 @@ int main ()
   float     pan_deadzone    = 0.1f;                                                                 // Pan rotation deadzone [0...1].
   float     pan_rate        = 1.0f;                                                                 // Pan rotation rate [rev/s].
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////
-  /////////////////////////////////////////// INITIALIZATION /////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////////
-  bas->init (QUEUE_NUM, KERNEL_NUM, INTEROP);                                                       // Initializing Neutrino baseline...
+  // NEUTRINO:
+  neutrino* bas             = new neutrino ();                                                      // Neutrino baseline.
+  opengl*   gui             = new opengl ();                                                        // OpenGL context.
+  opencl*   ctx             = new opencl ();                                                        // OpenCL context.
+  shader*   S               = new shader ();                                                        // OpenGL shader program.
+  queue*    Q               = new queue ();                                                         // OpenCL queue.
+  kernel*   K               = new kernel ();                                                        // OpenCL kernel array.
+  size_t    kernel_sx       = nodes;                                                                // Kernel dimension "x" [#].
+  size_t    kernel_sy       = 0;                                                                    // Kernel dimension "y" [#].
+  size_t    kernel_sz       = 0;                                                                    // Kernel dimension "z" [#].
 
-// Initializing OpenGL context...
-  gui->init                                                                                         // Initializing GUI...
-  (
-   bas,                                                                                             // Neutrino baseline.
-   GUI_SIZE_X,                                                                                      // GUI x-size [px].
-   GUI_SIZE_Y,                                                                                      // GUI y-size [px.]
-   GUI_NAME,                                                                                        // GUI name.
-   orbit_x_init,                                                                                    // Initial x-orbit.
-   orbit_y_init,                                                                                    // Initial y-orbit.
-   pan_x_init,                                                                                      // Initial x-pan.
-   pan_y_init,                                                                                      // Initial y-pan.
-   pan_z_init                                                                                       // Initial z-pan.
-  );
-
-  ctx->init (bas, gui, NU_GPU);                                                                     // Initializing OpenCL context...
-  S->init (bas, SHADER_HOME, SHADER_VERT, SHADER_GEOM, SHADER_FRAG);                                // Initializing OpenGL shader...
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////// DATA INITIALIZATION //////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
   position->init (nodes);                                                                           // Initializing OpenGL point array...
   color->init (nodes);                                                                              // Initializing OpenGL color array...
   t->init (nodes);                                                                                  // Initializing time...
-  Q->init (bas);                                                                                    // Initializing OpenCL queue...
-  K->init (bas, KERNEL_HOME, KERNEL_FILE, kernel_sx, kernel_sy, kernel_sz);                         // Initializing OpenCL kernel...
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////// SETTING POINTS DATA //////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////////
   position->name = "voxel_center";                                                                  // Setting variable name in OpenGL shader...
   color->name    = "voxel_color";                                                                   // Setting variable name in OpenGL shader...
 
@@ -140,6 +117,56 @@ int main ()
       t->data[gid]          = 0.0f;                                                                 // Setting time...
     }
   }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////// NEUTRINO INITIALIZATION /////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  bas->init (QUEUE_NUM, KERNEL_NUM, INTEROP);                                                       // Initializing Neutrino baseline...
+
+  // Initializing OpenGL context...
+  gui->init                                                                                         // Initializing GUI...
+  (
+   bas,                                                                                             // Neutrino baseline.
+   GUI_SIZE_X,                                                                                      // GUI x-size [px].
+   GUI_SIZE_Y,                                                                                      // GUI y-size [px.]
+   GUI_NAME,                                                                                        // GUI name.
+   orbit_x_init,                                                                                    // Initial x-orbit.
+   orbit_y_init,                                                                                    // Initial y-orbit.
+   pan_x_init,                                                                                      // Initial x-pan.
+   pan_y_init,                                                                                      // Initial y-pan.
+   pan_z_init                                                                                       // Initial z-pan.
+  );
+
+  // Initializing OpenCL context...
+  ctx->init (
+             bas,                                                                                   // Neutrino baseline.
+             gui,                                                                                   // GUI.
+             NU_GPU                                                                                 // GPU client.
+            );
+
+  // Initializing OpenGL shader...
+  S->init (
+           bas,                                                                                     // Neutrino baseline.
+           SHADER_HOME,                                                                             // Shader home directory.
+           SHADER_VERT,                                                                             // Vertex shader file name.
+           SHADER_GEOM,                                                                             // Geometry shader file name.
+           SHADER_FRAG                                                                              // Fragment shader file name.
+          );
+
+  // Initializing OpenCL queue...
+  Q->init (
+           bas                                                                                      // Neutrino baseline.
+          );
+
+  // Initializing OpenCL kernel...
+  K->init (
+           bas,                                                                                     // Neutrino baseline.
+           KERNEL_HOME,                                                                             // Kernel home directory.
+           KERNEL_FILE,                                                                             // Kernel file name.
+           kernel_sx,                                                                               // Kernel dimension "x" [#].
+           kernel_sy,                                                                               // Kernel dimension "y" [#].
+           kernel_sz                                                                                // Kernel dimension "z" [#].
+          );
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// SETTING OPENCL KERNEL ARGUMENTS /////////////////////////////////
