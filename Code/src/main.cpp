@@ -1,4 +1,7 @@
-/// @file
+/// @file     main.cpp
+/// @author   Erik ZORZIN
+/// @date     24OCT2019
+/// @brief    It implements an example of a Neutrino application.
 
 // INCLUDES:
 #include "opengl.hpp"                                                                               // OpenGL.
