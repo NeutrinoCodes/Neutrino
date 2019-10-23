@@ -13,7 +13,7 @@ PROJECT_BRIEF           = "A fast and light library for GPU-based parallel compu
 
 ## Project logo.
 #  This logo will appear on the headline of each page of the documentation.
-PROJECT_LOGO            = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen/Logos/neutrino_logo_enso.png
+PROJECT_LOGO            = @CMAKE_CURRENT_SOURCE_DIR@/../Logos/neutrino_logo_enso.png
 
 ## Doxygen documentation output directory.
 #  This is the directory where Doxygen puts all documentation files it generates.
