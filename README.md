@@ -61,7 +61,7 @@ like `\"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.1/\"`
 5. Go to `Code/build/windows` under neutrino's project directory and type  `neutrino` from the
 Command Prompt to launch the demo application.
 
-Alternative command line compilation:
+Alternative command line compilation using "devenv":
 
 1. From the Windows' start menu, launch "Visual Studio 2019" -> "Developer Command Prompt".
 2. Cd into your `Neutrino\Code` folder.
@@ -69,6 +69,18 @@ Alternative command line compilation:
 4. Cd into that `cmake` folder.
 5. Execute: `devenv /build Release neutrino.sln`. That would compile the code: it will create a
 new `Release` folder into the `cmake` folder.
+6. Cd into the `Release` folder: a `neutrino.exe` file should be there.
+7. Launch it from this command prompt (type: `neutrino`), or double click on its icon from the
+Windows' file manager.
+
+Alternative command line compilation using "msbuild":
+
+1. From the Windows' start menu, launch "Visual Studio 2019" -> "Developer Command Prompt".
+2. Cd into your `Neutrino\Code` folder.
+3. Launch: `configure_windows.bat`. A new `cmake` folder will be created.
+4. Cd into that `cmake` folder.
+5. Execute: `msbuild neutrino.sln /p:Configuration=Release /p:Platform=x64 -m`.
+That would compile the code: it will create a new `Release` folder into the `cmake` folder.
 6. Cd into the `Release` folder: a `neutrino.exe` file should be there.
 7. Launch it from this command prompt (type: `neutrino`), or double click on its icon from the
 Windows' file manager.
