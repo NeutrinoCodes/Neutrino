@@ -110,6 +110,21 @@ typedef enum
 } compute_device_type;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// OpenCL/GL interoperability ///////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef __APPLE__
+  #define NU_INTEROP "cl_APPLE_gl_sharing"
+#endif
+
+#ifdef __linux__
+  #define NU_INTEROP "cl_khr_gl_sharing"
+#endif
+
+#ifdef WIN32
+  #define NU_INTEROP "cl_khr_gl_sharing"
+#endif
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////// Standard C/C++ header files //////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <stdlib.h>
@@ -118,6 +133,7 @@ typedef enum
 #include <iostream>
 #include <fstream>
 #include <cerrno>
+#include <algorithm>
 
 #ifdef __APPLE__                                                                                    // Detecting Mac OS...
   #include <math.h>
@@ -261,6 +277,12 @@ public:
                       std::string loc_text                                                          ///< User defined text message.
                      );
 
+  /// @brief **Warning message function.**
+  /// @details Prints a "warning" message on the terminal console.
+  void        warning (
+                       std::string loc_text                                                         ///< User defined text message.
+                      );
+
   /// @brief **Error message function.**
   /// @details Prints an "error" message on the terminal console.
   void        error (
@@ -275,9 +297,20 @@ public:
                     size_t      loc_tab                                                             ///< User defined text tab size.
                    );
 
+  /// @brief **Property search function.**
+  /// @details Searches an input string for a text property.
+  bool        property (
+                        std::string loc_input,                                                      // Input string.
+                        std::string loc_property                                                    // Property string.
+                       );
+
   /// @brief **Done message function.**
   /// @details Prints a "done" message on the terminal console.
   void        done ();
+
+  /// @brief **Not done message function.**
+  /// @details Prints an "unfulfilled" message on the terminal console.
+  void        unfulfilled ();
 
   /// @brief **Terminated message function.**
   /// @details Prints a "terminated" message on the terminal console.

@@ -142,6 +142,8 @@ void opencl::init
 {
   cl_int  loc_error;                                                                                // Error code.
   cl_uint i;                                                                                        // Index.
+  bool    loc_platform_interop = false;                                                             // Platform interoperability flag.
+  bool    loc_device_interop   = false;                                                             // Device interoperability flag.
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
@@ -149,13 +151,6 @@ void opencl::init
 
   baseline         = loc_baseline;                                                                  // Getting Neutrino baseline...
   device_type_text = new char[NU_MAX_TEXT_SIZE];                                                    // Device type text [string].
-
-  if(!(baseline->interop))
-  {
-    loc_gui->glfw_window = NULL;                                                                    // Setting a NULL graphics window...
-
-    baseline->action ("using OpenCL without OpenGL interoperability...");                           // Printing message...
-  }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// SETTING TARGET DEVICE TYPE ///////////////////////////////////
@@ -226,6 +221,18 @@ void opencl::init
                    );
   }
 
+  if(platforms_number == 1)
+  {
+    if(baseline->property (opencl_platform[0]->extensions, NU_INTEROP))                             // Checking for platform interoperability flag...
+    {
+      loc_platform_interop = true;                                                                  // Setting platform interoperability flag...
+    }
+    else
+    {
+      loc_platform_interop = false;                                                                 // Resetting platform interoperability flag...
+    }
+  }
+
   if(platforms_number > 1)                                                                          // Asking to select a platform...
   {
     std::cout << "Action: please select a platform [1..." + std::to_string (platforms_number);      // Formulating query...
@@ -238,6 +245,15 @@ void opencl::init
                           platforms_number                                                          // Maximum numeric choice in query answer.
                          )
                         ) - 1;                                                                      // Setting selected platform index...
+
+    if(baseline->property (opencl_platform[selected_platform]->extensions, NU_INTEROP))             // Checking for platform interoperability flag...
+    {
+      loc_platform_interop = true;                                                                  // Setting platform interoperability flag...
+    }
+    else
+    {
+      loc_platform_interop = false;                                                                 // Resetting platform interoperability flag...
+    }
   }
 
   else
@@ -420,6 +436,18 @@ void opencl::init
     std::cout << opencl_device[i]->queue_properties << std::endl;                                   // Printing message...
   }
 
+  if(devices_number == 1)
+  {
+    if(baseline->property (opencl_device[0]->extensions, NU_INTEROP))                               // Checking for device interoperability flag...
+    {
+      loc_device_interop = true;                                                                    // Setting device interoperability flag...
+    }
+    else
+    {
+      loc_device_interop = false;                                                                   // Resetting device interoperability flag...
+    }
+  }
+
   if(devices_number > 1)                                                                            // Asking to select a platform...
   {
     std::cout << "Action: please select a device [1..." +
@@ -432,12 +460,30 @@ void opencl::init
                         devices_number                                                              // Maximum numeric choice in query answer.
                        )
                       ) - 1;                                                                        // Setting selected device index...
+    if(baseline->property (opencl_device[selected_device]->extensions, NU_INTEROP))                 // Checking for device interoperability flag...
+    {
+      loc_device_interop = true;                                                                    // Setting device interoperability flag...
+    }
+    else
+    {
+      loc_device_interop = false;                                                                   // Resetting device interoperability flag...
+    }
   }
 
   else
   {
     selected_device = 0;                                                                            // Setting 1st device, in case it is the only found one...
   }
+
+  /*
+     if(loc_platform_interop && loc_device_interop)                                                    // Evaluating interoperability flag...
+     {
+     baseline->interop = true;                                                                       // Setting interoperability flag...
+     }
+     else
+     {
+     baseline->interop = false;                                                                      // Resetting interoperability flag...
+     }*/
 
   baseline->device_id = opencl_device[selected_device]->id;                                         // Setting neutrino OpenCL device ID...
 
@@ -454,8 +500,11 @@ void opencl::init
 
     cl_context_properties properties[3];
 
+    baseline->action ("verifying OpenCL/GL interoperability support...");                           // Printing message...
     if(baseline->interop)
     {
+      baseline->done ();                                                                            // Printing message...
+
       CGLContextObj    kCGLContext    = CGLGetCurrentContext ();
       CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup (kCGLContext);
       properties[0] = CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE;                                 // Setting APPLE with CL-GL interop...
@@ -464,9 +513,17 @@ void opencl::init
     }
     else
     {
-      properties[0] = CL_CONTEXT_PLATFORM;                                                          // Setting APPLE without CL-GL interop...
-      properties[1] = (cl_context_properties)baseline->platform_id;
-      properties[2] = 0;
+      baseline->unfulfilled ();                                                                     // Printing message...
+      baseline->warning ("could not find OpenCL/GL interoperability!");                             // Printing message...
+      baseline->action ("switching to non-graphics modality...");                                   // Printing message...
+
+      loc_gui->glfw_window = NULL;                                                                  // Setting a NULL graphics window...
+
+      properties[0]        = CL_CONTEXT_PLATFORM;                                                   // Setting APPLE without CL-GL interop...
+      properties[1]        = (cl_context_properties)baseline->platform_id;
+      properties[2]        = 0;
+
+      baseline->done ();                                                                            // Printing message...
     }
   #endif
 
@@ -476,8 +533,11 @@ void opencl::init
 
     cl_context_properties properties[7];
 
+    baseline->action ("verifying OpenCL/GL interoperability support...");                           // Printing message...
     if(baseline->interop)
     {
+      baseline->done ();                                                                            // Printing message...
+
       properties[0] = CL_GL_CONTEXT_KHR;                                                            // Setting LINUX with CL-GL interop...
       properties[1] = (cl_context_properties)glfwGetGLXContext
                       (
@@ -491,9 +551,15 @@ void opencl::init
     }
     else
     {
-      properties[0] = CL_CONTEXT_PLATFORM;                                                          // Setting LINUX without CL-GL interop...
-      properties[1] = (cl_context_properties)baseline->platform_id;
-      properties[2] = 0;
+      baseline->unfulfilled ();                                                                     // Printing message...
+      baseline->warning ("could not find OpenCL/GL interoperability!");                             // Printing message...
+      baseline->action ("switching to non-graphics modality...");                                   // Printing message...
+
+      loc_gui->glfw_window = NULL;                                                                  // Setting a NULL graphics window...
+
+      properties[0]        = CL_CONTEXT_PLATFORM;                                                   // Setting LINUX without CL-GL interop...
+      properties[1]        = (cl_context_properties)baseline->platform_id;
+      properties[2]        = 0;
     }
   #endif
 
@@ -503,8 +569,11 @@ void opencl::init
 
     cl_context_properties properties[7];
 
+    baseline->action ("verifying OpenCL/GL interoperability support...");                           // Printing message...
     if(baseline->interop)
     {
+      baseline->done ();                                                                            // Printing message...
+
       properties[0] = CL_GL_CONTEXT_KHR;                                                            // Setting WINDOWS with CL-GL interop...
       properties[1] = (cl_context_properties)glfwGetWGLContext
                       (
@@ -524,9 +593,15 @@ void opencl::init
     }
     else
     {
-      properties[0] = CL_CONTEXT_PLATFORM;                                                          // Setting WINDOWS without CL-GL interop...
-      properties[1] = (cl_context_properties)baseline->platform_id;
-      properties[2] = 0;
+      baseline->unfulfilled ();                                                                     // Printing message...
+      baseline->warning ("could not find OpenCL/GL interoperability!");                             // Printing message...
+      baseline->action ("switching to non-graphics modality...");                                   // Printing message...
+
+      loc_gui->glfw_window = NULL;                                                                  // Setting a NULL graphics window...
+
+      properties[0]        = CL_CONTEXT_PLATFORM;                                                   // Setting WINDOWS without CL-GL interop...
+      properties[1]        = (cl_context_properties)baseline->platform_id;
+      properties[2]        = 0;
     }
   #endif
 
