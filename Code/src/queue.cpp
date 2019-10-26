@@ -824,28 +824,36 @@ void queue::acquire
 {
   cl_int loc_error;                                                                                 // Local error code.
 
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+  if(baseline->interop)                                                                             // Checking for interoperability...
+  {
 
-  // Setting layout index in vertex shader...
-  glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
+    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
 
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+    // Setting layout index in vertex shader...
+    glDisableVertexAttribArray (loc_layout_index);                                                  // Unbinding data array...
 
-  // Acquiring OpenCL buffer:
-  loc_error = clEnqueueAcquireGLObjects
-              (
-               queue_id,                                                                            // Queue.
-               1,                                                                                   // Number of memory objects.
-               &loc_data->buffer,                                                                   // Memory object array.
-               0,                                                                                   // Number of events in event list.
-               NULL,                                                                                // Event list.
-               NULL                                                                                 // Event.
-              );
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+    // Acquiring OpenCL buffer:
+    loc_error = clEnqueueAcquireGLObjects
+                (
+                 queue_id,                                                                          // Queue.
+                 1,                                                                                 // Number of memory objects.
+                 &loc_data->buffer,                                                                 // Memory object array.
+                 0,                                                                                 // Number of events in event list.
+                 NULL,                                                                              // Event list.
+                 NULL                                                                               // Event.
+                );
 
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+    baseline->check_error (loc_error);                                                              // Checking returned error code...
+
+    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
+  }
+  else
+  {
+    // Doing nothing.
+  }
 };
 
 void queue::acquire
@@ -856,28 +864,35 @@ void queue::acquire
 {
   cl_int loc_error;                                                                                 // Local error code.
 
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+  if(baseline->interop)                                                                             // Checking for interoperability...
+  {
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
+    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
 
-  // Setting layout index in vertex shader...
-  glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
+    // Setting layout index in vertex shader...
+    glDisableVertexAttribArray (loc_layout_index);                                                  // Unbinding data array...
 
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
 
-  // Acquiring OpenCL buffer:
-  loc_error = clEnqueueAcquireGLObjects
-              (
-               queue_id,                                                                            // Queue.
-               1,                                                                                   // Number of memory objects.
-               &loc_data->buffer,                                                                   // Memory object array.
-               0,                                                                                   // Number of events in event list.
-               NULL,                                                                                // Event list.
-               NULL                                                                                 // Event.
-              );
+    // Acquiring OpenCL buffer:
+    loc_error = clEnqueueAcquireGLObjects
+                (
+                 queue_id,                                                                          // Queue.
+                 1,                                                                                 // Number of memory objects.
+                 &loc_data->buffer,                                                                 // Memory object array.
+                 0,                                                                                 // Number of events in event list.
+                 NULL,                                                                              // Event list.
+                 NULL                                                                               // Event.
+                );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+    baseline->check_error (loc_error);                                                              // Checking returned error code...
 
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
+  }
+  else
+  {
+    // Doing nothing.
+  }
 };
 
 void queue::release
@@ -888,39 +903,46 @@ void queue::release
 {
   cl_int loc_error;                                                                                 // Local error code.
 
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+  if(baseline->interop)                                                                             // Checking for interoperability...
+  {
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
+    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
 
-  // Releasing openCL buffer:
-  loc_error = clEnqueueReleaseGLObjects
-              (
-               queue_id,                                                                            // Queue.
-               1,                                                                                   // Number of memory objects.
-               &loc_data->buffer,                                                                   // Memory object array.
-               0,                                                                                   // Number of events in event list.
-               NULL,                                                                                // Event list.
-               NULL                                                                                 // Event.
-              );
+    // Releasing openCL buffer:
+    loc_error = clEnqueueReleaseGLObjects
+                (
+                 queue_id,                                                                          // Queue.
+                 1,                                                                                 // Number of memory objects.
+                 &loc_data->buffer,                                                                 // Memory object array.
+                 0,                                                                                 // Number of events in event list.
+                 NULL,                                                                              // Event list.
+                 NULL                                                                               // Event.
+                );
 
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
 
-  glEnableVertexAttribArray (loc_layout_index);
+    glEnableVertexAttribArray (loc_layout_index);
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+    baseline->check_error (loc_error);                                                              // Checking returned error code...
 
-  // Binding data:
-  glBindBuffer (GL_ARRAY_BUFFER, loc_data->vbo);                                                    // Binding VBO...
-  glVertexAttribPointer
-  (
-   loc_layout_index,                                                                                // VAO index.
-   1,                                                                                               // Number of components of data vector.
-   GL_FLOAT,                                                                                        // Data type.
-   GL_FALSE,                                                                                        // Fixed-point data normalization.
-   0,                                                                                               // Data stride.
-   0                                                                                                // Data offset.
-  );
+    // Binding data:
+    glBindBuffer (GL_ARRAY_BUFFER, loc_data->vbo);                                                  // Binding VBO...
+    glVertexAttribPointer
+    (
+     loc_layout_index,                                                                              // VAO index.
+     1,                                                                                             // Number of components of data vector.
+     GL_FLOAT,                                                                                      // Data type.
+     GL_FALSE,                                                                                      // Fixed-point data normalization.
+     0,                                                                                             // Data stride.
+     0                                                                                              // Data offset.
+    );
 
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
+  }
+  else
+  {
+    // Doing nothing.
+  }
 };
 
 void queue::release
@@ -931,39 +953,46 @@ void queue::release
 {
   cl_int loc_error;                                                                                 // Local error code.
 
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+  if(baseline->interop)                                                                             // Checking for interoperability...
+  {
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
+    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
 
-  // Releasing openCL buffer:
-  loc_error = clEnqueueReleaseGLObjects
-              (
-               queue_id,                                                                            // Queue.
-               1,                                                                                   // Number of memory objects.
-               &loc_data->buffer,                                                                   // Memory object array.
-               0,                                                                                   // Number of events in event list.
-               NULL,                                                                                // Event list.
-               NULL                                                                                 // Event.
-              );
+    // Releasing openCL buffer:
+    loc_error = clEnqueueReleaseGLObjects
+                (
+                 queue_id,                                                                          // Queue.
+                 1,                                                                                 // Number of memory objects.
+                 &loc_data->buffer,                                                                 // Memory object array.
+                 0,                                                                                 // Number of events in event list.
+                 NULL,                                                                              // Event list.
+                 NULL                                                                               // Event.
+                );
 
-  clFinish (queue_id);                                                                              // Ensuring that all OpenCL has completed all operations...
+    clFinish (queue_id);                                                                            // Ensuring that all OpenCL has completed all operations...
 
-  glEnableVertexAttribArray (loc_layout_index);
+    glEnableVertexAttribArray (loc_layout_index);
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+    baseline->check_error (loc_error);                                                              // Checking returned error code...
 
-  // Binding data:
-  glBindBuffer (GL_ARRAY_BUFFER, loc_data->vbo);                                                    // Binding VBO...
-  glVertexAttribPointer
-  (
-   loc_layout_index,                                                                                // VAO index.
-   4,                                                                                               // Number of components of data vector.
-   GL_FLOAT,                                                                                        // Data type.
-   GL_FALSE,                                                                                        // Fixed-point data normalization.
-   0,                                                                                               // Data stride.
-   0                                                                                                // Data offset.
-  );
+    // Binding data:
+    glBindBuffer (GL_ARRAY_BUFFER, loc_data->vbo);                                                  // Binding VBO...
+    glVertexAttribPointer
+    (
+     loc_layout_index,                                                                              // VAO index.
+     4,                                                                                             // Number of components of data vector.
+     GL_FLOAT,                                                                                      // Data type.
+     GL_FALSE,                                                                                      // Fixed-point data normalization.
+     0,                                                                                             // Data stride.
+     0                                                                                              // Data offset.
+    );
 
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
+  }
+  else
+  {
+// Doing nothing.
+  }
 };
 
 queue::~queue()

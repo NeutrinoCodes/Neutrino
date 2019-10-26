@@ -350,6 +350,7 @@ void opengl::init
   loc_title.copy (loc_title_buffer, loc_title_size + 1);
   loc_title_buffer[loc_title_size] = '\0';
 
+
   glfwGetVersion (&glfw_ver_major, &glfw_ver_minor, &glfw_rev);                                     // Getting GLFW version...
 
   // Building up glfw version string:
@@ -721,22 +722,15 @@ void opengl::close ()
 
 bool opengl::closed ()
 {
-  if(baseline->interop)
+  std::cout << "pippo" << std::endl;
+  if(glfwWindowShouldClose (glfw_window))
   {
-    if(glfwWindowShouldClose (glfw_window))
-    {
-      baseline->erase ();                                                                           // Printing message...
-      baseline->action ("terminating graphics context...");                                         // Printing message...
-      baseline->done ();                                                                            // Printing message...
-    }
+    baseline->erase ();                                                                             // Printing message...
+    baseline->action ("terminating graphics context...");                                           // Printing message...
+    baseline->done ();                                                                              // Printing message...
+  }
 
-    return(glfwWindowShouldClose (glfw_window));                                                    // Returning window closure status...
-  }
-  else
-  {
-    baseline->action ("terminating text context...");                                               // Printing message...
-    return (true);
-  }
+  return(glfwWindowShouldClose (glfw_window));                                                      // Returning window closure status...
 }
 
 void opengl::clear ()
