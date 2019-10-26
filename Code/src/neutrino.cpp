@@ -195,6 +195,40 @@ void neutrino::action
   std::cout << text + pad;                                                                          // Printing buffer...
 }
 
+void neutrino::warning (
+                        std::string loc_text                                                        ///< User defined text message.
+                       )
+{
+  size_t      i;                                                                                    // Index.
+  std::string text;                                                                                 // Text buffer.
+  std::string pad;                                                                                  // Text pad.
+  size_t      pad_size;                                                                             // Text pad size.
+
+  // Compiling message string:
+  text     = std::string (NU_COLOR_YELLOW) +
+             std::string ("Warning:") +
+             std::string (NU_COLOR_NORMAL) +
+             loc_text;
+
+  pad_size = NU_MAX_MESSAGE_SIZE - text.size ();                                                    // Computing text padding...
+
+  if(pad_size >= 0)                                                                                 // Checking padding...
+  {
+    for(i = 0; i < pad_size; i++)                                                                   // Compiling padding...
+    {
+      pad += " ";                                                                                   // Adding pad...
+    }
+  }
+
+  else                                                                                              // Generating error message...
+  {
+    error ("string too big!");                                                                      // Printing message...
+    exit (1);                                                                                       // Exiting...
+  }
+
+  std::cout << text + pad;
+}
+
 void neutrino::error
 (
  std::string loc_text                                                                               // User defined text message.
@@ -278,6 +312,25 @@ void neutrino::list
   std::cout << NU_ERASE;                                                                            // Erasing current text line...
 }
 
+bool neutrino::property (
+                         std::string loc_input,                                                     // Input string.
+                         std::string loc_property                                                   // Property string.
+                        )
+{
+  std::transform (loc_input.begin (), loc_input.end (), loc_input.begin (), ::tolower);             // Convert complete given String to lower case
+  std::transform (loc_property.begin (), loc_property.end (), loc_property.begin (), ::tolower);    // Convert complete given Sub String to lower case
+
+  // Looking for substring:
+  if(loc_input.find (loc_property, 0) != std::string::npos)
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
 void neutrino::done ()
 {
   std::string loc_text;                                                                             // Text buffer.
@@ -285,6 +338,18 @@ void neutrino::done ()
   // Compiling message string:
   loc_text = std::string (NU_COLOR_GREEN) +
              std::string ("DONE!") +
+             std::string (NU_COLOR_NORMAL);
+
+  std::cout << loc_text << std::endl;                                                               // Printing message...
+}
+
+void neutrino::unfulfilled ()
+{
+  std::string loc_text;                                                                             // Text buffer.
+
+  // Compiling message string:
+  loc_text = std::string (NU_COLOR_YELLOW) +
+             std::string ("UNFULFILLED!") +
              std::string (NU_COLOR_NORMAL);
 
   std::cout << loc_text << std::endl;                                                               // Printing message...
