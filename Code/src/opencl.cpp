@@ -475,15 +475,18 @@ void opencl::init
     selected_device = 0;                                                                            // Setting 1st device, in case it is the only found one...
   }
 
-  /*
-     if(loc_platform_interop && loc_device_interop)                                                    // Evaluating interoperability flag...
-     {
-     baseline->interop = true;                                                                       // Setting interoperability flag...
-     }
-     else
-     {
-     baseline->interop = false;                                                                      // Resetting interoperability flag...
-     }*/
+  if(loc_platform_interop && loc_device_interop)                                                    // Evaluating interoperability flag...
+  {
+    baseline->interop = true;                                                                       // Setting interoperability flag...
+  }
+  else
+  {
+    baseline->interop = false;                                                                      // Resetting interoperability flag...
+  }
+
+  // EZOR: non-interop test:
+  baseline->interop   = false;
+
 
   baseline->device_id = opencl_device[selected_device]->id;                                         // Setting neutrino OpenCL device ID...
 

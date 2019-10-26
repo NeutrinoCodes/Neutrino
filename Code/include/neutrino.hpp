@@ -223,9 +223,8 @@ public:
   /// @brief **Class initializer.**
   /// @details Initializes Neutrino.
   void init (
-             size_t loc_q_num,                                                                      ///Number of OpenCL queues.
-             size_t loc_k_num,                                                                      ///Number of OpenCL kernels.
-             bool   loc_interop                                                                     ///< Interoperability flag.
+             size_t loc_q_num,                                                                      ///< Number of OpenCL queues.
+             size_t loc_k_num                                                                       ///< Number of OpenCL kernels.
             );
 
   /// @brief **Getter of "tic" time.**
