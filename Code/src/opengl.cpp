@@ -722,7 +722,6 @@ void opengl::close ()
 
 bool opengl::closed ()
 {
-  std::cout << "pippo" << std::endl;
   if(glfwWindowShouldClose (glfw_window))
   {
     baseline->erase ();                                                                             // Printing message...
