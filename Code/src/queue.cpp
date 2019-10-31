@@ -852,7 +852,32 @@ void queue::acquire
   }
   else
   {
-    // Doing nothing.
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
+    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
+
+    // Checking layout index:
+    if(loc_layout_index != loc_data->layout)
+    {
+      baseline->error ("Layout index mismatch!");                                                   // Printing message...
+      exit (EXIT_FAILURE);                                                                          // Exiting...
+    }
+
+    // Writing OpenCL buffer:
+    loc_error = clEnqueueWriteBuffer
+                (
+                 queue_id,                                                                          // OpenCL queue ID.
+                 loc_data->buffer,                                                                  // Data buffer.
+                 CL_TRUE,                                                                           // Blocking write flag.
+                 0,                                                                                 // Data buffer offset.
+                 sizeof(GLfloat)*loc_data->size,                                                    // Data buffer size.
+                 loc_data->data,                                                                    // Data buffer.
+                 0,                                                                                 // Number of events in the list.
+                 NULL,                                                                              // Event list.
+                 NULL                                                                               // Event.
+                );
+    baseline->check_error (loc_error);
+
+    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
   }
 };
 
@@ -891,7 +916,32 @@ void queue::acquire
   }
   else
   {
-    // Doing nothing.
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
+    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
+
+    // Checking layout index:
+    if(loc_layout_index != loc_data->layout)
+    {
+      baseline->error ("Layout index mismatch!");                                                   // Printing message...
+      exit (EXIT_FAILURE);                                                                          // Exiting...
+    }
+
+    // Writing OpenCL buffer:
+    loc_error = clEnqueueWriteBuffer
+                (
+                 queue_id,                                                                          // OpenCL queue ID.
+                 loc_data->buffer,                                                                  // Data buffer.
+                 CL_TRUE,                                                                           // Blocking write flag.
+                 0,                                                                                 // Data buffer offset.
+                 sizeof(float4G_structure)*loc_data->size,                                          // Data buffer size.
+                 loc_data->data,                                                                    // Data buffer.
+                 0,                                                                                 // Number of events in the list.
+                 NULL,                                                                              // Event list.
+                 NULL                                                                               // Event.
+                );
+    baseline->check_error (loc_error);
+
+    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
   }
 };
 
@@ -941,7 +991,33 @@ void queue::release
   }
   else
   {
-    // Doing nothing.
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
+    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
+
+    // Checking layout index:
+    if(loc_layout_index != loc_data->layout)
+    {
+      baseline->error ("Layout index mismatch!");                                                   // Printing message...
+      exit (EXIT_FAILURE);                                                                          // Exiting...
+    }
+
+    // Reading OpenCL buffer:
+    loc_error = clEnqueueReadBuffer
+                (
+                 queue_id,                                                                          // OpenCL queue ID.
+                 loc_data->buffer,                                                                  // Data buffer.
+                 CL_TRUE,                                                                           // Blocking write flag.
+                 0,                                                                                 // Data buffer offset.
+                 sizeof(GLfloat)*loc_data->size,                                                    // Data buffer size.
+                 loc_data->data,                                                                    // Data buffer.
+                 0,                                                                                 // Number of events in the list.
+                 NULL,                                                                              // Event list.
+                 NULL                                                                               // Event.
+                );
+
+    baseline->check_error (loc_error);
+
+    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
   }
 };
 
@@ -991,7 +1067,33 @@ void queue::release
   }
   else
   {
-// Doing nothing.
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
+    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
+
+    // Checking layout index:
+    if(loc_layout_index != loc_data->layout)
+    {
+      baseline->error ("Layout index mismatch!");                                                   // Printing message...
+      exit (EXIT_FAILURE);                                                                          // Exiting...
+    }
+
+    // Reading OpenCL buffer:
+    loc_error = clEnqueueReadBuffer
+                (
+                 queue_id,                                                                          // OpenCL queue ID.
+                 loc_data->buffer,                                                                  // Data buffer.
+                 CL_TRUE,                                                                           // Blocking write flag.
+                 0,                                                                                 // Data buffer offset.
+                 sizeof(float4G_structure)*loc_data->size,                                          // Data buffer size.
+                 loc_data->data,                                                                    // Data buffer.
+                 0,                                                                                 // Number of events in the list.
+                 NULL,                                                                              // Event list.
+                 NULL                                                                               // Event.
+                );
+
+    baseline->check_error (loc_error);
+
+    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
   }
 };
 
