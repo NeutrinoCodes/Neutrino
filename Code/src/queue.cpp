@@ -625,11 +625,14 @@ void queue::write
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
-  // Acquiring OpenGL buffer:
-  acquire (
-           loc_data,                                                                                // Data object.
-           loc_layout_index                                                                         // OpenGL shader layout index.
-          );
+  if(baseline->interop)                                                                             // Checking for interoperability...
+  {
+    // Acquiring OpenGL buffer:
+    acquire (
+             loc_data,                                                                              // Data object.
+             loc_layout_index                                                                       // OpenGL shader layout index.
+            );
+  }
 
   // Writing OpenCL buffer:
   loc_error = clEnqueueWriteBuffer
@@ -646,12 +649,15 @@ void queue::write
               );
   baseline->check_error (loc_error);
 
-  // Releasing OpenGL buffer:
-  release
-  (
-   loc_data,                                                                                        // Data object.
-   loc_layout_index                                                                                 // OpenGL shader layout index.
-  );
+  if(baseline->interop)                                                                             // Checking for interoperability...
+  {
+    // Releasing OpenGL buffer:
+    release
+    (
+     loc_data,                                                                                      // Data object.
+     loc_layout_index                                                                               // OpenGL shader layout index.
+    );
+  }
 
   clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
 };
@@ -785,11 +791,14 @@ void queue::write
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
-  // Acquiring OpenGL buffer:
-  acquire (
-           loc_data,                                                                                // Data object.
-           loc_layout_index                                                                         // OpenGL shader layout index.
-          );
+  if(baseline->interop)                                                                             // Checking for interoperability...
+  {
+    // Acquiring OpenGL buffer:
+    acquire (
+             loc_data,                                                                              // Data object.
+             loc_layout_index                                                                       // OpenGL shader layout index.
+            );
+  }
 
   // Writing OpenCL buffer:
   loc_error = clEnqueueWriteBuffer
@@ -806,12 +815,15 @@ void queue::write
               );
   baseline->check_error (loc_error);
 
-  // Releasing OpenGL buffer:
-  release
-  (
-   loc_data,                                                                                        // Data object.
-   loc_layout_index                                                                                 // OpenGL shader layout index.
-  );
+  if(baseline->interop)                                                                             // Checking for interoperability...
+  {
+    // Releasing OpenGL buffer:
+    release
+    (
+     loc_data,                                                                                      // Data object.
+     loc_layout_index                                                                               // OpenGL shader layout index.
+    );
+  }
 
   clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
 };
@@ -826,7 +838,6 @@ void queue::acquire
 
   if(baseline->interop)                                                                             // Checking for interoperability...
   {
-
     glFinish ();                                                                                    // Waiting for OpenGL to finish...
     clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
 
