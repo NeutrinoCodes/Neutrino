@@ -876,16 +876,23 @@ void queue::acquire
 {
   cl_int loc_error;                                                                                 // Local error code.
 
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    exit (EXIT_FAILURE);                                                                            // Exiting...
+  }
+
+  // Setting layout index in vertex shader...
+  glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
   if(baseline->interop)                                                                             // Checking for interoperability...
   {
-    glFinish ();                                                                                    // Waiting for OpenGL to finish...
-    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
-
-    // Setting layout index in vertex shader...
-    glDisableVertexAttribArray (loc_layout_index);                                                  // Unbinding data array...
-
-    glFinish ();                                                                                    // Waiting for OpenGL to finish...
-
     // Acquiring OpenCL buffer:
     loc_error = clEnqueueAcquireGLObjects
                 (
@@ -903,15 +910,56 @@ void queue::acquire
   }
   else
   {
-    glFinish ();                                                                                    // Waiting for OpenGL to finish...
-    clFinish (queue_id);                                                                            // Waiting for OpenCL to finish...
+    // Binding node VAO...
+    glBindVertexArray
+    (
+     loc_data->vao                                                                                  // VAOs array.
+    );
 
-    // Checking layout index:
-    if(loc_layout_index != loc_data->layout)
-    {
-      baseline->error ("Layout index mismatch!");                                                   // Printing message...
-      exit (EXIT_FAILURE);                                                                          // Exiting...
-    }
+    // Binding VBO:
+    glBindBuffer
+    (
+     GL_ARRAY_BUFFER,                                                                               // VBO target.
+     loc_data->vbo                                                                                  // VBO to bind.
+    );
+
+    // Creating and initializing a buffer object's data store:
+    glBufferSubData
+    (
+     GL_ARRAY_BUFFER,                                                                               // VBO target.
+     0,                                                                                             // VBO Offset.
+     sizeof(GLfloat)*loc_data->size,                                                                // VBO size.
+     loc_data->data                                                                                 // VBO data.
+    );
+
+    // Specifying the format for attribute in vertex shader:
+    glVertexAttribPointer
+    (
+     loc_layout_index,                                                                              // VAO index.
+     1,                                                                                             // VAO's number of components.
+     GL_FLOAT,                                                                                      // Data type.
+     GL_FALSE,                                                                                      // Not using normalized numbers.
+     0,                                                                                             // Data stride.
+     0                                                                                              // Data offset.
+    );
+
+    // Enabling attribute in vertex shader:
+    glEnableVertexAttribArray
+    (
+     loc_layout_index                                                                               // VAO index.
+    );
+
+    // Binding VBO:
+    glBindBuffer
+    (
+     GL_ARRAY_BUFFER,                                                                               // VBO target.
+     loc_data->vbo                                                                                  // VBO to bind.
+    );
+
+    // Setting layout index in vertex shader...
+    glDisableVertexAttribArray (loc_layout_index);                                                  // Unbinding data array...
+
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
 
     // Writing OpenCL buffer:
     loc_error = clEnqueueWriteBuffer
@@ -939,7 +987,6 @@ void queue::acquire
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
-
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
   clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
