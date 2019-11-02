@@ -484,8 +484,9 @@ void opencl::init
     baseline->interop = false;                                                                      // Resetting interoperability flag...
   }
 
-  // EZOR: non-interop test:
-  baseline->interop   = false;
+  // EZOR 02NOV2019: non-interop test.
+  // It looks it works also when interop = false.
+  // baseline->interop   = false;
 
   baseline->device_id = opencl_device[selected_device]->id;                                         // Setting neutrino OpenCL device ID...
 
