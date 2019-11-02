@@ -972,6 +972,57 @@ void queue::acquire
 
   else
   {
+    // Binding node VAO...
+    glBindVertexArray
+    (
+     loc_data->vao                                                                                  // VAOs array.
+    );
+
+    // Binding VBO:
+    glBindBuffer
+    (
+     GL_ARRAY_BUFFER,                                                                               // VBO target.
+     loc_data->vbo                                                                                  // VBO to bind.
+    );
+
+    // Creating and initializing a buffer object's data store:
+    glBufferSubData
+    (
+     GL_ARRAY_BUFFER,                                                                               // VBO target.
+     0,                                                                                             // VBO Offset.
+     sizeof(float4G_structure)*loc_data->size,                                                      // VBO size.
+     loc_data->data                                                                                 // VBO data.
+    );
+
+    // Specifying the format for attribute in vertex shader:
+    glVertexAttribPointer
+    (
+     loc_layout_index,                                                                              // VAO index.
+     4,                                                                                             // VAO's number of components.
+     GL_FLOAT,                                                                                      // Data type.
+     GL_FALSE,                                                                                      // Not using normalized numbers.
+     0,                                                                                             // Data stride.
+     0                                                                                              // Data offset.
+    );
+
+    // Enabling attribute in vertex shader:
+    glEnableVertexAttribArray
+    (
+     loc_layout_index                                                                               // VAO index.
+    );
+
+    // Binding VBO:
+    glBindBuffer
+    (
+     GL_ARRAY_BUFFER,                                                                               // VBO target.
+     loc_data->vbo                                                                                  // VBO to bind.
+    );
+
+    // Setting layout index in vertex shader...
+    glDisableVertexAttribArray (loc_layout_index);                                                  // Unbinding data array...
+
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
+
     // Writing OpenCL buffer:
     loc_error = clEnqueueWriteBuffer
                 (
