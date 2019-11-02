@@ -487,7 +487,6 @@ void opencl::init
   // EZOR: non-interop test:
   baseline->interop   = false;
 
-
   baseline->device_id = opencl_device[selected_device]->id;                                         // Setting neutrino OpenCL device ID...
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
