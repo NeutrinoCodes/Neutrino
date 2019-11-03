@@ -501,7 +501,7 @@ void kernel::setarg
                           baseline->context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
-                          sizeof(cl_float)*loc_data->size,                                          // Data buffer size.
+                          sizeof(GLfloat)*loc_data->size,                                           // Data buffer size.
                           loc_data->data,                                                           // Data buffer.
                           &loc_error                                                                // Error code.
                          );
@@ -763,7 +763,7 @@ void kernel::setarg
                           baseline->context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
-                          sizeof(float4_structure)*loc_data->size,                                  // Data buffer size.
+                          sizeof(float4G_structure)*loc_data->size,                                 // Data buffer size.
                           loc_data->data,                                                           // Data buffer.
                           &loc_error                                                                // Error code.
                          );
