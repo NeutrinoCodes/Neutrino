@@ -509,19 +509,18 @@ void kernel::setarg
 
     baseline->check_error (loc_error);                                                              // Checking returned error code...
     loc_data->ready = true;                                                                         // Setting "ready" flag...
-
-
-    loc_error       = clSetKernelArg
-                      (
-                       kernel_id,                                                                   // Kernel id.
-                       loc_layout_index,                                                            // Layout index.
-                       sizeof(cl_mem),                                                              // Data size.
-                       &loc_data->buffer                                                            // Data value.
-                      );
-
-    baseline->check_error (loc_error);                                                              // Checking returned error code...
-    baseline->done ();                                                                              // Printing message...
   }
+
+  loc_error = clSetKernelArg
+              (
+               kernel_id,                                                                           // Kernel id.
+               loc_layout_index,                                                                    // Layout index.
+               sizeof(cl_mem),                                                                      // Data size.
+               &loc_data->buffer                                                                    // Data value.
+              );
+
+  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  baseline->done ();                                                                                // Printing message...
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -771,19 +770,18 @@ void kernel::setarg
 
     baseline->check_error (loc_error);                                                              // Checking returned error code...
     loc_data->ready = true;                                                                         // Setting "ready" flag...
-
-    loc_error       = clSetKernelArg
-                      (
-                       kernel_id,                                                                   // Kernel id.
-                       loc_layout_index,                                                            // Layout index.
-                       sizeof(cl_mem),                                                              // Data size.
-                       &loc_data->buffer                                                            // Data value.
-                      );
-
-    baseline->check_error (loc_error);                                                              // Checking returned error code...
-
-    baseline->done ();                                                                              // Printing message...
   }
+  loc_error = clSetKernelArg
+              (
+               kernel_id,                                                                           // Kernel id.
+               loc_layout_index,                                                                    // Layout index.
+               sizeof(cl_mem),                                                                      // Data size.
+               &loc_data->buffer                                                                    // Data value.
+              );
+
+  baseline->check_error (loc_error);                                                                // Checking returned error code...
+
+  baseline->done ();                                                                                // Printing message...
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
