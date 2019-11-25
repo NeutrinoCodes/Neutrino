@@ -81,12 +81,12 @@ if(WIN32)                                                                       
 endif(WIN32)
 
 install(
-  TARGETS ${PROJECT_NAME}
-  DESTINATION ${NEUTRINO_PATH}/lib)
+  TARGETS ${PROJECT_NAME}                                                                           # Project name.
+  DESTINATION ${NEUTRINO_PATH}/lib)                                                                 # Library installation path.
 
 install(
-  DIRECTORY ${INCLUDES}
-  DESTINATION ${NEUTRINO_PATH})
+  DIRECTORY ${INCLUDES}                                                                             # Includes files.
+  DESTINATION ${NEUTRINO_PATH})                                                                     # Includes installation path.
 
 message("DONE!")                                                                                    # Printing message...
 
