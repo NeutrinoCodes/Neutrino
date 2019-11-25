@@ -8,79 +8,190 @@ _A fast and light library for GPU-based computation and interactive data visuali
 
 © Alessandro LUCANTONIO, Erik ZORZIN - 2018-2019
 
-Requirements
+Hardware requirements:
 ----
-- OpenCL-compatible GPU with support for OpenCL-OpenGL interoperability*
-- OpenCL v2.2 (runtime/loader + headers)
-- OpenGL v4.6 (library + headers)
-- GLAD (https://glad.dav1d.de/)
+- OpenCL-compatible GPU with support for OpenCL-OpenGL.
+
+It is better if the "interoperability" sharing modality exists. By using the tool  `clinfo`, under
+Mac check for the "cl_APPLE_gl_sharing" extension, while under Linux or Windows check for the
+"cl_khr_gl_sharing" extension.
+
+Software requirements for Mac:
+----
+- OpenCL v1.2 (runtime/loader + headers) *
+- OpenGL v4.6 (library + headers) *
+- GLAD (https://glad.dav1d.de/) **
 - GLFW v3.3 (https://www.glfw.org/)
-- GCC v9.1 [Linux/Mac]
-- CMake v3.14.5 [Linux/Mac]
-- Make [Linux/Mac]
-- Visual Studio 2019 [Windows] (https://visualstudio.microsoft.com/)
-- Git v2.21
+- GCC v9.1 ***
+- CMake v3.14.5 ***
+- Make ***
+- Git v2.21 ***
+- GraphViz (https://graphviz.org/) ***
+- Doxygen v1.8.15 (http://www.doxygen.nl/) ***
+- Clinfo (https://github.com/Oblomov/clinfo) ***
+
+\* They should be already present by default in the system.
+
+\** The GLAD loader should be generated from its webpage using the following settings:
+- Language = C/C++
+- gl = Version 4.6
+- Profile = Core
+
+Download the zip file containing the code and extract it in a
+custom directory, e.g. "/Users/yourname/glad".
+
+\*** If not present, they could be installed by using `brew` package manager (https://brew.sh/).
+
+Software requirements for Linux:
+----
+- OpenCL v1.2 (runtime/loader + headers) *
+- OpenGL v4.6 (library + headers) *
+- GLAD (https://glad.dav1d.de/) **
+- GLFW v3.3 (https://www.glfw.org/)
+- GCC v9.1 *
+- CMake v3.14.5 *
+- Make *
+- Git v2.21 *
+- GraphViz (https://graphviz.org/) *
+- Doxygen v1.8.15 (http://www.doxygen.nl/) *
+- Clinfo (https://github.com/Oblomov/clinfo) *
+
+\* If not present, they could be installed by using the system's package manager.
+
+\** The GLAD loader should be generated from its webpage using the following settings:
+- Language = C/C++
+- gl = Version 4.6
+- Profile = Core
+
+Download the zip file containing the code and extract it in a
+custom directory, e.g. "˜/glad".
+
+Software requirements for Windows:
+----
+- OpenCL v1.2 (runtime/loader + headers) *
+- OpenGL v4.6 (library + headers) *
+- GLAD (https://glad.dav1d.de/) **
+- GLFW v3.3 (https://www.glfw.org/)
+- Visual Studio 2019 (https://visualstudio.microsoft.com/) with "Desktop development
+with C++ --> C++ CMake tools for Windows" workload.
+- Make for Windows (http://gnuwin32.sourceforge.net/packages/make.htm) ***
+- Git v2.21 (https://gitforwindows.org/)
+- GraphViz (https://graphviz.org/)
 - Doxygen v1.8.15 (http://www.doxygen.nl/)
+- Clinfo (https://github.com/Oblomov/clinfo)
 
-\*Only needed to run neutrino in graphical mode; check for the "cl_khr_gl_sharing" extension using
-the tool  `clinfo` on Linux.
+\* To be installed within the graphics card drivers coming from the manufacturer.
 
-GCC, CMake and Make can be installed from the package manager of your Linux OS. Under Mac OS, ...
+\** The GLAD loader should be generated from its webpage using the following settings:
+- Language = C/C++
+- gl = Version 4.6
+- Profile = Core
 
-GLAD loader should be generated from its webpage using the following settings: Language = C/C++;
-gl = Version 4.6; Profile = Core. Download the zip file containing the code and extract it in a
-custom directory, i.e. C:\glad under Windows.
+Download the zip file containing the code and extract it in a
+custom directory, e.g. "C:\Users\yourname\glad".
 
-OpenCL runtime/loader are usually part of the GPU drivers.
+\*** After its installation, from the Windows' task bar go to Settings. In "Find a setting" type:
+"environment" and then select "Edit the environment variables"; a pop up window will appear. From
+that window, click the button "Environment Variables..."; in the "System variables" section edit the
+"Path" variable and add the path where you installed Make for Windows
+(e.g. "C:\Program Files (x86)\GnuWin32\bin").
 
 Compilation
 ----
 
-### Linux (generic)
-1. From the command shell, navigate into your favorite directory and clone neutrino project using
+### Mac
+1. From the command shell, navigate into your favourite directory and clone the Neutrino project
+using the command `git clone https://github.com/NeutrinoCodes/neutrino.git`.
+2. Cd into neutrino's project directory and edit the configuration script in the Code
+subdirectory: `./configure_mac` by setting your paths. Provide the **absolute** path for the
+following variables in the script:
+- DCMAKE_C_COMPILER
+- DCMAKE_CXX_COMPILER
+- DGLAD_PATH
+- DGLFW_PATH
+- DNEUTRINO_PATH
+
+You can also set environment variables in your `/Users/yourname/.bash_profile` and use them in the
+script.
+
+e.g.
+
+`export CC="/usr/local/bin/gcc-9"`
+`export CCX="/usr/local/bin/g++-9"`
+`export CPATH="/usr/local/include"`
+`export LIBRARY_PATH="/usr/local/lib"`
+`export NEUTRINOCODES_PATH="/users/yourname/NeutrinoCodes"`
+`export NEUTRINO_PATH=$NEUTRINOCODES_PATH/libnu`
+`export GLAD_PATH=$NEUTRINOCODES_PATH/glad`
+`export GLFW_PATH=$NEUTRINOCODES_PATH/glfw`
+
+P.S. after setting these variables, remember to exit and re-open the command shell or launch the
+shell command `source /Users/yourname/.bash_profile` in order to have them refreshed by the system.
+The first four variables are mandatory, because we are using gcc instead of Xcode.
+
+3. Then launch it. The Cmake configuration files will be generated.
+4. Enter the `cmake` directory and type `make install` (use `make clean` to remove old build files
+  if necessary).
+
+### Linux
+1. From the command shell, navigate into your favourite directory and clone neutrino project using
 the command `git clone https://github.com/NeutrinoCodes/neutrino.git`.
-2. Cd into neutrino's project directory and launch the configuration script in the Code
-subdirectory: `./configure`. Cmake configuration files will be generated.
-3. Enter the `cmake` directory and type `make` (use  `make clean` to remove build files and
-`make run` to launch neutrino demo application after building).
-4. Go to `Code/build/linux` under neutrino's project directory and type  `./neutrino` from the
-command shell to launch the demo application.
+2. Cd into neutrino's project directory and edit the configuration script in the Code
+subdirectory: `./configure_linux` by setting your paths. Provide the **absolute** path for the
+following variables in the script:
+- DGLAD_PATH
+- DGLFW_PATH
+- DNEUTRINO_PATH
 
-### Windows 10
-1. Launch Command Prompt, navigate into your favorite directory and clone neutrino project using
-the command `git clone https://github.com/NeutrinoCodes/neutrino.git`
-2. Launch Visual Studio 2019 and select neutrino project folder.
-3. Project -> CMake settings for neutrino -> Edit JSON; add the string
-`"-DGLAD_PATH=C:/path/to/glad -DGLFW_PATH=C:/path/to/glfw -DCL_PATH=C:/path/to/opencl"`
-to the parameter `"cmakeCommandArgs"` to specify the paths of GLAD, GLFW, and OpenCL headers
-(root directory). Also set the parameter `"buildRoot"` to `"${projectDir}\\build\\windows"`.
-_Note: if you installed the NVIDIA GPU Computing Toolkit, `-DCL_PATH` will be something
-like `\"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.1/\"`
-(notice the trailing and ending slashes, to be used if the path contains spaces)._
-4. Build -> Build All.
-5. Go to `Code/build/windows` under neutrino's project directory and type  `neutrino` from the
-Command Prompt to launch the demo application.
+You can also set environment variables in your `/Users/yourname/.bash_profile` and use them in the
+script.
 
-Alternative command line compilation using "devenv":
+e.g.
 
-1. From the Windows' start menu, launch "Visual Studio 2019" -> "Developer Command Prompt".
-2. Cd into your `Neutrino\Code` folder.
-3. Launch: `configure_windows.bat`. A new `cmake` folder will be created.
-4. Cd into that `cmake` folder.
-5. Execute: `devenv /build Release neutrino.sln`. That would compile the code: it will create a
-new `Release` folder into the `cmake` folder.
-6. Cd into the `Release` folder: a `neutrino.exe` file should be there.
-7. Launch it from this command prompt (type: `neutrino`), or double click on its icon from the
-Windows' file manager.
+`export NEUTRINOCODES_PATH="/users/yourname/NeutrinoCodes"`
+`export NEUTRINO_PATH=$NEUTRINOCODES_PATH/libnu`
+`export GLAD_PATH=$NEUTRINOCODES_PATH/glad`
+`export GLFW_PATH=$NEUTRINOCODES_PATH/glfw`
 
-Alternative command line compilation using "msbuild":
+3. Then launch it. The Cmake configuration files will be generated.
+4. Enter the `cmake` directory and type `make install` (use `make clean` to remove old build files
+  if necessary).
 
-1. From the Windows' start menu, launch "Visual Studio 2019" -> "Developer Command Prompt".
-2. Cd into your `Neutrino\Code` folder.
-3. Launch: `configure_windows.bat`. A new `cmake` folder will be created.
-4. Cd into that `cmake` folder.
-5. Execute: `msbuild neutrino.sln /p:Configuration=Release /p:Platform=x64 -m`.
-That would compile the code: it will create a new `Release` folder into the `cmake` folder.
-6. Cd into the `Release` folder: a `neutrino.exe` file should be there.
-7. Launch it from this command prompt (type: `neutrino`), or double click on its icon from the
-Windows' file manager.
+### Windows
+1. From the "x64 Native Tools Command Prompt for VS 2019" shell, navigate into your favourite
+directory and clone neutrino project using
+the command `git clone https://github.com/NeutrinoCodes/neutrino.git`.
+2. Cd into neutrino's project directory and edit the configuration script in the Code
+subdirectory: `./configure_windows.bat` by setting your paths. Provide the **absolute** path for the
+following variables in the script:
+- DGLAD_PATH
+- DGLFW_PATH
+- DNEUTRINO_PATH
+
+You can also set environment variables in your system and use them in the script.
+
+e.g.
+
+`export NEUTRINOCODES_PATH="/users/yourname/NeutrinoCodes"`
+`export NEUTRINO_PATH=$NEUTRINOCODES_PATH/libnu`
+`export GLAD_PATH=$NEUTRINOCODES_PATH/glad`
+`export GLFW_PATH=$NEUTRINOCODES_PATH/glfw`
+
+You can set these environment variables starting from the Windows' task bar. Go to Settings.
+In "Find a setting" type: "environment" and then select "Edit the environment variables";
+a pop up window will appear. From that window, click the button "Environment Variables...";
+in the "User variables for yourname" section add the new variables.
+
+3. Then launch it. The Cmake configuration files will be generated.
+4. Enter the `cmake` directory and type `make install` (use `make clean` to remove old build files
+  if necessary).
+
+All this should result in a "libnu" folder having two subfolders:
+- include
+- lib
+
+### Final considerations
+The "libnu" folder would be later used in order to build Neutrino applications. See the "Examples"
+repository.
+
+© Alessandro LUCANTONIO, Erik ZORZIN - 2018-2019
