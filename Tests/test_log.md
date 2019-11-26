@@ -1,1 +1,1 @@
-EZOR: 22NOV2019 09:07 --> Tested on WINDOWS: it works. To be further tested.
+EZOR: 26NOV2019 08:20 --> Tested on WINDOWS: it works.
