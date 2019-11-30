@@ -90,7 +90,7 @@ void neutrino::get_toc ()
   }
 }
 
-std::string neutrino::load_file
+std::string neutrino::read_file
 (
  std::string loc_file_name                                                                          // File name.
 )
@@ -109,14 +109,6 @@ std::string neutrino::load_file
     return(loc_data);                                                                               // Returning file content as string...
   }
   throw(errno);                                                                                     // Throwing error in case of a reading problem...
-}
-
-void neutrino::write_file
-(
- std::string file_name                                                                              // File name.
-)
-{
-  // EZOR: 05AGU2019: TO BE DONE!
 }
 
 size_t neutrino::query_numeric
