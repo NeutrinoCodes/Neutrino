@@ -247,15 +247,9 @@ public:
 
   /// @brief **Loader file function.**
   /// @details Loads a file.
-  std::string load_file (
+  std::string read_file (
                          std::string loc_file_name                                                  ///< File name.
                         );
-
-  /// @brief **Writer file function.**
-  /// @details Writes a file.
-  void        write_file (
-                          std::string file_name                                                     ///< File name.
-                         );
 
   /// @brief **Query numeric input from stdin function.**
   /// @details Parses a user numeric input from stdin on a terminal console.

@@ -62,7 +62,7 @@ GLuint shader::compile
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   // Loading shader from file:
-  loc_shader_source = baseline->load_file (
+  loc_shader_source = baseline->read_file (
                                            loc_shader_filename                                      // Shader file.
                                           );
 
