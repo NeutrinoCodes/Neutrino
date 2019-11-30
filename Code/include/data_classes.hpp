@@ -182,6 +182,17 @@ public:
              size_t loc_size                                                                        ///< Data size [#].
             );
 
+  /// @brief **Read file function.**
+  /// @details Reads data from a file and fills the data variable. If the data in the file is
+  /// longer than the data variable size, then the reading process is interrupted.
+  /// If the data in the file is shorter, than after filling the data variable with the data from
+  /// the file the data variable is filled with zeros.
+  /// The data must be organized in 1 column of 1 **cl_long** number per line.
+  void read (
+             std::string loc_file_directory,                                                        /// File directory.
+             std::string loc_file_name                                                              /// File name.
+            );
+
   /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
   /// @link int1::init @endlink as data storage.

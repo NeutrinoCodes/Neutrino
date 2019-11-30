@@ -10,27 +10,81 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 int1::int1()
 {
-  ready = false;                                                                                    /// Resetting "ready" flag...
+  ready = false;                                                                                    // Resetting "ready" flag...
 }
 
 void int1::init (
-                 size_t loc_size                                                                    /// Data size.
+                 size_t loc_size                                                                    // Data size.
                 )
 {
-  size_t i;                                                                                         /// Index.
+  size_t i;                                                                                         // Index.
 
-  data = new cl_long[loc_size];                                                                     /// "1 x size" data storage [cl_long].
-  size = loc_size;                                                                                  /// Data size [#].
+  data = new cl_long[loc_size];                                                                     // "1 x size" data storage [cl_long].
+  size = loc_size;                                                                                  // Data size [#].
 
   for(i = 0; i < loc_size; i++)
   {
-    data[i] = 0;                                                                                    /// Resetting data...
+    data[i] = 0;                                                                                    // Resetting data...
+  }
+}
+
+void int1::read
+(
+ std::string loc_file_directory,                                                                    // File directory.
+ std::string loc_file_name                                                                          // File name.
+)
+{
+  size_t      i;                                                                                    // Data index.
+  cl_long     loc_data;                                                                             // File data.
+  std::string loc_full_name;                                                                        // Full file name.
+
+  #ifdef __linux__
+    loc_full_name = loc_file_directory +                                                            // Data directory.
+                    std::string ("/") +                                                             // Slash.
+                    loc_file_name;                                                                  // Data file name.
+  #endif
+
+  #ifdef __APPLE__
+    loc_full_name = loc_file_directory +                                                            // Data directory.
+                    std::string ("/") +                                                             // Slash.
+                    loc_file_name;                                                                  // Data file name.
+  #endif
+
+  #ifdef WIN32
+    loc_full_name = loc_file_directory +                                                            // Data directory.
+                    std::string ("\\") +                                                            // Backslash.
+                    loc_file_name;                                                                  // Data file name.
+  #endif
+
+  std::ifstream loc_file (loc_full_name);                                                           // File.
+
+  if(loc_file)                                                                                      // Checking file...
+  {
+    for(i = 0; i < size; i++)
+    {
+      if(loc_file >> loc_data)
+      {
+        data[i] = loc_data;                                                                         // Setting data...
+      }
+
+      else
+      {
+        data[i] = 0;                                                                                // Resetting data...
+      }
+    }
+
+    loc_file.close ();                                                                              // Closing file...
+  }
+
+  else
+  {
+    throw(errno);                                                                                   // Throwing error in case of a reading problem...
   }
 }
 
 int1::~int1()
 {
-  delete[] data;                                                                                    /// Deleting data storage...
+  delete[] data;                                                                                    // Deleting data storage...
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
