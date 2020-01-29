@@ -33,6 +33,10 @@ public:
              neutrino* loc_baseline                                                                 ///< Neutrino baseline.
             );
 
+  void read_msh (
+                 std::string loc_file_name                                                          ///< GMSH .msh file name.
+                );
+
   ~mesh();
 };
 
