@@ -10,6 +10,7 @@
 #define nu_hpp
 
 // INCLUDES:
+  #include "mesh.hpp"                                                                               // Neutrino's mesh context declarations.
   #include "opengl.hpp"                                                                             // Neutrino's OpenGL context declarations.
   #include "opencl.hpp"                                                                             // Neutrino's OpenCL context declarations.
 
