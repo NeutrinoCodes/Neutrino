@@ -30,40 +30,39 @@ void mesh::read_msh (
                      std::string loc_file_name                                                      ///< GMSH .msh file name.
                     )
 {
+  gmsh::open (loc_file_name.c_str ());
 
-  gmsh::clear ();                                                                                   ///< Opening .msh file...
-/*
-     // get all elementary entities in the model
-     std::vector<std::pair<int, int> > entities;
-     gmsh::model::getEntities (entities);
+  // get all elementary entities in the model
+  std::vector<std::pair<int, int> > entities;
+  gmsh::model::getEntities (entities);
 
-     for(unsigned int i = 0; i < entities.size (); i++) {
-     // get the mesh nodes for each elementary entity
-     std::vector<std::size_t>               nodeTags;
-     std::vector<double>                    nodeCoords, nodeParams;
-     int                                    dim = entities[i].first, tag = entities[i].second;
-     gmsh::model::mesh::getNodes (nodeTags, nodeCoords, nodeParams, dim, tag);
+  for(unsigned int i = 0; i < entities.size (); i++) {
+    // get the mesh nodes for each elementary entity
+    std::vector<std::size_t>               nodeTags;
+    std::vector<double>                    nodeCoords, nodeParams;
+    int                                    dim = entities[i].first, tag = entities[i].second;
+    gmsh::model::mesh::getNodes (nodeTags, nodeCoords, nodeParams, dim, tag);
 
-     // get the mesh elements for each elementary entity
-     std::vector<int>                       elemTypes;
-     std::vector<std::vector<std::size_t> > elemTags, elemNodeTags;
-     gmsh::model::mesh::getElements (elemTypes, elemTags, elemNodeTags, dim, tag);
+    // get the mesh elements for each elementary entity
+    std::vector<int>                       elemTypes;
+    std::vector<std::vector<std::size_t> > elemTags, elemNodeTags;
+    gmsh::model::mesh::getElements (elemTypes, elemTags, elemNodeTags, dim, tag);
 
-     // report some statistics
-     int                                    numElem = 0;
+    // report some statistics
+    int                                    numElem = 0;
 
-     for(unsigned int i = 0; i < elemTags.size (); i++)
+    for(unsigned int i = 0; i < elemTags.size (); i++)
       numElem += elemTags[i].size ();
 
-     std::string                            type;
-     gmsh::model::getType (dim, tag, type);
-     std::cout << nodeTags.size () << " mesh nodes and "
+    std::string                            type;
+    gmsh::model::getType (dim, tag, type);
+    std::cout << nodeTags.size () << " mesh nodes and "
               << numElem << " mesh elements on entity ("
               << dim << "," << tag << ") of type " << type << "\n";
-     std::vector<int>                       partitions;
-     gmsh::model::getPartitions (dim, tag, partitions);
-     if(partitions.size ())
-     {
+    std::vector<int>                       partitions;
+    gmsh::model::getPartitions (dim, tag, partitions);
+    if(partitions.size ())
+    {
       std::cout << " - Partition tag(s):";
 
       for(unsigned int i = 0; i < partitions.size (); i++)
@@ -72,9 +71,9 @@ void mesh::read_msh (
       int parentDim, parentTag;
       gmsh::model::getParent (dim, tag, parentDim, parentTag);
       std::cout << " - parent entity (" << parentDim << "," << parentTag << ")\n";
-     }
+    }
 
-     for(unsigned int i = 0; i < elemTypes.size (); i++) {
+    for(unsigned int i = 0; i < elemTypes.size (); i++) {
       std::string         name;
       int                 d, order, numv, numpv;
       std::vector<double> param;
@@ -94,9 +93,8 @@ void mesh::read_msh (
         std::cout << param[j] << " ";
 
       std::cout << ")\n";
-     }
-     }
- */
+    }
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
