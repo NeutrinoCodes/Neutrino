@@ -94,6 +94,23 @@ void mesh::read_msh (
 
       std::cout << ")\n";
     }
+
+    std::cout << "Node coordinates: " << std::endl;
+
+    for(unsigned int i = 0; i < nodeCoords.size ()/3; i += 3)
+    {
+      for(unsigned int j = 0; j < 3; j++)
+      {
+        std::cout << "x = "
+                  << nodeCoords[i + j]
+                  << " y = "
+                  << nodeCoords[i + j]
+                  << " z = "
+                  << nodeCoords[i + j]
+                  << std::endl;
+      }
+
+    }
   }
 }
 
