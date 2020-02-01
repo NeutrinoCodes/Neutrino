@@ -21,35 +21,44 @@ void mesh::init
   baseline = loc_baseline;                                                                          // Getting Neutrino baseline...
   baseline->action ("initializing GMSH...");                                                        // Printing message...
   gmsh::initialize ();                                                                              // Initializing GMSH...
-  gmsh::model::add ("boolean");
+  gmsh::model::add ("neutrino");                                                                    // Adding a new GMSH model (named "neutrino")...
   gmsh::option::setNumber ("General.Terminal", 1);                                                  // Allowing GMSH to write on stdout...
   baseline->done ();                                                                                // Printing message...
 }
 
 void mesh::read_msh (
-                     std::string loc_file_name                                                      ///< GMSH .msh file name.
+                     std::string loc_file_name                                                      // GMSH .msh file name.
                     )
 {
-  size_t                            i;
-  size_t                            j;
-  size_t                            k;
+  size_t                                 i;
+  size_t                                 j;
+  size_t                                 k;
+  size_t                                 n;
+  size_t                                 dim;
+  size_t                                 tag;
+  std::vector<std::pair<int, int> >      entities;
+  std::vector<std::size_t>               nodeTags;
+  std::vector<double>                    nodeCoords;
+  std::vector<double>                    nodeParams;
+  std::vector<int>                       elemTypes;
+  std::vector<std::vector<std::size_t> > elemTags;
+  std::vector<std::vector<std::size_t> > elemNodeTags;
 
-  gmsh::open (loc_file_name.c_str ());
+  std::string                            elemName;
+  int                                    order;
+  int                                    numNodes;
+  int                                    numPrimaryNodes;
+  std::vector<double>                    param;
+  int                                    d;
 
-  // get all elementary entities in the model
-  std::vector<std::pair<int, int> > entities;
-  gmsh::model::getEntities (entities);
+  gmsh::open (loc_file_name.c_str ());                                                              // Opening GMSH model from file...
+  gmsh::model::getEntities (entities);                                                              // Getting all entities...
 
   for(i = 0; i < entities.size (); i++)
   {
-    // get the mesh nodes for each elementary entity
-    std::vector<std::size_t> nodeTags;
-    std::vector<double>      nodeCoords, nodeParams;
-    int                      dim = entities[i].first, tag = entities[i].second;
-    gmsh::model::mesh::getNodes (nodeTags, nodeCoords, nodeParams, dim, tag);
-
-    //std::cout << "nodeTags.size = " << nodeTags.size () << std::endl;
-    //std::cout << "nodeCoords.size = " << nodeCoords.size () << std::endl;
+    dim = entities[i].first;
+    tag = entities[i].second;
+    gmsh::model::mesh::getNodes (nodeTags, nodeCoords, nodeParams, dim, tag);                       // Getting the mesh nodes for each entity...
 
     for(j = 0; j < nodeTags.size (); j++)
     {
@@ -63,84 +72,33 @@ void mesh::read_msh (
                 << std::endl;
     }
 
-    // get the mesh elements for each elementary entity
-    std::vector<int>                       elemTypes;
-    std::vector<std::vector<std::size_t> > elemTags, elemNodeTags;
-    gmsh::model::mesh::getElements (elemTypes, elemTags, elemNodeTags, dim, tag);
+    gmsh::model::mesh::getElements (elemTypes, elemTags, elemNodeTags, dim, tag);                   // Getting the mesh elements for each entity...
 
-    std::cout << "pippo" << std::endl;
-
-    for(j = 0; j < elemTags.size (); j++)
+    for(j = 0; j < elemTypes.size (); j++)
     {
-      std::cout << "element types " << elemTypes[j] << std::endl;
-
-      for(k = 0; k < elemTypes[j]; k++)
-      {
-        std::cout << elemTags[j][k]
-                  << " "
-                  << std::endl;
-      }
-
-      /*<< " "
-         << elemNodeTags[4*j + 0]
-         << ","
-         << elemNodeTags[4*j + 1]
-         << ","
-         << elemNodeTags[4*j + 2]
-         << ","
-         << elemNodeTags[4*j + 3]
-       */
-
-    }
-
-
-    // report some statistics
-    int              numElem = 0;
-
-    for(unsigned int i = 0; i < elemTags.size (); i++)
-      numElem += elemTags[i].size ();
-
-    std::string      type;
-    gmsh::model::getType (dim, tag, type);
-    std::cout << nodeTags.size () << " mesh nodes and "
-              << numElem << " mesh elements on entity ("
-              << dim << "," << tag << ") of type " << type << "\n";
-    std::vector<int> partitions;
-    gmsh::model::getPartitions (dim, tag, partitions);
-    if(partitions.size ())
-    {
-      std::cout << " - Partition tag(s):";
-
-      for(unsigned int i = 0; i < partitions.size (); i++)
-        std::cout << " " << partitions[i];
-
-      int parentDim, parentTag;
-      gmsh::model::getParent (dim, tag, parentDim, parentTag);
-      std::cout << " - parent entity (" << parentDim << "," << parentTag << ")\n";
-    }
-
-    for(unsigned int i = 0; i < elemTypes.size (); i++) {
-      std::string         name;
-      int                 d, order, numv, numpv;
-      std::vector<double> param;
       gmsh::model::mesh::getElementProperties (
-                                               elemTypes[i],
-                                               name,
+                                               elemTypes[j],
+                                               elemName,
                                                d,
                                                order,
-                                               numv,
+                                               numNodes,
                                                param,
-                                               numpv
+                                               numPrimaryNodes
                                               );
-      std::cout << " - Element type: " << name << ", order " << order << "\n";
-      std::cout << "   with " << numv << " nodes in param coord: (";
 
-      for(unsigned int j = 0; j < param.size (); j++)
-        std::cout << param[j] << " ";
+      std::cout << "element type = " << elemTypes[j] << std::endl;
+      std::cout << "elementNodeTags.size = " << elemNodeTags[j].size ()<< std::endl;
 
-      std::cout << ")\n";
+      for(k = 0; k < elemNodeTags[j].size (); k += 1)
+      {
+        for(n = 0; n < numNodes; n++)
+        {
+          std::cout << elemNodeTags[j][k + n] << " ";
+        }
+
+        std::cout << std::endl;
+      }
     }
-
   }
 }
 
