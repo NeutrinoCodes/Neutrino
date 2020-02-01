@@ -89,15 +89,21 @@ void mesh::read_msh (
       std::cout << "element type = " << elemTypes[j] << std::endl;
       std::cout << "elementNodeTags.size = " << elemNodeTags[j].size ()<< std::endl;
 
-      for(k = 0; k < elemNodeTags[j].size (); k += 1)
+      std::cout << "elemTags.size = " << elemTags.size () << std::endl;
+      std::cout << "elemTags[j].size = " << elemTags[j].size () << std::endl;
+
+      for(k = 0; k < elemTags[j].size (); k++)
       {
+        std::cout << elemTags[j][k] << " ";
+
         for(n = 0; n < numNodes; n++)
         {
-          std::cout << elemNodeTags[j][k + n] << " ";
+          std::cout << elemNodeTags[j][numNodes*k + n] << " ";
         }
 
         std::cout << std::endl;
       }
+
     }
   }
 }
