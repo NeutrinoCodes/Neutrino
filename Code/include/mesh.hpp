@@ -12,6 +12,7 @@
 #define mesh_hpp
 
 #include "neutrino.hpp"
+#include "data_classes.hpp"
 #include <gmsh.h>
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,17 +25,40 @@
 class mesh                                                                                          /// @brief **Mesh.**
 {
 private:
-  neutrino* baseline;                                                                               ///< @brief **Neutrino baseline.**
+  neutrino*                              baseline;                                                  ///< @brief **Neutrino baseline.**
+  size_t                                 i;                                                         ///< Index.
+  size_t                                 j;                                                         ///< Index.
+  size_t                                 k;                                                         ///< Index.
+  size_t                                 n;                                                         ///< Index.
+  size_t                                 dim;                                                       ///< Entity dimension.
+  size_t                                 tag;                                                       ///< Entity tag.
+  std::vector<std::pair<int, int> >      entities;                                                  ///< Entity array.
+  std::vector<std::size_t>               nodeTags;                                                  ///< Node tags array...
+  std::vector<double>                    nodeCoords;                                                ///< Node coordinates array...
+  std::vector<double>                    nodeParams;
+  std::vector<int>                       elemTypes;                                                 ///< Element type array...
+  std::vector<std::vector<std::size_t> > elemTags;                                                  ///< Element tags array...
+  std::vector<std::vector<std::size_t> > elemNodeTags;                                              ///< Element node tags array...
+  int                                    model_dim;                                                 ///< Model dimension.
+  std::string                            elemName;                                                  ///< Element name...
+  int                                    order;
+  int                                    numNodes;
+  int                                    numPrimaryNodes;
+  std::vector<double>                    param;
+  int                                    d;
+
 public:
+  size_t                                 nodes;                                                     ///< Number of mesh nodes.
 
   mesh ();
 
   void init (
-             neutrino* loc_baseline                                                                 ///< Neutrino baseline.
+             neutrino*   loc_baseline,                                                              ///< Neutrino baseline.
+             std::string loc_file_name                                                              ///< GMSH .msh file name.
             );
 
   void read_msh (
-                 std::string loc_file_name                                                          ///< GMSH .msh file name.
+                 float4G* loc_node                                                                  ///< GMSH node data.
                 );
 
   ~mesh();
