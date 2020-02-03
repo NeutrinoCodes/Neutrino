@@ -208,11 +208,12 @@ void opengl::mouse_button
       switch(loc_action)
       {
         case GLFW_PRESS:
-          mouse_LEFT = true;
+          mouse_LEFT           = true;
           break;
 
         case GLFW_RELEASE:
-          mouse_LEFT = false;
+          mouse_LEFT           = false;
+          mouse_1st_click_LEFT = false;
           break;
       }
 
@@ -223,11 +224,12 @@ void opengl::mouse_button
       switch(loc_action)
       {
         case GLFW_PRESS:
-          mouse_RIGHT = true;
+          mouse_RIGHT           = true;
           break;
 
         case GLFW_RELEASE:
-          mouse_RIGHT = false;
+          mouse_RIGHT           = false;
+          mouse_1st_click_RIGHT = false;
           break;
       }
 
@@ -290,6 +292,8 @@ void opengl::init
 
   mouse_X                   = 0;                                                                    // Initializing mouse x-coordinate [px]...
   mouse_Y                   = 0;                                                                    // Initializing mouse y-coordinate [px]...
+  mouse_1st_click_LEFT      = false;                                                                // Resetting flag...
+  mouse_1st_click_RIGHT     = false;                                                                // Resetting flag...
 
   scroll_X                  = 0;                                                                    // Initializing scroll x-coordinate [px]...
   scroll_Y                  = 0;                                                                    // Initializing scroll y-coordinate [px]...
@@ -550,39 +554,53 @@ void opengl::orbit
   loc_orbit_initial[1] = 0.0f;                                                                      // Building initial world vector...
   loc_orbit_initial[2] = 1.0f;                                                                      // Building initial world vector...
 
+  if(mouse_LEFT)
+  {
+    if(!mouse_1st_click_LEFT)
+    {
+      loc_orbit_initial[0] = mouse_X/window_size_x;
+      loc_orbit_initial[1] = mouse_Y/window_size_y;
+      loc_orbit_initial[2] = 1.0f;
+      mouse_1st_click_LEFT = true;
+    }
+
+    loc_orbit_x = mouse_X/window_size_x;
+    loc_orbit_y = mouse_X/window_size_y;
+  }
+
   // Constraining input values:
-  loc_orbit_x          = baseline->constrain_float
-                         (
-                          loc_orbit_x,                                                              // Initial x-orbit.
-                          NU_GAMEPAD_MIN_AXES,                                                      // Minimum x-orbit.
-                          NU_GAMEPAD_MAX_AXES                                                       // Maximum x-orbit.
-                         );
-  loc_orbit_y          = baseline->constrain_float
-                         (
-                          loc_orbit_y,                                                              // Initial y-orbit.
-                          NU_GAMEPAD_MIN_AXES,                                                      // Minimum y-orbit.
-                          NU_GAMEPAD_MAX_AXES                                                       // Maximum y-orbit.
-                         );
+  loc_orbit_x         = baseline->constrain_float
+                        (
+                         loc_orbit_x,                                                               // Initial x-orbit.
+                         NU_GAMEPAD_MIN_AXES,                                                       // Minimum x-orbit.
+                         NU_GAMEPAD_MAX_AXES                                                        // Maximum x-orbit.
+                        );
+  loc_orbit_y         = baseline->constrain_float
+                        (
+                         loc_orbit_y,                                                               // Initial y-orbit.
+                         NU_GAMEPAD_MIN_AXES,                                                       // Minimum y-orbit.
+                         NU_GAMEPAD_MAX_AXES                                                        // Maximum y-orbit.
+                        );
 
-  loc_orbit_rate       = baseline->constrain_float
-                         (
-                          loc_orbit_rate,                                                           // Orbit angular rate [rev/s].
-                          NU_GAMEPAD_MIN_ORBIT_RATE,                                                // Minimum orbit angular rate [rev/s].
-                          NU_GAMEPAD_MAX_ORBIT_RATE                                                 // Maximum orbit angular rate [rev/s].
-                         );
-  loc_orbit_deadzone   = baseline->constrain_float
-                         (
-                          loc_orbit_deadzone,                                                       // Orbit deadzone.
-                          NU_GAMEPAD_MIN_AXES,                                                      // Minimum gampad axes value.
-                          NU_GAMEPAD_MAX_AXES                                                       // Maximum gampad axes value.
-                         );
+  loc_orbit_rate      = baseline->constrain_float
+                        (
+                         loc_orbit_rate,                                                            // Orbit angular rate [rev/s].
+                         NU_GAMEPAD_MIN_ORBIT_RATE,                                                 // Minimum orbit angular rate [rev/s].
+                         NU_GAMEPAD_MAX_ORBIT_RATE                                                  // Maximum orbit angular rate [rev/s].
+                        );
+  loc_orbit_deadzone  = baseline->constrain_float
+                        (
+                         loc_orbit_deadzone,                                                        // Orbit deadzone.
+                         NU_GAMEPAD_MIN_AXES,                                                       // Minimum gampad axes value.
+                         NU_GAMEPAD_MAX_AXES                                                        // Maximum gampad axes value.
+                        );
 
-  loc_orbit_decaytime  = baseline->constrain_float
-                         (
-                          loc_orbit_decaytime,                                                      // Orbit LP filter decay time [s].
-                          NU_GAMEPAD_MIN_DECAYTIME,                                                 // Minimum orbit LP filter decay time [s].
-                          NU_GAMEPAD_MAX_DECAYTIME                                                  // Maximum orbit LP filter decay time [s].
-                         );
+  loc_orbit_decaytime = baseline->constrain_float
+                        (
+                         loc_orbit_decaytime,                                                       // Orbit LP filter decay time [s].
+                         NU_GAMEPAD_MIN_DECAYTIME,                                                  // Minimum orbit LP filter decay time [s].
+                         NU_GAMEPAD_MAX_DECAYTIME                                                   // Maximum orbit LP filter decay time [s].
+                        );
 
   // Applying deadzone:
   if((abs (loc_orbit_x) <= loc_orbit_deadzone) &&
