@@ -298,9 +298,6 @@ public:
   bool        mouse_LEFT;                                                                           ///< @brief **Mouse "LEFT" button.**
   bool        mouse_RIGHT;                                                                          ///< @brief **Mouse "RIGHT" button.**
 
-  bool        mouse_1st_click_LEFT;                                                                 ///<  @brief **Mouse "LEFT" button 1st click detection.**
-  bool        mouse_1st_click_RIGHT;                                                                ///<  @brief **Mouse "RIGHT" button 1st click detection.**
-
   double      mouse_X;                                                                              ///< @brief **Mouse x-coordinate [px].**
   double      mouse_Y;                                                                              ///< @brief **Mouse y-coordinate [px].**
 
