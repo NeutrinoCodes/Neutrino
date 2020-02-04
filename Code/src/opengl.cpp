@@ -214,6 +214,7 @@ void opengl::mouse_button
         case GLFW_RELEASE:
           mouse_LEFT           = false;
           mouse_1st_click_LEFT = false;
+          //backup (R_mat_old, R_mat);                                                                // Backing up rotation matrix...
           break;
       }
 
@@ -558,14 +559,14 @@ void opengl::orbit
   {
     if(!mouse_1st_click_LEFT)
     {
-      loc_orbit_initial[0] = mouse_X/window_size_x;
-      loc_orbit_initial[1] = mouse_Y/window_size_y;
+      loc_orbit_initial[0] = 2.0*(mouse_X - window_size_x/2.0)/window_size_x;
+      loc_orbit_initial[1] = 2.0*(mouse_Y - window_size_y/2.0)/window_size_y;
       loc_orbit_initial[2] = 1.0f;
       mouse_1st_click_LEFT = true;
     }
 
-    loc_orbit_x = mouse_X/window_size_x;
-    loc_orbit_y = mouse_X/window_size_y;
+    loc_orbit_x = 2.0*(mouse_X - window_size_x/2.0)/window_size_x;
+    loc_orbit_y = 2.0*(mouse_Y - window_size_y/2.0)/window_size_y;
   }
 
   // Constraining input values:
@@ -588,6 +589,7 @@ void opengl::orbit
                          NU_GAMEPAD_MIN_ORBIT_RATE,                                                 // Minimum orbit angular rate [rev/s].
                          NU_GAMEPAD_MAX_ORBIT_RATE                                                  // Maximum orbit angular rate [rev/s].
                         );
+
   loc_orbit_deadzone  = baseline->constrain_float
                         (
                          loc_orbit_deadzone,                                                        // Orbit deadzone.
