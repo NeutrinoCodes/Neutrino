@@ -339,6 +339,15 @@ public:
               float loc_orbit_decaytime                                                             ///< Orbit low pass decay time [s].
              );
 
+  /// @brief **GUI mouse control.**
+  /// @details Controls the GUI navigation by the mouse or trakpad.
+  void mouse (
+              float loc_orbit_rate,                                                                 ///< Orbit angular rate coefficient [rev/s].
+              float loc_pan_xy_rate,                                                                ///< Pan xy-translation rate [m/s].
+              float loc_pan_z_rate,                                                                 ///< Pan z-translation rate [m/s].
+              float loc_decaytime                                                                   ///< Low pass filter decay time [s].
+             );
+
   /// @brief **Pan movement.**
   /// @details Translates the view matrix according to a pan movement.
   void pan (
