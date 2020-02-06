@@ -840,6 +840,54 @@ void opengl::gamepad_navigation (
       );
 }
 
+void opengl::gamepad_navigation (
+                                 float loc_orbit_rate,                                              // Orbit angular rate coefficient [rev/s].
+                                 float loc_pan_xy_rate,                                             // Pan xy-translation rate [m/s].
+                                 float loc_pan_z_rate,                                              // Pan z-translation rate [m/s].
+                                 float loc_decaytime,                                               // Low pass filter decay time [s].
+                                 float loc_deadzone                                                 // Gamepad joystick deadzone [0...1].
+                                )
+{
+  float loc_orbit_x;
+  float loc_orbit_y;
+  float loc_pan_x;
+  float loc_pan_y;
+  float loc_pan_z;
+
+  loc_orbit_x = +axis_LEFT_X;                                                                       // Setting "Near clipping-plane" x-coordinate...
+  loc_orbit_y = -axis_LEFT_Y;                                                                       // Setting "Near clipping-plane" y-coordinate...
+
+  orbit (
+         loc_orbit_x,                                                                               // "Near clipping-plane" x-coordinate.
+         loc_orbit_y,                                                                               // "Near clipping-plane" y-coordinate.
+         loc_orbit_rate,                                                                            // Orbit angular rate coefficient [rev/s].
+         loc_deadzone,                                                                              // Orbit deadzone threshold coefficient.
+         loc_decaytime                                                                              // Orbit low pass decay time [s].
+        );
+
+  pan_x       = +axis_RIGHT_X;                                                                      // Setting world x-pan...
+  pan_y       = -axis_RIGHT_Y;                                                                      // Setting world y-pan...
+  pan_z       = (axis_RIGHT_TRIGGER + 1.0)/2.0 - (axis_LEFT_TRIGGER + 1.0)/2.0;                     // Setting world z-pan...
+
+  pan (
+       0.0,                                                                                         // World x-pan.
+       0.0,                                                                                         // World y-pan.
+       loc_pan_z,                                                                                   // World z-pan.
+       loc_pan_z_rate,                                                                              // Pan rate [length/s].
+       loc_deadzone,                                                                                // Pan deadzone threshold coefficient.
+       loc_decaytime                                                                                // Pan low pass decay time [s].
+      );
+
+  pan (
+       loc_pan_x,                                                                                   // World x-pan.
+       loc_pan_y,                                                                                   // World y-pan.
+       0.0,                                                                                         // World z-pan.
+       loc_pan_xy_rate,                                                                             // Pan rate [length/s].
+       loc_deadzone,                                                                                // Pan deadzone threshold coefficient.
+       loc_decaytime                                                                                // Pan low pass decay time [s].
+      );
+}
+
 void opengl::close ()
 {
   glfwSetWindowShouldClose (glfw_window, GL_TRUE);                                                  // Setting window "closed" flag...
