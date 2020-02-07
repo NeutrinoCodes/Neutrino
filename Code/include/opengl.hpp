@@ -17,6 +17,13 @@ class opengl                                                                    
 private:
   neutrino*        baseline;                                                                        ///< @brief **Neutrino baseline.**
   GLFWgamepadstate gamepad;                                                                         ///< @brief **Gamepad state.**
+  float            mouse_x;                                                                         ///< @brief **Mouse x movement (current) for velocity computation.**
+  float            mouse_y;                                                                         ///< @brief **Mouse y movement (current) for velocity computation.**
+  float            mouse_z;                                                                         ///< @brief **Mouse z movement (current) for velocity computation.**
+  float            mouse_x_old;                                                                     ///< @brief **Mouse x movement (old) for velocity computation.**
+  float            mouse_y_old;                                                                     ///< @brief **Mouse y movement (old) for velocity computation.**
+  float            mouse_z_old;                                                                     ///< @brief **Mouse z movement (old) for velocity computation.**
+  bool             mouse_sample;                                                                    ///< @brief **Mouse sample flag for velocity computation.**
   bool             orbit_on;                                                                        ///< @brief **Orbit activation flag.**
   float            orbit_x;                                                                         ///< @brief **Orbit x movement (current).**
   float            orbit_y;                                                                         ///< @brief **Orbit y movement (current).**
@@ -342,6 +349,23 @@ public:
             float loc_pan_deadzone,                                                                 ///< Pan deadzone threshold coefficient.
             float loc_pan_decaytime                                                                 ///< Pan low pass decay time [s].
            );
+
+  /// @brief **GUI mouse control.**
+  /// @details Controls the GUI navigation by the mouse or trakpad.
+  void mouse_navigation (
+                         float loc_orbit_rate,                                                      ///< Orbit angular rate coefficient [rev/s].
+                         float loc_pan_rate,                                                        ///< Pan translation rate [m/s].
+                         float loc_decaytime                                                        ///< Low pass filter decay time [s].
+                        );
+
+  /// @brief **GUI gamepad control.**
+  /// @details Controls the GUI navigation by the gamepad.
+  void gamepad_navigation (
+                           float loc_orbit_rate,                                                    ///< Orbit angular rate coefficient [rev/s].
+                           float loc_pan_rate,                                                      ///< Pan translation rate [m/s].
+                           float loc_decaytime,                                                     ///< Low pass filter decay time [s].
+                           float loc_deadzone                                                       ///< Gamepad joystick deadzone [0...1].
+                          );
 
   /// @brief **GUI close function.**
   /// @details Closes the GUI. To be invoked by the user.
