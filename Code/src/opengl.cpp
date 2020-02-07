@@ -284,6 +284,8 @@ void opengl::init
   initial_scene_position[1] = loc_pan_y_initial;                                                    // Initializing y-position...
   initial_scene_position[2] = loc_pan_z_initial;                                                    // Initializing z-position...
 
+  mouse_sample              = false;                                                                // Resetting mouse sampling flag...
+
   mouse_X                   = 0;                                                                    // Initializing mouse x-coordinate [px]...
   mouse_Y                   = 0;                                                                    // Initializing mouse y-coordinate [px]...
 
@@ -713,6 +715,126 @@ void opengl::pan
    T_mat_old,
    T_mat
   );                                                                                                // Backing up translation matrix...
+}
+
+void opengl::mouse_navigation (
+                               float loc_orbit_rate,                                                // Orbit angular rate coefficient [rev/s].
+                               float loc_pan_rate,                                                  // Pan translation rate [m/s].
+                               float loc_decaytime                                                  // Low pass filter decay time [s].
+                              )
+{
+  float dt          = 0.0;
+  float dt_min      = 0.01;
+  float dt_max      = 0.05;
+  float loc_orbit_x = 0.0;
+  float loc_orbit_y = 0.0;
+  float loc_pan_x   = 0.0;
+  float loc_pan_y   = 0.0;
+  float loc_pan_z   = 0.0;
+  float loc_vx      = 0.0;
+  float loc_vy      = 0.0;
+  float loc_vz      = 0.0;
+
+  switch(mouse_sample)                                                                              // Sampling mouse position...
+  {
+    case false:
+      mouse_x      = mouse_X;                                                                       // Getting mouse x-axis...
+      mouse_y      = mouse_Y;                                                                       // Getting mouse y-axis...
+      mouse_z      = scroll_Y;                                                                      // Getting mouse z-axis...
+      mouse_sample = true;                                                                          // Setting sample flag...
+      break;
+
+    case true:
+      mouse_x_old  = mouse_x;                                                                       // Backing up mouse x-axis...
+      mouse_y_old  = mouse_y;                                                                       // Backing up mouse y-axis...
+      mouse_z_old  = mouse_z;                                                                       // Backing up mouse z-axis...
+      mouse_x      = mouse_X;                                                                       // Getting mouse x-axis...
+      mouse_y      = mouse_Y;                                                                       // Getting mouse y-axis...
+      mouse_z      = scroll_Y;                                                                      // Getting mouse z-axis...
+      mouse_sample = false;                                                                         // Resetting sample flag...
+      break;
+  }
+
+  dt     = baseline->constrain_float (baseline->loop_time, dt_min, dt_max);                         // Getting loop time...
+  loc_vx = +(mouse_x - mouse_x_old)/(window_size_x*dt);                                             // Computing mouse x-velocity [px/s]...
+  loc_vy = -(mouse_y - mouse_y_old)/(window_size_y*dt);                                             // Computing mouse y-velocity [px/s]...
+  loc_vz = +(mouse_z - mouse_z_old)/(window_size_y*dt);                                             // Computing mouse z-velocity [px/s]...
+
+  // Doing mouse orbit movement...
+  if(mouse_LEFT)
+  {
+    loc_orbit_x = loc_vx;
+    loc_orbit_y = loc_vy;
+  }
+
+  // Doing mouse pan movement...
+  if(mouse_RIGHT)
+  {
+    loc_pan_x = loc_vx;
+    loc_pan_y = loc_vy;
+    loc_pan_z = 0.0;
+  }
+
+  if(mouse_z != 0.0)
+  {
+    loc_pan_z = mouse_z;
+  }
+
+  orbit (
+         loc_orbit_x,                                                                               // "Near clipping-plane" x-coordinate.
+         loc_orbit_y,                                                                               // "Near clipping-plane" y-coordinate.
+         loc_orbit_rate,                                                                            // Orbit angular rate coefficient [rev/s].
+         0.0,                                                                                       // Orbit deadzone threshold coefficient.
+         loc_decaytime                                                                              // Orbit low pass decay time [s].
+        );
+
+  pan (
+       loc_pan_x,                                                                                   // World x-pan.
+       loc_pan_y,                                                                                   // World y-pan.
+       loc_pan_z,                                                                                   // World z-pan.
+       loc_pan_rate,                                                                                // Pan rate [length/s].
+       0.0,                                                                                         // Pan deadzone threshold coefficient.
+       loc_decaytime                                                                                // Pan low pass decay time [s].
+      );
+
+  scroll_Y = 0;                                                                                     // Resetting scroll_Y...
+}
+
+void opengl::gamepad_navigation (
+                                 float loc_orbit_rate,                                              // Orbit angular rate coefficient [rev/s].
+                                 float loc_pan_rate,                                                // Pan translation rate [m/s].
+                                 float loc_decaytime,                                               // Low pass filter decay time [s].
+                                 float loc_deadzone                                                 // Gamepad joystick deadzone [0...1].
+                                )
+{
+  float loc_orbit_x;
+  float loc_orbit_y;
+  float loc_pan_x;
+  float loc_pan_y;
+  float loc_pan_z;
+
+  loc_orbit_x = +axis_LEFT_X;                                                                       // Setting "Near clipping-plane" x-coordinate...
+  loc_orbit_y = -axis_LEFT_Y;                                                                       // Setting "Near clipping-plane" y-coordinate...
+  loc_pan_x   = +axis_RIGHT_X;                                                                      // Setting world x-pan...
+  loc_pan_y   = -axis_RIGHT_Y;                                                                      // Setting world y-pan...
+  loc_pan_z   = (axis_RIGHT_TRIGGER + 1.0)/2.0 - (axis_LEFT_TRIGGER + 1.0)/2.0;                     // Setting world z-pan...
+
+  orbit (
+         loc_orbit_x,                                                                               // "Near clipping-plane" x-coordinate.
+         loc_orbit_y,                                                                               // "Near clipping-plane" y-coordinate.
+         loc_orbit_rate,                                                                            // Orbit angular rate coefficient [rev/s].
+         loc_deadzone,                                                                              // Orbit deadzone threshold coefficient.
+         loc_decaytime                                                                              // Orbit low pass decay time [s].
+        );
+
+  pan (
+       loc_pan_x,                                                                                   // World x-pan.
+       loc_pan_y,                                                                                   // World y-pan.
+       loc_pan_z,                                                                                   // World z-pan.
+       loc_pan_rate,                                                                                // Pan rate [length/s].
+       loc_deadzone,                                                                                // Pan deadzone threshold coefficient.
+       loc_decaytime                                                                                // Pan low pass decay time [s].
+      );
 }
 
 void opengl::close ()
