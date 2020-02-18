@@ -98,11 +98,11 @@ using the command `git clone https://github.com/NeutrinoCodes/neutrino.git`.
 2. Cd into neutrino's project directory and edit the configuration script in the Code
 subdirectory: `./configure_mac` by setting your paths. Provide the **absolute** path for the
 following variables in the script:
-`- DCMAKE_C_COMPILER`
-`- DCMAKE_CXX_COMPILER`
-`- DGLAD_PATH`
-`- DGLFW_PATH`
-`- DNEUTRINO_PATH`
+- `DCMAKE_C_COMPILER`
+- `DCMAKE_CXX_COMPILER`
+- `DGLAD_PATH`
+- `DGLFW_PATH`
+- `DNEUTRINO_PATH`
 
 You can also set environment variables in your `/Users/yourname/.bash_profile` and use them in the
 script.
@@ -133,9 +133,9 @@ the command `git clone https://github.com/NeutrinoCodes/neutrino.git`.
 2. Cd into neutrino's project directory and edit the configuration script in the Code
 subdirectory: `./configure_linux` by setting your paths. Provide the **absolute** path for the
 following variables in the script:
-`- DGLAD_PATH`
-`- DGLFW_PATH`
-`- DNEUTRINO_PATH`
+- `DGLAD_PATH`
+- `DGLFW_PATH`
+- `DNEUTRINO_PATH`
 
 You can also set environment variables in your `/Users/yourname/.bash_profile` and use them in the
 script.
