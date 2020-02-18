@@ -6,7 +6,7 @@ _A fast and light library for GPU-based computation and interactive data visuali
 
 [www.neutrino.codes](http://www.neutrino.codes)
 
-© Alessandro LUCANTONIO, Erik ZORZIN - 2018-2019
+© Alessandro LUCANTONIO, Erik ZORZIN - 2018-2020
 
 Hardware requirements:
 ----
@@ -74,7 +74,6 @@ Software requirements for Windows:
 - GLFW v3.3 (https://www.glfw.org/)
 - Visual Studio 2019 (https://visualstudio.microsoft.com/) with "Desktop development
 with C++ --> C++ CMake tools for Windows" workload.
-- Make for Windows (http://gnuwin32.sourceforge.net/packages/make.htm) ***
 - Git v2.21 (https://gitforwindows.org/)
 - GraphViz (https://graphviz.org/)
 - Doxygen v1.8.15 (http://www.doxygen.nl/)
@@ -89,12 +88,6 @@ with C++ --> C++ CMake tools for Windows" workload.
 
 Download the zip file containing the code and extract it in a
 custom directory, e.g. "C:\Users\yourname\glad".
-
-\*** After its installation, from the Windows' task bar go to Settings. In "Find a setting" type:
-"environment" and then select "Edit the environment variables"; a pop up window will appear. From
-that window, click the button "Environment Variables..."; in the "System variables" section edit the
-"Path" variable and add the path where you installed Make for Windows
-(e.g. "C:\Program Files (x86)\GnuWin32\bin").
 
 Compilation
 ----
