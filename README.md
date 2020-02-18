@@ -122,7 +122,8 @@ P.S. after setting these variables, remember to exit and re-open the command she
 shell command `source /Users/yourname/.bash_profile` in order to have them refreshed by the system.
 The first four variables are mandatory, because we are using gcc instead of Xcode.
 
-3. Then launch it. The Cmake configuration files will be generated.
+3. Then launch it by typing `./configure_mac` at the command prompt. The Cmake configuration files
+will be generated.
 4. Enter the `cmake` directory and type `make install` (use `make clean` to remove old build files
   if necessary).
 
@@ -146,7 +147,8 @@ e.g.
 `export GLAD_PATH=$NEUTRINOCODES_PATH/glad`
 `export GLFW_PATH=$NEUTRINOCODES_PATH/glfw`
 
-3. Then launch it. The Cmake configuration files will be generated.
+3. Then launch it by typing `./configure_linux` at the command prompt. The Cmake configuration files
+will be generated.
 4. Enter the `cmake` directory and type `make install` (use `make clean` to remove old build files
   if necessary).
 
