@@ -13,8 +13,8 @@ Hardware requirements:
 - OpenCL-compatible GPU with support for OpenCL-OpenGL.
 
 It is better if the "interoperability" sharing modality exists. By using the tool  `clinfo`, under
-Mac check for the "cl_APPLE_gl_sharing" extension, while under Linux or Windows check for the
-"cl_khr_gl_sharing" extension.
+Mac check for the `cl_APPLE_gl_sharing` extension, while under Linux or Windows check for the
+`cl_khr_gl_sharing` extension.
 
 Software requirements for Mac:
 ----
@@ -38,7 +38,7 @@ Software requirements for Mac:
 - Profile = Core
 
 Download the zip file containing the code and extract it in a
-custom directory, e.g. "/Users/yourname/glad".
+custom directory, e.g. `/Users/yourname/glad`.
 
 \*** If not present, they could be installed by using `brew` package manager (https://brew.sh/).
 
@@ -64,7 +64,7 @@ Software requirements for Linux:
 - Profile = Core
 
 Download the zip file containing the code and extract it in a
-custom directory, e.g. "˜/glad".
+custom directory, e.g. `˜/glad`.
 
 Software requirements for Windows:
 ----
@@ -87,7 +87,7 @@ with C++ --> C++ CMake tools for Windows" workload.
 - Profile = Core
 
 Download the zip file containing the code and extract it in a
-custom directory, e.g. "C:\Users\yourname\glad".
+custom directory, e.g. `C:\Users\yourname\glad`.
 
 Compilation
 ----
@@ -98,11 +98,11 @@ using the command `git clone https://github.com/NeutrinoCodes/neutrino.git`.
 2. Cd into neutrino's project directory and edit the configuration script in the Code
 subdirectory: `./configure_mac` by setting your paths. Provide the **absolute** path for the
 following variables in the script:
-- DCMAKE_C_COMPILER
-- DCMAKE_CXX_COMPILER
-- DGLAD_PATH
-- DGLFW_PATH
-- DNEUTRINO_PATH
+`- DCMAKE_C_COMPILER`
+`- DCMAKE_CXX_COMPILER`
+`- DGLAD_PATH`
+`- DGLFW_PATH`
+`- DNEUTRINO_PATH`
 
 You can also set environment variables in your `/Users/yourname/.bash_profile` and use them in the
 script.
@@ -132,9 +132,9 @@ the command `git clone https://github.com/NeutrinoCodes/neutrino.git`.
 2. Cd into neutrino's project directory and edit the configuration script in the Code
 subdirectory: `./configure_linux` by setting your paths. Provide the **absolute** path for the
 following variables in the script:
-- DGLAD_PATH
-- DGLFW_PATH
-- DNEUTRINO_PATH
+`- DGLAD_PATH`
+`- DGLFW_PATH`
+`- DNEUTRINO_PATH`
 
 You can also set environment variables in your `/Users/yourname/.bash_profile` and use them in the
 script.
@@ -151,13 +151,13 @@ e.g.
   if necessary).
 
 ### Windows
-1. Launch Command Prompt, navigate into your favorite directory and clone neutrino project using the command git clone https://github.com/NeutrinoCodes/neutrino.git
+1. Launch Command Prompt, navigate into your favorite directory and clone neutrino project using the command `git clone https://github.com/NeutrinoCodes/neutrino.git`.
 2. Launch Visual Studio 2019 and select neutrino project folder.
-3. Project -> CMake settings for neutrino -> Edit JSON; add the string "-DGLAD_PATH=C:/path/to/glad -DGLFW_PATH=C:/path/to/glfw -DCL_PATH=C:/path/to/opencl" to the parameter "cmakeCommandArgs" to specify the paths of GLAD, GLFW, and OpenCL headers (root directory). Also set the parameter "buildRoot" to "${projectDir}\\build\\windows". Note: if you installed the NVIDIA GPU Computing Toolkit, -DCL_PATH will be something like \"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.1/\" (notice the trailing and ending slashes, to be used if the path contains spaces).
-4. Build -> Build All. The ".lib" file will be placed in the "libnu\lib" folder under the Neutrino project root directory.
+3. Project -> CMake settings for neutrino -> Edit JSON; add the string `-DGLAD_PATH=C:/path/to/glad` `-DGLFW_PATH=C:/path/to/glfw` `-DCL_PATH=C:/path/to/opencl` to the parameter `cmakeCommandArgs` to specify the paths of GLAD, GLFW, and OpenCL headers (root directory). Also set the parameter `buildRoot` to `${projectDir}\\build\\windows`. Note: if you installed the NVIDIA GPU Computing Toolkit, `-DCL_PATH` will be something like `\"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.1/\"` (notice the trailing and ending slashes, to be used if the path contains spaces).
+4. Build -> Build All. The `.lib` file will be placed in the `libnu\lib` folder under the Neutrino project root directory.
 
 ### Final considerations
-The "libnu" folder would be later used in order to build Neutrino applications. See the "Examples"
+The `libnu` folder would be later used in order to build Neutrino applications. See the "Examples"
 repository.
 
 © Alessandro LUCANTONIO, Erik ZORZIN - 2018-2020
