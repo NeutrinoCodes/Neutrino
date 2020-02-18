@@ -158,40 +158,13 @@ e.g.
   if necessary).
 
 ### Windows
-1. From the "x64 Native Tools Command Prompt for VS 2019" shell, navigate into your favourite
-directory and clone neutrino project using
-the command `git clone https://github.com/NeutrinoCodes/neutrino.git`.
-2. Cd into neutrino's project directory and edit the configuration script in the Code
-subdirectory: `./configure_windows.bat` by setting your paths. Provide the **absolute** path for the
-following variables in the script:
-- DGLAD_PATH
-- DGLFW_PATH
-- DNEUTRINO_PATH
-
-You can also set environment variables in your system and use them in the script.
-
-e.g.
-
-`export NEUTRINOCODES_PATH="/users/yourname/NeutrinoCodes"`
-`export NEUTRINO_PATH=$NEUTRINOCODES_PATH/libnu`
-`export GLAD_PATH=$NEUTRINOCODES_PATH/glad`
-`export GLFW_PATH=$NEUTRINOCODES_PATH/glfw`
-
-You can set these environment variables starting from the Windows' task bar. Go to Settings.
-In "Find a setting" type: "environment" and then select "Edit the environment variables";
-a pop up window will appear. From that window, click the button "Environment Variables...";
-in the "User variables for yourname" section add the new variables.
-
-3. Then launch it. The Cmake configuration files will be generated.
-4. Enter the `cmake` directory and type `make install` (use `make clean` to remove old build files
-  if necessary).
-
-All this should result in a "libnu" folder having two subfolders:
-- include
-- lib
+1. Launch Command Prompt, navigate into your favorite directory and clone neutrino project using the command git clone https://github.com/NeutrinoCodes/neutrino.git
+2. Launch Visual Studio 2019 and select neutrino project folder.
+3. Project -> CMake settings for neutrino -> Edit JSON; add the string "-DGLAD_PATH=C:/path/to/glad -DGLFW_PATH=C:/path/to/glfw -DCL_PATH=C:/path/to/opencl" to the parameter "cmakeCommandArgs" to specify the paths of GLAD, GLFW, and OpenCL headers (root directory). Also set the parameter "buildRoot" to "${projectDir}\\build\\windows". Note: if you installed the NVIDIA GPU Computing Toolkit, -DCL_PATH will be something like \"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.1/\" (notice the trailing and ending slashes, to be used if the path contains spaces).
+4. Build -> Build All. The ".lib" file will be placed in the "libnu\lib" folder under the Neutrino project root directory.
 
 ### Final considerations
 The "libnu" folder would be later used in order to build Neutrino applications. See the "Examples"
 repository.
 
-© Alessandro LUCANTONIO, Erik ZORZIN - 2018-2019
+© Alessandro LUCANTONIO, Erik ZORZIN - 2018-2020
