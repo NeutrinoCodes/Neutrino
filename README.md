@@ -147,6 +147,9 @@ e.g.
 `export GLAD_PATH=$NEUTRINOCODES_PATH/glad`
 `export GLFW_PATH=$NEUTRINOCODES_PATH/glfw`
 
+P.S. after setting these variables, remember to exit and re-open the command shell or launch the
+shell command `source /Users/yourname/.bash_profile` in order to have them refreshed by the system.
+
 3. Then launch it by typing `./configure_linux` at the command prompt. The Cmake configuration files
 will be generated.
 4. Enter the `cmake` directory and type `make install` (use `make clean` to remove old build files
