@@ -1,0 +1,28 @@
+﻿{
+  "configurations": [
+    {
+      "name": "x64-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "buildRoot": "${projectDir}\\build\\windows",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "-DNEUTRINO_PATH=E:/BookHouseBoys/ezor/NeutrinoCodes/libnu -DGLAD_PATH=E:/BookHouseBoys/ezor/NeutrinoCodes/glad -DGLFW_PATH=E:/BookHouseBoys/ezor/NeutrinoCodes/glfw -DCL_PATH=\"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1\"",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": "",
+      "variables": []
+    },
+    {
+      "name": "x64-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "buildRoot": "${projectDir}\\build\\windows",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "-DNEUTRINO_PATH=E:/BookHouseBoys/ezor/NeutrinoCodes/libnu -DGLAD_PATH=E:/BookHouseBoys/ezor/NeutrinoCodes/glad -DGLFW_PATH=E:/BookHouseBoys/ezor/NeutrinoCodes/glfw -DCL_PATH=\"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1\"",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "variables": []
+    }
+  ]
+}

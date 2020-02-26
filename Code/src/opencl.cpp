@@ -223,51 +223,42 @@ void opencl::init
 
   if(platforms_number == 1)
   {
-    if(baseline->property (opencl_platform[0]->extensions, NU_INTEROP))                             // Checking for platform interoperability flag...
-    {
-      loc_platform_interop = true;                                                                  // Setting platform interoperability flag...
-    }
-    else
-    {
-      loc_platform_interop = false;                                                                 // Resetting platform interoperability flag...
-    }
-  }
-
-  if(platforms_number > 1)                                                                          // Asking to select a platform...
-  {
-    std::cout << "Action: please select a platform [1..." + std::to_string (platforms_number);      // Formulating query...
-
-    selected_platform = (
-                         (cl_uint)baseline->query_numeric
-                         (
-                          " + enter]: ",                                                            // Query text.
-                          1,                                                                        // Minimum numeric choice in query answer.
-                          platforms_number                                                          // Maximum numeric choice in query answer.
-                         )
-                        ) - 1;                                                                      // Setting selected platform index...
-
-    if(baseline->property (opencl_platform[selected_platform]->extensions, NU_INTEROP))             // Checking for platform interoperability flag...
-    {
-      loc_platform_interop = true;                                                                  // Setting platform interoperability flag...
-    }
-    else
-    {
-      loc_platform_interop = false;                                                                 // Resetting platform interoperability flag...
-    }
-  }
-
-  else
-  {
     selected_platform = 0;                                                                          // Setting 1st platform, in case it is the only found one...
   }
 
+  if (platforms_number > 1)                                                                         // Asking to select a platform...
+  {
+      std::cout << "Action: please select a platform [1..." + std::to_string(platforms_number);     // Formulating query...
+
+      selected_platform = (
+          (cl_uint)baseline->query_numeric
+          (
+              " + enter]: ",                                                                        // Query text.
+              1,                                                                                    // Minimum numeric choice in query answer.
+              platforms_number                                                                      // Maximum numeric choice in query answer.
+          )
+          ) - 1;                                                                                    // Setting selected platform index...
+  }
+  
   baseline->platform_id = opencl_platform[selected_platform]->id;                                   // Setting neutrino OpenCL platform ID...
+
+  if(baseline->property (opencl_platform[selected_platform]->extensions, NU_INTEROP))               // Checking for platform interoperability flag...
+  {
+    loc_platform_interop = true;                                                                    // Setting platform interoperability flag...
+  }
+  else
+  {
+    loc_platform_interop = false;                                                                   // Resetting platform interoperability flag...
+  }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// SETTING OPENCL DEVICE ////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   devices_number        = get_devices_number (selected_platform);                                   // Getting number of existing NU_GPU devices [#]...
+
   opencl_device         = new device*[devices_number];                                              // Initializing platform...
+
+  devices_number = 1; // EZOR 25FEB2020 test.
 
   for(i = 0; i < devices_number; i++)                                                               // Checking all devices:
   {
