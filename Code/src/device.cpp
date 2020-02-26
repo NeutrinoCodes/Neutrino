@@ -493,11 +493,16 @@ void device::init
 {
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
+  std::cout << "pippo" << std::endl;
+
   address_bits                  = get_cl_uint                                                       // Getting device information...
                                   (
                                    loc_device_id,                                                   // OpenCL device id [cl_device_id].
                                    CL_DEVICE_ADDRESS_BITS                                           // Parameter of interest [cl_device_info].
                                   );
+
+  std::cout << "puppo" << std::endl;
+
   available                     = get_cl_bool                                                       // Getting device information...
                                   (
                                    loc_device_id,                                                   // OpenCL device id [cl_device_id].
@@ -757,6 +762,8 @@ void device::init
                                   );
 
   id                            = loc_device_id;                                                    // Initializing device_id...
+
+  std::cout << "peppo" << std::endl;
 }
 
 device::~device()
