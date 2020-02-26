@@ -118,9 +118,9 @@ cl_device_id opencl::get_device_id
                    (
                     opencl_platform[loc_platform_index]->id,                                        // Platform ID.
                     device_type,                                                                    // Device type.
-                    platforms_number,                                                               // Number of existing platforms.
+                    devices_number,                                                                 // Number of existing devices.
                     loc_device_id,                                                                  // Device IDs array.
-                    NULL                                                                            // Dummy number of platforms.
+                    NULL                                                                            // Dummy number of devices.
                    );
 
   baseline->check_error (loc_error);                                                                // Checking returned error code...
@@ -257,8 +257,6 @@ void opencl::init
   devices_number        = get_devices_number (selected_platform);                                   // Getting number of existing NU_GPU devices [#]...
 
   opencl_device         = new device*[devices_number];                                              // Initializing platform...
-
-  devices_number = 1; // EZOR 25FEB2020 test.
 
   for(i = 0; i < devices_number; i++)                                                               // Checking all devices:
   {
@@ -429,14 +427,7 @@ void opencl::init
 
   if(devices_number == 1)
   {
-    if(baseline->property (opencl_device[0]->extensions, NU_INTEROP))                               // Checking for device interoperability flag...
-    {
-      loc_device_interop = true;                                                                    // Setting device interoperability flag...
-    }
-    else
-    {
-      loc_device_interop = false;                                                                   // Resetting device interoperability flag...
-    }
+    selected_device = 0;                                                                             // Setting 1st device, in case it is the only found one...
   }
 
   if(devices_number > 1)                                                                            // Asking to select a platform...
@@ -451,19 +442,15 @@ void opencl::init
                         devices_number                                                              // Maximum numeric choice in query answer.
                        )
                       ) - 1;                                                                        // Setting selected device index...
-    if(baseline->property (opencl_device[selected_device]->extensions, NU_INTEROP))                 // Checking for device interoperability flag...
-    {
-      loc_device_interop = true;                                                                    // Setting device interoperability flag...
-    }
-    else
-    {
-      loc_device_interop = false;                                                                   // Resetting device interoperability flag...
-    }
   }
 
+  if (baseline->property(opencl_device[selected_device]->extensions, NU_INTEROP))                   // Checking for device interoperability flag...
+  {
+      loc_device_interop = true;                                                                    // Setting device interoperability flag...
+  }
   else
   {
-    selected_device = 0;                                                                            // Setting 1st device, in case it is the only found one...
+      loc_device_interop = false;                                                                   // Resetting device interoperability flag...
   }
 
   if(loc_platform_interop && loc_device_interop)                                                    // Evaluating interoperability flag...
