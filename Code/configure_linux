@@ -1,5 +1,0 @@
-#!/bin/sh
-cmake -B"./cmake" -H"./" \
--DGLAD_PATH=/run/media/ezor/LINUX/BookhouseBoys/ezor/glad \
--DGLFW_PATH=/run/media/ezor/LINUX/BookhouseBoys/ezor/glfw \
--DNEUTRINO_PATH=/run/media/ezor/LINUX/BookhouseBoys/ezor/libnu

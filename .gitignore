@@ -2,3 +2,6 @@
 /Code/build
 /Docs/Doxygen/html
 .vs
+/Code/configure*
+libnu
+/Code/CMakeSettings.json
