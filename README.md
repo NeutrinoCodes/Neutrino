@@ -1,5 +1,5 @@
 <p align="center">
-<img src="/logos/neutrino_logo.png" width="200" height="200" />
+<img src="/Logos/neutrino_logo.png" width="200" height="200" />
 </p>
 
 _A fast and light library for GPU-based computation and interactive data visualization._
