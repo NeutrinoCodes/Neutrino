@@ -53,6 +53,7 @@ using the command `git clone https://github.com/NeutrinoCodes/neutrino.git`.
     - `DNEUTRINO_PATH` is the path of Neutrino's project folder and should be followed by `/libnu`, where the library will be installed;
     - `DGLAD_PATH` is the path of the root directory of the Glad library: it contains the subdirectories `src` and `include`;
     - `DGLFW_PATH` is the path where `glfw3.h` is located.
+
     On **MacOS** you also need to set the variables `DCMAKE_C_COMPILER` and `DCMAKE_CXX_COMPILER`, because we are using gcc instead of Xcode.
 
 3. Make the configuration script executable (`chmod a+x configure`) and launch it by typing `./configure` at the command prompt. The CMake configuration files will be generated.
@@ -62,14 +63,17 @@ using the command `git clone https://github.com/NeutrinoCodes/neutrino.git`.
 
 ### Windows
 1. Launch the Command Prompt, navigate into your favorite directory and clone the Neutrino project using the command `git clone https://github.com/NeutrinoCodes/neutrino.git`.
-2. Launch Visual Studio and select Neutrino's project folder.
-3. Project -> CMake settings for Neutrino -> Edit JSON; add the string `-DGLAD_PATH=/path/to/glad/root -DGLFW_PATH=/path/to/GLFW/include -DNEUTRINO_PATH=/path/to/neutrino/libnu -DCL_PATH=/path/to/opencl/include` to the parameter `cmakeCommandArgs` and specify the paths accordingly. In particular:
-  - `DNEUTRINO_PATH` is the path of Neutrino's project folder and should be followed by `/libnu`, where the library will be installed;
-  - `DGLAD_PATH` is the path of the root directory of the Glad library: it contains the subdirectories `src` and `include`;
-  - `DGLFW_PATH` is the path where `glfw3.h` is located;
-  - `DCL_PATH` is the path where `cl.h` is located. **Note**: if you installed the _NVIDIA GPU Computing Toolkit_, `-DCL_PATH` will be something like `\"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.1/\"` (notice the trailing and ending slashes, to be used if the path contains spaces).
 
-  Also set the parameter `buildRoot` to `${projectDir}\\build\\windows`.
+2. Launch Visual Studio and select Neutrino's project folder.
+
+3. Project -> CMake settings for Neutrino -> Edit JSON; add the string `-DGLAD_PATH=/path/to/glad/root -DGLFW_PATH=/path/to/GLFW/include -DNEUTRINO_PATH=/path/to/neutrino/libnu -DCL_PATH=/path/to/opencl/include` to the parameter `cmakeCommandArgs` and specify the paths accordingly. In particular:
+    - `DNEUTRINO_PATH` is the path of Neutrino's project folder and should be followed by `/libnu`, where the library will be installed;
+    - `DGLAD_PATH` is the path of the root directory of the Glad library: it contains the subdirectories `src` and `include`;
+    - `DGLFW_PATH` is the path where `glfw3.h` is located;
+    - `DCL_PATH` is the path where `cl.h` is located. **Note**: if you installed the _NVIDIA GPU Computing Toolkit_, `-DCL_PATH` will be something like `\"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.1/\"` (notice the trailing and ending slashes, to be used if the path contains spaces).
+
+    Also set the parameter `buildRoot` to `${projectDir}\\build\\windows`.
+
 4. Build -> Build All. The `.lib` file will be placed in the `libnu\lib` folder under the Neutrino's root directory.
 
 Final considerations
