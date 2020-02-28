@@ -48,13 +48,17 @@ Compilation
 ### Linux/MacOS
 1. From the command shell, navigate into your favourite directory and clone the Neutrino project
 using the command `git clone https://github.com/NeutrinoCodes/neutrino.git`.
+
 2. Cd into Neutrino's project directory and create a configuration script called `configure` in the `code` subdirectory. Edit this file by adding the following command line: `cmake -B"./cmake" -H"./" -DGLAD_PATH=/path/to/glad/root -DGLFW_PATH=/path/to/GLFW/include -DNEUTRINO_PATH=/path/to/neutrino/libnu` and specify the paths accordingly. In particular:
+
   - `DNEUTRINO_PATH` is the path of Neutrino's project folder and should be followed by `/libnu`, where the library will be installed;
   - `DGLAD_PATH` is the path of the root directory of the Glad library: it contains the subdirectories `src` and `include`;
   - `DGLFW_PATH` is the path where `glfw3.h` is located.
 
   On **MacOS** you also need to set the variables `DCMAKE_C_COMPILER` and `DCMAKE_CXX_COMPILER`, because we are using gcc instead of Xcode.
+
 3. Make the configuration script executable (`chmod a+x configure`) and launch it by typing `./configure` at the command prompt. The CMake configuration files will be generated.
+
 4. Enter the `cmake` directory and type `make install` (use `make clean` to remove old build files
   if necessary).
 
