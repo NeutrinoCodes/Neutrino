@@ -1,5 +1,6 @@
 /Code/cmake
 /Code/build
+/Code/out
 /Docs/Doxygen/html
 .vs
 /Code/configure*
