@@ -254,8 +254,6 @@ void neutrino::error
   std::cout << text + pad << std::endl;                                                             // Printing buffer...
 
   terminated ();
-
-  exit (1);                                                                                         // Exiting...
 }
 
 void neutrino::list
