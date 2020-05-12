@@ -103,8 +103,6 @@ void kernel::init
 
   if(loc_error != CL_SUCCESS)                                                                       // Checking compiled kernel...
   {
-    std::cout << "pippo" << std::endl;
-
     baseline->error (baseline->get_error (loc_error));                                              // Printing message...
 
     // Getting OpenCL compiler information:
@@ -117,8 +115,6 @@ void kernel::init
                  NULL,                                                                              // Dummy parameter value.
                  &loc_log_size                                                                      // Size of log.
                 );
-
-    baseline->check_error (loc_error);                                                              // Checking error...
 
     char* loc_log_buffer = new char[loc_log_size + 1]();                                            // Allocating log buffer...
 
@@ -133,9 +129,12 @@ void kernel::init
                  NULL                                                                               // Dummy size parameter.
                 );
 
-    baseline->check_error (loc_error);                                                              // Checking error...
+
 
     compiler_log = loc_log_buffer;                                                                  // Setting compiler log...
+    std::cout << "" << std::endl;
+    std::cout << "See error log:" << std::endl;
+    std::cout << "" << std::endl;
     std::cout << compiler_log << std::endl;                                                         // Printing log...
     delete (loc_log_buffer);                                                                        // Deleting log buffer...
     exit (loc_error);                                                                               // Exiting...
