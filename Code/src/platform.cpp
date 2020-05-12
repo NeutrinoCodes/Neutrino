@@ -48,7 +48,7 @@ std::string platform::get_info_value
 {
   cl_int      loc_error;                                                                            // Error code.
   std::string loc_parameter;
-  char*       loc_parameter_buffer = new char[loc_parameter_size];                                  // Parameter value.
+  char*       loc_parameter_buffer = new char[loc_parameter_size]();                                // Parameter value.
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 

@@ -68,7 +68,7 @@ GLuint shader::compile
 
 
   loc_shader_size   = loc_shader_source.size ();
-  loc_shader_buffer = new char[loc_shader_size];
+  loc_shader_buffer = new char[loc_shader_size]();
   loc_shader_source.copy (loc_shader_buffer, loc_shader_size);
 
   // Selecting shader type:
@@ -113,8 +113,8 @@ GLuint shader::compile
   if(!loc_success)
   {
     glGetShaderiv (loc_shader, GL_INFO_LOG_LENGTH, &loc_log_size);                                  // Getting log length...
-    loc_log               = (char*) malloc (loc_log_size + 1);                                      // Allocating temporary buffer for log...
-    loc_log[loc_log_size] = '\0';                                                                   // Null-terminating log buffer...
+    loc_log               = (char*) calloc (loc_log_size + 1, sizeof(GLchar));                      // Allocating temporary buffer for log...
+    //loc_log[loc_log_size] = '\0';                                                                   // Null-terminating log buffer...
     glGetShaderInfoLog (loc_shader, loc_log_size + 1, NULL, loc_log);                               // Getting log...
     std::string loc_log_string (loc_log);
     std::cout << loc_log_string << std::endl;                                                       // Printing log...
@@ -156,7 +156,7 @@ void shader::setarg
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
-  loc_name_buffer                = new char[loc_name_size + 1];
+  loc_name_buffer                = new char[loc_name_size + 1]();
   loc_data->name.copy (loc_name_buffer, loc_name_size);
   loc_name_buffer[loc_name_size] = '\0';
 
@@ -185,7 +185,7 @@ void shader::setarg
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
-  loc_name_buffer                = new char[loc_name_size + 1];
+  loc_name_buffer                = new char[loc_name_size + 1]();
   loc_data->name.copy (loc_name_buffer, loc_name_size);
   loc_name_buffer[loc_name_size] = '\0';
 
