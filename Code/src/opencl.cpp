@@ -150,7 +150,7 @@ void opencl::init
   baseline->action ("initializing OpenCL...");                                                      // Printing message...
 
   baseline         = loc_baseline;                                                                  // Getting Neutrino baseline...
-  device_type_text = new char[NU_MAX_TEXT_SIZE];                                                    // Device type text [string].
+  device_type_text = new char[NU_MAX_TEXT_SIZE]();                                                  // Device type text [string].
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// SETTING TARGET DEVICE TYPE ///////////////////////////////////
@@ -239,7 +239,7 @@ void opencl::init
           )
           ) - 1;                                                                                    // Setting selected platform index...
   }
-  
+
   baseline->platform_id = opencl_platform[selected_platform]->id;                                   // Setting neutrino OpenCL platform ID...
 
   if(baseline->property (opencl_platform[selected_platform]->extensions, NU_INTEROP))               // Checking for platform interoperability flag...

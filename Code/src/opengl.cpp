@@ -350,7 +350,7 @@ void opengl::init
   opengl_msaa                      = 4;                                                             // 3 or 4 is good due to the oversampling-decimation method.
 
   loc_title_size                   = loc_title.size ();                                             // Getting source size...
-  loc_title_buffer                 = new char[loc_title_size + 1];
+  loc_title_buffer                 = new char[loc_title_size + 1]();
   loc_title.copy (loc_title_buffer, loc_title_size + 1);
   loc_title_buffer[loc_title_size] = '\0';
 

@@ -38,7 +38,7 @@ std::string device::get_string
 
   baseline->check_error (loc_error);                                                                // Checking error...
 
-  char* loc_parameter_buffer = new char[loc_parameter_size];                                        // Text buffer.
+  char* loc_parameter_buffer = new char[loc_parameter_size]();                                      // Text buffer.
 
   // Getting parameter information:
   loc_error = clGetDeviceInfo
