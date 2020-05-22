@@ -53,8 +53,7 @@ GLuint shader::compile
 {
   GLuint      loc_shader;                                                                           // Shader.
   std::string loc_shader_source;                                                                    // Shader source.
-  char*       loc_shader_buffer;
-  size_t      loc_shader_size;                                                                      // Shader size [characters].
+  GLchar const* loc_shader_source_c;                                                                // Shader source, C style string.
   GLint       loc_success;                                                                          // "GL_COMPILE_STATUS" flag.
   GLchar*     loc_log;                                                                              // Buffer for OpenGL error log.
   GLsizei     loc_log_size;                                                                         // Size of OpenGL error log.
@@ -66,10 +65,7 @@ GLuint shader::compile
                                            loc_shader_filename                                      // Shader file.
                                           );
 
-
-  loc_shader_size   = loc_shader_source.size ();
-  loc_shader_buffer = new char[loc_shader_size]();
-  loc_shader_source.copy (loc_shader_buffer, loc_shader_size);
+  loc_shader_source_c = loc_shader_source.c_str();                                                  // Converting C++ string to C string...
 
   // Selecting shader type:
   switch(loc_shader_type)
@@ -95,8 +91,8 @@ GLuint shader::compile
   (
    loc_shader,                                                                                      // GLSL shader.
    1,                                                                                               // Number of shaders.
-   (const char**)&loc_shader_source,                                                                // Shader source.
-   (GLint*)&loc_shader_size                                                                         // Shader size.
+   &loc_shader_source_c,                                                                            // Shader source.
+   NULL                                                                                             // Shader size: NULL = null-terminated string.
   );
 
   glCompileShader (loc_shader);                                                                     // Compiling shader...
@@ -114,15 +110,12 @@ GLuint shader::compile
   {
     glGetShaderiv (loc_shader, GL_INFO_LOG_LENGTH, &loc_log_size);                                  // Getting log length...
     loc_log               = (char*) calloc (loc_log_size + 1, sizeof(GLchar));                      // Allocating temporary buffer for log...
-    //loc_log[loc_log_size] = '\0';                                                                   // Null-terminating log buffer...
     glGetShaderInfoLog (loc_shader, loc_log_size + 1, NULL, loc_log);                               // Getting log...
     std::string loc_log_string (loc_log);
     std::cout << loc_log_string << std::endl;                                                       // Printing log...
     free (loc_log);                                                                                 // Freeing log...
     exit (1);                                                                                       // Exiting...
   }
-
-  delete loc_shader_buffer;
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
