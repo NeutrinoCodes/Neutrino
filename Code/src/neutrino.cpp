@@ -96,19 +96,22 @@ std::string neutrino::read_file
 )
 {
   std::string   loc_data;                                                                           // File data.
-
   std::ifstream loc_file (loc_file_name, std::ios::in | std::ios::binary);                          // File.
-
+  
   if(loc_file)
   {
     loc_file.seekg (0, std::ios::end);
     loc_data.resize (loc_file.tellg ());
     loc_file.seekg (0, std::ios::beg);
-    loc_file.read (&loc_data[0], loc_data.size ());
+    loc_file.read (loc_data.data(), loc_data.size ());
     loc_file.close ();
-    return(loc_data);                                                                               // Returning file content as string...
   }
-  throw(errno);                                                                                     // Throwing error in case of a reading problem...
+  else
+  {
+    loc_data = "Error while reading file " + loc_file_name;
+    std::cout << loc_data << std::endl;
+  }
+  return(loc_data);                                                                                 // Returning file content as string...
 }
 
 size_t neutrino::query_numeric

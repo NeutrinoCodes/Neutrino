@@ -32,8 +32,9 @@ if(APPLE)                                                                       
   set(INCLUDES                                                                                      # Setting "INCLUDES" variable...
     ${CMAKE_HOME_DIRECTORY}/Code/include                                                            # Neutrino include directory.
     ${GLAD_PATH}/include                                                                            # GLAD include diretory.
-    ${GLFW_PATH}/include)                                                                           # GLFW include directory.
-  target_include_directories(                                                                       # Setting include directories...
+    ${GLFW_PATH}/include                                                                            # GLFW include directory.
+    ${GMSH_PATH}/include)
+    target_include_directories(                                                                       # Setting include directories...
     ${PROJECT_NAME} PRIVATE                                                                         # Project name.
     ${INCLUDES})                                                                                    # All include directories.
 
