@@ -10,9 +10,9 @@ message("Setting project name...")                                              
 project (nu)                                                                                        # Setting project name...
 message("Project name = ${PROJECT_NAME}")                                                           # Printing message...
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD 17)                                                                          # Setting C++17 standard...
+set(CMAKE_CXX_STANDARD_REQUIRED ON)                                                                 # Setting complier standard requirement...
+set(CMAKE_CXX_EXTENSIONS OFF)                                                                       # Disabling compiler-specific standards...
 
 message("Setting build type...")                                                                    # Printing message...
 set(CMAKE_BUILD_TYPE Release)                                                                       # Setting build type...
@@ -33,8 +33,8 @@ if(APPLE)                                                                       
     ${CMAKE_HOME_DIRECTORY}/Code/include                                                            # Neutrino include directory.
     ${GLAD_PATH}/include                                                                            # GLAD include diretory.
     ${GLFW_PATH}/include                                                                            # GLFW include directory.
-    ${GMSH_PATH}/include)
-    target_include_directories(                                                                       # Setting include directories...
+    ${GMSH_PATH}/include)                                                                           # GMSH include directory.
+    target_include_directories(                                                                     # Setting include directories...
     ${PROJECT_NAME} PRIVATE                                                                         # Project name.
     ${INCLUDES})                                                                                    # All include directories.
 
@@ -52,7 +52,8 @@ if(UNIX AND NOT APPLE)                                                          
   set(INCLUDES                                                                                      # Setting "INCLUDES" variable...
     ${CMAKE_HOME_DIRECTORY}/Code/include                                                            # Neutrino include directory.
     ${GLAD_PATH}/include                                                                            # GLAD include diretory.
-    ${GLFW_PATH})                                                                                   # GLFW include directory.
+    ${GLFW_PATH}/include                                                                            # GLFW include directory.
+    ${GMSH_PATH}/include)                                                                           # GMSH include directory.
   target_include_directories(                                                                       # Setting include directories...
     ${PROJECT_NAME} PRIVATE                                                                         # Project name.
     ${INCLUDES})                                                                                    # All include directories.
@@ -73,7 +74,8 @@ if(WIN32)                                                                       
     ${CMAKE_HOME_DIRECTORY}/Code/include                                                            # Neutrino include directory.
     ${GLAD_PATH}/include                                                                            # GLAD include diretory.
     ${GLFW_PATH}/include                                                                            # GLFW include directory.
-    ${CL_PATH}/include)                                                                             # OpenCL includes.
+    ${GMSH_PATH}/include                                                                            # GMSH include directory.
+    ${CL_PATH}/include)                                                                             # OpenCL include directory.
   target_include_directories(                                                                       # Setting include directories...
     ${PROJECT_NAME} PRIVATE                                                                         # Project name.
     ${INCLUDES})                                                                                    # All include directories.
