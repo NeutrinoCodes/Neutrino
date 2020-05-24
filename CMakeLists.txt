@@ -44,7 +44,7 @@ if(APPLE)                                                                       
     "-framework OpenGL"                                                                             # OpenGL library.
     "-framework OpenCL"                                                                             # OpenCL library.
     ${GLFW_PATH}/lib-macos/libglfw.3.dylib                                                          # GLFW library.
-    "-lgmsh")                                                                                       # GMSH library.
+    ${GMSH_PATH}/lib/libgmsh.dylib)                                                                 # GMSH library.
 endif(APPLE)
 
 if(UNIX AND NOT APPLE)                                                                              # Detecting LINUX...
