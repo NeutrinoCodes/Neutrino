@@ -97,13 +97,13 @@ std::string neutrino::read_file
 {
   std::string   loc_data;                                                                           // File data.
   std::ifstream loc_file (loc_file_name, std::ios::in | std::ios::binary);                          // File.
-  
+
   if(loc_file)
   {
     loc_file.seekg (0, std::ios::end);
     loc_data.resize (loc_file.tellg ());
     loc_file.seekg (0, std::ios::beg);
-    loc_file.read (loc_data.data(), loc_data.size ());
+    loc_file.read (loc_data.data (), loc_data.size ());
     loc_file.close ();
   }
   else
