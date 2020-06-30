@@ -10,7 +10,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 kernel::kernel()
 {
-  source    = "";                                                                                   // Initializing kernel source...
   program   = NULL;                                                                                 // Initializing kernel program...
   size_i    = 0;                                                                                    // Initializing kernel size (i-index)...
   size_j    = 0;                                                                                    // Initializing kernel size (j-index)...
@@ -23,7 +22,8 @@ void kernel::init
 (
  neutrino*   loc_baseline,                                                                          // Neutrino baseline.
  std::string loc_kernel_home,                                                                       // Kernel home directory.
- std::string loc_kernel_file_name,                                                                  // OpenCL kernel file name.
+ std::string loc_kernel_file_name[],                                                                // OpenCL kernel file name.
+ size_t      loc_kernel_file_number,                                                                // OpenCL kernel file number.
  size_t      loc_kernel_size_i,                                                                     // OpenCL kernel size (i-index).
  size_t      loc_kernel_size_j,                                                                     // OpenCL kernel size (j-index).
  size_t      loc_kernel_size_k                                                                      // OpenCL kernel size (k-index).
@@ -31,8 +31,9 @@ void kernel::init
 {
   cl_int      loc_error;                                                                            // Error code.
   size_t      loc_log_size;                                                                         // OpenCL JIT compiler log size.
-  std::string loc_source;                                                                           // Source file as string.
-  char*       loc_source_buffer;                                                                    // Source file temporary char buffer.
+  std::string loc_source[loc_kernel_file_number];                                                   // Source file as string.
+  std::string loc_slash;                                                                            // Slash character, according to the operating system.
+  char*       loc_source_buffer[loc_kernel_file_number];                                            // Source file temporary char buffer.
   char*       loc_options_buffer;                                                                   // Options temporary char buffer.
   size_t      i;                                                                                    // Index.
 
@@ -42,41 +43,62 @@ void kernel::init
   size_k                                       = loc_kernel_size_k;                                 // Getting OpenCL kernel size (k-index)...
 
   kernel_home                                  = loc_kernel_home;                                   // Getting OpenCL kernel home directory...
-  kernel_file_name                             = kernel_home + "/" +
-                                                 loc_kernel_file_name;                              // Building up vertex file full name...
-  compiler_options                             = "-I " + kernel_home;                               // Building up JIT compiler options string...
-  loc_options_buffer                           =                                                    // Building temporary char options buffer...
-                                                 new char[compiler_options.size () + 1]();
+  kernel_file_number                           = loc_kernel_file_number;                            // Getting kernel file number...
+
+  #ifdef __linux__
+    loc_slash                                  = "/";                                               // Setting slash acording to Linux...
+  #endif
+
+  #ifdef __APPLE__
+    loc_slash                                  = "/";                                               // Setting slash acording to Apple...
+  #endif
+
+  #ifdef WIN32
+    loc_slash                                  = "\\";                                              // Setting slash acording to Windows...
+  #endif
+
+  compiler_options                             = "";
+  loc_options_buffer                           = new char[compiler_options.size () + 1]();          // Building temporary char options buffer...
+
   compiler_options.copy (loc_options_buffer, compiler_options.size () + 1);                         // Building options string...
   loc_options_buffer[compiler_options.size ()] = '\0';                                              // Null terminating options string...
 
-  baseline->action ("loading OpenCL kernel source from file...");                                   // Printing message...
-  loc_source                                   =
-    baseline->read_file (kernel_file_name);                                                         // Loading file...
-  source_size                                  = loc_source.size ();                                // Getting source size...
-  source                                       = loc_source;
+  baseline->action ("loading OpenCL kernel sources from files...");                                 // Printing message...
+
+  for(i = 0; i < kernel_file_number; i++)
+  {
+    kernel_file_name[i] = kernel_home + loc_slash + loc_kernel_file_name[i];                        // Building up vertex file full name...
+    loc_source[i]       = baseline->read_file (kernel_file_name[i]);                                // Loading file...
+    source_size[i]      = loc_source[i].size ();                                                    // Getting source size...
+    source[i]           = loc_source[i];
+  }
+
   baseline->done ();                                                                                // Printing message...
 
   baseline->action ("creating OpenCL program from kernel source...");                               // Printing message...
-  loc_source_buffer                            = new char[source_size + 1]();                       // Building temporary source char buffer...
-  loc_source.copy (loc_source_buffer, source_size + 1);                                             // Building string source buffer...
-  loc_source_buffer[source_size]               = '\0';                                              // Null terminateing buffer string...
+
+  for(i = 0; i < kernel_file_number; i++)
+  {
+    loc_source_buffer[i]              = new char[source_size[i] + 1]();                             // Building temporary source char buffer...
+    loc_source[i].copy (loc_source_buffer[i], source_size[i] + 1);                                  // Building string source buffer...
+    loc_source_buffer[source_size[i]] = '\0';                                                       // Null terminateing buffer string...
+  }
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   // Creating OpenCL program from its source:
-  program                                      = clCreateProgramWithSource
-                                                 (
-                                                  baseline->context_id,                             // OpenCL context ID.
-                                                  1,                                                // Number of program sources.
-                                                  (const char**)&loc_source_buffer,                 // Program source.
-                                                  &source_size,                                     // Source size.
-                                                  &loc_error                                        // Error code.
-                                                 );
+  program = clCreateProgramWithSource
+            (
+             baseline->context_id,                                                                  // OpenCL context ID.
+             kernel_file_number,                                                                    // Number of program sources.
+             (const char**)loc_source_buffer,                                                       // Program source.
+             source_size,                                                                           // Source size.
+             &loc_error                                                                             // Error code.
+            );
   baseline->check_error (loc_error);                                                                // Checking error...
   baseline->done ();                                                                                // Printing message...
 
-  delete loc_source_buffer;                                                                         // Deleting buffer...
+  delete[] loc_source_buffer;                                                                       // Deleting buffer...
 
   baseline->action ("building OpenCL program...");                                                  // Printing message...
 
@@ -115,15 +137,15 @@ void kernel::init
     char* loc_log_buffer = new char[loc_log_size + 1]();                                            // Allocating log buffer...
 
     // Reading OpenCL compiler error log:
-    loc_error = clGetProgramBuildInfo
-                (
-                 program,                                                                           // Program.
-                 device_id[0],                                                                      // Device ID.
-                 CL_PROGRAM_BUILD_LOG,                                                              // Build log parameter.
-                 loc_log_size + 1,                                                                  // Log size.
-                 loc_log_buffer,                                                                    // The log.
-                 NULL                                                                               // Dummy size parameter.
-                );
+    loc_error    = clGetProgramBuildInfo
+                   (
+                    program,                                                                        // Program.
+                    device_id[0],                                                                   // Device ID.
+                    CL_PROGRAM_BUILD_LOG,                                                           // Build log parameter.
+                    loc_log_size + 1,                                                               // Log size.
+                    loc_log_buffer,                                                                 // The log.
+                    NULL                                                                            // Dummy size parameter.
+                   );
 
     compiler_log = loc_log_buffer;                                                                  // Setting compiler log...
     std::cout << "" << std::endl;                                                                   // Printing message...
