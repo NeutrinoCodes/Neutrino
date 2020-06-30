@@ -20,22 +20,22 @@ kernel::kernel()
 
 void kernel::init
 (
- neutrino*   loc_baseline,                                                                          // Neutrino baseline.
- std::string loc_kernel_home,                                                                       // Kernel home directory.
- std::string loc_kernel_file_name[],                                                                // OpenCL kernel file name.
- size_t      loc_kernel_file_number,                                                                // OpenCL kernel file number.
- size_t      loc_kernel_size_i,                                                                     // OpenCL kernel size (i-index).
- size_t      loc_kernel_size_j,                                                                     // OpenCL kernel size (j-index).
- size_t      loc_kernel_size_k                                                                      // OpenCL kernel size (k-index).
+ neutrino*                loc_baseline,                                                             // Neutrino baseline.
+ std::string              loc_kernel_home,                                                          // Kernel home directory.
+ std::vector<std::string> loc_kernel_file_name,                                                     // OpenCL kernel file name.
+ size_t                   loc_kernel_file_number,                                                   // OpenCL kernel file number.
+ size_t                   loc_kernel_size_i,                                                        // OpenCL kernel size (i-index).
+ size_t                   loc_kernel_size_j,                                                        // OpenCL kernel size (j-index).
+ size_t                   loc_kernel_size_k                                                         // OpenCL kernel size (k-index).
 )
 {
-  cl_int      loc_error;                                                                            // Error code.
-  size_t      loc_log_size;                                                                         // OpenCL JIT compiler log size.
-  std::string loc_source[loc_kernel_file_number];                                                   // Source file as string.
-  std::string loc_slash;                                                                            // Slash character, according to the operating system.
-  char*       loc_source_buffer[loc_kernel_file_number];                                            // Source file temporary char buffer.
-  char*       loc_options_buffer;                                                                   // Options temporary char buffer.
-  size_t      i;                                                                                    // Index.
+  cl_int                   loc_error;                                                               // Error code.
+  size_t                   loc_log_size;                                                            // OpenCL JIT compiler log size.
+  std::vector<std::string> loc_source;                                                              // Source file as string.
+  std::string              loc_slash;                                                               // Slash character, according to the operating system.
+  char**                   loc_source_buffer;                                                       // Source file temporary char buffer.
+  char*                    loc_options_buffer;                                                      // Options temporary char buffer.
+  size_t                   i;                                                                       // Index.
 
   baseline                                     = loc_baseline;                                      // Getting Neutrino baseline...
   size_i                                       = loc_kernel_size_i;                                 // Getting OpenCL kernel size (i-index)...
@@ -77,11 +77,13 @@ void kernel::init
 
   baseline->action ("creating OpenCL program from kernel source...");                               // Printing message...
 
+  loc_source_buffer = new char*[kernel_file_number];                                                // Building temporary source char buffer...
+
   for(i = 0; i < kernel_file_number; i++)
   {
-    loc_source_buffer[i]              = new char[source_size[i] + 1]();                             // Building temporary source char buffer...
+    loc_source_buffer[i]                 = new char[source_size[i] + 1];                            // Building temporary source char buffer...
     loc_source[i].copy (loc_source_buffer[i], source_size[i] + 1);                                  // Building string source buffer...
-    loc_source_buffer[source_size[i]] = '\0';                                                       // Null terminateing buffer string...
+    loc_source_buffer[i][source_size[i]] = '\0';                                                    // Null terminateing buffer string...
   }
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
