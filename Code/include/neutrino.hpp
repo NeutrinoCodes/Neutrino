@@ -130,6 +130,7 @@ typedef enum
 #include <stdlib.h>
 #include <errno.h>
 #include <string>
+#include <vector>
 #include <iostream>
 #include <fstream>
 #include <cerrno>
