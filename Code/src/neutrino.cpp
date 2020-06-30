@@ -114,35 +114,6 @@ std::string neutrino::read_file
   return(loc_data);                                                                                 // Returning file content as string...
 }
 
-std::string neutrino::find_include
-(
- std::string source_file
-)
-{
-  size_t      pos_include;
-  size_t      pos_1st_quote;
-  std::string include_str;
-
-  include_str   = "#include";
-
-  pos_1st_quote = 0,
-  pos_include   = source_file.find (include_str);
-
-  if(pos_include != std::string::npos)
-  {
-    pos_1st_quote = pos_include + include_str.size ();
-    pos_space     = source_file.find (" ", pos_include + 8);
-
-    if(pos_1st_quote != std::string::npos)
-    {
-
-    }
-
-    pos_1st_quote = source_file.find ("\"", pos_include + 8);
-
-  }
-}
-
 size_t neutrino::query_numeric
 (
  std::string loc_caption,                                                                           // Text query caption.

@@ -33,11 +33,9 @@ public:
   cl_kernel                kernel_id;                                                               ///< @brief **Kernel id.**
   std::string              kernel_home;                                                             ///< @brief **Kernel home directory [std::string].**
   std::vector<std::string> kernel_file_name;                                                        ///< @brief **Kernel file name array [std::string].**
-  size_t                   kernel_file_number;                                                      ///< @brief **OpenCL kernel file number.**
+  std::vector<std::string> kernel_source;                                                           ///< @brief **Kernel source array [std::string].**
   std::string              compiler_options;                                                        ///< @brief **OpenCL JIT complier options string [std::string].**
   std::string              compiler_log;                                                            ///< @brief **OpenCL JIT compiler error log [std::string].**
-  std::vector<std::string> source;                                                                  ///< @brief **Kernel source array [std::string].**
-  std::vector<size_t>      source_size;                                                             ///< @brief **Kernel source size array [characters].
   cl_program               program;                                                                 ///< @brief **Kernel program.**
   size_t                   size_i;                                                                  ///< @brief **Kernel size (i-index) [#].**
   size_t                   size_j;                                                                  ///< @brief **Kernel size (j-index) [#].**
@@ -65,7 +63,6 @@ public:
              neutrino*                loc_baseline,                                                 ///< Neutrino baseline.
              std::string              loc_kernel_home,                                              ///< Kernel home directory.
              std::vector<std::string> loc_kernel_file_name,                                         ///< OpenCL kernel file name.
-             size_t                   loc_kernel_file_number,                                       ///< OpenCL kernel file number.
              size_t                   loc_kernel_size_i,                                            ///< OpenCL kernel size (i-index).
              size_t                   loc_kernel_size_j,                                            ///< OpenCL kernel size (j-index).
              size_t                   loc_kernel_size_k                                             ///< OpenCL kernel size (k-index).
