@@ -65,7 +65,8 @@ if(UNIX AND NOT APPLE)                                                          
     "-lOpenCL"                                                                                      # OpenCL library.
     "-ldl"                                                                                          # "libdl" library.
     "-lglfw"                                                                                        # GLFW library.
-    "-lm")                                                                                          # "math" library.
+    "-lm"                                                                                           # "math" library.
+    "-lgmsh")                                                                                       # GMSH library.
 endif(UNIX AND NOT APPLE)
 
 if(WIN32)                                                                                           # Detecting WINDOWS...
@@ -84,7 +85,8 @@ if(WIN32)                                                                       
   target_link_libraries(                                                                            # Setting other linked libraries...
     ${PROJECT_NAME}                                                                                 # Project name.
     ${CL_PATH}/lib/x64/OpenCL.lib                                                                   # OpenCL library.
-    ${GLFW_PATH}/lib-vc2019/glfw3.lib)                                                              # GLFW library.
+    ${GLFW_PATH}/lib-vc2019/glfw3.lib                                                               # GLFW library.
+    ${GMSH_PATH}/lib/gmsh.lib)                                                                      # GMSH library.
 endif(WIN32)
 
 install(
