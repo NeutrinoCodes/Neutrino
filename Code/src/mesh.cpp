@@ -76,7 +76,10 @@ void mesh::read_msh (
                 << std::endl;
     }
 
+    /*
+    std::cout << "before crash..." << std::endl;
     gmsh::model::mesh::getElements (elemTypes, elemTags, elemNodeTags, dim, tag);                   // Getting entity mesh elements...
+    std::cout << "...after crash" << std::endl;
 
     for(j = 0; j < elemTypes.size (); j++)
     {
@@ -104,6 +107,7 @@ void mesh::read_msh (
         std::cout << std::endl;
       }
     }
+    */
   }
 }
 
