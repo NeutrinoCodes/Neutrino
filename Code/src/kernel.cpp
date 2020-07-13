@@ -87,7 +87,7 @@ void kernel::init
   program = clCreateProgramWithSource
             (
              baseline->context_id,                                                                  // OpenCL context ID.
-             kernel_file_name.size (),                                                              // Number of program sources.
+             (cl_uint)kernel_file_name.size (),                                                     // Number of program sources.
              (const char**)loc_kernel_source,                                                       // Program source.
              loc_kernel_source_size,                                                                // Source size.
              &loc_error                                                                             // Error code.
