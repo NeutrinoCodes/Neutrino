@@ -365,8 +365,6 @@ void opengl::init
 
   baseline->action (glfw_ver_string);                                                               // Printing message...
 
-  std::cout << "pippo" << std::endl;
-
   // Initializing GLFW context:
   if(glfwInit () == GLFW_TRUE)                                                                      // Inititalizing GLFW context...
   {
@@ -384,8 +382,6 @@ void opengl::init
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
-  std::cout << "pippo" << std::endl;
-
   glfw_window = glfwCreateWindow
                 (
                  window_size_x,                                                                     // Window x-size [px].
@@ -395,10 +391,7 @@ void opengl::init
                  NULL                                                                               // Share.
                 );
 
-  std::cout << "pippo" << std::endl;
   delete loc_title_buffer;
-
-  std::cout << "pippo" << std::endl;
 
   if(!glfw_window)
   {
