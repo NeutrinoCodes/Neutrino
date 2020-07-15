@@ -310,7 +310,33 @@ At this point the NeutrinoCodes directory should appear like this:
 
 Congratulations, you have installed Neutrino on Windows!
 
-# Examples
+# Post installation (recommended)
+
+## Uncrustify:
+We all like tidy code! For this, we provide an **Uncrustify** (sources: https://github.com/uncrustify/uncrustify) configuration file specific for Neutrino. In order to use it, please first install Uncrustify according to your operating system (e.g. use the Linux's package manager, or Homebrew under Mac or use these binaries: https://sourceforge.net/projects/uncrustify/ under Windows), then install the VScode's *Uncrustify extension* (https://marketplace.visualstudio.com/items?itemName=LaurentTreguier.uncrustify).
+
+According to your operating system, add the following lines to either the *global* or *project* **settings.json** file:
+
+### Linux:
+`"uncrustify.executablePath.linux": "your_path_to_uncrustify",`\
+`"editor.defaultFormatter": "LaurentTreguier.uncrustify",`\
+`"editor.formatOnSave": true`
+
+### Mac:
+`"uncrustify.executablePath.osx": "your_path_to_uncrustify",`\
+`"editor.defaultFormatter": "LaurentTreguier.uncrustify",`\
+`"editor.formatOnSave": true`
+
+### Windows:
+`"uncrustify.executablePath.windows": "your_path_to_uncrustify.exe",`\
+`"editor.defaultFormatter": "LaurentTreguier.uncrustify",`\
+`"editor.formatOnSave": true`\
+
+To edit the *global* settings, on VScode go to the left bar: push the **Extensions** button and select the Uncrustify extension. Then go to **Manage --> Extension Settings** (gear-like icon) and edit the `settings.json` file by clicking one of the links in that section. This will set the Uncrustify code formatter globally in all your VScode projects (but still with per-project custom uncrustify configuration files).
+
+To edit the *project* settings, open `settings.json` file in the `.vscode` you created for Neutrino (the hidden directory inside the `NeutrinoCodes` directory, see *Installation*) and put the same lines in it. This will set Uncrustify as code formatter (together with the configuration file we provide) only for the Neutrino project.
+
+## Examples:
 In order to test the installation of Neutrino and to start experimenting with it, please check the instructions present in the *Examples* repository: https://github.com/NeutrinoCodes/Examples.
 
 © Alessandro LUCANTONIO, Erik ZORZIN - 2018-2020
