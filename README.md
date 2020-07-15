@@ -2,7 +2,7 @@
 <img src="./Logos/neutrino_logo.png" width="200" height="200" />
 </p>
 
-_A fast and light library for GPU-based computation and interactive data visualization._
+*A fast and light library for GPU-based computation and interactive data visualization.*
 
 [www.neutrino.codes](http://www.neutrino.codes)
 
@@ -134,10 +134,10 @@ and verify the presence of the `cl_APPLE_gl_sharing` extension.
 - OpenGL (library + headers), coming along the OS-X installation.
 - GIT (https://git-scm.com)
 - GLAD (https://glad.dav1d.de/) *
-- GLFW (https://www.glfw.org/)
+- GLFW (https://www.glfw.org/) **
 - GMSH (https://gmsh.info/)
-- CLANG (https://clang.llvm.org/) **
-- CMake (https://cmake.org) **
+- CLANG (https://clang.llvm.org/) ***
+- CMake (https://cmake.org) ***
 - GraphViz (https://graphviz.org/)
 - Doxygen (http://www.doxygen.nl/)
 
@@ -150,7 +150,21 @@ Under Mac, it should be possible to install most of those packages via the **Hom
 
 After having generated it, download the zip file containing the code and extract it in a custom directory (see *Installation*).
 
-\** It is recommended to use the **VScode editor** and follow the instructions (https://code.visualstudio.com/docs/cpp/config-clang-macx) in order to install it and verify the installation of GCC, as well as the instructions (https://code.visualstudio.com/docs/cpp/cmake-linux, instructions for Linux but good also for Mac) to verify the installation of Cmake and to install the Cmake Tools extension for VSCode.
+\** It might be possible that OS-X will not recognize GLFW as a valid software, throwing an error similar to this one:\
+<p align="center">
+<img src="./Pictures/Installation_mac/libglfw_mac_alert_1.png"/>
+</p>
+or this one:
+<p align="center">
+<img src="./Pictures/Installation_mac/libglfw_mac_alert_3.png"/>
+</p>
+
+In that case, you should enable it from the Mac OS-X *Security & Privacy* panel:\
+<p align="center">
+<img src="./Pictures/Installation_mac/libglfw_mac_alert_2.png"/>
+</p>
+
+\*** It is recommended to use the **VScode editor** and follow the instructions (https://code.visualstudio.com/docs/cpp/config-clang-macx) in order to install it and verify the installation of GCC, as well as the instructions (https://code.visualstudio.com/docs/cpp/cmake-linux, instructions for Linux but good also for Mac) to verify the installation of Cmake and to install the Cmake Tools extension for VSCode.
 
 ## Installation:
 The recommended method is by using the VScode toolchain hereby described. We assume Neutrino is going to be installed in a directory named *NeutrinoCodes* containing the following subdirectories:
@@ -297,6 +311,6 @@ At this point the NeutrinoCodes directory should appear like this:
 Congratulations, you have installed Neutrino on Windows!
 
 # Examples
-In order to test the installation of Neutrino and to start experimenting with it, please check the instructions present in the *Examples* repository: `https://github.com/NeutrinoCodes/Examples`.
+In order to test the installation of Neutrino and to start experimenting with it, please check the instructions present in the *Examples* repository: https://github.com/NeutrinoCodes/Examples.
 
 © Alessandro LUCANTONIO, Erik ZORZIN - 2018-2020
