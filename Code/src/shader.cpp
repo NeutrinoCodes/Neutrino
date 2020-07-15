@@ -51,21 +51,21 @@ GLuint shader::compile
  shader_type loc_shader_type                                                                        // GLSL shader type.
 )
 {
-  GLuint      loc_shader;                                                                           // Shader.
-  std::string loc_shader_source;                                                                    // Shader source.
+  GLuint        loc_shader;                                                                         // Shader.
+  std::string   loc_shader_source;                                                                  // Shader source.
   GLchar const* loc_shader_source_c;                                                                // Shader source, C style string.
-  GLint       loc_success;                                                                          // "GL_COMPILE_STATUS" flag.
-  GLchar*     loc_log;                                                                              // Buffer for OpenGL error log.
-  GLsizei     loc_log_size;                                                                         // Size of OpenGL error log.
+  GLint         loc_success;                                                                        // "GL_COMPILE_STATUS" flag.
+  GLchar*       loc_log;                                                                            // Buffer for OpenGL error log.
+  GLsizei       loc_log_size;                                                                       // Size of OpenGL error log.
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   // Loading shader from file:
-  loc_shader_source = baseline->read_file (
-                                           loc_shader_filename                                      // Shader file.
-                                          );
+  loc_shader_source   = baseline->read_file (
+                                             loc_shader_filename                                    // Shader file.
+                                            );
 
-  loc_shader_source_c = loc_shader_source.c_str();                                                  // Converting C++ string to C string...
+  loc_shader_source_c = loc_shader_source.c_str ();                                                 // Converting C++ string to C string...
 
   // Selecting shader type:
   switch(loc_shader_type)
@@ -109,7 +109,7 @@ GLuint shader::compile
   if(!loc_success)
   {
     glGetShaderiv (loc_shader, GL_INFO_LOG_LENGTH, &loc_log_size);                                  // Getting log length...
-    loc_log               = (char*) calloc (loc_log_size + 1, sizeof(GLchar));                      // Allocating temporary buffer for log...
+    loc_log = (char*) calloc (loc_log_size + 1, sizeof(GLchar));                                    // Allocating temporary buffer for log...
     glGetShaderInfoLog (loc_shader, loc_log_size + 1, NULL, loc_log);                               // Getting log...
     std::string loc_log_string (loc_log);
     std::cout << loc_log_string << std::endl;                                                       // Printing log...
