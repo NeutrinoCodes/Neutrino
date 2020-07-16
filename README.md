@@ -266,6 +266,24 @@ The recommended method is by using the VScode toolchain hereby described. We ass
 
 where the corresponding software, according to the software requirements for Linux in this guide, has been already installed.
 
+**IMPORTANT NOTE**: GMSH is used in Neutrino as an API library. It can work in two modes: its sources can be used together with Neutrino's during the compilation of the latter one or as and external library. Under a Windows purely native environment there is a limitation (see https://gitlab.onelab.info/gmsh/gmsh/-/issues/894) and because of this it can used only as an external DLL. When using a library this way, the manufacturer of it provides three things: a `.dll` executable, a `.h` header file and a `.lib` file. The `.h` header file should be compatible on the target computer with the symbols of the functions of the `.dll` described in the `.lib`: this is not always the case if the DLL has been compiled by a C/C++ compiler which is different than the one the end user of the library has got on the target computer. Carefully reading all README files present in the GMSH's *Download the Software Development Kit (SDK) for Windows 64-bit* distribution it turned out that the only way to use the GMSH API library **on Windows** is by **installing the GMSH SDK** and by following this procedure coming from the following note of installation of an example application built around the GMHS's API:
+
+If your C++ compiler does not have a compatible ABI and if there are no
+compatibility flags available, you can rename `gmsh.h_cwrap' as `gmsh.h': this implementation redefines the C++ API in terms of the C API. Using this header will lead to (slightly) reduced performance compared to using the native Gmsh C++ API from the original `gmsh.h' header, as it entails additional data copies between this C++ wrapper, the C API and the native C++ code. For example, the Windows SDK is currently compiled using the GNU Compiler Collection (GCC). To compile a C++ example with Microsoft Visual Studio 2017 in the Visual Studio shell and run it, you would do:
+
+`C:\gmsh-git-Windows64-sdk> ren include\gmsh.h_cwrap gmsh.h`\
+`C:\gmsh-git-Windows64-sdk> cl /Iinclude share\doc\gmsh\tutorial\c++\t1.cpp lib\gmsh.lib`\
+`C:\gmsh-git-Windows64-sdk> cd lib`\
+`C:\gmsh-git-Windows64-sdk\lib> ..\t1.exe`
+
+Therefore the same rationale has to be adopted for Neutrino as well:
+- after the installation of GMSH, the `gmsh.h_cwrap` file has to be renamed as `gmsh.h` (hence substituting it).
+- the gmsh DLL file provided by the SDK should be then copied in all locations where every application later build with Neutrino is present, or moved to `C:\Windows\System32` and registered following this procedure: https://answers.microsoft.com/en-us/windows/forum/all/how-do-i-register-dll-files-in-a-windows-10-64-bit/27429279-61ff-463b-bb77-3f30be2954ba as a 64-bit DLL for Windows 64-bit (notice that the 64-bit DLLs stay in `C:\Windows\System32` while the 32-bit ones stay in `C:\Windows\SysWoW64`).
+
+This should make the GMSH's API working on Windows 10.
+
+Continuing with the installation of Neutrino:
+
 1. From the command shell (either VScode's or system's), navigate into *NeutrinoCodes* and create a `libnu` directory using the command:\
 `mkdir libnu`\
 \
