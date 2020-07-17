@@ -351,8 +351,8 @@ void opengl::init
 
   loc_title_size                   = loc_title.size ();                                             // Getting source size...
   loc_title_buffer                 = new char[loc_title_size + 1]();
-  loc_title.copy (loc_title_buffer, loc_title_size + 1);
-  loc_title_buffer[loc_title_size] = '\0';
+  loc_title.copy (loc_title_buffer, loc_title.size ());                                             // Copying title into char buffer...
+  loc_title_buffer[loc_title_size] = '\0';                                                          // NULL-terminating char buffer...
 
 
   glfwGetVersion (&glfw_ver_major, &glfw_ver_minor, &glfw_rev);                                     // Getting GLFW version...
@@ -382,6 +382,8 @@ void opengl::init
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
+  std::cout << "pippo" << std::endl;
+
   glfw_window = glfwCreateWindow
                 (
                  window_size_x,                                                                     // Window x-size [px].
@@ -390,6 +392,8 @@ void opengl::init
                  NULL,                                                                              // Monitor.
                  NULL                                                                               // Share.
                 );
+
+  std::cout << "pippo" << std::endl;
 
   delete loc_title_buffer;
 
@@ -756,7 +760,7 @@ void opengl::mouse_navigation (
     mouse_z      = scroll_Y;                                                                        // Getting mouse z-axis...
     mouse_sample = true;                                                                            // Setting sample flag...
   }
-  
+
   dt     = baseline->constrain_float (baseline->loop_time, dt_min, dt_max);                         // Getting loop time...
   loc_vx = +(mouse_x - mouse_x_old)/(window_size_x*dt);                                             // Computing mouse x-velocity [px/s]...
   loc_vy = -(mouse_y - mouse_y_old)/(window_size_y*dt);                                             // Computing mouse y-velocity [px/s]...
