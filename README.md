@@ -287,7 +287,6 @@ This will create the `libnu` directory.
 This will create the `neutrino` directory.
 
 3. Go to the `neutrino` directory and create a `.vscode` hidden directory:\
-`cd neutrino`\
 `mkdir .vscode`\
 \
 and create a new file `settings.json` in it, then fill it with the following information:\
