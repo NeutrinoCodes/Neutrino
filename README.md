@@ -274,8 +274,6 @@ where the corresponding software, according to the software requirements for Lin
 
 This should make the GMSH's API working on Windows.
 
-**IMPORTANT NOTE FOR OPENCL INSTALLATION ON WINDOWS**: OpenCL on Windows comes together with the installation of the graphics drivers of your GPU.
-
 Continuing with the installation of Neutrino:
 
 1. From the command shell (either VScode's or system's), navigate into *NeutrinoCodes* and create a `libnu` directory using the command:\
@@ -296,14 +294,19 @@ and create a new file `settings.json` in it, then fill it with the following inf
 `{`\
 &nbsp;&nbsp;`"C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",`\
 &nbsp;&nbsp;`"cmake.configureArgs" : [   `\
-&nbsp;&nbsp;&nbsp;&nbsp;`"-DGLAD_PATH=your_path_to_NeutrinoCodes/glad,`\
-&nbsp;&nbsp;&nbsp;&nbsp;`"-DGLFW_PATH=your_path_to_NeutrinoCodes/glfw",`\
-&nbsp;&nbsp;&nbsp;&nbsp;`"-DGMSH_PATH=your_path_to_NeutrinoCodes/gmsh",`\
-&nbsp;&nbsp;&nbsp;&nbsp;`"-DNEUTRINO_PATH=your_path_to_NeutrinoCodes/libnu"`\
+&nbsp;&nbsp;&nbsp;&nbsp;`"-DGLAD_PATH=your_path_to_NeutrinoCodes\\glad,`\
+&nbsp;&nbsp;&nbsp;&nbsp;`"-DGLFW_PATH=your_path_to_NeutrinoCodes\\glfw",`\
+&nbsp;&nbsp;&nbsp;&nbsp;`"-DGMSH_PATH=your_path_to_NeutrinoCodes\\gmsh",`\
+&nbsp;&nbsp;&nbsp;&nbsp;`"-DCL_PATH=your_path_to_OpenCL",`\
+&nbsp;&nbsp;&nbsp;&nbsp;`"-DNEUTRINO_PATH=your_path_to_NeutrinoCodes\\libnu"`\
 &nbsp;&nbsp;`]`\
 `}`\
 \
 and save it.\
+\
+Notice all paths **must** be specificed with *double backslashes*, in order to correctly manage the possibility of space characters in the them.
+Also notice that `your_path_to_OpenCL` might be something like this (it depends on your GPU's graphics drivers):\
+`C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v10.1`\
 \
 At this point, Neutrino is configured for your system. 
 
