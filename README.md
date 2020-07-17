@@ -152,7 +152,7 @@ Under Mac, it should be possible to install most of those packages via the **Hom
 
 After having generated it, download the zip file containing the code and extract it in a custom directory (see *Installation*).
 
-\** It might be possible that OS-X will not recognize GLFW as a valid software, throwing an error similar to this one:\
+\** It might be possible that OS-X will not recognize GLFW as a valid software, throwing an error similar to this one:
 <p align="center">
 <img src="./Pictures/Installation_mac/libglfw_mac_alert_1.png"/>
 </p>
@@ -161,7 +161,7 @@ or this one:
 <img src="./Pictures/Installation_mac/libglfw_mac_alert_3.png"/>
 </p>
 
-In that case, you should enable it from the Mac OS-X *Security & Privacy* panel:\
+In that case, you should enable it from the Mac OS-X *Security & Privacy* panel:
 <p align="center">
 <img src="./Pictures/Installation_mac/libglfw_mac_alert_2.png"/>
 </p>
