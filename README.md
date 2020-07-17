@@ -274,6 +274,8 @@ where the corresponding software, according to the software requirements for Lin
 
 This should make the GMSH's API working on Windows.
 
+**IMPORTANT NOTE FOR OPENCL INSTALLATION ON WINDOWS**: OpenCL on Windows comes together with the installation of the graphics drivers of your GPU.
+
 Continuing with the installation of Neutrino:
 
 1. From the command shell (either VScode's or system's), navigate into *NeutrinoCodes* and create a `libnu` directory using the command:\
