@@ -6,12 +6,12 @@
 
 *A fast and light library for GPU-based computation and interactive data visualization.*
 
-[www.neutrino.codes](http://www.neutrino.codes)
+[www.neutrino.codes](https://www.neutrino.codes)
 
 © Alessandro LUCANTONIO, Erik ZORZIN - 2018-2020
 
 # Overview
-Neutrino is a C++ library that facilitates writing parallel code running on GPU hardware combining the power of the OpenCL computational framework with the OpenGL graphics language (see http://www.neutrino.codes).
+Neutrino is a C++ library that facilitates writing parallel code running on GPU hardware combining the power of the OpenCL computational framework with the OpenGL graphics language (see https://www.neutrino.codes).
 
 Neutrino can be successfully installed and used on Linux, Mac or Windows. The recommended installation suggests the use of the **VScode** editor, because this exists in all three operating systems and it works in combination of their corresponding native C/C++ environments. This provides a universal toolchain that gives advantages when working from different types of machines. The installation of Neutrino, along this toolchain, is only sligthly different according to the underlying operating system.
 
@@ -45,7 +45,7 @@ and verify the presence of the `cl_khr_gl_sharing` extension.
 - GCC (https://gcc.gnu.org) **
 - CMake (https://cmake.org) **
 - GraphViz (https://graphviz.org/)
-- Doxygen (http://www.doxygen.nl/)
+- Doxygen (https://www.doxygen.nl/)
 
 Under Linux, it should be possible to install most of those packages via the system's package manager.
 
@@ -143,7 +143,7 @@ and verify the presence of the `cl_APPLE_gl_sharing` extension.
 - CLANG (https://clang.llvm.org/) ***
 - CMake (https://cmake.org) ***
 - GraphViz (https://graphviz.org/)
-- Doxygen (http://www.doxygen.nl/)
+- Doxygen (https://www.doxygen.nl/)
 
 Under Mac, it should be possible to install most of those packages via the **Homebrew** (https://brew.sh/) package manager.
 
@@ -251,7 +251,7 @@ and verify the presence of the `cl_khr_gl_sharing` extension.
 - GCC (https://gcc.gnu.org) **
 - CMake (https://cmake.org) **
 - GraphViz (https://graphviz.org/)
-- Doxygen (http://www.doxygen.nl/)
+- Doxygen (https://www.doxygen.nl/)
 
 \* The GLAD loader should be generated from its webpage using the following settings:
 - Language = C/C++
