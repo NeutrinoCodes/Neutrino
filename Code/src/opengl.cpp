@@ -354,7 +354,6 @@ void opengl::init
   loc_title.copy (loc_title_buffer, loc_title.size ());                                             // Copying title into char buffer...
   loc_title_buffer[loc_title_size] = '\0';                                                          // NULL-terminating char buffer...
 
-
   glfwGetVersion (&glfw_ver_major, &glfw_ver_minor, &glfw_rev);                                     // Getting GLFW version...
 
   // Building up glfw version string:
@@ -382,8 +381,6 @@ void opengl::init
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
-  std::cout << "pippo" << std::endl;
-
   glfw_window = glfwCreateWindow
                 (
                  window_size_x,                                                                     // Window x-size [px].
@@ -392,8 +389,6 @@ void opengl::init
                  NULL,                                                                              // Monitor.
                  NULL                                                                               // Share.
                 );
-
-  std::cout << "pippo" << std::endl;
 
   delete loc_title_buffer;
 

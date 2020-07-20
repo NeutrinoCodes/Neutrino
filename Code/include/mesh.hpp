@@ -30,7 +30,7 @@ private:
   size_t                                 j;                                                         ///< Index.
   size_t                                 k;                                                         ///< Index.
   size_t                                 n;                                                         ///< Index.
-  size_t                                 dim;                                                       ///< Entity dimension.
+  int                                    dim;                                                       ///< Entity dimension.
   int                                    tag;                                                       ///< Entity tag.
   std::vector<std::pair<int, int> >      entities;                                                  ///< Entity array.
   std::vector<std::size_t>               nodeTags;                                                  ///< Node tags array...
