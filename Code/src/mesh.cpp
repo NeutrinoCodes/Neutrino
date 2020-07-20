@@ -75,14 +75,11 @@ void mesh::read_msh (
                 << std::endl;
     }
 
-    /*
-       std::cout << "before crash..." << std::endl;
-       gmsh::model::mesh::getElements (elemTypes, elemTags, elemNodeTags, dim, tag);                   // Getting entity mesh elements...
-       std::cout << "...after crash" << std::endl;
+    gmsh::model::mesh::getElements (elemTypes, elemTags, elemNodeTags, dim, tag);                   // Getting entity mesh elements...
 
-       for(j = 0; j < elemTypes.size (); j++)
-       {
-       gmsh::model::mesh::getElementProperties (
+    for(j = 0; j < elemTypes.size (); j++)
+    {
+      gmsh::model::mesh::getElementProperties (
                                                elemTypes[j],
                                                elemName,
                                                d,
@@ -92,8 +89,8 @@ void mesh::read_msh (
                                                numPrimaryNodes
                                               );
 
-       for(k = 0; k < elemTags[j].size (); k++)
-       {
+      for(k = 0; k < elemTags[j].size (); k++)
+      {
         std::cout << "simplex: "
                   << elemTags[j][k]
                   << " --> nodes: ";
@@ -104,9 +101,8 @@ void mesh::read_msh (
         }
 
         std::cout << std::endl;
-       }
-       }
-     */
+      }
+    }
   }
 }
 
