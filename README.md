@@ -11,6 +11,8 @@
 © Alessandro LUCANTONIO, Erik ZORZIN - 2018-2020
 
 # Overview
+Neutrino is a C++ library that facilitates writing parallel code running on GPU hardware combining the power of the OpenCL computational framework with the OpenGL graphics language (see http://www.neutrino.codes).
+
 Neutrino can be successfully installed and used on Linux, Mac or Windows. The recommended installation suggests the use of the **VScode** editor, because this exists in all three operating systems and it works in combination of their corresponding native C/C++ environments. This provides a universal toolchain that gives advantages when working from different types of machines. The installation of Neutrino, along this toolchain, is only sligthly different according to the underlying operating system.
 
 # Linux 
