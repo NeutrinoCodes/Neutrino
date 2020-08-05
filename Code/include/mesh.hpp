@@ -29,17 +29,19 @@ private:
   size_t                                 i;                                                         ///< Index.
   size_t                                 j;                                                         ///< Index.
   size_t                                 k;                                                         ///< Index.
+  size_t                                 i_node;                                                    ///< Neutrino node index.
+  size_t                                 i_simplex;                                                 ///< Neutrino simplex index.
   size_t                                 n;                                                         ///< Index.
   int                                    dim;                                                       ///< Entity dimension.
   int                                    tag;                                                       ///< Entity tag.
   std::vector<std::pair<int, int> >      entities;                                                  ///< Entity array.
   std::vector<std::size_t>               nodeTags;                                                  ///< Node tags array...
+  std::vector<std::size_t>               nodeList;                                                  ///< Node tags full array...
   std::vector<double>                    nodeCoords;                                                ///< Node coordinates array...
   std::vector<double>                    nodeParams;
   std::vector<int>                       elemTypes;                                                 ///< Element type array...
   std::vector<std::vector<std::size_t> > elemTags;                                                  ///< Element tags array...
   std::vector<std::vector<std::size_t> > elemNodeTags;                                              ///< Element node tags array...
-  int                                    model_dim;                                                 ///< Model dimension.
   std::string                            elemName;                                                  ///< Element name...
   int                                    order;
   int                                    numNodes;
@@ -48,8 +50,9 @@ private:
   int                                    d;
 
 public:
-  size_t                                 nodes;                                                     ///< Number of mesh nodes.
-  size_t                                 simplexes;                                                 ///< Number of mesh simplexes.
+  size_t                                 node_num;                                                  ///< Number of mesh nodes.
+  size_t                                 simplex_num;                                               ///< Number of mesh simplexes.
+  size_t                                 complex_num;                                               ///< Number of mesh complexes.
 
   mesh ();
 
@@ -59,7 +62,11 @@ public:
             );
 
   void read_msh (
-                 float4G* loc_node                                                                  ///< GMSH node data.
+                 float4G* loc_node,                                                                 ///< GMSH node coordinates.
+                 int1*    loc_simplex,                                                              ///< GMSH simplex: node index list.
+                 int1*    loc_simplex_stride,                                                       ///< GMSH simplex: strides.
+                 int1*    loc_complex,                                                              ///< GMSH complex: simplex index list.
+                 int1*    loc_complex_stride                                                        ///< GMSH complex: strides.
                 );
 
   ~mesh();
