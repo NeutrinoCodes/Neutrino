@@ -50,9 +50,10 @@ private:
   int                                    d;
 
 public:
-  size_t                                 node_num;                                                  ///< Number of mesh nodes.
-  size_t                                 simplex_num;                                               ///< Number of mesh simplexes.
-  size_t                                 complex_num;                                               ///< Number of mesh complexes.
+  size_t                                 nodes;                                                     ///< Number of mesh nodes.
+  size_t                                 simplexes;                                                 ///< Number of mesh simplexes.
+  size_t                                 complexes;                                                 ///< Number of mesh complexes.
+  size_t                                 strides;                                                   ///< Number of mesh strides.
 
   mesh ();
 

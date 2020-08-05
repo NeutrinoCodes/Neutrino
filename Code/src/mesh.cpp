@@ -18,7 +18,7 @@ void mesh::init (
                  std::string loc_file_name                                                          ///< GMSH .msh file name.
                 )
 {
-  baseline    = loc_baseline;                                                                       // Getting Neutrino baseline...
+  baseline  = loc_baseline;                                                                         // Getting Neutrino baseline...
   baseline->action ("initializing GMSH...");                                                        // Printing message...
   gmsh::initialize ();                                                                              // Initializing GMSH...
   gmsh::model::add ("neutrino");                                                                    // Adding a new GMSH model (named "neutrino")...
@@ -26,23 +26,26 @@ void mesh::init (
   gmsh::open (loc_file_name.c_str ());                                                              // Opening GMSH model from file...
 
   gmsh::model::getEntities (entities);                                                              // Getting all entities...
-  node_num    = 0;                                                                                  // Resetting nodes number...
+  nodes     = 0;                                                                                    // Resetting nodes number...
 
   for(i = 0; i < entities.size (); i++)
   {
-    dim       = entities[i].first;                                                                  // Getting entity dimension...
-    tag       = entities[i].second;                                                                 // Getting entity tag...
+    dim    = entities[i].first;                                                                     // Getting entity dimension...
+    tag    = entities[i].second;                                                                    // Getting entity tag...
     gmsh::model::mesh::getNodes (nodeTags, nodeCoords, nodeParams, dim, tag);                       // Getting entity mesh nodes...
 
-    node_num += nodeTags.size ();                                                                   // Accumulating nodes number...
+    nodes += nodeTags.size ();                                                                      // Accumulating nodes number...
   }
 
-  simplex_num = 0;                                                                                  // Resetting simplexes number...
+  simplexes = 0;                                                                                    // Resetting simplexes number...
+  complexes = 0;
+  strides   = 0;
 
   gmsh::model::mesh::getElements (elemTypes, elemTags, elemNodeTags, dim, tag);                     // Getting entity mesh elements...
 
   for(i = 0; i < elemTypes.size (); i++)
   {
+    // Getting element properties:
     gmsh::model::mesh::getElementProperties (
                                              elemTypes[i],
                                              elemName,
@@ -53,9 +56,11 @@ void mesh::init (
                                              numPrimaryNodes
                                             );
 
+    strides++;
+
     for(j = 0; j < elemTags[i].size (); j++)
     {
-      simplex_num++;
+      simplexes++;                                                                                  // Incrementing Neutrino simplex index...
     }
   }
 
@@ -108,6 +113,7 @@ void mesh::read_msh (
 
     for(j = 0; j < elemTypes.size (); j++)
     {
+      // Getting element properties:
       gmsh::model::mesh::getElementProperties (
                                                elemTypes[j],
                                                elemName,
@@ -120,16 +126,7 @@ void mesh::read_msh (
 
       for(k = 0; k < elemTags[j].size (); k++)
       {
-        loc_simplex->data[i_simplex]        =
-          std::distance (
-                         nodeList,
-                         std::find (
-                                    nodeList,
-                                    nodeList + nodeList.size,
-                                    elemTags[j][k]
-                                   )
-                        );
-        loc_simplex_stride->data[i_simplex] = numNodes;
+        loc_simplex_stride->data[i_simplex] = numNodes;                                             // Setting simplex data stride...
 
         std::cout << "simplex: "
                   << elemTags[j][k]
@@ -138,12 +135,25 @@ void mesh::read_msh (
         for(n = 0; n < numNodes; n++)
         {
           std::cout << elemNodeTags[j][numNodes*k + n] << " ";
+
+          // Finding the index corresponding to each node tag in the full node array:
+          loc_simplex->data[i_simplex] = std::distance (
+                                                        nodeList.begin (),
+                                                        std::find (
+                                                                   nodeList.begin (),
+                                                                   nodeList.end (),
+                                                                   elemNodeTags[j][numNodes*k + n]
+                                                                  )
+                                                       );
+          i_simplex++;                                                                              // Incrementing Neutrino simplex index...
         }
 
         std::cout << std::endl;
       }
     }
   }
+
+  nodeList.clear ();                                                                                // Clearing full node array...
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
