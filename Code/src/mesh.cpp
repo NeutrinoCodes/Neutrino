@@ -28,7 +28,7 @@ void mesh::init (
   gmsh::model::getEntities (entities);                                                              // Getting all entities...
   model_dim = gmsh::model::getDimension ();                                                         // Getting model dimension...
 
-  nodes     = 0;                                                                                    // Resetting nodes nubmer...
+  nodes     = 0;                                                                                    // Resetting nodes number...
 
   for(i = 0; i < entities.size (); i++)
   {
@@ -37,6 +37,28 @@ void mesh::init (
     gmsh::model::mesh::getNodes (nodeTags, nodeCoords, nodeParams, dim, tag);                       // Getting entity mesh nodes...
 
     nodes += nodeTags.size ();                                                                      // Accumulating nodes number...
+  }
+
+  simplexes = 0;                                                                                    // Resetting simplexes number...
+
+  gmsh::model::mesh::getElements (elemTypes, elemTags, elemNodeTags, dim, tag);                     // Getting entity mesh elements...
+
+  for(i = 0; i < elemTypes.size (); i++)
+  {
+    gmsh::model::mesh::getElementProperties (
+                                             elemTypes[i],
+                                             elemName,
+                                             d,
+                                             order,
+                                             numNodes,
+                                             param,
+                                             numPrimaryNodes
+                                            );
+
+    for(j = 0; j < elemTags[i].size (); j++)
+    {
+      simplexes++;
+    }
   }
 
   baseline->done ();                                                                                // Printing message...
@@ -49,6 +71,8 @@ void mesh::read_msh (
   gmsh::model::getEntities (entities);                                                              // Getting all entities...
   model_dim = gmsh::model::getDimension ();                                                         // Getting model dimension...
 
+  k         = 0;                                                                                    // Resetting Neutrino node index...
+
   for(i = 0; i < entities.size (); i++)
   {
     dim = entities[i].first;                                                                        // Getting entity dimension...
@@ -57,22 +81,24 @@ void mesh::read_msh (
 
     for(j = 0; j < nodeTags.size (); j++)
     {
-      // NOTE: GMSH starts labeling the 1st (j = 0) node tag with "1",
-      // therefore "nodeTags[0] - 1 = 0" is the 1st node index for Neutrino.
-      loc_node->data[nodeTags[j] - 1].x = (cl_float)nodeCoords[model_dim*j + 0];                    // Setting "x" coordinate...
-      loc_node->data[nodeTags[j] - 1].y = (cl_float)nodeCoords[model_dim*j + 1];                    // Setting "y" coordinate...
-      loc_node->data[nodeTags[j] - 1].z = (cl_float)nodeCoords[model_dim*j + 2];                    // Setting "z" coordinate...
-      loc_node->data[nodeTags[j] - 1].w = (cl_float)1.0;                                            // Setting "w" coordinate...
+      loc_node->data[k].x = (cl_float)nodeCoords[3*j + 0];                                          // Setting "x" coordinate...
+      loc_node->data[k].y = (cl_float)nodeCoords[3*j + 1];                                          // Setting "y" coordinate...
+      loc_node->data[k].z = (cl_float)nodeCoords[3*j + 2];                                          // Setting "z" coordinate...
+      loc_node->data[k].w = (cl_float)1.0;                                                          // Setting "w" coordinate...
 
-      std::cout << "node: "
+      std::cout << "index: "
+                << k
+                << " node tag: "
                 << nodeTags[j]
                 << " --> coordinates: "
-                << nodeCoords[model_dim*j + 0]
+                << nodeCoords[3*j + 0]
                 << ", "
-                << nodeCoords[model_dim*j + 1]
+                << nodeCoords[3*j + 1]
                 << ", "
-                << nodeCoords[model_dim*j + 2]
+                << nodeCoords[3*j + 2]
                 << std::endl;
+
+      k++;                                                                                          // Incrementing Neutrino node index...
     }
 
     gmsh::model::mesh::getElements (elemTypes, elemTags, elemNodeTags, dim, tag);                   // Getting entity mesh elements...

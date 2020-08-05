@@ -49,6 +49,7 @@ private:
 
 public:
   size_t                                 nodes;                                                     ///< Number of mesh nodes.
+  size_t                                 simplexes;                                                 ///< Number of mesh simplexes.
 
   mesh ();
 
