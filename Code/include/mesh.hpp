@@ -26,34 +26,41 @@ class mesh                                                                      
 {
 private:
   neutrino*                              baseline;                                                  ///< @brief **Neutrino baseline.**
-  size_t                                 i;                                                         ///< Index.
-  size_t                                 j;                                                         ///< Index.
-  size_t                                 k;                                                         ///< Index.
-  size_t                                 i_node;                                                    ///< Neutrino node index.
-  size_t                                 i_simplex;                                                 ///< Neutrino simplex index.
-  size_t                                 n;                                                         ///< Index.
+  size_t                                 entity;                                                    ///< Entity index.
+  size_t                                 type;                                                      ///< Type index.
+  size_t                                 element;                                                   ///< Element index.
+  size_t                                 node;                                                      ///< Node index.
+  size_t                                 vertex;                                                    ///< Vertex index.
+  size_t                                 simplex;                                                   ///< Simplex index.
   int                                    dim;                                                       ///< Entity dimension.
   int                                    tag;                                                       ///< Entity tag.
-  std::vector<std::pair<int, int> >      entities;                                                  ///< Entity array.
+  std::vector<std::pair<int, int> >      entity_list;                                               ///< Entity list.
   std::vector<std::size_t>               nodeTags;                                                  ///< Node tags array...
-  std::vector<std::size_t>               nodeList;                                                  ///< Node tags full array...
+  std::vector<std::size_t>               nodeTags_list;                                             ///< Node tags list...
+  std::vector<std::size_t>               simplexTags_list;                                          ///< Simplex tags list...
   std::vector<double>                    nodeCoords;                                                ///< Node coordinates array...
   std::vector<double>                    nodeParams;
-  std::vector<int>                       elemTypes;                                                 ///< Element type array...
-  std::vector<std::vector<std::size_t> > elemTags;                                                  ///< Element tags array...
+  std::vector<int>                       type_list;                                                 ///< Element type list...
+  std::vector<std::vector<std::size_t> > element_list;                                              ///< Element tags list...
   std::vector<std::vector<std::size_t> > elemNodeTags;                                              ///< Element node tags array...
   std::string                            elemName;                                                  ///< Element name...
   int                                    order;
-  int                                    numNodes;
+  int                                    entities;
+  int                                    nodes_num;
+  int                                    vertexes_num;
+  int                                    nodeTags_num;
+  int                                    types;
+  int                                    elemTags_num;
+  int                                    elements;
   int                                    numPrimaryNodes;
   std::vector<double>                    param;
   int                                    d;
 
 public:
-  size_t                                 nodes;                                                     ///< Number of mesh nodes.
-  size_t                                 simplexes;                                                 ///< Number of mesh simplexes.
-  size_t                                 complexes;                                                 ///< Number of mesh complexes.
-  size_t                                 strides;                                                   ///< Number of mesh strides.
+  size_t                                 nodes;                                                     ///< Number of nodes.
+  size_t                                 simplexes;                                                 ///< Number of simplexes.
+  size_t                                 vertexes;                                                  ///< Number of vertexes.
+  size_t                                 complexes;                                                 ///< Number of complexes.
 
   mesh ();
 
