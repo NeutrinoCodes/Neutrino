@@ -88,10 +88,11 @@ private:
   neutrino*                                             baseline;                                   ///< @brief **Neutrino baseline.**
 
   // INDEXES:
-  size_t                                                i;
-  size_t                                                j;
-  size_t                                                k;
-  size_t                                                m;
+  size_t                                                i;                                          ///< Entity index.
+  size_t                                                j;                                          ///< Simplex type index.
+  size_t                                                k;                                          ///< Simplex index.
+  size_t                                                m;                                          ///< Vertex index.
+  size_t                                                n;                                          ///< Node index.
 
   // NODE VARIABLES:
   std::vector<double>                                   node_coordinates;                           ///< Node coordinates.
@@ -118,7 +119,7 @@ private:
   std::vector<int>                                      type_list;                                  ///< Simplex type list.
   std::string                                           type_name;                                  ///< Simplex type name.
   int                                                   type_dimension;                             ///< Simplex type dimension.
-  int                                                   type_order;                                 // Simplex type order.
+  int                                                   type_order;                                 ///< Simplex type order.
   std::vector<double>                                   type_vertex_coordinates;                    ///< Simplex vertex coordinates.
   int                                                   type_primary_nodes;                         ///< Simplex primary nodes.
 
@@ -128,8 +129,8 @@ private:
   std::vector<std::pair<int, int> >                     entity_list;                                ///< Entity list.
 
 public:
-  std::vector<std::vector<gmsh_node> >                  node;                                       ///< Nodes.
-  std::vector<std::vector<std::vector<gmsh_simplex> > > simplex;                                    ///< Simplexes.
+  std::vector<std::vector<gmsh_node> >                  node;                                       ///< Node[i][n].
+  std::vector<std::vector<std::vector<gmsh_simplex> > > simplex;                                    ///< Simplex[i][j][k].
 
   mesh ();
 
