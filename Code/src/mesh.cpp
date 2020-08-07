@@ -25,18 +25,13 @@ void mesh::init (
   gmsh::option::setNumber ("General.Terminal", 1);                                                  // Allowing GMSH to write on stdout...
   gmsh::open (loc_file_name.c_str ());                                                              // Opening GMSH model from file...
   gmsh::model::getEntities (entity_list);                                                           // Getting entity list...
+
   entities = entity_list.size ();                                                                   // Getting number of entities...
 
-  std::vector<std::size_t> types_vector;
-
-  std::cout << "number of entities = " << entities << std::endl;
-
-  for(entity = 0; entity < entities; entity++)
+  for(i = 0; i < entities; i++)
   {
-    std::cout << "entity = " << entity << std::endl;
-
-    entity_dimension = entity_list[entity].first;                                                   // Getting entity dimension [#]...
-    entity_tag       = entity_list[entity].second;                                                  // Getting entity tag [#]...
+    entity_dimension = entity_list[i].first;                                                        // Getting entity dimension [#]...
+    entity_tag       = entity_list[i].second;                                                       // Getting entity tag [#]...
 
     // Getting entity nodes:
     // where:
@@ -50,25 +45,15 @@ void mesh::init (
                                  entity_tag                                                         // Entity tag [#].
                                 );
 
-    int       i;
-    gmsh_node pippo;
+    nodes = node_list.size ();                                                                      // Getting number of nodes...
 
-    for(i = 0; i < node_list.size (); i++)
+    for(j = 0; j < nodes; j++)
     {
-      pippo.tag = node_list[i];
+      node_scalar.x   = node_coordinates[3*j + 0];                                                  // Setting "x" node coordinate...
+      node_scalar.x   = node_coordinates[3*j + 1];                                                  // Setting "y" node coordinate...
+      node_scalar.x   = node_coordinates[3*j + 2];                                                  // Setting "z" node coordinate...
+      node_scalar.tag = node_list[j];                                                               // Setting node tag...
     }
-
-    nodes.push_back (node_list);
-    // Finding the index corresponding to each node tag in the node tag list:
-    loc_simplicialcomplex->data[node] = std::distance (
-                                                       node_list.begin (),
-                                                       std::find (
-                                                                  nodeTags_list.begin (),
-                                                                  nodeTags_list.end (),
-                                                                  elemNodeTags[type][vertex]
-                                                                 )
-                                                      );                                            // Setting number of nodes...
-    std::cout << "number of nodes = " << node_list.size () << std::endl;
 
     // Getting entity simplexes:
     // where:
@@ -77,116 +62,55 @@ void mesh::init (
     // L = number of simplex types.
     // M(i) = number of simplexes per simplex type.
     // N(j) = number of nodes per simplex, for each simplex type.
-
     gmsh::model::mesh::getElements (
                                     type_list,                                                      // Element type list [L].
-                                    element_array,                                                  // Element tag array LxM(i).
-                                    node_array,                                                     // Node tag array Lx[N(1),N(2),...,N(j),N(M(i))].
+                                    simplex_tag_matrix,                                             // Simplex tag matrix LxM(i).
+                                    node_matrix,                                                    // Node tag matrix Lx[N(1),N(2),...,N(j),N(M(i))].
                                     entity_dimension,                                               // Entity dimension [#].
                                     entity_tag                                                      // Entity tag [#].
                                    );
 
-    types.push_back (type_list);                                                                    // Setting simplex types...
-    simplexes.push_back (element_array);                                                            // Getting number of simplexes...
+    types = type_list.size ();                                                                      // Getting number of types...
+
+    for(j = 0; j < types; j++)
+    {
+      simplexes = simplex_tag_matrix[j].size ();                                                    // Getting number of simplexes...
+
+      for(k = 0; k < simplexes; k++)
+      {
+        std::vector<size_t> pippo;
+
+        // Getting element type properties:
+        gmsh::model::mesh::getElementProperties (
+                                                 type_list[j],                                      // Simplex type.
+                                                 type_name,                                         // Simplex type name.
+                                                 type_dimension,                                    // Simplex type dimension.
+                                                 type_order,                                        // Simplex type order.
+                                                 vertexes,                                          // Simplex type number of vertexes.
+                                                 type_vertex_coordinates,                           // Simplex type vetexes local coordinates.
+                                                 type_primary_nodes                                 // Number of primary vertexes.
+                                                );
+
+        for(m = 0; m < vertexes; m++)
+        {
+          simplex_scalar.vertex.push_back (node_matrix[j][k*vertexes + m]);                         // Setting simplex vertex...
+        }
+
+        simplex_scalar.type = type_list[j];                                                         // Setting simplex type...
+        simplex_scalar.size = vertexes;                                                             // Setting simplex number of vetexes...
+        simplex_scalar.tag  = simplex_tag_matrix[j][k];                                             // Setting simplex tag...
+      }
+
+      simplex_vector.push_back (simplex_scalar);                                                    // Setting simplex scalar...
+    }
+
+    simplex_matrix.push_back (simplex_vector);                                                      // Setting simplex vector...
   }
 
+  node.push_back (node_vector);                                                                     // Setting node vector...
+  simplex.push_back (simplex_matrix);                                                               // Setting simplex matrix...
+
   baseline->done ();                                                                                // Printing message...
-}
-
-void mesh::read_msh (
-                     float4G* loc_node,                                                             // Node coordinates.
-                     int1*    loc_simplicialcomplex,                                                // Simplicial complex.
-                     int1*    loc_order,                                                            // Simplex orders.
-                     int1*    loc_cell,                                                             // Cell indexes.
-                     int1*    loc_adjacencies                                                       // Simplex adjacencies.
-                    )
-{
-  /*
-     gmsh::model::getEntities (entity_list);                                                           // Getting entity list...
-     entities = entity_list.size ();                                                                   // Getting number of entities...
-
-     for(entity = 0; entity < entities; entity++)
-     {
-     entity_dimension = entity_list[entity].first;                                                   // Getting entity dimension...
-     entity_tag       = entity_list[entity].second;                                                  // Getting entity tag...
-
-     // Getting entity mesh nodes:
-     gmsh::model::mesh::getNodes (
-                                 node_list,                                                         // Node tags.
-                                 nodeCoords,                                                        // Node coordinates.
-                                 nodeParams,                                                        // Node parametric coordinates.
-                                 entity_dimension,                                                  // Entity dimension.
-                                 entity_tag                                                         // Entity tag.
-                                );
-
-     nodeTags_num = node_list.size ();                                                               // Getting number of nodeTags...
-
-     for(node = 0; node < nodeTags_num; node++)
-     {
-      loc_node->data[node].x = (cl_float)nodeCoords[3*node + 0];                                    // Setting "x" coordinate...
-      loc_node->data[node].y = (cl_float)nodeCoords[3*node + 1];                                    // Setting "y" coordinate...
-      loc_node->data[node].z = (cl_float)nodeCoords[3*node + 2];                                    // Setting "z" coordinate...
-      loc_node->data[node].w = (cl_float)1.0;                                                       // Setting "w" coordinate...
-      nodeTags_list.push_back (nodeTags[node]);                                                     // Setting node tag in the list...
-     }
-
-     // Getting entity mesh elements:
-     gmsh::model::mesh::getElements (
-                                    type_list,                                                      // Element type list.
-                                    element_list,                                                   // Element tag list.
-                                    elemNodeTags,                                                   // Node tag list, for each element.
-                                    entity_dimension,                                               // Entity dimension.
-                                    entity_tag                                                      // Entity tag.
-                                   );
-
-     types = type_list.size ();                                                                      // Getting number of elemTypes...
-
-     for(type = 0; type < types; type++)
-     {
-      // Getting element properties:
-      gmsh::model::mesh::getElementProperties (
-                                               type_list[type],                                     // Element type.
-                                               elemName,                                            // Element name.
-                                               d,                                                   // Element dimension.
-                                               order,                                               // Element order.
-                                               vertexes_num,                                        // Number of vertexes.
-                                               param,                                               // Local coordinates of the vertexes.
-                                               numPrimaryNodes                                      // Number of primary vertexes.
-                                              );
-
-      elements = element_list[type].size ();                                                        // Getting number of elemTags...
-
-      for(element = 0; element < elemTags_num; element++)
-      {
-        simplex                  = type*types + element;                                            // Setting simplex index...
-        loc_order->data[simplex] = vertexes_num;                                                    // Setting simplex order...
-        simplexTags_list.push_back (element_list[type][element]);                                   // Setting simplex tag in list...
-
-        for(vertex = 0; vertex < vertexes_num; vertex++)
-        {
-          node                              = type*types*elemTags_num +
-                                              element*elemTags_num +
-                                              vertex;
-
-          // Finding the index corresponding to each node tag in the node tag list:
-          loc_simplicialcomplex->data[node] = std::distance (
-                                                             nodeTags_list.begin (),
-                                                             std::find (
-                                                                        nodeTags_list.begin (),
-                                                                        nodeTags_list.end (),
-                                                                        elemNodeTags[type][vertex]
-                                                                       )
-                                                            );
-        }
-      }
-     }
-     }
-
-     std::cout << "simplexTags_list = " << simplexTags_list.size () << std::endl;
-
-     nodeTags_list.clear ();                                                                           // Clearing full node array...
-     simplexTags_list.clear ();                                                                        // Clearing full simplex array...
-   */
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////

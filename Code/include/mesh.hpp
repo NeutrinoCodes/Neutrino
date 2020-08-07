@@ -19,13 +19,26 @@
 /// @details  This structure is used as data storage in the node array. It is tightly packed to be
 /// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
-typedef struct _gmhs_node
+typedef struct _gmsh_node
 {
   cl_float x;                                                                                       ///< Node "x" coordinate.
   cl_float y;                                                                                       ///< Node "y" coordinate.
   cl_float z;                                                                                       ///< Node "z" coordinate.
   size_t tag;                                                                                       ///< Node tag.
 } gmsh_node;
+#pragma pack(pop)
+
+/// @brief    **Data structure. Internally used by Neutrino.**
+/// @details  This structure is used as data storage in the simplex array. It is tightly packed to be
+/// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
+#pragma pack(push, 1)                                                                               // Packing data in 1 column...
+typedef struct _gmsh_simplex
+{
+  std::vector<size_t> vertex;                                                                       ///< Simplex vertex tags.
+  int type;                                                                                         ///< Simplex type.
+  int size;                                                                                         ///< Simplex number of vertexes.
+  size_t tag;                                                                                       ///< Simplex tag.
+} gmsh_simplex;
 #pragma pack(pop)
 
 #define GMHS_2_NODE_LINE                              1
@@ -72,53 +85,51 @@ typedef struct _gmhs_node
 class mesh                                                                                          /// @brief **Mesh.**
 {
 private:
-  neutrino*                                            baseline;                                    ///< @brief **Neutrino baseline.**
+  neutrino*                                             baseline;                                   ///< @brief **Neutrino baseline.**
 
-  size_t                                               entity;                                      ///< Entity index.
-  size_t                                               type;                                        ///< Type index.
-  size_t                                               element;                                     ///< Element index.
-  size_t                                               node;                                        ///< Node index.
-  size_t                                               vertex;                                      ///< Vertex index.
-  size_t                                               simplex;                                     ///< Simplex index.
+  // INDEXES:
+  size_t                                                i;
+  size_t                                                j;
+  size_t                                                k;
+  size_t                                                m;
 
-  int                                                  entity_dimension;                            ///< Entity dimension.
-  int                                                  entity_tag;                                  ///< Entity tag.
+  // NODE VARIABLES:
+  std::vector<double>                                   node_coordinates;                           ///< Node coordinates.
+  std::vector<double>                                   node_parametric_coordinates;                ///< Node parametric coordinates.
+  std::vector<std::size_t>                              node_list;                                  ///< Node list.
+  gmsh_node                                             node_scalar;                                ///< Node scalar.
+  std::vector<gmsh_node>                                node_vector;                                ///< Node vector.
+  std::vector<std::vector<std::size_t> >                node_matrix;                                ///< Node matrix.
 
-  std::vector<std::pair<int, int> >                    entity_list;                                 ///< Entity list.
+  // SIMPLEX VARIABLES:
+  gmsh_simplex                                          simplex_scalar;                             ///< Simplex scalar.
+  std::vector<gmsh_simplex>                             simplex_vector;                             ///< Simplex vector.
+  std::vector<std::vector<gmsh_simplex> >               simplex_matrix;                             ///< Simplex matrix.
+  std::vector<std::vector<std::size_t> >                simplex_tag_matrix;                         ///< Simplex tag matrix.
 
-  std::vector<int>                                     type_list;                                   ///< Element type list...
-  std::vector<std::size_t>                             node_list;                                   ///< Node tags list...
+  // MESH VARIABLES:
+  size_t                                                entities;                                   ///< Number of entities.
+  size_t                                                nodes;                                      ///< Number of nodes.
+  size_t                                                types;                                      ///< Number of simplex types.
+  size_t                                                simplexes;                                  ///< Number of simplexes.
+  int                                                   vertexes;                                   ///< Number of vertexes.
 
-  std::vector<std::vector<std::size_t> >               element_array;                               ///< Element tags array...
-  std::vector<std::vector<std::size_t> >               node_array;                                  ///< Element node tags array...
+  // TYPE VARIABLES:
+  std::vector<int>                                      type_list;                                  ///< Simplex type list.
+  std::string                                           type_name;                                  ///< Simplex type name.
+  int                                                   type_dimension;                             ///< Simplex type dimension.
+  int                                                   type_order;                                 // Simplex type order.
+  std::vector<double>                                   type_vertex_coordinates;                    ///< Simplex vertex coordinates.
+  int                                                   type_primary_nodes;                         ///< Simplex primary nodes.
 
-  std::vector<std::size_t>                             simplexTags_list;                            ///< Simplex tags list...
-  std::vector<double>                                  node_coordinates;                            ///< Node coordinates array...
-  std::vector<double>                                  node_parametric_coordinates;                 ///< Node parametric coordinates.
-
-
-
-  std::string                                          elemName;                                    ///< Element name...
-  int                                                  order;
-
-  int                                                  nodes_num;
-  int                                                  vertexes_num;
-  int                                                  nodeTags_num;
-
-  int                                                  elemTags_num;
-  int                                                  elements;
-  int                                                  numPrimaryNodes;
-  std::vector<double>                                  param;
-  int                                                  d;
+  // ENTITY VARIABLES:
+  int                                                   entity_dimension;                           ///< Entity dimension.
+  int                                                   entity_tag;                                 ///< Entity tag.
+  std::vector<std::pair<int, int> >                     entity_list;                                ///< Entity list.
 
 public:
-  size_t                                               entities;                                    ///< Number of entities.
-  std::vector<std::size_t>                             complexes;                                   ///< Number of complexes.
-  std::vector<std::vector<std::vector<std::size_t> > > simplexes;                                   ///< Number of simplexes.
-  std::vector<std::vector<int> >                       types;                                       ///< Number of types.
-  std::vector<std::size_t>                             vertexes;                                    ///< Number of vertexes.
-
-  std::vector<std::vector<gmsh_node> >                 nodes;                                       ///< Number of nodes.
+  std::vector<std::vector<gmsh_node> >                  node;                                       ///< Nodes.
+  std::vector<std::vector<std::vector<gmsh_simplex> > > simplex;                                    ///< Simplexes.
 
   mesh ();
 
@@ -126,14 +137,6 @@ public:
              neutrino*   loc_baseline,                                                              ///< Neutrino baseline.
              std::string loc_file_name                                                              ///< GMSH .msh file name.
             );
-
-  void read_msh (
-                 float4G* loc_node,                                                                 ///< GMSH node coordinates.
-                 int1*    loc_simplex,                                                              ///< GMSH simplex: node index list.
-                 int1*    loc_simplex_stride,                                                       ///< GMSH simplex: strides.
-                 int1*    loc_complex,                                                              ///< GMSH complex: simplex index list.
-                 int1*    loc_complex_stride                                                        ///< GMSH complex: strides.
-                );
 
   ~mesh();
 };
