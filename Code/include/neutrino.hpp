@@ -131,6 +131,7 @@ typedef enum
 #include <errno.h>
 #include <string>
 #include <vector>
+#include <tuple>
 #include <iostream>
 #include <fstream>
 #include <cerrno>
