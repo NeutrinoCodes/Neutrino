@@ -24,7 +24,7 @@ typedef struct _gmsh_node
   cl_float x;                                                                                       ///< Node "x" coordinate.
   cl_float y;                                                                                       ///< Node "y" coordinate.
   cl_float z;                                                                                       ///< Node "z" coordinate.
-  size_t tag;                                                                                       ///< Node tag.
+  cl_float w;                                                                                       ///< Node "w" coordinate.
 } gmsh_node;
 #pragma pack(pop)
 
@@ -34,10 +34,10 @@ typedef struct _gmsh_node
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _gmsh_simplex
 {
-  std::vector<size_t> vertex;                                                                       ///< Simplex vertex tags.
+  std::vector<size_t> vertex;                                                                       ///< Simplex vertex indexes.
   int type;                                                                                         ///< Simplex type.
   int size;                                                                                         ///< Simplex number of vertexes.
-  size_t tag;                                                                                       ///< Simplex tag.
+  size_t index;                                                                                     ///< Simplex index.
 } gmsh_simplex;
 #pragma pack(pop)
 
