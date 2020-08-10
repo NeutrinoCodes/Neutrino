@@ -46,9 +46,9 @@ void mesh::init (
                                  entity_tag                                                         // Entity tag [#].
                                 );
 
-    nodes = node_list.size ();                                                                      // Getting number of nodes...
+    nodes.push_back (node_list.size ());                                                            // Getting number of nodes...
 
-    for(n = 0; n < nodes; n++)
+    for(n = 0; n < nodes[i]; n++)
     {
       node_scalar.x = node_coordinates[3*n + 0];                                                    // Setting "x" node coordinate...
       node_scalar.y = node_coordinates[3*n + 1];                                                    // Setting "y" node coordinate...
@@ -71,13 +71,13 @@ void mesh::init (
                                     entity_tag                                                      // Entity tag [#].
                                    );
 
-    types = type_list.size ();                                                                      // Getting number of types...
+    types.push_back (type_list.size ());                                                            // Getting number of types...
 
-    for(j = 0; j < types; j++)
+    for(j = 0; j < types[i]; j++)
     {
-      simplexes = simplex_tag_matrix[j].size ();                                                    // Getting number of simplexes...
+      simplexes_scalar.push_back (simplex_tag_matrix[j].size ());                                   // Getting number of simplexes...
 
-      for(k = 0; k < simplexes; k++)
+      for(k = 0; k < simplexes_scalar[j]; k++)
       {
         // Getting element type properties:
         gmsh::model::mesh::getElementProperties (
@@ -95,9 +95,7 @@ void mesh::init (
           simplex_scalar.vertex.push_back ((node_matrix[j][k*vertexes + m]) - 1);                   // Setting simplex vertex index...
         }
 
-        simplex_scalar.type  = type_list[j];                                                        // Setting simplex type...
-        simplex_scalar.size  = vertexes;                                                            // Setting simplex number of vertexes...
-        simplex_scalar.index = (simplex_tag_matrix[j][k]) - 1;                                      // Setting simplex index...
+        simplex_scalar.type = type_list[j];                                                         // Setting simplex type...
         simplex_vector.push_back (simplex_scalar);                                                  // Setting simplex scalar...
         simplex_scalar.vertex.clear ();                                                             // Clearing vertex vector for next simplex...
       }
@@ -105,13 +103,41 @@ void mesh::init (
       simplex_matrix.push_back (simplex_vector);                                                    // Setting simplex vector...
     }
 
+    simplexes.push_back (simplexes_scalar);
+    simplexes_scalar.clear ();
     node.push_back (node_vector);                                                                   // Setting node vector...
     simplex.push_back (simplex_matrix);                                                             // Setting simplex matrix...
   }
 
+  // Finding complexes for each node in each entity = finding the indexes of all simplexes having the node "n" in them:
+  for(i = 0; i < entities; i++)
+  {
+    for(n = 0; n < nodes[i]; n++)
+    {
+      for(j = 0; j < types[i]; j++)
+      {
+        for(k = 0; k < simplexes[i][j]; k++)
+        {
+          for(m = 0; m < simplex[i][j][k].vertex.size (); m++)
+          {
+            if(simplex[i][j][k].vertex[m] == n)
+            {
+              complex_scalar.push_back (i*entities*types[i] + j*types[i] + k);                      // Setting complex scalar...
+            }
+          }
+        }
+      }
+
+      complex_vector.push_back (complex_scalar);                                                    // Setting complex vector...
+      complex_scalar.clear ();                                                                      // Clearing complex scalar for next complex...
+    }
+
+    complex.push_back (complex_vector);                                                             // Setting complex vector...
+    complex_vector.clear ();                                                                        // Clearing complex vector for next complex...
+  }
+
   baseline->done ();                                                                                // Printing message...
 }
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////// DESTRUCTOR ////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////

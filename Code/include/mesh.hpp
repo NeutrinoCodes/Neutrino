@@ -36,8 +36,6 @@ typedef struct _gmsh_simplex
 {
   std::vector<size_t> vertex;                                                                       ///< Simplex vertex indexes.
   int type;                                                                                         ///< Simplex type.
-  int size;                                                                                         ///< Simplex number of vertexes.
-  size_t index;                                                                                     ///< Simplex index.
 } gmsh_simplex;
 #pragma pack(pop)
 
@@ -108,11 +106,17 @@ private:
   std::vector<std::vector<gmsh_simplex> >               simplex_matrix;                             ///< Simplex matrix.
   std::vector<std::vector<std::size_t> >                simplex_tag_matrix;                         ///< Simplex tag matrix.
 
+  // COMPLEX VARIABLES:
+  std::vector<size_t>                                   complex_scalar;
+  std::vector<std::vector<size_t> >                     complex_vector;
+
+
   // MESH VARIABLES:
   size_t                                                entities;                                   ///< Number of entities.
-  size_t                                                nodes;                                      ///< Number of nodes.
-  size_t                                                types;                                      ///< Number of simplex types.
-  size_t                                                simplexes;                                  ///< Number of simplexes.
+  std::vector<size_t>                                   nodes;                                      ///< Number of nodes.
+  std::vector<size_t>                                   types;                                      ///< Number of simplex types.
+  std::vector<size_t>                                   simplexes_scalar;
+  std::vector<std::vector<size_t> >                     simplexes;                                  ///< Number of simplexes.
   int                                                   vertexes;                                   ///< Number of vertexes.
 
   // TYPE VARIABLES:
@@ -131,6 +135,7 @@ private:
 public:
   std::vector<std::vector<gmsh_node> >                  node;                                       ///< Node[i][n].
   std::vector<std::vector<std::vector<gmsh_simplex> > > simplex;                                    ///< Simplex[i][j][k].
+  std::vector<std::vector<std::vector<size_t> > >       complex;                                    ///< Complex[i][n].
 
   mesh ();
 
