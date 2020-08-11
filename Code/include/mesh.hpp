@@ -107,9 +107,8 @@ private:
   std::vector<std::vector<std::size_t> >                simplex_tag_matrix;                         ///< Simplex tag matrix.
 
   // COMPLEX VARIABLES:
-  std::vector<size_t>                                   complex_scalar;
-  std::vector<std::vector<size_t> >                     complex_vector;
-
+  std::vector<size_t>                                   complex_scalar;                             ///< Complex scalar.
+  std::vector<std::vector<size_t> >                     complex_vector;                             ///< Complex vector.
 
   // MESH VARIABLES:
   size_t                                                entities;                                   ///< Number of entities.
@@ -136,6 +135,7 @@ public:
   std::vector<std::vector<gmsh_node> >                  node;                                       ///< Node[i][n].
   std::vector<std::vector<std::vector<gmsh_simplex> > > simplex;                                    ///< Simplex[i][j][k].
   std::vector<std::vector<std::vector<size_t> > >       complex;                                    ///< Complex[i][n].
+  std::vector<std::vector<std::vector<size_t> > >       neighbour;                                  ///< Neighbour[i][n].
 
   mesh ();
 
