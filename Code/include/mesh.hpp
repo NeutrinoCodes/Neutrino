@@ -91,6 +91,7 @@ private:
   size_t                                                k;                                          ///< Simplex index.
   size_t                                                m;                                          ///< Vertex index.
   size_t                                                n;                                          ///< Node index.
+  size_t                                                o;
 
   // NODE VARIABLES:
   std::vector<double>                                   node_coordinates;                           ///< Node coordinates.
@@ -109,6 +110,9 @@ private:
   // COMPLEX VARIABLES:
   std::vector<size_t>                                   complex_scalar;                             ///< Complex scalar.
   std::vector<std::vector<size_t> >                     complex_vector;                             ///< Complex vector.
+
+  std::vector<size_t>                                   neighbour_scalar;
+  std::vector<std::vector<size_t> >                     neighbour_vector;
 
   // MESH VARIABLES:
   size_t                                                entities;                                   ///< Number of entities.
