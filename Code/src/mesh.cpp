@@ -123,17 +123,36 @@ void mesh::init (
             if(simplex[i][j][k].vertex[m] == n)
             {
               complex_scalar.push_back (i*entities*types[i] + j*types[i] + k);                      // Setting complex scalar...
+              neighbour_scalar.insert (
+                                       neighbour_scalar.end (),
+                                       simplex[i][j][k].vertex.begin (),
+                                       simplex[i][j][k].vertex.end ()
+                                      );
             }
           }
         }
       }
 
+      neighbour_scalar.resize (
+                               std::distance (
+                                              neighbour_scalar.begin (),
+                                              std::unique (
+                                                           neighbour_scalar.begin (),
+                                                           neighbour_scalar.begin () +
+                                                           neighbour_scalar.size ()
+                                                          )
+                                             )
+                              );
       complex_vector.push_back (complex_scalar);                                                    // Setting complex vector...
       complex_scalar.clear ();                                                                      // Clearing complex scalar for next complex...
+      neighbour_vector.push_back (neighbour_scalar);
+      neighbour_scalar.clear ();
     }
 
     complex.push_back (complex_vector);                                                             // Setting complex vector...
     complex_vector.clear ();                                                                        // Clearing complex vector for next complex...
+    neighbour.push_back (neighbour_vector);
+    neighbour_vector.clear ();
   }
 
   baseline->done ();                                                                                // Printing message...
