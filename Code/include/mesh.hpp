@@ -97,14 +97,15 @@ private:
   std::vector<double>                                   node_coordinates;                           ///< Node coordinates.
   std::vector<double>                                   node_parametric_coordinates;                ///< Node parametric coordinates.
   std::vector<std::size_t>                              node_list;                                  ///< Node list.
-  gmsh_node                                             node_scalar;                                ///< Node scalar.
-  std::vector<gmsh_node>                                node_vector;                                ///< Node vector.
-  std::vector<std::vector<std::size_t> >                node_matrix;                                ///< Node matrix.
+  std::vector<std::vector<std::size_t> >                node_tag;                                   ///< Node tag.
+  gmsh_node                                             node_i_n;                                   ///< [i][n] slice of node[i][n] tensor.
+  std::vector<gmsh_node>                                node_i;                                     ///< [i] slice of node[i][n] tensor.
+
 
   // SIMPLEX VARIABLES:
-  gmsh_simplex                                          simplex_scalar;                             ///< Simplex scalar.
-  std::vector<gmsh_simplex>                             simplex_vector;                             ///< Simplex vector.
-  std::vector<std::vector<gmsh_simplex> >               simplex_matrix;                             ///< Simplex matrix.
+  gmsh_simplex                                          simplex_i_j_k_m;                            ///< [i][j][k][m] slice of simplex[i][j][k][m] tensor.
+  std::vector<gmsh_simplex>                             simplex_i_j_k;                              ///< [i][j][k] slice of simplex[i][j][k][m] tensor.
+  std::vector<std::vector<gmsh_simplex> >               simplex_i_j;                                ///< [i][j] slice of simplex[i][j][k][m] tensor.
   std::vector<std::vector<std::size_t> >                simplex_tag_matrix;                         ///< Simplex tag matrix.
 
   // COMPLEX VARIABLES:
