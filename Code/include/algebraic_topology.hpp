@@ -97,7 +97,7 @@ private:
   size_t                                                entities;                                   ///< Number of entities.
   std::vector<size_t>                                   nodes;                                      ///< Number of nodes.
   std::vector<size_t>                                   types;                                      ///< Number of simplex types.
-  std::vector<size_t>                                   simplexes_i;                                ///< [i] slice of simplexes tensor.
+  std::vector<size_t>                                   type_simplexes;                             ///< Number of simplexes per type.
   std::vector<std::vector<size_t> >                     simplexes;                                  ///< Number of simplexes.
   int                                                   vertexes;                                   ///< Number of vertexes.
 
@@ -125,7 +125,7 @@ private:
   gmsh_simplex                                          simplex_i_j_k_m;                            ///< [i][j][k][m] slice of simplex[i][j][k][m] tensor.
   std::vector<gmsh_simplex>                             simplex_i_j_k;                              ///< [i][j][k] slice of simplex[i][j][k][m] tensor.
   std::vector<std::vector<gmsh_simplex> >               simplex_i_j;                                ///< [i][j] slice of simplex[i][j][k][m] tensor.
-  std::vector<std::vector<std::size_t> >                simplex_tag_matrix;                         ///< Simplex tag matrix.
+  std::vector<std::vector<std::size_t> >                simplex_tag;                                ///< Simplex tag list.
 
   // COMPLEX VARIABLES:
   std::vector<size_t>                                   complex_i_n_j_k_m;                          ///< [i][n][j][k][m] slice of complex tensor.
