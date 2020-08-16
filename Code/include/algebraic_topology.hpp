@@ -91,7 +91,6 @@ private:
   size_t                                                k;                                          ///< Simplex index.
   size_t                                                m;                                          ///< Vertex index.
   size_t                                                n;                                          ///< Node index.
-  //size_t                                                o;
 
   // TENSOR SIZES:
   size_t                                                entities;                                   ///< Number of entities.
