@@ -24,16 +24,16 @@ void mesh::init (
   gmsh::model::add ("neutrino");                                                                    // Adding a new GMSH model (named "neutrino")...
   gmsh::option::setNumber ("General.Terminal", 0);                                                  // Not allowing GMSH to write on stdout...
   gmsh::open (loc_file_name.c_str ());                                                              // Opening GMSH model from file...
-  gmsh::model::getEntities (entity_list);                                                           // Getting entity list...
-  entities = entity_list.size ();                                                                   // Getting number of entities...
+  gmsh::model::getEntities (entity);                                                                // Getting entity list...
+  entities = entity.size ();                                                                        // Getting number of entities...
 
   gmsh::model::mesh::renumberNodes ();                                                              // Renumbering the node tags in a continuous sequence...
   gmsh::model::mesh::renumberElements ();                                                           // Renumbering the element tags in a continuous sequence...
 
   for(i = 0; i < entities; i++)
   {
-    entity_dimension = entity_list[i].first;                                                        // Getting entity dimension [#]...
-    entity_tag       = entity_list[i].second;                                                       // Getting entity tag [#]...
+    entity_dimension = entity[i].first;                                                             // Getting entity dimension [#]...
+    entity_tag       = entity[i].second;                                                            // Getting entity tag [#]...
 
     // Getting entity nodes, where:
     // N = number of nodes
@@ -46,7 +46,7 @@ void mesh::init (
                                  entity_tag                                                         // Entity tag [#].
                                 );
 
-    nodes.push_back (node_list.size ());                                                            // Getting number of nodes...
+    nodes.push_back (node_list.size ());                                                            // Pushing number of nodes...
 
     for(n = 0; n < nodes[i]; n++)
     {
@@ -75,9 +75,9 @@ void mesh::init (
 
     for(j = 0; j < types[i]; j++)
     {
-      simplexes_scalar.push_back (simplex_tag_matrix[j].size ());                                   // Getting number of simplexes...
+      simplexes_i.push_back (simplex_tag_matrix[j].size ());                                        // Getting number of simplexes...
 
-      for(k = 0; k < simplexes_scalar[j]; k++)
+      for(k = 0; k < simplexes_i[j]; k++)
       {
         // Getting element type properties:
         gmsh::model::mesh::getElementProperties (
@@ -103,8 +103,8 @@ void mesh::init (
       simplex_i_j.push_back (simplex_i_j_k);                                                        // Pushing simplex[i][j][k] slice to simplex[i][j] slice...
     }
 
-    simplexes.push_back (simplexes_scalar);
-    simplexes_scalar.clear ();
+    simplexes.push_back (simplexes_i);
+    simplexes_i.clear ();
     node.push_back (node_i);                                                                        // Setting node vector...
     simplex.push_back (simplex_i_j);                                                                // Setting simplex matrix...
   }
@@ -122,37 +122,37 @@ void mesh::init (
           {
             if(simplex[i][j][k].vertex[m] == n)
             {
-              complex_scalar.push_back (i*entities*types[i] + j*types[i] + k);                      // Setting complex scalar...
-              neighbour_scalar.insert (
-                                       neighbour_scalar.end (),
-                                       simplex[i][j][k].vertex.begin (),
-                                       simplex[i][j][k].vertex.end ()
-                                      );
+              complex_i_n_j_k_m.push_back (i*entities*types[i] + j*types[i] + k);                   // Setting complex scalar...
+              neighbour_i_n_j_k_m.insert (
+                                          neighbour_i_n_j_k_m.end (),
+                                          simplex[i][j][k].vertex.begin (),
+                                          simplex[i][j][k].vertex.end ()
+                                         );
             }
           }
         }
       }
 
-      neighbour_scalar.resize (
-                               std::distance (
-                                              neighbour_scalar.begin (),
-                                              std::unique (
-                                                           neighbour_scalar.begin (),
-                                                           neighbour_scalar.begin () +
-                                                           neighbour_scalar.size ()
-                                                          )
-                                             )
-                              );
-      complex_vector.push_back (complex_scalar);                                                    // Setting complex vector...
-      complex_scalar.clear ();                                                                      // Clearing complex scalar for next complex...
-      neighbour_vector.push_back (neighbour_scalar);
-      neighbour_scalar.clear ();
+      neighbour_i_n_j_k_m.resize (
+                                  std::distance (
+                                                 neighbour_i_n_j_k_m.begin (),
+                                                 std::unique (
+                                                              neighbour_i_n_j_k_m.begin (),
+                                                              neighbour_i_n_j_k_m.begin () +
+                                                              neighbour_i_n_j_k_m.size ()
+                                                             )
+                                                )
+                                 );
+      complex_i_n_j_k.push_back (complex_i_n_j_k_m);                                                // Setting complex vector...
+      complex_i_n_j_k_m.clear ();                                                                   // Clearing complex scalar for next complex...
+      neighbour_i_n_j_k.push_back (neighbour_i_n_j_k_m);
+      neighbour_i_n_j_k_m.clear ();
     }
 
-    complex.push_back (complex_vector);                                                             // Setting complex vector...
-    complex_vector.clear ();                                                                        // Clearing complex vector for next complex...
-    neighbour.push_back (neighbour_vector);
-    neighbour_vector.clear ();
+    complex.push_back (complex_i_n_j_k);                                                            // Setting complex vector...
+    complex_i_n_j_k.clear ();                                                                       // Clearing complex vector for next complex...
+    neighbour.push_back (neighbour_i_n_j_k);
+    neighbour_i_n_j_k.clear ();
   }
 
   baseline->done ();                                                                                // Printing message...
