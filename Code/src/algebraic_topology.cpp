@@ -124,10 +124,21 @@ void mesh::init (
             {
               complex_i_n_j_k_m.push_back (i*entities*types[i] + j*types[i] + k);                   // Setting complex[i][n][j][k][m] slice complex index...
 
+              if(n > 0)
+              {
+                // Appending simplex[i][j][k] vertexes in neighbour[i][n][j][k][m] slice:
+                neighbour_i_n_j_k_m.insert (
+                                            neighbour_i_n_j_k_m.end (),                             // Beginning of append = end of current neighbour slice.
+                                            simplex[i][j][k].vertex.begin (),                       // Beginning of slice to be appended.
+                                            simplex[i][j][k].vertex.begin () + n - 1                // End of slice to be appended.
+                                           );
+              }
+
+
               // Appending simplex[i][j][k] vertexes in neighbour[i][n][j][k][m] slice:
               neighbour_i_n_j_k_m.insert (
                                           neighbour_i_n_j_k_m.end (),                               // Beginning of append = end of current neighbour slice.
-                                          simplex[i][j][k].vertex.begin (),                         // Beginning of slice to be appended.
+                                          simplex[i][j][k].vertex.begin () + n + 1,                 // Beginning of slice to be appended.
                                           simplex[i][j][k].vertex.end ()                            // End of slice to be appended.
                                          );
             }
