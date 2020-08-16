@@ -1,4 +1,4 @@
-/// @file     mesh.hpp
+/// @file     algebraic_topology.hpp
 /// @author   Erik ZORZIN
 /// @date     27JAN2020
 /// @brief    Declaration of a "mesh" class based on GMSH.
@@ -8,8 +8,8 @@
 /// Neutrino reads GMSH files and reconstructs a simplicial complex out of it.
 /// The simplicial complex is used for both computational and rendering purposes.
 
-#ifndef mesh_hpp
-#define mesh_hpp
+#ifndef algebraic_topology_hpp
+#define algebraic_topology_hpp
 
 #include "neutrino.hpp"
 #include "data_classes.hpp"
