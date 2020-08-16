@@ -65,19 +65,19 @@ void mesh::init (
     // N(j) = number of nodes per simplex, for each simplex type.
     gmsh::model::mesh::getElements (
                                     type_list,                                                      // Element type list [L].
-                                    simplex_tag_matrix,                                             // Simplex tag matrix LxM(i).
-                                    node_tag,                                                       // Node tag matrix Lx[N(1),N(2),...,N(j),N(M(i))].
+                                    simplex_tag,                                                    // Simplex tag list LxM(i).
+                                    node_tag,                                                       // Node tag list Lx[N(1),N(2),...,N(j),N(M(i))].
                                     entity_dimension,                                               // Entity dimension [#].
                                     entity_tag                                                      // Entity tag [#].
                                    );
 
-    types.push_back (type_list.size ());                                                            // Getting number of types...
+    types.push_back (type_list.size ());                                                            // Pushing number of types...
 
     for(j = 0; j < types[i]; j++)
     {
-      simplexes_i.push_back (simplex_tag_matrix[j].size ());                                        // Getting number of simplexes...
+      type_simplexes.push_back (simplex_tag[j].size ());                                            // Pushing number of simplexes per type...
 
-      for(k = 0; k < simplexes_i[j]; k++)
+      for(k = 0; k < type_simplexes[j]; k++)
       {
         // Getting element type properties:
         gmsh::model::mesh::getElementProperties (
@@ -103,10 +103,10 @@ void mesh::init (
       simplex_i_j.push_back (simplex_i_j_k);                                                        // Pushing simplex[i][j][k] slice to simplex[i][j] slice...
     }
 
-    simplexes.push_back (simplexes_i);
-    simplexes_i.clear ();
-    node.push_back (node_i);                                                                        // Setting node vector...
-    simplex.push_back (simplex_i_j);                                                                // Setting simplex matrix...
+    simplexes.push_back (type_simplexes);                                                           // Pushing number of simplexes...
+    type_simplexes.clear ();                                                                        // Clearing number of simplexs per type...
+    node.push_back (node_i);                                                                        // Pushing node[i] slice to node tensor...
+    simplex.push_back (simplex_i_j);                                                                // Pushing simplex[i][j] slice to simplex tensor...
   }
 
   // Finding complexes for each node in each entity = finding the indexes of all simplexes having the node "n" in them:
@@ -122,37 +122,42 @@ void mesh::init (
           {
             if(simplex[i][j][k].vertex[m] == n)
             {
-              complex_i_n_j_k_m.push_back (i*entities*types[i] + j*types[i] + k);                   // Setting complex scalar...
+              complex_i_n_j_k_m.push_back (i*entities*types[i] + j*types[i] + k);                   // Setting complex[i][n][j][k][m] slice complex index...
+
+              // Appending simplex[i][j][k] vertexes in neighbour[i][n][j][k][m] slice:
               neighbour_i_n_j_k_m.insert (
-                                          neighbour_i_n_j_k_m.end (),
-                                          simplex[i][j][k].vertex.begin (),
-                                          simplex[i][j][k].vertex.end ()
+                                          neighbour_i_n_j_k_m.end (),                               // Beginning of append = end of current neighbour slice.
+                                          simplex[i][j][k].vertex.begin (),                         // Beginning of slice to be appended.
+                                          simplex[i][j][k].vertex.end ()                            // End of slice to be appended.
                                          );
             }
           }
         }
       }
 
+      // Eliminating null indexes:
       neighbour_i_n_j_k_m.resize (
+                                                                                                    // Calculating index distance:
                                   std::distance (
                                                  neighbour_i_n_j_k_m.begin (),
+                                                                                                    // Finding unique indexes:
                                                  std::unique (
-                                                              neighbour_i_n_j_k_m.begin (),
-                                                              neighbour_i_n_j_k_m.begin () +
-                                                              neighbour_i_n_j_k_m.size ()
+                                                              neighbour_i_n_j_k_m.begin (),         // Beginning of index slice.
+                                                              neighbour_i_n_j_k_m.end ()            // End of index slice.
                                                              )
                                                 )
                                  );
-      complex_i_n_j_k.push_back (complex_i_n_j_k_m);                                                // Setting complex vector...
-      complex_i_n_j_k_m.clear ();                                                                   // Clearing complex scalar for next complex...
-      neighbour_i_n_j_k.push_back (neighbour_i_n_j_k_m);
-      neighbour_i_n_j_k_m.clear ();
+
+      complex_i_n_j_k.push_back (complex_i_n_j_k_m);                                                // Pushing complex[i][n][j][k][m] slice to complex[i][n][j][k] slice...
+      complex_i_n_j_k_m.clear ();                                                                   // Clearing complex[i][n][j][k][m] slice...
+      neighbour_i_n_j_k.push_back (neighbour_i_n_j_k_m);                                            // Pushing neighbour[i][n][j][k][m] slice to neighbour[i][n][j][k] slice...
+      neighbour_i_n_j_k_m.clear ();                                                                 // Clearing neighbour[i][n][j][k][m] slice...
     }
 
     complex.push_back (complex_i_n_j_k);                                                            // Setting complex vector...
     complex_i_n_j_k.clear ();                                                                       // Clearing complex vector for next complex...
-    neighbour.push_back (neighbour_i_n_j_k);
-    neighbour_i_n_j_k.clear ();
+    neighbour.push_back (neighbour_i_n_j_k);                                                        // Pushing neighbour[i][n][j][k] slice to neighbour tensor...
+    neighbour_i_n_j_k.clear ();                                                                     // Clearing neighbour[i][n][j][k] slice...
   }
 
   baseline->done ();                                                                                // Printing message...
