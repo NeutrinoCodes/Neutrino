@@ -30,6 +30,8 @@ void mesh::init (
   gmsh::model::mesh::renumberNodes ();                                                              // Renumbering the node tags in a continuous sequence...
   gmsh::model::mesh::renumberElements ();                                                           // Renumbering the element tags in a continuous sequence...
 
+  std::cout << "entities = " << entities << std::endl;
+
   for(i = 0; i < entities; i++)
   {
     entity_dimension = entity[i].first;                                                             // Getting entity dimension [#]...
@@ -47,6 +49,8 @@ void mesh::init (
                                 );
 
     nodes.push_back (node_list.size ());                                                            // Pushing number of nodes...
+
+    std::cout << "nodes = " << nodes[i] << std::endl;
 
     for(n = 0; n < nodes[i]; n++)
     {
@@ -169,7 +173,6 @@ void mesh::init (
     neighbour_i_n_j_k.clear ();                                                                     // Clearing neighbour[i][n][j][k] slice...
   }
 
-  std::cout << "n = " << node.size () << std::endl;
   baseline->done ();                                                                                // Printing message...
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
