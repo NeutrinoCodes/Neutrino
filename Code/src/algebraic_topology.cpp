@@ -30,10 +30,10 @@ void mesh::init (
 
   entities = entity_list.size ();                                                                   // Getting number of entities...
 
-  for(i = 0; i < entities; i++)
+  for(n = 0; n < entities; n++)
   {
-    entity_dimension = entity_list[i].first;                                                        // Getting entity dimension [#]...
-    entity_tag       = entity_list[i].second;                                                       // Getting entity tag [#]...
+    entity_dimension = entity_list[n].first;                                                        // Getting entity dimension [#]...
+    entity_tag       = entity_list[n].second;                                                       // Getting entity tag [#]...
 
     // Getting entity nodes, where:
     // N = number of nodes
@@ -48,13 +48,13 @@ void mesh::init (
 
     nodes = node_list.size ();                                                                      // Getting number of nodes...
 
-    for(n = 0; n < nodes; n++)
+    for(i = 0; i < nodes; i++)
     {
-      node_structure.x = node_coordinates[3*n + 0];                                                 // Setting node[i] "x" coordinate...
-      node_structure.y = node_coordinates[3*n + 1];                                                 // Setting node[i] "y"coordinate...
-      node_structure.z = node_coordinates[3*n + 2];                                                 // Setting node[i] "z" coordinate...
-      node_structure.w = 1.0f;                                                                      // Setting node[i] "w" coordinate...
-      node.push_back (node_structure);                                                              // Pushing node[i] to node vector...
+      node_structure.x = node_coordinates[3*i + 0];                                                 // Setting node structure "x" coordinate...
+      node_structure.y = node_coordinates[3*i + 1];                                                 // Setting node structure "y"coordinate...
+      node_structure.z = node_coordinates[3*i + 2];                                                 // Setting node structure "z" coordinate...
+      node_structure.w = 1.0f;                                                                      // Setting node structure "w" coordinate...
+      node.push_back (node_structure);                                                              // Adding node structure to node vector...
     }
 
     // Getting entity simplexes, where:
@@ -92,70 +92,65 @@ void mesh::init (
 
         for(m = 0; m < vertexes; m++)
         {
-          simplex_structure.vertex.push_back ((node_tag[j][k*vertexes + m]) - 1);                   // Setting simplex[i] vertex index...
+          simplex_structure.vertex.push_back ((node_tag[j][k*vertexes + m]) - 1);                   // Adding vertex to simplex structure...
         }
 
-        simplex_structure.type = type_list[j];                                                      // Setting simplex[i] type...
-        simplex.push_back (simplex_structure);                                                      // Pushing simplex[i] to simplex vector...
-        simplex_structure.vertex.clear ();                                                          // Clearing vertex vector for next simplex...
+        simplex_structure.type = type_list[j];                                                      // Setting simplex structure type...
+        simplex.push_back (simplex_structure);                                                      // Adding simplex[k] to simplex vector...
+        simplex_structure.vertex.clear ();                                                          // Clearing simplex structure vertex vector...
       }
     }
   }
 
-  // Finding complexes for each node in each entity = finding the indexes of all simplexes having the node "n" in them:
-    for(n = 0; n < node.size();n++)
+  // Finding complexes for each node:
+  for(i = 0; i < node.size (); i++)
+  {
+    for(k = 0; k < simplex.size (); k++)
     {
-        for(i = 0; i < simplex.size(); i++)
+      for(m = 0; m < simplex[k].vertex.size (); m++)
+      {
+        if(simplex[k].vertex[m] == i)
         {
-          for(m = 0; m < simplex[i].vertex.size (); m++)
-          {
-            if(simplex[i].vertex[m] == n)
-            {
-              complex_structure.simplex.push_back (i);                   // Pushing simplex index ot complex structure...
+          complex_structure.simplex.push_back (k);                                                  // Adding simplex index to complex structure...
 
-              // Appending simplex[i][j][k] vertexes in neighbour[i][n][j][k][m] slice:
-              neighbour_i_n_j_k_m.insert (
-                                          neighbour_i_n_j_k_m.end (),                               // Beginning of append = end of current neighbour slice.
-                                          simplex[i][j][k].vertex.begin (),                         // Beginning of slice to be appended.
-                                          simplex[i][j][k].vertex.end ()                            // End of slice to be appended.
-                                         );
+          // Appending simplex[i] vertexes in neighbour structure:
+          neighbour_structure.index.insert (
+                                            neighbour_structure.index.end (),                       // Insertion point.
+                                            simplex[k].vertex.begin (),                             // Beginning of vector to be appended.
+                                            simplex[k].vertex.end ()                                // End of vector to be appended.
+                                           );
 
-              // Erasing central node from neighbourhood:
-              neighbour_i_n_j_k_m.erase (
-                                         neighbour_i_n_j_k_m.end () -                               // Beginning of erase = end of current neighbour slice.
-                                         simplex[i][j][k].vertex.size () +                          // Number of vertexes.
-                                         m                                                          // Central node.
-                                        );
-
-            }
-          }
+          // Erasing central node from neighbourhood:
+          neighbour_structure.index.erase (
+                                           neighbour_structure.index.end () -                       // Insertion point.
+                                           simplex[k].vertex.size () +                              // Number of vertexes.
+                                           m                                                        // Central node.
+                                          );
         }
       }
-
-      // Eliminating repeated indexes:
-      neighbour_i_n_j_k_m.resize (
-                                                                                                    // Eliminating null indexes...
-                                  std::distance (
-                                                                                                    // Calculating index distance...
-                                                 neighbour_i_n_j_k_m.begin (),
-                                                 std::unique (
-                                                                                                    // Finding unique indexes...
-                                                              neighbour_i_n_j_k_m.begin (),         // Beginning of index slice.
-                                                              neighbour_i_n_j_k_m.end ()            // End of index slice.
-                                                             )
-                                                )
-                                 );
-
-      complex_i_n_j_k.push_back (complex_i_n_j_k_m);                                                // Pushing complex[i][n][j][k][m] slice to complex[i][n][j][k] slice...
-      complex_i_n_j_k_m.clear ();                                                                   // Clearing complex[i][n][j][k][m] slice...
-      neighbour_i_n_j_k.push_back (neighbour_i_n_j_k_m);                                            // Pushing neighbour[i][n][j][k][m] slice to neighbour[i][n][j][k] slice...
-      neighbour_i_n_j_k_m.clear ();                                                                 // Clearing neighbour[i][n][j][k][m] slice...
     }
 
-    complex.push_back (complex_i_n_j_k);                                                            // Setting complex vector...
-    complex_i_n_j_k.clear ();                                                                       // Clearing complex vector for next complex...
-    neighbour.push_back (neighbour_i_n_j_k);                                                        // Pushing neighbour[i][n][j][k] slice to neighbour tensor...
-    neighbour_i_n_j_k.clear ();                                                                     // Clearing neighbour[i][n][j][k] slice...
+    // Eliminating repeated indexes:
+    std::sort (neighbour_structure.index.begin (), neighbour_structure.index.end ());
+    neighbour_structure.index.resize (
+                                                                                                    // Eliminating null indexes...
+                                      std::distance (
+                                                                                                    // Calculating index distance...
+                                                     neighbour_structure.index.begin (),
+                                                     std::unique (
+                                                                                                    // Finding unique indexes...
+                                                                  neighbour_structure.index.
+                                                                  begin (),                         // Beginning of index vector.
+                                                                  neighbour_structure.index.
+                                                                  end ()                            // End of index vector.
+                                                                 )
+                                                    )
+                                     );
+
+    complex.push_back (complex_structure);                                                          // Adding complex structure to complex vector...
+    complex_structure.simplex.clear ();                                                             // Clearing complex structure simplex vector...
+    neighbour.push_back (neighbour_structure);                                                      // Adding neighbour structure to neighbour vector...
+    neighbour_structure.index.clear ();                                                             // Clearing neighbour structure index vector...
   }
 
   baseline->done ();                                                                                // Printing message...

@@ -29,6 +29,16 @@ typedef struct _gmsh_node
 #pragma pack(pop)
 
 /// @brief    **Data structure. Internally used by Neutrino.**
+/// @details  This structure is used as data storage in the neighbour array. It is tightly packed to be
+/// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
+#pragma pack(push, 1)                                                                               // Packing data in 1 column...
+typedef struct _gmsh_neighbour
+{
+  std::vector<size_t> index;                                                                        ///< Neighbour indexes.
+} gmsh_neighbour;
+#pragma pack(pop)
+
+/// @brief    **Data structure. Internally used by Neutrino.**
 /// @details  This structure is used as data storage in the simplex array. It is tightly packed to be
 /// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
@@ -93,62 +103,57 @@ typedef struct _gmsh_complex
 class mesh                                                                                          /// @brief **Mesh.**
 {
 private:
-  neutrino*                               baseline;                                                 ///< @brief **Neutrino baseline.**
+  neutrino*                              baseline;                                                  ///< @brief **Neutrino baseline.**
 
   // TENSOR INDEXES:
-  size_t                                  i;                                                        ///< Entity index.
-  size_t                                  j;                                                        ///< Simplex type index.
-  size_t                                  k;                                                        ///< Simplex index.
-  size_t                                  m;                                                        ///< Vertex index.
-  size_t                                  n;                                                        ///< Node index.
+  size_t                                 i;                                                         ///< Node index.
+  size_t                                 j;                                                         ///< Type index.
+  size_t                                 k;                                                         ///< Simplex index.
+  size_t                                 m;                                                         ///< Vertex index.
+  size_t                                 n;                                                         ///< Entity index.
 
   // TENSOR SIZES:
-  size_t                                  entities;                                                 ///< Number of entities.
-  size_t                                  nodes;                                                    ///< Number of nodes.
-  size_t                                  types;                                                    ///< Number of simplex types.
-  size_t                                  simplexes;                                                ///< Number of simplexes.
-  int                                     vertexes;                                                 ///< Number of vertexes.
+  size_t                                 entities;                                                  ///< Number of entities.
+  size_t                                 nodes;                                                     ///< Number of nodes.
+  size_t                                 types;                                                     ///< Number of simplex types.
+  size_t                                 simplexes;                                                 ///< Number of simplexes.
+  int                                    vertexes;                                                  ///< Number of vertexes.
 
   // ENTITY VARIABLES:
-  std::vector<std::pair<int, int> >       entity_list;                                              ///< Entity list.
-  int                                     entity_dimension;                                         ///< Entity dimension.
-  int                                     entity_tag;                                               ///< Entity tag.
+  std::vector<std::pair<int, int> >      entity_list;                                               ///< Entity list.
+  int                                    entity_dimension;                                          ///< Entity dimension.
+  int                                    entity_tag;                                                ///< Entity tag.
 
   // NODE VARIABLES:
-  std::vector<double>                     node_coordinates;                                         ///< Node coordinates.
-  std::vector<double>                     node_parametric_coordinates;                              ///< Node parametric coordinates.
-  std::vector<std::size_t>                node_list;                                                ///< Node list.
-  std::vector<std::vector<std::size_t> >  node_tag;                                                 ///< Node tag.
-  gmsh_node                               node_structure;                                           ///< Node structure.
+  gmsh_node                              node_structure;                                            ///< Node structure.
+  std::vector<std::size_t>               node_list;                                                 ///< Node list.
+  std::vector<double>                    node_coordinates;                                          ///< Node coordinates.
+  std::vector<double>                    node_parametric_coordinates;                               ///< Node parametric coordinates.
+  std::vector<std::vector<std::size_t> > node_tag;                                                  ///< Node tag.
 
   // TYPE VARIABLES:
-  std::vector<int>                        type_list;                                                ///< Simplex type list.
-  std::string                             type_name;                                                ///< Simplex type name.
-  int                                     type_dimension;                                           ///< Simplex type dimension.
-  int                                     type_order;                                               ///< Simplex type order.
-  std::vector<double>                     type_vertex_coordinates;                                  ///< Simplex vertex coordinates.
-  int                                     type_primary_nodes;                                       ///< Simplex primary nodes
+  std::vector<int>                       type_list;                                                 ///< Simplex type list.
+  std::string                            type_name;                                                 ///< Simplex type name.
+  int                                    type_dimension;                                            ///< Simplex type dimension.
+  int                                    type_order;                                                ///< Simplex type order.
+  std::vector<double>                    type_vertex_coordinates;                                   ///< Simplex vertex coordinates.
+  int                                    type_primary_nodes;                                        ///< Simplex primary nodes
 
   // SIMPLEX VARIABLES:
-  gmsh_simplex                            simplex_structure;                                        ///< Simplex structure.
-  std::vector<gmsh_simplex>               simplex_i_j_k;                                            ///< [i][j][k] slice of simplex[i][j][k][m] tensor.
-  std::vector<std::vector<gmsh_simplex> > simplex_i_j;                                              ///< [i][j] slice of simplex[i][j][k][m] tensor.
-  std::vector<std::vector<std::size_t> >  simplex_tag;                                              ///< Simplex tag list.
+  gmsh_simplex                           simplex_structure;                                         ///< Simplex structure.
+  std::vector<std::vector<std::size_t> > simplex_tag;                                               ///< Simplex tag list.
 
   // COMPLEX VARIABLES:
-  gmsh_complex                            complex_structure;                                        ///< Complex structure.
-  std::vector<size_t>                     complex_i_n_j_k_m;                                        ///< [i][n][j][k][m] slice of complex tensor.
-  std::vector<std::vector<size_t> >       complex_i_n_j_k;                                          ///< [i][n][j][k] slice of complex tensor.
+  gmsh_complex                           complex_structure;                                         ///< Complex structure.
 
   // NEIGHBOUR VARIABLES:
-  std::vector<size_t>                     neighbour_i_n_j_k_m;                                      ///< [i][n][j][k][m] slice of neighbour tensor.
-  std::vector<std::vector<size_t> >       neighbour_i_n_j_k;                                        ///< [i][n][j][k] slice of neighbour tensor.
+  gmsh_neighbour                         neighbour_structure;                                       ///< Neighbour structure.
 
 public:
-  std::vector<gmsh_node>                  node;                                                     ///< node[i].
-  std::vector<gmsh_simplex>               simplex;                                                  ///< simplex[i].
-  std::vector<gmsh_complex>               complex;                                                  ///< complex[i].
-  std::vector<gmsh_node>                  neighbour;                                                ///< neighbour[i].
+  std::vector<gmsh_node>                 node;                                                      ///< node[i].
+  std::vector<gmsh_simplex>              simplex;                                                   ///< simplex[k].
+  std::vector<gmsh_complex>              complex;                                                   ///< complex[i].
+  std::vector<gmsh_neighbour>            neighbour;                                                 ///< neighbour[i].
 
   mesh ();
 
