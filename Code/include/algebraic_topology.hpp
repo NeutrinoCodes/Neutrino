@@ -5,8 +5,8 @@
 ///
 /// @details  **GMSH** (http://gmsh.info) is "a three-dimensional finite element mesh generator
 /// with built-in pre- and post-processing facilities".
-/// Neutrino reads GMSH files and reconstructs a simplicial complex out of it.
-/// The simplicial complex is used for both computational and rendering purposes.
+/// Neutrino reads GMSH files and reconstructs a group complex out of it.
+/// The group complex is used for both computational and rendering purposes.
 
 #ifndef algebraic_topology_hpp
 #define algebraic_topology_hpp
@@ -39,24 +39,24 @@ typedef struct _gmsh_neighbour
 #pragma pack(pop)
 
 /// @brief    **Data structure. Internally used by Neutrino.**
-/// @details  This structure is used as data storage in the simplex array. It is tightly packed to be
+/// @details  This structure is used as data storage in the element array. It is tightly packed to be
 /// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
-typedef struct _gmsh_simplex
+typedef struct _gmsh_element
 {
-  std::vector<size_t> vertex;                                                                       ///< Vertex indexes.
-  int type;                                                                                         ///< Simplex type.
-} gmsh_simplex;
+  std::vector<size_t> node;                                                                         ///< Node indexes.
+  int type;                                                                                         ///< Element type.
+} gmsh_element;
 #pragma pack(pop)
 
 /// @brief    **Data structure. Internally used by Neutrino.**
-/// @details  This structure is used as data storage in the complex array. It is tightly packed to be
+/// @details  This structure is used as data storage in the group array. It is tightly packed to be
 /// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
-typedef struct _gmsh_complex
+typedef struct _gmsh_group
 {
-  std::vector<size_t> simplex;                                                                      ///< Simplex indexes.
-} gmsh_complex;
+  std::vector<size_t> element;                                                                      ///< Element indexes.
+} gmsh_group;
 #pragma pack(pop)
 
 #define GMHS_2_NODE_LINE                              1
@@ -105,24 +105,19 @@ class mesh                                                                      
 private:
   neutrino*                              baseline;                                                  ///< @brief **Neutrino baseline.**
 
-  // TENSOR INDEXES:
+  // INDEXES:
   size_t                                 i;                                                         ///< Node index.
   size_t                                 j;                                                         ///< Type index.
-  size_t                                 k;                                                         ///< Simplex index.
-  size_t                                 m;                                                         ///< Vertex index.
+  size_t                                 k;                                                         ///< Element index.
+  size_t                                 m;                                                         ///< Type node index.
   size_t                                 n;                                                         ///< Entity index.
 
-  // TENSOR SIZES:
-  size_t                                 entities;                                                  ///< Number of entities.
+  // SIZES:
   size_t                                 nodes;                                                     ///< Number of nodes.
   size_t                                 types;                                                     ///< Number of simplex types.
-  size_t                                 simplexes;                                                 ///< Number of simplexes.
-  int                                    vertexes;                                                  ///< Number of vertexes.
-
-  // ENTITY VARIABLES:
-  std::vector<std::pair<int, int> >      entity_list;                                               ///< Entity list.
-  int                                    entity_dimension;                                          ///< Entity dimension.
-  int                                    entity_tag;                                                ///< Entity tag.
+  size_t                                 elements;                                                  ///< Number of elements.
+  int                                    type_nodes;                                                ///< Number of type_nodes.
+  size_t                                 entities;                                                  ///< Number of entities.
 
   // NODE VARIABLES:
   gmsh_node                              node_structure;                                            ///< Node structure.
@@ -132,27 +127,32 @@ private:
   std::vector<std::vector<std::size_t> > node_tag;                                                  ///< Node tag.
 
   // TYPE VARIABLES:
-  std::vector<int>                       type_list;                                                 ///< Simplex type list.
-  std::string                            type_name;                                                 ///< Simplex type name.
-  int                                    type_dimension;                                            ///< Simplex type dimension.
-  int                                    type_order;                                                ///< Simplex type order.
-  std::vector<double>                    type_vertex_coordinates;                                   ///< Simplex vertex coordinates.
-  int                                    type_primary_nodes;                                        ///< Simplex primary nodes
+  std::vector<int>                       type_list;                                                 ///< Element type list.
+  std::string                            type_name;                                                 ///< Element type name.
+  int                                    type_dimension;                                            ///< Element type dimension.
+  int                                    type_order;                                                ///< Element type order.
+  std::vector<double>                    type_node_coordinates;                                     ///< Element type node coordinates.
+  int                                    type_primary_nodes;                                        ///< Element primary nodes
 
-  // SIMPLEX VARIABLES:
-  gmsh_simplex                           simplex_structure;                                         ///< Simplex structure.
-  std::vector<std::vector<std::size_t> > simplex_tag;                                               ///< Simplex tag list.
+  // ELEMENT VARIABLES:
+  gmsh_element                           element_structure;                                         ///< Element structure.
+  std::vector<std::vector<std::size_t> > element_tag;                                               ///< Element tag list.
 
-  // COMPLEX VARIABLES:
-  gmsh_complex                           complex_structure;                                         ///< Complex structure.
+  // ENTITY VARIABLES:
+  std::vector<std::pair<int, int> >      entity_list;                                               ///< Entity list.
+  int                                    entity_dimension;                                          ///< Entity dimension.
+  int                                    entity_tag;                                                ///< Entity tag.
+
+  // GROUP VARIABLES:
+  gmsh_group                             group_structure;                                           ///< Group structure.
 
   // NEIGHBOUR VARIABLES:
   gmsh_neighbour                         neighbour_structure;                                       ///< Neighbour structure.
 
 public:
   std::vector<gmsh_node>                 node;                                                      ///< node[i].
-  std::vector<gmsh_simplex>              simplex;                                                   ///< simplex[k].
-  std::vector<gmsh_complex>              complex;                                                   ///< complex[i].
+  std::vector<gmsh_element>              element;                                                   ///< element[k].
+  std::vector<gmsh_group>                group;                                                     ///< group[i].
   std::vector<gmsh_neighbour>            neighbour;                                                 ///< neighbour[i].
 
   mesh ();

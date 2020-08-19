@@ -57,15 +57,15 @@ void mesh::init (
       node.push_back (node_structure);                                                              // Adding node structure to node vector...
     }
 
-    // Getting entity simplexes, where:
-    // i = index of simplex type.
-    // j = index of nodes per simplex, for each simplex type.
-    // L = number of simplex types.
-    // M(i) = number of simplexes per simplex type.
-    // N(j) = number of nodes per simplex, for each simplex type.
+    // Getting entity elements, where:
+    // i = index of element type.
+    // j = index of nodes per element, for each element type.
+    // L = number of element types.
+    // M(i) = number of elements per element type.
+    // N(j) = number of nodes per element, for each element type.
     gmsh::model::mesh::getElements (
                                     type_list,                                                      // Element type list [L].
-                                    simplex_tag,                                                    // Simplex tag list LxM(i).
+                                    element_tag,                                                    // Element tag list LxM(i).
                                     node_tag,                                                       // Node tag list Lx[N(1),N(2),...,N(j),N(M(i))].
                                     entity_dimension,                                               // Entity dimension [#].
                                     entity_tag                                                      // Entity tag [#].
@@ -75,55 +75,55 @@ void mesh::init (
 
     for(j = 0; j < types; j++)
     {
-      simplexes = simplex_tag[j].size ();                                                           // Getting number of simplexes...
+      elements = element_tag[j].size ();                                                            // Getting number of elements...
 
-      for(k = 0; k < simplexes; k++)
+      for(k = 0; k < elements; k++)
       {
         // Getting element type properties:
         gmsh::model::mesh::getElementProperties (
-                                                 type_list[j],                                      // Simplex type [#].
-                                                 type_name,                                         // Simplex type name [string].
-                                                 type_dimension,                                    // Simplex type dimension [#].
-                                                 type_order,                                        // Simplex type order [#].
-                                                 vertexes,                                          // Simplex type number of vertexes [#].
-                                                 type_vertex_coordinates,                           // Simplex type vertexes local coordinates [vector].
-                                                 type_primary_nodes                                 // Number of primary vertexes [#].
+                                                 type_list[j],                                      // Element type [#].
+                                                 type_name,                                         // Element type name [string].
+                                                 type_dimension,                                    // Element type dimension [#].
+                                                 type_order,                                        // Element type order [#].
+                                                 type_nodes,                                        // Element type number of type nodes [#].
+                                                 type_node_coordinates,                             // Element type node local coordinates [vector].
+                                                 type_primary_nodes                                 // Number of primary type nodes [#].
                                                 );
 
-        for(m = 0; m < vertexes; m++)
+        for(m = 0; m < type_nodes; m++)
         {
-          simplex_structure.vertex.push_back ((node_tag[j][k*vertexes + m]) - 1);                   // Adding vertex to simplex structure...
+          element_structure.node.push_back ((node_tag[j][k*type_nodes + m]) - 1);                   // Adding type node to element structure...
         }
 
-        simplex_structure.type = type_list[j];                                                      // Setting simplex structure type...
-        simplex.push_back (simplex_structure);                                                      // Adding simplex[k] to simplex vector...
-        simplex_structure.vertex.clear ();                                                          // Clearing simplex structure vertex vector...
+        element_structure.type = type_list[j];                                                      // Setting element structure type...
+        element.push_back (element_structure);                                                      // Adding element[k] to element vector...
+        element_structure.node.clear ();                                                            // Clearing element structure node vector...
       }
     }
   }
 
-  // Finding complexes for each node:
+  // Finding groups for each node:
   for(i = 0; i < node.size (); i++)
   {
-    for(k = 0; k < simplex.size (); k++)
+    for(k = 0; k < element.size (); k++)
     {
-      for(m = 0; m < simplex[k].vertex.size (); m++)
+      for(m = 0; m < element[k].node.size (); m++)
       {
-        if(simplex[k].vertex[m] == i)
+        if(element[k].node[m] == i)
         {
-          complex_structure.simplex.push_back (k);                                                  // Adding simplex index to complex structure...
+          group_structure.element.push_back (k);                                                    // Adding element index to group structure...
 
-          // Appending simplex[i] vertexes in neighbour structure:
+          // Appending element[i] type nodes in neighbour structure:
           neighbour_structure.index.insert (
                                             neighbour_structure.index.end (),                       // Insertion point.
-                                            simplex[k].vertex.begin (),                             // Beginning of vector to be appended.
-                                            simplex[k].vertex.end ()                                // End of vector to be appended.
+                                            element[k].node.begin (),                               // Beginning of vector to be appended.
+                                            element[k].node.end ()                                  // End of vector to be appended.
                                            );
 
           // Erasing central node from neighbourhood:
           neighbour_structure.index.erase (
                                            neighbour_structure.index.end () -                       // Insertion point.
-                                           simplex[k].vertex.size () +                              // Number of vertexes.
+                                           element[k].node.size () +                                // Number of type nodes.
                                            m                                                        // Central node.
                                           );
         }
@@ -147,8 +147,8 @@ void mesh::init (
                                                     )
                                      );
 
-    complex.push_back (complex_structure);                                                          // Adding complex structure to complex vector...
-    complex_structure.simplex.clear ();                                                             // Clearing complex structure simplex vector...
+    group.push_back (group_structure);                                                              // Adding group structure to group vector...
+    group_structure.element.clear ();                                                               // Clearing group structure element vector...
     neighbour.push_back (neighbour_structure);                                                      // Adding neighbour structure to neighbour vector...
     neighbour_structure.index.clear ();                                                             // Clearing neighbour structure index vector...
   }
