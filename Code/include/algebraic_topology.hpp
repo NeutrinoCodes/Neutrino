@@ -120,7 +120,7 @@ private:
   size_t                                 entities;                                                  ///< Number of entities.
 
   // NODE VARIABLES:
-  gmsh_node                              node_structure;                                            ///< Node structure.
+  gmsh_node                              node_unit;                                                 ///< Node unit.
   std::vector<std::size_t>               node_list;                                                 ///< Node list.
   std::vector<double>                    node_coordinates;                                          ///< Node coordinates.
   std::vector<double>                    node_parametric_coordinates;                               ///< Node parametric coordinates.
@@ -135,7 +135,7 @@ private:
   int                                    type_primary_nodes;                                        ///< Element primary nodes
 
   // ELEMENT VARIABLES:
-  gmsh_element                           element_structure;                                         ///< Element structure.
+  gmsh_element                           element_unit;                                              ///< Element unit.
   std::vector<std::vector<std::size_t> > element_tag;                                               ///< Element tag list.
 
   // ENTITY VARIABLES:
@@ -144,10 +144,10 @@ private:
   int                                    entity_tag;                                                ///< Entity tag.
 
   // GROUP VARIABLES:
-  gmsh_group                             group_structure;                                           ///< Group structure.
+  gmsh_group                             group_unit;                                                ///< Group unit.
 
   // NEIGHBOUR VARIABLES:
-  gmsh_neighbour                         neighbour_structure;                                       ///< Neighbour structure.
+  gmsh_neighbour                         neighbour_unit;                                            ///< Neighbour unit.
 
 public:
   std::vector<gmsh_node>                 node;                                                      ///< node[i].

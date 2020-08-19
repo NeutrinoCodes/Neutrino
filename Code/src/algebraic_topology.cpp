@@ -50,11 +50,11 @@ void mesh::init (
 
     for(i = 0; i < nodes; i++)
     {
-      node_structure.x = node_coordinates[3*i + 0];                                                 // Setting node structure "x" coordinate...
-      node_structure.y = node_coordinates[3*i + 1];                                                 // Setting node structure "y"coordinate...
-      node_structure.z = node_coordinates[3*i + 2];                                                 // Setting node structure "z" coordinate...
-      node_structure.w = 1.0f;                                                                      // Setting node structure "w" coordinate...
-      node.push_back (node_structure);                                                              // Adding node structure to node vector...
+      node_unit.x = node_coordinates[3*i + 0];                                                      // Setting node unit "x" coordinate...
+      node_unit.y = node_coordinates[3*i + 1];                                                      // Setting node unit "y"coordinate...
+      node_unit.z = node_coordinates[3*i + 2];                                                      // Setting node unit "z" coordinate...
+      node_unit.w = 1.0f;                                                                           // Setting node unit "w" coordinate...
+      node.push_back (node_unit);                                                                   // Adding node unit to node vector...
     }
 
     // Getting entity elements, where:
@@ -92,12 +92,12 @@ void mesh::init (
 
         for(m = 0; m < type_nodes; m++)
         {
-          element_structure.node.push_back ((node_tag[j][k*type_nodes + m]) - 1);                   // Adding type node to element structure...
+          element_unit.node.push_back ((node_tag[j][k*type_nodes + m]) - 1);                        // Adding type node to element unit...
         }
 
-        element_structure.type = type_list[j];                                                      // Setting element structure type...
-        element.push_back (element_structure);                                                      // Adding element[k] to element vector...
-        element_structure.node.clear ();                                                            // Clearing element structure node vector...
+        element_unit.type = type_list[j];                                                           // Setting element unit type...
+        element.push_back (element_unit);                                                           // Adding element[k] to element vector...
+        element_unit.node.clear ();                                                                 // Clearing element unit node vector...
       }
     }
   }
@@ -111,46 +111,46 @@ void mesh::init (
       {
         if(element[k].node[m] == i)
         {
-          group_structure.element.push_back (k);                                                    // Adding element index to group structure...
+          group_unit.element.push_back (k);                                                         // Adding element index to group unit...
 
-          // Appending element[i] type nodes in neighbour structure:
-          neighbour_structure.index.insert (
-                                            neighbour_structure.index.end (),                       // Insertion point.
-                                            element[k].node.begin (),                               // Beginning of vector to be appended.
-                                            element[k].node.end ()                                  // End of vector to be appended.
-                                           );
+          // Appending element[i] type nodes in neighbour unit:
+          neighbour_unit.index.insert (
+                                       neighbour_unit.index.end (),                                 // Insertion point.
+                                       element[k].node.begin (),                                    // Beginning of vector to be appended.
+                                       element[k].node.end ()                                       // End of vector to be appended.
+                                      );
 
           // Erasing central node from neighbourhood:
-          neighbour_structure.index.erase (
-                                           neighbour_structure.index.end () -                       // Insertion point.
-                                           element[k].node.size () +                                // Number of type nodes.
-                                           m                                                        // Central node.
-                                          );
+          neighbour_unit.index.erase (
+                                      neighbour_unit.index.end () -                                 // Insertion point.
+                                      element[k].node.size () +                                     // Number of type nodes.
+                                      m                                                             // Central node.
+                                     );
         }
       }
     }
 
     // Eliminating repeated indexes:
-    std::sort (neighbour_structure.index.begin (), neighbour_structure.index.end ());
-    neighbour_structure.index.resize (
+    std::sort (neighbour_unit.index.begin (), neighbour_unit.index.end ());
+    neighbour_unit.index.resize (
                                                                                                     // Eliminating null indexes...
-                                      std::distance (
+                                 std::distance (
                                                                                                     // Calculating index distance...
-                                                     neighbour_structure.index.begin (),
-                                                     std::unique (
+                                                neighbour_unit.index.begin (),
+                                                std::unique (
                                                                                                     // Finding unique indexes...
-                                                                  neighbour_structure.index.
-                                                                  begin (),                         // Beginning of index vector.
-                                                                  neighbour_structure.index.
-                                                                  end ()                            // End of index vector.
-                                                                 )
-                                                    )
-                                     );
+                                                             neighbour_unit.index.
+                                                             begin (),                              // Beginning of index vector.
+                                                             neighbour_unit.index.
+                                                             end ()                                 // End of index vector.
+                                                            )
+                                               )
+                                );
 
-    group.push_back (group_structure);                                                              // Adding group structure to group vector...
-    group_structure.element.clear ();                                                               // Clearing group structure element vector...
-    neighbour.push_back (neighbour_structure);                                                      // Adding neighbour structure to neighbour vector...
-    neighbour_structure.index.clear ();                                                             // Clearing neighbour structure index vector...
+    group.push_back (group_unit);                                                                   // Adding group unit to group vector...
+    group_unit.element.clear ();                                                                    // Clearing group unit element vector...
+    neighbour.push_back (neighbour_unit);                                                           // Adding neighbour unit to neighbour vector...
+    neighbour_unit.index.clear ();                                                                  // Clearing neighbour unit index vector...
   }
 
   baseline->done ();                                                                                // Printing message...
