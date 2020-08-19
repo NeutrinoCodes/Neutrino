@@ -29,16 +29,6 @@ typedef struct _gmsh_node
 #pragma pack(pop)
 
 /// @brief    **Data structure. Internally used by Neutrino.**
-/// @details  This structure is used as data storage in the neighbour array. It is tightly packed to be
-/// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
-#pragma pack(push, 1)                                                                               // Packing data in 1 column...
-typedef struct _gmsh_neighbour
-{
-  std::vector<size_t> index;                                                                        ///< Neighbour indexes.
-} gmsh_neighbour;
-#pragma pack(pop)
-
-/// @brief    **Data structure. Internally used by Neutrino.**
 /// @details  This structure is used as data storage in the element array. It is tightly packed to be
 /// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
@@ -147,20 +137,23 @@ private:
   gmsh_group                             group_unit;                                                ///< Group unit.
 
   // NEIGHBOUR VARIABLES:
-  gmsh_neighbour                         neighbour_unit;                                            ///< Neighbour unit.
+  std::vector<size_t>                    neighbour_unit;                                            ///< Neighbour unit.
 
 public:
   std::vector<gmsh_node>                 node;                                                      ///< node[i].
   std::vector<gmsh_element>              element;                                                   ///< element[k].
   std::vector<gmsh_group>                group;                                                     ///< group[i].
-  std::vector<gmsh_neighbour>            neighbour;                                                 ///< neighbour[i].
 
   mesh ();
 
-  void init (
-             neutrino*   loc_baseline,                                                              ///< Neutrino baseline.
-             std::string loc_file_name                                                              ///< GMSH .msh file name.
-            );
+  void                init (
+                            neutrino*   loc_baseline,                                               ///< Neutrino baseline.
+                            std::string loc_file_name                                               ///< GMSH .msh file name.
+                           );
+
+  std::vector<size_t> neighbours (
+                                  size_t loc_node                                                   ///< Node index.
+                                 );
 
   ~mesh();
 };
