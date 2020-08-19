@@ -112,49 +112,63 @@ void mesh::init (
         if(element[k].node[m] == i)
         {
           group_unit.element.push_back (k);                                                         // Adding element index to group unit...
-
-          // Appending element[i] type nodes in neighbour unit:
-          neighbour_unit.index.insert (
-                                       neighbour_unit.index.end (),                                 // Insertion point.
-                                       element[k].node.begin (),                                    // Beginning of vector to be appended.
-                                       element[k].node.end ()                                       // End of vector to be appended.
-                                      );
-
-          // Erasing central node from neighbourhood:
-          neighbour_unit.index.erase (
-                                      neighbour_unit.index.end () -                                 // Insertion point.
-                                      element[k].node.size () +                                     // Number of type nodes.
-                                      m                                                             // Central node.
-                                     );
         }
       }
     }
 
-    // Eliminating repeated indexes:
-    std::sort (neighbour_unit.index.begin (), neighbour_unit.index.end ());
-    neighbour_unit.index.resize (
-                                                                                                    // Eliminating null indexes...
-                                 std::distance (
-                                                                                                    // Calculating index distance...
-                                                neighbour_unit.index.begin (),
-                                                std::unique (
-                                                                                                    // Finding unique indexes...
-                                                             neighbour_unit.index.
-                                                             begin (),                              // Beginning of index vector.
-                                                             neighbour_unit.index.
-                                                             end ()                                 // End of index vector.
-                                                            )
-                                               )
-                                );
-
     group.push_back (group_unit);                                                                   // Adding group unit to group vector...
     group_unit.element.clear ();                                                                    // Clearing group unit element vector...
-    neighbour.push_back (neighbour_unit);                                                           // Adding neighbour unit to neighbour vector...
-    neighbour_unit.index.clear ();                                                                  // Clearing neighbour unit index vector...
   }
 
   baseline->done ();                                                                                // Printing message...
 }
+
+std::vector<size_t> mesh::neighbours (
+                                      size_t loc_node
+                                     )
+{
+
+  for(k = 0; k < element.size (); k++)
+  {
+    for(m = 0; m < element[k].node.size (); m++)
+    {
+      if(element[k].node[m] == loc_node)
+      {
+        // Appending element[i] type nodes in neighbour unit:
+        neighbour_unit.insert (
+                               neighbour_unit.end (),                                               // Insertion point.
+                               element[k].node.begin (),                                            // Beginning of vector to be appended.
+                               element[k].node.end ()                                               // End of vector to be appended.
+                              );
+
+        // Erasing central node from neighbourhood:
+        neighbour_unit.erase (
+                              neighbour_unit.end () -                                               // Insertion point.
+                              element[k].node.size () +                                             // Number of type nodes.
+                              m                                                                     // Central node.
+                             );
+      }
+    }
+  }
+
+  // Eliminating repeated indexes:
+  std::sort (neighbour_unit.begin (), neighbour_unit.end ());
+  neighbour_unit.resize (
+                                                                                                    // Eliminating null indexes...
+                         std::distance (
+                                                                                                    // Calculating index distance...
+                                        neighbour_unit.begin (),
+                                        std::unique (
+                                                                                                    // Finding unique indexes...
+                                                     neighbour_unit.begin (),                       // Beginning of index vector.
+                                                     neighbour_unit.end ()                          // End of index vector.
+                                                    )
+                                       )
+                        );
+
+  return (neighbour_unit);                                                                          // Returning neighbour unit vector...
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////// DESTRUCTOR ////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
