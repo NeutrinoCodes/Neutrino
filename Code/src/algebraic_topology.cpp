@@ -127,6 +127,7 @@ std::vector<size_t> mesh::neighbours (
                                       size_t loc_node
                                      )
 {
+  neighbour_unit.clear ();
 
   for(k = 0; k < element.size (); k++)
   {
@@ -167,6 +168,23 @@ std::vector<size_t> mesh::neighbours (
                         );
 
   return (neighbour_unit);                                                                          // Returning neighbour unit vector...
+}
+
+std::vector<size_t> mesh::physical (
+                                    size_t loc_physical_group_dim,
+                                    size_t loc_physical_group_tag
+                                   )
+{
+  std::vector<size_t> loc_node_tags;
+  std::vector<double> loc_node_coordinates;
+  gmsh::model::mesh::getNodesForPhysicalGroup (
+                                               loc_physical_group_dim,
+                                               loc_physical_group_tag,
+                                               loc_node_tags,
+                                               loc_node_coordinates
+                                              );
+  loc_node_coordinates.clear ();
+  return (loc_node_tags);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
