@@ -14,8 +14,8 @@ mesh::mesh()
 }
 
 void mesh::init (
-                 neutrino*   loc_baseline,                                                          ///< Neutrino baseline.
-                 std::string loc_file_name                                                          ///< GMSH .msh file name.
+                 neutrino*   loc_baseline,                                                          // Neutrino baseline.
+                 std::string loc_file_name                                                          // GMSH .msh file name.
                 )
 {
   baseline = loc_baseline;                                                                          // Getting Neutrino baseline...
@@ -124,7 +124,7 @@ void mesh::init (
 }
 
 std::vector<size_t> mesh::neighbours (
-                                      size_t loc_node
+                                      size_t loc_node                                               // Central node index [x].
                                      )
 {
   neighbour_unit.clear ();
@@ -171,20 +171,29 @@ std::vector<size_t> mesh::neighbours (
 }
 
 std::vector<size_t> mesh::physical (
-                                    size_t loc_physical_group_dim,
-                                    size_t loc_physical_group_tag
+                                    size_t loc_physical_group_dim,                                  // Physical group dimension [#].
+                                    size_t loc_physical_group_tag                                   // Physical group tag [#].
                                    )
 {
-  std::vector<size_t> loc_node_tags;
-  std::vector<double> loc_node_coordinates;
+  std::vector<size_t> loc_node_tags;                                                                // Node tags.
+  std::vector<double> loc_node_coordinates;                                                         // Node coordinates.
+
+  // Getting nodes for given physical group:
   gmsh::model::mesh::getNodesForPhysicalGroup (
-                                               loc_physical_group_dim,
-                                               loc_physical_group_tag,
-                                               loc_node_tags,
-                                               loc_node_coordinates
+                                               loc_physical_group_dim,                              // Physical group dimension.
+                                               loc_physical_group_tag,                              // Physical group tag.
+                                               loc_node_tags,                                       // Node tags.
+                                               loc_node_coordinates                                 // Node coordinates.
                                               );
-  loc_node_coordinates.clear ();
-  return (loc_node_tags);
+
+  // Adjusting node index according to Neutrino (1st index = 0):
+  for(size_t i = 0; i < loc_node_tags.size (); i++)
+  {
+    loc_node_tags[i]--;                                                                             // Adjusting node index...
+  }
+
+  loc_node_coordinates.clear ();                                                                    // Clearing unnecessary coordinates vector...
+  return (loc_node_tags);                                                                           // Returning node index vector...
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
