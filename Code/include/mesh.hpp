@@ -1,4 +1,4 @@
-/// @file     algebraic_topology.hpp
+/// @file     mesh.hpp
 /// @author   Erik ZORZIN
 /// @date     27JAN2020
 /// @brief    Declaration of a "mesh" class based on GMSH.
@@ -8,8 +8,8 @@
 /// Neutrino reads GMSH files and reconstructs a group complex out of it.
 /// The group complex is used for both computational and rendering purposes.
 
-#ifndef algebraic_topology_hpp
-#define algebraic_topology_hpp
+#ifndef mesh_hpp
+#define mesh_hpp
 
 #include "neutrino.hpp"
 #include "data_classes.hpp"
