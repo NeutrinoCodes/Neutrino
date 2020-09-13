@@ -916,20 +916,20 @@ void queue::acquire
      loc_data->vao                                                                                  // VAOs array.
     );
 
-    // Binding VBO:
+    // Binding SSBO:
     glBindBuffer
     (
-     GL_ARRAY_BUFFER,                                                                               // VBO target.
-     loc_data->ssbo                                                                                 // VBO to bind.
+     GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
+     loc_data->ssbo                                                                                 // SSBO to bind.
     );
 
     // Creating and initializing a buffer object's data store:
     glBufferSubData
     (
-     GL_ARRAY_BUFFER,                                                                               // VBO target.
-     0,                                                                                             // VBO Offset.
-     sizeof(GLfloat)*loc_data->size,                                                                // VBO size.
-     loc_data->data                                                                                 // VBO data.
+     GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
+     0,                                                                                             // SSBO Offset.
+     sizeof(GLfloat)*loc_data->size,                                                                // SSBO size.
+     loc_data->data                                                                                 // SSBO data.
     );
 
     // Specifying the format for attribute in vertex shader:
@@ -952,8 +952,8 @@ void queue::acquire
     // Binding VBO:
     glBindBuffer
     (
-     GL_ARRAY_BUFFER,                                                                               // VBO target.
-     loc_data->ssbo                                                                                 // VBO to bind.
+     GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
+     loc_data->ssbo                                                                                 // SSBO to bind.
     );
 
     // Setting layout index in vertex shader...
@@ -1025,20 +1025,20 @@ void queue::acquire
      loc_data->vao                                                                                  // VAOs array.
     );
 
-    // Binding VBO:
+    // Binding SSBO:
     glBindBuffer
     (
-     GL_ARRAY_BUFFER,                                                                               // VBO target.
-     loc_data->vbo                                                                                  // VBO to bind.
+     GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
+     loc_data->ssbo                                                                                 // SSBO to bind.
     );
 
     // Creating and initializing a buffer object's data store:
     glBufferSubData
     (
-     GL_ARRAY_BUFFER,                                                                               // VBO target.
-     0,                                                                                             // VBO Offset.
-     sizeof(float4G_structure)*loc_data->size,                                                      // VBO size.
-     loc_data->data                                                                                 // VBO data.
+     GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
+     0,                                                                                             // SSBO Offset.
+     sizeof(float4G_structure)*loc_data->size,                                                      // SSBO size.
+     loc_data->data                                                                                 // SSBO data.
     );
 
     // Specifying the format for attribute in vertex shader:
@@ -1058,11 +1058,11 @@ void queue::acquire
      loc_layout_index                                                                               // VAO index.
     );
 
-    // Binding VBO:
+    // Binding SSBO:
     glBindBuffer
     (
-     GL_ARRAY_BUFFER,                                                                               // VBO target.
-     loc_data->vbo                                                                                  // VBO to bind.
+     GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
+     loc_data->ssbo                                                                                 // SSBO to bind.
     );
 
     // Setting layout index in vertex shader...
@@ -1121,7 +1121,7 @@ void queue::release
     baseline->check_error (loc_error);                                                              // Checking returned error code...
 
     // Binding data:
-    glBindBuffer (GL_ARRAY_BUFFER, loc_data->ssbo);                                                 // Binding VBO...
+    glBindBuffer (GL_SHADER_STORAGE_BUFFER, loc_data->ssbo);                                        // Binding SSBO...
     glVertexAttribPointer
     (
      loc_layout_index,                                                                              // VAO index.
@@ -1222,7 +1222,7 @@ void queue::release
   glEnableVertexAttribArray (loc_layout_index);
 
   // Binding data:
-  glBindBuffer (GL_ARRAY_BUFFER, loc_data->vbo);                                                    // Binding VBO...
+  glBindBuffer (GL_SHADER_STORAGE_BUFFER, loc_data->ssbo);                                          // Binding SSBO...
   glVertexAttribPointer
   (
    loc_layout_index,                                                                                // VAO index.
