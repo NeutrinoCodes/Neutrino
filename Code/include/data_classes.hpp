@@ -489,8 +489,9 @@ public:
   GLuint      vao;                                                                                  ///< @brief **OpenGL data Vertex Array Object.**
 
   /// @details [OpenGL data Vertex Buffer Object]
-  /// (https://www.khronos.org/opengl/wiki/Vertex_Specification). Internally used by Neutrino.
-  GLuint      vbo;                                                                                  ///< @brief **OpenGL data Vertex Buffer Object.**
+  /// (https://www.khronos.org/opengl/wiki/Shader_Storage_Buffer_Object).
+  /// Internally used by Neutrino.
+  GLuint      ssbo;                                                                                 ///< @brief **OpenGL data Vertex Buffer Object.**
 
   /// @details Size, in numbers of elements, of the user's data to be allocated as data storage.
   GLsizeiptr  size;                                                                                 ///< @brief **Data size [#].**

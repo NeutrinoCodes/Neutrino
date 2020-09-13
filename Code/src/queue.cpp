@@ -920,7 +920,7 @@ void queue::acquire
     glBindBuffer
     (
      GL_ARRAY_BUFFER,                                                                               // VBO target.
-     loc_data->vbo                                                                                  // VBO to bind.
+     loc_data->ssbo                                                                                 // VBO to bind.
     );
 
     // Creating and initializing a buffer object's data store:
@@ -953,7 +953,7 @@ void queue::acquire
     glBindBuffer
     (
      GL_ARRAY_BUFFER,                                                                               // VBO target.
-     loc_data->vbo                                                                                  // VBO to bind.
+     loc_data->ssbo                                                                                 // VBO to bind.
     );
 
     // Setting layout index in vertex shader...
@@ -1121,7 +1121,7 @@ void queue::release
     baseline->check_error (loc_error);                                                              // Checking returned error code...
 
     // Binding data:
-    glBindBuffer (GL_ARRAY_BUFFER, loc_data->vbo);                                                  // Binding VBO...
+    glBindBuffer (GL_ARRAY_BUFFER, loc_data->ssbo);                                                 // Binding VBO...
     glVertexAttribPointer
     (
      loc_layout_index,                                                                              // VAO index.
