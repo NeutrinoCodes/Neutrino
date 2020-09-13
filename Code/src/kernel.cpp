@@ -448,30 +448,35 @@ void kernel::setarg
      loc_data->vao                                                                                   // VAOs array.
     );
 
-    // Generating VBO:
+    // Generating SSBO:
     glGenBuffers
     (
-     1,                                                                                              // Number of VBOs to generate.
-     &loc_data->vbo                                                                                  // VBOs array.
+     1,                                                                                              // Number of SSBOs to generate.
+     &loc_data->ssbo                                                                                 // SSBOs array.
     );
 
-    // Binding VBO:
+    // Binding SSBO:
     glBindBuffer
     (
-     GL_SHADER_STORAGE_BUFFER,                                                                       // VBO target.
-     loc_data->vbo                                                                                   // VBO to bind.
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     loc_data->ssbo                                                                                  // SSBO to bind.
     );
 
     // Creating and initializing a buffer object's data store:
     glBufferData
     (
-     GL_SHADER_STORAGE_BUFFER,                                                                       // VBO target.
-     sizeof(GLfloat)*loc_data->size,                                                                 // VBO size.
-     loc_data->data,                                                                                 // VBO data.
-     GL_DYNAMIC_DRAW                                                                                 // VBO usage.
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     sizeof(GLfloat)*loc_data->size,                                                                 // SSBO size.
+     loc_data->data,                                                                                 // SSBO data.
+     GL_DYNAMIC_DRAW                                                                                 // SSBO usage.
     );
 
-    glBindBufferBase (GL_SHADER_STORAGE_BUFFER, loc_layout_index, loc_data->vbo);
+    // Binding buffer object to an indexed buffer target:
+    glBindBufferBase (
+                      GL_SHADER_STORAGE_BUFFER,
+                      loc_layout_index,
+                      loc_data->ssbo
+                     );
 
     // Specifying the format for attribute in vertex shader:
     glVertexAttribPointer
@@ -490,11 +495,11 @@ void kernel::setarg
      loc_layout_index                                                                                // VAO index.
     );
 
-    // Binding VBO:
+    // Binding SSBO:
     glBindBuffer
     (
-     GL_SHADER_STORAGE_BUFFER,                                                                       // VBO target.
-     loc_data->vbo                                                                                   // VBO to bind.
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     loc_data->ssbo                                                                                  // SSBO to bind.
     );
 
     glFinish ();                                                                                     // Waiting for OpenGL to finish...
@@ -506,7 +511,7 @@ void kernel::setarg
                          (
                           baseline->context_id,                                                      // OpenCL context.
                           CL_MEM_READ_WRITE,                                                         // Memory flags.
-                          loc_data->vbo,                                                             // VBO.
+                          loc_data->ssbo,                                                            // VBO.
                           &loc_error                                                                 // Returned error.
                          );
     }
