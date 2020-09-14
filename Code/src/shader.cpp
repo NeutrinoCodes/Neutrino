@@ -139,7 +139,36 @@ void shader::build ()
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void shader::setarg
 (
- float1G* loc_data,                                                                                 // Data object.
+ nu_int* loc_data,                                                                                  // Data object.
+ GLuint  loc_layout_index                                                                           // Data layout index.
+)
+{
+  size_t loc_name_size;
+  char*  loc_name_buffer;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
+  loc_name_buffer                = new char[loc_name_size + 1]();
+  loc_data->name.copy (loc_name_buffer, loc_name_size);
+  loc_name_buffer[loc_name_size] = '\0';
+
+  glBindAttribLocation (
+                        program,                                                                    // OpenGL GLSL program.
+                        loc_layout_index,                                                           // Data layout index.
+                        loc_name_buffer                                                             // Data name.
+                       );
+
+  size                           = loc_data->size;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  delete loc_name_buffer;
+};
+
+void shader::setarg
+(
+ nu_int2* loc_data,                                                                                 // Data object.
  GLuint   loc_layout_index                                                                          // Data layout index.
 )
 {
@@ -168,8 +197,153 @@ void shader::setarg
 
 void shader::setarg
 (
- float4G* loc_data,                                                                                 // Data object.
+ nu_int3* loc_data,                                                                                 // Data object.
  GLuint   loc_layout_index                                                                          // Data layout index.
+)
+{
+  size_t loc_name_size;
+  char*  loc_name_buffer;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
+  loc_name_buffer                = new char[loc_name_size + 1]();
+  loc_data->name.copy (loc_name_buffer, loc_name_size);
+  loc_name_buffer[loc_name_size] = '\0';
+
+  glBindAttribLocation (
+                        program,                                                                    // OpenGL GLSL program.
+                        loc_layout_index,                                                           // Data layout index.
+                        loc_name_buffer                                                             // Data name.
+                       );
+
+  size                           = loc_data->size;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  delete loc_name_buffer;
+};
+
+void shader::setarg
+(
+ nu_int4* loc_data,                                                                                 // Data object.
+ GLuint   loc_layout_index                                                                          // Data layout index.
+)
+{
+  size_t loc_name_size;
+  char*  loc_name_buffer;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
+  loc_name_buffer                = new char[loc_name_size + 1]();
+  loc_data->name.copy (loc_name_buffer, loc_name_size);
+  loc_name_buffer[loc_name_size] = '\0';
+
+  glBindAttribLocation (
+                        program,                                                                    // OpenGL GLSL program.
+                        loc_layout_index,                                                           // Data layout index.
+                        loc_name_buffer                                                             // Data name.
+                       );
+
+  size                           = loc_data->size;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  delete loc_name_buffer;
+};
+
+void shader::setarg
+(
+ nu_float* loc_data,                                                                                // Data object.
+ GLuint    loc_layout_index                                                                         // Data layout index.
+)
+{
+  size_t loc_name_size;
+  char*  loc_name_buffer;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
+  loc_name_buffer                = new char[loc_name_size + 1]();
+  loc_data->name.copy (loc_name_buffer, loc_name_size);
+  loc_name_buffer[loc_name_size] = '\0';
+
+  glBindAttribLocation (
+                        program,                                                                    // OpenGL GLSL program.
+                        loc_layout_index,                                                           // Data layout index.
+                        loc_name_buffer                                                             // Data name.
+                       );
+
+  size                           = loc_data->size;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  delete loc_name_buffer;
+};
+
+void shader::setarg
+(
+ nu_float2* loc_data,                                                                               // Data object.
+ GLuint     loc_layout_index                                                                        // Data layout index.
+)
+{
+  size_t loc_name_size;
+  char*  loc_name_buffer;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
+  loc_name_buffer                = new char[loc_name_size + 1]();
+  loc_data->name.copy (loc_name_buffer, loc_name_size);
+  loc_name_buffer[loc_name_size] = '\0';
+
+  glBindAttribLocation (
+                        program,                                                                    // OpenGL GLSL program.
+                        loc_layout_index,                                                           // Data layout index.
+                        loc_name_buffer                                                             // Data name.
+                       );
+
+  size                           = loc_data->size;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  delete loc_name_buffer;
+};
+
+void shader::setarg
+(
+ nu_float3* loc_data,                                                                               // Data object.
+ GLuint     loc_layout_index                                                                        // Data layout index.
+)
+{
+  size_t loc_name_size;
+  char*  loc_name_buffer;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
+  loc_name_buffer                = new char[loc_name_size + 1]();
+  loc_data->name.copy (loc_name_buffer, loc_name_size);
+  loc_name_buffer[loc_name_size] = '\0';
+
+  glBindAttribLocation (
+                        program,                                                                    // OpenGL GLSL program.
+                        loc_layout_index,                                                           // Data layout index.
+                        loc_name_buffer                                                             // Data name.
+                       );
+
+  size                           = loc_data->size;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  delete loc_name_buffer;
+};
+
+void shader::setarg
+(
+ nu_float4* loc_data,                                                                               // Data object.
+ GLuint     loc_layout_index                                                                        // Data layout index.
 )
 {
   size_t loc_name_size;

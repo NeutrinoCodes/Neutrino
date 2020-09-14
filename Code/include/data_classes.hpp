@@ -31,8 +31,8 @@
 /// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
 typedef struct _nu_int2_structure
 {
-  GL_int64 x;                                                                                       ///< "x" coordinate.
-  GL_int64 y;                                                                                       ///< "y" coordinate.
+  GLint x;                                                                                          ///< "x" coordinate.
+  GLint y;                                                                                          ///< "y" coordinate.
 } nu_int2_structure;
 #pragma pack(pop)                                                                                   // End of packing.
 
@@ -42,9 +42,9 @@ typedef struct _nu_int2_structure
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _nu_int3_structure
 {
-  GL_int64 x;                                                                                       ///< "x" coordinate.
-  GL_int64 y;                                                                                       ///< "y" coordinate.
-  GL_int64 z;                                                                                       ///< "z" coordinate.
+  GLint x;                                                                                          ///< "x" coordinate.
+  GLint y;                                                                                          ///< "y" coordinate.
+  GLint z;                                                                                          ///< "z" coordinate.
 } nu_int3_structure;
 #pragma pack(pop)
 
@@ -54,10 +54,10 @@ typedef struct _nu_int3_structure
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
 typedef struct _nu_int4_structure
 {
-  GL_int64 x;                                                                                       ///< "x" coordinate.
-  GL_int64 y;                                                                                       ///< "y" coordinate.
-  GL_int64 z;                                                                                       ///< "z" coordinate.
-  GL_int64 w;                                                                                       ///< "w" coordinate.
+  GLint x;                                                                                          ///< "x" coordinate.
+  GLint y;                                                                                          ///< "y" coordinate.
+  GLint z;                                                                                          ///< "z" coordinate.
+  GLint w;                                                                                          ///< "w" coordinate.
 } nu_int4_structure;
 #pragma pack(pop)
 
@@ -104,16 +104,16 @@ typedef struct _nu_float4_structure
 /////////////////////////////////////////// "nu_int" class ////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @class nu_int
-/// ### 1xN vector of "GLint64" data.
-/// Declares a 1xN vector (N = data size) of **GLint64** data numbers.
+/// ### 1xN vector of "GLint" data.
+/// Declares a 1xN vector (N = data size) of **GLint** data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended to be used for graphics rendering.
-class nu_int                                                                                        /// @brief **1xN vector of "GLint64" data.**
+class nu_int                                                                                        /// @brief **1xN vector of "GLint" data.**
 {
 private:
 
 public:
-  /// @details 1xN (N = data @link size @endlink ) **GLint64** data storage.
+  /// @details 1xN (N = data @link size @endlink ) **GLint** data storage.
   /// These data are stored in the host PC memory.
   /// They can be eventually exchanged between the client GPU by using the @link queue::init
   /// @endlink and @link write @endlink methods of the @link queue @endlink class.
@@ -123,7 +123,7 @@ public:
   /// @endlink flag. The latter one serves as an indicator (internally managed by Neutrino) in order
   /// allow the @link buffer @endlink initialization and to impede it during subsequents
   /// calls of the @link kernel::setarg @endlink method.
-  GLint64*    data;                                                                                 ///< @brief **Data [GLint64].**
+  GLint*      data;                                                                                 ///< @brief **Data [GLint].**
 
   /// @details **cl_mem** OpenCL memory buffer object. It does not contain user data. It is
   /// internally used by Neutrino within the OpenCL mechanisms to define the properties of
@@ -164,7 +164,7 @@ public:
   nu_int ();
 
   /// @brief **Class initializer.**
-  /// @details Creates a "1 x size" data storage of **GLint64** allocated on the host PC memory
+  /// @details Creates a "1 x size" data storage of **GLint** allocated on the host PC memory
   /// and initializes all data to 0.
   void init (
              GLsizeiptr loc_size                                                                    ///< Data size [#].
@@ -175,7 +175,7 @@ public:
   /// longer than the data variable size, then the reading process is interrupted.
   /// If the data in the file is shorter, than after filling the data variable with the data from
   /// the file the data variable is filled with zeros.
-  /// The data must be organized in 1 column of 1 **GLint64** number per line.
+  /// The data must be organized in 1 column of 1 **GLint** number per line.
   void read (
              std::string loc_file_directory,                                                        /// File directory.
              std::string loc_file_name                                                              /// File name.
@@ -192,16 +192,16 @@ public:
 ////////////////////////////////////////// "nu_int2" class ////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @class nu_int2
-/// ### 2xN vector of "GLint64" data.
-/// Declares a 2xN vector (N = data size) of "GLint64" data numbers.
+/// ### 2xN vector of "GLint" data.
+/// Declares a 2xN vector (N = data size) of "GLint" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended to be used for graphics rendering.
-class nu_int2                                                                                       /// @brief **2xN vector of "GLint64" data.**
+class nu_int2                                                                                       /// @brief **2xN vector of "GLint" data.**
 {
 private:
 
 public:
-  /// @details 2xN (N = data @link size @endlink ) **GLint64** data storage.
+  /// @details 2xN (N = data @link size @endlink ) **GLint** data storage.
   /// These data are stored in the host PC memory.
   /// They can be eventually exchanged between the client GPU by using the @link queue::init
   /// @endlink and @link write @endlink methods of the @link queue @endlink class.
@@ -211,7 +211,7 @@ public:
   /// @endlink flag. The latter one serves as an indicator (internally managed by Neutrino) in order
   /// allow the @link buffer @endlink initialization and to impede it during subsequents
   /// calls of the @link kernel::setarg @endlink method.
-  nu_int2_structure* data;                                                                          ///< @brief **Data [GLint64].**
+  nu_int2_structure* data;                                                                          ///< @brief **Data [GLint].**
 
   /// @details **cl_mem** OpenCL memory buffer object. It does not contain user data. It is
   /// internally used by Neutrino within the OpenCL mechanisms to define the properties of
@@ -252,7 +252,7 @@ public:
   nu_int2 ();
 
   /// @brief **Class initializer.**
-  /// @details Creates a "2 x size" data storage of **GLint64** allocated on the host PC memory
+  /// @details Creates a "2 x size" data storage of **GLint** allocated on the host PC memory
   /// and initializes all data to 0.
   void init (
              GLsizeiptr loc_size                                                                    ///< Data size [#].
@@ -268,16 +268,16 @@ public:
 ////////////////////////////////////////// "nu_int3" class ////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @class nu_int3
-/// ### 3xN vector of "GLint64" data.
-/// Declares a 3xN vector (N = data size) of "GLint64" data numbers.
+/// ### 3xN vector of "GLint" data.
+/// Declares a 3xN vector (N = data size) of "GLint" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended to be used for graphics rendering.
-class nu_int3                                                                                       /// @brief **3xN vector of "GLint64" data.**
+class nu_int3                                                                                       /// @brief **3xN vector of "GLint" data.**
 {
 private:
 
 public:
-  /// @details 3xN (N = data @link size @endlink ) **GLint64** data storage.
+  /// @details 3xN (N = data @link size @endlink ) **GLint** data storage.
   /// These data are stored in the host PC memory.
   /// They can be eventually exchanged between the client GPU by using the @link queue::init
   /// @endlink and @link write @endlink methods of the @link queue @endlink class.
@@ -287,7 +287,7 @@ public:
   /// @endlink flag. The latter one serves as an indicator (internally managed by Neutrino) in order
   /// allow the @link buffer @endlink initialization and to impede it during subsequents
   /// calls of the @link kernel::setarg @endlink method.
-  nu_int3_structure* data;                                                                          ///< @brief **Data [GLint64].**
+  nu_int3_structure* data;                                                                          ///< @brief **Data [GLint].**
 
   /// @details **cl_mem** OpenCL memory buffer object. It does not contain user data. It is
   /// internally used by Neutrino within the OpenCL mechanisms to define the properties of
@@ -328,7 +328,7 @@ public:
   nu_int3 ();
 
   /// @brief **Class initializer.**
-  /// @details Creates a "3 x size" data storage of **GLint64** allocated on the host PC memory
+  /// @details Creates a "3 x size" data storage of **GLint** allocated on the host PC memory
   /// and initializes all data to 0.
   void init (
              GLsizeiptr loc_size                                                                    ///< Data size [#].
@@ -344,16 +344,16 @@ public:
 ////////////////////////////////////////// "nu_int4" class ////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @class nu_int4
-/// ### 4xN vector of "GLint64" data.
-/// Declares a 4xN vector (N = data size) of "GLint64" data numbers.
+/// ### 4xN vector of "GLint" data.
+/// Declares a 4xN vector (N = data size) of "GLint" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended to be used for graphics rendering.
-class nu_int4                                                                                       /// @brief **4xN vector of "GLint64" data.**
+class nu_int4                                                                                       /// @brief **4xN vector of "GLint" data.**
 {
 private:
 
 public:
-  /// @details 4xN (N = data @link size @endlink ) **GLint64** data storage.
+  /// @details 4xN (N = data @link size @endlink ) **GLint** data storage.
   /// These data are stored in the host PC memory.
   /// They can be eventually exchanged between the client GPU by using the @link queue::init
   /// @endlink and @link write @endlink methods of the @link queue @endlink class.
@@ -363,7 +363,7 @@ public:
   /// @endlink flag. The latter one serves as an indicator (internally managed by Neutrino) in order
   /// allow the @link buffer @endlink initialization and to impede it during subsequents
   /// calls of the @link kernel::setarg @endlink method.
-  nu_int4_structure* data;                                                                          ///< @brief **Data [GLint64].**
+  nu_int4_structure* data;                                                                          ///< @brief **Data [GLint].**
 
   /// @details **cl_mem** OpenCL memory buffer object. It does not contain user data. It is
   /// internally used by Neutrino within the OpenCL mechanisms to define the properties of
@@ -404,7 +404,7 @@ public:
   nu_int4 ();
 
   /// @brief **Class initializer.**
-  /// @details Creates a "4 x size" data storage of **GLint64** allocated on the host PC memory
+  /// @details Creates a "4 x size" data storage of **GLint** allocated on the host PC memory
   /// and initializes all data to 0.
   void init (
              GLsizeiptr loc_size                                                                    ///< Data size [#].
