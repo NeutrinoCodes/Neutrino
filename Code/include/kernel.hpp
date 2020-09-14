@@ -81,7 +81,7 @@ public:
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
                nu_int* loc_data,                                                                    ///< nu_int data.
-               cl_uint loc_layout_index                                                             ///< Layout index.
+               GLuint  loc_layout_index                                                             ///< Layout index.
               );
 
   /// @overload setarg(nu_int2* loc_data, cl_uint loc_layout_index)
@@ -97,7 +97,7 @@ public:
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
                nu_int2* loc_data,                                                                   ///< nu_int2 data.
-               cl_uint  loc_layout_index                                                            ///< Layout index.
+               GLuint   loc_layout_index                                                            ///< Layout index.
               );
 
   /// @overload setarg(nu_int3* loc_data, cl_uint loc_layout_index)
@@ -113,7 +113,7 @@ public:
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
                nu_int3* loc_data,                                                                   ///< nu_int3 data.
-               cl_uint  loc_layout_index                                                            ///< Layout index.
+               GLuint   loc_layout_index                                                            ///< Layout index.
               );
 
   /// @overload setarg(nu_int4* loc_data, cl_uint loc_layout_index)
@@ -129,7 +129,7 @@ public:
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
                nu_int4* loc_data,                                                                   ///< nu_int4 data.
-               cl_uint  loc_layout_index                                                            ///< Layout index.
+               GLuint   loc_layout_index                                                            ///< Layout index.
               );
 
   /// @overload setarg(nu_float* loc_data, cl_uint loc_layout_index)
@@ -145,23 +145,7 @@ public:
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
                nu_float* loc_data,                                                                  ///< nu_float data.
-               cl_uint   loc_layout_index                                                           ///< Layout index.
-              );
-
-  /// @overload setarg(float1G* loc_data, cl_uint loc_layout_index)
-  /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
-  /// must correspond to the argument in the OpenCL kernel source file.
-  /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
-  /// function of the kernel source file.
-  /// The setter function has two arguments:
-  /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
-  ///   client GPU.
-  /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
-  ///   by the user for each instace of this function. This number tells Neutrino the place of the
-  ///   argument in the @link thekernel @endlink function of the kernel source file.
-  void setarg (
-               float1G* loc_data,                                                                   ///< float1G data.
-               cl_uint  loc_layout_index                                                            ///< Layout index.
+               GLuint    loc_layout_index                                                           ///< Layout index.
               );
 
   /// @overload setarg(nu_float2* loc_data, cl_uint loc_layout_index)
@@ -177,7 +161,7 @@ public:
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
                nu_float2* loc_data,                                                                 ///< nu_float2 data.
-               cl_uint    loc_layout_index                                                          ///< Layout index.
+               GLuint     loc_layout_index                                                          ///< Layout index.
               );
 
   /// @overload setarg(nu_float3* loc_data, cl_uint loc_layout_index)
@@ -193,7 +177,7 @@ public:
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
                nu_float3* loc_data,                                                                 ///< nu_float3 data.
-               cl_uint    loc_layout_index                                                          ///< Layout index.
+               GLuint     loc_layout_index                                                          ///< Layout index.
               );
 
   /// @overload setarg(nu_float4* loc_data, cl_uint loc_layout_index)
@@ -209,23 +193,7 @@ public:
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
                nu_float4* loc_data,                                                                 ///< nu_float4 data.
-               cl_uint    loc_layout_index                                                          ///< Layout index.
-              );
-
-  /// @overload setarg(float4G* loc_data, GLuint loc_layout_index)
-  /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
-  /// must correspond to the argument in the OpenCL kernel source file.
-  /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
-  /// function of the kernel source file.
-  /// The setter function has two arguments:
-  /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
-  ///   client GPU.
-  /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
-  ///   by the user for each instace of this function. This number tells Neutrino the place of the
-  ///   argument in the @link thekernel @endlink function of the kernel source file.
-  void setarg (
-               float4G* loc_data,                                                                   ///< float4G data.
-               GLuint   loc_layout_index                                                            ///< Layout index.
+               GLuint     loc_layout_index                                                          ///< Layout index.
               );
 
   /// @brief **Class destructor.**

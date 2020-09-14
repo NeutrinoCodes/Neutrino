@@ -19,7 +19,7 @@ void nu_int::init (
 {
   GLsizeiptr i;                                                                                     // Index.
 
-  data = new GLint64[loc_size];                                                                     // "1 x size" data storage [GLint64].
+  data = new GLint[loc_size];                                                                       // "1 x size" data storage [GLint].
   size = loc_size;                                                                                  // Data size [#].
 
   for(i = 0; i < loc_size; i++)
@@ -35,7 +35,7 @@ void nu_int::read
 )
 {
   size_t      i;                                                                                    // Data index.
-  GLint64     loc_data;                                                                             // File data.
+  GLint       loc_data;                                                                             // File data.
   std::string loc_full_name;                                                                        // Full file name.
 
   #ifdef __linux__
