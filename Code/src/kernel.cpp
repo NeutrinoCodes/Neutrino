@@ -187,11 +187,11 @@ void kernel::init
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// setarg "int1" overload ///////////////////////////////////
+/////////////////////////////////////////// setarg "nu_int" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void kernel::setarg
 (
- int1*   loc_data,                                                                                   // int1 data.
+ nu_int* loc_data,                                                                                   // nu_int data.
  cl_uint loc_layout_index                                                                            // Layout index.
 )
 {
@@ -205,40 +205,124 @@ void kernel::setarg
 
   if(!loc_data->ready)
   {
-    // Creating OpenCL memory buffer:
-    loc_data->buffer = clCreateBuffer
-                       (
-                        baseline->context_id,                                                        // OpenCL context.
-                        CL_MEM_READ_WRITE |                                                          // Memory flag.
-                        CL_MEM_COPY_HOST_PTR,                                                        // Memory flag.
-                        sizeof(cl_long)*loc_data->size,                                              // Data buffer size.
-                        loc_data->data,                                                              // Data buffer.
-                        &loc_error                                                                   // Error code.
-                       );
+    // Generating VAO...
+    glGenVertexArrays
+    (
+     1,                                                                                              // Number of VAOs to generate.
+     &loc_data->vao                                                                                  // VAOs array.
+    );
+
+    // Binding node VAO...
+    glBindVertexArray
+    (
+     loc_data->vao                                                                                   // VAOs array.
+    );
+
+    // Generating SSBO:
+    glGenBuffers
+    (
+     1,                                                                                              // Number of SSBOs to generate.
+     &loc_data->ssbo                                                                                 // SSBOs array.
+    );
+
+    // Binding SSBO:
+    glBindBuffer
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     loc_data->ssbo                                                                                  // SSBO to bind.
+    );
+
+    // Creating and initializing a buffer object's data store:
+    glBufferData
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     sizeof(GLint64)*loc_data->size,                                                                 // SSBO size.
+     loc_data->data,                                                                                 // SSBO data.
+     GL_DYNAMIC_DRAW                                                                                 // SSBO usage.
+    );
+
+    // Binding buffer object to an indexed buffer target:
+    glBindBufferBase (
+                      GL_SHADER_STORAGE_BUFFER,                                                      // SSBO target.
+                      loc_layout_index,                                                              // SSBO index.
+                      loc_data->ssbo                                                                 // SSBO buffer.
+                     );
+
+    // Specifying the format for attribute in vertex shader:
+    glVertexAttribPointer
+    (
+     loc_layout_index,                                                                               // VAO index.
+     1,                                                                                              // VAO's number of components.
+     GL_FLOAT,                                                                                       // Data type.
+     GL_FALSE,                                                                                       // Not using normalized numbers.
+     0,                                                                                              // Data stride.
+     0                                                                                               // Data offset.
+    );
+
+    // Enabling attribute in vertex shader:
+    glEnableVertexAttribArray
+    (
+     loc_layout_index                                                                                // VAO index.
+    );
+
+    // Binding SSBO:
+    glBindBuffer
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     loc_data->ssbo                                                                                  // SSBO to bind.
+    );
+
+    glFinish ();                                                                                     // Waiting for OpenGL to finish...
+
+    if(baseline->interop)                                                                            // Checking for interoperability...
+    {
+      // Creating OpenCL buffer from OpenGL buffer:
+      loc_data->buffer = clCreateFromGLBuffer
+                         (
+                          baseline->context_id,                                                      // OpenCL context.
+                          CL_MEM_READ_WRITE,                                                         // Memory flags.
+                          loc_data->ssbo,                                                            // VBO.
+                          &loc_error                                                                 // Returned error.
+                         );
+    }
+
+    else
+    {
+      // Creating OpenCL memory buffer:
+      loc_data->buffer = clCreateBuffer
+                         (
+                          baseline->context_id,                                                      // OpenCL context.
+                          CL_MEM_READ_WRITE |                                                        // Memory flag.
+                          CL_MEM_COPY_HOST_PTR,                                                      // Memory flag.
+                          sizeof(GLint64)*loc_data->size,                                            // Data buffer size.
+                          loc_data->data,                                                            // Data buffer.
+                          &loc_error                                                                 // Error code.
+                         );
+    }
 
     baseline->check_error (loc_error);                                                               // Checking returned error code...
-
     loc_data->ready = true;                                                                          // Setting "ready" flag...
   }
 
   loc_error = clSetKernelArg
               (
                kernel_id,                                                                            // Kernel id.
-               (cl_uint)loc_layout_index,                                                            // Layout index.
+               loc_layout_index,                                                                     // Layout index.
                sizeof(cl_mem),                                                                       // Data size.
                &loc_data->buffer                                                                     // Data value.
               );
 
+  baseline->check_error (loc_error);                                                                 // Checking returned error code...
   baseline->done ();                                                                                 // Printing message...
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// setarg "int2" overload ///////////////////////////////////
+/////////////////////////////////////////// setarg "nu_int2" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void kernel::setarg
 (
- int2*   loc_data,                                                                                   // int2 data.
- cl_uint loc_layout_index                                                                            // Layout index.
+ nu_int2* loc_data,                                                                                  // nu_int2 data.
+ cl_uint  loc_layout_index                                                                           // Layout index.
 )
 {
   cl_int loc_error;                                                                                  // Error code.
@@ -251,40 +335,124 @@ void kernel::setarg
 
   if(!loc_data->ready)
   {
-    // Creating OpenCL memory buffer:
-    loc_data->buffer = clCreateBuffer
-                       (
-                        baseline->context_id,                                                        // OpenCL context.
-                        CL_MEM_READ_WRITE |                                                          // Memory flag.
-                        CL_MEM_COPY_HOST_PTR,                                                        // Memory flag.
-                        sizeof(int2_structure)*loc_data->size,                                       // Data buffer size.
-                        loc_data->data,                                                              // Data buffer.
-                        &loc_error                                                                   // Error code.
-                       );
+    // Generating VAO...
+    glGenVertexArrays
+    (
+     1,                                                                                              // Number of VAOs to generate.
+     &loc_data->vao                                                                                  // VAOs array.
+    );
+
+    // Binding node VAO...
+    glBindVertexArray
+    (
+     loc_data->vao                                                                                   // VAOs array.
+    );
+
+    // Generating SSBO:
+    glGenBuffers
+    (
+     1,                                                                                              // Number of SSBOs to generate.
+     &loc_data->ssbo                                                                                 // SSBOs array.
+    );
+
+    // Binding SSBO:
+    glBindBuffer
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     loc_data->ssbo                                                                                  // SSBO to bind.
+    );
+
+    // Creating and initializing a buffer object's data store:
+    glBufferData
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     sizeof(nu_int2_structure)*loc_data->size,                                                       // SSBO size.
+     loc_data->data,                                                                                 // SSBO data.
+     GL_DYNAMIC_DRAW                                                                                 // SSBO usage.
+    );
+
+    // Binding buffer object to an indexed buffer target:
+    glBindBufferBase (
+                      GL_SHADER_STORAGE_BUFFER,                                                      // SSBO target.
+                      loc_layout_index,                                                              // SSBO index.
+                      loc_data->ssbo                                                                 // SSBO buffer.
+                     );
+
+    // Specifying the format for attribute in vertex shader:
+    glVertexAttribPointer
+    (
+     loc_layout_index,                                                                               // VAO index.
+     1,                                                                                              // VAO's number of components.
+     GL_FLOAT,                                                                                       // Data type.
+     GL_FALSE,                                                                                       // Not using normalized numbers.
+     0,                                                                                              // Data stride.
+     0                                                                                               // Data offset.
+    );
+
+    // Enabling attribute in vertex shader:
+    glEnableVertexAttribArray
+    (
+     loc_layout_index                                                                                // VAO index.
+    );
+
+    // Binding SSBO:
+    glBindBuffer
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     loc_data->ssbo                                                                                  // SSBO to bind.
+    );
+
+    glFinish ();                                                                                     // Waiting for OpenGL to finish...
+
+    if(baseline->interop)                                                                            // Checking for interoperability...
+    {
+      // Creating OpenCL buffer from OpenGL buffer:
+      loc_data->buffer = clCreateFromGLBuffer
+                         (
+                          baseline->context_id,                                                      // OpenCL context.
+                          CL_MEM_READ_WRITE,                                                         // Memory flags.
+                          loc_data->ssbo,                                                            // VBO.
+                          &loc_error                                                                 // Returned error.
+                         );
+    }
+
+    else
+    {
+      // Creating OpenCL memory buffer:
+      loc_data->buffer = clCreateBuffer
+                         (
+                          baseline->context_id,                                                      // OpenCL context.
+                          CL_MEM_READ_WRITE |                                                        // Memory flag.
+                          CL_MEM_COPY_HOST_PTR,                                                      // Memory flag.
+                          sizeof(nu_int2_structure)*loc_data->size,                                  // Data buffer size.
+                          loc_data->data,                                                            // Data buffer.
+                          &loc_error                                                                 // Error code.
+                         );
+    }
 
     baseline->check_error (loc_error);                                                               // Checking returned error code...
-
     loc_data->ready = true;                                                                          // Setting "ready" flag...
   }
 
   loc_error = clSetKernelArg
               (
                kernel_id,                                                                            // Kernel id.
-               (cl_uint)loc_layout_index,                                                            // Layout index.
+               loc_layout_index,                                                                     // Layout index.
                sizeof(cl_mem),                                                                       // Data size.
                &loc_data->buffer                                                                     // Data value.
               );
 
+  baseline->check_error (loc_error);                                                                 // Checking returned error code...
   baseline->done ();                                                                                 // Printing message...
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// setarg "int3" overload ///////////////////////////////////
+/////////////////////////////////////////// setarg "nu_int3" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void kernel::setarg
 (
- int3*   loc_data,                                                                                   // int3 data.
- cl_uint loc_layout_index                                                                            // Layout index.
+ nu_int3* loc_data,                                                                                  // nu_int3 data.
+ cl_uint  loc_layout_index                                                                           // Layout index.
 )
 {
   cl_int loc_error;                                                                                  // Error code.
@@ -297,40 +465,124 @@ void kernel::setarg
 
   if(!loc_data->ready)
   {
-    // Creating OpenCL memory buffer:
-    loc_data->buffer = clCreateBuffer
-                       (
-                        baseline->context_id,                                                        // OpenCL context.
-                        CL_MEM_READ_WRITE |                                                          // Memory flag.
-                        CL_MEM_COPY_HOST_PTR,                                                        // Memory flag.
-                        sizeof(int3_structure)*loc_data->size,                                       // Data buffer size.
-                        loc_data->data,                                                              // Data buffer.
-                        &loc_error                                                                   // Error code.
-                       );
+    // Generating VAO...
+    glGenVertexArrays
+    (
+     1,                                                                                              // Number of VAOs to generate.
+     &loc_data->vao                                                                                  // VAOs array.
+    );
+
+    // Binding node VAO...
+    glBindVertexArray
+    (
+     loc_data->vao                                                                                   // VAOs array.
+    );
+
+    // Generating SSBO:
+    glGenBuffers
+    (
+     1,                                                                                              // Number of SSBOs to generate.
+     &loc_data->ssbo                                                                                 // SSBOs array.
+    );
+
+    // Binding SSBO:
+    glBindBuffer
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     loc_data->ssbo                                                                                  // SSBO to bind.
+    );
+
+    // Creating and initializing a buffer object's data store:
+    glBufferData
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     sizeof(nu_int3_structure)*loc_data->size,                                                       // SSBO size.
+     loc_data->data,                                                                                 // SSBO data.
+     GL_DYNAMIC_DRAW                                                                                 // SSBO usage.
+    );
+
+    // Binding buffer object to an indexed buffer target:
+    glBindBufferBase (
+                      GL_SHADER_STORAGE_BUFFER,                                                      // SSBO target.
+                      loc_layout_index,                                                              // SSBO index.
+                      loc_data->ssbo                                                                 // SSBO buffer.
+                     );
+
+    // Specifying the format for attribute in vertex shader:
+    glVertexAttribPointer
+    (
+     loc_layout_index,                                                                               // VAO index.
+     1,                                                                                              // VAO's number of components.
+     GL_FLOAT,                                                                                       // Data type.
+     GL_FALSE,                                                                                       // Not using normalized numbers.
+     0,                                                                                              // Data stride.
+     0                                                                                               // Data offset.
+    );
+
+    // Enabling attribute in vertex shader:
+    glEnableVertexAttribArray
+    (
+     loc_layout_index                                                                                // VAO index.
+    );
+
+    // Binding SSBO:
+    glBindBuffer
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     loc_data->ssbo                                                                                  // SSBO to bind.
+    );
+
+    glFinish ();                                                                                     // Waiting for OpenGL to finish...
+
+    if(baseline->interop)                                                                            // Checking for interoperability...
+    {
+      // Creating OpenCL buffer from OpenGL buffer:
+      loc_data->buffer = clCreateFromGLBuffer
+                         (
+                          baseline->context_id,                                                      // OpenCL context.
+                          CL_MEM_READ_WRITE,                                                         // Memory flags.
+                          loc_data->ssbo,                                                            // VBO.
+                          &loc_error                                                                 // Returned error.
+                         );
+    }
+
+    else
+    {
+      // Creating OpenCL memory buffer:
+      loc_data->buffer = clCreateBuffer
+                         (
+                          baseline->context_id,                                                      // OpenCL context.
+                          CL_MEM_READ_WRITE |                                                        // Memory flag.
+                          CL_MEM_COPY_HOST_PTR,                                                      // Memory flag.
+                          sizeof(nu_int3_structure)*loc_data->size,                                  // Data buffer size.
+                          loc_data->data,                                                            // Data buffer.
+                          &loc_error                                                                 // Error code.
+                         );
+    }
 
     baseline->check_error (loc_error);                                                               // Checking returned error code...
-
     loc_data->ready = true;                                                                          // Setting "ready" flag...
   }
 
   loc_error = clSetKernelArg
               (
                kernel_id,                                                                            // Kernel id.
-               (cl_uint)loc_layout_index,                                                            // Layout index.
+               loc_layout_index,                                                                     // Layout index.
                sizeof(cl_mem),                                                                       // Data size.
                &loc_data->buffer                                                                     // Data value.
               );
 
+  baseline->check_error (loc_error);                                                                 // Checking returned error code...
   baseline->done ();                                                                                 // Printing message...
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// setarg "int4" overload ///////////////////////////////////
+/////////////////////////////////////////// setarg "nu_int4" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void kernel::setarg
 (
- int4*   loc_data,                                                                                   // int4 data.
- cl_uint loc_layout_index                                                                            // Layout index.
+ nu_int4* loc_data,                                                                                  // nu_int4 data.
+ cl_uint  loc_layout_index                                                                           // Layout index.
 )
 {
   cl_int loc_error;                                                                                  // Error code.
@@ -343,86 +595,124 @@ void kernel::setarg
 
   if(!loc_data->ready)
   {
-    // Creating OpenCL memory buffer:
-    loc_data->buffer = clCreateBuffer
-                       (
-                        baseline->context_id,                                                        // OpenCL context.
-                        CL_MEM_READ_WRITE |                                                          // Memory flag.
-                        CL_MEM_COPY_HOST_PTR,                                                        // Memory flag.
-                        sizeof(int4_structure)*loc_data->size,                                       // Data buffer size.
-                        loc_data->data,                                                              // Data buffer.
-                        &loc_error                                                                   // Error code.
-                       );
+    // Generating VAO...
+    glGenVertexArrays
+    (
+     1,                                                                                              // Number of VAOs to generate.
+     &loc_data->vao                                                                                  // VAOs array.
+    );
+
+    // Binding node VAO...
+    glBindVertexArray
+    (
+     loc_data->vao                                                                                   // VAOs array.
+    );
+
+    // Generating SSBO:
+    glGenBuffers
+    (
+     1,                                                                                              // Number of SSBOs to generate.
+     &loc_data->ssbo                                                                                 // SSBOs array.
+    );
+
+    // Binding SSBO:
+    glBindBuffer
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     loc_data->ssbo                                                                                  // SSBO to bind.
+    );
+
+    // Creating and initializing a buffer object's data store:
+    glBufferData
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     sizeof(nu_int4_structure)*loc_data->size,                                                       // SSBO size.
+     loc_data->data,                                                                                 // SSBO data.
+     GL_DYNAMIC_DRAW                                                                                 // SSBO usage.
+    );
+
+    // Binding buffer object to an indexed buffer target:
+    glBindBufferBase (
+                      GL_SHADER_STORAGE_BUFFER,                                                      // SSBO target.
+                      loc_layout_index,                                                              // SSBO index.
+                      loc_data->ssbo                                                                 // SSBO buffer.
+                     );
+
+    // Specifying the format for attribute in vertex shader:
+    glVertexAttribPointer
+    (
+     loc_layout_index,                                                                               // VAO index.
+     1,                                                                                              // VAO's number of components.
+     GL_FLOAT,                                                                                       // Data type.
+     GL_FALSE,                                                                                       // Not using normalized numbers.
+     0,                                                                                              // Data stride.
+     0                                                                                               // Data offset.
+    );
+
+    // Enabling attribute in vertex shader:
+    glEnableVertexAttribArray
+    (
+     loc_layout_index                                                                                // VAO index.
+    );
+
+    // Binding SSBO:
+    glBindBuffer
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     loc_data->ssbo                                                                                  // SSBO to bind.
+    );
+
+    glFinish ();                                                                                     // Waiting for OpenGL to finish...
+
+    if(baseline->interop)                                                                            // Checking for interoperability...
+    {
+      // Creating OpenCL buffer from OpenGL buffer:
+      loc_data->buffer = clCreateFromGLBuffer
+                         (
+                          baseline->context_id,                                                      // OpenCL context.
+                          CL_MEM_READ_WRITE,                                                         // Memory flags.
+                          loc_data->ssbo,                                                            // VBO.
+                          &loc_error                                                                 // Returned error.
+                         );
+    }
+
+    else
+    {
+      // Creating OpenCL memory buffer:
+      loc_data->buffer = clCreateBuffer
+                         (
+                          baseline->context_id,                                                      // OpenCL context.
+                          CL_MEM_READ_WRITE |                                                        // Memory flag.
+                          CL_MEM_COPY_HOST_PTR,                                                      // Memory flag.
+                          sizeof(nu_int4_structure)*loc_data->size,                                  // Data buffer size.
+                          loc_data->data,                                                            // Data buffer.
+                          &loc_error                                                                 // Error code.
+                         );
+    }
 
     baseline->check_error (loc_error);                                                               // Checking returned error code...
-
     loc_data->ready = true;                                                                          // Setting "ready" flag...
   }
 
   loc_error = clSetKernelArg
               (
                kernel_id,                                                                            // Kernel id.
-               (cl_uint)loc_layout_index,                                                            // Layout index.
+               loc_layout_index,                                                                     // Layout index.
                sizeof(cl_mem),                                                                       // Data size.
                &loc_data->buffer                                                                     // Data value.
               );
 
+  baseline->check_error (loc_error);                                                                 // Checking returned error code...
   baseline->done ();                                                                                 // Printing message...
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////// setarg "float1" overload ////////////////////////////////////
+//////////////////////////////////////// setarg "nu_float" overload ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void kernel::setarg
 (
- float1* loc_data,                                                                                   // float1 data.
- cl_uint loc_layout_index                                                                            // Layout index.
-)
-{
-  cl_int loc_error;                                                                                  // Error code.
-
-  glFinish ();                                                                                       // Waiting for OpenGL to finish...
-
-  baseline->action ("setting kernel argument...");                                                   // Printing message...
-
-  loc_data->layout = loc_layout_index;                                                               // Setting layout index.
-
-  if(!loc_data->ready)
-  {
-    // Creating OpenCL memory buffer:
-    loc_data->buffer = clCreateBuffer
-                       (
-                        baseline->context_id,                                                        // OpenCL context.
-                        CL_MEM_READ_WRITE |                                                          // Memory flag.
-                        CL_MEM_COPY_HOST_PTR,                                                        // Memory flag.
-                        sizeof(cl_float)*loc_data->size,                                             // Data buffer size.
-                        loc_data->data,                                                              // Data buffer.
-                        &loc_error                                                                   // Error code.
-                       );
-
-    baseline->check_error (loc_error);                                                               // Checking returned error code...
-
-    loc_data->ready = true;                                                                          // Setting "ready" flag...
-  }
-
-  loc_error = clSetKernelArg
-              (
-               kernel_id,                                                                            // Kernel id.
-               (cl_uint)loc_layout_index,                                                            // Layout index.
-               sizeof(cl_mem),                                                                       // Data size.
-               &loc_data->buffer                                                                     // Data value.
-              );
-
-  baseline->done ();                                                                                 // Printing message...
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// setarg "float1G" overload ////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-void kernel::setarg
-(
- float1G* loc_data,                                                                                  // float1G data.
- GLuint   loc_layout_index                                                                           // Layout index.
+ nu_float* loc_data,                                                                                 // nu_float data.
+ GLuint    loc_layout_index                                                                          // Layout index.
 )
 {
   cl_int loc_error;                                                                                  // Error code.
@@ -547,150 +837,12 @@ void kernel::setarg
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// setarg "float2" overload /////////////////////////////////////
+/////////////////////////////////////// setarg "nu_float2" overload /////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void kernel::setarg
 (
- float2* loc_data,                                                                                   // float2 data.
- cl_uint loc_layout_index                                                                            // Layout index.
-)
-{
-  cl_int loc_error;                                                                                  // Error code.
-
-  glFinish ();                                                                                       // Waiting for OpenGL to finish...
-
-  baseline->action ("setting kernel argument...");                                                   // Printing message...
-
-  loc_data->layout = loc_layout_index;                                                               // Setting layout index.
-
-  if(!loc_data->ready)
-  {
-    // Creating OpenCL memory buffer:
-    loc_data->buffer = clCreateBuffer
-                       (
-                        baseline->context_id,                                                        // OpenCL context.
-                        CL_MEM_READ_WRITE |                                                          // Memory flag.
-                        CL_MEM_COPY_HOST_PTR,                                                        // Memory flag.
-                        sizeof(float2_structure)*loc_data->size,                                     // Data buffer size.
-                        loc_data->data,                                                              // Data buffer.
-                        &loc_error                                                                   // Error code.
-                       );
-
-    baseline->check_error (loc_error);                                                               // Checking returned error code...
-
-    loc_data->ready = true;                                                                          // Setting "ready" flag...
-  }
-
-  loc_error = clSetKernelArg
-              (
-               kernel_id,                                                                            // Kernel id.
-               (cl_uint)loc_layout_index,                                                            // Layout index.
-               sizeof(cl_mem),                                                                       // Data size.
-               &loc_data->buffer                                                                     // Data value.
-              );
-
-  baseline->done ();                                                                                 // Printing message...
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// setarg "float3" overload /////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-void kernel::setarg
-(
- float3* loc_data,                                                                                   // float3 data.
- cl_uint loc_layout_index                                                                            // Layout index.
-)
-{
-  cl_int loc_error;                                                                                  // Error code.
-
-  glFinish ();                                                                                       // Waiting for OpenGL to finish...
-
-  baseline->action ("setting kernel argument...");                                                   // Printing message...
-
-  loc_data->layout = loc_layout_index;                                                               // Setting layout index.
-
-  if(!loc_data->ready)
-  {
-    // Creating OpenCL memory buffer:
-    loc_data->buffer = clCreateBuffer
-                       (
-                        baseline->context_id,                                                        // OpenCL context.
-                        CL_MEM_READ_WRITE |                                                          // Memory flag.
-                        CL_MEM_COPY_HOST_PTR,                                                        // Memory flag.
-                        sizeof(float3_structure)*loc_data->size,                                     // Data buffer size.
-                        loc_data->data,                                                              // Data buffer.
-                        &loc_error                                                                   // Error code.
-                       );
-
-    baseline->check_error (loc_error);                                                               // Checking returned error code...
-
-    loc_data->ready = true;                                                                          // Setting "ready" flag...
-  }
-
-  loc_error = clSetKernelArg
-              (
-               kernel_id,                                                                            // Kernel id.
-               (cl_uint)loc_layout_index,                                                            // Layout index.
-               sizeof(cl_mem),                                                                       // Data size.
-               &loc_data->buffer                                                                     // Data value.
-              );
-
-  baseline->done ();                                                                                 // Printing message...
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// setarg "float4" overload /////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-void kernel::setarg
-(
- float4* loc_data,                                                                                   // float4 data.
- cl_uint loc_layout_index                                                                            // Layout index.
-)
-{
-  cl_int loc_error;                                                                                  // Error code.
-
-  glFinish ();                                                                                       // Waiting for OpenGL to finish...
-
-  baseline->action ("setting kernel argument...");                                                   // Printing message...
-
-  loc_data->layout = loc_layout_index;                                                               // Setting layout index.
-
-  if(!loc_data->ready)
-  {
-    // Creating OpenCL memory buffer:
-    loc_data->buffer = clCreateBuffer
-                       (
-                        baseline->context_id,                                                        // OpenCL context.
-                        CL_MEM_READ_WRITE |                                                          // Memory flag.
-                        CL_MEM_COPY_HOST_PTR,                                                        // Memory flag.
-                        sizeof(float4_structure)*loc_data->size,                                     // Data buffer size.
-                        loc_data->data,                                                              // Data buffer.
-                        &loc_error                                                                   // Error code.
-                       );
-
-    baseline->check_error (loc_error);                                                               // Checking returned error code...
-
-    loc_data->ready = true;                                                                          // Setting "ready" flag...
-  }
-
-  loc_error = clSetKernelArg
-              (
-               kernel_id,                                                                            // Kernel id.
-               (cl_uint)loc_layout_index,                                                            // Layout index.
-               sizeof(cl_mem),                                                                       // Data size.
-               &loc_data->buffer                                                                     // Data value.
-              );
-
-  baseline->done ();                                                                                 // Printing message...
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////// setarg "float4G" overload /////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-void kernel::setarg
-(
- float4G* loc_data,                                                                                  // float4G data.
- GLuint   loc_layout_index                                                                           // Layout index.
+ nu_float2* loc_data,                                                                                // nu_float2 data.
+ cl_uint    loc_layout_index                                                                         // Layout index.
 )
 {
   cl_int loc_error;                                                                                  // Error code.
@@ -734,7 +886,7 @@ void kernel::setarg
     glBufferData
     (
      GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
-     sizeof(float4G_structure)*loc_data->size,                                                       // SSBO size.
+     sizeof(nu_float2_structure)*loc_data->size,                                                     // SSBO size.
      loc_data->data,                                                                                 // SSBO data.
      GL_DYNAMIC_DRAW                                                                                 // SSBO usage.
     );
@@ -750,7 +902,7 @@ void kernel::setarg
     glVertexAttribPointer
     (
      loc_layout_index,                                                                               // VAO index.
-     4,                                                                                              // VAO's number of components.
+     1,                                                                                              // VAO's number of components.
      GL_FLOAT,                                                                                       // Data type.
      GL_FALSE,                                                                                       // Not using normalized numbers.
      0,                                                                                              // Data stride.
@@ -779,7 +931,7 @@ void kernel::setarg
                          (
                           baseline->context_id,                                                      // OpenCL context.
                           CL_MEM_READ_WRITE,                                                         // Memory flags.
-                          loc_data->ssbo,                                                            // SSBO.
+                          loc_data->ssbo,                                                            // VBO.
                           &loc_error                                                                 // Returned error.
                          );
     }
@@ -792,7 +944,7 @@ void kernel::setarg
                           baseline->context_id,                                                      // OpenCL context.
                           CL_MEM_READ_WRITE |                                                        // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                      // Memory flag.
-                          sizeof(float4G_structure)*loc_data->size,                                  // Data buffer size.
+                          sizeof(nu_float2_structure)*loc_data->size,                                // Data buffer size.
                           loc_data->data,                                                            // Data buffer.
                           &loc_error                                                                 // Error code.
                          );
@@ -801,6 +953,7 @@ void kernel::setarg
     baseline->check_error (loc_error);                                                               // Checking returned error code...
     loc_data->ready = true;                                                                          // Setting "ready" flag...
   }
+
   loc_error = clSetKernelArg
               (
                kernel_id,                                                                            // Kernel id.
@@ -810,7 +963,266 @@ void kernel::setarg
               );
 
   baseline->check_error (loc_error);                                                                 // Checking returned error code...
+  baseline->done ();                                                                                 // Printing message...
+}
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// setarg "nu_float3" overload /////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+void kernel::setarg
+(
+ nu_float3* loc_data,                                                                                // nu_float3 data.
+ cl_uint    loc_layout_index                                                                         // Layout index.
+)
+{
+  cl_int loc_error;                                                                                  // Error code.
+
+  glFinish ();                                                                                       // Waiting for OpenGL to finish...
+
+  baseline->action ("setting kernel argument...");                                                   // Printing message...
+
+  loc_data->layout = loc_layout_index;                                                               // Setting layout index.
+
+  if(!loc_data->ready)
+  {
+    // Generating VAO...
+    glGenVertexArrays
+    (
+     1,                                                                                              // Number of VAOs to generate.
+     &loc_data->vao                                                                                  // VAOs array.
+    );
+
+    // Binding node VAO...
+    glBindVertexArray
+    (
+     loc_data->vao                                                                                   // VAOs array.
+    );
+
+    // Generating SSBO:
+    glGenBuffers
+    (
+     1,                                                                                              // Number of SSBOs to generate.
+     &loc_data->ssbo                                                                                 // SSBOs array.
+    );
+
+    // Binding SSBO:
+    glBindBuffer
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     loc_data->ssbo                                                                                  // SSBO to bind.
+    );
+
+    // Creating and initializing a buffer object's data store:
+    glBufferData
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     sizeof(nu_float3_structure)*loc_data->size,                                                     // SSBO size.
+     loc_data->data,                                                                                 // SSBO data.
+     GL_DYNAMIC_DRAW                                                                                 // SSBO usage.
+    );
+
+    // Binding buffer object to an indexed buffer target:
+    glBindBufferBase (
+                      GL_SHADER_STORAGE_BUFFER,                                                      // SSBO target.
+                      loc_layout_index,                                                              // SSBO index.
+                      loc_data->ssbo                                                                 // SSBO buffer.
+                     );
+
+    // Specifying the format for attribute in vertex shader:
+    glVertexAttribPointer
+    (
+     loc_layout_index,                                                                               // VAO index.
+     1,                                                                                              // VAO's number of components.
+     GL_FLOAT,                                                                                       // Data type.
+     GL_FALSE,                                                                                       // Not using normalized numbers.
+     0,                                                                                              // Data stride.
+     0                                                                                               // Data offset.
+    );
+
+    // Enabling attribute in vertex shader:
+    glEnableVertexAttribArray
+    (
+     loc_layout_index                                                                                // VAO index.
+    );
+
+    // Binding SSBO:
+    glBindBuffer
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     loc_data->ssbo                                                                                  // SSBO to bind.
+    );
+
+    glFinish ();                                                                                     // Waiting for OpenGL to finish...
+
+    if(baseline->interop)                                                                            // Checking for interoperability...
+    {
+      // Creating OpenCL buffer from OpenGL buffer:
+      loc_data->buffer = clCreateFromGLBuffer
+                         (
+                          baseline->context_id,                                                      // OpenCL context.
+                          CL_MEM_READ_WRITE,                                                         // Memory flags.
+                          loc_data->ssbo,                                                            // VBO.
+                          &loc_error                                                                 // Returned error.
+                         );
+    }
+
+    else
+    {
+      // Creating OpenCL memory buffer:
+      loc_data->buffer = clCreateBuffer
+                         (
+                          baseline->context_id,                                                      // OpenCL context.
+                          CL_MEM_READ_WRITE |                                                        // Memory flag.
+                          CL_MEM_COPY_HOST_PTR,                                                      // Memory flag.
+                          sizeof(nu_float3_structure)*loc_data->size,                                // Data buffer size.
+                          loc_data->data,                                                            // Data buffer.
+                          &loc_error                                                                 // Error code.
+                         );
+    }
+
+    baseline->check_error (loc_error);                                                               // Checking returned error code...
+    loc_data->ready = true;                                                                          // Setting "ready" flag...
+  }
+
+  loc_error = clSetKernelArg
+              (
+               kernel_id,                                                                            // Kernel id.
+               loc_layout_index,                                                                     // Layout index.
+               sizeof(cl_mem),                                                                       // Data size.
+               &loc_data->buffer                                                                     // Data value.
+              );
+
+  baseline->check_error (loc_error);                                                                 // Checking returned error code...
+  baseline->done ();                                                                                 // Printing message...
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// setarg "nu_float4" overload /////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+void kernel::setarg
+(
+ nu_float4* loc_data,                                                                                // nu_float4 data.
+ cl_uint    loc_layout_index                                                                         // Layout index.
+)
+{
+  cl_int loc_error;                                                                                  // Error code.
+
+  glFinish ();                                                                                       // Waiting for OpenGL to finish...
+
+  baseline->action ("setting kernel argument...");                                                   // Printing message...
+
+  loc_data->layout = loc_layout_index;                                                               // Setting layout index.
+
+  if(!loc_data->ready)
+  {
+    // Generating VAO...
+    glGenVertexArrays
+    (
+     1,                                                                                              // Number of VAOs to generate.
+     &loc_data->vao                                                                                  // VAOs array.
+    );
+
+    // Binding node VAO...
+    glBindVertexArray
+    (
+     loc_data->vao                                                                                   // VAOs array.
+    );
+
+    // Generating SSBO:
+    glGenBuffers
+    (
+     1,                                                                                              // Number of SSBOs to generate.
+     &loc_data->ssbo                                                                                 // SSBOs array.
+    );
+
+    // Binding SSBO:
+    glBindBuffer
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     loc_data->ssbo                                                                                  // SSBO to bind.
+    );
+
+    // Creating and initializing a buffer object's data store:
+    glBufferData
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     sizeof(nu_float4_structure)*loc_data->size,                                                     // SSBO size.
+     loc_data->data,                                                                                 // SSBO data.
+     GL_DYNAMIC_DRAW                                                                                 // SSBO usage.
+    );
+
+    // Binding buffer object to an indexed buffer target:
+    glBindBufferBase (
+                      GL_SHADER_STORAGE_BUFFER,                                                      // SSBO target.
+                      loc_layout_index,                                                              // SSBO index.
+                      loc_data->ssbo                                                                 // SSBO buffer.
+                     );
+
+    // Specifying the format for attribute in vertex shader:
+    glVertexAttribPointer
+    (
+     loc_layout_index,                                                                               // VAO index.
+     1,                                                                                              // VAO's number of components.
+     GL_FLOAT,                                                                                       // Data type.
+     GL_FALSE,                                                                                       // Not using normalized numbers.
+     0,                                                                                              // Data stride.
+     0                                                                                               // Data offset.
+    );
+
+    // Enabling attribute in vertex shader:
+    glEnableVertexAttribArray
+    (
+     loc_layout_index                                                                                // VAO index.
+    );
+
+    // Binding SSBO:
+    glBindBuffer
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                       // SSBO target.
+     loc_data->ssbo                                                                                  // SSBO to bind.
+    );
+
+    glFinish ();                                                                                     // Waiting for OpenGL to finish...
+
+    if(baseline->interop)                                                                            // Checking for interoperability...
+    {
+      // Creating OpenCL buffer from OpenGL buffer:
+      loc_data->buffer = clCreateFromGLBuffer
+                         (
+                          baseline->context_id,                                                      // OpenCL context.
+                          CL_MEM_READ_WRITE,                                                         // Memory flags.
+                          loc_data->ssbo,                                                            // VBO.
+                          &loc_error                                                                 // Returned error.
+                         );
+    }
+
+    else
+    {
+      // Creating OpenCL memory buffer:
+      loc_data->buffer = clCreateBuffer
+                         (
+                          baseline->context_id,                                                      // OpenCL context.
+                          CL_MEM_READ_WRITE |                                                        // Memory flag.
+                          CL_MEM_COPY_HOST_PTR,                                                      // Memory flag.
+                          sizeof(nu_float4_structure)*loc_data->size,                                // Data buffer size.
+                          loc_data->data,                                                            // Data buffer.
+                          &loc_error                                                                 // Error code.
+                         );
+    }
+
+    baseline->check_error (loc_error);                                                               // Checking returned error code...
+    loc_data->ready = true;                                                                          // Setting "ready" flag...
+  }
+
+  loc_error = clSetKernelArg
+              (
+               kernel_id,                                                                            // Kernel id.
+               loc_layout_index,                                                                     // Layout index.
+               sizeof(cl_mem),                                                                       // Data size.
+               &loc_data->buffer                                                                     // Data value.
+              );
+
+  baseline->check_error (loc_error);                                                                 // Checking returned error code...
   baseline->done ();                                                                                 // Printing message...
 }
 

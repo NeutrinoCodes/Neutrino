@@ -80,11 +80,11 @@ public:
   ///   by the user for each instace of this function. This number tells Neutrino the place of the
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
-               int1*   loc_data,                                                                    ///< int1 data.
+               nu_int* loc_data,                                                                    ///< nu_int data.
                cl_uint loc_layout_index                                                             ///< Layout index.
               );
 
-  /// @overload setarg(int2* loc_data, cl_uint loc_layout_index)
+  /// @overload setarg(nu_int2* loc_data, cl_uint loc_layout_index)
   /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
@@ -96,11 +96,11 @@ public:
   ///   by the user for each instace of this function. This number tells Neutrino the place of the
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
-               int2*   loc_data,                                                                    ///< int2 data.
-               cl_uint loc_layout_index                                                             ///< Layout index.
+               nu_int2* loc_data,                                                                   ///< nu_int2 data.
+               cl_uint  loc_layout_index                                                            ///< Layout index.
               );
 
-  /// @overload setarg(int3* loc_data, cl_uint loc_layout_index)
+  /// @overload setarg(nu_int3* loc_data, cl_uint loc_layout_index)
   /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
@@ -112,11 +112,11 @@ public:
   ///   by the user for each instace of this function. This number tells Neutrino the place of the
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
-               int3*   loc_data,                                                                    ///< int3 data.
-               cl_uint loc_layout_index                                                             ///< Layout index.
+               nu_int3* loc_data,                                                                   ///< nu_int3 data.
+               cl_uint  loc_layout_index                                                            ///< Layout index.
               );
 
-  /// @overload setarg(int4* loc_data, cl_uint loc_layout_index)
+  /// @overload setarg(nu_int4* loc_data, cl_uint loc_layout_index)
   /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
@@ -128,11 +128,11 @@ public:
   ///   by the user for each instace of this function. This number tells Neutrino the place of the
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
-               int4*   loc_data,                                                                    ///< int4 data.
-               cl_uint loc_layout_index                                                             ///< Layout index.
+               nu_int4* loc_data,                                                                   ///< nu_int4 data.
+               cl_uint  loc_layout_index                                                            ///< Layout index.
               );
 
-  /// @overload setarg(float1* loc_data, cl_uint loc_layout_index)
+  /// @overload setarg(nu_float* loc_data, cl_uint loc_layout_index)
   /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
@@ -144,8 +144,8 @@ public:
   ///   by the user for each instace of this function. This number tells Neutrino the place of the
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
-               float1* loc_data,                                                                    ///< float1 data.
-               cl_uint loc_layout_index                                                             ///< Layout index.
+               nu_float* loc_data,                                                                  ///< nu_float data.
+               cl_uint   loc_layout_index                                                           ///< Layout index.
               );
 
   /// @overload setarg(float1G* loc_data, cl_uint loc_layout_index)
@@ -164,7 +164,7 @@ public:
                cl_uint  loc_layout_index                                                            ///< Layout index.
               );
 
-  /// @overload setarg(float2* loc_data, cl_uint loc_layout_index)
+  /// @overload setarg(nu_float2* loc_data, cl_uint loc_layout_index)
   /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
@@ -176,11 +176,11 @@ public:
   ///   by the user for each instace of this function. This number tells Neutrino the place of the
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
-               float2* loc_data,                                                                    ///< float2 data.
-               cl_uint loc_layout_index                                                             ///< Layout index.
+               nu_float2* loc_data,                                                                 ///< nu_float2 data.
+               cl_uint    loc_layout_index                                                          ///< Layout index.
               );
 
-  /// @overload setarg(float3* loc_data, cl_uint loc_layout_index)
+  /// @overload setarg(nu_float3* loc_data, cl_uint loc_layout_index)
   /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
@@ -192,11 +192,11 @@ public:
   ///   by the user for each instace of this function. This number tells Neutrino the place of the
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
-               float3* loc_data,                                                                    ///< float3 data.
-               cl_uint loc_layout_index                                                             ///< Layout index.
+               nu_float3* loc_data,                                                                 ///< nu_float3 data.
+               cl_uint    loc_layout_index                                                          ///< Layout index.
               );
 
-  /// @overload setarg(float4* loc_data, cl_uint loc_layout_index)
+  /// @overload setarg(nu_float4* loc_data, cl_uint loc_layout_index)
   /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
@@ -208,8 +208,8 @@ public:
   ///   by the user for each instace of this function. This number tells Neutrino the place of the
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
-               float4* loc_data,                                                                    ///< float4 data.
-               cl_uint loc_layout_index                                                             ///< Layout index.
+               nu_float4* loc_data,                                                                 ///< nu_float4 data.
+               cl_uint    loc_layout_index                                                          ///< Layout index.
               );
 
   /// @overload setarg(float4G* loc_data, GLuint loc_layout_index)
