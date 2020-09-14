@@ -56,40 +56,40 @@ public:
   /// @details Reads data from the OpenCL queue.
   void read
   (
-   int1*   loc_data,                                                                                ///< int1 object.
+   nu_int* loc_data,                                                                                ///< nu_int object.
    cl_uint loc_layout_index                                                                         ///< Layout index.
   );
 
-  /// @overload read(int2* loc_data, cl_uint loc_layout_index)
+  /// @overload read(nu_int2* loc_data, cl_uint loc_layout_index)
   /// @details Reads data from the OpenCL queue.
   void read
   (
-   int2*   loc_data,                                                                                ///< int2 object.
-   cl_uint loc_layout_index                                                                         ///< Layout index.
+   nu_int2* loc_data,                                                                               ///< nu_int2 object.
+   cl_uint  loc_layout_index                                                                        ///< Layout index.
   );
 
-  /// @overload read(int3* loc_data, cl_uint loc_layout_index)
+  /// @overload read(nu_int3* loc_data, cl_uint loc_layout_index)
   /// @details Reads data from the OpenCL queue.
   void read
   (
-   int3*   loc_data,                                                                                ///< int3 object.
-   cl_uint loc_layout_index                                                                         ///< Layout index.
+   nu_int3* loc_data,                                                                               ///< nu_int3 object.
+   cl_uint  loc_layout_index                                                                        ///< Layout index.
   );
 
-  /// @overload read(int4* loc_data, cl_uint loc_layout_index)
+  /// @overload read(nu_int4* loc_data, cl_uint loc_layout_index)
   /// @details Reads data from the OpenCL queue.
   void read
   (
-   int4*   loc_data,                                                                                ///< int4 object.
-   cl_uint loc_layout_index                                                                         ///< Layout index.
+   nu_int4* loc_data,                                                                               ///< nu_int4 object.
+   cl_uint  loc_layout_index                                                                        ///< Layout index.
   );
 
-  /// @overload read(float1* loc_data, cl_uint loc_layout_index)
+  /// @overload read(nu_float* loc_data, cl_uint loc_layout_index)
   /// @details Reads data from the OpenCL queue.
   void read
   (
-   float1* loc_data,                                                                                ///< float1 object.
-   cl_uint loc_layout_index                                                                         ///< Layout index.
+   nu_float* loc_data,                                                                              ///< nu_float object.
+   cl_uint   loc_layout_index                                                                       ///< Layout index.
   );
 
   /// @overload read(float1G* loc_data, GLuint loc_layout_index)
@@ -100,28 +100,28 @@ public:
    GLuint   loc_layout_index                                                                        ///< Layout index.
   );
 
-  /// @overload read(float2* loc_data, cl_uint loc_layout_index)
+  /// @overload read(nu_float2* loc_data, cl_uint loc_layout_index)
   /// @details Reads data from the OpenCL queue.
   void read
   (
-   float2* loc_data,                                                                                ///< float2 object.
-   cl_uint loc_layout_index                                                                         ///< Layout index.
+   nu_float2* loc_data,                                                                             ///< nu_float2 object.
+   cl_uint    loc_layout_index                                                                      ///< Layout index.
   );
 
-  /// @overload read(float3* loc_data, cl_uint loc_layout_index)
+  /// @overload read(nu_float3* loc_data, cl_uint loc_layout_index)
   /// @details Reads data from the OpenCL queue.
   void read
   (
-   float3* loc_data,                                                                                ///< float3 object.
-   cl_uint loc_layout_index                                                                         ///< Layout index.
+   nu_float3* loc_data,                                                                             ///< nu_float3 object.
+   cl_uint    loc_layout_index                                                                      ///< Layout index.
   );
 
-  /// @overload read(float4* loc_data, cl_uint loc_layout_index)
+  /// @overload read(nu_float4* loc_data, cl_uint loc_layout_index)
   /// @details Reads data from the OpenCL queue.
   void read
   (
-   float4* loc_data,                                                                                ///< float4 object.
-   cl_uint loc_layout_index                                                                         ///< Layout index.
+   nu_float4* loc_data,                                                                             ///< nu_float4 object.
+   cl_uint    loc_layout_index                                                                      ///< Layout index.
   );
 
   /// @overload read(float4G* loc_data, GLuint loc_layout_index)
@@ -139,40 +139,40 @@ public:
   /// @details Writes data to the OpenCL queue.
   void write
   (
-   int1*   loc_data,                                                                                ///< int1 object.
+   nu_int* loc_data,                                                                                ///< nu_int object.
    cl_uint loc_layout_index                                                                         ///< Layout index.
   );
 
-  /// @overload write(int2* loc_data, cl_uint loc_layout_index)
+  /// @overload write(nu_int2* loc_data, cl_uint loc_layout_index)
   /// @details Writes data from the OpenCL queue.
   void write
   (
-   int2*   loc_data,                                                                                ///< int2 object.
-   cl_uint loc_layout_index                                                                         ///< Layout index.
+   nu_int2* loc_data,                                                                               ///< nu_int2 object.
+   cl_uint  loc_layout_index                                                                        ///< Layout index.
   );
 
-  /// @overload write(int3* loc_data, cl_uint loc_layout_index)
+  /// @overload write(nu_int3* loc_data, cl_uint loc_layout_index)
   /// @details Writes data from the OpenCL queue.
   void write
   (
-   int3*   loc_data,                                                                                ///< int3 object.
-   cl_uint loc_layout_index                                                                         ///< Layout index.
+   nu_int3* loc_data,                                                                               ///< nu_int3 object.
+   cl_uint  loc_layout_index                                                                        ///< Layout index.
   );
 
-  /// @overload write(int4* loc_data, cl_uint loc_layout_index)
+  /// @overload write(nu_int4* loc_data, cl_uint loc_layout_index)
   /// @details Writes data from the OpenCL queue.
   void write
   (
-   int4*   loc_data,                                                                                ///< int4 object.
-   cl_uint loc_layout_index                                                                         ///< Layout index.
+   nu_int4* loc_data,                                                                               ///< nu_int4 object.
+   cl_uint  loc_layout_index                                                                        ///< Layout index.
   );
 
-  /// @overload write(float1* loc_data, cl_uint loc_layout_index)
+  /// @overload write(nu_float* loc_data, cl_uint loc_layout_index)
   /// @details Writes data from the OpenCL queue.
   void write
   (
-   float1* loc_data,                                                                                ///< float1 object.
-   cl_uint loc_layout_index                                                                         ///< Layout index.
+   nu_float* loc_data,                                                                              ///< nu_float object.
+   cl_uint   loc_layout_index                                                                       ///< Layout index.
   );
 
   /// @overload write(float1G* loc_data, GLuint loc_layout_index)
@@ -183,28 +183,28 @@ public:
    GLuint   loc_layout_index                                                                        ///< Layout index.
   );
 
-  /// @overload write(float2* loc_data, cl_uint loc_layout_index)
+  /// @overload write(nu_float2* loc_data, cl_uint loc_layout_index)
   /// @details Writes data from the OpenCL queue.
   void write
   (
-   float2* loc_data,                                                                                ///< float2 object.
-   cl_uint loc_layout_index                                                                         ///< Layout index.
+   nu_float2* loc_data,                                                                             ///< nu_float2 object.
+   cl_uint    loc_layout_index                                                                      ///< Layout index.
   );
 
-  /// @overload write(float3* loc_data, cl_uint loc_layout_index)
+  /// @overload write(nu_float3* loc_data, cl_uint loc_layout_index)
   /// @details Writes data from the OpenCL queue.
   void write
   (
-   float3* loc_data,                                                                                ///< float3 object.
-   cl_uint loc_layout_index                                                                         ///< Layout index.
+   nu_float3* loc_data,                                                                             ///< nu_float3 object.
+   cl_uint    loc_layout_index                                                                      ///< Layout index.
   );
 
-  /// @overload write(float4* loc_data, cl_uint loc_layout_index)
+  /// @overload write(nu_float4* loc_data, cl_uint loc_layout_index)
   /// @details Writes data from the OpenCL queue.
   void write
   (
-   float4* loc_data,                                                                                ///< float4 object.
-   cl_uint loc_layout_index                                                                         ///< Layout index.
+   nu_float4* loc_data,                                                                             ///< nu_float4 object.
+   cl_uint    loc_layout_index                                                                      ///< Layout index.
   );
 
   /// @overload write(float4G* loc_data, GLuint loc_layout_index)

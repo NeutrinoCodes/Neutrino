@@ -355,7 +355,7 @@ public:
                                 double loc_max                                                      ///< Maximum constraint.
                                );
 
-  /// @brief **Constrainer function for float3_structure numbers.**
+  /// @brief **Constrainer function for nu_float3_structure numbers.**
   /// @details Constrains a float number to stay within a minimum and a maximum value.
   float       constrain_float (
                                float loc_input,                                                     ///< Input number to be constrained.
