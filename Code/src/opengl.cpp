@@ -20,7 +20,10 @@ void opengl::set_shader
 (
  shader* loc_shader,                                                                                // Shader.
  float   view_matrix[16],                                                                           // View matrix.
- float   projection_matrix[16]                                                                      // Projection matrix.
+ float   projection_matrix[16],                                                                     // Projection matrix.
+ float   framebuffer_size_x,                                                                        // Framebuffer x-size [px_float].
+ float   framebuffer_size_y,                                                                        // Framebuffer y-size [px_float].
+ float   framebuffer_AR                                                                             // Framebuffer aspect ratio.
 )
 {
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
@@ -52,6 +55,39 @@ void opengl::set_shader
    1,                                                                                               // Number of matrices to be modified.
    GL_FALSE,                                                                                        // FALSE = column major.
    &projection_matrix[0]                                                                            // Projection matrix.
+  );
+
+  // Setting framebuffer size_x on shader:
+  glUniform1f
+  (
+   glGetUniformLocation                                                                             // Getting variable's uniform location:
+   (
+    loc_shader->program,                                                                            // Program.
+    "size_x"                                                                                        // Variable.
+   ),
+   framebuffer_size_x                                                                               // Window x-size [px_float].
+  );
+
+  // Setting framebuffer size_y on shader:
+  glUniform1f
+  (
+   glGetUniformLocation                                                                             // Getting variable's uniform location:
+   (
+    loc_shader->program,                                                                            // Program.
+    "size_y"                                                                                        // Variable.
+   ),
+   framebuffer_size_y                                                                               // Window y-size [px_float].
+  );
+
+  // Setting framebuffer aspect ratio on shader:
+  glUniform1f
+  (
+   glGetUniformLocation                                                                             // Getting variable's uniform location:
+   (
+    loc_shader->program,                                                                            // Program.
+    "AR"                                                                                            // Variable.
+   ),
+   framebuffer_AR                                                                                   // Framebuffer aspect ratio [].
   );
 }
 
@@ -442,12 +478,14 @@ void opengl::init
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
   glClearColor (0.0f, 0.0f, 0.0f, 1.0f);                                                            // Setting color for clearing window...
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                                              // Clearing window...
-  glDisable (GL_DEPTH_TEST);                                                                        // Enabling depth test...
-  glEnable (GL_PROGRAM_POINT_SIZE);                                                                 // Enabling "gl_PointSize" in vertex shader...
-  glBlendFunc (GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-  glEnable (GL_BLEND);
 
-  PR_mode      = NU_MODE_MONO;                                                                      // Setting monoscopic projection mode...
+  // SETTINGS FOR TRANSPARENCY:
+  glDisable (GL_DEPTH_TEST);                                                                        // Disabling depth test...
+  glEnable (GL_PROGRAM_POINT_SIZE);                                                                 // Enabling "gl_PointSize" in vertex shader...
+  glBlendFunc (GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);                                                // Setting blending function...
+  glEnable (GL_BLEND);                                                                              // Enabling alpha blending...
+
+  PR_mode = NU_MODE_MONO;                                                                           // Setting monoscopic projection mode...
 
   // Setting monoscopic perspective:
   perspective_mono
@@ -875,7 +913,16 @@ void opengl::plot
 
       // Computing view matrix:
       multiplicate (V_mat, T_mat, R_mat);                                                           // Setting view matrix...
-      set_shader (loc_shader, V_mat, P_mat);                                                        // Setting plot style...
+
+      // Setting plot style:
+      set_shader (
+                  loc_shader,                                                                       // Shader.
+                  V_mat,                                                                            // View matrix.
+                  P_mat,                                                                            // Projection matrix.
+                  (float)framebuffer_size_x,                                                        // Framebuffer size_x.
+                  (float)framebuffer_size_y,                                                        // Framebuffer size_y.
+                  aspect_ratio                                                                      // Framebuffer aspect ratio.
+                 );
 
       // Drawing:
       glViewport (0, 0, window_size_x, window_size_y);
@@ -895,7 +942,14 @@ void opengl::plot
       multiplicate (VR_mat, TR_mat, V_mat);                                                         // Setting right eye stereoscopic view matrix...
 
       // Left eye:
-      set_shader (loc_shader, VL_mat, PL_mat);                                                      // Setting plot style...
+      set_shader (
+                  loc_shader,                                                                       // Shader.
+                  VL_mat,                                                                           // View matrix.
+                  PL_mat,                                                                           // Projection matrix.
+                  (float)floor (framebuffer_size_x/2.0),                                            // Framebuffer size_x.
+                  (float)framebuffer_size_y,                                                        // Framebuffer size_y.
+                  aspect_ratio                                                                      // Framebuffer aspect ratio.
+                 );                                                                                 // Setting plot style...
 
       glViewport (
                   0,
@@ -912,8 +966,16 @@ void opengl::plot
       glFinish ();                                                                                  // Waiting for OpenGL to finish...
 
       // Right eye:
-      set_shader (loc_shader, VR_mat, PR_mat);                                                      // Setting plot style...
+      set_shader (
+                  loc_shader,                                                                       // Shader.
+                  VR_mat,                                                                           // View matrix.
+                  PR_mat,                                                                           // Projection matrix.
+                  (float)floor (framebuffer_size_x/2.0),                                            // Framebuffer size_x.
+                  (float)framebuffer_size_y,                                                        // Framebuffer size_y.
+                  aspect_ratio                                                                      // Framebuffer aspect ratio.
+                 );                                                                                 // Setting plot style...
 
+      // Setting plot style:
       glViewport (
                   window_size_x/2,
                   0,
