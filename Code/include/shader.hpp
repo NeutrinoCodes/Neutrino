@@ -39,12 +39,14 @@ public:
   std::string shader_home;                                                                          ///< @brief **OpenGL shader home directory.**
   std::string vertex_file_name;                                                                     ///< @brief **OpenGL vertex shader source file name.**
   std::string geometry_file_name;                                                                   ///< @brief **OpenGL geometry shader source file name.**
+  std::string geometry_file_name_2;                                                                 ///< @brief **OpenGL geometry shader source file name.**
   std::string fragment_file_name;                                                                   ///< @brief **OpenGL fragment shader source file name.**
   std::string vertex_source;                                                                        ///< @brief **OpenGL vertex shader source file.**
   std::string geometry_source;                                                                      ///< @brief **OpenGL geometry shader source file.**
   std::string fragment_source;                                                                      ///< @brief **OpenGL vertex shader source file.**
   GLuint      vertex;                                                                               ///< @brief **OpenGL vertex shader id.**
   GLuint      geometry;                                                                             ///< @brief **OpenGL geometry shader id.**
+  GLuint      geometry_2;                                                                           ///< @brief **OpenGL geometry shader id.**
   GLuint      fragment;                                                                             ///< @brief **OpenGL fragment shader id.**
   GLuint      program;                                                                              ///< @brief **OpenGL program.**
   GLsizeiptr  size;                                                                                 ///< @brief **OpenGL shader argument size.**
@@ -60,6 +62,7 @@ public:
              std::string loc_shader_home,                                                           ///< Shader home directory.
              std::string loc_vertex_file_name,                                                      ///< Vertex shader file name.
              std::string loc_geometry_file_name,                                                    ///< Geometry shader file name.
+             std::string loc_geometry_file_name_2,                                                  ///< Geometry shader file name.
              std::string loc_fragment_file_name                                                     ///< Fragment shader file name.
             );
 

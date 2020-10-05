@@ -16,32 +16,39 @@ void shader::init
  std::string loc_shader_home,                                                                       // Shader home directory.
  std::string loc_vertex_file_name,                                                                  // Vertex shader file name.
  std::string loc_geometry_file_name,                                                                // Geometry shader file name.
+ std::string loc_geometry_file_name_2,                                                              // Geometry shader file name.
  std::string loc_fragment_file_name                                                                 // Fragment shader file name.
 )
 {
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
-  shader_home        = loc_shader_home;                                                             // Getting shader home directory...
+  shader_home          = loc_shader_home;                                                           // Getting shader home directory...
 
   // Building up vertex file full name:
-  vertex_file_name   = shader_home +                                                                // Shader home directory.
-                       std::string ("/") +
-                       loc_vertex_file_name;                                                        // Vertex shader file name.
+  vertex_file_name     = shader_home +                                                              // Shader home directory.
+                         std::string ("/") +
+                         loc_vertex_file_name;                                                      // Vertex shader file name.
 
   // Building up geometry file full name:
-  geometry_file_name = shader_home +                                                                // Shader home directory.
-                       std::string ("/") +
-                       loc_geometry_file_name;                                                      // Geometry shader file name.
+  geometry_file_name   = shader_home +                                                              // Shader home directory.
+                         std::string ("/") +
+                         loc_geometry_file_name;                                                    // Geometry shader file name.
+
+  // Building up geometry file full name:
+  geometry_file_name_2 = shader_home +                                                              // Shader home directory.
+                         std::string ("/") +
+                         loc_geometry_file_name_2;                                                  // Geometry shader file name.
 
   // Building up fragment file full name:
-  fragment_file_name = shader_home +                                                                // Shader home directory.
-                       std::string ("/") +
-                       loc_fragment_file_name;                                                      // Fragment shader file name.
+  fragment_file_name   = shader_home +                                                              // Shader home directory.
+                         std::string ("/") +
+                         loc_fragment_file_name;                                                    // Fragment shader file name.
 
-  vertex             = compile (vertex_file_name, NU_VERTEX);                                       // Compiling vertex shader...
-  geometry           = compile (geometry_file_name, NU_GEOMETRY);                                   // Compiling geometry shader...
-  fragment           = compile (fragment_file_name, NU_FRAGMENT);                                   // Compiling fragment shader...
-  program            = glCreateProgram ();                                                          // Creating program...
+  vertex               = compile (vertex_file_name, NU_VERTEX);                                     // Compiling vertex shader...
+  geometry             = compile (geometry_file_name, NU_GEOMETRY);                                 // Compiling geometry shader...
+  geometry_2           = compile (geometry_file_name_2, NU_GEOMETRY);                               // Compiling geometry shader...
+  fragment             = compile (fragment_file_name, NU_FRAGMENT);                                 // Compiling fragment shader...
+  program              = glCreateProgram ();                                                        // Creating program...
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 }
 
@@ -128,6 +135,7 @@ void shader::build ()
 
   glAttachShader (program, vertex);                                                                 // Attaching vertex shader to program...
   glAttachShader (program, geometry);                                                               // Attaching geometry shader to program...
+  glAttachShader (program, geometry_2);                                                             // Attaching geometry shader to program...
   glAttachShader (program, fragment);                                                               // Attaching fragment shader to program...
   glLinkProgram (program);                                                                          // Linking program...
 
