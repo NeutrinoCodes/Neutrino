@@ -31,8 +31,6 @@ private:
 
 public:
   cl_kernel                kernel_id;                                                               ///< @brief **Kernel id.**
-  std::string              kernel_home;                                                             ///< @brief **Kernel home directory [std::string].**
-  std::vector<std::string> kernel_file_name;                                                        ///< @brief **Kernel file name array [std::string].**
   std::vector<std::string> kernel_source;                                                           ///< @brief **Kernel source array [std::string].**
   std::string              compiler_options;                                                        ///< @brief **OpenCL JIT complier options string [std::string].**
   std::string              compiler_log;                                                            ///< @brief **OpenCL JIT compiler error log [std::string].**
@@ -52,21 +50,23 @@ public:
   kernel();
 
   /// @brief **Class initializer.**
-  /// @details Loads an OpenCL kernel source from its corresponding source file,
-  /// creates an OpenCL program from that kernel source and builds it into an OpenCL program,
-  /// creates an OpenCL kernel object from that program and initializes the kernel object.
+  /// @details Initializes the kernel object.
   /// The values of the kernel dimensions @link size_i @endlink, @link size_j @endlink,
   /// and @link size_k @endlink variables are copied from the corresponding parameters the user
   /// must pass as input arguments to the @link kernel::init @method , according to the
-  /// implementation of the algorithms in the kernel source code.
+  /// implementation of the algorithms in the kernel sources.
   void init (
-             neutrino*                loc_baseline,                                                 ///< Neutrino baseline.
-             std::string              loc_kernel_home,                                              ///< Kernel home directory.
-             std::vector<std::string> loc_kernel_file_name,                                         ///< OpenCL kernel file name.
-             size_t                   loc_kernel_size_i,                                            ///< OpenCL kernel size (i-index).
-             size_t                   loc_kernel_size_j,                                            ///< OpenCL kernel size (j-index).
-             size_t                   loc_kernel_size_k                                             ///< OpenCL kernel size (k-index).
+             neutrino* loc_baseline,                                                                ///< Neutrino baseline.
+             size_t    loc_kernel_size_i,                                                           ///< OpenCL kernel size (i-index).
+             size_t    loc_kernel_size_j,                                                           ///< OpenCL kernel size (j-index).
+             size_t    loc_kernel_size_k                                                            ///< OpenCL kernel size (k-index).
             );
+
+  /// @brief **Kernel source adder function.**
+  /// @details Loads an OpenCL kernel source from its corresponding source file.
+  void addsource (
+                  std::string loc_kernel_file_name                                                  ///< OpenCL kernel file name.
+                 );
 
   /// @brief **Kernel argument setter function.**
   /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
@@ -195,6 +195,10 @@ public:
                nu_float4* loc_data,                                                                 ///< nu_float4 data.
                GLuint     loc_layout_index                                                          ///< Layout index.
               );
+
+  /// @brief **OpenCL kernel builder.**
+  /// @details Creates an OpenCL program from the kernel sources and builds it.
+  void build ();
 
   /// @brief **Class destructor.**
   /// @details Releases the OpenCL kernel object, releases the OpenCL kernel event,
