@@ -29,23 +29,24 @@ void shader::addsource
  shader_type loc_shader_type                                                                        // GLSL shader type.
 )
 {
-  GLuint        loc_shader;                                                                         // Shader.
-  std::string   loc_shader_source;                                                                  // Shader source.
-  GLchar const* loc_shader_source_c;                                                                // Shader source, C style string.
-  GLint         loc_success;                                                                        // "GL_COMPILE_STATUS" flag.
-  GLchar*       loc_log;                                                                            // Buffer for OpenGL error log.
-  GLsizei       loc_log_size;                                                                       // Size of OpenGL error log.
+  GLuint      loc_shader;                                                                           // Shader.
+  std::string loc_shader_source;                                                                    // Shader source.
+  GLchar**    loc_shader_source_c;                                                                  // Shader source, C style string.
+  GLint       loc_success;                                                                          // "GL_COMPILE_STATUS" flag.
+  GLchar*     loc_log;                                                                              // Buffer for OpenGL error log.
+  GLsizei     loc_log_size;                                                                         // Size of OpenGL error log.
 
   baseline->action ("loading OpenGL shader source from file...");                                   // Printing message...
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   // Loading shader from file:
-  loc_shader_source   = baseline->read_file (
-                                             loc_shader_filename                                    // Shader file.
-                                            );
-
-  loc_shader_source_c = loc_shader_source.c_str ();                                                 // Converting C++ string to C string...
+  loc_shader_source      = baseline->read_file (
+                                                loc_shader_filename                                 // Shader file.
+                                               );
+  loc_shader_source_c    = new char*[1]();                                                          // Building temporary shader source char buffer...
+  loc_shader_source_c[0] = new char[loc_shader_source.size ()]();                                   // Building temporary source char buffer...
+  loc_shader_source.copy (loc_shader_source_c[0], loc_shader_source.size ());                       // Building string source buffer...
 
   // Selecting shader type:
   switch(loc_shader_type)
@@ -63,20 +64,23 @@ void shader::addsource
       break;
   }
 
+  std::cout << "pippo" << std::endl;
   baseline->done ();                                                                                // Printing message...
-
-  baseline->action ("attaching OpenGL shader source to shader object...");                          // Printing message...
-
+  std::cout << "pippo" << std::endl;
+  //baseline->action ("attaching OpenGL shader source to shader object...");                          // Printing message...
+  std::cout << "pippo" << std::endl;
   // Attaching source code to shader:
   glShaderSource
   (
    loc_shader,                                                                                      // GLSL shader.
    1,                                                                                               // Number of shaders.
-   &loc_shader_source_c,                                                                            // Shader source.
+   (const GLchar**)loc_shader_source_c,                                                             // Shader source.
    NULL                                                                                             // Shader size: NULL = null-terminated string.
   );
 
   baseline->done ();                                                                                // Printing message...
+
+  delete[] loc_shader_source_c;                                                                     // Deleting buffer...
 
   baseline->action ("compiling OpenGL shader...");                                                  // Printing message...
   glCompileShader (loc_shader);                                                                     // Compiling shader...
