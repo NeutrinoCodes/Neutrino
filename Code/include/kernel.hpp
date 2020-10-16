@@ -68,6 +68,10 @@ public:
                   std::string loc_kernel_file_name                                                  ///< OpenCL kernel file name.
                  );
 
+  /// @brief **OpenCL kernel builder.**
+  /// @details Creates an OpenCL program from the kernel sources and builds it.
+  void build ();
+
   /// @brief **Kernel argument setter function.**
   /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
   /// must correspond to the argument in the OpenCL kernel source file.
@@ -195,10 +199,6 @@ public:
                nu_float4* loc_data,                                                                 ///< nu_float4 data.
                GLuint     loc_layout_index                                                          ///< Layout index.
               );
-
-  /// @brief **OpenCL kernel builder.**
-  /// @details Creates an OpenCL program from the kernel sources and builds it.
-  void build ();
 
   /// @brief **Class destructor.**
   /// @details Releases the OpenCL kernel object, releases the OpenCL kernel event,

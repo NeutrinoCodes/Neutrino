@@ -52,6 +52,137 @@ void kernel::addsource (
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////// build ///////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+void kernel::build ()
+{
+  cl_int  loc_error;                                                                                // Error code.
+  char*   loc_options;                                                                              // Options temporary char buffer.
+  char**  loc_kernel_source;                                                                        // Source file temporary char buffer.
+  size_t* loc_kernel_source_size;                                                                   // Source file as string.
+  size_t  loc_log_size;                                                                             // OpenCL JIT compiler log size.
+  size_t  i;                                                                                        // Index.
+
+  loc_options                           = new char[compiler_options.size () + 1]();                 // Building temporary options char buffer...
+  loc_options[compiler_options.size ()] = '\0';                                                     // Null terminating options string...
+  compiler_options.copy (loc_options, compiler_options.size ());                                    // Building options string...
+  loc_kernel_source_size                = new size_t[kernel_source.size ()]();                      // Building temporary kernel source char buffer size...
+  loc_kernel_source                     = new char*[kernel_source.size ()]();                       // Building temporary kernel source char buffer...
+
+  baseline->action ("linking OpenCL kernel sources...");                                            // Printing message...
+
+  for(i = 0; i < kernel_source.size (); i++)
+  {
+    loc_kernel_source_size[i] = kernel_source[i].size ();                                           // Getting source size...
+    loc_kernel_source[i]      = new char[loc_kernel_source_size[i]]();                              // Building temporary source char buffer...
+    kernel_source[i].copy (loc_kernel_source[i], kernel_source[i].size ());                         // Building string source buffer...
+  }
+
+  baseline->done ();                                                                                // Printing message...
+
+  baseline->action ("creating OpenCL program from kernel sources...");                              // Printing message...
+  program = clCreateProgramWithSource
+            (
+             baseline->context_id,                                                                  // OpenCL context ID.
+             (cl_uint)kernel_source.size (),                                                        // Number of program sources.
+             (const char**)loc_kernel_source,                                                       // Program source.
+             loc_kernel_source_size,                                                                // Source size.
+             &loc_error                                                                             // Error code.
+            );
+  baseline->check_error (loc_error);                                                                // Checking error...
+  baseline->done ();                                                                                // Printing message...
+
+  delete[] loc_kernel_source;                                                                       // Deleting buffer...
+  delete loc_kernel_source_size;                                                                    // Deleting buffer...
+
+  baseline->action ("building OpenCL program...");                                                  // Printing message...
+
+  // Creating device ID list:
+  device_id    = new cl_device_id[1];                                                               // OpenCL device ID.
+  device_id[0] = baseline->device_id;                                                               // Getting device ID.
+
+  // Building OpenCL program:
+  loc_error    = clBuildProgram
+                 (
+                  program,                                                                          // Program.
+                  1,                                                                                // Number of devices.
+                  device_id,                                                                        // Device ID.
+                  loc_options,                                                                      // Including header files from kernel's directory.
+                  NULL,                                                                             // Notification routine.
+                  NULL                                                                              // Notification argument.
+                 );
+
+  delete loc_options;
+
+  if(loc_error != CL_SUCCESS)                                                                       // Checking compiled kernel...
+  {
+    baseline->error (baseline->get_error (loc_error));                                              // Printing message...
+
+    // Getting OpenCL compiler information:
+    loc_error = clGetProgramBuildInfo
+                (
+                 program,                                                                           // Program.
+                 device_id[0],                                                                      // Device ID.
+                 CL_PROGRAM_BUILD_LOG,                                                              // Build log parameter.
+                 0,                                                                                 // Dummy parameter size.
+                 NULL,                                                                              // Dummy parameter value.
+                 &loc_log_size                                                                      // Size of log.
+                );
+
+    char* loc_log_buffer = new char[loc_log_size + 1]();                                            // Allocating log buffer...
+
+    // Reading OpenCL compiler error log:
+    loc_error    = clGetProgramBuildInfo
+                   (
+                    program,                                                                        // Program.
+                    device_id[0],                                                                   // Device ID.
+                    CL_PROGRAM_BUILD_LOG,                                                           // Build log parameter.
+                    loc_log_size + 1,                                                               // Log size.
+                    loc_log_buffer,                                                                 // The log.
+                    NULL                                                                            // Dummy size parameter.
+                   );
+
+    compiler_log = loc_log_buffer;                                                                  // Setting compiler log...
+    std::cout << "" << std::endl;                                                                   // Printing message...
+    std::cout << "See error log:" << std::endl;                                                     // Printing message...
+    std::cout << "" << std::endl;                                                                   // Printing message...
+    std::cout << compiler_log << std::endl;                                                         // Printing log...
+    delete[] (loc_log_buffer);                                                                      // Deleting log buffer...
+    exit (loc_error);                                                                               // Exiting...
+  }
+
+  baseline->done ();                                                                                // Printing message...
+
+  baseline->action ("generating OpenCL kernel ID...");                                              // Printing message...
+
+  // Creating OpenCL kernel:
+  kernel_id = clCreateKernel
+              (
+               program,                                                                             // OpenCL kernel program.
+               NU_KERNEL_NAME,                                                                      // Kernel name.
+               &loc_error                                                                           // Error code.
+              );
+
+  baseline->check_error (loc_error);                                                                // Checking error...
+
+  baseline->done ();                                                                                // Printing message...
+
+  // Initializing kernel object:
+  baseline->action ("enumerating OpenCL kernel ID...");                                             // Printing message...
+
+  for(i = 0; i < baseline->k_num; i++)                                                              // Scanning OpenCL kernel argument array...
+  {
+    if(baseline->kernel_id[i] == NULL)                                                              // Looking for 1st non-assigned OpenCL kernel ID...
+    {
+      baseline->kernel_id[i] = kernel_id;                                                           // Assigning value to 1st non-assigned OpenCL kernel ID...
+      break;                                                                                        // Exiting loop...
+    }
+  }
+
+  baseline->done ();                                                                                // Printing message...
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////// setarg "nu_int" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void kernel::setarg
@@ -1088,134 +1219,6 @@ void kernel::setarg
               );
 
   baseline->check_error (loc_error);                                                                // Checking returned error code...
-  baseline->done ();                                                                                // Printing message...
-}
-
-void kernel::build ()
-{
-  cl_int  loc_error;                                                                                // Error code.
-  char*   loc_options;                                                                              // Options temporary char buffer.
-  char**  loc_kernel_source;                                                                        // Source file temporary char buffer.
-  size_t* loc_kernel_source_size;                                                                   // Source file as string.
-  size_t  loc_log_size;                                                                             // OpenCL JIT compiler log size.
-  size_t  i;                                                                                        // Index.
-
-  loc_options                           = new char[compiler_options.size () + 1]();                 // Building temporary options char buffer...
-  loc_options[compiler_options.size ()] = '\0';                                                     // Null terminating options string...
-  compiler_options.copy (loc_options, compiler_options.size ());                                    // Building options string...
-  loc_kernel_source_size                = new size_t[kernel_source.size ()]();                      // Building temporary kernel source char buffer size...
-  loc_kernel_source                     = new char*[kernel_source.size ()]();                       // Building temporary kernel source char buffer...
-
-  baseline->action ("linking OpenCL kernel sources...");                                            // Printing message...
-
-  for(i = 0; i < kernel_source.size (); i++)
-  {
-    loc_kernel_source_size[i] = kernel_source[i].size ();                                           // Getting source size...
-    loc_kernel_source[i]      = new char[loc_kernel_source_size[i]]();                              // Building temporary source char buffer...
-    kernel_source[i].copy (loc_kernel_source[i], kernel_source[i].size ());                         // Building string source buffer...
-  }
-
-  baseline->done ();                                                                                // Printing message...
-
-  baseline->action ("creating OpenCL program from kernel source...");                               // Printing message...
-  program = clCreateProgramWithSource
-            (
-             baseline->context_id,                                                                  // OpenCL context ID.
-             (cl_uint)kernel_source.size (),                                                        // Number of program sources.
-             (const char**)loc_kernel_source,                                                       // Program source.
-             loc_kernel_source_size,                                                                // Source size.
-             &loc_error                                                                             // Error code.
-            );
-  baseline->check_error (loc_error);                                                                // Checking error...
-  baseline->done ();                                                                                // Printing message...
-
-  delete[] loc_kernel_source;                                                                       // Deleting buffer...
-  delete loc_kernel_source_size;                                                                    // Deleting buffer...
-
-  baseline->action ("building OpenCL program...");                                                  // Printing message...
-
-  // Creating device ID list:
-  device_id    = new cl_device_id[1];                                                               // OpenCL device ID.
-  device_id[0] = baseline->device_id;                                                               // Getting device ID.
-
-  // Building OpenCL program:
-  loc_error    = clBuildProgram
-                 (
-                  program,                                                                          // Program.
-                  1,                                                                                // Number of devices.
-                  device_id,                                                                        // Device ID.
-                  loc_options,                                                                      // Including header files from kernel's directory.
-                  NULL,                                                                             // Notification routine.
-                  NULL                                                                              // Notification argument.
-                 );
-
-  delete loc_options;
-
-  if(loc_error != CL_SUCCESS)                                                                       // Checking compiled kernel...
-  {
-    baseline->error (baseline->get_error (loc_error));                                              // Printing message...
-
-    // Getting OpenCL compiler information:
-    loc_error = clGetProgramBuildInfo
-                (
-                 program,                                                                           // Program.
-                 device_id[0],                                                                      // Device ID.
-                 CL_PROGRAM_BUILD_LOG,                                                              // Build log parameter.
-                 0,                                                                                 // Dummy parameter size.
-                 NULL,                                                                              // Dummy parameter value.
-                 &loc_log_size                                                                      // Size of log.
-                );
-
-    char* loc_log_buffer = new char[loc_log_size + 1]();                                            // Allocating log buffer...
-
-    // Reading OpenCL compiler error log:
-    loc_error    = clGetProgramBuildInfo
-                   (
-                    program,                                                                        // Program.
-                    device_id[0],                                                                   // Device ID.
-                    CL_PROGRAM_BUILD_LOG,                                                           // Build log parameter.
-                    loc_log_size + 1,                                                               // Log size.
-                    loc_log_buffer,                                                                 // The log.
-                    NULL                                                                            // Dummy size parameter.
-                   );
-
-    compiler_log = loc_log_buffer;                                                                  // Setting compiler log...
-    std::cout << "" << std::endl;                                                                   // Printing message...
-    std::cout << "See error log:" << std::endl;                                                     // Printing message...
-    std::cout << "" << std::endl;                                                                   // Printing message...
-    std::cout << compiler_log << std::endl;                                                         // Printing log...
-    delete[] (loc_log_buffer);                                                                      // Deleting log buffer...
-    exit (loc_error);                                                                               // Exiting...
-  }
-
-  baseline->done ();                                                                                // Printing message...
-
-  baseline->action ("creating OpenCL kernel object from program...");                               // Printing message...
-
-  // Creating OpenCL kernel:
-  kernel_id = clCreateKernel
-              (
-               program,                                                                             // OpenCL kernel program.
-               NU_KERNEL_NAME,                                                                      // Kernel name.
-               &loc_error                                                                           // Error code.
-              );
-
-  baseline->check_error (loc_error);                                                                // Checking error...
-
-  baseline->done ();                                                                                // Printing message...
-
-  // Initializing kernel object:
-  baseline->action ("initializing kernel object...");                                               // Printing message...
-
-  for(i = 0; i < baseline->k_num; i++)                                                              // Scanning OpenCL kernel argument array...
-  {
-    if(baseline->kernel_id[i] == NULL)                                                              // Looking for 1st non-assigned OpenCL kernel ID...
-    {
-      baseline->kernel_id[i] = kernel_id;                                                           // Assigning value to 1st non-assigned OpenCL kernel ID...
-      break;                                                                                        // Exiting loop...
-    }
-  }
-
   baseline->done ();                                                                                // Printing message...
 }
 

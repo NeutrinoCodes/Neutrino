@@ -66,6 +66,12 @@ public:
              std::string loc_fragment_file_name                                                     ///< Fragment shader file name.
             );
 
+  /// @brief **Shader source adder function.**
+  /// @details Loads an OpenGL shader source from its corresponding source file.
+  void addsource (
+                  std::string loc_shader_file_name                                                  ///< OpenGL shader file name.
+                 );
+
   /// @brief    **OpenGL shader builder.**
   /// @details  It builds an OpenGL shader.
   void build ();
