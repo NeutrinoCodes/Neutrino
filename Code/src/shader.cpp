@@ -20,39 +20,16 @@ void shader::init
  std::string loc_fragment_file_name                                                                 // Fragment shader file name.
 )
 {
+  baseline = loc_baseline;                                                                          // Getting Neutrino baseline...
+  baseline->action ("initializing OpenGL shader object...");                                        // Printing message...
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  baseline->done ();                                                                                // Printing message...
 
-  shader_home          = loc_shader_home;                                                           // Getting shader home directory...
-
-  // Building up vertex file full name:
-  vertex_file_name     = shader_home +                                                              // Shader home directory.
-                         std::string ("/") +
-                         loc_vertex_file_name;                                                      // Vertex shader file name.
-
-  // Building up geometry file full name:
-  geometry_file_name   = shader_home +                                                              // Shader home directory.
-                         std::string ("/") +
-                         loc_geometry_file_name;                                                    // Geometry shader file name.
-
-  // Building up geometry file full name:
-  geometry_file_name_2 = shader_home +                                                              // Shader home directory.
-                         std::string ("/") +
-                         loc_geometry_file_name_2;                                                  // Geometry shader file name.
-
-  // Building up fragment file full name:
-  fragment_file_name   = shader_home +                                                              // Shader home directory.
-                         std::string ("/") +
-                         loc_fragment_file_name;                                                    // Fragment shader file name.
-
-  vertex               = compile (vertex_file_name, NU_VERTEX);                                     // Compiling vertex shader...
-  geometry             = compile (geometry_file_name, NU_GEOMETRY);                                 // Compiling geometry shader...
-  geometry_2           = compile (geometry_file_name_2, NU_GEOMETRY);                               // Compiling geometry shader...
-  fragment             = compile (fragment_file_name, NU_FRAGMENT);                                 // Compiling fragment shader...
-  program              = glCreateProgram ();                                                        // Creating program...
+  program  = glCreateProgram ();                                                                    // Creating program...
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 }
 
-GLuint shader::compile
+GLuint shader::addsource
 (
  std::string loc_shader_filename,                                                                   // GLSL shader file name.
  shader_type loc_shader_type                                                                        // GLSL shader type.
@@ -78,7 +55,7 @@ GLuint shader::compile
   switch(loc_shader_type)
   {
     case NU_VERTEX:
-      vertex_source   = loc_shader_source;
+      vertex_source.push_back (loc_shader_source);                                                  // Adding vertex shader source...
       loc_shader      = glCreateShader (GL_VERTEX_SHADER);                                          // Creating shader...
       break;
 
