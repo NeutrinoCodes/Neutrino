@@ -59,7 +59,7 @@
 #define NU_LINE_WIDTH                     3                                                         ///< Line width [px].
 #define NU_KERNEL_NAME                    "thekernel"                                               ///< OpenCL kernel function name.
 #define NU_MAX_TEXT_SIZE                  128                                                       ///< Maximum number of characters in a text string.
-#define NU_MAX_MESSAGE_SIZE               64                                                        ///< Maximum number of characters in a text message.
+#define NU_MAX_MESSAGE_SIZE               128                                                       ///< Maximum number of characters in a text message.
 #define NU_MAX_PATH_SIZE                  32768                                                     ///< Maximum number of characters in a text file path.
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
