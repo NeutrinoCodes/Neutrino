@@ -280,8 +280,8 @@ void queue::read
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(GL_FLOAT)*loc_data->size,                                                     // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
+               sizeof(GL_FLOAT)*loc_data->data.size (),                                             // Data buffer size.
+               loc_data->data.data (),                                                              // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
@@ -683,8 +683,8 @@ void queue::write
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(GL_FLOAT)*loc_data->size,                                                     // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
+               sizeof(GL_FLOAT)*loc_data->data.size (),                                             // Data buffer size.
+               loc_data->data.data (),                                                              // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.

@@ -439,52 +439,42 @@ public:
   /// @endlink flag. The latter one serves as an indicator (internally managed by Neutrino) in order
   /// allow the @link buffer @endlink initialization and to impede it during subsequents
   /// calls of the @link kernel::setarg @endlink method.
-  GLfloat*    data;                                                                                 ///< @brief **Data [GLfloat].**
+  std::vector<GLfloat> data;                                                                        ///< @brief **Data [GLfloat].**
 
   /// @details **cl_mem** OpenCL memory buffer object. It does not contain user data. It is
   /// internally used by Neutrino within the OpenCL mechanisms to define the properties of
   /// the memory allocation on the client GPU.
-  cl_mem      buffer;                                                                               ///< @brief **Data memory buffer.**.
+  cl_mem               buffer;                                                                      ///< @brief **Data memory buffer.**.
 
   /// @details [OpenGL data Vertex Array Object]
   /// (https://www.khronos.org/opengl/wiki/Vertex_Specification). Internally used by Neutrino.
-  GLuint      vao;                                                                                  ///< @brief **OpenGL data Vertex Array Object.**
+  GLuint               vao;                                                                         ///< @brief **OpenGL data Vertex Array Object.**
 
   /// @details [OpenGL data Vertex Buffer Object]
   /// (https://www.khronos.org/opengl/wiki/Shader_Storage_Buffer_Object).
   /// Internally used by Neutrino.
-  GLuint      ssbo;                                                                                 ///< @brief **OpenGL data Shader Storage Buffer Object.**
-
-  /// @details Size, in numbers of elements, of the user's data to be allocated as data storage.
-  GLsizeiptr  size;                                                                                 ///< @brief **Data size [#].**
+  GLuint               ssbo;                                                                        ///< @brief **OpenGL data Shader Storage Buffer Object.**
 
   /// @details This flag serves as an indicator (internally managed by Neutrino) in order
   /// allow the @link buffer @endlink initialization and to impede it during subsequents
   /// calls of the @link kernel::setarg @endlink method. It is internally managed by Neutrino.
-  GLuint      layout;                                                                               ///< @brief **Data layout index [#].**
+  GLuint               layout;                                                                      ///< @brief **Data layout index [#].**
 
   /// @details String name of the object instance. To be set by the user according to what
   /// defined in the GLSL OpenGL shaders. Used to uniquely identify the object reference as
   /// variable in the GLSL OpenGL shaders.
-  std::string name;                                                                                 ///< @brief **Data name.**
+  std::string          name;                                                                        ///< @brief **Data name.**
 
   /// @details This flag serves as an indicator (internally managed by Neutrino) in order
   /// allow the @link buffer @endlink initialization and to impede it during subsequents
   /// calls of the @link kernel::setarg @endlink method. It is internally managed by Neutrino.
-  bool        ready;                                                                                ///< @brief **Buffer "ready" flag.**
+  bool                 ready;                                                                       ///< @brief **Buffer "ready" flag.**
 
   /// @brief **Class constructor.**
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link nu_float::init @endlink method.
   nu_float ();
-
-  /// @brief **Class initializer.**
-  /// @details Creates a "1 x size" data storage of **GLfloat** allocated on the host PC memory
-  /// and initializes all data to 0.0f.
-  void init (
-             GLsizeiptr loc_size                                                                    ///< Data size [#].
-            );
 
   /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the

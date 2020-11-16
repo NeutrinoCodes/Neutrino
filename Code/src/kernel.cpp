@@ -752,8 +752,8 @@ void kernel::setarg
     glBufferData
     (
      GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
-     sizeof(GL_FLOAT)*loc_data->size,                                                               // SSBO size.
-     loc_data->data,                                                                                // SSBO data.
+     sizeof(GL_FLOAT)*loc_data->data.size (),                                                       // SSBO size.
+     loc_data->data.data (),                                                                        // SSBO data.
      GL_DYNAMIC_DRAW                                                                                // SSBO usage.
     );
 
@@ -810,8 +810,8 @@ void kernel::setarg
                           baseline->context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
-                          sizeof(GL_FLOAT)*loc_data->size,                                          // Data buffer size.
-                          loc_data->data,                                                           // Data buffer.
+                          sizeof(GL_FLOAT)*loc_data->data.size (),                                  // Data buffer size.
+                          loc_data->data.data (),                                                   // Data buffer.
                           &loc_error                                                                // Error code.
                          );
     }
