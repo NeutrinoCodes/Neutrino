@@ -186,25 +186,9 @@ nu_float::nu_float()
   ready = false;                                                                                    // Resetting "ready" flag...
 }
 
-void nu_float::init
-(
- GLsizeiptr loc_size                                                                                // Data size.
-)
-{
-  GLsizeiptr i;                                                                                     // Index.
-
-  data = new GLfloat[loc_size];                                                                     // "1 x size" data storage [GLfloat].
-  size = loc_size;                                                                                  // Data size [#].
-
-  for(i = 0; i < loc_size; i++)
-  {
-    data[i] = 0.0f;                                                                                 // Resetting data...
-  }
-}
-
 nu_float::~nu_float()
 {
-  delete[] data;                                                                                    // Deleting data storage...
+  // Doing nothing!
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
