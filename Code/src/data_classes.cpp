@@ -13,21 +13,6 @@ nu_int::nu_int()
   ready = false;                                                                                    // Resetting "ready" flag...
 }
 
-void nu_int::init (
-                   GLsizeiptr loc_size                                                              // Data size.
-                  )
-{
-  GLsizeiptr i;                                                                                     // Index.
-
-  data = new GLint[loc_size];                                                                       // "1 x size" data storage [GLint].
-  size = loc_size;                                                                                  // Data size [#].
-
-  for(i = 0; i < loc_size; i++)
-  {
-    data[i] = 0;                                                                                    // Resetting data...
-  }
-}
-
 void nu_int::read
 (
  std::string loc_file_directory,                                                                    // File directory.
@@ -60,20 +45,22 @@ void nu_int::read
 
   if(loc_file)                                                                                      // Checking file...
   {
-    for(i = 0; i < size; i++)
-    {
-      if(loc_file >> loc_data)
-      {
+    /* EZOR 18NOV2020 to be modified according to std::vector data.
+       for(i = 0; i < size; i++)
+       {
+       if(loc_file >> loc_data)
+       {
         data[i] = loc_data;                                                                         // Setting data...
-      }
+       }
 
-      else
-      {
+       else
+       {
         data[i] = 0;                                                                                // Resetting data...
-      }
-    }
+       }
+       }
 
-    loc_file.close ();                                                                              // Closing file...
+       loc_file.close ();                                                                              // Closing file...
+     */
   }
 
   else
@@ -84,7 +71,7 @@ void nu_int::read
 
 nu_int::~nu_int()
 {
-  delete[] data;                                                                                    // Deleting data storage...
+  // Doing nothing!
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,25 +82,9 @@ nu_int2::nu_int2()
   ready = false;                                                                                    // Resetting "ready" flag...
 }
 
-void nu_int2::init (
-                    GLsizeiptr loc_size                                                             // Data size.
-                   )
-{
-  GLsizeiptr i;                                                                                     // Index.
-
-  data = new nu_int2_structure[loc_size];                                                           // "2 x size" data storage [cl_long].
-  size = loc_size;                                                                                  // Data size [#].
-
-  for(i = 0; i < loc_size; i++)
-  {
-    data[i].x = 0;                                                                                  // Resetting data...
-    data[i].y = 0;                                                                                  // Resetting data...
-  }
-}
-
 nu_int2::~nu_int2()
 {
-  delete[] data;                                                                                    // Deleting data storage...
+  // Doing nothing!
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,26 +95,9 @@ nu_int3::nu_int3()
   ready = false;                                                                                    // Resetting "ready" flag...
 }
 
-void nu_int3::init (
-                    GLsizeiptr loc_size                                                             // Data size.
-                   )
-{
-  GLsizeiptr i;                                                                                     // Index.
-
-  data = new nu_int3_structure[loc_size];                                                           // "3 x size" data storage [cl_long].
-  size = loc_size;                                                                                  // Data size [#].
-
-  for(i = 0; i < loc_size; i++)
-  {
-    data[i].x = 0;                                                                                  // Resetting data...
-    data[i].y = 0;                                                                                  // Resetting data...
-    data[i].z = 0;                                                                                  // Resetting data...
-  }
-}
-
 nu_int3::~nu_int3()
 {
-  delete[] data;                                                                                    // Deleting data storage...
+  // Doing nothing!
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,28 +108,9 @@ nu_int4::nu_int4()
   ready = false;                                                                                    // Resetting "ready" flag...
 }
 
-void nu_int4::init
-(
- GLsizeiptr loc_size                                                                                // Data size.
-)
-{
-  GLsizeiptr i;                                                                                     // Index.
-
-  data = new nu_int4_structure[loc_size];                                                           // "4 x size" data storage [cl_long].
-  size = loc_size;                                                                                  // Data size [#].
-
-  for(i = 0; i < loc_size; i++)
-  {
-    data[i].x = 0;                                                                                  // Resetting data...
-    data[i].y = 0;                                                                                  // Resetting data...
-    data[i].z = 0;                                                                                  // Resetting data...
-    data[i].w = 0;                                                                                  // Resetting data...
-  }
-}
-
 nu_int4::~nu_int4()
 {
-  delete[] data;                                                                                    // Deleting data storage...
+  // Doing nothing!
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -199,26 +134,9 @@ nu_float2::nu_float2()
   ready = false;                                                                                    // Resetting "ready" flag...
 }
 
-void nu_float2::init
-(
- GLsizeiptr loc_size                                                                                // Data size.
-)
-{
-  GLsizeiptr i;                                                                                     // Index.
-
-  data = new nu_float2_structure[loc_size];                                                         // "2 x size" data storage [GLfloat].
-  size = loc_size;                                                                                  // Data size [#].
-
-  for(i = 0; i < loc_size; i++)
-  {
-    data[i].x = 0.0f;                                                                               // Resetting data...
-    data[i].y = 0.0f;                                                                               // Resetting data...
-  }
-}
-
 nu_float2::~nu_float2()
 {
-  delete[] data;                                                                                    // Deleting data storage...
+  // Doing nothing!
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,27 +147,9 @@ nu_float3::nu_float3()
   ready = false;                                                                                    // Resetting "ready" flag...
 }
 
-void nu_float3::init
-(
- GLsizeiptr loc_size                                                                                // Data size.
-)
-{
-  GLsizeiptr i;                                                                                     // Index.
-
-  data = new nu_float3_structure[loc_size];                                                         // "3 x size" data storage [GLfloat].
-  size = loc_size;                                                                                  // Data size [#].
-
-  for(i = 0; i < loc_size; i++)
-  {
-    data[i].x = 0.0f;                                                                               // Resetting data...
-    data[i].y = 0.0f;                                                                               // Resetting data...
-    data[i].z = 0.0f;                                                                               // Resetting data...
-  }
-}
-
 nu_float3::~nu_float3()
 {
-  delete[] data;                                                                                    // Deleting data storage...
+  // Doing nothing!
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,26 +160,7 @@ nu_float4::nu_float4()
   ready = false;                                                                                    // Resetting "ready" flag...
 }
 
-void nu_float4::init
-(
- GLsizeiptr loc_size                                                                                // Data size.
-)
-{
-  GLsizeiptr i;                                                                                     // Index.
-
-  data = new nu_float4_structure[loc_size];                                                         // "4 x size" data storage [GLfloat].
-  size = loc_size;                                                                                  // Data size [#].
-
-  for(i = 0; i < loc_size; i++)
-  {
-    data[i].x = 0.0f;                                                                               // Resetting data...
-    data[i].y = 0.0f;                                                                               // Resetting data...
-    data[i].z = 0.0f;                                                                               // Resetting data...
-    data[i].w = 1.0f;                                                                               // Setting data...
-  }
-}
-
 nu_float4::~nu_float4()
 {
-  delete[] data;                                                                                    // Deleting data storage...
+  // Doing nothing!
 }
