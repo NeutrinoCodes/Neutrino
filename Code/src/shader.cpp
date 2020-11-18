@@ -150,7 +150,7 @@ void shader::setarg
                         loc_name_buffer                                                             // Data name.
                        );
 
-  size                           = loc_data->size;
+  size                           = loc_data->data.size ();
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
@@ -179,7 +179,7 @@ void shader::setarg
                         loc_name_buffer                                                             // Data name.
                        );
 
-  size                           = loc_data->size;
+  size                           = loc_data->data.size ();
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
@@ -208,7 +208,7 @@ void shader::setarg
                         loc_name_buffer                                                             // Data name.
                        );
 
-  size                           = loc_data->size;
+  size                           = loc_data->data.size ();
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
@@ -237,7 +237,7 @@ void shader::setarg
                         loc_name_buffer                                                             // Data name.
                        );
 
-  size                           = loc_data->size;
+  size                           = loc_data->data.size ();
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
@@ -295,7 +295,7 @@ void shader::setarg
                         loc_name_buffer                                                             // Data name.
                        );
 
-  size                           = loc_data->size;
+  size                           = loc_data->data.size ();
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
@@ -324,7 +324,7 @@ void shader::setarg
                         loc_name_buffer                                                             // Data name.
                        );
 
-  size                           = loc_data->size;
+  size                           = loc_data->data.size ();
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
@@ -353,7 +353,7 @@ void shader::setarg
                         loc_name_buffer                                                             // Data name.
                        );
 
-  size                           = loc_data->size;
+  size                           = loc_data->data.size ();
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 

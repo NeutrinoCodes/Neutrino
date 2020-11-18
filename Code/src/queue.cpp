@@ -80,8 +80,8 @@ void queue::read
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(GL_INT)*loc_data->size,                                                       // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
+               sizeof(GL_INT)*loc_data->data.size (),                                               // Data buffer size.
+               loc_data->data.data (),                                                              // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
@@ -130,8 +130,8 @@ void queue::read
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(nu_int2_structure)*loc_data->size,                                            // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
+               sizeof(nu_int2_structure)*loc_data->data.size (),                                    // Data buffer size.
+               loc_data->data.data (),                                                              // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
@@ -180,8 +180,8 @@ void queue::read
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(nu_int3_structure)*loc_data->size,                                            // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
+               sizeof(nu_int3_structure)*loc_data->data.size (),                                    // Data buffer size.
+               loc_data->data.data (),                                                              // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
@@ -230,8 +230,8 @@ void queue::read
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(nu_int4_structure)*loc_data->size,                                            // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
+               sizeof(nu_int4_structure)*loc_data->data.size (),                                    // Data buffer size.
+               loc_data->data.data (),                                                              // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
@@ -330,8 +330,8 @@ void queue::read
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(nu_float2_structure)*loc_data->size,                                          // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
+               sizeof(nu_float2_structure)*loc_data->data.size (),                                  // Data buffer size.
+               loc_data->data.data (),                                                              // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
@@ -380,8 +380,8 @@ void queue::read
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(nu_float3_structure)*loc_data->size,                                          // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
+               sizeof(nu_float3_structure)*loc_data->data.size (),                                  // Data buffer size.
+               loc_data->data.data (),                                                              // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
@@ -430,8 +430,8 @@ void queue::read
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(nu_float4_structure)*loc_data->size,                                          // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
+               sizeof(nu_float4_structure)*loc_data->data.size (),                                  // Data buffer size.
+               loc_data->data.data (),                                                              // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
@@ -483,8 +483,8 @@ void queue::write
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(GL_INT)*loc_data->size,                                                       // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
+               sizeof(GL_INT)*loc_data->data.size (),                                               // Data buffer size.
+               loc_data->data.data (),                                                              // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
@@ -533,8 +533,8 @@ void queue::write
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(nu_int2_structure)*loc_data->size,                                            // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
+               sizeof(nu_int2_structure)*loc_data->data.size (),                                    // Data buffer size.
+               loc_data->data.data (),                                                              // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
@@ -583,8 +583,8 @@ void queue::write
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(nu_int3_structure)*loc_data->size,                                            // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
+               sizeof(nu_int3_structure)*loc_data->data.size (),                                    // Data buffer size.
+               loc_data->data.data (),                                                              // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
@@ -633,8 +633,8 @@ void queue::write
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(nu_int4_structure)*loc_data->size,                                            // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
+               sizeof(nu_int4_structure)*loc_data->data.size (),                                    // Data buffer size.
+               loc_data->data.data (),                                                              // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
@@ -733,8 +733,8 @@ void queue::write
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(nu_float2_structure)*loc_data->size,                                          // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
+               sizeof(nu_float2_structure)*loc_data->data.size (),                                  // Data buffer size.
+               loc_data->data.data (),                                                              // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
@@ -783,8 +783,8 @@ void queue::write
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(nu_float3_structure)*loc_data->size,                                          // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
+               sizeof(nu_float3_structure)*loc_data->data.size (),                                  // Data buffer size.
+               loc_data->data.data (),                                                              // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.
@@ -833,8 +833,8 @@ void queue::write
                loc_data->buffer,                                                                    // Data buffer.
                CL_TRUE,                                                                             // Blocking write flag.
                0,                                                                                   // Data buffer offset.
-               sizeof(nu_float4_structure)*loc_data->size,                                          // Data buffer size.
-               loc_data->data,                                                                      // Data buffer.
+               sizeof(nu_float4_structure)*loc_data->data.size (),                                  // Data buffer size.
+               loc_data->data.data (),                                                              // Data buffer.
                0,                                                                                   // Number of events in the list.
                NULL,                                                                                // Event list.
                NULL                                                                                 // Event.

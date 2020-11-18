@@ -232,8 +232,8 @@ void kernel::setarg
     glBufferData
     (
      GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
-     sizeof(GL_INT)*loc_data->size,                                                                 // SSBO size.
-     loc_data->data,                                                                                // SSBO data.
+     sizeof(GL_INT)*loc_data->data.size (),                                                         // SSBO size.
+     loc_data->data.data (),                                                                        // SSBO data.
      GL_DYNAMIC_DRAW                                                                                // SSBO usage.
     );
 
@@ -290,8 +290,8 @@ void kernel::setarg
                           baseline->context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
-                          sizeof(GL_INT)*loc_data->size,                                            // Data buffer size.
-                          loc_data->data,                                                           // Data buffer.
+                          sizeof(GL_INT)*loc_data->data.size (),                                    // Data buffer size.
+                          loc_data->data.data (),                                                   // Data buffer.
                           &loc_error                                                                // Error code.
                          );
     }
@@ -362,8 +362,8 @@ void kernel::setarg
     glBufferData
     (
      GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
-     sizeof(nu_int2_structure)*loc_data->size,                                                      // SSBO size.
-     loc_data->data,                                                                                // SSBO data.
+     sizeof(nu_int2_structure)*loc_data->data.size (),                                              // SSBO size.
+     loc_data->data.data (),                                                                        // SSBO data.
      GL_DYNAMIC_DRAW                                                                                // SSBO usage.
     );
 
@@ -420,8 +420,8 @@ void kernel::setarg
                           baseline->context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
-                          sizeof(nu_int2_structure)*loc_data->size,                                 // Data buffer size.
-                          loc_data->data,                                                           // Data buffer.
+                          sizeof(nu_int2_structure)*loc_data->data.size (),                         // Data buffer size.
+                          loc_data->data.data (),                                                   // Data buffer.
                           &loc_error                                                                // Error code.
                          );
     }
@@ -492,8 +492,8 @@ void kernel::setarg
     glBufferData
     (
      GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
-     sizeof(nu_int3_structure)*loc_data->size,                                                      // SSBO size.
-     loc_data->data,                                                                                // SSBO data.
+     sizeof(nu_int3_structure)*loc_data->data.size (),                                              // SSBO size.
+     loc_data->data.data (),                                                                        // SSBO data.
      GL_DYNAMIC_DRAW                                                                                // SSBO usage.
     );
 
@@ -550,8 +550,8 @@ void kernel::setarg
                           baseline->context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
-                          sizeof(nu_int3_structure)*loc_data->size,                                 // Data buffer size.
-                          loc_data->data,                                                           // Data buffer.
+                          sizeof(nu_int3_structure)*loc_data->data.size (),                         // Data buffer size.
+                          loc_data->data.data (),                                                   // Data buffer.
                           &loc_error                                                                // Error code.
                          );
     }
@@ -622,8 +622,8 @@ void kernel::setarg
     glBufferData
     (
      GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
-     sizeof(nu_int4_structure)*loc_data->size,                                                      // SSBO size.
-     loc_data->data,                                                                                // SSBO data.
+     sizeof(nu_int4_structure)*loc_data->data.size (),                                              // SSBO size.
+     loc_data->data.data (),                                                                        // SSBO data.
      GL_DYNAMIC_DRAW                                                                                // SSBO usage.
     );
 
@@ -680,8 +680,8 @@ void kernel::setarg
                           baseline->context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
-                          sizeof(nu_int4_structure)*loc_data->size,                                 // Data buffer size.
-                          loc_data->data,                                                           // Data buffer.
+                          sizeof(nu_int4_structure)*loc_data->data.size (),                         // Data buffer size.
+                          loc_data->data.data (),                                                   // Data buffer.
                           &loc_error                                                                // Error code.
                          );
     }
@@ -882,8 +882,8 @@ void kernel::setarg
     glBufferData
     (
      GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
-     sizeof(nu_float2_structure)*loc_data->size,                                                    // SSBO size.
-     loc_data->data,                                                                                // SSBO data.
+     sizeof(nu_float2_structure)*loc_data->data.size (),                                            // SSBO size.
+     loc_data->data.data (),                                                                        // SSBO data.
      GL_DYNAMIC_DRAW                                                                                // SSBO usage.
     );
 
@@ -940,8 +940,8 @@ void kernel::setarg
                           baseline->context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
-                          sizeof(nu_float2_structure)*loc_data->size,                               // Data buffer size.
-                          loc_data->data,                                                           // Data buffer.
+                          sizeof(nu_float2_structure)*loc_data->data.size (),                       // Data buffer size.
+                          loc_data->data.data (),                                                   // Data buffer.
                           &loc_error                                                                // Error code.
                          );
     }
@@ -1012,8 +1012,8 @@ void kernel::setarg
     glBufferData
     (
      GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
-     sizeof(nu_float3_structure)*loc_data->size,                                                    // SSBO size.
-     loc_data->data,                                                                                // SSBO data.
+     sizeof(nu_float3_structure)*loc_data->data.size (),                                            // SSBO size.
+     loc_data->data.data (),                                                                        // SSBO data.
      GL_DYNAMIC_DRAW                                                                                // SSBO usage.
     );
 
@@ -1070,8 +1070,8 @@ void kernel::setarg
                           baseline->context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
-                          sizeof(nu_float3_structure)*loc_data->size,                               // Data buffer size.
-                          loc_data->data,                                                           // Data buffer.
+                          sizeof(nu_float3_structure)*loc_data->data.size (),                       // Data buffer size.
+                          loc_data->data.data (),                                                   // Data buffer.
                           &loc_error                                                                // Error code.
                          );
     }
@@ -1142,8 +1142,8 @@ void kernel::setarg
     glBufferData
     (
      GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
-     sizeof(nu_float4_structure)*loc_data->size,                                                    // SSBO size.
-     loc_data->data,                                                                                // SSBO data.
+     sizeof(nu_float4_structure)*loc_data->data.size (),                                            // SSBO size.
+     loc_data->data.data (),                                                                        // SSBO data.
      GL_DYNAMIC_DRAW                                                                                // SSBO usage.
     );
 
@@ -1200,8 +1200,8 @@ void kernel::setarg
                           baseline->context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
-                          sizeof(nu_float4_structure)*loc_data->size,                               // Data buffer size.
-                          loc_data->data,                                                           // Data buffer.
+                          sizeof(nu_float4_structure)*loc_data->data.size (),                       // Data buffer size.
+                          loc_data->data.data (),                                                   // Data buffer.
                           &loc_error                                                                // Error code.
                          );
     }
