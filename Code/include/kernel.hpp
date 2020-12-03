@@ -70,10 +70,7 @@ public:
 
   /// @brief **OpenCL kernel builder.**
   /// @details Creates an OpenCL program from the kernel sources and builds it.
-  void build (
-              size_t loc_arg_num,
-              ...
-             );
+  void build ();
 
   /// @brief **Kernel argument setter function.**
   /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object

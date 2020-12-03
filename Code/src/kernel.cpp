@@ -54,10 +54,7 @@ void kernel::addsource (
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////// build ///////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void kernel::build (
-                    size_t loc_arg_num,
-                    ...
-                   )
+void kernel::build ()
 {
   cl_int  loc_error;                                                                                // Error code.
   char*   loc_options;                                                                              // Options temporary char buffer.
@@ -65,7 +62,6 @@ void kernel::build (
   size_t* loc_kernel_source_size;                                                                   // Source file as string.
   size_t  loc_log_size;                                                                             // OpenCL JIT compiler log size.
   size_t  i;                                                                                        // Index.
-  va_list loc_arg;                                                                                  // Arguments.
 
   loc_options                           = new char[compiler_options.size () + 1]();                 // Building temporary options char buffer...
   loc_options[compiler_options.size ()] = '\0';                                                     // Null terminating options string...
@@ -182,15 +178,6 @@ void kernel::build (
       break;                                                                                        // Exiting loop...
     }
   }
-
-  va_start (loc_arg, loc_arg_num );                                                                 // Initializing arguments to store all values...
-
-  for(i = 0; i < loc_arg_num; i++)
-  {
-    setarg(va_arg(loc_arg, nu_int*, i);
-  }
-
-  va_end (loc_arg);                                                                                 // Cleaning up argument list...
 
   baseline->done ();                                                                                // Printing message...
 }

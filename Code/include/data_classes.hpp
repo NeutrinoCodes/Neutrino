@@ -100,6 +100,13 @@ typedef struct _nu_float4_structure
 } nu_float4_structure;
 #pragma pack(pop)
 
+/// @class nu_data
+/// ### Common base class for all Neutrino data.
+/// Declares a common base class for all Neutrino data.
+/// Used in order to be able to define vectors of heterogeneous Neutrino data.
+class nu_data
+{};
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////// "nu_int" class ////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +115,7 @@ typedef struct _nu_float4_structure
 /// Declares a 1xN vector (N = data size) of **GLint** data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended to be used for graphics rendering.
-class nu_int                                                                                        /// @brief **1xN vector of "GLint" data.**
+class nu_int : public nu_data                                                                       /// @brief **1xN vector of "GLint" data.**
 {
 private:
 
@@ -186,7 +193,7 @@ public:
 /// Declares a 2xN vector (N = data size) of "GLint" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended to be used for graphics rendering.
-class nu_int2                                                                                       /// @brief **2xN vector of "GLint" data.**
+class nu_int2 : public nu_data                                                                      /// @brief **2xN vector of "GLint" data.**
 {
 private:
 
@@ -252,7 +259,7 @@ public:
 /// Declares a 3xN vector (N = data size) of "GLint" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended to be used for graphics rendering.
-class nu_int3                                                                                       /// @brief **3xN vector of "GLint" data.**
+class nu_int3 : public nu_data                                                                      /// @brief **3xN vector of "GLint" data.**
 {
 private:
 
@@ -318,7 +325,7 @@ public:
 /// Declares a 4xN vector (N = data size) of "GLint" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended to be used for graphics rendering.
-class nu_int4                                                                                       /// @brief **4xN vector of "GLint" data.**
+class nu_int4 : public nu_data                                                                      /// @brief **4xN vector of "GLint" data.**
 {
 private:
 
@@ -384,7 +391,7 @@ public:
 /// Declares a 1xN vector (N = data size) of "GLfloat" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended to be used for graphics rendering.
-class nu_float                                                                                      /// @brief **1xN vector of "GLfloat" data.**
+class nu_float : public nu_data                                                                     /// @brief **1xN vector of "GLfloat" data.**
 {
 private:
 
@@ -450,7 +457,7 @@ public:
 /// Declares a 2xN vector (N = data size) of "GLfloat" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended for graphics rendering.
-class nu_float2                                                                                     /// @brief **2xN vector of "GLfloat" data.**
+class nu_float2 : public nu_data                                                                    /// @brief **2xN vector of "GLfloat" data.**
 {
 private:
 
@@ -516,7 +523,7 @@ public:
 /// Declares a 3xN vector (N = data size) of "GLfloat" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended for graphics rendering.
-class nu_float3                                                                                     /// @brief **3xN vector of "GLfloat" data.**
+class nu_float3 : public nu_data                                                                    /// @brief **3xN vector of "GLfloat" data.**
 {
 private:
 
@@ -582,7 +589,7 @@ public:
 /// Declares a 4xN vector (N = data size) of "GLfloat" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended for graphics rendering.
-class nu_float4                                                                                     /// @brief **4xN vector of "GLfloat" data.**
+class nu_float4 : public nu_data                                                                    /// @brief **4xN vector of "GLfloat" data.**
 {
 private:
 
