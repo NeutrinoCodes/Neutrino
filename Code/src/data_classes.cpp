@@ -6,11 +6,20 @@
 #include "data_classes.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////// "nu_int" class ////////////////////////////////////////////
+///////////////////////////////////////////// "nu_int" class //////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_int::nu_int()
+nu_int::nu_int(
+               std::vector<nu_data*> loc_nu_data,                                                   // Neutrino common base data class.
+               size_t                loc_layout_index                                               // Kernel argument layout index.
+              )
 {
-  ready = false;                                                                                    // Resetting "ready" flag...
+  size_t i;                                                                                         // Data vector current index.
+
+  i                            = loc_nu_data.size ();                                               // Getting data vector current index...
+  loc_nu_data.push_back (this);
+  loc_nu_data[i]->type         = NU_INT;                                                            // Setting Neutrino data type...
+  loc_nu_data[i]->layout_index = loc_layout_index;                                                  // Setting kernel argument layout index...
+  ready                        = false;                                                             // Resetting "ready" flag...
 }
 
 void nu_int::read
@@ -75,11 +84,16 @@ nu_int::~nu_int()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////// "nu_int2" class ///////////////////////////////////////////
+////////////////////////////////////////// "nu_int2" class ///////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_int2::nu_int2()
+nu_int2::nu_int2(
+                 nu_data* loc_nu_data,                                                              // Neutrino common base data class.
+                 size_t   loc_layout_index                                                          // Kernel argument layout index.
+                )
 {
-  ready = false;                                                                                    // Resetting "ready" flag...
+  loc_nu_data->type         = NU_INT2;                                                              // Setting Neutrino data type...
+  loc_nu_data->layout_index = loc_layout_index;                                                     // Setting kernel argument layout index...
+  ready                     = false;                                                                // Resetting "ready" flag...
 }
 
 nu_int2::~nu_int2()
@@ -88,11 +102,16 @@ nu_int2::~nu_int2()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////// "nu_int3" class ///////////////////////////////////////////
+////////////////////////////////////////// "nu_int3" class ///////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_int3::nu_int3()
+nu_int3::nu_int3(
+                 nu_data* loc_nu_data,                                                              // Neutrino common base data class.
+                 size_t   loc_layout_index                                                          // Kernel argument layout index.
+                )
 {
-  ready = false;                                                                                    // Resetting "ready" flag...
+  loc_nu_data->type         = NU_INT3;                                                              // Setting Neutrino data type...
+  loc_nu_data->layout_index = loc_layout_index;                                                     // Setting kernel argument layout index...
+  ready                     = false;                                                                // Resetting "ready" flag...
 }
 
 nu_int3::~nu_int3()
@@ -101,11 +120,16 @@ nu_int3::~nu_int3()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////// "nu_int4" class ///////////////////////////////////////////
+////////////////////////////////////////// "nu_int4" class ///////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_int4::nu_int4()
+nu_int4::nu_int4(
+                 nu_data* loc_nu_data,                                                              // Neutrino common base data class.
+                 size_t   loc_layout_index                                                          // Kernel argument layout index.
+                )
 {
-  ready = false;                                                                                    // Resetting "ready" flag...
+  loc_nu_data->type         = NU_INT4;                                                              // Setting Neutrino data type...
+  loc_nu_data->layout_index = loc_layout_index;                                                     // Setting kernel argument layout index...
+  ready                     = false;                                                                // Resetting "ready" flag...
 }
 
 nu_int4::~nu_int4()
@@ -114,11 +138,16 @@ nu_int4::~nu_int4()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////// "nu_float" class /////////////////////////////////////////
+/////////////////////////////////////////// "nu_float" class /////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_float::nu_float()
+nu_float::nu_float(
+                   nu_data* loc_nu_data,                                                            // Neutrino common base data class.
+                   size_t   loc_layout_index                                                        // Kernel argument layout index.
+                  )
 {
-  ready = false;                                                                                    // Resetting "ready" flag...
+  loc_nu_data->type         = NU_FLOAT;                                                             // Setting Neutrino data type...
+  loc_nu_data->layout_index = loc_layout_index;                                                     // Setting kernel argument layout index...
+  ready                     = false;                                                                // Resetting "ready" flag...
 }
 
 nu_float::~nu_float()
@@ -127,11 +156,16 @@ nu_float::~nu_float()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////// "nu_float2" class ///////////////////////////////////////
+//////////////////////////////////////////// "nu_float2" class ///////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_float2::nu_float2()
+nu_float2::nu_float2(
+                     nu_data* loc_nu_data,                                                          // Neutrino common base data class.
+                     size_t   loc_layout_index                                                      // Kernel argument layout index.
+                    )
 {
-  ready = false;                                                                                    // Resetting "ready" flag...
+  loc_nu_data->type         = NU_FLOAT2;                                                            // Setting Neutrino data type...
+  loc_nu_data->layout_index = loc_layout_index;                                                     // Setting kernel argument layout index...
+  ready                     = false;                                                                // Resetting "ready" flag...
 }
 
 nu_float2::~nu_float2()
@@ -140,11 +174,16 @@ nu_float2::~nu_float2()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////// "nu_float3" class ///////////////////////////////////////
+//////////////////////////////////////////// "nu_float3" class ///////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_float3::nu_float3()
+nu_float3::nu_float3(
+                     nu_data* loc_nu_data,                                                          // Neutrino common base data class.
+                     size_t   loc_layout_index                                                      // Kernel argument layout index.
+                    )
 {
-  ready = false;                                                                                    // Resetting "ready" flag...
+  loc_nu_data->type         = NU_FLOAT3;                                                            // Setting Neutrino data type...
+  loc_nu_data->layout_index = loc_layout_index;                                                     // Setting kernel argument layout index...
+  ready                     = false;                                                                // Resetting "ready" flag...
 }
 
 nu_float3::~nu_float3()
@@ -153,11 +192,16 @@ nu_float3::~nu_float3()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////// "nu_float4" class //////////////////////////////////////
+///////////////////////////////////////////// "nu_float4" class //////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_float4::nu_float4()
+nu_float4::nu_float4(
+                     nu_data* loc_nu_data,                                                          // Neutrino common base data class.
+                     size_t   loc_layout_index                                                      // Kernel argument layout index.
+                    )
 {
-  ready = false;                                                                                    // Resetting "ready" flag...
+  loc_nu_data->type         = NU_FLOAT4;                                                            // Setting Neutrino data type...
+  loc_nu_data->layout_index = loc_layout_index;                                                     // Setting kernel argument layout index...
+  ready                     = false;                                                                // Resetting "ready" flag...
 }
 
 nu_float4::~nu_float4()
