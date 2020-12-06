@@ -100,12 +100,29 @@ typedef struct _nu_float4_structure
 } nu_float4_structure;
 #pragma pack(pop)
 
+// Neutrino data types:
+typedef enum
+{
+  NU_INT,                                                                                           ///< Neutrino "nu_int" data type.
+  NU_INT2,                                                                                          ///< Neutrino "nu_int2" data type.
+  NU_INT3,                                                                                          ///< Neutrino "nu_int3" data type.
+  NU_INT4,                                                                                          ///< Neutrino "nu_int4" data type.
+  NU_FLOAT,                                                                                         ///< Neutrino "nu_float" data type.
+  NU_FLOAT2,                                                                                        ///< Neutrino "nu_float2" data type.
+  NU_FLOAT3,                                                                                        ///< Neutrino "nu_float3" data type.
+  NU_FLOAT4,                                                                                        ///< Neutrino "nu_float4" data type.
+} nu_type;
+
 /// @class nu_data
 /// ### Common base class for all Neutrino data.
 /// Declares a common base class for all Neutrino data.
 /// Used in order to be able to define vectors of heterogeneous Neutrino data.
 class nu_data
-{};
+{
+public:
+  nu_type type;                                                                                     ///< Kernel argument data type.
+  size_t  layout_index;                                                                             ///< Kernel argument layout index.
+};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////// "nu_int" class ////////////////////////////////////////////
@@ -165,7 +182,10 @@ public:
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link nu_int::init @endlink method.
-  nu_int ();
+  nu_int (
+          std::vector<nu_data*> loc_nu_data,                                                        ///< Neutrino common base data class.
+          size_t                loc_layout_index                                                    ///< Kernel argument layout index.
+         );
 
   /// @brief **Read file function.**
   /// @details Reads data from a file and fills the data variable. If the data in the file is
@@ -174,8 +194,8 @@ public:
   /// the file the data variable is filled with zeros.
   /// The data must be organized in 1 column of 1 **GLint** number per line.
   void read (
-             std::string loc_file_directory,                                                        /// File directory.
-             std::string loc_file_name                                                              /// File name.
+             std::string loc_file_directory,                                                        ///< File directory.
+             std::string loc_file_name                                                              ///< File name.
             );
 
   /// @brief **Class destructor.**
@@ -193,7 +213,7 @@ public:
 /// Declares a 2xN vector (N = data size) of "GLint" data numbers.
 /// To be used to transfer memory between host and client. It does not have bindings for
 /// OpenGL/CL interoperability. Not intended to be used for graphics rendering.
-class nu_int2 : public nu_data                                                                      /// @brief **2xN vector of "GLint" data.**
+class nu_int2 : public nu_data                                                                      ///< @brief **2xN vector of "GLint" data.**
 {
 private:
 
@@ -243,7 +263,10 @@ public:
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link nu_int2::init @endlink method.
-  nu_int2 ();
+  nu_int2 (
+           nu_data* loc_nu_data,                                                                    ///< Neutrino common base data class.
+           size_t   loc_layout_index                                                                ///< Kernel argument layout index.
+          );
 
   /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
@@ -309,7 +332,10 @@ public:
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link nu_int3::init @endlink method.
-  nu_int3 ();
+  nu_int3 (
+           nu_data* loc_nu_data,                                                                    ///< Neutrino common base data class.
+           size_t   loc_layout_index                                                                ///< Kernel argument layout index.
+          );
 
   /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
@@ -375,7 +401,10 @@ public:
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link nu_int4::init @endlink method.
-  nu_int4 ();
+  nu_int4 (
+           nu_data* loc_nu_data,                                                                    ///< Neutrino common base data class.
+           size_t   loc_layout_index                                                                ///< Kernel argument layout index.
+          );
 
   /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
@@ -441,7 +470,10 @@ public:
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link nu_float::init @endlink method.
-  nu_float ();
+  nu_float (
+            nu_data* loc_nu_data,                                                                   ///< Neutrino common base data class.
+            size_t   loc_layout_index                                                               ///< Kernel argument layout index.
+           );
 
   /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
@@ -507,7 +539,10 @@ public:
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link nu_float2::init @endlink method.
-  nu_float2 ();
+  nu_float2 (
+             nu_data* loc_nu_data,                                                                  ///< Neutrino common base data class.
+             size_t   loc_layout_index                                                              ///< Kernel argument layout index.
+            );
 
   /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
@@ -573,7 +608,10 @@ public:
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link nu_float3::init @endlink method.
-  nu_float3 ();
+  nu_float3 (
+             nu_data* loc_nu_data,                                                                  ///< Neutrino common base data class.
+             size_t   loc_layout_index                                                              ///< Kernel argument layout index.
+            );
 
   /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
@@ -639,7 +677,10 @@ public:
   /// @details It resets the @link ready @endlink. The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link nu_float4::init @endlink method.
-  nu_float4 ();
+  nu_float4 (
+             nu_data* loc_nu_data,                                                                  ///< Neutrino common base data class.
+             size_t   loc_layout_index                                                              ///< Kernel argument layout index.
+            );
 
   /// @brief **Class destructor.**
   /// @details It deallocates the host PC memory previously allocated by the
