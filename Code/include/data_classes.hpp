@@ -264,8 +264,8 @@ public:
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link nu_int2::init @endlink method.
   nu_int2 (
-           nu_data* loc_nu_data,                                                                    ///< Neutrino common base data class.
-           size_t   loc_layout_index                                                                ///< Kernel argument layout index.
+           std::vector<nu_data*> loc_nu_data,                                                       ///< Neutrino common base data class.
+           size_t                loc_layout_index                                                   ///< Kernel argument layout index.
           );
 
   /// @brief **Class destructor.**
@@ -333,8 +333,8 @@ public:
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link nu_int3::init @endlink method.
   nu_int3 (
-           nu_data* loc_nu_data,                                                                    ///< Neutrino common base data class.
-           size_t   loc_layout_index                                                                ///< Kernel argument layout index.
+           std::vector<nu_data*> loc_nu_data,                                                       ///< Neutrino common base data class.
+           size_t                loc_layout_index                                                   ///< Kernel argument layout index.
           );
 
   /// @brief **Class destructor.**
@@ -402,8 +402,8 @@ public:
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link nu_int4::init @endlink method.
   nu_int4 (
-           nu_data* loc_nu_data,                                                                    ///< Neutrino common base data class.
-           size_t   loc_layout_index                                                                ///< Kernel argument layout index.
+           std::vector<nu_data*> loc_nu_data,                                                       ///< Neutrino common base data class.
+           size_t                loc_layout_index                                                   ///< Kernel argument layout index.
           );
 
   /// @brief **Class destructor.**
@@ -471,8 +471,8 @@ public:
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link nu_float::init @endlink method.
   nu_float (
-            nu_data* loc_nu_data,                                                                   ///< Neutrino common base data class.
-            size_t   loc_layout_index                                                               ///< Kernel argument layout index.
+            std::vector<nu_data*> loc_nu_data,                                                      ///< Neutrino common base data class.
+            size_t                loc_layout_index                                                  ///< Kernel argument layout index.
            );
 
   /// @brief **Class destructor.**
@@ -540,8 +540,8 @@ public:
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link nu_float2::init @endlink method.
   nu_float2 (
-             nu_data* loc_nu_data,                                                                  ///< Neutrino common base data class.
-             size_t   loc_layout_index                                                              ///< Kernel argument layout index.
+             std::vector<nu_data*> loc_nu_data,                                                     ///< Neutrino common base data class.
+             size_t                loc_layout_index                                                 ///< Kernel argument layout index.
             );
 
   /// @brief **Class destructor.**
@@ -609,8 +609,8 @@ public:
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link nu_float3::init @endlink method.
   nu_float3 (
-             nu_data* loc_nu_data,                                                                  ///< Neutrino common base data class.
-             size_t   loc_layout_index                                                              ///< Kernel argument layout index.
+             std::vector<nu_data*> loc_nu_data,                                                     ///< Neutrino common base data class.
+             size_t                loc_layout_index                                                 ///< Kernel argument layout index.
             );
 
   /// @brief **Class destructor.**
@@ -678,8 +678,8 @@ public:
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link nu_float4::init @endlink method.
   nu_float4 (
-             nu_data* loc_nu_data,                                                                  ///< Neutrino common base data class.
-             size_t   loc_layout_index                                                              ///< Kernel argument layout index.
+             std::vector<nu_data*> loc_nu_data,                                                     ///< Neutrino common base data class.
+             size_t                loc_layout_index                                                 ///< Kernel argument layout index.
             );
 
   /// @brief **Class destructor.**
