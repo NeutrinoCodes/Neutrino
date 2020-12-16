@@ -9,8 +9,8 @@
 ///////////////////////////////////////////// "nu_int" class //////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 nu_int::nu_int(
-               std::vector<nu_data*> loc_nu_data,                                                   // Neutrino common base data class.
-               size_t                loc_layout                                                     // Kernel argument layout index.
+               std::vector<nu_data*> &loc_nu_data,                                                  // Neutrino common base data class.
+               size_t                 loc_layout                                                    // Kernel argument layout index.
               )
 {
   size_t i;                                                                                         // Data vector current index.
@@ -87,8 +87,8 @@ nu_int::~nu_int()
 ////////////////////////////////////////// "nu_int2" class ///////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 nu_int2::nu_int2(
-                 std::vector<nu_data*> loc_nu_data,                                                 // Neutrino common base data class.
-                 size_t                loc_layout                                                   // Kernel argument layout index.
+                 std::vector<nu_data*> &loc_nu_data,                                                // Neutrino common base data class.
+                 size_t                 loc_layout                                                  // Kernel argument layout index.
                 )
 {
   size_t i;                                                                                         // Data vector current index.
@@ -109,8 +109,8 @@ nu_int2::~nu_int2()
 ////////////////////////////////////////// "nu_int3" class ///////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 nu_int3::nu_int3(
-                 std::vector<nu_data*> loc_nu_data,                                                 // Neutrino common base data class.
-                 size_t                loc_layout                                                   // Kernel argument layout index.
+                 std::vector<nu_data*> &loc_nu_data,                                                // Neutrino common base data class.
+                 size_t                 loc_layout                                                  // Kernel argument layout index.
                 )
 {
   size_t i;                                                                                         // Data vector current index.
@@ -131,8 +131,8 @@ nu_int3::~nu_int3()
 ////////////////////////////////////////// "nu_int4" class ///////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 nu_int4::nu_int4(
-                 std::vector<nu_data*> loc_nu_data,                                                 // Neutrino common base data class.
-                 size_t                loc_layout                                                   // Kernel argument layout index.
+                 std::vector<nu_data*> &loc_nu_data,                                                // Neutrino common base data class.
+                 size_t                 loc_layout                                                  // Kernel argument layout index.
                 )
 {
   size_t i;                                                                                         // Data vector current index.
@@ -153,8 +153,8 @@ nu_int4::~nu_int4()
 /////////////////////////////////////////// "nu_float" class /////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 nu_float::nu_float(
-                   std::vector<nu_data*> loc_nu_data,                                               // Neutrino common base data class.
-                   size_t                loc_layout                                                 // Kernel argument layout index.
+                   std::vector<nu_data*> &loc_nu_data,                                              // Neutrino common base data class.
+                   size_t                 loc_layout                                                // Kernel argument layout index.
                   )
 {
   size_t i;                                                                                         // Data vector current index.
@@ -175,8 +175,8 @@ nu_float::~nu_float()
 //////////////////////////////////////////// "nu_float2" class ///////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 nu_float2::nu_float2(
-                     std::vector<nu_data*> loc_nu_data,                                             // Neutrino common base data class.
-                     size_t                loc_layout                                               // Kernel argument layout index.
+                     std::vector<nu_data*> &loc_nu_data,                                            // Neutrino common base data class.
+                     size_t                 loc_layout                                              // Kernel argument layout index.
                     )
 {
   size_t i;                                                                                         // Data vector current index.
@@ -197,8 +197,8 @@ nu_float2::~nu_float2()
 //////////////////////////////////////////// "nu_float3" class ///////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 nu_float3::nu_float3(
-                     std::vector<nu_data*> loc_nu_data,                                             // Neutrino common base data class.
-                     size_t                loc_layout                                               // Kernel argument layout index.
+                     std::vector<nu_data*> &loc_nu_data,                                            // Neutrino common base data class.
+                     size_t                 loc_layout                                              // Kernel argument layout index.
                     )
 {
   size_t i;                                                                                         // Data vector current index.
@@ -219,8 +219,8 @@ nu_float3::~nu_float3()
 ///////////////////////////////////////////// "nu_float4" class //////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 nu_float4::nu_float4(
-                     std::vector<nu_data*> loc_nu_data,                                             // Neutrino common base data class.
-                     size_t                loc_layout                                               // Kernel argument layout index.
+                     std::vector<nu_data*> &loc_nu_data,                                            // Neutrino common base data class.
+                     size_t                 loc_layout                                              // Kernel argument layout index.
                     )
 {
   size_t i;                                                                                         // Data vector current index.
@@ -230,7 +230,6 @@ nu_float4::nu_float4(
   loc_nu_data[i]->type   = NU_FLOAT4;                                                               // Setting Neutrino data type...
   loc_nu_data[i]->layout = loc_layout;                                                              // Setting kernel argument layout index...
   ready                  = false;                                                                   // Resetting "ready" flag...
-  std::cout << "sono qui" << std::endl;
 }
 
 nu_float4::~nu_float4()
