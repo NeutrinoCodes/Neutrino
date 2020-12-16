@@ -121,7 +121,7 @@ class nu_data
 {
 public:
   nu_type type;                                                                                     ///< Kernel argument data type.
-  size_t  layout_index;                                                                             ///< Kernel argument layout index.
+  size_t  layout;                                                                                   ///< Kernel argument layout index.
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,7 +184,7 @@ public:
   /// therefore it must be done by invoking the @link nu_int::init @endlink method.
   nu_int (
           std::vector<nu_data*> loc_nu_data,                                                        ///< Neutrino common base data class.
-          size_t                loc_layout_index                                                    ///< Kernel argument layout index.
+          size_t                loc_layout                                                          ///< Kernel argument layout index.
          );
 
   /// @brief **Read file function.**
@@ -265,7 +265,7 @@ public:
   /// therefore it must be done by invoking the @link nu_int2::init @endlink method.
   nu_int2 (
            std::vector<nu_data*> loc_nu_data,                                                       ///< Neutrino common base data class.
-           size_t                loc_layout_index                                                   ///< Kernel argument layout index.
+           size_t                loc_layout                                                         ///< Kernel argument layout index.
           );
 
   /// @brief **Class destructor.**
@@ -334,7 +334,7 @@ public:
   /// therefore it must be done by invoking the @link nu_int3::init @endlink method.
   nu_int3 (
            std::vector<nu_data*> loc_nu_data,                                                       ///< Neutrino common base data class.
-           size_t                loc_layout_index                                                   ///< Kernel argument layout index.
+           size_t                loc_layout                                                         ///< Kernel argument layout index.
           );
 
   /// @brief **Class destructor.**
@@ -403,7 +403,7 @@ public:
   /// therefore it must be done by invoking the @link nu_int4::init @endlink method.
   nu_int4 (
            std::vector<nu_data*> loc_nu_data,                                                       ///< Neutrino common base data class.
-           size_t                loc_layout_index                                                   ///< Kernel argument layout index.
+           size_t                loc_layout                                                         ///< Kernel argument layout index.
           );
 
   /// @brief **Class destructor.**
@@ -472,7 +472,7 @@ public:
   /// therefore it must be done by invoking the @link nu_float::init @endlink method.
   nu_float (
             std::vector<nu_data*> loc_nu_data,                                                      ///< Neutrino common base data class.
-            size_t                loc_layout_index                                                  ///< Kernel argument layout index.
+            size_t                loc_layout                                                        ///< Kernel argument layout index.
            );
 
   /// @brief **Class destructor.**
@@ -541,7 +541,7 @@ public:
   /// therefore it must be done by invoking the @link nu_float2::init @endlink method.
   nu_float2 (
              std::vector<nu_data*> loc_nu_data,                                                     ///< Neutrino common base data class.
-             size_t                loc_layout_index                                                 ///< Kernel argument layout index.
+             size_t                loc_layout                                                       ///< Kernel argument layout index.
             );
 
   /// @brief **Class destructor.**
@@ -610,7 +610,7 @@ public:
   /// therefore it must be done by invoking the @link nu_float3::init @endlink method.
   nu_float3 (
              std::vector<nu_data*> loc_nu_data,                                                     ///< Neutrino common base data class.
-             size_t                loc_layout_index                                                 ///< Kernel argument layout index.
+             size_t                loc_layout                                                       ///< Kernel argument layout index.
             );
 
   /// @brief **Class destructor.**
@@ -679,7 +679,7 @@ public:
   /// therefore it must be done by invoking the @link nu_float4::init @endlink method.
   nu_float4 (
              std::vector<nu_data*> loc_nu_data,                                                     ///< Neutrino common base data class.
-             size_t                loc_layout_index                                                 ///< Kernel argument layout index.
+             size_t                loc_layout                                                       ///< Kernel argument layout index.
             );
 
   /// @brief **Class destructor.**
