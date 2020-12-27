@@ -9,16 +9,17 @@
 ///////////////////////////////////////////// "opencl" class /////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 opencl::opencl(
-               size_t      loc_q_num,                                                               // Number of OpenCL queues.
-               size_t      loc_k_num,                                                               // Number of OpenCL kernels.
-               int         loc_window_size_x,                                                       // Window x-size [px].
-               int         loc_window_size_y,                                                       // Window y-size [px].
-               std::string loc_title,                                                               // Window title.
-               float       loc_orbit_x_initial,                                                     // Initial "near clipping-plane" x-coordinate.
-               float       loc_orbit_y_initial,                                                     // Initial "near clipping-plane" y-coordinate.
-               float       loc_pan_x_initial,                                                       // Initial pan-x coordinate.
-               float       loc_pan_y_initial,                                                       // Initial pan-y coordinate.
-               float       loc_pan_z_initial                                                        // Initial pan-z coordinate.
+               size_t              loc_q_num,                                                       // Number of OpenCL queues.
+               size_t              loc_k_num,                                                       // Number of OpenCL kernels.
+               int                 loc_window_size_x,                                               // Window x-size [px].
+               int                 loc_window_size_y,                                               // Window y-size [px].
+               std::string         loc_title,                                                       // Window title.
+               float               loc_orbit_x_initial,                                             // Initial "near clipping-plane" x-coordinate.
+               float               loc_orbit_y_initial,                                             // Initial "near clipping-plane" y-coordinate.
+               float               loc_pan_x_initial,                                               // Initial pan-x coordinate.
+               float               loc_pan_y_initial,                                               // Initial pan-y coordinate.
+               float               loc_pan_z_initial,                                               // Initial pan-z coordinate.
+               compute_device_type loc_device_type                                                  // OpenCL device type.
               )
 {
   neutrino::init (loc_q_num, loc_k_num);
@@ -39,6 +40,7 @@ opencl::opencl(
   properties       = NULL;                                                                          // Initializing platforms' properties...
   context_id       = NULL;                                                                          // Initializing platforms' context...
   device_type      = NU_DEFAULT;                                                                    // Initializing device type...
+  opencl::init (loc_device_type);                                                                   // OpenCL device type.)
 }
 
 cl_uint opencl::get_platforms_number ()
@@ -220,16 +222,11 @@ void opencl::init
     opencl_platform[i] = new platform ();
     opencl_platform[i]->init (get_platform_id (i));
 
-    std::cout << "        PLATFORM #: " +
-      std::to_string (i + 1) << std::endl;                                                          // Printing message...
-    std::cout << "        --> profile:    " +
-      opencl_platform[i]->profile << std::endl;                                                     // Printing message...
-    std::cout << "        --> version:    " +
-      opencl_platform[i]->version << std::endl;                                                     // Printing message...
-    std::cout << "        --> name:       " +
-      opencl_platform[i]->name << std::endl;                                                        // Printing message...
-    std::cout << "        --> vendor:     " +
-      opencl_platform[i]->vendor << std::endl;                                                      // Printing message...
+    std::cout << "        PLATFORM #: " + std::to_string (i + 1) << std::endl;                      // Printing message...
+    std::cout << "        --> profile:    " + opencl_platform[i]->profile << std::endl;             // Printing message...
+    std::cout << "        --> version:    " + opencl_platform[i]->version << std::endl;             // Printing message...
+    std::cout << "        --> name:       " + opencl_platform[i]->name << std::endl;                // Printing message...
+    std::cout << "        --> vendor:     " + opencl_platform[i]->vendor << std::endl;              // Printing message...
     std::cout << "        --> extensions: ";                                                        // Printing message (24 characters long)...
 
     // Listing platform extensions:
