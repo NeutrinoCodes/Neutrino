@@ -90,10 +90,9 @@ typedef struct _gmsh_group
 /// ### Mesh.
 /// Declares a mesh class.
 /// To be used to run mesh operations.
-class mesh                                                                                          /// @brief **Mesh.**
+class mesh : public neutrino                                                                        /// @brief **Mesh.**
 {
 private:
-  neutrino*                         baseline;                                                       ///< @brief **Neutrino baseline.**
 
   // INDEXES:
   size_t                            i;                                                              ///< Node index.
@@ -147,7 +146,6 @@ public:
   mesh ();
 
   void                init (
-                            neutrino*   loc_baseline,                                               ///< Neutrino baseline.
                             std::string loc_file_name                                               ///< GMSH .msh file name.
                            );
 

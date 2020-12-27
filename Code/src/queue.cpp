@@ -10,9 +10,9 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 queue::queue()
 {
-  queue_id   = NULL;                                                                                // Initializing queue id...
-  context_id = NULL;                                                                                // Initializing context id...
-  device_id  = NULL;                                                                                // Initializing device id...
+  queue_id          = NULL;                                                                         // Initializing queue id...
+  queue::context_id = NULL;                                                                         // Initializing context id...
+  queue::device_id  = NULL;                                                                         // Initializing device id...
 }
 
 void queue::init ()
@@ -23,17 +23,17 @@ void queue::init ()
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
-  context_id = neutrino::context_id;                                                                // Initializing context id...
-  device_id  = neutrino::device_id;                                                                 // Initializing device id...
+  queue::context_id = neutrino::context_id;                                                         // Initializing context id...
+  queue::device_id  = neutrino::device_id;                                                          // Initializing device id...
 
   // Creating OpenCL queue:
-  queue_id   = clCreateCommandQueue
-               (
-                context_id,                                                                         // OpenCL context ID.
-                device_id,                                                                          // Device ID.
-                0,                                                                                  // Queue properties (con be used for enabling profiling).
-                &loc_error
-               );                                                                                   // Error code.
+  queue_id          = clCreateCommandQueue
+                      (
+                       queue::context_id,                                                           // OpenCL context ID.
+                       queue::device_id,                                                            // Device ID.
+                       0,                                                                           // Queue properties (con be used for enabling profiling).
+                       &loc_error
+                      );                                                                            // Error code.
 
   neutrino::check_error (loc_error);                                                                // Checking error...
 
