@@ -15,20 +15,16 @@ queue::queue()
   device_id  = NULL;                                                                                // Initializing device id...
 }
 
-void queue::init
-(
- neutrino* loc_baseline
-)
+void queue::init ()
 {
   cl_int loc_error;                                                                                 // Local error code.
 
-  baseline   = loc_baseline;                                                                        // Getting Neutrino baseline...
-  baseline->action ("creating OpenCL command queue...");                                            // Printing message...
+  neutrino::action ("creating OpenCL command queue...");                                            // Printing message...
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
-  context_id = baseline->context_id;                                                                // Initializing context id...
-  device_id  = baseline->device_id;                                                                 // Initializing device id...
+  context_id = neutrino::context_id;                                                                // Initializing context id...
+  device_id  = neutrino::device_id;                                                                 // Initializing device id...
 
   // Creating OpenCL queue:
   queue_id   = clCreateCommandQueue
@@ -39,11 +35,11 @@ void queue::init
                 &loc_error
                );                                                                                   // Error code.
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
 
-  baseline->done ();                                                                                // Printing message...
+  neutrino::done ();                                                                                // Printing message...
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,7 +59,7 @@ void queue::read
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -87,7 +83,7 @@ void queue::read
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   // Releasing OpenGL buffer:
   release
@@ -113,7 +109,7 @@ void queue::read
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -137,7 +133,7 @@ void queue::read
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   // Releasing OpenGL buffer:
   release
@@ -163,7 +159,7 @@ void queue::read
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -187,7 +183,7 @@ void queue::read
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   // Releasing OpenGL buffer:
   release
@@ -213,7 +209,7 @@ void queue::read
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -237,7 +233,7 @@ void queue::read
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   // Releasing OpenGL buffer:
   release
@@ -263,7 +259,7 @@ void queue::read
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -287,7 +283,7 @@ void queue::read
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   // Releasing OpenGL buffer:
   release
@@ -313,7 +309,7 @@ void queue::read
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -337,7 +333,7 @@ void queue::read
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   // Releasing OpenGL buffer:
   release
@@ -363,7 +359,7 @@ void queue::read
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -387,7 +383,7 @@ void queue::read
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   // Releasing OpenGL buffer:
   release
@@ -413,7 +409,7 @@ void queue::read
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -437,7 +433,7 @@ void queue::read
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   // Releasing OpenGL buffer:
   release
@@ -466,7 +462,7 @@ void queue::write
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -490,7 +486,7 @@ void queue::write
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   // Releasing OpenGL buffer:
   release
@@ -516,7 +512,7 @@ void queue::write
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -540,7 +536,7 @@ void queue::write
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   // Releasing OpenGL buffer:
   release
@@ -566,7 +562,7 @@ void queue::write
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -590,7 +586,7 @@ void queue::write
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   // Releasing OpenGL buffer:
   release
@@ -616,7 +612,7 @@ void queue::write
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -640,7 +636,7 @@ void queue::write
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   // Releasing OpenGL buffer:
   release
@@ -666,7 +662,7 @@ void queue::write
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -690,7 +686,7 @@ void queue::write
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   // Releasing OpenGL buffer:
   release
@@ -716,7 +712,7 @@ void queue::write
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -740,7 +736,7 @@ void queue::write
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   // Releasing OpenGL buffer:
   release
@@ -766,7 +762,7 @@ void queue::write
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -790,7 +786,7 @@ void queue::write
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   // Releasing OpenGL buffer:
   release
@@ -816,7 +812,7 @@ void queue::write
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -840,7 +836,7 @@ void queue::write
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   // Releasing OpenGL buffer:
   release
@@ -866,7 +862,7 @@ void queue::acquire
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -886,7 +882,7 @@ void queue::acquire
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
 
   clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
 };
@@ -905,7 +901,7 @@ void queue::acquire
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -925,7 +921,7 @@ void queue::acquire
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
 
   clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
 };
@@ -944,7 +940,7 @@ void queue::acquire
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -964,7 +960,7 @@ void queue::acquire
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
 
   clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
 };
@@ -983,7 +979,7 @@ void queue::acquire
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -1003,7 +999,7 @@ void queue::acquire
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
 
   clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
 };
@@ -1022,7 +1018,7 @@ void queue::acquire
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -1042,7 +1038,7 @@ void queue::acquire
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
 
   clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
 };
@@ -1061,7 +1057,7 @@ void queue::acquire
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -1081,7 +1077,7 @@ void queue::acquire
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
 
   clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
 };
@@ -1100,7 +1096,7 @@ void queue::acquire
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -1120,7 +1116,7 @@ void queue::acquire
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
 
   clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
 };
@@ -1139,7 +1135,7 @@ void queue::acquire
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -1159,7 +1155,7 @@ void queue::acquire
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
 
   clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
 };
@@ -1178,7 +1174,7 @@ void queue::release
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -1193,7 +1189,7 @@ void queue::release
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
 
   clFinish (queue_id);                                                                              // Ensuring that all OpenCL has completed all operations...
 
@@ -1228,7 +1224,7 @@ void queue::release
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -1243,7 +1239,7 @@ void queue::release
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
 
   clFinish (queue_id);                                                                              // Ensuring that all OpenCL has completed all operations...
 
@@ -1278,7 +1274,7 @@ void queue::release
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -1293,7 +1289,7 @@ void queue::release
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
 
   clFinish (queue_id);                                                                              // Ensuring that all OpenCL has completed all operations...
 
@@ -1328,7 +1324,7 @@ void queue::release
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -1343,7 +1339,7 @@ void queue::release
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
 
   clFinish (queue_id);                                                                              // Ensuring that all OpenCL has completed all operations...
 
@@ -1378,7 +1374,7 @@ void queue::release
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -1393,7 +1389,7 @@ void queue::release
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
 
   clFinish (queue_id);                                                                              // Ensuring that all OpenCL has completed all operations...
 
@@ -1428,7 +1424,7 @@ void queue::release
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -1443,7 +1439,7 @@ void queue::release
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
 
   clFinish (queue_id);                                                                              // Ensuring that all OpenCL has completed all operations...
 
@@ -1478,7 +1474,7 @@ void queue::release
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -1493,7 +1489,7 @@ void queue::release
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
 
   clFinish (queue_id);                                                                              // Ensuring that all OpenCL has completed all operations...
 
@@ -1528,7 +1524,7 @@ void queue::release
   // Checking layout index:
   if(loc_layout_index != loc_data->layout)
   {
-    baseline->error ("Layout index mismatch!");                                                     // Printing message...
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
     exit (EXIT_FAILURE);                                                                            // Exiting...
   }
 
@@ -1543,7 +1539,7 @@ void queue::release
                NULL                                                                                 // Event.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking returned error code...
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
 
   clFinish (queue_id);                                                                              // Ensuring that all OpenCL has completed all operations...
 
@@ -1571,13 +1567,13 @@ queue::~queue()
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
   clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
 
-  baseline->action ("releasing OpenCL command queue...");                                           // Printing message...
+  neutrino::action ("releasing OpenCL command queue...");                                           // Printing message...
 
   loc_error = clReleaseCommandQueue (queue_id);                                                     // Releasing OpenCL queue...
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
 
-  baseline->done ();                                                                                // Printing message...
+  neutrino::done ();                                                                                // Printing message...
 }
