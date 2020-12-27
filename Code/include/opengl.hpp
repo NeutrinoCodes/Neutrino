@@ -309,10 +309,7 @@ public:
 
   /// @brief **Class constructor.**
   /// @details It does nothing.
-  opengl(
-         size_t loc_q_num,
-         size_t loc_k_num
-        );
+  opengl();
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////// PUBLIC METHODS //////////////////////////////////////////
@@ -320,7 +317,6 @@ public:
   /// @brief **GUI initialization.**
   /// @details Initializes GLFW, GLAD and OpenGL contexts.
   void init (
-             neutrino*   loc_baseline,
              int         loc_window_size_x,                                                         ///< Window x-size [px].
              int         loc_window_size_y,                                                         ///< Window y-size [px].
              std::string loc_title,                                                                 ///< Windows title.

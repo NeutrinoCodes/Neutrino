@@ -8,12 +8,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////// "opengl" class /////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-opengl::opengl(
-               size_t loc_q_num,
-               size_t loc_k_num
-              )
+opengl::opengl()
 {
-  neutrino::init (loc_q_num, loc_k_num);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -299,7 +295,6 @@ void opengl::mouse_scrolled
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void opengl::init
 (
- neutrino*   loc_baseline,                                                                          // Neutrino baseline.
  int         loc_window_size_x,                                                                     // Window x-size [px].
  int         loc_window_size_y,                                                                     // Window y-size [px].
  std::string loc_title,                                                                             // Window title.
@@ -313,7 +308,6 @@ void opengl::init
   char*  loc_title_buffer;
   size_t loc_title_size;
 
-  baseline                  = loc_baseline;                                                         // Initializing Neutrino baseline...
   window_size_x             = loc_window_size_x;                                                    // Initializing window x-size [px]...
   window_size_y             = loc_window_size_y;                                                    // Initializing window y-size [px]...
   title                     = loc_title;                                                            // Initializing window title...

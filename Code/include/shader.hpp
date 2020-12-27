@@ -23,10 +23,9 @@
 /// @class shader
 /// ### OpenCL shader class.
 /// Declares an OpenCL shader class. To be used in order to do graphics rendition of OpenCL data.
-class shader                                                                                        /// @brief **OpenGL shader.**
+class shader : public neutrino                                                                      /// @brief **OpenGL shader.**
 {
 private:
-  neutrino*  baseline;                                                                              ///< @brief **Neutrino baseline.**
 
   /// @brief    **OpenGL shader compilation.**
   /// @details  It compiles an OpenGL shader.
@@ -45,9 +44,7 @@ public:
 
   /// @brief **Class initializer.**
   /// @details It compiles the OpenGL vertex, geometry and fragment shader into an OpenGL program.
-  void init (
-             neutrino* loc_baseline                                                                 ///< Neutrino baseline.
-            );
+  void init ();
 
   /// @brief **Shader source adder function.**
   /// @details Loads an OpenGL shader source from its corresponding source file.

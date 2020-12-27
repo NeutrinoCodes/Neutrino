@@ -23,10 +23,9 @@
 /// ### OpenCL kernel.
 /// Declares an OpenCL kernel.
 /// To be used to run OpenCL computation.
-class kernel                                                                                        /// @brief **OpenCL kernel.**
+class kernel : public neutrino                                                                      /// @brief **OpenCL kernel.**
 {
 private:
-  neutrino*                baseline;                                                                ///< @brief **Neutrino baseline.**
   cl_device_id*            device_id;                                                               ///< @brief **Device ID array.**
 
 public:
@@ -56,10 +55,9 @@ public:
   /// must pass as input arguments to the @link kernel::init @method , according to the
   /// implementation of the algorithms in the kernel sources.
   void init (
-             neutrino* loc_baseline,                                                                ///< Neutrino baseline.
-             size_t    loc_kernel_size_i,                                                           ///< OpenCL kernel size (i-index).
-             size_t    loc_kernel_size_j,                                                           ///< OpenCL kernel size (j-index).
-             size_t    loc_kernel_size_k                                                            ///< OpenCL kernel size (k-index).
+             size_t loc_kernel_size_i,                                                              ///< OpenCL kernel size (i-index).
+             size_t loc_kernel_size_j,                                                              ///< OpenCL kernel size (j-index).
+             size_t loc_kernel_size_k                                                               ///< OpenCL kernel size (k-index).
             );
 
   /// @brief **Kernel source adder function.**
