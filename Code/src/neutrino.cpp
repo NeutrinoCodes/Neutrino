@@ -10,14 +10,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 neutrino::neutrino()
 {
-  interop     = false;                                                                              // Use OpenCL-OpenGL interop.
-  tic         = 0.0;                                                                                // Tic time [us].
-  toc         = 0.0;                                                                                // Toc time [us].
-  loop_time   = 0.0;                                                                                // Loop time [us].
-
-  context_id  = NULL;                                                                               // OpenCL context ID.
-  platform_id = NULL;                                                                               // OpenCL platform ID.
-  device_id   = NULL;                                                                               // OpenCL device ID.
 }
 
 void neutrino::init
@@ -26,6 +18,15 @@ void neutrino::init
  size_t loc_k_num
 )
 {
+  interop       = false;                                                                            // Use OpenCL-OpenGL interop.
+  tic           = 0.0;                                                                              // Tic time [us].
+  toc           = 0.0;                                                                              // Toc time [us].
+  loop_time     = 0.0;                                                                              // Loop time [us].
+
+  nu_context_id = NULL;                                                                             // OpenCL context ID.
+  platform_id   = NULL;                                                                             // OpenCL platform ID.
+  nu_device_id  = NULL;                                                                             // OpenCL device ID.
+
   // Setting ANSI color modality for Windows:
   #ifdef WIN32
     DWORD  l_mode;

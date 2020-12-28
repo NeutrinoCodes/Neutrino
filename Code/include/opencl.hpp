@@ -27,10 +27,9 @@
 /// ### OpenCL class.
 /// Declares an OpenCL class.
 /// To be used to run OpenCL computation.
-class opencl : public opengl                                                                        /// @brief **OpenCL context.**
+class opencl : virtual public neutrino, virtual public opengl                                       /// @brief **OpenCL context.**
 {
 private:
-  neutrino*      baseline;                                                                          ///< @brief **Neutrino baseline.**
   cl_device_type device_type;                                                                       ///< @brief **OpenCL device type.**
   std::string    device_type_text;                                                                  ///< @brief **OpenCL device text description.**
 

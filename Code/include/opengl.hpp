@@ -12,10 +12,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////// "opengl" class //////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-class opengl : public neutrino                                                                      /// @brief **OpenGL GUI.**
+class opengl : virtual public neutrino                                                              /// @brief **OpenGL GUI.**
 {
 private:
-  neutrino*        baseline;                                                                        ///< @brief **Neutrino baseline.**
   GLFWgamepadstate gamepad;                                                                         ///< @brief **Gamepad state.**
   float            mouse_x;                                                                         ///< @brief **Mouse x movement (current) for velocity computation.**
   float            mouse_y;                                                                         ///< @brief **Mouse y movement (current) for velocity computation.**
