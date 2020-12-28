@@ -36,7 +36,7 @@ std::string device::get_string
                &loc_parameter_size                                                                  // Returned parameter size.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   char* loc_parameter_buffer = new char[loc_parameter_size]();                                      // Text buffer.
 
@@ -50,7 +50,7 @@ std::string device::get_string
                NULL                                                                                 // Returned parameter size (NULL = ignored).
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   loc_parameter_value = loc_parameter_buffer;                                                       // Setting parameter value...
 
@@ -79,7 +79,7 @@ cl_uint device::get_cl_uint
                &loc_parameter_size                                                                  // Returned parameter size.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   // Getting parameter information:
   loc_error = clGetDeviceInfo
@@ -91,7 +91,7 @@ cl_uint device::get_cl_uint
                NULL                                                                                 // Returned parameter size (NULL = ignored).
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   return (loc_parameter_value);                                                                     // Returning parameter value...
 }
@@ -118,7 +118,7 @@ cl_uint device::get_cl_bool
                &loc_parameter_size                                                                  // Returned parameter size.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   // Getting parameter information:
   loc_error = clGetDeviceInfo
@@ -130,7 +130,7 @@ cl_uint device::get_cl_bool
                NULL                                                                                 // Returned parameter size (NULL = ignored).
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   return (loc_parameter_value);                                                                     // Returning parameter value...
 }
@@ -157,7 +157,7 @@ cl_device_fp_config device::get_cl_device_fp_config
                &loc_parameter_size                                                                  // Returned parameter size.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   // Getting parameter information:
   loc_error = clGetDeviceInfo
@@ -169,7 +169,7 @@ cl_device_fp_config device::get_cl_device_fp_config
                NULL                                                                                 // Returned parameter size (NULL = ignored).
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   return (loc_parameter_value);                                                                     // Returning parameter value...
 }
@@ -196,7 +196,7 @@ cl_device_exec_capabilities device::get_cl_device_exec_capabilities
                &loc_parameter_size                                                                  // Returned parameter size.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   // Getting parameter information:
   loc_error = clGetDeviceInfo
@@ -208,7 +208,7 @@ cl_device_exec_capabilities device::get_cl_device_exec_capabilities
                NULL                                                                                 // Returned parameter size (NULL = ignored).
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   return (loc_parameter_value);                                                                     // Returning parameter value...
 }
@@ -235,7 +235,7 @@ cl_ulong device::get_cl_ulong
                &loc_parameter_size                                                                  // Returned parameter size.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   // Getting parameter information:
   loc_error = clGetDeviceInfo
@@ -247,7 +247,7 @@ cl_ulong device::get_cl_ulong
                NULL                                                                                 // Returned parameter size (NULL = ignored).
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   return (loc_parameter_value);                                                                     // Returning parameter value...
 }
@@ -274,7 +274,7 @@ cl_device_mem_cache_type device::get_cl_device_mem_cache_type
                &loc_parameter_size                                                                  // Returned parameter size.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   // Getting parameter information:
   loc_error = clGetDeviceInfo
@@ -286,7 +286,7 @@ cl_device_mem_cache_type device::get_cl_device_mem_cache_type
                NULL                                                                                 // Returned parameter size (NULL = ignored).
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   return (loc_parameter_value);                                                                     // Returning parameter value...
 }
@@ -313,7 +313,7 @@ size_t device::get_size_t
                &loc_parameter_size                                                                  // Returned parameter size.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   // Getting parameter information:
   loc_error = clGetDeviceInfo
@@ -325,7 +325,7 @@ size_t device::get_size_t
                NULL                                                                                 // Returned parameter size (NULL = ignored).
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   return (loc_parameter_value);                                                                     // Returning parameter value...
 }
@@ -352,7 +352,7 @@ cl_device_local_mem_type device::get_cl_device_local_mem_type
                &loc_parameter_size                                                                  // Returned parameter size.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   // Getting parameter information:
   loc_error = clGetDeviceInfo
@@ -364,7 +364,7 @@ cl_device_local_mem_type device::get_cl_device_local_mem_type
                NULL                                                                                 // Returned parameter size (NULL = ignored).
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   return (loc_parameter_value);                                                                     // Returning parameter value...
 }
@@ -391,7 +391,7 @@ cl_platform_id device::get_cl_platform_id
                &loc_parameter_size                                                                  // Returned parameter size.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   // Getting parameter information:
   loc_error = clGetDeviceInfo
@@ -403,7 +403,7 @@ cl_platform_id device::get_cl_platform_id
                NULL                                                                                 // Returned parameter size (NULL = ignored).
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   return (loc_parameter_value);                                                                     // Returning parameter value...
 }
@@ -430,7 +430,7 @@ cl_device_type device::get_cl_device_type
                &loc_parameter_size                                                                  // Returned parameter size.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   // Getting parameter information:
   loc_error = clGetDeviceInfo
@@ -442,7 +442,7 @@ cl_device_type device::get_cl_device_type
                NULL                                                                                 // Returned parameter size (NULL = ignored).
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   return (loc_parameter_value);                                                                     // Returning parameter value...
 }
@@ -469,7 +469,7 @@ cl_command_queue_properties device::get_cl_command_queue_properties
                &loc_parameter_size                                                                  // Returned parameter size.
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   // Getting parameter information:
   loc_error = clGetDeviceInfo
@@ -481,7 +481,7 @@ cl_command_queue_properties device::get_cl_command_queue_properties
                NULL                                                                                 // Returned parameter size (NULL = ignored).
               );
 
-  baseline->check_error (loc_error);                                                                // Checking error...
+  neutrino::check_error (loc_error);                                                                // Checking error...
 
   return (loc_parameter_value);                                                                     // Returning parameter value...
 }

@@ -21,10 +21,9 @@
 /// platform. See also the OpenCL [platform]
 /// (https://www.sciencedirect.com/topics/computer-science/platform-model)
 /// description.
-class platform                                                                                      /// @brief **OpenCL platform.**
+class platform : public neutrino                                                                    /// @brief **OpenCL platform.**
 {
 private:
-  neutrino*   baseline;                                                                             ///< @brief **Neutrino baseline.**
   std::string parameter;                                                                            ///< @brief **Parameter value.**
 
   /// @brief **info_size** getter function.

@@ -34,7 +34,7 @@ size_t platform::get_info_size
                &loc_parameter_size                                                                  // Returned parameter size.
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   return (loc_parameter_size);                                                                      // Returning local parameter size...
 }
@@ -62,7 +62,7 @@ std::string platform::get_info_value
                NULL                                                                                 // Returned parameter size (NULL = ignored).
               );
 
-  baseline->check_error (loc_error);
+  neutrino::check_error (loc_error);
 
   loc_parameter = std::string (loc_parameter_buffer);
 

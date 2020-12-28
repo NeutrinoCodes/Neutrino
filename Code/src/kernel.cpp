@@ -81,7 +81,7 @@ void kernel::build ()
   neutrino::action ("creating OpenCL program from kernel sources...");                              // Printing message...
   program = clCreateProgramWithSource
             (
-             neutrino::nu_context_id,                                                               // OpenCL context ID.
+             neutrino::context_id,                                                                  // OpenCL context ID.
              (cl_uint)kernel_source.size (),                                                        // Number of program sources.
              (const char**)loc_kernel_source,                                                       // Program source.
              loc_kernel_source_size,                                                                // Source size.
@@ -97,7 +97,7 @@ void kernel::build ()
 
   // Creating device ID list:
   device_id    = new cl_device_id[1];                                                               // OpenCL device ID.
-  device_id[0] = neutrino::nu_device_id;                                                            // Getting device ID.
+  device_id[0] = neutrino::device_id;                                                               // Getting device ID.
 
   // Building OpenCL program:
   loc_error    = clBuildProgram
@@ -273,7 +273,7 @@ void kernel::setarg
       // Creating OpenCL buffer from OpenGL buffer:
       loc_data->buffer = clCreateFromGLBuffer
                          (
-                          neutrino::nu_context_id,                                                  // OpenCL context.
+                          neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE,                                                        // Memory flags.
                           loc_data->ssbo,                                                           // VBO.
                           &loc_error                                                                // Returned error.
@@ -285,7 +285,7 @@ void kernel::setarg
       // Creating OpenCL memory buffer:
       loc_data->buffer = clCreateBuffer
                          (
-                          neutrino::nu_context_id,                                                  // OpenCL context.
+                          neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
                           sizeof(GL_INT)*loc_data->data.size (),                                    // Data buffer size.
@@ -403,7 +403,7 @@ void kernel::setarg
       // Creating OpenCL buffer from OpenGL buffer:
       loc_data->buffer = clCreateFromGLBuffer
                          (
-                          neutrino::nu_context_id,                                                  // OpenCL context.
+                          neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE,                                                        // Memory flags.
                           loc_data->ssbo,                                                           // VBO.
                           &loc_error                                                                // Returned error.
@@ -415,7 +415,7 @@ void kernel::setarg
       // Creating OpenCL memory buffer:
       loc_data->buffer = clCreateBuffer
                          (
-                          neutrino::nu_context_id,                                                  // OpenCL context.
+                          neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
                           sizeof(nu_int2_structure)*loc_data->data.size (),                         // Data buffer size.
@@ -533,7 +533,7 @@ void kernel::setarg
       // Creating OpenCL buffer from OpenGL buffer:
       loc_data->buffer = clCreateFromGLBuffer
                          (
-                          neutrino::nu_context_id,                                                  // OpenCL context.
+                          neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE,                                                        // Memory flags.
                           loc_data->ssbo,                                                           // VBO.
                           &loc_error                                                                // Returned error.
@@ -545,7 +545,7 @@ void kernel::setarg
       // Creating OpenCL memory buffer:
       loc_data->buffer = clCreateBuffer
                          (
-                          neutrino::nu_context_id,                                                  // OpenCL context.
+                          neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
                           sizeof(nu_int3_structure)*loc_data->data.size (),                         // Data buffer size.
@@ -663,7 +663,7 @@ void kernel::setarg
       // Creating OpenCL buffer from OpenGL buffer:
       loc_data->buffer = clCreateFromGLBuffer
                          (
-                          neutrino::nu_context_id,                                                  // OpenCL context.
+                          neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE,                                                        // Memory flags.
                           loc_data->ssbo,                                                           // VBO.
                           &loc_error                                                                // Returned error.
@@ -675,7 +675,7 @@ void kernel::setarg
       // Creating OpenCL memory buffer:
       loc_data->buffer = clCreateBuffer
                          (
-                          neutrino::nu_context_id,                                                  // OpenCL context.
+                          neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
                           sizeof(nu_int4_structure)*loc_data->data.size (),                         // Data buffer size.
@@ -793,7 +793,7 @@ void kernel::setarg
       // Creating OpenCL buffer from OpenGL buffer:
       loc_data->buffer = clCreateFromGLBuffer
                          (
-                          neutrino::nu_context_id,                                                  // OpenCL context.
+                          neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE,                                                        // Memory flags.
                           loc_data->ssbo,                                                           // VBO.
                           &loc_error                                                                // Returned error.
@@ -805,7 +805,7 @@ void kernel::setarg
       // Creating OpenCL memory buffer:
       loc_data->buffer = clCreateBuffer
                          (
-                          neutrino::nu_context_id,                                                  // OpenCL context.
+                          neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
                           sizeof(GL_FLOAT)*loc_data->data.size (),                                  // Data buffer size.
@@ -923,7 +923,7 @@ void kernel::setarg
       // Creating OpenCL buffer from OpenGL buffer:
       loc_data->buffer = clCreateFromGLBuffer
                          (
-                          neutrino::nu_context_id,                                                  // OpenCL context.
+                          neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE,                                                        // Memory flags.
                           loc_data->ssbo,                                                           // VBO.
                           &loc_error                                                                // Returned error.
@@ -935,7 +935,7 @@ void kernel::setarg
       // Creating OpenCL memory buffer:
       loc_data->buffer = clCreateBuffer
                          (
-                          neutrino::nu_context_id,                                                  // OpenCL context.
+                          neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
                           sizeof(nu_float2_structure)*loc_data->data.size (),                       // Data buffer size.
@@ -1053,7 +1053,7 @@ void kernel::setarg
       // Creating OpenCL buffer from OpenGL buffer:
       loc_data->buffer = clCreateFromGLBuffer
                          (
-                          neutrino::nu_context_id,                                                  // OpenCL context.
+                          neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE,                                                        // Memory flags.
                           loc_data->ssbo,                                                           // VBO.
                           &loc_error                                                                // Returned error.
@@ -1065,7 +1065,7 @@ void kernel::setarg
       // Creating OpenCL memory buffer:
       loc_data->buffer = clCreateBuffer
                          (
-                          neutrino::nu_context_id,                                                  // OpenCL context.
+                          neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
                           sizeof(nu_float3_structure)*loc_data->data.size (),                       // Data buffer size.
@@ -1183,7 +1183,7 @@ void kernel::setarg
       // Creating OpenCL buffer from OpenGL buffer:
       loc_data->buffer = clCreateFromGLBuffer
                          (
-                          neutrino::nu_context_id,                                                  // OpenCL context.
+                          neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE,                                                        // Memory flags.
                           loc_data->ssbo,                                                           // VBO.
                           &loc_error                                                                // Returned error.
@@ -1195,7 +1195,7 @@ void kernel::setarg
       // Creating OpenCL memory buffer:
       loc_data->buffer = clCreateBuffer
                          (
-                          neutrino::nu_context_id,                                                  // OpenCL context.
+                          neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
                           sizeof(nu_float4_structure)*loc_data->data.size (),                       // Data buffer size.
