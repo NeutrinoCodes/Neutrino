@@ -482,7 +482,7 @@ void opencl::init
   // It looks it works also when interop = false.
   // neutrino::interop   = false;
 
-  neutrino::nu_device_id = opencl_device[selected_device]->id;                                      // Setting neutrino OpenCL device ID...
+  neutrino::device_id = opencl_device[selected_device]->id;                                         // Setting neutrino OpenCL device ID...
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////// IDENTIFYING OS //////////////////////////////////////////
@@ -616,9 +616,9 @@ void opencl::init
                        );
 
   neutrino::check_error (loc_error);                                                                // Checking returned error code...
-  neutrino::nu_context_id = opencl::context_id;                                                     // Setting neutrino OpenCL context ID...
+  neutrino::context_id = opencl::context_id;                                                        // Setting neutrino OpenCL context ID...
 
-  std::cout << "nu_context_id = " << neutrino::nu_context_id << std::endl;
+  std::cout << "context_id = " << neutrino::context_id << std::endl;
 
   neutrino::done ();                                                                                // Printing message...
 }

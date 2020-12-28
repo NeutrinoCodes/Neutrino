@@ -10,7 +10,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 queue::queue()
 {
-  std::cout << "nu_context_id again = " << neutrino::nu_context_id << std::endl;
 }
 
 void queue::init ()
@@ -21,10 +20,8 @@ void queue::init ()
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
-  std::cout << "nu_context_id again_2 = " << neutrino::nu_context_id << std::endl;
-
-  queue::context_id = neutrino::nu_context_id;                                                      // Initializing context id...
-  queue::device_id  = neutrino::nu_device_id;                                                       // Initializing device id...
+  queue::context_id = neutrino::context_id;                                                         // Initializing context id...
+  queue::device_id  = neutrino::device_id;                                                          // Initializing device id...
 
   std::cout << "context_id = " << queue::context_id << std::endl;
 

@@ -90,7 +90,7 @@ typedef struct _gmsh_group
 /// ### Mesh.
 /// Declares a mesh class.
 /// To be used to run mesh operations.
-class mesh : virtual public neutrino                                                                /// @brief **Mesh.**
+class mesh : public neutrino                                                                        /// @brief **Mesh.**
 {
 private:
 
