@@ -243,16 +243,16 @@ private:
   size_t                terminal_time;                                                              ///< @brief **Terminal time (for refresh) [us].**
 
 public:
-  bool                  interop;                                                                    ///< @brief **Use OpenCL-OpenGL interop.**
-  double                tic;                                                                        ///< @brief **Tic time [s].**
-  double                toc;                                                                        ///< @brief **Toc time [s].**
-  double                loop_time;                                                                  ///< @brief **Loop time [s].**
-  size_t                q_num;                                                                      ///< @brief **Number of OpenCL queues.**
-  size_t                k_num;                                                                      ///< @brief **Number of OpenCL kernels.**
+  static bool           interop;                                                                    ///< @brief **Use OpenCL-OpenGL interop.**
+  static double         tic;                                                                        ///< @brief **Tic time [s].**
+  static double         toc;                                                                        ///< @brief **Toc time [s].**
+  static double         loop_time;                                                                  ///< @brief **Loop time [s].**
+  static size_t         q_num;                                                                      ///< @brief **Number of OpenCL queues.**
+  static size_t         k_num;                                                                      ///< @brief **Number of OpenCL kernels.**
   static cl_context     context_id;                                                                 ///< @brief **OpenCL context id.**
   static cl_platform_id platform_id;                                                                ///< @brief **OpenCL platform ID.**
   static cl_device_id   device_id;                                                                  ///< @brief **OpenCL device id.**
-  cl_kernel*            kernel_id;                                                                  ///< @brief **OpenCL kernel ID array.**
+  static cl_kernel*     kernel_id;                                                                  ///< @brief **OpenCL kernel ID array.**
 
   /// @brief **Class constructor.**
   /// @details Resets interop, tic, toc, loop_time, context_id, platform_id and device_id to their

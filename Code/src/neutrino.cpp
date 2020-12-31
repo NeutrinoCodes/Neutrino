@@ -5,9 +5,20 @@
 
 #include "neutrino.hpp"
 
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// "neutrino" class ///////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+bool           neutrino::interop;                                                                   // Use OpenCL-OpenGL interop (static variable storage).
+double         neutrino::tic;                                                                       // Tic time [s] (static variable storage).
+double         neutrino::toc;                                                                       // Toc time [s] (static variable storage).
+double         neutrino::loop_time;                                                                 // Loop time [s] (static variable storage).
+size_t         neutrino::q_num;                                                                     // Number of OpenCL queues (static variable storage).
+size_t         neutrino::k_num;                                                                     // Number of OpenCL kernels (static variable storage).
+cl_context     neutrino::context_id;                                                                // OpenCL context ID (static variable storage).
+cl_platform_id neutrino::platform_id;                                                               // OpenCL platform ID (static variable storage).
+cl_device_id   neutrino::device_id;                                                                 // OpenCL device ID (static variable storage).
+cl_kernel*     neutrino::kernel_id;                                                                 // OpenCL kernel ID array (static variable storage).
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// "neutrino" class /////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 neutrino::neutrino()
 {
 }
@@ -18,14 +29,6 @@ void neutrino::init
  size_t loc_k_num
 )
 {
-  interop     = false;                                                                              // Use OpenCL-OpenGL interop.
-  tic         = 0.0;                                                                                // Tic time [us].
-  toc         = 0.0;                                                                                // Toc time [us].
-  loop_time   = 0.0;                                                                                // Loop time [us].
-  context_id  = NULL;                                                                               // OpenCL context ID.
-  platform_id = NULL;                                                                               // OpenCL platform ID.
-  device_id   = NULL;                                                                               // OpenCL device ID.
-
   // Setting ANSI color modality for Windows:
   #ifdef WIN32
     DWORD  l_mode;
@@ -42,18 +45,22 @@ void neutrino::init
   // Initializing neutrino object:
   action ("initializing NEUTRINO...");                                                              // Printing message...
 
-  q_num         = loc_q_num;                                                                        // Getting number of OpenCL queues...
-  k_num         = loc_k_num;                                                                        // Getting number of OpenCL kernels...
-  kernel_id     = new cl_kernel[k_num];                                                             // Initializing OpenCL kernel ID array...
-  terminal_time = 0;                                                                                // Resetting terminal time...
-  loop_time     = 0.0;                                                                              // Resetting loop time...
-  tic           = 0.0;                                                                              // Resetting tic time...
-  toc           = 0.0;                                                                              // Resetting toc time...
+  neutrino::interop     = false;                                                                    // Use OpenCL-OpenGL interop.
+  neutrino::q_num       = loc_q_num;                                                                // Getting number of OpenCL queues...
+  neutrino::k_num       = loc_k_num;                                                                // Getting number of OpenCL kernels...
+  neutrino::context_id  = NULL;                                                                     // OpenCL context ID.
+  neutrino::platform_id = NULL;                                                                     // OpenCL platform ID.
+  neutrino::device_id   = NULL;                                                                     // OpenCL device ID.
+  neutrino::kernel_id   = new cl_kernel[k_num];                                                     // Initializing OpenCL kernel ID array...
+  neutrino::loop_time   = 0.0;                                                                      // Resetting loop time...
+  neutrino::tic         = 0.0;                                                                      // Resetting tic time...
+  neutrino::toc         = 0.0;                                                                      // Resetting toc time...
+  terminal_time         = 0;                                                                        // Resetting terminal time...
   size_t i;                                                                                         // Index.
 
   for(i = 0; i < k_num; i++)                                                                        // Scanning OpenCL kernel argument array...
   {
-    kernel_id[i] = NULL;                                                                            // Resetting kernel ID array...
+    neutrino::kernel_id[i] = NULL;                                                                  // Resetting kernel ID array...
   }
 
   done ();                                                                                          // Printing message...
@@ -61,7 +68,7 @@ void neutrino::init
 
 void neutrino::get_tic ()
 {
-  tic = glfwGetTime ();                                                                             // Getting "tic"...
+  neutrino::tic = glfwGetTime ();                                                                   // Getting "tic"...
 }
 
 void neutrino::get_toc ()
@@ -69,9 +76,9 @@ void neutrino::get_toc ()
   std::string loc_text;                                                                             // Text buffer.
   std::string loc_pad;                                                                              // Text pad.
 
-  toc            = glfwGetTime ();                                                                  // Getting "toc"...
-  loop_time      = toc - tic;                                                                       // Loop execution time [s].
-  terminal_time += size_t (round (loop_time*1000000.0f));                                           // Terminal time [us].
+  neutrino::toc       = glfwGetTime ();                                                             // Getting "toc"...
+  neutrino::loop_time = neutrino::toc - neutrino::tic;                                              // Loop execution time [s].
+  terminal_time      += size_t (round (neutrino::loop_time*1000000.0f));                            // Terminal time [us].
 
   if(terminal_time > NU_TERMINAL_REFRESH)                                                           // Checking terminal time...
   {
@@ -83,7 +90,7 @@ void neutrino::get_toc ()
                     std::string ("Action: ") +
                     std::string (NU_COLOR_NORMAL) +
                     std::string ("running host loop time = ") +
-                    std::to_string (long (round (1000000.0*loop_time))) +
+                    std::to_string (long (round (1000000.0*neutrino::loop_time))) +
                     std::string (" us");
 
     std::cout << loc_text + loc_pad << std::flush;                                                  // Printing buffer...
@@ -510,5 +517,5 @@ void neutrino::check_error
 
 neutrino::~neutrino()
 {
-  delete[]  kernel_id;                                                                              // Deleting kernel ID array...
+  delete[]  neutrino::kernel_id;                                                                    // Deleting kernel ID array...
 }
