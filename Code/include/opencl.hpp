@@ -77,6 +77,16 @@ public:
          compute_device_type loc_device_type                                                        ///< OpenCL device type.
         );
 
+  /// @brief **Class initializer.**
+  /// @details It checks whether the interoperability modality
+  /// is supported by the client GPU or not, it sets the OpenCL target device, it sets the OpenCL
+  /// platform and lists its extensions, it sets the OpenCL device and lists its extensions,
+  /// it identifies the operating system of hte host PC and it creates the OpenCL context.
+  /// The OpenCL context must be created after the OpenGL context.
+  void init (
+             compute_device_type loc_device_type                                                    ///< Compute device type.
+            );
+
   /// @brief Kernel execution function.
   /// @details This function invokes the execution of an [OpenCL kernel]
   /// (https://en.wikipedia.org/wiki/OpenCL#OpenCL_C_language) on an OpenCL @link queue @endlink .

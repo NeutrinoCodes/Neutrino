@@ -325,9 +325,9 @@ public:
   /// @brief **GUI initialization.**
   /// @details Initializes GLFW, GLAD and OpenGL contexts.
   void init (
+             std::string loc_title,                                                                 ///< Windows title.
              int         loc_window_size_x,                                                         ///< Window x-size [px].
              int         loc_window_size_y,                                                         ///< Window y-size [px].
-             std::string loc_title,                                                                 ///< Windows title.
              float       loc_orbit_x_initial,                                                       ///< Initial "near clipping-plane" x-coordinate.
              float       loc_orbit_y_initial,                                                       ///< Initial "near clipping-plane" y-coordinate.
              float       loc_pan_x_initial,                                                         ///< Initial pan-x coordinate.
