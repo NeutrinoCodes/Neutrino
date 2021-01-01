@@ -18,6 +18,129 @@ opencl::opencl(
   properties         = NULL;                                                                        // Initializing platforms' properties...
   opencl::context_id = NULL;                                                                        // Initializing platforms' context...
   device_type        = NU_DEFAULT;                                                                  // Initializing device type...
+  opencl::init (loc_device_type);                                                                   // OpenCL device type.)
+}
+
+cl_uint opencl::get_platforms_number ()
+{
+  cl_int  loc_error;                                                                                // Error code.
+  cl_uint loc_platforms_number;                                                                     // Number of platforms.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  // Getting number of existing OpenCL platforms:
+  loc_error = clGetPlatformIDs
+              (
+               0,                                                                                   // "0" = we are asking for the number of platforms.
+               NULL,                                                                                // Dummy platfomrs id.
+               &loc_platforms_number                                                                // Returned local number of existing platforms.
+              );
+
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
+
+  return loc_platforms_number;                                                                      // Returning number of existing platforms...
+}
+
+cl_platform_id opencl::get_platform_id
+(
+ cl_uint loc_platform_index                                                                         // OpenCL platform index.
+)
+{
+  cl_int          loc_error;                                                                        // Error code.
+  cl_platform_id* loc_platform_id;                                                                  // Platform IDs array.
+  cl_platform_id  loc_selected_platform_id;                                                         // Selected platform ID.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  neutrino::action ("getting OpenCL platform ID...");                                               // Printing message...
+
+  loc_platform_id          = new cl_platform_id[platforms_number];                                  // Allocating platform array...
+
+  // Getting OpenCL platform IDs:
+  loc_error                = clGetPlatformIDs
+                             (
+                              platforms_number,                                                     // Number of existing platforms.
+                              loc_platform_id,                                                      // Platform IDs array.
+                              NULL                                                                  // Dummy number of platforms.
+                             );
+
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
+
+  loc_selected_platform_id = loc_platform_id[loc_platform_index];                                   // Setting id of selected platform...
+  delete[] loc_platform_id;                                                                         // Deleting platform IDs array...
+
+  neutrino::done ();                                                                                // Printing message...
+
+  return(loc_selected_platform_id);                                                                 // Returning selected platform ID...
+}
+
+cl_uint opencl::get_devices_number
+(
+ cl_uint loc_platform_index                                                                         // OpenCL platform index.
+)
+{
+  cl_int  loc_error;                                                                                // Error code.
+  cl_uint loc_devices_number;                                                                       // Number of devices.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  // Getting number of existing OpenCL devices:
+  loc_error = clGetDeviceIDs
+              (
+               opencl_platform[loc_platform_index]->id,                                             // Platform ID.
+               device_type,                                                                         // Device type.
+               0,                                                                                   // "0" means we are asking for the number of devices.
+               NULL,                                                                                // Dummy device.
+               &loc_devices_number                                                                  // Returned local number of existing devices.
+              );
+
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
+
+  return(loc_devices_number);                                                                       // Returning number of existing devices...
+}
+
+cl_device_id opencl::get_device_id
+(
+ cl_uint loc_device_index,                                                                          // OpenCL platform index.
+ cl_uint loc_platform_index                                                                         // OpenCL device index.
+)
+{
+  cl_int        loc_error;                                                                          // OpenCL error code.
+  cl_device_id* loc_device_id;                                                                      // Opencl device ID.
+  cl_device_id  loc_selected_device_id;                                                             // OpenCL selected device ID.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  devices_number = get_devices_number (loc_platform_index);                                         // Getting number of existing devices...
+  loc_device_id  = new cl_device_id[devices_number];                                                // Allocating platform array...
+
+  neutrino::action ("getting OpenCL device ID...");                                                 // Printing message...
+
+  // Getting OpenCL device IDs:
+  loc_error      = clGetDeviceIDs
+                   (
+                    opencl_platform[loc_platform_index]->id,                                        // Platform ID.
+                    device_type,                                                                    // Device type.
+                    devices_number,                                                                 // Number of existing devices.
+                    loc_device_id,                                                                  // Device IDs array.
+                    NULL                                                                            // Dummy number of devices.
+                   );
+
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
+
+  loc_selected_device_id = loc_device_id[loc_device_index];                                         // Setting ID of selected device...
+  delete[] loc_device_id;                                                                           // Deleting device IDs array...
+
+  neutrino::done ();                                                                                // Printing message...
+
+  return(loc_selected_device_id);                                                                   // Returning selected device ID...
+}
+
+void opencl::init
+(
+ compute_device_type loc_device_type                                                                // OpenCL device type.
+)
+{
   cl_int  loc_error;                                                                                // Error code.
   cl_uint i;                                                                                        // Index.
   bool    loc_platform_interop = false;                                                             // Platform interoperability flag.
@@ -26,7 +149,7 @@ opencl::opencl(
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   neutrino::action ("initializing OpenCL...");                                                      // Printing message...
-  device_type_text   = new char[NU_MAX_TEXT_SIZE]();                                                // Device type text [string].
+  device_type_text = new char[NU_MAX_TEXT_SIZE]();                                                  // Device type text [string].
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// SETTING TARGET DEVICE TYPE ///////////////////////////////////
@@ -475,122 +598,7 @@ opencl::opencl(
 
   std::cout << "context_id = " << neutrino::context_id << std::endl;
 
-  neutrino::done ();
-}
-
-cl_uint opencl::get_platforms_number ()
-{
-  cl_int  loc_error;                                                                                // Error code.
-  cl_uint loc_platforms_number;                                                                     // Number of platforms.
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  // Getting number of existing OpenCL platforms:
-  loc_error = clGetPlatformIDs
-              (
-               0,                                                                                   // "0" = we are asking for the number of platforms.
-               NULL,                                                                                // Dummy platfomrs id.
-               &loc_platforms_number                                                                // Returned local number of existing platforms.
-              );
-
-  neutrino::check_error (loc_error);                                                                // Checking returned error code...
-
-  return loc_platforms_number;                                                                      // Returning number of existing platforms...
-}
-
-cl_platform_id opencl::get_platform_id
-(
- cl_uint loc_platform_index                                                                         // OpenCL platform index.
-)
-{
-  cl_int          loc_error;                                                                        // Error code.
-  cl_platform_id* loc_platform_id;                                                                  // Platform IDs array.
-  cl_platform_id  loc_selected_platform_id;                                                         // Selected platform ID.
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  neutrino::action ("getting OpenCL platform ID...");                                               // Printing message...
-
-  loc_platform_id          = new cl_platform_id[platforms_number];                                  // Allocating platform array...
-
-  // Getting OpenCL platform IDs:
-  loc_error                = clGetPlatformIDs
-                             (
-                              platforms_number,                                                     // Number of existing platforms.
-                              loc_platform_id,                                                      // Platform IDs array.
-                              NULL                                                                  // Dummy number of platforms.
-                             );
-
-  neutrino::check_error (loc_error);                                                                // Checking returned error code...
-
-  loc_selected_platform_id = loc_platform_id[loc_platform_index];                                   // Setting id of selected platform...
-  delete[] loc_platform_id;                                                                         // Deleting platform IDs array...
-
   neutrino::done ();                                                                                // Printing message...
-
-  return(loc_selected_platform_id);                                                                 // Returning selected platform ID...
-}
-
-cl_uint opencl::get_devices_number
-(
- cl_uint loc_platform_index                                                                         // OpenCL platform index.
-)
-{
-  cl_int  loc_error;                                                                                // Error code.
-  cl_uint loc_devices_number;                                                                       // Number of devices.
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  // Getting number of existing OpenCL devices:
-  loc_error = clGetDeviceIDs
-              (
-               opencl_platform[loc_platform_index]->id,                                             // Platform ID.
-               device_type,                                                                         // Device type.
-               0,                                                                                   // "0" means we are asking for the number of devices.
-               NULL,                                                                                // Dummy device.
-               &loc_devices_number                                                                  // Returned local number of existing devices.
-              );
-
-  neutrino::check_error (loc_error);                                                                // Checking returned error code...
-
-  return(loc_devices_number);                                                                       // Returning number of existing devices...
-}
-
-cl_device_id opencl::get_device_id
-(
- cl_uint loc_device_index,                                                                          // OpenCL platform index.
- cl_uint loc_platform_index                                                                         // OpenCL device index.
-)
-{
-  cl_int        loc_error;                                                                          // OpenCL error code.
-  cl_device_id* loc_device_id;                                                                      // Opencl device ID.
-  cl_device_id  loc_selected_device_id;                                                             // OpenCL selected device ID.
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  devices_number = get_devices_number (loc_platform_index);                                         // Getting number of existing devices...
-  loc_device_id  = new cl_device_id[devices_number];                                                // Allocating platform array...
-
-  neutrino::action ("getting OpenCL device ID...");                                                 // Printing message...
-
-  // Getting OpenCL device IDs:
-  loc_error      = clGetDeviceIDs
-                   (
-                    opencl_platform[loc_platform_index]->id,                                        // Platform ID.
-                    device_type,                                                                    // Device type.
-                    devices_number,                                                                 // Number of existing devices.
-                    loc_device_id,                                                                  // Device IDs array.
-                    NULL                                                                            // Dummy number of devices.
-                   );
-
-  neutrino::check_error (loc_error);                                                                // Checking returned error code...
-
-  loc_selected_device_id = loc_device_id[loc_device_index];                                         // Setting ID of selected device...
-  delete[] loc_device_id;                                                                           // Deleting device IDs array...
-
-  neutrino::done ();                                                                                // Printing message...
-
-  return(loc_selected_device_id);                                                                   // Returning selected device ID...
 }
 
 void opencl::execute

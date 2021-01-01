@@ -29,7 +29,7 @@
 /// Declares an OpenCL queue. The queue is a system to accumulate OpenCL commands in a list that
 /// OpenCL eventually executes in front of a @link opencl::execute @endlink instruction.
 /// Commands in the queue are related to what is written in the OpenCL kernel source file(s).
-class queue : public neutrino                                                                       /// @brief **OpenCL queue.**
+class queue : public opencl                                                                         /// @brief **OpenCL queue.**
 {
 private:
 

@@ -5,16 +5,14 @@
 
 #include "neutrino.hpp"
 
-bool           neutrino::interop;                                                                   // Use OpenCL-OpenGL interop (static variable storage).
-double         neutrino::tic;                                                                       // Tic time [s] (static variable storage).
-double         neutrino::toc;                                                                       // Toc time [s] (static variable storage).
-double         neutrino::loop_time;                                                                 // Loop time [s] (static variable storage).
-size_t         neutrino::q_num;                                                                     // Number of OpenCL queues (static variable storage).
-size_t         neutrino::k_num;                                                                     // Number of OpenCL kernels (static variable storage).
-cl_context     neutrino::context_id;                                                                // OpenCL context ID (static variable storage).
-cl_platform_id neutrino::platform_id;                                                               // OpenCL platform ID (static variable storage).
-cl_device_id   neutrino::device_id;                                                                 // OpenCL device ID (static variable storage).
-cl_kernel*     neutrino::kernel_id;                                                                 // OpenCL kernel ID array (static variable storage).
+bool                   neutrino::interop;                                                           // Use OpenCL-OpenGL interop (static variable storage).
+double                 neutrino::tic;                                                               // Tic time [s] (static variable storage).
+double                 neutrino::toc;                                                               // Toc time [s] (static variable storage).
+double                 neutrino::loop_time;                                                         // Loop time [s] (static variable storage).
+cl_context             neutrino::context_id;                                                        // OpenCL context ID (static variable storage).
+cl_platform_id         neutrino::platform_id;                                                       // OpenCL platform ID (static variable storage).
+cl_device_id           neutrino::device_id;                                                         // OpenCL device ID (static variable storage).
+std::vector<cl_kernel> neutrino::kernel_id;                                                         // OpenCL kernel ID array (static variable storage).
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////// "neutrino" class /////////////////////////////////////////
@@ -25,8 +23,6 @@ neutrino::neutrino()
 
 void neutrino::init
 (
- size_t loc_q_num,
- size_t loc_k_num
 )
 {
   // Setting ANSI color modality for Windows:
@@ -45,21 +41,14 @@ void neutrino::init
   // Initializing neutrino object:
   action ("initializing NEUTRINO...");                                                              // Printing message...
 
-  neutrino::interop     = false;                                                                    // Use OpenCL-OpenGL interop.
-  neutrino::context_id  = NULL;                                                                     // OpenCL context ID.
-  neutrino::platform_id = NULL;                                                                     // OpenCL platform ID.
-  neutrino::device_id   = NULL;                                                                     // OpenCL device ID.
-  neutrino::kernel_id   = new cl_kernel[k_num];                                                     // Initializing OpenCL kernel ID array...
-  neutrino::loop_time   = 0.0;                                                                      // Resetting loop time...
-  neutrino::tic         = 0.0;                                                                      // Resetting tic time...
-  neutrino::toc         = 0.0;                                                                      // Resetting toc time...
-  terminal_time         = 0;                                                                        // Resetting terminal time...
-  size_t i;                                                                                         // Index.
-
-  for(i = 0; i < k_num; i++)                                                                        // Scanning OpenCL kernel argument array...
-  {
-    neutrino::kernel_id[i] = NULL;                                                                  // Resetting kernel ID array...
-  }
+  neutrino::terminal_time = 0;                                                                      // Resetting terminal time...
+  neutrino::interop       = false;                                                                  // Use OpenCL-OpenGL interop.
+  neutrino::tic           = 0.0;                                                                    // Resetting tic time...
+  neutrino::toc           = 0.0;                                                                    // Resetting toc time...
+  neutrino::loop_time     = 0.0;                                                                    // Resetting loop time...
+  neutrino::context_id    = NULL;                                                                   // OpenCL context ID.
+  neutrino::platform_id   = NULL;                                                                   // OpenCL platform ID.
+  neutrino::device_id     = NULL;                                                                   // OpenCL device ID.
 
   done ();                                                                                          // Printing message...
 }
@@ -515,5 +504,4 @@ void neutrino::check_error
 
 neutrino::~neutrino()
 {
-  delete[]  neutrino::kernel_id;                                                                    // Deleting kernel ID array...
 }

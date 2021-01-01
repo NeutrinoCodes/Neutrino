@@ -19,11 +19,11 @@ opengl::opengl(
                float       loc_pan_z_initial                                                        ///< Initial pan-z coordinate.
               )
 {
-  neutrino::init (loc_q_num, loc_k_num);
+  neutrino::init ();                                                                                // Initializing Neutrino...
   opengl::init (
+                loc_title,                                                                          // Window title.
                 loc_window_size_x,                                                                  // Window x-size [px].
                 loc_window_size_y,                                                                  // Window y-size [px].
-                loc_title,                                                                          // Window title.
                 loc_orbit_x_initial,                                                                // Initial "near clipping-plane" x-coordinate.
                 loc_orbit_y_initial,                                                                // Initial "near clipping-plane" y-coordinate.
                 loc_pan_x_initial,                                                                  // Initial pan-x coordinate.
@@ -315,9 +315,9 @@ void opengl::mouse_scrolled
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void opengl::init
 (
+ std::string loc_title,                                                                             // Window title.
  int         loc_window_size_x,                                                                     // Window x-size [px].
  int         loc_window_size_y,                                                                     // Window y-size [px].
- std::string loc_title,                                                                             // Window title.
  float       loc_orbit_x_initial,                                                                   // Initial "near clipping-plane" x-coordinate.
  float       loc_orbit_y_initial,                                                                   // Initial "near clipping-plane" y-coordinate.
  float       loc_pan_x_initial,                                                                     // Initial pan-x coordinate.
@@ -328,9 +328,9 @@ void opengl::init
   char*  loc_title_buffer;
   size_t loc_title_size;
 
+  title                     = loc_title;                                                            // Initializing window title...
   window_size_x             = loc_window_size_x;                                                    // Initializing window x-size [px]...
   window_size_y             = loc_window_size_y;                                                    // Initializing window y-size [px]...
-  title                     = loc_title;                                                            // Initializing window title...
   aspect_ratio              = (float)window_size_x/(float)window_size_y;                            // Initializing window aspect ration []...
 
   initial_scene_position[0] = loc_pan_x_initial;                                                    // Initializing x-position...
