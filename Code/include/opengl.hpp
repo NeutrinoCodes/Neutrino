@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////// "opengl" class //////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-class opengl : virtual public neutrino                                                              /// @brief **OpenGL GUI.**
+class opengl : public neutrino                                                                      /// @brief **OpenGL GUI.**
 {
 private:
   GLFWgamepadstate gamepad;                                                                         ///< @brief **Gamepad state.**
@@ -308,7 +308,16 @@ public:
 
   /// @brief **Class constructor.**
   /// @details It does nothing.
-  opengl();
+  opengl(
+         std::string loc_title,                                                                     ///< Window title.
+         int         loc_window_size_x,                                                             ///< Window x-size [px].
+         int         loc_window_size_y,                                                             ///< Window y-size [px].
+         float       loc_orbit_x_initial,                                                           ///< Initial "near clipping-plane" x-coordinate.
+         float       loc_orbit_y_initial,                                                           ///< Initial "near clipping-plane" y-coordinate.
+         float       loc_pan_x_initial,                                                             ///< Initial pan-x coordinate.
+         float       loc_pan_y_initial,                                                             ///< Initial pan-y coordinate.
+         float       loc_pan_z_initial                                                              ///< Initial pan-z coordinate.
+        );
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////// PUBLIC METHODS //////////////////////////////////////////

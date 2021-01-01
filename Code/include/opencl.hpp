@@ -74,28 +74,8 @@ public:
   /// @details It initializes the opencl_platform, platforms_number, devices_number,
   /// properties, context_id and device_type to their default values.
   opencl(
-         size_t              loc_q_num,                                                             ///< Number of OpenCL queues.
-         size_t              loc_k_num,                                                             ///< Number of OpenCL kernels.
-         int                 loc_window_size_x,                                                     ///< Window x-size [px].
-         int                 loc_window_size_y,                                                     ///< Window y-size [px].
-         std::string         loc_title,                                                             ///< Window title.
-         float               loc_orbit_x_initial,                                                   ///< Initial "near clipping-plane" x-coordinate.
-         float               loc_orbit_y_initial,                                                   ///< Initial "near clipping-plane" y-coordinate.
-         float               loc_pan_x_initial,                                                     ///< Initial pan-x coordinate.
-         float               loc_pan_y_initial,                                                     ///< Initial pan-y coordinate.
-         float               loc_pan_z_initial,                                                     ///< Initial pan-z coordinate.
-         compute_device_type loc_device_type                                                        // OpenCL device type.
+         compute_device_type loc_device_type                                                        ///< OpenCL device type.
         );
-
-  /// @brief **Class initializer.**
-  /// @details It checks whether the interoperability modality
-  /// is supported by the client GPU or not, it sets the OpenCL target device, it sets the OpenCL
-  /// platform and lists its extensions, it sets the OpenCL device and lists its extensions,
-  /// it identifies the operating system of hte host PC and it creates the OpenCL context.
-  /// The OpenCL context must be created after the OpenGL context.
-  void init (
-             compute_device_type loc_device_type                                                    ///< Compute device type.
-            );
 
   /// @brief Kernel execution function.
   /// @details This function invokes the execution of an [OpenCL kernel]
