@@ -8,8 +8,28 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////// "opengl" class /////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-opengl::opengl()
+opengl::opengl(
+               std::string loc_title,                                                               ///< Window title.
+               int         loc_window_size_x,                                                       ///< Window x-size [px].
+               int         loc_window_size_y,                                                       ///< Window y-size [px].
+               float       loc_orbit_x_initial,                                                     ///< Initial "near clipping-plane" x-coordinate.
+               float       loc_orbit_y_initial,                                                     ///< Initial "near clipping-plane" y-coordinate.
+               float       loc_pan_x_initial,                                                       ///< Initial pan-x coordinate.
+               float       loc_pan_y_initial,                                                       ///< Initial pan-y coordinate.
+               float       loc_pan_z_initial                                                        ///< Initial pan-z coordinate.
+              )
 {
+  neutrino::init (loc_q_num, loc_k_num);
+  opengl::init (
+                loc_window_size_x,                                                                  // Window x-size [px].
+                loc_window_size_y,                                                                  // Window y-size [px].
+                loc_title,                                                                          // Window title.
+                loc_orbit_x_initial,                                                                // Initial "near clipping-plane" x-coordinate.
+                loc_orbit_y_initial,                                                                // Initial "near clipping-plane" y-coordinate.
+                loc_pan_x_initial,                                                                  // Initial pan-x coordinate.
+                loc_pan_y_initial,                                                                  // Initial pan-y coordinate.
+                loc_pan_z_initial                                                                   // Initial pan-z coordinate.
+               );
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////

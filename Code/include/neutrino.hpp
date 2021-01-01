@@ -240,19 +240,17 @@ typedef enum
 class neutrino                                                                                      /// @brief **Neutrino baseline.**
 {
 private:
-  size_t                terminal_time;                                                              ///< @brief **Terminal time (for refresh) [us].**
+  size_t                        terminal_time;                                                      ///< @brief **Terminal time (for refresh) [us].**
 
 public:
-  static bool           interop;                                                                    ///< @brief **Use OpenCL-OpenGL interop.**
-  static double         tic;                                                                        ///< @brief **Tic time [s].**
-  static double         toc;                                                                        ///< @brief **Toc time [s].**
-  static double         loop_time;                                                                  ///< @brief **Loop time [s].**
-  static size_t         q_num;                                                                      ///< @brief **Number of OpenCL queues.**
-  static size_t         k_num;                                                                      ///< @brief **Number of OpenCL kernels.**
-  static cl_context     context_id;                                                                 ///< @brief **OpenCL context id.**
-  static cl_platform_id platform_id;                                                                ///< @brief **OpenCL platform ID.**
-  static cl_device_id   device_id;                                                                  ///< @brief **OpenCL device id.**
-  static cl_kernel*     kernel_id;                                                                  ///< @brief **OpenCL kernel ID array.**
+  static bool                   interop;                                                            ///< @brief **Use OpenCL-OpenGL interop.**
+  static double                 tic;                                                                ///< @brief **Tic time [s].**
+  static double                 toc;                                                                ///< @brief **Toc time [s].**
+  static double                 loop_time;                                                          ///< @brief **Loop time [s].**
+  static cl_context             context_id;                                                         ///< @brief **OpenCL context ID.**
+  static cl_platform_id         platform_id;                                                        ///< @brief **OpenCL platform ID.**
+  static cl_device_id           device_id;                                                          ///< @brief **OpenCL device ID.**
+  static std::vector<cl_kernel> kernel_id;                                                          ///< @brief **OpenCL kernel ID array.**
 
   /// @brief **Class constructor.**
   /// @details Resets interop, tic, toc, loop_time, context_id, platform_id and device_id to their
@@ -261,10 +259,7 @@ public:
 
   /// @brief **Class initializer.**
   /// @details Initializes Neutrino.
-  void init (
-             size_t loc_q_num,                                                                      ///< Number of OpenCL queues.
-             size_t loc_k_num                                                                       ///< Number of OpenCL kernels.
-            );
+  void        init ();
 
   /// @brief **Getter of "tic" time.**
   /// @details Gets a "tic" time, which is the value of operating system precision timer at the
