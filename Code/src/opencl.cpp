@@ -5,6 +5,8 @@
 
 #include "opencl.hpp"
 
+bool opencl::init_done = false;                                                                     // init_done flag.
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////// "opencl" class /////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -12,13 +14,15 @@ opencl::opencl(
                compute_device_type loc_device_type                                                  // OpenCL device type.
               )
 {
-  opencl_platform    = NULL;                                                                        // Initializing platforms IDs array...
-  platforms_number   = 0;                                                                           // Initializing number of platforms...
-  devices_number     = 0;                                                                           // Initializing number of devices...
-  properties         = NULL;                                                                        // Initializing platforms' properties...
-  opencl::context_id = NULL;                                                                        // Initializing platforms' context...
-  device_type        = NU_DEFAULT;                                                                  // Initializing device type...
-  opencl::init (loc_device_type);                                                                   // OpenCL device type.)
+  if(neutrino::init_done != true)
+  {
+    neutrino::init ();                                                                              // Initializing Neutrino...
+  }
+
+  if(opencl::init_done != true)
+  {
+    opencl::init (loc_device_type);                                                                 // OpenCL device type.)
+  }
 }
 
 cl_uint opencl::get_platforms_number ()
@@ -141,6 +145,13 @@ void opencl::init
  compute_device_type loc_device_type                                                                // OpenCL device type.
 )
 {
+  opencl_platform    = NULL;                                                                        // Initializing platforms IDs array...
+  platforms_number   = 0;                                                                           // Initializing number of platforms...
+  devices_number     = 0;                                                                           // Initializing number of devices...
+  properties         = NULL;                                                                        // Initializing platforms' properties...
+  opencl::context_id = NULL;                                                                        // Initializing platforms' context...
+  device_type        = NU_DEFAULT;                                                                  // Initializing device type...
+
   cl_int  loc_error;                                                                                // Error code.
   cl_uint i;                                                                                        // Index.
   bool    loc_platform_interop = false;                                                             // Platform interoperability flag.
@@ -149,7 +160,7 @@ void opencl::init
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   neutrino::action ("initializing OpenCL...");                                                      // Printing message...
-  device_type_text = new char[NU_MAX_TEXT_SIZE]();                                                  // Device type text [string].
+  device_type_text   = new char[NU_MAX_TEXT_SIZE]();                                                // Device type text [string].
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// SETTING TARGET DEVICE TYPE ///////////////////////////////////
@@ -514,7 +525,7 @@ void opencl::init
       properties[0] = CL_GL_CONTEXT_KHR;                                                            // Setting LINUX with CL-GL interop...
       properties[1] = (cl_context_properties)glfwGetGLXContext
                       (
-                       opengl::glfw_window
+                       neutrino::glfw_window
                       );
       properties[2] = CL_GLX_DISPLAY_KHR;
       properties[3] = (cl_context_properties)glfwGetX11Display ();
@@ -550,14 +561,14 @@ void opencl::init
       properties[0] = CL_GL_CONTEXT_KHR;                                                            // Setting WINDOWS with CL-GL interop...
       properties[1] = (cl_context_properties)glfwGetWGLContext
                       (
-                       opengl::glfw_window
+                       neutrino::glfw_window
                       );
       properties[2] = CL_WGL_HDC_KHR;
       properties[3] = (cl_context_properties)GetDC
                       (
                        glfwGetWin32Window
                        (
-                        opengl::glfw_window
+                        neutrino::glfw_window
                        )
                       );
       properties[4] = CL_CONTEXT_PLATFORM;
@@ -597,6 +608,7 @@ void opencl::init
   neutrino::context_id = opencl::context_id;                                                        // Setting neutrino OpenCL context ID...
 
   std::cout << "context_id = " << neutrino::context_id << std::endl;
+  opencl::init_done    = true;                                                                      // Setting init_done flag...
 
   neutrino::done ();                                                                                // Printing message...
 }

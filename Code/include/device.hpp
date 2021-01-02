@@ -27,7 +27,7 @@
 /// device. See also the OpenCL [clDeviceInfo]
 /// (https://www.khronos.org/registry/OpenCL/sdk/1.2/docs/man/xhtml/clGetDeviceInfo.html)
 /// specifications.
-class device : public opencl                                                                        /// @brief **OpenCL device.**
+class device : public neutrino                                                                      /// @brief **OpenCL device.**
 {
 private:
   std::string parameter_value;                                                                      ///< @brief **Parameter value.**

@@ -5,6 +5,8 @@
 
 #include "opengl.hpp"
 
+bool opengl::init_done = false;                                                                     // init_done flag.
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////// "opengl" class /////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -19,17 +21,24 @@ opengl::opengl(
                float       loc_pan_z_initial                                                        ///< Initial pan-z coordinate.
               )
 {
-  neutrino::init ();                                                                                // Initializing Neutrino...
-  opengl::init (
-                loc_title,                                                                          // Window title.
-                loc_window_size_x,                                                                  // Window x-size [px].
-                loc_window_size_y,                                                                  // Window y-size [px].
-                loc_orbit_x_initial,                                                                // Initial "near clipping-plane" x-coordinate.
-                loc_orbit_y_initial,                                                                // Initial "near clipping-plane" y-coordinate.
-                loc_pan_x_initial,                                                                  // Initial pan-x coordinate.
-                loc_pan_y_initial,                                                                  // Initial pan-y coordinate.
-                loc_pan_z_initial                                                                   // Initial pan-z coordinate.
-               );
+  if(neutrino::init_done != true)
+  {
+    neutrino::init ();                                                                              // Initializing Neutrino...
+  }
+
+  if(opengl::init_done != true)
+  {
+    opengl::init (
+                  loc_title,                                                                        // Window title.
+                  loc_window_size_x,                                                                // Window x-size [px].
+                  loc_window_size_y,                                                                // Window y-size [px].
+                  loc_orbit_x_initial,                                                              // Initial "near clipping-plane" x-coordinate.
+                  loc_orbit_y_initial,                                                              // Initial "near clipping-plane" y-coordinate.
+                  loc_pan_x_initial,                                                                // Initial pan-x coordinate.
+                  loc_pan_y_initial,                                                                // Initial pan-y coordinate.
+                  loc_pan_z_initial                                                                 // Initial pan-z coordinate.
+                 );
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -535,6 +544,8 @@ void opengl::init
   glfwSwapBuffers (glfw_window);                                                                    // Swapping front and back buffers...
   glfwPollEvents ();                                                                                // Polling GLFW events...
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  neutrino::glfw_window = glfw_window;                                                              // Setting glfw window...
+  opengl::init_done     = true;                                                                     // Setting init_done flag...
 
   neutrino::done ();                                                                                // Printing message...
 }

@@ -6,8 +6,8 @@
 #ifndef opengl_hpp
 #define opengl_hpp
 
-  #include "neutrino.hpp"
-  #include "shader.hpp"
+#include "neutrino.hpp"
+#include "shader.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////// "opengl" class //////////////////////////////////////////////
@@ -185,6 +185,7 @@ public:
   int         framebuffer_size_x;                                                                   ///< @brief **Window x-size [px].**
   int         framebuffer_size_y;                                                                   ///< @brief **Window y-size [px].**
   float       aspect_ratio;                                                                         ///< @brief **Window aspect ratio [].**
+  static bool init_done;                                                                            ///< @brief **init_done flag.**
 
   /// @details Quaternion used in the implementation of an [arcball]
   /// (https://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Tutorial_Arcball) pointing the

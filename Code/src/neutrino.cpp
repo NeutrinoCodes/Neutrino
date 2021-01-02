@@ -13,7 +13,8 @@ cl_context             neutrino::context_id;                                    
 cl_platform_id         neutrino::platform_id;                                                       // OpenCL platform ID (static variable storage).
 cl_device_id           neutrino::device_id;                                                         // OpenCL device ID (static variable storage).
 std::vector<cl_kernel> neutrino::kernel_id;                                                         // OpenCL kernel ID array (static variable storage).
-bool                   neutrino::init_done;                                                         // init_done flag.
+GLFWwindow*            neutrino::glfw_window;                                                       // Window handle.
+bool                   neutrino::init_done = false;                                                 // init_done flag.
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////// "neutrino" class /////////////////////////////////////////
@@ -22,9 +23,7 @@ neutrino::neutrino()
 {
 }
 
-void neutrino::init
-(
-)
+void neutrino::init ()
 {
   // Setting ANSI color modality for Windows:
   #ifdef WIN32
