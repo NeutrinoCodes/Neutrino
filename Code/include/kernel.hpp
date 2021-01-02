@@ -48,18 +48,6 @@ public:
   /// therefore it must be done by invoking the @link kernel::init @endlink method.
   kernel();
 
-  /// @brief **Class initializer.**
-  /// @details Initializes the kernel object.
-  /// The values of the kernel dimensions @link size_i @endlink, @link size_j @endlink,
-  /// and @link size_k @endlink variables are copied from the corresponding parameters the user
-  /// must pass as input arguments to the @link kernel::init @method , according to the
-  /// implementation of the algorithms in the kernel sources.
-  void init (
-             size_t loc_kernel_size_i,                                                              ///< OpenCL kernel size (i-index).
-             size_t loc_kernel_size_j,                                                              ///< OpenCL kernel size (j-index).
-             size_t loc_kernel_size_k                                                               ///< OpenCL kernel size (k-index).
-            );
-
   /// @brief **Kernel source adder function.**
   /// @details Loads an OpenCL kernel source from its corresponding source file.
   void addsource (
@@ -68,7 +56,11 @@ public:
 
   /// @brief **OpenCL kernel builder.**
   /// @details Creates an OpenCL program from the kernel sources and builds it.
-  void build ();
+  void build (
+              size_t loc_kernel_size_i,                                                             ///< OpenCL kernel size (i-index).
+              size_t loc_kernel_size_j,                                                             ///< OpenCL kernel size (j-index).
+              size_t loc_kernel_size_k                                                              ///< OpenCL kernel size (k-index).
+             );
 
   /// @brief **Kernel argument setter function.**
   /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object

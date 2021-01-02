@@ -42,10 +42,6 @@ public:
   /// @details It does nothing.
   shader ();
 
-  /// @brief **Class initializer.**
-  /// @details It compiles the OpenGL vertex, geometry and fragment shader into an OpenGL program.
-  void init ();
-
   /// @brief **Shader source adder function.**
   /// @details Loads an OpenGL shader source from its corresponding source file.
   void addsource (

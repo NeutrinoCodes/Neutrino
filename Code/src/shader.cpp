@@ -7,11 +7,6 @@
 
 shader::shader ()
 {
-  // Doing nothing.
-}
-
-void shader::init ()
-{
   neutrino::action ("initializing OpenGL shader object...");                                        // Printing message...
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
   program = glCreateProgram ();                                                                     // Creating program...
