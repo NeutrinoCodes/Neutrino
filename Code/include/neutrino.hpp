@@ -251,6 +251,7 @@ public:
   static cl_platform_id         platform_id;                                                        ///< @brief **OpenCL platform ID.**
   static cl_device_id           device_id;                                                          ///< @brief **OpenCL device ID.**
   static std::vector<cl_kernel> kernel_id;                                                          ///< @brief **OpenCL kernel ID array.**
+  static bool                   init_done;                                                          ///< @brief **init_done flag.**
 
   /// @brief **Class constructor.**
   /// @details Resets interop, tic, toc, loop_time, context_id, platform_id and device_id to their
