@@ -23,7 +23,7 @@
 /// ### OpenCL kernel.
 /// Declares an OpenCL kernel.
 /// To be used to run OpenCL computation.
-class kernel : public opencl                                                                        /// @brief **OpenCL kernel.**
+class kernel : public neutrino                                                                      /// @brief **OpenCL kernel.**
 {
 private:
   cl_device_id*            device_id;                                                               ///< @brief **Device ID array.**

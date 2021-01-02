@@ -21,7 +21,7 @@
 /// platform. See also the OpenCL [platform]
 /// (https://www.sciencedirect.com/topics/computer-science/platform-model)
 /// description.
-class platform : public opencl                                                                      /// @brief **OpenCL platform.**
+class platform : public neutrino                                                                    /// @brief **OpenCL platform.**
 {
 private:
   std::string parameter;                                                                            ///< @brief **Parameter value.**

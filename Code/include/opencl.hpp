@@ -27,7 +27,7 @@
 /// ### OpenCL class.
 /// Declares an OpenCL class.
 /// To be used to run OpenCL computation.
-class opencl : public opengl                                                                        ///< @brief **OpenCL context.**
+class opencl : public neutrino                                                                      ///< @brief **OpenCL context.**
 {
 private:
   cl_device_type device_type;                                                                       ///< @brief **OpenCL device type.**
@@ -62,13 +62,12 @@ public:
   cl_uint                platforms_number;                                                          ///< @brief **Existing OpenCL platforms number.**
   cl_uint                selected_platform;                                                         ///< @brief **Selected platform index.**
   platform**             opencl_platform;                                                           ///< @brief **OpenCL platform array.**
-
   cl_uint                devices_number;                                                            ///< @brief **Existing OpenCL device number.**
   cl_uint                selected_device;                                                           ///< @brief **Selected device index.**
   device**               opencl_device;                                                             ///< @brief **OpenCL device array.**
-
   cl_context_properties* properties;                                                                ///< @brief ** OpenCL context properties.**
   cl_context             context_id;                                                                ///< @brief **OpenCL context ID.**
+  static bool            init_done;                                                                 ///< @brief **init_done flag.**
 
   /// @brief **Class constructor.**
   /// @details It initializes the opencl_platform, platforms_number, devices_number,
