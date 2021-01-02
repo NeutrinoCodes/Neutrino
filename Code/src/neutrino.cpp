@@ -13,6 +13,7 @@ cl_context             neutrino::context_id;                                    
 cl_platform_id         neutrino::platform_id;                                                       // OpenCL platform ID (static variable storage).
 cl_device_id           neutrino::device_id;                                                         // OpenCL device ID (static variable storage).
 std::vector<cl_kernel> neutrino::kernel_id;                                                         // OpenCL kernel ID array (static variable storage).
+bool                   neutrino::init_done;                                                         // init_done flag.
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////// "neutrino" class /////////////////////////////////////////
@@ -49,6 +50,7 @@ void neutrino::init
   neutrino::context_id    = NULL;                                                                   // OpenCL context ID.
   neutrino::platform_id   = NULL;                                                                   // OpenCL platform ID.
   neutrino::device_id     = NULL;                                                                   // OpenCL device ID.
+  neutrino::init_done     = true;                                                                   // Setting init_done flag...
 
   done ();                                                                                          // Printing message...
 }
