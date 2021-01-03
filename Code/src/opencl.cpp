@@ -5,7 +5,8 @@
 
 #include "opencl.hpp"
 
-bool opencl::init_done = false;                                                                     // init_done flag.
+queue* opencl::opencl_queue;                                                                        // OpenCL queue.
+bool   opencl::init_done = false;                                                                   // init_done flag.
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////// "opencl" class /////////////////////////////////////////
@@ -22,6 +23,7 @@ opencl::opencl(
   if(opencl::init_done != true)
   {
     opencl::init (loc_device_type);                                                                 // OpenCL device type.)
+    opencl::opencl_queue = new queue ();                                                            // OpenCL queue.
   }
 }
 
@@ -719,6 +721,7 @@ opencl::~opencl()
 
   delete[] opencl_platform;                                                                         // Deleting platform...
   delete[] opencl_device;                                                                           // Deleting device...
+  delete opencl_queue;                                                                              // Deleting opencl queue...
 
   loc_error = clReleaseContext (opencl::context_id);                                                // Releasing OpenCL context...
 

@@ -228,6 +228,7 @@ typedef enum
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "linear_algebra.hpp"
 #include "projective_geometry.hpp"
+#include "data_classes.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////// "neutrino" class ///////////////////////////////////////
@@ -252,6 +253,7 @@ public:
   static cl_device_id           device_id;                                                          ///< @brief **OpenCL device ID.**
   static std::vector<cl_kernel> kernel_id;                                                          ///< @brief **OpenCL kernel ID array.**
   static GLFWwindow*            glfw_window;                                                        ///< @brief **Window handle.**
+  static std::vector<nu_data*>  data;
   static bool                   init_done;                                                          ///< @brief **init_done flag.**
 
   /// @brief **Class constructor.**
