@@ -253,7 +253,7 @@ public:
   static cl_device_id           device_id;                                                          ///< @brief **OpenCL device ID.**
   static std::vector<cl_kernel> kernel_id;                                                          ///< @brief **OpenCL kernel ID array.**
   static GLFWwindow*            glfw_window;                                                        ///< @brief **Window handle.**
-  static std::vector<nu_data*>  data;
+  static std::vector<nu_data*>  data;                                                               ///< @brief **Neutrino data array.**
   static bool                   init_done;                                                          ///< @brief **init_done flag.**
 
   /// @brief **Class constructor.**
