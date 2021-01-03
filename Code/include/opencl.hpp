@@ -19,6 +19,7 @@
 #include "device.hpp"
 #include "queue.hpp"
 #include "kernel.hpp"
+#include "data_classes.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// "opencl" class /////////////////////////////////////////////
@@ -87,6 +88,12 @@ public:
              compute_device_type loc_device_type                                                    ///< Compute device type.
             );
 
+  void write ();
+
+  void acquire ();
+
+  void release ();
+
   /// @brief Kernel execution function.
   /// @details This function invokes the execution of an [OpenCL kernel]
   /// (https://en.wikipedia.org/wiki/OpenCL#OpenCL_C_language) on an OpenCL @link queue @endlink .
@@ -105,7 +112,6 @@ public:
   /// synchronize different OpenCL work-items within a given OpenCL work-group.
   void execute (
                 kernel*     loc_kernel,                                                             ///< OpenCL kernel.
-                queue*      loc_queue,                                                              ///< OpenCL queue.
                 kernel_mode loc_kernel_mode                                                         ///< OpenCL kernel mode.
                );
 

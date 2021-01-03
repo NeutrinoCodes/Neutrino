@@ -109,10 +109,63 @@ void shader::addsource
 
 void shader::build ()
 {
+  size_t i;                                                                                         // Index.
+
   neutrino::action ("linking OpenGL shader sources...");                                            // Printing message...
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
   glLinkProgram (program);                                                                          // Linking program...
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  neutrino::done ();                                                                                // Printing message...
+
+  // Setting shader arguments:
+  neutrino::action ("setting OpenGL shader arguments...");                                          // Printing message...
+
+  for(i = 0; i < neutrino::data.size (); i++)
+  {
+    switch(data[i]->type)
+    {
+      case NU_INT:
+        ((nu_int*)neutrino::data[i])->name    = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu_int*)neutrino::data[i], i);
+        break;
+
+      case NU_INT2:
+        ((nu_int2*)neutrino::data[i])->name   = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu_int2*)neutrino::data[i], i);
+        break;
+
+      case NU_INT3:
+        ((nu_int3*)neutrino::data[i])->name   = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu_int3*)neutrino::data[i], i);
+        break;
+
+      case NU_INT4:
+        ((nu_int4*)neutrino::data[i])->name   = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu_int4*)neutrino::data[i], i);
+        break;
+
+      case NU_FLOAT:
+        ((nu_float*)neutrino::data[i])->name  = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu_float*)neutrino::data[i], i);
+        break;
+
+      case NU_FLOAT2:
+        ((nu_float2*)neutrino::data[i])->name = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu_float2*)neutrino::data[i], i);
+        break;
+
+      case NU_FLOAT3:
+        ((nu_float3*)neutrino::data[i])->name = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu_float3*)neutrino::data[i], i);
+        break;
+
+      case NU_FLOAT4:
+        ((nu_float4*)neutrino::data[i])->name = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu_float4*)neutrino::data[i], i);
+        break;
+    }
+  }
+
   neutrino::done ();                                                                                // Printing message...
 }
 

@@ -613,10 +613,151 @@ void opencl::init
   neutrino::done ();                                                                                // Printing message...
 }
 
+void opencl::write ()
+{
+  size_t i;                                                                                         // Index.
+
+  // Setting kernel arguments:
+  neutrino::action ("setting OpenCL kernel arguments...");                                          // Printing message...
+
+  for(i = 0; i < neutrino::data.size (); i++)
+  {
+    switch(data[i]->type)
+    {
+      case NU_INT:
+        ((nu_int*)neutrino::data[i])->name    = std::string ("arg_") + std::to_string (i);
+        opencl_queue->write ((nu_int*)neutrino::data[i], i);
+        break;
+
+      case NU_INT2:
+        ((nu_int2*)neutrino::data[i])->name   = std::string ("arg_") + std::to_string (i);
+        opencl_queue->write ((nu_int2*)neutrino::data[i], i);
+        break;
+
+      case NU_INT3:
+        ((nu_int3*)neutrino::data[i])->name   = std::string ("arg_") + std::to_string (i);
+        opencl_queue->write ((nu_int3*)neutrino::data[i], i);
+        break;
+
+      case NU_INT4:
+        ((nu_int4*)neutrino::data[i])->name   = std::string ("arg_") + std::to_string (i);
+        opencl_queue->write ((nu_int4*)neutrino::data[i], i);
+        break;
+
+      case NU_FLOAT:
+        ((nu_float*)neutrino::data[i])->name  = std::string ("arg_") + std::to_string (i);
+        opencl_queue->write ((nu_float*)neutrino::data[i], i);
+        break;
+
+      case NU_FLOAT2:
+        ((nu_float2*)neutrino::data[i])->name = std::string ("arg_") + std::to_string (i);
+        opencl_queue->write ((nu_float2*)neutrino::data[i], i);
+        break;
+
+      case NU_FLOAT3:
+        ((nu_float3*)neutrino::data[i])->name = std::string ("arg_") + std::to_string (i);
+        opencl_queue->write ((nu_float3*)neutrino::data[i], i);
+        break;
+
+      case NU_FLOAT4:
+        ((nu_float4*)neutrino::data[i])->name = std::string ("arg_") + std::to_string (i);
+        opencl_queue->write ((nu_float4*)neutrino::data[i], i);
+        break;
+    }
+  }
+
+  neutrino::done ();                                                                                // Printing message...
+}
+
+void opencl::acquire ()
+{
+  size_t i;                                                                                         // Index.
+
+  for(i = 0; i < data.size (); i++)
+  {
+    switch(data[i]->type)
+    {
+      case NU_INT:
+        opencl_queue->acquire ((nu_int*)data[i], i);
+        break;
+
+      case NU_INT2:
+        opencl_queue->acquire ((nu_int2*)data[i], i);
+        break;
+
+      case NU_INT3:
+        opencl_queue->acquire ((nu_int3*)data[i], i);
+        break;
+
+      case NU_INT4:
+        opencl_queue->acquire ((nu_int4*)data[i], i);
+        break;
+
+      case NU_FLOAT:
+        opencl_queue->acquire ((nu_float*)data[i], i);
+        break;
+
+      case NU_FLOAT2:
+        opencl_queue->acquire ((nu_float2*)data[i], i);
+        break;
+
+      case NU_FLOAT3:
+        opencl_queue->acquire ((nu_float3*)data[i], i);
+        break;
+
+      case NU_FLOAT4:
+        opencl_queue->acquire ((nu_float4*)data[i], i);
+        break;
+    }
+  }
+}
+
+void opencl::release ()
+{
+  size_t i;                                                                                         // Index.
+
+  for(i = 0; i < data.size (); i++)
+  {
+    switch(data[i]->type)
+    {
+      case NU_INT:
+        opencl_queue->release ((nu_int*)data[i], i);
+        break;
+
+      case NU_INT2:
+        opencl_queue->release ((nu_int2*)data[i], i);
+        break;
+
+      case NU_INT3:
+        opencl_queue->release ((nu_int3*)data[i], i);
+        break;
+
+      case NU_INT4:
+        opencl_queue->release ((nu_int4*)data[i], i);
+        break;
+
+      case NU_FLOAT:
+        opencl_queue->release ((nu_float*)data[i], i);
+        break;
+
+      case NU_FLOAT2:
+        opencl_queue->release ((nu_float2*)data[i], i);
+        break;
+
+      case NU_FLOAT3:
+        opencl_queue->release ((nu_float3*)data[i], i);
+        break;
+
+      case NU_FLOAT4:
+        opencl_queue->release ((nu_float4*)data[i], i);
+        break;
+    }
+  }
+}
+
 void opencl::execute
 (
  kernel*     loc_kernel,                                                                            // OpenCL kernel.
- queue*      loc_queue,                                                                             // OpenCL queue.
  kernel_mode loc_kernel_mode                                                                        // Kernel mode.
 )
 {
@@ -626,7 +767,7 @@ void opencl::execute
   bool    kernel_valid = false;                                                                     // Validity flag.
 
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
-  clFinish (loc_queue->queue_id);                                                                   // Waiting for OpenCL to finish...
+  clFinish (opencl_queue->queue_id);                                                                // Waiting for OpenCL to finish...
 
   // Selecting kernel size:
   if(
@@ -677,7 +818,7 @@ void opencl::execute
   // Enqueueing OpenCL kernel (as a single task):
   loc_error = clEnqueueNDRangeKernel
               (
-               loc_queue->queue_id,                                                                 // Queue ID.
+               opencl_queue->queue_id,                                                              // Queue ID.
                loc_kernel->kernel_id,                                                               // Kernel ID.
                kernel_dimension,                                                                    // Kernel dimension.
                NULL,                                                                                // Global work offset.
@@ -690,7 +831,7 @@ void opencl::execute
 
   neutrino::check_error (loc_error);                                                                // Checking error...
 
-  clFinish (loc_queue->queue_id);                                                                   // Waiting for OpenCL to finish...
+  clFinish (opencl_queue->queue_id);                                                                // Waiting for OpenCL to finish...
 
   // Selecting kernel mode:
   switch(loc_kernel_mode)
