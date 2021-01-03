@@ -75,6 +75,9 @@ void kernel::build (
   neutrino::done ();                                                                                // Printing message...
 
   neutrino::action ("creating OpenCL program from kernel sources...");                              // Printing message...
+
+  std::cout << "context_id = " << neutrino::context_id << std::endl;
+  std::cout << "neutrino::init_done = " << neutrino::init_done << std::endl;
   program = clCreateProgramWithSource
             (
              neutrino::context_id,                                                                  // OpenCL context ID.
