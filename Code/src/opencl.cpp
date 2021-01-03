@@ -14,12 +14,9 @@ opencl::opencl(
                compute_device_type loc_device_type                                                  // OpenCL device type.
               )
 {
-  std::cout << "before opencl neutrino::init_done = " << neutrino::init_done << std::endl;
-
   if(neutrino::init_done != true)
   {
     neutrino::init ();                                                                              // Initializing Neutrino...
-    std::cout << "after neutrino::init_done = " << neutrino::init_done << std::endl;
   }
 
   if(opencl::init_done != true)
@@ -609,8 +606,6 @@ void opencl::init
 
   neutrino::check_error (loc_error);                                                                // Checking returned error code...
   neutrino::context_id = opencl::context_id;                                                        // Setting neutrino OpenCL context ID...
-
-  std::cout << "context_id = " << neutrino::context_id << std::endl;
   opencl::init_done    = true;                                                                      // Setting init_done flag...
 
   neutrino::done ();                                                                                // Printing message...

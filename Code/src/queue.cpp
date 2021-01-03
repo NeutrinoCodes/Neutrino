@@ -10,10 +10,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 queue::queue()
 {
-}
-
-void queue::init ()
-{
   cl_int loc_error;                                                                                 // Local error code.
 
   neutrino::action ("creating OpenCL command queue...");                                            // Printing message...
@@ -22,8 +18,6 @@ void queue::init ()
 
   queue::context_id = neutrino::context_id;                                                         // Initializing context id...
   queue::device_id  = neutrino::device_id;                                                          // Initializing device id...
-
-  std::cout << "context_id = " << queue::context_id << std::endl;
 
   // Creating OpenCL queue:
   queue_id          = clCreateCommandQueue
