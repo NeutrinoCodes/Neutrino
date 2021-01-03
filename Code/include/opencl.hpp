@@ -67,6 +67,7 @@ public:
   device**               opencl_device;                                                             ///< @brief **OpenCL device array.**
   cl_context_properties* properties;                                                                ///< @brief ** OpenCL context properties.**
   cl_context             context_id;                                                                ///< @brief **OpenCL context ID.**
+  static queue*          opencl_queue;                                                              ///< @brief **OpenCL queue**.
   static bool            init_done;                                                                 ///< @brief **init_done flag.**
 
   /// @brief **Class constructor.**

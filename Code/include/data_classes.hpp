@@ -20,7 +20,131 @@
 #ifndef data_classes_hpp
 #define data_classes_hpp
 
-#include "neutrino.hpp"
+#define CL_USE_DEPRECATED_OPENCL_1_2_APIS                                                           ///< Allows the usage of "OpenCL 1.2" functions in newer versions.
+
+#ifdef WIN32                                                                                        // Detecting Windows...
+  #define GLFW_EXPOSE_NATIVE_WIN32                                                                  ///< Enabling Windows native access functions...
+  #define GLFW_EXPOSE_NATIVE_WGL                                                                    ///< Enabling Windows native access functions...
+#endif
+
+#ifdef __linux__                                                                                    // Detecting Linux...
+  #define GLFW_EXPOSE_NATIVE_X11                                                                    ///< Enabling Linux native access functions...
+  #define GLFW_EXPOSE_NATIVE_GLX                                                                    ///< Enabling Linux native access functions...
+#endif
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// OpenCL/GL interoperability ///////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef __APPLE__
+  #define NU_INTEROP                      "cl_APPLE_gl_sharing"
+#endif
+
+#ifdef __linux__
+  #define NU_INTEROP                      "cl_khr_gl_sharing"
+#endif
+
+#ifdef WIN32
+  #define NU_INTEROP                      "cl_khr_gl_sharing"
+#endif
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// Standard C/C++ header files //////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+#include <stdlib.h>
+#include <stdarg.h>
+#include <errno.h>
+#include <string>
+#include <vector>
+#include <tuple>
+#include <iostream>
+#include <fstream>
+#include <cerrno>
+#include <algorithm>
+
+#ifdef __APPLE__                                                                                    // Detecting Mac OS...
+  #include <math.h>
+#endif
+
+#ifdef __linux__                                                                                    // Detecting Linux...
+  #include <math.h>
+#endif
+
+#ifdef WIN32                                                                                        // Detecting Windows...
+  #include <windows.h>
+  #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004                                                 ///< Enabling ANSI terminal in Windows...
+  #define DISABLE_NEWLINE_AUTO_RETURN        0x0008                                                 ///< Disabling new line auto return in Windows terminal...
+
+  #include <cmath>
+  #ifndef M_PI
+    #define M_PI                             3.14159265358979323846f
+  #endif
+#endif
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// GLAD header files ////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef __APPLE__                                                                                    // Detecting Mac OS...
+  #include <glad/glad.h>                                                                            // https://glad.dav1d.de
+#endif
+
+#ifdef __linux__                                                                                    // Detecting Linux...
+  #include <glad/glad.h>                                                                            // https://glad.dav1d.de
+#endif
+
+#ifdef WIN32                                                                                        // Detecting Windows...
+  #include <glad\glad.h>                                                                            // https://glad.dav1d.de
+#endif
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// GLFW header files ////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef __APPLE__                                                                                    // Detecting Mac OS...
+  #include <GLFW/glfw3.h>                                                                           // https://www.glfw.org
+  #include <GLFW/glfw3native.h>                                                                     // https://www.glfw.org
+#endif
+
+#ifdef __linux__                                                                                    // Detecting Linux...
+  #include <GLFW/glfw3.h>                                                                           // https://www.glfw.org
+  #include <GLFW/glfw3native.h>                                                                     // https://www.glfw.org
+#endif
+
+#ifdef WIN32                                                                                        // Detecting Windows...
+  #include <GLFW\glfw3.h>                                                                           // https://www.glfw.org
+  #include <GLFW\glfw3native.h>                                                                     // https://www.glfw.org
+#endif
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// OpenGL header files ///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef __APPLE__
+  #include <OpenGL/OpenGL.h>                                                                        // Apple deprecated the OpenGL framework in 2018, OS-X 10.14 Mojave.
+#endif
+
+#ifdef __linux__                                                                                    // Detecting Linux...
+  #include <GL/gl.h>                                                                                // https://www.opengl.org
+#endif
+
+#ifdef WIN32                                                                                        // Detecting Windows...
+  #include <GL\gl.h>                                                                                // https://www.opengl.org
+#endif
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// OpenCL header files ///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef __APPLE__
+  #include <OpenCL/opencl.h>                                                                        // Apple deprecated the OpenCL framework in 2018, OS-X 10.14 Mojave.
+#endif
+
+#ifdef __linux__                                                                                    // Detecting Linux...
+  #include <CL/cl.h>                                                                                // https://www.opengl.org
+  #include <CL/cl_gl.h>                                                                             // https://www.opengl.org
+#endif
+
+#ifdef WIN32                                                                                        // Detecting Windows...
+  #include <CL\cl.h>                                                                                // https://www.opengl.org
+  #include <CL\cl_gl.h>                                                                             // https://www.opengl.org
+#endif
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////// DATA STRUCTURES ////////////////////////////////////////////
