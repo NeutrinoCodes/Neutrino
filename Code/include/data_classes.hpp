@@ -244,8 +244,9 @@ typedef enum
 class nu_data
 {
 public:
-  nu_type type;                                                                                     ///< Kernel argument data type.
-  size_t  layout;                                                                                   ///< Kernel argument layout index.
+  nu_type                      type;                                                                ///< Kernel argument data type.
+  size_t                       layout;                                                              ///< Kernel argument layout index.
+  static std::vector<nu_data*> data;                                                                ///< @brief **Neutrino data array.**
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////

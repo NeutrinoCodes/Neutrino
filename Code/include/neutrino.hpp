@@ -238,7 +238,7 @@ typedef enum
 /// Declares a Neutrino baseline object.
 /// This class contains common definitions and utility functions which are used in various points
 /// in the code.
-class neutrino                                                                                      /// @brief **Neutrino baseline.**
+class neutrino : public nu_data                                                                     /// @brief **Neutrino baseline.**
 {
 private:
   size_t                        terminal_time;                                                      ///< @brief **Terminal time (for refresh) [us].**
@@ -253,7 +253,6 @@ public:
   static cl_device_id           device_id;                                                          ///< @brief **OpenCL device ID.**
   static std::vector<cl_kernel> kernel_id;                                                          ///< @brief **OpenCL kernel ID array.**
   static GLFWwindow*            glfw_window;                                                        ///< @brief **Window handle.**
-  static std::vector<nu_data*>  data;                                                               ///< @brief **Neutrino data array.**
   static bool                   init_done;                                                          ///< @brief **init_done flag.**
 
   /// @brief **Class constructor.**
