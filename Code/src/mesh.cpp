@@ -118,12 +118,26 @@ void mesh::init (
     group_unit.element.clear ();                                                                    // Clearing group unit element vector...
   }
 
+  neighbours = 0;                                                                                   // Resetting number of neighbours...
+
+  for(i = 0; i < node.size (); i++)
+  {
+    neighbour_unit = this->neighbour (i);                                                           // Getting neighbourhood indices...
+    neighbourhood.insert (
+                          neighbourhood.end (),
+                          neighbour_unit.begin (),
+                          neighbour_unit.end ()
+                         );                                                                         // Building neighbour tuple...
+    neighbours    += neighbour_unit.size ();                                                        // Counting neighbour nodes...
+    offset.push_back (neighbours);                                                                  // Setting neighbour offset...
+  }
+
   neutrino::done ();                                                                                // Printing message...
 }
 
-std::vector<size_t> mesh::neighbours (
-                                      size_t loc_node                                               // Central node index [x].
-                                     )
+std::vector<size_t> mesh::neighbour (
+                                     size_t loc_node                                                // Central node index [x].
+                                    )
 {
   neighbour_unit.clear ();
 

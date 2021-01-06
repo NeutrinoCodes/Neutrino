@@ -136,12 +136,15 @@ private:
   gmsh_group                        group_unit;                                                     ///< Group unit.
 
   // NEIGHBOUR VARIABLES:
+  size_t                            neighbours;                                                     ///< Number of neighbours.
   std::vector<size_t>               neighbour_unit;                                                 ///< Neighbour unit.
 
 public:
   std::vector<gmsh_node>            node;                                                           ///< node[i].
   std::vector<gmsh_element>         element;                                                        ///< element[k].
   std::vector<gmsh_group>           group;                                                          ///< group[i].
+  std::vector<int>                  neighbourhood;                                                  ///< neighbourhood.
+  std::vector<int>                  offset;                                                         ///< neighbour offset.
 
   mesh ();
 
@@ -149,9 +152,9 @@ public:
                             std::string loc_file_name                                               ///< GMSH .msh file name.
                            );
 
-  std::vector<size_t> neighbours (
-                                  size_t loc_node                                                   ///< Node index.
-                                 );
+  std::vector<size_t> neighbour (
+                                 size_t loc_node                                                    ///< Node index.
+                                );
 
   std::vector<size_t> physical (
                                 size_t loc_physical_group_dim,                                      ///< Physical group dimension.
