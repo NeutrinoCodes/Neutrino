@@ -132,6 +132,33 @@ void mesh::init (
     offset.push_back (neighbours);                                                                  // Setting neighbour offset...
   }
 
+  for(i = 0; i < node.size (); i++)
+  {
+    s_max = offset[i];                                                                              // Setting stride maximum...
+
+    if(i == 0)
+    {
+      s_min = 0;                                                                                    // Setting stride minimum (first stride)...
+    }
+    else
+    {
+      s_min = offset[i - 1];                                                                        // Setting stride minimum (all others)...
+    }
+
+    for(s = s_min; s < s_max; s++)
+    {
+      k = neighbourhood[s];                                                                         // Getting neighbour index...
+      link.push_back (
+      {
+        node[k].x - node[i].x,                                                                      // Computing link "x" component...
+        node[k].y - node[i].y,                                                                      // Computing link "y" component...
+        node[k].z - node[i].z,                                                                      // Computing link "z" component...
+        0.0f                                                                                        // Computing link "w" component...
+      }
+                     );
+    }
+  }
+
   neutrino::done ();                                                                                // Printing message...
 }
 

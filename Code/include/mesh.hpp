@@ -29,6 +29,19 @@ typedef struct _gmsh_node
 #pragma pack(pop)
 
 /// @brief    **Data structure. Internally used by Neutrino.**
+/// @details  This structure is used as data storage in the link array. It is tightly packed to be
+/// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
+#pragma pack(push, 1)                                                                               // Packing data in 1 column...
+typedef struct _gmsh_link
+{
+  cl_float x;                                                                                       ///< Link "x" coordinate.
+  cl_float y;                                                                                       ///< Link "y" coordinate.
+  cl_float z;                                                                                       ///< Link "z" coordinate.
+  cl_float w;                                                                                       ///< Link "w" coordinate.
+} gmsh_link;
+#pragma pack(pop)
+
+/// @brief    **Data structure. Internally used by Neutrino.**
 /// @details  This structure is used as data storage in the element array. It is tightly packed to be
 /// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
 #pragma pack(push, 1)                                                                               // Packing data in 1 column...
@@ -100,6 +113,9 @@ private:
   size_t                            k;                                                              ///< Element index.
   size_t                            m;                                                              ///< Type node index.
   size_t                            n;                                                              ///< Entity index.
+  size_t                            s;                                                              ///< Stride index.
+  size_t                            s_min;                                                          ///< Stride minimum index.
+  size_t                            s_max;                                                          ///< Stride maximum index.
 
   // SIZES:
   size_t                            nodes;                                                          ///< Number of nodes.
@@ -141,6 +157,7 @@ private:
 
 public:
   std::vector<gmsh_node>            node;                                                           ///< node[i].
+  std::vector<gmsh_link>            link;                                                           ///< link.
   std::vector<gmsh_element>         element;                                                        ///< element[k].
   std::vector<gmsh_group>           group;                                                          ///< group[i].
   std::vector<int>                  neighbourhood;                                                  ///< neighbourhood.
