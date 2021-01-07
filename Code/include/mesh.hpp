@@ -163,11 +163,9 @@ public:
   std::vector<int>                  neighbourhood;                                                  ///< neighbourhood.
   std::vector<int>                  offset;                                                         ///< neighbour offset.
 
-  mesh ();
-
-  void                init (
-                            std::string loc_file_name                                               ///< GMSH .msh file name.
-                           );
+  mesh (
+        std::string loc_file_name                                                                   ///< GMSH .msh file name.
+       );
 
   std::vector<size_t> neighbour (
                                  size_t loc_node                                                    ///< Node index.

@@ -8,13 +8,9 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////// "mesh" class /////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-mesh::mesh()
-{
-}
-
-void mesh::init (
-                 std::string loc_file_name                                                          // GMSH .msh file name.
-                )
+mesh::mesh(
+           std::string loc_file_name                                                                // GMSH .msh file name.
+          )
 {
   entities = 0;                                                                                     // Resetting number of entities...
   neutrino::action ("initializing GMSH...");                                                        // Printing message...
