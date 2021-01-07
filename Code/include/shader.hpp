@@ -51,7 +51,9 @@ public:
 
   /// @brief    **OpenGL shader builder.**
   /// @details  It builds an OpenGL shader.
-  void build ();
+  void build (
+              size_t loc_points                                                                     ///< Number of points to be rendered...
+             );
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////// setarg "functions" //////////////////////////////////////////
