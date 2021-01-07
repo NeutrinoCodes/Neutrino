@@ -167,8 +167,6 @@ void kernel::build (
   neutrino::done ();                                                                                // Printing message...
 
   // Setting kernel arguments:
-  neutrino::action ("setting OpenCL kernel arguments...");                                          // Printing message...
-
   for(i = 0; i < neutrino::data.size (); i++)
   {
     switch(data[i]->type)
@@ -214,8 +212,6 @@ void kernel::build (
         break;
     }
   }
-
-  neutrino::done ();                                                                                // Printing message...
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
