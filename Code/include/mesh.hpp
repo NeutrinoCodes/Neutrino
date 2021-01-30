@@ -168,6 +168,7 @@ public:
        );
 
   std::vector<size_t> neighbour (
+                                 int    loc_type,                                                   ///< Element type.
                                  size_t loc_node                                                    ///< Node index.
                                 );
 

@@ -159,6 +159,7 @@ mesh::mesh(
 }
 
 std::vector<size_t> mesh::neighbour (
+                                     int    loc_type,                                               // Element type.
                                      size_t loc_node                                                // Central node index [x].
                                     )
 {
@@ -168,7 +169,7 @@ std::vector<size_t> mesh::neighbour (
   {
     for(m = 0; m < element[k].node.size (); m++)
     {
-      if(element[k].node[m] == loc_node)
+      if((element[k].node[m] == loc_node) && (element[k].type == loc_type))
       {
         // Appending element[i] type nodes in neighbour unit:
         neighbour_unit.insert (
