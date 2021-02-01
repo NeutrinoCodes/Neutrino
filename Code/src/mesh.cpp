@@ -42,8 +42,6 @@ mesh::mesh(
 
     nodes = node_list.size ();                                                                      // Getting number of nodes...
 
-
-
     // Getting entity elements, where:
     // i = index of element type.
     // j = index of nodes per element, for each element type.
@@ -63,16 +61,22 @@ mesh::mesh(
     t     = 0;                                                                                      // Resetting tag index...
     element.push_back ({});                                                                         // Creating "0_th" element placeholder...
     node.push_back ({});                                                                            // Creating "0_th" node placeholder...
+    group.push_back ({});                                                                           // Creating "0_th" group placeholder...
+    neighbourhood.push_back ({});                                                                   // Creating "0_th" group placeholder...
+    offset.push_back ({});                                                                          // Creating "0_th" offset placeholder...
+    link.push_back ({});                                                                            // Creating "0_th" link placeholder...
 
+    // For each element type in the entity:
     for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
     {
       element.push_back ({});                                                                       // Creating "j_th" element placeholder...
 
-      // Checking whether "j_th" element type is present in type list or not:
+      // Checking whether element type "j" is present in the type list or not:
       if((j == type_list[t]) && (t < types))
       {
         elements = element_tag[t].size ();                                                          // Getting number of elements...
 
+        // For each "k_th" element of type "j":
         for(k = 0; k < elements; k++)
         {
           // Getting element type properties:
@@ -86,7 +90,7 @@ mesh::mesh(
                                                    type_primary_nodes                               // Number of primary type nodes [#].
                                                   );
 
-          // Processing "m_th" node in "k_th" element of "j_th" type:
+          // Processing the "m_th" node in "k_th" element of type "j":
           for(m = 0; m < type_nodes; m++)
           {
             element_unit.node.push_back ((node_tag[t][k*type_nodes + m]) - 1);                      // Adding type node to element unit...
@@ -113,8 +117,6 @@ mesh::mesh(
       }
     }
   }
-
-  group.push_back ({});                                                                             // Creating "0_th" group placeholder...
 
   for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
   {
@@ -143,10 +145,6 @@ mesh::mesh(
       }
     }
   }
-
-  neighbourhood.push_back ({});                                                                     // Creating "0_th" group placeholder...
-  offset.push_back ({});                                                                            // Creating "0_th" offset placeholder...
-  link.push_back ({});                                                                              // Creating "0_th" link placeholder...
 
   for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
   {
