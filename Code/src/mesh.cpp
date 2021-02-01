@@ -42,14 +42,7 @@ mesh::mesh(
 
     nodes = node_list.size ();                                                                      // Getting number of nodes...
 
-    for(i = 0; i < nodes; i++)
-    {
-      node_unit.x = (float)node_coordinates[3*i + 0];                                               // Setting node unit "x" coordinate...
-      node_unit.y = (float)node_coordinates[3*i + 1];                                               // Setting node unit "y"coordinate...
-      node_unit.z = (float)node_coordinates[3*i + 2];                                               // Setting node unit "z" coordinate...
-      node_unit.w = 1.0f;                                                                           // Setting node unit "w" coordinate...
-      node.push_back (node_unit);                                                                   // Adding node unit to node vector...
-    }
+
 
     // Getting entity elements, where:
     // i = index of element type.
@@ -67,91 +60,153 @@ mesh::mesh(
 
     types = type_list.size ();                                                                      // Getting number of types...
 
-    for(j = 0; j < types; j++)
+    t     = 0;                                                                                      // Resetting tag index...
+    element.push_back ({});                                                                         // Creating "0_th" element placeholder...
+    node.push_back ({});                                                                            // Creating "0_th" node placeholder...
+
+    for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
     {
-      elements = element_tag[j].size ();                                                            // Getting number of elements...
+      element.push_back ({});                                                                       // Creating "j_th" element placeholder...
 
-      for(k = 0; k < elements; k++)
+      // Checking whether "j_th" element type is present in type list or not:
+      if((j == type_list[t]) && (t < types))
       {
-        // Getting element type properties:
-        gmsh::model::mesh::getElementProperties (
-                                                 type_list[j],                                      // Element type [#].
-                                                 type_name,                                         // Element type name [string].
-                                                 type_dimension,                                    // Element type dimension [#].
-                                                 type_order,                                        // Element type order [#].
-                                                 type_nodes,                                        // Element type number of type nodes [#].
-                                                 type_node_coordinates,                             // Element type node local coordinates [vector].
-                                                 type_primary_nodes                                 // Number of primary type nodes [#].
-                                                );
+        elements = element_tag[t].size ();                                                          // Getting number of elements...
 
-        for(m = 0; m < type_nodes; m++)
+        for(k = 0; k < elements; k++)
         {
-          element_unit.node.push_back ((node_tag[j][k*type_nodes + m]) - 1);                        // Adding type node to element unit...
+          // Getting element type properties:
+          gmsh::model::mesh::getElementProperties (
+                                                   type_list[t],                                    // Element type [#].
+                                                   type_name,                                       // Element type name [string].
+                                                   type_dimension,                                  // Element type dimension [#].
+                                                   type_order,                                      // Element type order [#].
+                                                   type_nodes,                                      // Element type number of type nodes [#].
+                                                   type_node_coordinates,                           // Element type node local coordinates [vector].
+                                                   type_primary_nodes                               // Number of primary type nodes [#].
+                                                  );
+
+          // Processing "m_th" node in "k_th" element of "j_th" type:
+          for(m = 0; m < type_nodes; m++)
+          {
+            element_unit.node.push_back ((node_tag[t][k*type_nodes + m]) - 1);                      // Adding type node to element unit...
+            node_unit.x = (float)node_coordinates[3*m + 0];                                         // Setting node unit "x" coordinate...
+            node_unit.y = (float)node_coordinates[3*m + 1];                                         // Setting node unit "y"coordinate...
+            node_unit.z = (float)node_coordinates[3*m + 2];                                         // Setting node unit "z" coordinate...
+            node_unit.w = 1.0f;                                                                     // Setting node unit "w" coordinate...
+            node.push_back ({});                                                                    // Creating "m_th" node placeholder...
+            node[j].push_back (node_unit);                                                          // Adding node unit to node vector...
+          }
+
+          element_unit.type = type_list[t];                                                         // Setting element unit type...
+          element[j].push_back (element_unit);                                                      // Adding element[k] to element vector...
+
+          t++;                                                                                      // Incrementing tag index...
         }
 
-        element_unit.type = type_list[j];                                                           // Setting element unit type...
-        element.push_back (element_unit);                                                           // Adding element[k] to element vector...
         element_unit.node.clear ();                                                                 // Clearing element unit node vector...
       }
+      else
+      {
+        element[j].push_back ({});                                                                  // Adding empty elment unit to element vector...
+        node[j].push_back ({});                                                                     // Adding empty node unit to node vector...
+      }
     }
   }
 
-  // Finding groups for each node:
-  for(i = 0; i < node.size (); i++)
+  group.push_back ({});                                                                             // Creating "0_th" group placeholder...
+
+  for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
   {
-    for(k = 0; k < element.size (); k++)
+    // Finding groups for each node:
+    for(i = 0; i < node[j].size (); i++)
     {
-      for(m = 0; m < element[k].node.size (); m++)
+      for(k = 0; k < element[j].size (); k++)
       {
-        if(element[k].node[m] == i)
+        for(m = 0; m < element[j][k].node.size (); m++)
         {
-          group_unit.element.push_back (k);                                                         // Adding element index to group unit...
+          if(element[j][k].node[m] == i)
+          {
+            group_unit.element.push_back (k);                                                       // Adding element index to group unit...
+          }
         }
       }
-    }
 
-    group.push_back (group_unit);                                                                   // Adding group unit to group vector...
-    group_unit.element.clear ();                                                                    // Clearing group unit element vector...
-  }
-
-  neighbours = 0;                                                                                   // Resetting number of neighbours...
-
-  for(i = 0; i < node.size (); i++)
-  {
-    neighbour_unit = this->neighbour (i);                                                           // Getting neighbourhood indices...
-    neighbourhood.insert (
-                          neighbourhood.end (),
-                          neighbour_unit.begin (),
-                          neighbour_unit.end ()
-                         );                                                                         // Building neighbour tuple...
-    neighbours    += neighbour_unit.size ();                                                        // Counting neighbour nodes...
-    offset.push_back (neighbours);                                                                  // Setting neighbour offset...
-  }
-
-  for(i = 0; i < node.size (); i++)
-  {
-    s_max = offset[i];                                                                              // Setting stride maximum...
-
-    if(i == 0)
-    {
-      s_min = 0;                                                                                    // Setting stride minimum (first stride)...
-    }
-    else
-    {
-      s_min = offset[i - 1];                                                                        // Setting stride minimum (all others)...
-    }
-
-    for(s = s_min; s < s_max; s++)
-    {
-      k = neighbourhood[s];                                                                         // Getting neighbour index...
-      link.push_back (
+      if(node[j].size () > 0)
       {
-        node[k].x - node[i].x,                                                                      // Computing link "x" component...
-        node[k].y - node[i].y,                                                                      // Computing link "y" component...
-        node[k].z - node[i].z,                                                                      // Computing link "z" component...
-        0.0f                                                                                        // Computing link "w" component...
+        group[j].push_back (group_unit);                                                            // Adding group unit to group vector...
+        group_unit.element.clear ();                                                                // Clearing group unit element vector...
       }
-                     );
+      else
+      {
+        group[j].push_back ({});                                                                    // Adding empty group unit to group vector...
+      }
+    }
+  }
+
+  neighbourhood.push_back ({});                                                                     // Creating "0_th" group placeholder...
+  offset.push_back ({});                                                                            // Creating "0_th" offset placeholder...
+  link.push_back ({});                                                                              // Creating "0_th" link placeholder...
+
+  for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
+  {
+    neighbours = 0;                                                                                 // Resetting number of neighbours...
+
+    for(i = 0; i < node[j].size (); i++)
+    {
+      neighbour_unit = this->neighbour (j, i);                                                      // Getting neighbourhood indices...
+      neighbourhood[j].insert (
+                               neighbourhood[j].end (),
+                               neighbour_unit.begin (),
+                               neighbour_unit.end ()
+                              );                                                                    // Building neighbour tuple...
+      neighbours    += neighbour_unit.size ();                                                      // Counting neighbour nodes...
+
+      if(node[j].size () > 0)
+      {
+        offset[j].push_back (neighbours);                                                           // Setting neighbour offset...
+      }
+      else
+      {
+        offset[j].push_back ({});                                                                   // Setting empty neighbour offset...
+      }
+    }
+
+    neighbour_unit.clear ();
+
+    for(i = 0; i < node[j].size (); i++)
+    {
+      s_max = offset[j][i];                                                                         // Setting stride maximum...
+
+      if(i == 0)
+      {
+        s_min = 0;                                                                                  // Setting stride minimum (first stride)...
+      }
+      else
+      {
+        s_min = offset[j][i - 1];                                                                   // Setting stride minimum (all others)...
+      }
+
+      for(s = s_min; s < s_max; s++)
+      {
+        k = neighbourhood[j][s];                                                                    // Getting neighbour index...
+        if(node[j].size () > 0)
+        {
+          // Setting link:
+          link[j].push_back (
+          {
+            node[j][k].x - node[j][i].x,                                                            // Computing link "x" component...
+            node[j][k].y - node[j][i].y,                                                            // Computing link "y" component...
+            node[j][k].z - node[j][i].z,                                                            // Computing link "z" component...
+            0.0f                                                                                    // Computing link "w" component...
+          }
+                            );
+        }
+        else
+        {
+          link[j].push_back ({});                                                                   // Setting empty link...
+        }
+      }
     }
   }
 
@@ -167,21 +222,21 @@ std::vector<size_t> mesh::neighbour (
 
   for(k = 0; k < element.size (); k++)
   {
-    for(m = 0; m < element[k].node.size (); m++)
+    for(m = 0; m < element[loc_type][k].node.size (); m++)
     {
-      if((element[k].node[m] == loc_node) && (element[k].type == loc_type))
+      if((element[loc_type][k].node[m] == loc_node))
       {
         // Appending element[i] type nodes in neighbour unit:
         neighbour_unit.insert (
                                neighbour_unit.end (),                                               // Insertion point.
-                               element[k].node.begin (),                                            // Beginning of vector to be appended.
-                               element[k].node.end ()                                               // End of vector to be appended.
+                               element[loc_type][k].node.begin (),                                  // Beginning of vector to be appended.
+                               element[loc_type][k].node.end ()                                     // End of vector to be appended.
                               );
 
         // Erasing central node from neighbourhood:
         neighbour_unit.erase (
                               neighbour_unit.end () -                                               // Insertion point.
-                              element[k].node.size () +                                             // Number of type nodes.
+                              element[loc_type][k].node.size () +                                   // Number of type nodes.
                               m                                                                     // Central node.
                              );
       }
