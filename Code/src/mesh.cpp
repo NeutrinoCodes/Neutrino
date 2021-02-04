@@ -24,32 +24,30 @@ mesh::mesh(
 
   entities             = entity_list.size ();                                                       // Getting number of entities...
 
-  entity_dimension_max = entity_list[0].first;
+  entity_dimension_max = entity_list[0].first;                                                      // Resetting maximum number of entity dimensions...
 
+  // Finding maximum number of dimensions in entities:
   for(n = 0; n < entities; n++)
   {
-    entity_dimension.push_back (entity_list[n].first);
-    std::cout << "entity dimension = " << entity_dimension[n] << std::endl;
+    entity_dimension.push_back (entity_list[n].first);                                              // Setting entity dimension...
 
     if(entity_dimension[n] > entity_dimension_max)
     {
-      entity_dimension_max = entity_dimension[n];
+      entity_dimension_max = entity_dimension[n];                                                   // Finding maximum dimension...
     }
   }
 
-  std::cout << "entity dimension max = " << entity_dimension_max << std::endl;
-
+  // Finding entity index and creating initial placeholders:
   for(d = 0; d < (entity_dimension_max + 1); d++)
   {
-    e = 0;
+    e = 0;                                                                                          // Resetting entity index...
 
     for(n = 0; n < entities; n++)
     {
       if(entity_list[n].first == d)
       {
-        entity_index.push_back (e);
-        std::cout << "entity index = " << e << std::endl;
-        e++;
+        entity_index.push_back (e);                                                                 // Setting entity index list...
+        e++;                                                                                        // Incrementing entity index..
       }
     }
 
@@ -77,8 +75,6 @@ mesh::mesh(
     e          = entity_index[n];
     entity_tag = entity_list[n].second;                                                             // Getting entity tag [#]...
 
-    std::cout << "d = " << d << " e = " << e << std::endl;
-
     // Getting entity nodes, where:
     // N = number of nodes
     // dim = entity dimension
@@ -91,6 +87,8 @@ mesh::mesh(
                                 );
 
     nodes = node_list.size ();                                                                      // Getting number of nodes...
+
+    std::cout << "gmsh nodes = " << nodes << std::endl;
 
     // Getting entity elements, where:
     // i = index of element type.
