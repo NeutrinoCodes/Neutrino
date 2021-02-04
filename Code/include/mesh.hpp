@@ -258,10 +258,8 @@ class mesh : public neutrino                                                    
 private:
 
   // INDEXES:
+  size_t                                                              d;                            ///< Entity dimension index.
   size_t                                                              e;                            ///< Entity index.
-  size_t                                                              d;                            ///< Entity dimension.
-  size_t                                                              e_max;                        ///< Maximum entity index.
-  size_t                                                              d_max;                        ///< Maximum entity dimension.
   size_t                                                              t;                            ///< Tag index.
   size_t                                                              i;                            ///< Node index.
   size_t                                                              j;                            ///< Type index.
@@ -300,7 +298,9 @@ private:
 
   // ENTITY VARIABLES:
   std::vector<std::pair<int, int> >                                   entity_list;                  ///< Entity list.
-  int                                                                 entity_dimension;             ///< Entity dimension.
+  std::vector<size_t>                                                 entity_dimension;             ///< Entity dimension list.
+  size_t                                                              entity_dimension_max;         ///< Maximun number of entity dimensions.
+  std::vector<size_t>                                                 entity_index;                 ///< Entity index list.
   int                                                                 entity_tag;                   ///< Entity tag.
 
   // GROUP VARIABLES:
