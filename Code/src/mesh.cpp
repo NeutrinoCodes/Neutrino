@@ -26,7 +26,7 @@ mesh::mesh(
 
   entity_dimension_max = entity_list[0].first;                                                      // Resetting maximum number of entity dimensions...
 
-  // Finding maximum number of dimensions in entities:
+  // Finding maximum number of dimensions among entities:
   for(n = 0; n < entities; n++)
   {
     entity_dimension.push_back (entity_list[n].first);                                              // Setting entity dimension...
@@ -37,7 +37,7 @@ mesh::mesh(
     }
   }
 
-  // Finding entity index and creating initial placeholders:
+  // Finding entity index and creating initial empty "tag placeholders":
   for(d = 0; d < (entity_dimension_max + 1); d++)
   {
     e = 0;                                                                                          // Resetting entity index...
@@ -69,15 +69,16 @@ mesh::mesh(
     }
   }
 
+  // Reading mesh:
   for(n = 0; n < entities; n++)
   {
     d          = entity_dimension[n];                                                               // Getting entity dimension [#]...
-    e          = entity_index[n];
+    e          = entity_index[n];                                                                   // Getting entity index...
     entity_tag = entity_list[n].second;                                                             // Getting entity tag [#]...
 
     // Getting entity nodes, where:
     // N = number of nodes
-    // dim = entity dimension
+    // d = entity dimension
     gmsh::model::mesh::getNodes (
                                  node_list,                                                         // Node tags list [N].
                                  node_coordinates,                                                  // Node coordinates list [3*N].
@@ -86,9 +87,7 @@ mesh::mesh(
                                  entity_tag                                                         // Entity tag [#].
                                 );
 
-    nodes = node_list.size ();                                                                      // Getting number of nodes...
-
-    std::cout << "gmsh nodes = " << nodes << std::endl;
+    nodes = node_list.size ();
 
     // Getting entity elements, where:
     // i = index of element type.
@@ -105,7 +104,6 @@ mesh::mesh(
                                    );
 
     types = type_list.size ();                                                                      // Getting number of types...
-
     element[d][e].push_back ({});                                                                   // Creating "0_th" element placeholder ("j" starts from "1")...
     node[d][e].push_back ({});                                                                      // Creating "0_th" node placeholder ("j" starts from "1")...
     group[d][e].push_back ({});                                                                     // Creating "0_th" group placeholder ("j" starts from "1")...
@@ -133,7 +131,7 @@ mesh::mesh(
           // For each "k_th" element of type "t":
           for(k = 0; k < elements; k++)
           {
-            // Getting element type properties:
+            // Getting the element type properties:
             gmsh::model::mesh::getElementProperties (
                                                      type_list[t],                                  // Element type [#].
                                                      type_name,                                     // Element type name [string].
@@ -144,12 +142,10 @@ mesh::mesh(
                                                      type_primary_nodes                             // Number of primary type nodes [#].
                                                     );
 
-            //std::cout << "gmsh type_nodes = " << type_nodes << std::endl;
-
-            // Processing the "m_th" node in "k_th" element of type "t":
+            // Getting the coordinates of the "m_th" node in "k_th" element of type "t":
             for(m = 0; m < type_nodes; m++)
             {
-              element_unit.node.push_back ((node_tag[t][k*type_nodes + m]) - 1);                    // Adding type node to element unit...
+              element_unit.node.push_back ((node_tag[t][k*type_nodes + m]) - 1);                    // Adding type node to "k_th" element unit...
               node_unit.x = (float)node_coordinates[3*m + 0];                                       // Setting node unit "x" coordinate...
               node_unit.y = (float)node_coordinates[3*m + 1];                                       // Setting node unit "y"coordinate...
               node_unit.z = (float)node_coordinates[3*m + 2];                                       // Setting node unit "z" coordinate...
@@ -158,10 +154,10 @@ mesh::mesh(
             }
 
             element_unit.type = type_list[t];                                                       // Setting element unit type...
-            element[d][e][j].push_back (element_unit);                                              // Adding element[k] to element vector...
+            element[d][e][j].push_back (element_unit);                                              // Adding "k_th" element unit to element vector...
           }
 
-          element_unit.node.clear ();                                                               // Clearing element unit node vector...
+          element_unit.node.clear ();                                                               // Clearing element unit for next "k"...
         }
         else
         {
