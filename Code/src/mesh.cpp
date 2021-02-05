@@ -116,6 +116,8 @@ mesh::mesh(
     // For each element type in the entity's type list:
     for(t = 0; t < types; t++)
     {
+      std::cout << "Element type = " << type_list[t] << std::endl;
+
       // For each GMSH's element type:
       for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
       {
@@ -126,6 +128,7 @@ mesh::mesh(
         if(j == type_list[t])
         {
           elements = element_tag[t].size ();                                                        // Getting the number of elements of "t" type...
+          std::cout << "gmsh elements = " << elements << std::endl;
 
           // For each "k_th" element of type "t":
           for(k = 0; k < elements; k++)
@@ -140,6 +143,8 @@ mesh::mesh(
                                                      type_node_coordinates,                         // Element type node local coordinates [vector].
                                                      type_primary_nodes                             // Number of primary type nodes [#].
                                                     );
+
+            //std::cout << "gmsh type_nodes = " << type_nodes << std::endl;
 
             // Processing the "m_th" node in "k_th" element of type "t":
             for(m = 0; m < type_nodes; m++)
