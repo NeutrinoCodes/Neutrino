@@ -204,76 +204,86 @@ mesh::mesh(
 
       std::cout << "pappo" << std::endl;
 
-/*
-          for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
+      // Finding neighbours for each GMSH's element type:
+      for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
+      {
+        neighbours = 0;                                                                             // Resetting number of neighbours...
+        neighbourhood[d][e].push_back ({});                                                         // Creating "j_th" element placeholder...
+        offset[d][e].push_back ({});                                                                // Creating "j_th" element placeholder...
+        link[d][e].push_back ({});                                                                  // Creating "j_th" element placeholder...
+
+        // Checking whether element type "j" is present in the type list or not:
+        if(j == type_list[t])
+        {
+          // For each "i_th" node of the elements of type "t":
+          for(i = 0; i < node[d][e][j].size (); i++)
           {
-            neighbours = 0;                                                                             // Resetting number of neighbours...
-            neighbourhood[d][e].push_back ({});                                                         // Creating "j_th" element placeholder...
-            offset[d][e].push_back ({});                                                                // Creating "j_th" element placeholder...
-            link[d][e].push_back ({});                                                                  // Creating "j_th" element placeholder...
+            neighbour_unit = this->neighbour (d, e, j, i);                                          // Getting neighbourhood indices...
+            neighbourhood[d][e][j].insert (
+                                           neighbourhood[d][e][j].end (),
+                                           neighbour_unit.begin (),
+                                           neighbour_unit.end ()
+                                          );                                                        // Building neighbour tuple...
+            neighbours    += neighbour_unit.size ();                                                // Counting neighbour nodes...
+            offset[d][e][j].push_back (neighbours);                                                 // Setting neighbour offset...
+          }
 
-            // Checking whether element type "j" is present in the type list or not:
-            if(j == type_list[t])
+          neighbour_unit.clear ();                                                                  // Clearing neighbour unit for next "k"...
+        }
+        else
+        {
+          neighbourhood[d][e][j].push_back ({});                                                    // Adding empty neighbour unit to neighbourhood vector...
+          offset[d][e][j].push_back ({});                                                           // Adding empty offset to offset vector...
+        }
+      }
+
+      std::cout << "peppo" << std::endl;
+
+
+      /*
+         // Finding links for each GMSH's element type:
+         for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
+         {
+         for(i = 0; i < node[d][e][j].size (); i++)
+         {
+          s_max = offset[d][e][j][i];                                                             // Setting stride maximum...
+
+          if(i == 0)
+          {
+            s_min = 0;                                                                            // Setting stride minimum (first stride)...
+          }
+          else
+          {
+            s_min = offset[d][e][j][i - 1];                                                       // Setting stride minimum (all others)...
+          }
+
+          for(s = s_min; s < s_max; s++)
+          {
+            k = neighbourhood[d][e][j][s];                                                        // Getting neighbour index...
+            if(node[j].size () > 0)
             {
-              for(i = 0; i < node[j].size (); i++)
+              // Setting link:
+              link[d][e][j].push_back (
               {
-                neighbour_unit = this->neighbour (d, e, j, i);                                          // Getting neighbourhood indices...
-                neighbourhood[d][e][j].insert (
-                                               neighbourhood[d][e][j].end (),
-                                               neighbour_unit.begin (),
-                                               neighbour_unit.end ()
-                                              );                                                        // Building neighbour tuple...
-                neighbours    += neighbour_unit.size ();                                                // Counting neighbour nodes...
-
-                if(node[d][e][j].size () > 0)
-                {
-                  offset[d][e][j].push_back (neighbours);                                               // Setting neighbour offset...
-                }
-                else
-                {
-                  offset[d][e][j].push_back ({});                                                       // Setting empty neighbour offset...
-                }
+                node[d][e][j][k].x - node[d][e][j][i].x,                                          // Computing link "x" component...
+                node[d][e][j][k].y - node[d][e][j][i].y,                                          // Computing link "y" component...
+                node[d][e][j][k].z - node[d][e][j][i].z,                                          // Computing link "z" component...
+                0.0f                                                                              // Computing link "w" component...
               }
-
-              neighbour_unit.clear ();
-
-              for(i = 0; i < node[d][e][j].size (); i++)
-              {
-                s_max = offset[d][e][j][i];                                                             // Setting stride maximum...
-
-                if(i == 0)
-                {
-                  s_min = 0;                                                                            // Setting stride minimum (first stride)...
-                }
-                else
-                {
-                  s_min = offset[d][e][j][i - 1];                                                       // Setting stride minimum (all others)...
-                }
-
-                for(s = s_min; s < s_max; s++)
-                {
-                  k = neighbourhood[d][e][j][s];                                                        // Getting neighbour index...
-                  if(node[j].size () > 0)
-                  {
-                    // Setting link:
-                    link[d][e][j].push_back (
-                    {
-                      node[d][e][j][k].x - node[d][e][j][i].x,                                          // Computing link "x" component...
-                      node[d][e][j][k].y - node[d][e][j][i].y,                                          // Computing link "y" component...
-                      node[d][e][j][k].z - node[d][e][j][i].z,                                          // Computing link "z" component...
-                      0.0f                                                                              // Computing link "w" component...
-                    }
-                                            );
-                  }
-                  else
-                  {
-                    link[d][e][j].push_back ({});                                                       // Setting empty link...
-                  }
-                }
-              }
+                                      );
+            }
+            else
+            {
+              link[d][e][j].push_back ({});                                                       // Setting empty link...
             }
           }
- */
+         }
+         }
+         }
+       */
+
+
+
     }
   }
 
