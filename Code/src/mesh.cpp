@@ -116,7 +116,7 @@ mesh::mesh(
     {
       std::cout << "Element type = " << type_list[t] << std::endl;
 
-      // For each GMSH's element type:
+      // Finding nodes for each GMSH's element type:
       for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
       {
         element[d][e].push_back ({});                                                               // Creating "j_th" element placeholder...
@@ -166,43 +166,45 @@ mesh::mesh(
         }
       }
 
-      /*
-          for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
+      // Finding groups for each GMSH's element type:
+      for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
+      {
+        group[d][e].push_back ({});                                                                 // Creating "j_th" element placeholder...
+
+        // Checking whether element type "j" is present in the type list or not:
+        if(j == type_list[t])
+        {
+          // For each "i_th" node of the elements of type "t":
+          for(i = 0; i < node[d][e][j].size (); i++)
           {
-            group[d][e].push_back ({});                                                                 // Creating "j_th" element placeholder...
-
-            // Checking whether element type "j" is present in the type list or not:
-            if(j == type_list[t])
+            // For each "k_th" element of type "t":
+            for(k = 0; k < element[d][e][j].size (); k++)
             {
-              // Finding groups for each node:
-              for(i = 0; i < node[d][e][j].size (); i++)
+              // For each "m_th" node in the "k_th" element of type "t":
+              for(m = 0; m < element[d][e][j][k].node.size (); m++)
               {
-                for(k = 0; k < element[d][e][j].size (); k++)
+                // Checking whether the "i_th" node is present in the present in the "k_th" element or not:
+                if(element[d][e][j][k].node[m] == i)
                 {
-                  for(m = 0; m < element[d][e][j][k].node.size (); m++)
-                  {
-                    if(element[d][e][j][k].node[m] == i)
-                    {
-                      group_unit.element.push_back (k);                                                 // Adding element index to group unit...
-                    }
-                  }
-                }
-
-                if(node[d][e][j].size () > 0)
-                {
-                  group[d][e][j].push_back (group_unit);                                                // Adding group unit to group vector...
-                  group_unit.element.clear ();                                                          // Clearing group unit element vector...
-                  std::cout << "peppo" << std::endl;
-                }
-                else
-                {
-                  group[d][e][j].push_back ({});                                                        // Adding empty group unit to group vector...
-                  std::cout << "pappo" << std::endl;
+                  group_unit.element.push_back (k);                                                 // Adding element index "k" to "k_th" group unit...
                 }
               }
             }
+
+            group[d][e][j].push_back (group_unit);                                                  // Adding "k_th" group unit to group vector...
           }
 
+          group_unit.element.clear ();                                                              // Clearing group unit for next "k"...
+        }
+        else
+        {
+          group[d][e][j].push_back ({});                                                            // Adding empty group unit to group vector...
+        }
+      }
+
+      std::cout << "pappo" << std::endl;
+
+/*
           for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
           {
             neighbours = 0;                                                                             // Resetting number of neighbours...
@@ -271,7 +273,7 @@ mesh::mesh(
               }
             }
           }
-       */
+ */
     }
   }
 
