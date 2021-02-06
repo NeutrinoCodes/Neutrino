@@ -205,7 +205,6 @@ mesh::mesh(
         neighbours = 0;                                                                             // Resetting number of neighbours...
         neighbourhood[d][e].push_back ({});                                                         // Creating "j_th" element placeholder...
         offset[d][e].push_back ({});                                                                // Creating "j_th" element placeholder...
-        link[d][e].push_back ({});                                                                  // Creating "j_th" element placeholder...
 
         // Checking whether element type "j" is present in the type list or not:
         if(j == type_list[t])
@@ -273,117 +272,55 @@ mesh::mesh(
         }
       }
 
-      /*
-         // Finding links for each GMSH's element type:
-         for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
-         {
-         for(i = 0; i < node[d][e][j].size (); i++)
-         {
-          s_max = offset[d][e][j][i];                                                             // Setting stride maximum...
+      // Finding links for each GMSH's element type:
+      for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
+      {
+        link[d][e].push_back ({});                                                                  // Creating "j_th" element placeholder...
 
-          if(i == 0)
+        // Checking whether element type "j" is present in the type list or not:
+        if(j == type_list[t])
+        {
+          // For each "i_th" node of the elements of type "t":
+          for(i = 0; i < node[d][e][j].size (); i++)
           {
-            s_min = 0;                                                                            // Setting stride minimum (first stride)...
-          }
-          else
-          {
-            s_min = offset[d][e][j][i - 1];                                                       // Setting stride minimum (all others)...
-          }
+            s_max = offset[d][e][j][i];                                                             // Setting stride maximum...
 
-          for(s = s_min; s < s_max; s++)
-          {
-            k = neighbourhood[d][e][j][s];                                                        // Getting neighbour index...
-            if(node[j].size () > 0)
+            // Computing minimum stride index:
+            if(i == 0)
             {
-              // Setting link:
-              link[d][e][j].push_back (
-              {
-                node[d][e][j][k].x - node[d][e][j][i].x,                                          // Computing link "x" component...
-                node[d][e][j][k].y - node[d][e][j][i].y,                                          // Computing link "y" component...
-                node[d][e][j][k].z - node[d][e][j][i].z,                                          // Computing link "z" component...
-                0.0f                                                                              // Computing link "w" component...
-              }
-                                      );
+              s_min = 0;                                                                            // Setting stride minimum (first stride)...
             }
             else
             {
-              link[d][e][j].push_back ({});                                                       // Setting empty link...
+              s_min = offset[d][e][j][i - 1];                                                       // Setting stride minimum (all others)...
+            }
+
+            // For each "s_th" stride index in the "i_th" stride:
+            for(s = s_min; s < s_max; s++)
+            {
+              k = neighbourhood[d][e][j][s];                                                        // Getting neighbour index...
+
+              // Setting link:
+              link[d][e][j].push_back (
+              {
+                node[d][e][j][k].x - node[d][e][j][i].x,                                            // Computing link "x" component...
+                node[d][e][j][k].y - node[d][e][j][i].y,                                            // Computing link "y" component...
+                node[d][e][j][k].z - node[d][e][j][i].z,                                            // Computing link "z" component...
+                0.0f                                                                                // Computing link "w" component...
+              }
+                                      );
             }
           }
-         }
-         }
-         }
-       */
-
-
-
-    }
-  }
-
-
-  neutrino::done ();                                                                                // Printing message...
-}
-
-std::vector<size_t> mesh::neighbour (
-                                     int    loc_element_dimension,                                  // Element dimension.
-                                     size_t loc_element_tag,                                        // Element tag.
-                                     int    loc_type,                                               // Element type.
-                                     size_t loc_node                                                // Central node index.
-                                    )
-{
-  std::vector<size_t> loc_neighbour_unit;
-
-  int                 d = loc_element_dimension;
-  size_t              e = loc_element_tag;
-  int                 t = loc_type;
-
-  // For each "k_th" element:
-  for(k = 0; k < element[d][e].size (); k++)
-  {
-    std::cout << "puppo" << std::endl;
-
-    // For each "m_th" node in each "k_th" element of type "t":
-    for(m = 0; m < element[d][e][t][k].node.size (); m++)
-    {
-      std::cout << "puppoo" << std::endl;
-      // Checking whether the "k_th" element of type "t" contains the "loc_node" central node:
-      if((element[d][e][t][k].node[m] == loc_node))
-      {
-        std::cout << "puppooo" << std::endl;
-        // Appending the element[i] type nodes in the neighbour unit:
-        loc_neighbour_unit.insert (
-                                   loc_neighbour_unit.end (),                                       // Insertion point.
-                                   element[d][e][t][k].node.begin (),                               // Beginning of vector to be appended.
-                                   element[d][e][t][k].node.end ()                                  // End of vector to be appended.
-                                  );
-
-        // Erasing the central node from the neighbourhood, hence keeping only its neighbours:
-        loc_neighbour_unit.erase (
-                                  loc_neighbour_unit.end () -                                       // Insertion point.
-                                  element[d][e][t][k].node.size () +                                // Number of type nodes.
-                                  m                                                                 // Central node.
-                                 );
+        }
+        else
+        {
+          link[d][e][j].push_back ({});                                                             // Setting empty link...
+        }
       }
     }
   }
 
-  std::cout << "puppoooo" << std::endl;
-  // Eliminating repeated indexes:
-  std::sort (loc_neighbour_unit.begin (), loc_neighbour_unit.end ());
-  loc_neighbour_unit.resize (
-                                                                                                    // Eliminating null indexes...
-                             std::distance (
-                                                                                                    // Calculating index distance...
-                                            loc_neighbour_unit.begin (),
-                                            std::unique (
-                                                                                                    // Finding unique indexes...
-                                                         loc_neighbour_unit.begin (),               // Beginning of index vector.
-                                                         loc_neighbour_unit.end ()                  // End of index vector.
-                                                        )
-                                           )
-                            );
-
-  return (loc_neighbour_unit);                                                                      // Returning neighbour unit vector...
+  neutrino::done ();                                                                                // Printing message...
 }
 
 std::vector<size_t> mesh::physical (
