@@ -111,6 +111,8 @@ mesh::mesh(
     offset[d][e].push_back ({});                                                                    // Creating "0_th" offset placeholder ("j" starts from "1")...
     link[d][e].push_back ({});                                                                      // Creating "0_th" link placeholder ("j" starts from "1")...
 
+    std::cout << "Finding nodes..." << std::endl;
+
     // For each element type in the entity's type list:
     for(t = 0; t < types; t++)
     {
@@ -163,8 +165,12 @@ mesh::mesh(
         }
       }
 
+
+      std::cout << "Finding groups..." << std::endl;
+
       // Finding groups for each GMSH's element type:
-      for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
+      j = NU_MSH_TRI_3;
+      //for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
       {
         group[d][e].push_back ({});                                                                 // Creating "j_th" element placeholder...
 
@@ -174,18 +180,24 @@ mesh::mesh(
           // For each "i_th" node of the elements of type "t":
           for(i = 0; i < node[d][e][j].size (); i++)
           {
+            std::cout << "i = " << i << std::endl;
+
             // For each "k_th" element of type "t":
             for(k = 0; k < element[d][e][j].size (); k++)
             {
-              // For each "m_th" node in the "k_th" element of type "t":
-              for(m = 0; m < element[d][e][j][k].node.size (); m++)
-              {
-                // Checking whether the "i_th" node is present in the present in the "k_th" element or not:
-                if(element[d][e][j][k].node[m] == i)
-                {
+
+
+              /*
+                 // For each "m_th" node in the "k_th" element of type "t":
+                 for(m = 0; m < element[d][e][j][k].node.size (); m++)
+                 {
+                 // Checking whether the "i_th" node is present in the present in the "k_th" element or not:
+                 if(element[d][e][j][k].node[m] == (node_tag[t][i] - 1))
+                 {
                   group_unit.element.push_back (k);                                                 // Adding element index "k" to "k_th" group unit...
-                }
-              }
+                 }
+                 }
+               */
             }
 
             group[d][e][j].push_back (group_unit);                                                  // Adding "k_th" group unit to group vector...
@@ -199,39 +211,44 @@ mesh::mesh(
         }
       }
 
-      // Finding neighbours for each GMSH's element type:
-      for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
-      {
-        neighbours = 0;                                                                             // Resetting number of neighbours...
-        neighbourhood[d][e].push_back ({});                                                         // Creating "j_th" element placeholder...
-        offset[d][e].push_back ({});                                                                // Creating "j_th" element placeholder...
 
-        // Checking whether element type "j" is present in the type list or not:
-        if(j == type_list[t])
-        {
+
+      /*
+         std::cout << "Finding neighbours..." << std::endl;
+
+         // Finding neighbours for each GMSH's element type:
+         for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
+         {
+         neighbours = 0;                                                                             // Resetting number of neighbours...
+         neighbourhood[d][e].push_back ({});                                                         // Creating "j_th" element placeholder...
+         offset[d][e].push_back ({});                                                                // Creating "j_th" element placeholder...
+
+         // Checking whether element type "j" is present in the type list or not:
+         if(j == type_list[t])
+         {
           // For each "i_th" central node of the elements of type "t":
           for(i = 0; i < node[d][e][j].size (); i++)
           {
             // For each "k_th" element of type "t":
-            for(k = 0; k < element[d][e][t].size (); k++)
+            for(k = 0; k < element[d][e][j].size (); k++)
             {
               // For each "m_th" node in each "k_th" element of type "t":
-              for(m = 0; m < element[d][e][t][k].node.size (); m++)
+              for(m = 0; m < element[d][e][j][k].node.size (); m++)
               {
                 // Checking whether the "k_th" element of type "t" contains the "i_th" central node:
-                if((element[d][e][t][k].node[m] == i))
+                if((element[d][e][j][k].node[m] == i))
                 {
                   // Appending the element[i] type nodes in the neighbour unit:
                   neighbour_unit.insert (
                                          neighbour_unit.end (),                                     // Insertion point.
-                                         element[d][e][t][k].node.begin (),                         // Beginning of vector to be appended.
-                                         element[d][e][t][k].node.end ()                            // End of vector to be appended.
+                                         element[d][e][j][k].node.begin (),                         // Beginning of vector to be appended.
+                                         element[d][e][j][k].node.end ()                            // End of vector to be appended.
                                         );
 
                   // Erasing the central node from the neighbourhood, hence keeping only its neighbours:
                   neighbour_unit.erase (
                                         neighbour_unit.end () -                                     // Insertion point.
-                                        element[d][e][t][k].node.size () +                          // Number of type nodes.
+                                        element[d][e][j][k].node.size () +                          // Number of type nodes.
                                         m                                                           // Central node.
                                        );
                 }
@@ -264,22 +281,24 @@ mesh::mesh(
           }
 
           neighbour_unit.clear ();                                                                  // Clearing neighbour unit for next "k"...
-        }
-        else
-        {
+         }
+         else
+         {
           neighbourhood[d][e][j].push_back ({});                                                    // Adding empty neighbour unit to neighbourhood vector...
           offset[d][e][j].push_back ({});                                                           // Adding empty offset to offset vector...
-        }
-      }
+         }
+         }
+       */
 
-      // Finding links for each GMSH's element type:
-      for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
-      {
-        link[d][e].push_back ({});                                                                  // Creating "j_th" element placeholder...
+      /*
+         // Finding links for each GMSH's element type:
+         for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
+         {
+         link[d][e].push_back ({});                                                                  // Creating "j_th" element placeholder...
 
-        // Checking whether element type "j" is present in the type list or not:
-        if(j == type_list[t])
-        {
+         // Checking whether element type "j" is present in the type list or not:
+         if(j == type_list[t])
+         {
           // For each "i_th" node of the elements of type "t":
           for(i = 0; i < node[d][e][j].size (); i++)
           {
@@ -311,13 +330,18 @@ mesh::mesh(
                                       );
             }
           }
-        }
-        else
-        {
+         }
+         else
+         {
           link[d][e][j].push_back ({});                                                             // Setting empty link...
-        }
-      }
+         }
+         }
+       */
     }
+
+    type_list.clear ();
+    element_tag.clear ();
+    node_tag.clear ();
   }
 
   neutrino::done ();                                                                                // Printing message...
