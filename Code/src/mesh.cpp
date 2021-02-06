@@ -114,8 +114,6 @@ mesh::mesh(
     // For each element type in the entity's type list:
     for(t = 0; t < types; t++)
     {
-      std::cout << "Element type = " << type_list[t] << std::endl;
-
       // Finding nodes for each GMSH's element type:
       for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
       {
@@ -126,7 +124,6 @@ mesh::mesh(
         if(j == type_list[t])
         {
           elements = element_tag[t].size ();                                                        // Getting the number of elements of "t" type...
-          std::cout << "gmsh elements = " << elements << std::endl;
 
           // For each "k_th" element of type "t":
           for(k = 0; k < elements; k++)
@@ -202,8 +199,6 @@ mesh::mesh(
         }
       }
 
-      std::cout << "pappo" << std::endl;
-
       // Finding neighbours for each GMSH's element type:
       for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
       {
@@ -215,16 +210,57 @@ mesh::mesh(
         // Checking whether element type "j" is present in the type list or not:
         if(j == type_list[t])
         {
-          // For each "i_th" node of the elements of type "t":
+          // For each "i_th" central node of the elements of type "t":
           for(i = 0; i < node[d][e][j].size (); i++)
           {
-            neighbour_unit = this->neighbour (d, e, j, i);                                          // Getting neighbourhood indices...
+            // For each "k_th" element of type "t":
+            for(k = 0; k < element[d][e][t].size (); k++)
+            {
+              // For each "m_th" node in each "k_th" element of type "t":
+              for(m = 0; m < element[d][e][t][k].node.size (); m++)
+              {
+                // Checking whether the "k_th" element of type "t" contains the "i_th" central node:
+                if((element[d][e][t][k].node[m] == i))
+                {
+                  // Appending the element[i] type nodes in the neighbour unit:
+                  neighbour_unit.insert (
+                                         neighbour_unit.end (),                                     // Insertion point.
+                                         element[d][e][t][k].node.begin (),                         // Beginning of vector to be appended.
+                                         element[d][e][t][k].node.end ()                            // End of vector to be appended.
+                                        );
+
+                  // Erasing the central node from the neighbourhood, hence keeping only its neighbours:
+                  neighbour_unit.erase (
+                                        neighbour_unit.end () -                                     // Insertion point.
+                                        element[d][e][t][k].node.size () +                          // Number of type nodes.
+                                        m                                                           // Central node.
+                                       );
+                }
+              }
+            }
+
+            // Eliminating repeated indexes:
+            std::sort (neighbour_unit.begin (), neighbour_unit.end ());
+            neighbour_unit.resize (
+                                                                                                    // Eliminating null indexes...
+                                   std::distance (
+                                                                                                    // Calculating index distance...
+                                                  neighbour_unit.begin (),
+                                                  std::unique (
+                                                                                                    // Finding unique indexes...
+                                                               neighbour_unit.begin (),             // Beginning of index vector.
+                                                               neighbour_unit.end ()                // End of index vector.
+                                                              )
+                                                 )
+                                  );
+
+            // Inserting "k_th" neighbour unit in neighbourhood vector...
             neighbourhood[d][e][j].insert (
                                            neighbourhood[d][e][j].end (),
                                            neighbour_unit.begin (),
                                            neighbour_unit.end ()
                                           );                                                        // Building neighbour tuple...
-            neighbours    += neighbour_unit.size ();                                                // Counting neighbour nodes...
+            neighbours += neighbour_unit.size ();                                                   // Counting neighbour nodes...
             offset[d][e][j].push_back (neighbours);                                                 // Setting neighbour offset...
           }
 
@@ -236,9 +272,6 @@ mesh::mesh(
           offset[d][e][j].push_back ({});                                                           // Adding empty offset to offset vector...
         }
       }
-
-      std::cout << "peppo" << std::endl;
-
 
       /*
          // Finding links for each GMSH's element type:
@@ -293,55 +326,64 @@ mesh::mesh(
 
 std::vector<size_t> mesh::neighbour (
                                      int    loc_element_dimension,                                  // Element dimension.
-                                     int    loc_element_tag,                                        // Element tag.
+                                     size_t loc_element_tag,                                        // Element tag.
                                      int    loc_type,                                               // Element type.
-                                     size_t loc_node                                                // Central node index [x].
+                                     size_t loc_node                                                // Central node index.
                                     )
 {
-  neighbour_unit.clear ();
+  std::vector<size_t> loc_neighbour_unit;
 
-  int d = loc_element_dimension;
-  int e = loc_element_tag;
+  int                 d = loc_element_dimension;
+  size_t              e = loc_element_tag;
+  int                 t = loc_type;
 
+  // For each "k_th" element:
   for(k = 0; k < element[d][e].size (); k++)
   {
-    for(m = 0; m < element[d][e][loc_type][k].node.size (); m++)
-    {
-      if((element[d][e][loc_type][k].node[m] == loc_node))
-      {
-        // Appending element[i] type nodes in neighbour unit:
-        neighbour_unit.insert (
-                               neighbour_unit.end (),                                               // Insertion point.
-                               element[d][e][loc_type][k].node.begin (),                            // Beginning of vector to be appended.
-                               element[d][e][loc_type][k].node.end ()                               // End of vector to be appended.
-                              );
+    std::cout << "puppo" << std::endl;
 
-        // Erasing central node from neighbourhood:
-        neighbour_unit.erase (
-                              neighbour_unit.end () -                                               // Insertion point.
-                              element[d][e][loc_type][k].node.size () +                             // Number of type nodes.
-                              m                                                                     // Central node.
-                             );
+    // For each "m_th" node in each "k_th" element of type "t":
+    for(m = 0; m < element[d][e][t][k].node.size (); m++)
+    {
+      std::cout << "puppoo" << std::endl;
+      // Checking whether the "k_th" element of type "t" contains the "loc_node" central node:
+      if((element[d][e][t][k].node[m] == loc_node))
+      {
+        std::cout << "puppooo" << std::endl;
+        // Appending the element[i] type nodes in the neighbour unit:
+        loc_neighbour_unit.insert (
+                                   loc_neighbour_unit.end (),                                       // Insertion point.
+                                   element[d][e][t][k].node.begin (),                               // Beginning of vector to be appended.
+                                   element[d][e][t][k].node.end ()                                  // End of vector to be appended.
+                                  );
+
+        // Erasing the central node from the neighbourhood, hence keeping only its neighbours:
+        loc_neighbour_unit.erase (
+                                  loc_neighbour_unit.end () -                                       // Insertion point.
+                                  element[d][e][t][k].node.size () +                                // Number of type nodes.
+                                  m                                                                 // Central node.
+                                 );
       }
     }
   }
 
+  std::cout << "puppoooo" << std::endl;
   // Eliminating repeated indexes:
-  std::sort (neighbour_unit.begin (), neighbour_unit.end ());
-  neighbour_unit.resize (
+  std::sort (loc_neighbour_unit.begin (), loc_neighbour_unit.end ());
+  loc_neighbour_unit.resize (
                                                                                                     // Eliminating null indexes...
-                         std::distance (
+                             std::distance (
                                                                                                     // Calculating index distance...
-                                        neighbour_unit.begin (),
-                                        std::unique (
+                                            loc_neighbour_unit.begin (),
+                                            std::unique (
                                                                                                     // Finding unique indexes...
-                                                     neighbour_unit.begin (),                       // Beginning of index vector.
-                                                     neighbour_unit.end ()                          // End of index vector.
-                                                    )
-                                       )
-                        );
+                                                         loc_neighbour_unit.begin (),               // Beginning of index vector.
+                                                         loc_neighbour_unit.end ()                  // End of index vector.
+                                                        )
+                                           )
+                            );
 
-  return (neighbour_unit);                                                                          // Returning neighbour unit vector...
+  return (loc_neighbour_unit);                                                                      // Returning neighbour unit vector...
 }
 
 std::vector<size_t> mesh::physical (
