@@ -288,13 +288,6 @@ public:
         std::string loc_file_name                                                                   ///< GMSH .msh file name.
        );
 
-  std::vector<size_t> neighbour (
-                                 int    loc_element_dimension,                                      ///< Element dimension.
-                                 size_t loc_element_tag,                                            ///< Element tag.
-                                 int    loc_type,                                                   ///< Element type.
-                                 size_t loc_node                                                    ///< Node index.
-                                );
-
   std::vector<size_t> physical (
                                 size_t loc_physical_group_dim,                                      ///< Physical group dimension.
                                 size_t loc_physical_group_tag                                       ///< Physical group tag.
