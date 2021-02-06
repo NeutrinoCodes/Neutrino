@@ -290,7 +290,7 @@ public:
 
   std::vector<size_t> neighbour (
                                  int    loc_element_dimension,                                      ///< Element dimension.
-                                 int    loc_element_tag,                                            ///< Element tag.
+                                 size_t loc_element_tag,                                            ///< Element tag.
                                  int    loc_type,                                                   ///< Element type.
                                  size_t loc_node                                                    ///< Node index.
                                 );
