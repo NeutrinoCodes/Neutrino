@@ -224,60 +224,67 @@ class mesh : public neutrino                                                    
 private:
 
   // INDEXES:
-  size_t                                                              d;                            ///< Entity dimension index.
-  size_t                                                              e;                            ///< Entity index.
-  size_t                                                              t;                            ///< Tag index.
-  size_t                                                              i;                            ///< Node index.
-  size_t                                                              j;                            ///< Type index.
-  size_t                                                              k;                            ///< Element index.
-  size_t                                                              m;                            ///< Type node index.
-  size_t                                                              n;                            ///< Entity index.
-  size_t                                                              s;                            ///< Stride index.
-  size_t                                                              s_min;                        ///< Stride minimum index.
-  size_t                                                              s_max;                        ///< Stride maximum index.
+  size_t                            d;                                                              ///< Entity dimension index.
+  size_t                            e;                                                              ///< Entity index.
+  size_t                            t;                                                              ///< Tag index.
+  size_t                            i;                                                              ///< Node index.
+  size_t                            j;                                                              ///< Type index.
+  size_t                            k;                                                              ///< Element index.
+  size_t                            m;                                                              ///< Type node index.
+  size_t                            n;                                                              ///< Entity index.
+  size_t                            s;                                                              ///< Stride index.
+  size_t                            s_min;                                                          ///< Stride minimum index.
+  size_t                            s_max;                                                          ///< Stride maximum index.
 
   // SIZES:
-  size_t                                                              nodes;                        ///< Number of nodes.
-  size_t                                                              types;                        ///< Number of simplex types.
-  size_t                                                              elements;                     ///< Number of elements.
-  int                                                                 type_nodes;                   ///< Number of type_nodes.
-  size_t                                                              entities;                     ///< Number of entities.
+  size_t                            nodes;                                                          ///< Number of nodes.
+  size_t                            types;                                                          ///< Number of simplex types.
+  size_t                            elements;                                                       ///< Number of elements.
+  int                               type_nodes;                                                     ///< Number of type_nodes.
+  size_t                            entities;                                                       ///< Number of entities.
 
   // NODE VARIABLES:
-  gmsh_node                                                           node_unit;                    ///< Node unit.
-  std::vector<size_t>                                                 node_list;                    ///< Node list.
-  std::vector<double>                                                 node_coordinates;             ///< Node coordinates.
-  std::vector<double>                                                 node_parametric_coordinates;  ///< Node parametric coordinates.
-  std::vector<std::vector<size_t> >                                   node_tag;                     ///< Node tag.
+  gmsh_node                         node_unit;                                                      ///< Node unit.
+  std::vector<size_t>               node_list;                                                      ///< Node list.
+  std::vector<double>               node_coordinates;                                               ///< Node coordinates.
+  std::vector<double>               node_parametric_coordinates;                                    ///< Node parametric coordinates.
+  std::vector<std::vector<size_t> > node_tag;                                                       ///< Node tag.
 
   // TYPE VARIABLES:
-  std::vector<int>                                                    type_list;                    ///< Element type list.
-  std::string                                                         type_name;                    ///< Element type name.
-  int                                                                 type_dimension;               ///< Element type dimension.
-  int                                                                 type_order;                   ///< Element type order.
-  std::vector<double>                                                 type_node_coordinates;        ///< Element type node coordinates.
-  int                                                                 type_primary_nodes;           ///< Element primary nodes
+  std::vector<int>                  type_list;                                                      ///< Element type list.
+  std::string                       type_name;                                                      ///< Element type name.
+  int                               type_dimension;                                                 ///< Element type dimension.
+  int                               type_order;                                                     ///< Element type order.
+  std::vector<double>               type_node_coordinates;                                          ///< Element type node coordinates.
+  int                               type_primary_nodes;                                             ///< Element primary nodes
 
   // ELEMENT VARIABLES:
-  gmsh_element                                                        element_unit;                 ///< Element unit.
-  std::vector<std::vector<size_t> >                                   element_tag;                  ///< Element tag list.
+  gmsh_element                      element_unit;                                                   ///< Element unit.
+  std::vector<std::vector<size_t> > element_tag;                                                    ///< Element tag list.
 
   // ENTITY VARIABLES:
-  std::vector<std::pair<int, int> >                                   entity_list;                  ///< Entity list.
-  std::vector<size_t>                                                 entity_dimension;             ///< Entity dimension list.
-  size_t                                                              entity_dimension_max;         ///< Maximun number of entity dimensions.
-  std::vector<size_t>                                                 entity_index;                 ///< Entity index list.
-  int                                                                 entity_tag;                   ///< Entity tag.
+  std::vector<std::pair<int, int> > entity_list;                                                    ///< Entity list.
+  std::vector<size_t>               entity_dimension;                                               ///< Entity dimension list.
+  size_t                            entity_dimension_max;                                           ///< Maximun number of entity dimensions.
+  std::vector<size_t>               entity_index;                                                   ///< Entity index list.
+  int                               entity_tag;                                                     ///< Entity tag.
 
   // GROUP VARIABLES:
-  gmsh_group                                                          group_unit;                   ///< Group unit.
+  gmsh_group                        group_unit;                                                     ///< Group unit.
 
   // NEIGHBOUR VARIABLES:
-  size_t                                                              neighbours;                   ///< Number of neighbours.
-  std::vector<size_t>                                                 neighbour_unit;               ///< Neighbour unit.
+  size_t                            neighbours;                                                     ///< Number of neighbours.
+  std::vector<size_t>               neighbour_unit;                                                 ///< Neighbour unit.
 
 public:
-  std::vector<std::vector<std::vector<std::vector<gmsh_node> > > >    node;                         ///< node[i].
+
+  //std::vector<std::vector<std::vector<std::vector<gmsh_node> > > >    node;                         ///< node[i].
+  std::vector<gmsh_node> node (
+                               size_t loc_dimension,
+                               size_t loc_entity,
+                               size_t loc_type
+                              );
+
   std::vector<std::vector<std::vector<std::vector<gmsh_link> > > >    link;                         ///< link.
   std::vector<std::vector<std::vector<std::vector<gmsh_element> > > > element;                      ///< element[k].
   std::vector<std::vector<std::vector<std::vector<gmsh_group> > > >   group;                        ///< group[i].
