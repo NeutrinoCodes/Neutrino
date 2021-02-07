@@ -188,19 +188,17 @@ mesh::mesh(
             // For each "k_th" element of type "t":
             for(k = 0; k < elements; k++)
             {
+              type_nodes = element[d][e][j][k].node.size ();
 
-
-              /*
-                 // For each "m_th" node in the "k_th" element of type "t":
-                 for(m = 0; m < element[d][e][j][k].node.size (); m++)
-                 {
-                 // Checking whether the "i_th" node is present in the present in the "k_th" element or not:
-                 if(element[d][e][j][k].node[m] == (node_tag[t][i] - 1))
-                 {
+              // For each "m_th" node in the "k_th" element of type "t":
+              for(m = 0; m < type_nodes; m++)
+              {
+                // Checking whether the "i_th" node is present in the present in the "k_th" element or not:
+                if(element[d][e][j][k].node[m] == (node_tag[t][i] - 1))
+                {
                   group_unit.element.push_back (k);                                                 // Adding element index "k" to "k_th" group unit...
-                 }
-                 }
-               */
+                }
+              }
             }
 
             group[d][e][j].push_back (group_unit);                                                  // Adding "k_th" group unit to group vector...
