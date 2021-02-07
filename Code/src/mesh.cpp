@@ -169,21 +169,24 @@ mesh::mesh(
       std::cout << "Finding groups..." << std::endl;
 
       // Finding groups for each GMSH's element type:
-      j = NU_MSH_TRI_3;
-      //for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
+      for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
       {
         group[d][e].push_back ({});                                                                 // Creating "j_th" element placeholder...
 
         // Checking whether element type "j" is present in the type list or not:
         if(j == type_list[t])
         {
+          nodes = node[d][e][j].size ();
+
           // For each "i_th" node of the elements of type "t":
-          for(i = 0; i < node[d][e][j].size (); i++)
+          for(i = 0; i < nodes; i++)
           {
             std::cout << "i = " << i << std::endl;
 
+            elements = element[d][e][j].size ();
+
             // For each "k_th" element of type "t":
-            for(k = 0; k < element[d][e][j].size (); k++)
+            for(k = 0; k < elements; k++)
             {
 
 
