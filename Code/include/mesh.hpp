@@ -237,9 +237,9 @@ private:
   size_t                            s_max;                                                          ///< Stride maximum index.
 
   // SIZES:
-  size_t                            nodes;                                                          ///< Number of nodes.
-  size_t                            types;                                                          ///< Number of simplex types.
-  size_t                            elements;                                                       ///< Number of elements.
+  //size_t                            nodes;                                                          ///< Number of nodes.
+  //size_t                            types;                                                          ///< Number of simplex types.
+  //size_t                            elements;                                                       ///< Number of elements.
   int                               type_nodes;                                                     ///< Number of type_nodes.
   size_t                            entities;                                                       ///< Number of entities.
 
@@ -280,9 +280,9 @@ public:
 
   //std::vector<std::vector<std::vector<std::vector<gmsh_node> > > >    node;                         ///< node[i].
   std::vector<gmsh_node> node (
-                               size_t loc_dimension,
-                               size_t loc_entity,
-                               size_t loc_type
+                               int loc_entity_dimension,
+                               int loc_entity_tag,
+                               int loc_element_type
                               );
 
   std::vector<std::vector<std::vector<std::vector<gmsh_link> > > >    link;                         ///< link.
