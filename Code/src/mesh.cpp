@@ -24,220 +24,391 @@ mesh::mesh(
 }
 
 std::vector<gmsh_node> mesh::node (
-                                   int loc_entity_dimension,
-                                   int loc_entity_tag,
-                                   int loc_element_type
+                                   int loc_entity_dimension,                                        // Entity dimension.
+                                   int loc_entity_tag,                                              // Entity tag.
+                                   int loc_element_type                                             // Element type.
                                   )
 {
-  std::vector<gmsh_node> node_vector;                                                               // Vector of nodes to be returned.
-  //size_t                 nodes;
-  size_t                 elements;
-  size_t                 types;
-  int                    t;                                                                         // Entity type index;
+  // NODE VARIABLES:
+  std::vector<size_t>               loc_node_list;                                                  // Node list.
+  std::vector<double>               loc_node_coordinates;                                           // Node coordinates.
+  std::vector<double>               loc_node_parametric_coordinates;                                // Node parametric coordinates.
+  std::vector<std::vector<size_t> > loc_node_tag;                                                   // Node tag list.
+  gmsh_node                         loc_node_unit;                                                  // Node unit.
+  std::vector<gmsh_node>            loc_node_vector;                                                // Node vector.
 
-  //entities = entity_list.size ();                                                                   // Getting number of entities...
+  // ELEMENT VARIABLES:
+  std::vector<std::vector<size_t> > loc_element_tag;                                                // Element tag list.
+  size_t                            loc_elements;                                                   // Number of elements.
+
+  // TYPE VARIABLES:
+  std::vector<int>                  loc_type_list;                                                  // Element type list.
+  size_t                            loc_types;                                                      // Number of element types.
+  std::string                       loc_type_name;                                                  // Element type name.
+  int                               loc_type_dimension;                                             // Element type dimension.
+  int                               loc_type_order;                                                 // Element type order.
+  std::vector<double>               loc_type_node_coordinates;                                      // Element type node coordinates.
+  int                               loc_type_primary_nodes;                                         // Element primary nodes
+  int                               loc_type_nodes;                                                 // Number of type nodes.
+
+  // INDICES:
+  size_t                            i;                                                              // Type index.
+  size_t                            j;                                                              // Current type.
+  size_t                            k;                                                              // Element index.
+  size_t                            m;                                                              // Node index of current element.
 
   // Getting entity nodes:
   gmsh::model::mesh::getNodes (
-                               node_list,                                                           // Node tags list [N].
-                               node_coordinates,                                                    // Node coordinates list [3*N].
-                               node_parametric_coordinates,                                         // Node parametric coordinates [dim*N].
+                               loc_node_list,                                                       // Node tags list [N].
+                               loc_node_coordinates,                                                // Node coordinates list [3*N].
+                               loc_node_parametric_coordinates,                                     // Node parametric coordinates [dim*N].
                                loc_entity_dimension,                                                // Entity dimension [#].
                                loc_entity_tag                                                       // Entity tag [#].
                               );
 
-  //nodes = node_list.size ();
-
   // Getting entity elements, where:
-  // i = index of element type.
-  // j = index of nodes per element, for each element type.
+  // i = type index.
+  // m = node index of current element.
   // L = number of element types.
   // M(i) = number of elements per element type.
-  // N(j) = number of nodes per element, for each element type.
+  // N(m) = number of nodes per element, for each element type.
   gmsh::model::mesh::getElements (
-                                  type_list,                                                        // Element type list [L].
-                                  element_tag,                                                      // Element tag list LxM(i).
-                                  node_tag,                                                         // Node tag list Lx[N(1),N(2),...,N(j),N(M(i))].
+                                  loc_type_list,                                                    // Element type list [L].
+                                  loc_element_tag,                                                  // Element tag list LxM(i).
+                                  loc_node_tag,                                                     // Node tag list Lx[N(1),N(2),...,N(m),N(M(i))].
                                   loc_entity_dimension,                                             // Entity dimension [#].
                                   loc_entity_tag                                                    // Entity tag [#].
                                  );
 
-  types = type_list.size ();                                                                        // Getting number of types...
+  loc_types = loc_type_list.size ();                                                                // Getting number of types...
 
-  for(t = 0; t < types; t++)
+  // Finding the number of elements of "j" type...
+  for(i = 0; i < loc_types; i++)
   {
-    if(type_list[t] == loc_element_type)
+    if(loc_type_list[i] == loc_element_type)
     {
-      elements = element_tag[t].size ();                                                            // Getting the number of elements of "t" type...
+      j            = i;                                                                             // Setting current element type index...
+      loc_elements = loc_element_tag[j].size ();                                                    // Getting the number of elements of "j" type...
     }
     else
     {
-      elements = 0;
+      loc_elements = 0;                                                                             // Resetting the number of elements of "j" type...
     }
   }
 
-
-
-  // For each "k_th" element of type "t":
-  for(k = 0; k < elements; k++)
+  // For each "k" element of "j" type:
+  for(k = 0; k < loc_elements; k++)
   {
     // Getting the element type properties:
     gmsh::model::mesh::getElementProperties (
                                              loc_element_type,                                      // Element type [#].
-                                             type_name,                                             // Element type name [string].
-                                             type_dimension,                                        // Element type dimension [#].
-                                             type_order,                                            // Element type order [#].
-                                             type_nodes,                                            // Element type number of type nodes [#].
-                                             type_node_coordinates,                                 // Element type node local coordinates [vector].
-                                             type_primary_nodes                                     // Number of primary type nodes [#].
+                                             loc_type_name,                                         // Element type name [string].
+                                             loc_type_dimension,                                    // Element type dimension [#].
+                                             loc_type_order,                                        // Element type order [#].
+                                             loc_type_nodes,                                        // Element type number of type nodes [#].
+                                             loc_type_node_coordinates,                             // Element type node local coordinates [vector].
+                                             loc_type_primary_nodes                                 // Number of primary type nodes [#].
                                             );
 
-    // Getting the coordinates of the "m_th" node in "k_th" element of type "t":
-    for(m = 0; m < type_nodes; m++)
+    // Getting the coordinates of the "m" node in the "k" element of "j" type:
+    for(m = 0; m < loc_type_nodes; m++)
     {
-      //element_unit.node.push_back ((node_tag[t][k*type_nodes + m]) - 1);                      // Adding type node to "k_th" element unit...
-      node_unit.x = (float)node_coordinates[3*m + 0];                                               // Setting node unit "x" coordinate...
-      node_unit.y = (float)node_coordinates[3*m + 1];                                               // Setting node unit "y"coordinate...
-      node_unit.z = (float)node_coordinates[3*m + 2];                                               // Setting node unit "z" coordinate...
-      node_unit.w = 1.0f;                                                                           // Setting node unit "w" coordinate...
-      node_vector.push_back (node_unit);                                                            // Adding node unit to node vector...
+      loc_node_unit.x   = (float)loc_node_coordinates[3*m + 0];                                     // Setting node unit "x" coordinate...
+      loc_node_unit.y   = (float)loc_node_coordinates[3*m + 1];                                     // Setting node unit "y"coordinate...
+      loc_node_unit.z   = (float)loc_node_coordinates[3*m + 2];                                     // Setting node unit "z" coordinate...
+      loc_node_unit.w   = 1.0f;                                                                     // Setting node unit "w" coordinate...
+      loc_node_unit.tag = loc_node_tag[j][k*loc_type_nodes + m] - 1;                                // Setting node unit "tag"...
+      loc_node_vector.push_back (loc_node_unit);                                                    // Adding node unit to node vector...
     }
-
-    //element_unit.type = type_list[t];                                                         // Setting element unit type...
-    //element[d][e][j].push_back (element_unit);                                                // Adding "k_th" element unit to element vector...
   }
 
-  //element_unit.node.clear ();                                                                 // Clearing element unit for next "k"...
-  neutrino::done ();                                                                                // Printing message...
-
-  return node_vector;
+  return loc_node_vector;
 }
 
-/*
-      std::cout << "Finding groups..." << std::endl;
+std::vector<gmsh_element> mesh::element (
+                                         int loc_entity_dimension,
+                                         int loc_entity_tag,
+                                         int loc_element_type
+                                        )
+{
+  // NODE VARIABLES:
+  std::vector<std::vector<size_t> > loc_node_tag;                                                   // Node tag list.
 
-      // Finding groups for each GMSH's element type:
-      for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
+  // ELEMENT VARIABLES:
+  std::vector<std::vector<size_t> > loc_element_tag;                                                // Element tag list.
+  size_t                            loc_elements;                                                   // Number of elements.
+  std::vector<gmsh_element>         loc_element_vector;                                             // Element vector to be returned.
+  gmsh_element                      loc_element_unit;                                               // Element unit.
+
+  // TYPE VARIABLES:
+  std::vector<int>                  loc_type_list;                                                  // Element type list.
+  size_t                            loc_types;                                                      // Number of element types.
+  std::string                       loc_type_name;                                                  // Element type name.
+  int                               loc_type_dimension;                                             // Element type dimension.
+  int                               loc_type_order;                                                 // Element type order.
+  std::vector<double>               loc_type_node_coordinates;                                      // Element type node coordinates.
+  int                               loc_type_primary_nodes;                                         // Element primary nodes
+  int                               loc_type_nodes;                                                 // Number of type nodes.
+
+  // INDICES:
+  size_t                            i;                                                              // Type index.
+  size_t                            j;                                                              // Current type.
+  size_t                            k;                                                              // Element index.
+  size_t                            m;                                                              // Node index of current element.
+
+  // Getting entity elements, where:
+  // i = type index.
+  // m = node index of current element.
+  // L = number of element types.
+  // M(i) = number of elements per element type.
+  // N(m) = number of nodes per element, for each element type.
+  gmsh::model::mesh::getElements (
+                                  loc_type_list,                                                    // Element type list [L].
+                                  loc_element_tag,                                                  // Element tag list LxM(i).
+                                  loc_node_tag,                                                     // Node tag list Lx[N(1),N(2),...,N(m),N(M(i))].
+                                  loc_entity_dimension,                                             // Entity dimension [#].
+                                  loc_entity_tag                                                    // Entity tag [#].
+                                 );
+
+  loc_types = loc_type_list.size ();                                                                // Getting number of types...
+
+  // Finding the number of elements of "j" type...
+  for(i = 0; i < loc_types; i++)
+  {
+    if(loc_type_list[i] == loc_element_type)
+    {
+      j            = i;                                                                             // Setting current element type index...
+      loc_elements = loc_element_tag[j].size ();                                                    // Getting the number of elements of "j" type...
+    }
+    else
+    {
+      loc_elements = 0;                                                                             // Resetting the number of elements of "j" type...
+    }
+  }
+
+  // For each "k" element of "j" type:
+  for(k = 0; k < loc_elements; k++)
+  {
+    // Getting the element type properties:
+    gmsh::model::mesh::getElementProperties (
+                                             loc_element_type,                                      // Element type [#].
+                                             loc_type_name,                                         // Element type name [string].
+                                             loc_type_dimension,                                    // Element type dimension [#].
+                                             loc_type_order,                                        // Element type order [#].
+                                             loc_type_nodes,                                        // Element type number of type nodes [#].
+                                             loc_type_node_coordinates,                             // Element type node local coordinates [vector].
+                                             loc_type_primary_nodes                                 // Number of primary type nodes [#].
+                                            );
+
+    // Getting the coordinates of the "m" node in the "k" element of "j" type:
+    for(m = 0; m < loc_type_nodes; m++)
+    {
+      loc_element_unit.node.push_back ((loc_node_tag[j][k*loc_type_nodes + m]) - 1);                // Adding the type node to the "k" element unit...
+    }
+
+    loc_element_unit.tag = loc_element_tag[t][k] - 1;                                               // Setting element unit tag...
+    loc_element_vector.push_back (loc_element_unit);                                                // Adding the "k" element unit to the element vector...
+    loc_element_unit.node.clear ();                                                                 // Clearing element unit for next "k"...
+  }
+
+  return loc_element_vector;
+}
+
+std::vector<gmsh_group> mesh::group (
+                                     int loc_entity_dimension,
+                                     int loc_entity_tag,
+                                     int loc_element_type
+                                    )
+{
+  // NODE VARIABLES:
+  std::vector<size_t>               loc_node_list;                                                  // Node list.
+  std::vector<double>               loc_node_coordinates;                                           // Node coordinates.
+  std::vector<double>               loc_node_parametric_coordinates;                                // Node parametric coordinates.
+  std::vector<std::vector<size_t> > loc_node_tag;                                                   // Node tag list.
+  gmsh_node                         loc_node_unit;                                                  // Node unit.
+  std::vector<gmsh_node>            loc_node_vector;                                                // Node vector.
+  size_t                            loc_nodes;                                                      // Number of nodes.
+
+  // ELEMENT VARIABLES:
+  std::vector<std::vector<size_t> > loc_element_tag;                                                // Element tag list.
+  std::vector<gmsh_element>         loc_element_vector;                                             // Element vector.
+  size_t                            loc_elements;                                                   // Number of elements.
+
+  // TYPE VARIABLES:
+  std::vector<int>                  loc_type_list;                                                  // Element type list.
+  size_t                            loc_types;                                                      // Number of element types.
+  std::string                       loc_type_name;                                                  // Element type name.
+  int                               loc_type_dimension;                                             // Element type dimension.
+  int                               loc_type_order;                                                 // Element type order.
+  std::vector<double>               loc_type_node_coordinates;                                      // Element type node coordinates.
+  int                               loc_type_primary_nodes;                                         // Element primary nodes
+  int                               loc_type_nodes;                                                 // Number of type nodes.
+
+  // GROUP VARIABLES:
+  gmsh_group                        loc_group_unit;                                                 // Group unit.
+  std::vector<gmsh_group>           loc_group_vector;                                               // Group vector.
+
+  // INDICES:
+  size_t                            i;                                                              // Node index.
+  size_t                            j;                                                              // Current type.
+  size_t                            k;                                                              // Element index.
+  size_t                            m;                                                              // Node index of current element.
+
+  loc_node_vector    = this->node (loc_entity_dimension, loc_entity_tag, loc_element_type);
+  loc_element_vector = this->element (loc_entity_dimension, loc_entity_tag, loc_element_type);
+  loc_nodes          = loc_node_vector.size ();
+
+  // For each "i" node of the elements of "j" type:
+  for(i = 0; i < loc_nodes; i++)
+  {
+    // For each "k" element of "j" type:
+    for(k = 0; k < loc_elements; k++)
+    {
+      loc_type_nodes = loc_element_vector[k].node.size ();
+
+      // For each "m" node in the "k" element of "j" type:
+      for(m = 0; m < loc_type_nodes; m++)
       {
-        group[d][e].push_back ({});                                                                 // Creating "j_th" element placeholder...
-
-        // Checking whether element type "j" is present in the type list or not:
-        if(j == type_list[t])
+        // Checking whether the "i" node is present in the "k" element or not:
+        if(loc_element_vector[k].node[m] == loc_node_vector[i].tag)
         {
-          nodes = node[d][e][j].size ();
-
-          // For each "i_th" node of the elements of type "t":
-          for(i = 0; i < nodes; i++)
-          {
-            std::cout << "i = " << i << std::endl;
-
-            elements = element[d][e][j].size ();
-
-            // For each "k_th" element of type "t":
-            for(k = 0; k < elements; k++)
-            {
-              type_nodes = element[d][e][j][k].node.size ();
-
-              // For each "m_th" node in the "k_th" element of type "t":
-              for(m = 0; m < type_nodes; m++)
-              {
-                // Checking whether the "i_th" node is present in the present in the "k_th" element or not:
-                if(element[d][e][j][k].node[m] == (node_tag[t][i] - 1))
-                {
-                  group_unit.element.push_back (k);                                                 // Adding element index "k" to "k_th" group unit...
-                }
-              }
-            }
-
-            group[d][e][j].push_back (group_unit);                                                  // Adding "k_th" group unit to group vector...
-          }
-
-          group_unit.element.clear ();                                                              // Clearing group unit for next "k"...
-        }
-        else
-        {
-          group[d][e][j].push_back ({});                                                            // Adding empty group unit to group vector...
+          loc_group_unit.element.push_back (k);                                                     // Adding element index "k" to the group unit...
         }
       }
+    }
 
+    loc_group_vector.push_back (loc_group_unit);                                                    // Adding "k" group unit to group vector...
+    loc_group_unit.element.clear ();                                                                // Clearing group unit for next "k"...
+  }
+}
 
+std::vector<int> mesh::neighbourhood (
+                                      int loc_entity_dimension,
+                                      int loc_entity_tag,
+                                      int loc_element_type
+                                     )
 
-      /*
-         std::cout << "Finding neighbours..." << std::endl;
+{
+  // NODE VARIABLES:
+  std::vector<std::vector<size_t> > loc_node_tag;                                                   // Node tag list.
+  std::vector<gmsh_node>            loc_node_vector;                                                // Node vector.
+  size_t                            loc_nodes;                                                      // Number of nodes.
 
-         // Finding neighbours for each GMSH's element type:
-         for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
-         {
-         neighbours = 0;                                                                             // Resetting number of neighbours...
-         neighbourhood[d][e].push_back ({});                                                         // Creating "j_th" element placeholder...
-         offset[d][e].push_back ({});                                                                // Creating "j_th" element placeholder...
+  // ELEMENT VARIABLES:
+  std::vector<std::vector<size_t> > loc_element_tag;                                                // Element tag list.
+  std::vector<gmsh_element>         loc_element_vector;                                             // Element vector.
+  size_t                            loc_elements;                                                   // Number of elements.
 
-         // Checking whether element type "j" is present in the type list or not:
-         if(j == type_list[t])
-         {
-          // For each "i_th" central node of the elements of type "t":
-          for(i = 0; i < node[d][e][j].size (); i++)
-          {
-            // For each "k_th" element of type "t":
-            for(k = 0; k < element[d][e][j].size (); k++)
-            {
-              // For each "m_th" node in each "k_th" element of type "t":
-              for(m = 0; m < element[d][e][j][k].node.size (); m++)
-              {
-                // Checking whether the "k_th" element of type "t" contains the "i_th" central node:
-                if((element[d][e][j][k].node[m] == i))
-                {
-                  // Appending the element[i] type nodes in the neighbour unit:
-                  neighbour_unit.insert (
-                                         neighbour_unit.end (),                                     // Insertion point.
-                                         element[d][e][j][k].node.begin (),                         // Beginning of vector to be appended.
-                                         element[d][e][j][k].node.end ()                            // End of vector to be appended.
-                                        );
+  // TYPE VARIABLES:
+  std::vector<int>                  loc_type_list;                                                  // Element type list.
+  size_t                            loc_types;                                                      // Number of element types.
+  int                               loc_type_nodes;                                                 // Number of type nodes.
 
-                  // Erasing the central node from the neighbourhood, hence keeping only its neighbours:
-                  neighbour_unit.erase (
-                                        neighbour_unit.end () -                                     // Insertion point.
-                                        element[d][e][j][k].node.size () +                          // Number of type nodes.
-                                        m                                                           // Central node.
-                                       );
-                }
-              }
-            }
+  // NEIGHBOUR VARIABLES:
+  std::vector<size_t>               loc_neighbour_unit;                                             // Neighbour unit.
+  std::vector<int>                  loc_neighbourhood_vector;                                       // Neighbourhood vector.
 
-            // Eliminating repeated indexes:
-            std::sort (neighbour_unit.begin (), neighbour_unit.end ());
-            neighbour_unit.resize (
+  // INDICES:
+  size_t                            i;                                                              // Node index.
+  size_t                            j;                                                              // Current type.
+  size_t                            k;                                                              // Element index.
+  size_t                            m;                                                              // Node index of current element.
+
+  // Getting entity elements, where:
+  // i = type index.
+  // m = node index of current element.
+  // L = number of element types.
+  // M(i) = number of elements per element type.
+  // N(m) = number of nodes per element, for each element type.
+  gmsh::model::mesh::getElements (
+                                  loc_type_list,                                                    // Element type list [L].
+                                  loc_element_tag,                                                  // Element tag list LxM(i).
+                                  loc_node_tag,                                                     // Node tag list Lx[N(1),N(2),...,N(m),N(M(i))].
+                                  loc_entity_dimension,                                             // Entity dimension [#].
+                                  loc_entity_tag                                                    // Entity tag [#].
+                                 );
+
+  loc_types = loc_type_list.size ();                                                                // Getting number of types...
+
+  // Finding the number of elements of "j" type...
+  for(i = 0; i < loc_types; i++)
+  {
+    if(loc_type_list[i] == loc_element_type)
+    {
+      j            = i;                                                                             // Setting current element type index...
+      loc_elements = loc_element_tag[j].size ();                                                    // Getting the number of elements of "j" type...
+    }
+    else
+    {
+      loc_elements = 0;                                                                             // Resetting the number of elements of "j" type...
+    }
+  }
+
+  loc_node_vector    = this->node (loc_entity_dimension, loc_entity_tag, loc_element_type);
+  loc_element_vector = this->element (loc_entity_dimension, loc_entity_tag, loc_element_type);
+  loc_nodes          = loc_node_vector.size ();
+
+  // For each "i" node of the elements of "j" type:
+  for(i = 0; i < loc_nodes; i++)
+  {
+    // For each "k" element of "j" type:
+    for(k = 0; k < loc_elements; k++)
+    {
+      loc_type_nodes = loc_element_vector[k].node.size ();
+
+      // For each "m" node in the "k" element of "j" type:
+      for(m = 0; m < loc_type_nodes; m++)
+      {
+        // Checking whether the "k" element of "j" type contains the "i" central node:
+        if((loc_element_vector[k].node[m] == loc_node_vector[i].tag))
+        {
+          // Appending the "k" element type nodes to the neighbour unit:
+          loc_neighbour_unit.insert (
+                                     loc_neighbour_unit.end (),                                     // Insertion point.
+                                     loc_element_vector[k].node.begin (),                           // Beginning of vector to be appended.
+                                     loc_element_vector[k].node.end ()                              // End of vector to be appended.
+                                    );
+
+          // Erasing the central node from the neighbour unit:
+          loc_neighbour_unit.erase (
+                                    loc_neighbour_unit.end () -                                     // Insertion point.
+                                    loc_element_vector[k].node.size () +                            // Number of type nodes.
+                                    m                                                               // Central node.
+                                   );
+        }
+      }
+    }
+
+    // Eliminating repeated indexes:
+    std::sort (loc_neighbour_unit.begin (), loc_neighbour_unit.end ());
+    loc_neighbour_unit.resize (
                                                                                                     // Eliminating null indexes...
-                                   std::distance (
+                               std::distance (
                                                                                                     // Calculating index distance...
-                                                  neighbour_unit.begin (),
-                                                  std::unique (
+                                              loc_neighbour_unit.begin (),
+                                              std::unique (
                                                                                                     // Finding unique indexes...
-                                                               neighbour_unit.begin (),             // Beginning of index vector.
-                                                               neighbour_unit.end ()                // End of index vector.
-                                                              )
-                                                 )
-                                  );
+                                                           loc_neighbour_unit.begin (),             // Beginning of index vector.
+                                                           loc_neighbour_unit.end ()                // End of index vector.
+                                                          )
+                                             )
+                              );
 
-            // Inserting "k_th" neighbour unit in neighbourhood vector...
-            neighbourhood[d][e][j].insert (
-                                           neighbourhood[d][e][j].end (),
-                                           neighbour_unit.begin (),
-                                           neighbour_unit.end ()
-                                          );                                                        // Building neighbour tuple...
-            neighbours += neighbour_unit.size ();                                                   // Counting neighbour nodes...
-            offset[d][e][j].push_back (neighbours);                                                 // Setting neighbour offset...
-          }
+    // Inserting "k" neighbour unit into the neighbourhood vector...
+    loc_neighbourhood_vector.insert (
+                                     loc_neighbourhood_vector.end (),
+                                     loc_neighbour_unit.begin (),
+                                     loc_neighbour_unit.end ()
+                                    );                                                              // Building neighbour tuple...
+    neighbours += loc_neighbour_unit.size ();                                                       // Counting neighbour nodes...
+    offset.push_back (neighbours);                                                                  // Setting neighbour offset...
+  }
 
-          neighbour_unit.clear ();                                                                  // Clearing neighbour unit for next "k"...
-         }
-         else
-         {
-          neighbourhood[d][e][j].push_back ({});                                                    // Adding empty neighbour unit to neighbourhood vector...
-          offset[d][e][j].push_back ({});                                                           // Adding empty offset to offset vector...
-         }
-         }
- */
+  loc_neighbour_unit.clear ();                                                                      // Clearing neighbour unit for next "k"...
+}
+
+
+
 
 /*
    // Finding links for each GMSH's element type:
