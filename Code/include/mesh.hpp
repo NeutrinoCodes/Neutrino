@@ -25,6 +25,7 @@ typedef struct _gmsh_node
   cl_float y;                                                                                       ///< Node "y" coordinate.
   cl_float z;                                                                                       ///< Node "z" coordinate.
   cl_float w;                                                                                       ///< Node "w" coordinate.
+  size_t tag;                                                                                       ///< Node tag.
 } gmsh_node;
 #pragma pack(pop)
 
@@ -48,7 +49,8 @@ typedef struct _gmsh_link
 typedef struct _gmsh_element
 {
   std::vector<size_t> node;                                                                         ///< Node indexes.
-  int type;                                                                                         ///< Element type.
+  size_t tag;                                                                                       ///< Element tag.
+  //int type;                                                                                         ///< Element type.
 } gmsh_element;
 #pragma pack(pop)
 
@@ -224,43 +226,13 @@ class mesh : public neutrino                                                    
 private:
 
   // INDEXES:
-  size_t                            d;                                                              ///< Entity dimension index.
-  size_t                            e;                                                              ///< Entity index.
-  size_t                            t;                                                              ///< Tag index.
-  size_t                            i;                                                              ///< Node index.
-  size_t                            j;                                                              ///< Type index.
-  size_t                            k;                                                              ///< Element index.
-  size_t                            m;                                                              ///< Type node index.
+
   size_t                            n;                                                              ///< Entity index.
   size_t                            s;                                                              ///< Stride index.
   size_t                            s_min;                                                          ///< Stride minimum index.
   size_t                            s_max;                                                          ///< Stride maximum index.
 
-  // SIZES:
-  //size_t                            nodes;                                                          ///< Number of nodes.
-  //size_t                            types;                                                          ///< Number of simplex types.
-  //size_t                            elements;                                                       ///< Number of elements.
-  int                               type_nodes;                                                     ///< Number of type_nodes.
   size_t                            entities;                                                       ///< Number of entities.
-
-  // NODE VARIABLES:
-  gmsh_node                         node_unit;                                                      ///< Node unit.
-  std::vector<size_t>               node_list;                                                      ///< Node list.
-  std::vector<double>               node_coordinates;                                               ///< Node coordinates.
-  std::vector<double>               node_parametric_coordinates;                                    ///< Node parametric coordinates.
-  std::vector<std::vector<size_t> > node_tag;                                                       ///< Node tag.
-
-  // TYPE VARIABLES:
-  std::vector<int>                  type_list;                                                      ///< Element type list.
-  std::string                       type_name;                                                      ///< Element type name.
-  int                               type_dimension;                                                 ///< Element type dimension.
-  int                               type_order;                                                     ///< Element type order.
-  std::vector<double>               type_node_coordinates;                                          ///< Element type node coordinates.
-  int                               type_primary_nodes;                                             ///< Element primary nodes
-
-  // ELEMENT VARIABLES:
-  gmsh_element                      element_unit;                                                   ///< Element unit.
-  std::vector<std::vector<size_t> > element_tag;                                                    ///< Element tag list.
 
   // ENTITY VARIABLES:
   std::vector<std::pair<int, int> > entity_list;                                                    ///< Entity list.
@@ -269,36 +241,56 @@ private:
   std::vector<size_t>               entity_index;                                                   ///< Entity index list.
   int                               entity_tag;                                                     ///< Entity tag.
 
-  // GROUP VARIABLES:
-  gmsh_group                        group_unit;                                                     ///< Group unit.
-
   // NEIGHBOUR VARIABLES:
   size_t                            neighbours;                                                     ///< Number of neighbours.
-  std::vector<size_t>               neighbour_unit;                                                 ///< Neighbour unit.
 
 public:
 
   //std::vector<std::vector<std::vector<std::vector<gmsh_node> > > >    node;                         ///< node[i].
-  std::vector<gmsh_node> node (
-                               int loc_entity_dimension,
-                               int loc_entity_tag,
-                               int loc_element_type
-                              );
+  std::vector<gmsh_node>    node (
+                                  int loc_entity_dimension,
+                                  int loc_entity_tag,
+                                  int loc_element_type
+                                 );
 
-  std::vector<std::vector<std::vector<std::vector<gmsh_link> > > >    link;                         ///< link.
-  std::vector<std::vector<std::vector<std::vector<gmsh_element> > > > element;                      ///< element[k].
-  std::vector<std::vector<std::vector<std::vector<gmsh_group> > > >   group;                        ///< group[i].
-  std::vector<std::vector<std::vector<std::vector<int> > > >          neighbourhood;                ///< neighbourhood.
-  std::vector<std::vector<std::vector<std::vector<int> > > >          offset;                       ///< neighbour offset.
+  std::vector<gmsh_element> element (
+                                     int loc_entity_dimension,
+                                     int loc_entity_tag,
+                                     int loc_element_type
+                                    );
+
+  std::vector<gmsh_group>   group (
+                                   int loc_entity_dimension,
+                                   int loc_entity_tag,
+                                   int loc_element_type
+                                  );
+
+  std::vector<int>          neighbourhood (
+                                           int loc_entity_dimension,
+                                           int loc_entity_tag,
+                                           int loc_element_type
+                                          );
+
+  std::vector<gmsh_link>    link (
+                                  int loc_entity_dimension,
+                                  int loc_entity_tag,
+                                  int loc_element_type
+                                 );
+
+  std::vector<int>          offset (
+                                    int loc_entity_dimension,
+                                    int loc_entity_tag,
+                                    int loc_element_type
+                                   );
 
   mesh (
         std::string loc_file_name                                                                   ///< GMSH .msh file name.
        );
 
-  std::vector<size_t> physical (
-                                size_t loc_physical_group_dim,                                      ///< Physical group dimension.
-                                size_t loc_physical_group_tag                                       ///< Physical group tag.
-                               );
+  std::vector<size_t>       physical (
+                                      size_t loc_physical_group_dim,                                ///< Physical group dimension.
+                                      size_t loc_physical_group_tag                                 ///< Physical group tag.
+                                     );
 
   ~mesh();
 };
