@@ -25,21 +25,7 @@ typedef struct _gmsh_node
   cl_float y;                                                                                       ///< Node "y" coordinate.
   cl_float z;                                                                                       ///< Node "z" coordinate.
   cl_float w;                                                                                       ///< Node "w" coordinate.
-  size_t tag;                                                                                       ///< Node tag.
 } gmsh_node;
-#pragma pack(pop)
-
-/// @brief    **Data structure. Internally used by Neutrino.**
-/// @details  This structure is used as data storage in the link array. It is tightly packed to be
-/// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
-#pragma pack(push, 1)                                                                               // Packing data in 1 column...
-typedef struct _gmsh_link
-{
-  cl_float x;                                                                                       ///< Link "x" coordinate.
-  cl_float y;                                                                                       ///< Link "y" coordinate.
-  cl_float z;                                                                                       ///< Link "z" coordinate.
-  cl_float w;                                                                                       ///< Link "w" coordinate.
-} gmsh_link;
 #pragma pack(pop)
 
 /// @brief    **Data structure. Internally used by Neutrino.**
@@ -49,8 +35,6 @@ typedef struct _gmsh_link
 typedef struct _gmsh_element
 {
   std::vector<size_t> node;                                                                         ///< Node indexes.
-  size_t tag;                                                                                       ///< Element tag.
-  //int type;                                                                                         ///< Element type.
 } gmsh_element;
 #pragma pack(pop)
 
@@ -62,6 +46,18 @@ typedef struct _gmsh_group
 {
   std::vector<size_t> element;                                                                      ///< Element indexes.
 } gmsh_group;
+#pragma pack(pop)
+
+/// @brief    **Data structure. Internally used by Neutrino.**
+/// @details  This structure is used as data storage in the group array. It is tightly packed to be
+/// compatible with the OpenCL requirement of having a contiguous data arrangement without padding.
+#pragma pack(push, 1)                                                                               // Packing data in 1 column...
+typedef struct _gmsh_neighbour
+{
+  std::vector<size_t> node;                                                                         ///< Neighbour indexes.
+  std::vector<gmsh_node> link;                                                                      ///< Neighbour indexes.
+  size_t offset;                                                                                    ///< Neighbour offset index.
+} gmsh_neighbour;
 #pragma pack(pop)
 
 // Element types in .msh file format (numbers should not be changed):
@@ -224,73 +220,42 @@ typedef struct _gmsh_group
 class mesh : public neutrino                                                                        /// @brief **Mesh.**
 {
 private:
-
-  // INDEXES:
-
-  size_t                            n;                                                              ///< Entity index.
-  size_t                            s;                                                              ///< Stride index.
-  size_t                            s_min;                                                          ///< Stride minimum index.
-  size_t                            s_max;                                                          ///< Stride maximum index.
-
-  size_t                            entities;                                                       ///< Number of entities.
-
   // ENTITY VARIABLES:
   std::vector<std::pair<int, int> > entity_list;                                                    ///< Entity list.
-  std::vector<size_t>               entity_dimension;                                               ///< Entity dimension list.
-  size_t                            entity_dimension_max;                                           ///< Maximun number of entity dimensions.
-  std::vector<size_t>               entity_index;                                                   ///< Entity index list.
-  int                               entity_tag;                                                     ///< Entity tag.
-
-  // NEIGHBOUR VARIABLES:
-  size_t                            neighbours;                                                     ///< Number of neighbours.
 
 public:
+  mesh (
+        std::string loc_file_name                                                                   ///< GMSH .msh file name.
+       );
 
-  //std::vector<std::vector<std::vector<std::vector<gmsh_node> > > >    node;                         ///< node[i].
-  std::vector<gmsh_node>    node (
-                                  int loc_entity_dimension,
-                                  int loc_entity_tag,
-                                  int loc_element_type
-                                 );
-
-  std::vector<gmsh_element> element (
-                                     int loc_entity_dimension,
-                                     int loc_entity_tag,
-                                     int loc_element_type
-                                    );
-
-  std::vector<gmsh_group>   group (
-                                   int loc_entity_dimension,
-                                   int loc_entity_tag,
-                                   int loc_element_type
-                                  );
-
-  std::vector<int>          neighbourhood (
-                                           int loc_entity_dimension,
-                                           int loc_entity_tag,
-                                           int loc_element_type
-                                          );
-
-  std::vector<gmsh_link>    link (
-                                  int loc_entity_dimension,
-                                  int loc_entity_tag,
-                                  int loc_element_type
-                                 );
-
-  std::vector<int>          offset (
+  std::vector<gmsh_node>      node (
                                     int loc_entity_dimension,
                                     int loc_entity_tag,
                                     int loc_element_type
                                    );
 
-  mesh (
-        std::string loc_file_name                                                                   ///< GMSH .msh file name.
-       );
+  std::vector<gmsh_element>   element (
+                                       int loc_entity_dimension,
+                                       int loc_entity_tag,
+                                       int loc_element_type
+                                      );
 
-  std::vector<size_t>       physical (
-                                      size_t loc_physical_group_dim,                                ///< Physical group dimension.
-                                      size_t loc_physical_group_tag                                 ///< Physical group tag.
-                                     );
+  std::vector<gmsh_group>     group (
+                                     int loc_entity_dimension,
+                                     int loc_entity_tag,
+                                     int loc_element_type
+                                    );
+
+  std::vector<gmsh_neighbour> neighbour (
+                                         int loc_entity_dimension,
+                                         int loc_entity_tag,
+                                         int loc_element_type
+                                        );
+
+  std::vector<size_t>         physical (
+                                        size_t loc_physical_group_dim,                              ///< Physical group dimension.
+                                        size_t loc_physical_group_tag                               ///< Physical group tag.
+                                       );
 
   ~mesh();
 };

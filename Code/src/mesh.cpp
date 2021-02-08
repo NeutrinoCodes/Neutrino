@@ -12,7 +12,6 @@ mesh::mesh(
            std::string loc_file_name                                                                // GMSH .msh file name.
           )
 {
-  entities = 0;                                                                                     // Resetting number of entities...
   neutrino::action ("initializing GMSH...");                                                        // Printing message...
   gmsh::initialize ();                                                                              // Initializing GMSH...
   gmsh::model::add ("neutrino");                                                                    // Adding a new GMSH model (named "neutrino")...
@@ -113,11 +112,10 @@ std::vector<gmsh_node> mesh::node (
     // Getting the coordinates of the "m" node in the "k" element of "j" type:
     for(m = 0; m < loc_type_nodes; m++)
     {
-      loc_node_unit.x   = (float)loc_node_coordinates[3*m + 0];                                     // Setting node unit "x" coordinate...
-      loc_node_unit.y   = (float)loc_node_coordinates[3*m + 1];                                     // Setting node unit "y"coordinate...
-      loc_node_unit.z   = (float)loc_node_coordinates[3*m + 2];                                     // Setting node unit "z" coordinate...
-      loc_node_unit.w   = 1.0f;                                                                     // Setting node unit "w" coordinate...
-      loc_node_unit.tag = loc_node_tag[j][k*loc_type_nodes + m] - 1;                                // Setting node unit "tag"...
+      loc_node_unit.x = (float)loc_node_coordinates[3*m + 0];                                       // Setting node unit "x" coordinate...
+      loc_node_unit.y = (float)loc_node_coordinates[3*m + 1];                                       // Setting node unit "y"coordinate...
+      loc_node_unit.z = (float)loc_node_coordinates[3*m + 2];                                       // Setting node unit "z" coordinate...
+      loc_node_unit.w = 1.0f;                                                                       // Setting node unit "w" coordinate...
       loc_node_vector.push_back (loc_node_unit);                                                    // Adding node unit to node vector...
     }
   }
@@ -206,7 +204,6 @@ std::vector<gmsh_element> mesh::element (
       loc_element_unit.node.push_back ((loc_node_tag[j][k*loc_type_nodes + m]) - 1);                // Adding the type node to the "k" element unit...
     }
 
-    loc_element_unit.tag = loc_element_tag[t][k] - 1;                                               // Setting element unit tag...
     loc_element_vector.push_back (loc_element_unit);                                                // Adding the "k" element unit to the element vector...
     loc_element_unit.node.clear ();                                                                 // Clearing element unit for next "k"...
   }
@@ -270,7 +267,7 @@ std::vector<gmsh_group> mesh::group (
       for(m = 0; m < loc_type_nodes; m++)
       {
         // Checking whether the "i" node is present in the "k" element or not:
-        if(loc_element_vector[k].node[m] == loc_node_vector[i].tag)
+        if(loc_element_vector[k].node[m] == i)
         {
           loc_group_unit.element.push_back (k);                                                     // Adding element index "k" to the group unit...
         }
@@ -282,11 +279,11 @@ std::vector<gmsh_group> mesh::group (
   }
 }
 
-std::vector<int> mesh::neighbourhood (
-                                      int loc_entity_dimension,
-                                      int loc_entity_tag,
-                                      int loc_element_type
-                                     )
+std::vector<gmsh_neighbour> mesh::neighbour (
+                                             int loc_entity_dimension,
+                                             int loc_entity_tag,
+                                             int loc_element_type
+                                            )
 
 {
   // NODE VARIABLES:
@@ -305,14 +302,19 @@ std::vector<int> mesh::neighbourhood (
   int                               loc_type_nodes;                                                 // Number of type nodes.
 
   // NEIGHBOUR VARIABLES:
-  std::vector<size_t>               loc_neighbour_unit;                                             // Neighbour unit.
-  std::vector<int>                  loc_neighbourhood_vector;                                       // Neighbourhood vector.
+  gmsh_neighbour                    loc_neighbour_unit;                                             // Neighbour unit.
+  std::vector<gmsh_neighbour>       loc_neighbour_vector;                                           // Neighbourhood vector.
+  size_t                            loc_neighbours;                                                 // Number of neighbours.
 
   // INDICES:
   size_t                            i;                                                              // Node index.
   size_t                            j;                                                              // Current type.
   size_t                            k;                                                              // Element index.
   size_t                            m;                                                              // Node index of current element.
+  size_t                            n;                                                              // Node index of current neighbour unit.
+  size_t                            s;                                                              // Stride index.
+  size_t                            s_min;                                                          // Stride minimum index.
+  size_t                            s_max;                                                          // Stride maximum index.
 
   // Getting entity elements, where:
   // i = type index.
@@ -347,6 +349,7 @@ std::vector<int> mesh::neighbourhood (
   loc_node_vector    = this->node (loc_entity_dimension, loc_entity_tag, loc_element_type);
   loc_element_vector = this->element (loc_entity_dimension, loc_entity_tag, loc_element_type);
   loc_nodes          = loc_node_vector.size ();
+  loc_neighbours     = 0;                                                                           // Resetting the number of neighbours...
 
   // For each "i" node of the elements of "j" type:
   for(i = 0; i < loc_nodes; i++)
@@ -360,103 +363,75 @@ std::vector<int> mesh::neighbourhood (
       for(m = 0; m < loc_type_nodes; m++)
       {
         // Checking whether the "k" element of "j" type contains the "i" central node:
-        if((loc_element_vector[k].node[m] == loc_node_vector[i].tag))
+        if((loc_element_vector[k].node[m] == i))
         {
           // Appending the "k" element type nodes to the neighbour unit:
-          loc_neighbour_unit.insert (
-                                     loc_neighbour_unit.end (),                                     // Insertion point.
-                                     loc_element_vector[k].node.begin (),                           // Beginning of vector to be appended.
-                                     loc_element_vector[k].node.end ()                              // End of vector to be appended.
-                                    );
+          loc_neighbour_unit.node.insert (
+                                          loc_neighbour_unit.node.end (),                           // Insertion point.
+                                          loc_element_vector[k].node.begin (),                      // Beginning of vector to be appended.
+                                          loc_element_vector[k].node.end ()                         // End of vector to be appended.
+                                         );
 
           // Erasing the central node from the neighbour unit:
-          loc_neighbour_unit.erase (
-                                    loc_neighbour_unit.end () -                                     // Insertion point.
-                                    loc_element_vector[k].node.size () +                            // Number of type nodes.
-                                    m                                                               // Central node.
-                                   );
+          loc_neighbour_unit.node.erase (
+                                         loc_neighbour_unit.node.end () -                           // Insertion point.
+                                         loc_element_vector[k].node.size () +                       // Number of type nodes.
+                                         m                                                          // Central node.
+                                        );
         }
       }
     }
 
     // Eliminating repeated indexes:
-    std::sort (loc_neighbour_unit.begin (), loc_neighbour_unit.end ());
-    loc_neighbour_unit.resize (
+    std::sort (loc_neighbour_unit.node.begin (), loc_neighbour_unit.node.end ());
+    loc_neighbour_unit.node.resize (
                                                                                                     // Eliminating null indexes...
-                               std::distance (
+                                    std::distance (
                                                                                                     // Calculating index distance...
-                                              loc_neighbour_unit.begin (),
-                                              std::unique (
+                                                   loc_neighbour_unit.node.begin (),
+                                                   std::unique (
                                                                                                     // Finding unique indexes...
-                                                           loc_neighbour_unit.begin (),             // Beginning of index vector.
-                                                           loc_neighbour_unit.end ()                // End of index vector.
-                                                          )
-                                             )
-                              );
+                                                                loc_neighbour_unit.node.
+                                                                begin (),                           // Beginning of index vector.
+                                                                loc_neighbour_unit.node.
+                                                                end ()                              // End of index vector.
+                                                               )
+                                                  )
+                                   );
 
     // Inserting "k" neighbour unit into the neighbourhood vector...
-    loc_neighbourhood_vector.insert (
-                                     loc_neighbourhood_vector.end (),
-                                     loc_neighbour_unit.begin (),
-                                     loc_neighbour_unit.end ()
-                                    );                                                              // Building neighbour tuple...
-    neighbours += loc_neighbour_unit.size ();                                                       // Counting neighbour nodes...
-    offset.push_back (neighbours);                                                                  // Setting neighbour offset...
-  }
+    loc_neighbour_vector.insert (
+                                 loc_neighbour_vector.end (),
+                                 loc_neighbour_unit.node.begin (),
+                                 loc_neighbour_unit.node.end ()
+                                );                                                                  // Building neighbour tuple...
+    loc_neighbours           += loc_neighbour_unit.node.size ();                                    // Counting neighbour nodes...
+    loc_neighbour_unit.node.clear ();                                                               // Clearing neighbour unit for next "k"...
+    loc_neighbour_unit.offset = loc_neighbours;                                                     // Setting neighbour offset...
 
-  loc_neighbour_unit.clear ();                                                                      // Clearing neighbour unit for next "k"...
-}
+    s_max                     = loc_neighbour_vector[i].offset;                                     // Setting stride maximum...
 
-
-
-
-/*
-   // Finding links for each GMSH's element type:
-   for(j = 1; j < (NU_MSH_MAX_NUM + 1); j++)
-   {
-   link[d][e].push_back ({});                                                                  // Creating "j_th" element placeholder...
-
-   // Checking whether element type "j" is present in the type list or not:
-   if(j == type_list[t])
-   {
-    // For each "i_th" node of the elements of type "t":
-    for(i = 0; i < node[d][e][j].size (); i++)
+    // Computing minimum stride index:
+    if(i == 0)
     {
-      s_max = offset[d][e][j][i];                                                             // Setting stride maximum...
-
-      // Computing minimum stride index:
-      if(i == 0)
-      {
-        s_min = 0;                                                                            // Setting stride minimum (first stride)...
-      }
-      else
-      {
-        s_min = offset[d][e][j][i - 1];                                                       // Setting stride minimum (all others)...
-      }
-
-      // For each "s_th" stride index in the "i_th" stride:
-      for(s = s_min; s < s_max; s++)
-      {
-        k = neighbourhood[d][e][j][s];                                                        // Getting neighbour index...
-
-        // Setting link:
-        link[d][e][j].push_back (
-        {
-          node[d][e][j][k].x - node[d][e][j][i].x,                                            // Computing link "x" component...
-          node[d][e][j][k].y - node[d][e][j][i].y,                                            // Computing link "y" component...
-          node[d][e][j][k].z - node[d][e][j][i].z,                                            // Computing link "z" component...
-          0.0f                                                                                // Computing link "w" component...
-        }
-                                );
-      }
+      s_min = 0;                                                                                    // Setting stride minimum (first stride)...
     }
-   }
-   else
-   {
-    link[d][e][j].push_back ({});                                                             // Setting empty link...
-   }
-   }
- */
+    else
+    {
+      s_min = loc_neighbour_vector[i - 1].offset;                                                   // Setting stride minimum (all others)...
+    }
+
+    // For each "s" neighbour node in the "i" stride:
+    for(s = s_min; s < s_max; s++)
+    {
+      n                                 = loc_neighbour_vector[i].node[s];                          // Getting neighbour index...
+      loc_neighbour_vector[i].link[s].x = loc_node_vector[n].x - loc_node_vector[i].x;              // Setting link "x" component...
+      loc_neighbour_vector[i].link[s].y = loc_node_vector[n].y - loc_node_vector[i].y;              // Setting link "y" component...
+      loc_neighbour_vector[i].link[s].z = loc_node_vector[n].z - loc_node_vector[i].z;              // Setting link "z" component...
+      loc_neighbour_vector[i].link[s].w = 0.0f;                                                     // Setting link "w" component...
+    }
+  }
+}
 
 std::vector<size_t> mesh::physical (
                                     size_t loc_physical_group_dim,                                  // Physical group dimension [#].
