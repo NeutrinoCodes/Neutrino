@@ -266,8 +266,6 @@ std::vector<gmsh_group> mesh::group (
   // For each "i" node of the elements of "j" type:
   for(i = 0; i < loc_nodes; i++)
   {
-    std::cout << "pippo i = " << i << std::endl;
-
     // For each "k" element of "j" type:
     for(k = 0; k < loc_elements; k++)
     {
@@ -343,8 +341,9 @@ std::vector<gmsh_neighbour> mesh::neighbour (
                                   loc_entity_dimension,                                             // Entity dimension [#].
                                   loc_entity_tag                                                    // Entity tag [#].
                                  );
-
+  std::cout << "puppo" << std::endl;
   loc_types = loc_type_list.size ();                                                                // Getting number of types...
+  std::cout << "puppo" << std::endl;
 
   // Finding the number of elements of "j" type...
   for(i = 0; i < loc_types; i++)
@@ -360,12 +359,17 @@ std::vector<gmsh_neighbour> mesh::neighbour (
     }
   }
 
+  std::cout << "puppo" << std::endl;
+
   loc_node_vector    = this->node (loc_entity_dimension, loc_entity_tag, loc_element_type);         // Getting nodes...
   loc_nodes          = loc_node_vector.size ();                                                     // Getting the number of nodes...
+  std::cout << "puppo" << std::endl;
   loc_element_vector = this->element (loc_entity_dimension, loc_entity_tag, loc_element_type);      // Getting elements...
   loc_elements       = loc_element_vector.size ();                                                  // Getting the number of elements...
   loc_type_nodes     = loc_element_vector[0].node.size ();                                          // Getting the number of node of the "j" type...
   loc_neighbours     = 0;                                                                           // Resetting the number of neighbours...
+
+  std::cout << "puppo" << std::endl;
 
   // For each "i" node of the elements of "j" type:
   for(i = 0; i < loc_nodes; i++)
@@ -382,11 +386,13 @@ std::vector<gmsh_neighbour> mesh::neighbour (
         if((loc_element_vector[k].node[m] == i))
         {
           // Appending the "k" element type nodes to the neighbour unit:
+          std::cout << "puppo" << std::endl;
           loc_neighbour_unit.node.insert (
                                           loc_neighbour_unit.node.end (),                           // Insertion point.
                                           loc_element_vector[k].node.begin (),                      // Beginning of vector to be appended.
                                           loc_element_vector[k].node.end ()                         // End of vector to be appended.
                                          );
+          std::cout << "poppo" << std::endl;
 
           // Erasing the central node from the neighbour unit:
           loc_neighbour_unit.node.erase (
@@ -394,10 +400,12 @@ std::vector<gmsh_neighbour> mesh::neighbour (
                                          loc_type_nodes +                                           // Number of type nodes.
                                          m                                                          // Central node.
                                         );
+          std::cout << "pappo" << std::endl;
         }
       }
     }
 
+    std::cout << "peppa" << std::endl;
     // Eliminating repeated indexes:
     std::sort (loc_neighbour_unit.node.begin (), loc_neighbour_unit.node.end ());
     loc_neighbour_unit.node.resize (
@@ -414,9 +422,9 @@ std::vector<gmsh_neighbour> mesh::neighbour (
                                                                )
                                                   )
                                    );
-
+    std::cout << "peppa" << std::endl;
     // Building neighbour vector (node part):
-    loc_neighbour_vector.push_back (loc_neighbour_unit);                                            // Adding "i" neighbour unit to neighbour vector...
+    //loc_neighbour_vector.push_back (loc_neighbour_unit);                                            // Adding "i" neighbour unit to neighbour vector...
     loc_neighbours           += loc_neighbour_unit.node.size ();                                    // Counting neighbour nodes...
     loc_neighbour_unit.node.clear ();                                                               // Clearing neighbour unit for next "i"...
 
@@ -424,7 +432,7 @@ std::vector<gmsh_neighbour> mesh::neighbour (
     loc_neighbour_unit.offset = loc_neighbours;                                                     // Setting neighbour offset...
 
     // Building neighbour vector (link part):
-    s_max                     = loc_neighbour_vector[i].offset;                                     // Setting stride maximum...
+    s_max                     = loc_neighbour_unit.offset;                                          // Setting stride maximum...
 
     if(i == 0)
     {
