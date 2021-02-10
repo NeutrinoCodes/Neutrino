@@ -282,6 +282,14 @@ public:
   /// It does not measure the execution time of the kernel on the client GPU.
   void        get_toc ();
 
+  /// @brief **Getter of "progress" percentage.**
+  /// @details Prints the percentage of progress of a task.
+  void        progress (
+                        size_t loc_start,                                                           ///< Starting progress value.
+                        size_t loc_stop,                                                            ///< Final progress value.
+                        size_t loc_value                                                            ///< Current progress value.
+                       );
+
   /// @brief **Loader file function.**
   /// @details Loads a file.
   std::string read_file (
