@@ -100,7 +100,7 @@ void neutrino::progress (
   loc_text = std::string ("executed percentage = ") +
              std::to_string (
                              long (round (
-                                          (loc_value - loc_start)/
+                                          100.0*(loc_value - loc_start)/
                                           (loc_stop - loc_start)
                                          ))
                             ) +
