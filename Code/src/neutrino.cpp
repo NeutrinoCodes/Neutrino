@@ -85,6 +85,31 @@ void neutrino::get_toc ()
   }
 }
 
+void neutrino::progress (
+                         size_t loc_start,                                                          // Starting progress value.
+                         size_t loc_stop,                                                           // Final progress value.
+                         size_t loc_value                                                           // Current progress value.
+                        )
+{
+  std::string loc_text;                                                                             // Text buffer.
+  std::string loc_pad;                                                                              // Text pad.
+
+  erase ();                                                                                         // Erasing terminal line...
+
+  // Compiling message string:
+  loc_text = std::string ("executed percentage = ") +
+             std::to_string (
+                             long (round (
+                                          (loc_value - loc_start)/
+                                          (loc_stop - loc_start)
+                                         ))
+                            ) +
+             std::string (" %");
+
+  std::cout << loc_text + loc_pad << std::flush;                                                    // Printing buffer...
+
+}
+
 std::string neutrino::read_file
 (
  std::string loc_file_name                                                                          // File name.
