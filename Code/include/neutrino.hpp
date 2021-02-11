@@ -242,12 +242,16 @@ class neutrino : public nu_data                                                 
 {
 private:
   size_t                        terminal_time;                                                      ///< @brief **Terminal time (for refresh) [us].**
+  size_t                        terminal_task;                                                      ///< @brief **Terminal time (for task percentage) [us].**
 
 public:
   static bool                   interop;                                                            ///< @brief **Use OpenCL-OpenGL interop.**
-  static double                 tic;                                                                ///< @brief **Tic time [s].**
-  static double                 toc;                                                                ///< @brief **Toc time [s].**
+  static double                 tic;                                                                ///< @brief **Tic application time [s].**
+  static double                 toc;                                                                ///< @brief **Toc application time [s].**
   static double                 loop_time;                                                          ///< @brief **Loop time [s].**
+  static double                 task_tic;                                                           ///< @brief **Tic task time [s].**
+  static double                 task_toc;                                                           ///< @brief **Toc task time [s].**
+  static double                 task_time;                                                          ///< @brief **Task time [s].**
   static cl_context             context_id;                                                         ///< @brief **OpenCL context ID.**
   static cl_platform_id         platform_id;                                                        ///< @brief **OpenCL platform ID.**
   static cl_device_id           device_id;                                                          ///< @brief **OpenCL device ID.**
@@ -282,12 +286,19 @@ public:
   /// It does not measure the execution time of the kernel on the client GPU.
   void        get_toc ();
 
+  /// @brief **Getter of "task" percentage.**
+  /// @details Gets a "task" time percentage, which is the value of operating system precision timer at the
+  /// beginning of a task. To be used in combination with the "progress" time in order
+  /// to measure the perecentage of execution of a task.
+  void        work ();
+
   /// @brief **Getter of "progress" percentage.**
   /// @details Prints the percentage of progress of a task.
   void        progress (
-                        size_t loc_start,                                                           ///< Starting progress value.
-                        size_t loc_stop,                                                            ///< Final progress value.
-                        size_t loc_value                                                            ///< Current progress value.
+                        std::string loc_message,                                                    ///< Message.
+                        size_t      loc_start,                                                      ///< Starting progress value.
+                        size_t      loc_stop,                                                       ///< Final progress value.
+                        size_t      loc_value                                                       ///< Current progress value.
                        );
 
   /// @brief **Loader file function.**

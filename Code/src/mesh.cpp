@@ -57,8 +57,6 @@ std::vector<gmsh_node> mesh::node (
   size_t                            k;                                                              // Element index.
   size_t                            m;                                                              // Node index of current element.
 
-  neutrino::action ("finding mesh nodes...");                                                       // Printing message...
-
   // Getting entity nodes:
   gmsh::model::mesh::getNodes (
                                loc_node_list,                                                       // Node tags list [N].
@@ -101,6 +99,7 @@ std::vector<gmsh_node> mesh::node (
   // For each "k" element of "j" type:
   for(k = 0; k < loc_elements; k++)
   {
+    neutrino::work ();                                                                              // Getting initial task time...
     // Getting the element type properties:
     gmsh::model::mesh::getElementProperties (
                                              loc_element_type,                                      // Element type [#].
@@ -122,7 +121,7 @@ std::vector<gmsh_node> mesh::node (
       loc_node_vector.push_back (loc_node_unit);                                                    // Adding node unit to node vector...
     }
 
-    neutrino::progress (0, loc_elements, k);                                                        // Printing progress message...
+    neutrino::progress ("finding mesh nodes... ", 0, loc_elements, k);                              // Printing progress message...
   }
 
   neutrino::done ();                                                                                // Printing message...
@@ -161,8 +160,6 @@ std::vector<gmsh_element> mesh::element (
   size_t                            k;                                                              // Element index.
   size_t                            m;                                                              // Node index of current element.
 
-  neutrino::action ("finding mesh elements...");                                                    // Printing message...
-
   // Getting entity elements, where:
   // i = type index.
   // m = node index of current element.
@@ -196,6 +193,8 @@ std::vector<gmsh_element> mesh::element (
   // For each "k" element of "j" type:
   for(k = 0; k < loc_elements; k++)
   {
+    neutrino::work ();                                                                              // Getting initial task time...
+
     // Getting the element type properties:
     gmsh::model::mesh::getElementProperties (
                                              loc_element_type,                                      // Element type [#].
@@ -215,7 +214,7 @@ std::vector<gmsh_element> mesh::element (
 
     loc_element_vector.push_back (loc_element_unit);                                                // Adding the "k" element unit to the element vector...
     loc_element_unit.node.clear ();                                                                 // Clearing element unit for next "k"...
-    neutrino::progress (0, loc_elements, k);                                                        // Printing progress message...
+    neutrino::progress ("finding mesh elements... ", 0, loc_elements, k);                           // Printing progress message...
   }
 
   neutrino::done ();                                                                                // Printing message...
@@ -258,8 +257,6 @@ std::vector<gmsh_group> mesh::group (
   size_t                            k;                                                              // Element index.
   size_t                            m;                                                              // Node index of current element.
 
-  neutrino::action ("finding mesh groups...");                                                      // Printing message...
-
   loc_node_vector    = this->node (loc_entity_dimension, loc_entity_tag, loc_element_type);         // Getting nodes...
   loc_nodes          = loc_node_vector.size ();                                                     // Getting the number of nodes...
   loc_element_vector = this->element (loc_entity_dimension, loc_entity_tag, loc_element_type);      // Getting elements...
@@ -269,6 +266,8 @@ std::vector<gmsh_group> mesh::group (
   // For each "i" node of the elements of "j" type:
   for(i = 0; i < loc_nodes; i++)
   {
+    neutrino::work ();                                                                              // Getting initial task time...
+
     // For each "k" element of "j" type:
     for(k = 0; k < loc_elements; k++)
     {
@@ -285,7 +284,7 @@ std::vector<gmsh_group> mesh::group (
 
     loc_group_vector.push_back (loc_group_unit);                                                    // Adding "k" group unit to group vector...
     loc_group_unit.element.clear ();                                                                // Clearing group unit for next "k"...
-    neutrino::progress (0, loc_nodes, i);                                                           // Printing progress message...
+    neutrino::progress ("finding mesh groups... ", 0, loc_nodes, i);                                // Printing progress message...
   }
 
   neutrino::done ();                                                                                // Printing message...
@@ -329,8 +328,6 @@ std::vector<gmsh_neighbour> mesh::neighbour (
   size_t                            n;                                                              // Node index of current neighbour unit.
   size_t                            s;                                                              // Stride index.
 
-  neutrino::action ("finding mesh neighbours...");                                                  // Printing message...
-
   // Getting entity elements, where:
   // i = type index.
   // m = node index of current element.
@@ -371,6 +368,8 @@ std::vector<gmsh_neighbour> mesh::neighbour (
   // For each "i" node of the elements of "j" type:
   for(i = 0; i < loc_nodes; i++)
   {
+    neutrino::work ();                                                                              // Getting initial task time...
+
     // For each "k" element of "j" type:
     for(k = 0; k < loc_elements; k++)
     {
@@ -435,7 +434,7 @@ std::vector<gmsh_neighbour> mesh::neighbour (
     loc_neighbour_vector.push_back (loc_neighbour_unit);                                            // Adding "i" neighbour unit to neighbour vector...
     loc_neighbour_unit.node.clear ();                                                               // Clearing neighbour unit for next "i"...
     loc_neighbour_unit.link.clear ();                                                               // Clearing neighbour unit for next "i"...
-    neutrino::progress (0, loc_nodes, i);                                                           // Printing progress message...
+    neutrino::progress ("finding mesh neighbours... ", 0, loc_nodes, i);                            // Printing progress message...
   }
 
   neutrino::done ();                                                                                // Printing message...
@@ -450,6 +449,8 @@ std::vector<size_t> mesh::physical (
 {
   std::vector<size_t> loc_node_tags;                                                                // Node tags.
   std::vector<double> loc_node_coordinates;                                                         // Node coordinates.
+
+  neutrino::action ("finding mesh physical groups...");                                             // Printing message...
 
   // Getting nodes for given physical group:
   gmsh::model::mesh::getNodesForPhysicalGroup (
@@ -466,6 +467,9 @@ std::vector<size_t> mesh::physical (
   }
 
   loc_node_coordinates.clear ();                                                                    // Clearing unnecessary coordinates vector...
+
+  neutrino::done ();                                                                                // Printing message...
+
   return (loc_node_tags);                                                                           // Returning node index vector...
 }
 

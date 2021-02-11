@@ -9,6 +9,9 @@ bool                   neutrino::interop;                                       
 double                 neutrino::tic;                                                               // Tic time [s] (static variable storage).
 double                 neutrino::toc;                                                               // Toc time [s] (static variable storage).
 double                 neutrino::loop_time;                                                         // Loop time [s] (static variable storage).
+double                 neutrino::task_tic;                                                          // Task Tic time [s] (static variable storage).
+double                 neutrino::task_toc;                                                          // Task Toc time [s] (static variable storage).
+double                 neutrino::task_time;                                                         // Task Time time [s] (static variable storage).
 cl_context             neutrino::context_id;                                                        // OpenCL context ID (static variable storage).
 cl_platform_id         neutrino::platform_id;                                                       // OpenCL platform ID (static variable storage).
 cl_device_id           neutrino::device_id;                                                         // OpenCL device ID (static variable storage).
@@ -64,50 +67,81 @@ void neutrino::get_toc ()
   std::string loc_text;                                                                             // Text buffer.
   std::string loc_pad;                                                                              // Text pad.
 
-  neutrino::toc       = glfwGetTime ();                                                             // Getting "toc"...
-  neutrino::loop_time = neutrino::toc - neutrino::tic;                                              // Loop execution time [s].
-  terminal_time      += size_t (round (neutrino::loop_time*1000000.0f));                            // Terminal time [us].
+  neutrino::toc            = glfwGetTime ();                                                        // Getting "toc"...
+  neutrino::loop_time      = neutrino::toc - neutrino::tic;                                         // Loop execution time [s].
+  neutrino::terminal_time += size_t (round (neutrino::loop_time*1000000.0f));                       // Terminal time [us].
 
-  if(terminal_time > NU_TERMINAL_REFRESH)                                                           // Checking terminal time...
+  if(neutrino::terminal_time > NU_TERMINAL_REFRESH)                                                 // Checking terminal time...
   {
-    terminal_time = 0;                                                                              // Resetting terminal time.
+    neutrino::terminal_time = 0;                                                                    // Resetting terminal time.
     erase ();                                                                                       // Erasing terminal line...
 
     // Compiling message string:
-    loc_text      = std::string (NU_COLOR_CYAN) +
-                    std::string ("Action: ") +
-                    std::string (NU_COLOR_NORMAL) +
-                    std::string ("running host loop time = ") +
-                    std::to_string (long (round (1000000.0*neutrino::loop_time))) +
-                    std::string (" us");
+    loc_text                = std::string (NU_COLOR_CYAN) +
+                              std::string ("Action: ") +
+                              std::string (NU_COLOR_NORMAL) +
+                              std::string ("running host loop time = ") +
+                              std::to_string (long (round (1000000.0*neutrino::loop_time))) +
+                              std::string (" us");
 
     std::cout << loc_text + loc_pad << std::flush;                                                  // Printing buffer...
   }
 }
 
+void neutrino::work ()
+{
+  neutrino::task_tic = glfwGetTime ();                                                              // Getting "tic"...
+}
+
 void neutrino::progress (
-                         size_t loc_start,                                                          // Starting progress value.
-                         size_t loc_stop,                                                           // Final progress value.
-                         size_t loc_value                                                           // Current progress value.
+                         std::string loc_message,                                                   // Message.
+                         size_t      loc_start,                                                     // Starting progress value.
+                         size_t      loc_stop,                                                      // Final progress value.
+                         size_t      loc_value                                                      // Current progress value.
                         )
 {
   std::string loc_text;                                                                             // Text buffer.
   std::string loc_pad;                                                                              // Text pad.
+  size_t      loc_pad_size;                                                                         // Text pad size.
+  long        percentage;                                                                           // Task percentage done...
+  int         i;                                                                                    // Index.
 
-  erase ();                                                                                         // Erasing terminal line...
+  neutrino::task_toc       = glfwGetTime ();                                                        // Getting "toc"...
+  neutrino::task_time      = neutrino::task_toc - neutrino::task_tic;                               // Loop execution time [s].
+  neutrino::terminal_task += size_t (round (neutrino::task_time*1000000.0f));                       // Terminal time [us].
+  percentage               = long (round (100.0*(loc_value - loc_start)/(loc_stop - loc_start)));   // Task percentage done...
 
-  // Compiling message string:
-  loc_text = std::string ("executed percentage = ") +
-             std::to_string (
-                             long (round (
-                                          100.0*(loc_value - loc_start)/
-                                          (loc_stop - loc_start)
-                                         ))
-                            ) +
-             std::string (" %");
+  if((neutrino::terminal_task > NU_TERMINAL_REFRESH) || (percentage == 100))                        // Checking terminal time...
+  {
+    neutrino::terminal_task = 0;                                                                    // Resetting terminal time.
+    erase ();                                                                                       // Erasing terminal line...
 
-  std::cout << loc_text + loc_pad << std::flush;                                                    // Printing buffer...
+    // Compiling message string:
+    loc_text                = std::string (NU_COLOR_CYAN) +
+                              std::string ("Action: ") +
+                              std::string (NU_COLOR_NORMAL) +
+                              std::string (loc_message) +
+                              std::to_string (percentage) +
+                              std::string (" %");
 
+    loc_pad_size            = NU_MAX_MESSAGE_SIZE - loc_text.size ();                               // Computing text padding...
+
+    if(loc_pad_size >= 0)                                                                           // Checking padding...
+    {
+      for(i = 0; i < loc_pad_size; i++)                                                             // Compiling padding...
+      {
+        loc_pad += " ";                                                                             // Adding pad...
+      }
+    }
+
+    else                                                                                            // Generating error message...
+    {
+      error ("string too big!");                                                                    // Printing message...
+      exit (1);                                                                                     // Exiting...
+    }
+
+    std::cout << loc_text + loc_pad << std::flush;                                                  // Printing buffer...
+  }
 }
 
 std::string neutrino::read_file
