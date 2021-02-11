@@ -224,38 +224,44 @@ private:
   std::vector<std::pair<int, int> > entity_list;                                                    ///< Entity list.
 
 public:
+  std::vector<gmsh_node>            node;                                                           ///< Nodes.
+  std::vector<gmsh_element>         element;                                                        ///< Elements.
+  std::vector<gmsh_group>           group;                                                          ///< Group.
+  std::vector<gmsh_neighbour>       neighbour;                                                      ///< Neighbours.
+  std::vector<size_t>               physical;                                                       ///< Physicals.
+
   mesh (
         std::string loc_file_name                                                                   ///< GMSH .msh file name.
        );
 
-  std::vector<gmsh_node>      node (
-                                    int loc_entity_dimension,
-                                    int loc_entity_tag,
-                                    int loc_element_type
-                                   );
+  void get_nodes (
+                  int loc_entity_dimension,
+                  int loc_entity_tag,
+                  int loc_element_type
+                 );
 
-  std::vector<gmsh_element>   element (
-                                       int loc_entity_dimension,
-                                       int loc_entity_tag,
-                                       int loc_element_type
-                                      );
+  void get_elements (
+                     int loc_entity_dimension,
+                     int loc_entity_tag,
+                     int loc_element_type
+                    );
 
-  std::vector<gmsh_group>     group (
-                                     int loc_entity_dimension,
-                                     int loc_entity_tag,
-                                     int loc_element_type
-                                    );
+  void get_groups (
+                   int loc_entity_dimension,
+                   int loc_entity_tag,
+                   int loc_element_type
+                  );
 
-  std::vector<gmsh_neighbour> neighbour (
-                                         int loc_entity_dimension,
-                                         int loc_entity_tag,
-                                         int loc_element_type
-                                        );
+  void get_neighbours (
+                       int loc_entity_dimension,
+                       int loc_entity_tag,
+                       int loc_element_type
+                      );
 
-  std::vector<size_t>         physical (
-                                        size_t loc_physical_group_dim,                              ///< Physical group dimension.
-                                        size_t loc_physical_group_tag                               ///< Physical group tag.
-                                       );
+  void get_physicals (
+                      size_t loc_physical_group_dim,                                                ///< Physical group dimension.
+                      size_t loc_physical_group_tag                                                 ///< Physical group tag.
+                     );
 
   ~mesh();
 };
