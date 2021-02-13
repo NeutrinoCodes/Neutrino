@@ -224,10 +224,13 @@ private:
   std::vector<std::pair<int, int> > entity_list;                                                    ///< Entity list.
 
 public:
-  std::vector<gmsh_node>            node;                                                           ///< Nodes.
-  std::vector<gmsh_element>         element;                                                        ///< Elements.
-  std::vector<gmsh_group>           group;                                                          ///< Group.
-  std::vector<gmsh_neighbour>       neighbour;                                                      ///< Neighbours.
+  std::vector<nu_float4_structure>  node;                                                           ///< Nodes.
+  std::vector<GLint>                element;                                                        ///< Elements.
+  std::vector<GLint>                element_offset;                                                 ///< Element offset indices.
+  std::vector<GLint>                group;                                                          ///< Group.
+  std::vector<GLint>                group_offset;                                                   ///< Group offset indices.
+  std::vector<GLint>                neighbour;                                                      ///< Neighbours.
+  std::vector<GLint>                neighbour_offset;                                               ///< Neighbour offset indices.
   std::vector<size_t>               physical;                                                       ///< Physicals.
 
   mesh (
