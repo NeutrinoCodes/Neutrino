@@ -34,7 +34,7 @@ void mesh::get_nodes (
   std::vector<double>               loc_node_coordinates;                                           // Node coordinates.
   std::vector<double>               loc_node_parametric_coordinates;                                // Node parametric coordinates.
   std::vector<std::vector<size_t> > loc_node_tag;                                                   // Node tag list.
-  gmsh_node                         loc_node_unit;                                                  // Node unit.
+  nu_float4_structure               loc_node_unit;                                                  // Node unit.
 
   // ELEMENT VARIABLES:
   std::vector<std::vector<size_t> > loc_element_tag;                                                // Element tag list.
@@ -55,6 +55,8 @@ void mesh::get_nodes (
   size_t                            j;                                                              // Current type.
   size_t                            k;                                                              // Element index.
   size_t                            m;                                                              // Node index of current element.
+
+  node.clear ();                                                                                    // Clearing node vector...
 
   // Getting entity nodes:
   gmsh::model::mesh::getNodes (
@@ -95,20 +97,21 @@ void mesh::get_nodes (
     }
   }
 
+  // Getting the element type properties:
+  gmsh::model::mesh::getElementProperties (
+                                           loc_element_type,                                        // Element type [#].
+                                           loc_type_name,                                           // Element type name [string].
+                                           loc_type_dimension,                                      // Element type dimension [#].
+                                           loc_type_order,                                          // Element type order [#].
+                                           loc_type_nodes,                                          // Element type number of type nodes [#].
+                                           loc_type_node_coordinates,                               // Element type node local coordinates [vector].
+                                           loc_type_primary_nodes                                   // Number of primary type nodes [#].
+                                          );
+
   // For each "k" element of "j" type:
   for(k = 0; k < loc_elements; k++)
   {
     neutrino::work ();                                                                              // Getting initial task time...
-    // Getting the element type properties:
-    gmsh::model::mesh::getElementProperties (
-                                             loc_element_type,                                      // Element type [#].
-                                             loc_type_name,                                         // Element type name [string].
-                                             loc_type_dimension,                                    // Element type dimension [#].
-                                             loc_type_order,                                        // Element type order [#].
-                                             loc_type_nodes,                                        // Element type number of type nodes [#].
-                                             loc_type_node_coordinates,                             // Element type node local coordinates [vector].
-                                             loc_type_primary_nodes                                 // Number of primary type nodes [#].
-                                            );
 
     // Getting the coordinates of the "m" node in the "k" element of "j" type:
     for(m = 0; m < loc_type_nodes; m++)
@@ -138,7 +141,7 @@ void mesh::get_elements (
   // ELEMENT VARIABLES:
   std::vector<std::vector<size_t> > loc_element_tag;                                                // Element tag list.
   size_t                            loc_elements;                                                   // Number of elements.
-  gmsh_element                      loc_element_unit;                                               // Element unit.
+  size_t                            loc_element_offset;                                             // Element offset.
 
   // TYPE VARIABLES:
   std::vector<int>                  loc_type_list;                                                  // Element type list.
@@ -155,6 +158,10 @@ void mesh::get_elements (
   size_t                            j;                                                              // Current type.
   size_t                            k;                                                              // Element index.
   size_t                            m;                                                              // Node index of current element.
+
+  element.clear ();                                                                                 // Clearing element vector...
+  element_offset.clear ();                                                                          // Clearing element offset vector...
+  loc_element_offset = 0;                                                                           // Resetting element offset...
 
   // Getting entity elements, where:
   // i = type index.
@@ -186,30 +193,30 @@ void mesh::get_elements (
     }
   }
 
+  // Getting the element type properties:
+  gmsh::model::mesh::getElementProperties (
+                                           loc_element_type,                                        // Element type [#].
+                                           loc_type_name,                                           // Element type name [string].
+                                           loc_type_dimension,                                      // Element type dimension [#].
+                                           loc_type_order,                                          // Element type order [#].
+                                           loc_type_nodes,                                          // Element type number of type nodes [#].
+                                           loc_type_node_coordinates,                               // Element type node local coordinates [vector].
+                                           loc_type_primary_nodes                                   // Number of primary type nodes [#].
+                                          );
+
   // For each "k" element of "j" type:
   for(k = 0; k < loc_elements; k++)
   {
     neutrino::work ();                                                                              // Getting initial task time...
 
-    // Getting the element type properties:
-    gmsh::model::mesh::getElementProperties (
-                                             loc_element_type,                                      // Element type [#].
-                                             loc_type_name,                                         // Element type name [string].
-                                             loc_type_dimension,                                    // Element type dimension [#].
-                                             loc_type_order,                                        // Element type order [#].
-                                             loc_type_nodes,                                        // Element type number of type nodes [#].
-                                             loc_type_node_coordinates,                             // Element type node local coordinates [vector].
-                                             loc_type_primary_nodes                                 // Number of primary type nodes [#].
-                                            );
-
     // Getting the coordinates of the "m" node in the "k" element of "j" type:
     for(m = 0; m < loc_type_nodes; m++)
     {
-      loc_element_unit.node.push_back ((loc_node_tag[j][k*loc_type_nodes + m]) - 1);                // Adding the type node to the "k" element unit...
+      element.push_back ((loc_node_tag[j][k*loc_type_nodes + m]) - 1);                              // Adding the type node to the "k" element unit...
     }
 
-    element.push_back (loc_element_unit);                                                           // Adding the "k" element unit to the element vector...
-    loc_element_unit.node.clear ();                                                                 // Clearing element unit for next "k"...
+    loc_element_offset += loc_type_nodes;                                                           // Incrementing element offset...
+    element_offset.push_back (loc_element_offset);                                                  // Adding the "k" element unit to the element vector...
     neutrino::progress ("finding mesh elements... ", 0, loc_elements, k);                           // Printing progress message...
   }
 
@@ -226,33 +233,52 @@ void mesh::get_groups (
   std::vector<size_t>               loc_node_list;                                                  // Node list.
   std::vector<double>               loc_node_coordinates;                                           // Node coordinates.
   std::vector<double>               loc_node_parametric_coordinates;                                // Node parametric coordinates.
-  gmsh_node                         loc_node_unit;                                                  // Node unit.
+  nu_float4_structure               loc_node_unit;                                                  // Node unit.
   size_t                            loc_nodes;                                                      // Number of nodes.
 
   // ELEMENT VARIABLES:
   std::vector<std::vector<size_t> > loc_element_tag;                                                // Element tag list.
   size_t                            loc_elements;                                                   // Number of elements.
-
-  // TYPE VARIABLES:
-  size_t                            loc_types;                                                      // Number of element types.
-  int                               loc_type_order;                                                 // Element type order.
-  int                               loc_type_primary_nodes;                                         // Element primary nodes
-  int                               loc_type_nodes;                                                 // Number of type nodes.
+  size_t                            loc_element_offsets;                                            // Number of element offsets.
 
   // GROUP VARIABLES:
-  gmsh_group                        loc_group_unit;                                                 // Group unit.
+  size_t                            loc_group_offset;                                               // Group offset.
+
+  // TYPE VARIABLES:
+  std::vector<int>                  loc_type_list;                                                  // Element type list.
+  size_t                            loc_types;                                                      // Number of element types.
+  std::string                       loc_type_name;                                                  // Element type name.
+  int                               loc_type_dimension;                                             // Element type dimension.
+  int                               loc_type_order;                                                 // Element type order.
+  std::vector<double>               loc_type_node_coordinates;                                      // Element type node coordinates.
+  int                               loc_type_primary_nodes;                                         // Element primary nodes
+  int                               loc_type_nodes;                                                 // Number of type nodes.
 
   // INDICES:
   size_t                            i;                                                              // Node index.
   size_t                            j;                                                              // Current type.
   size_t                            k;                                                              // Element index.
-  size_t                            m;                                                              // Node index of current element.
+  size_t                            m;                                                              // Index of current element node stride.
+  size_t                            m_min;                                                          // Minimum index of current element stride.
+  size_t                            m_max;                                                          // Maximum index of current element stride.
 
-  //loc_node_vector    = this->node (loc_entity_dimension, loc_entity_tag, loc_element_type);         // Getting nodes...
-  loc_nodes      = node.size ();                                                                    // Getting the number of nodes...
-  //loc_element_vector = this->element (loc_entity_dimension, loc_entity_tag, loc_element_type);      // Getting elements...
-  loc_elements   = element.size ();                                                                 // Getting the number of elements...
-  loc_type_nodes = element[0].node.size ();                                                         // Getting the number of node of the "j" type...
+  loc_nodes           = node.size ();                                                               // Getting the number of nodes...
+  loc_elements        = element.size ();                                                            // Getting the number of elements...
+  loc_element_offsets = element_offset.size ();                                                     // Getting the number of element offsets...
+  group.clear ();                                                                                   // Resetting group vector...
+  group_offset.clear ();                                                                            // Resetting group indices vector...
+  loc_group_offset    = 0;                                                                          // Resetting group offset...
+
+  // Getting the element type properties:
+  gmsh::model::mesh::getElementProperties (
+                                           loc_element_type,                                        // Element type [#].
+                                           loc_type_name,                                           // Element type name [string].
+                                           loc_type_dimension,                                      // Element type dimension [#].
+                                           loc_type_order,                                          // Element type order [#].
+                                           loc_type_nodes,                                          // Element type number of type nodes [#].
+                                           loc_type_node_coordinates,                               // Element type node local coordinates [vector].
+                                           loc_type_primary_nodes                                   // Number of primary type nodes [#].
+                                          );
 
   // For each "i" node of the elements of "j" type:
   for(i = 0; i < loc_nodes; i++)
@@ -260,27 +286,38 @@ void mesh::get_groups (
     neutrino::work ();                                                                              // Getting initial task time...
 
     // For each "k" element of "j" type:
-    for(k = 0; k < loc_elements; k++)
+    for(k = 0; k < loc_element_offsets; k++)
     {
+      // Computing minimum element offset index:
+      if(k == 0)
+      {
+        m_min = 0;                                                                                  // Setting minimum element offset index...
+      }
+      else
+      {
+        m_min = element_offset[k - 1];                                                              // Setting minimum element offset index...
+      }
+
+      m_max = element_offset[k];                                                                    // Setting maximum element offset index...
+
       // For each "m" node in the "k" element of "j" type:
-      for(m = 0; m < loc_type_nodes; m++)
+      for(m = m_min; m < m_max; m++)
       {
         // Checking whether the "i" node is present in the "k" element or not:
-        if(element[k].node[m] == i)
+        if(element[m] == i)
         {
-          loc_group_unit.element.push_back (k);                                                     // Adding element index "k" to the group unit...
+          group.push_back (k);                                                                      // Adding element index "k" to the group vector...
+          loc_group_offset++;                                                                       // Incrementing group offset...
         }
       }
+
+      group_offset.push_back (loc_group_offset);                                                    // Adding the "k" element offset to the element offset vector...
     }
 
-    group.push_back (loc_group_unit);                                                               // Adding "k" group unit to group vector...
-    loc_group_unit.element.clear ();                                                                // Clearing group unit for next "k"...
     neutrino::progress ("finding mesh groups... ", 0, loc_nodes, i);                                // Printing progress message...
   }
 
   neutrino::done ();                                                                                // Printing message...
-
-  //return loc_group_vector;                                                                          // Returning group vector...
 }
 
 void mesh::get_neighbours (
@@ -297,10 +334,16 @@ void mesh::get_neighbours (
   // ELEMENT VARIABLES:
   std::vector<std::vector<size_t> > loc_element_tag;                                                // Element tag list.
   size_t                            loc_elements;                                                   // Number of elements.
+  size_t                            loc_element_offsets;                                            // Number of element offsets.
 
   // TYPE VARIABLES:
   std::vector<int>                  loc_type_list;                                                  // Element type list.
   size_t                            loc_types;                                                      // Number of element types.
+  std::string                       loc_type_name;                                                  // Element type name.
+  int                               loc_type_dimension;                                             // Element type dimension.
+  int                               loc_type_order;                                                 // Element type order.
+  std::vector<double>               loc_type_node_coordinates;                                      // Element type node coordinates.
+  int                               loc_type_primary_nodes;                                         // Element primary nodes
   int                               loc_type_nodes;                                                 // Number of type nodes.
 
   // NEIGHBOUR VARIABLES:
@@ -312,7 +355,9 @@ void mesh::get_neighbours (
   size_t                            i;                                                              // Node index.
   size_t                            j;                                                              // Current type.
   size_t                            k;                                                              // Element index.
-  size_t                            m;                                                              // Node index of current element.
+  size_t                            m;                                                              // Index of current element node stride.
+  size_t                            m_min;                                                          // Minimum index of current element stride.
+  size_t                            m_max;                                                          // Maximum index of current element stride.
   size_t                            n;                                                              // Node index of current neighbour unit.
   size_t                            s;                                                              // Stride index.
 
@@ -332,6 +377,17 @@ void mesh::get_neighbours (
 
   loc_types = loc_type_list.size ();                                                                // Getting number of types...
 
+  // Getting the element type properties:
+  gmsh::model::mesh::getElementProperties (
+                                           loc_element_type,                                        // Element type [#].
+                                           loc_type_name,                                           // Element type name [string].
+                                           loc_type_dimension,                                      // Element type dimension [#].
+                                           loc_type_order,                                          // Element type order [#].
+                                           loc_type_nodes,                                          // Element type number of type nodes [#].
+                                           loc_type_node_coordinates,                               // Element type node local coordinates [vector].
+                                           loc_type_primary_nodes                                   // Number of primary type nodes [#].
+                                          );
+
   // Finding the number of elements of "j" type...
   for(i = 0; i < loc_types; i++)
   {
@@ -346,12 +402,10 @@ void mesh::get_neighbours (
     }
   }
 
-  //loc_node_vector    = this->node (loc_entity_dimension, loc_entity_tag, loc_element_type);         // Getting nodes...
-  loc_nodes      = node.size ();                                                                    // Getting the number of nodes...
-  //loc_element_vector = this->element (loc_entity_dimension, loc_entity_tag, loc_element_type);      // Getting elements...
-  loc_elements   = element.size ();                                                                 // Getting the number of elements...
-  loc_type_nodes = element[0].node.size ();                                                         // Getting the number of node of the "j" type...
-  loc_offset     = 0;                                                                               // Resetting the neighbour offset...
+  loc_nodes           = node.size ();                                                               // Getting the number of nodes...
+  loc_elements        = element.size ();                                                            // Getting the number of elements...
+  loc_element_offsets = element_offset.size ();                                                     // Getting the number of element offsets...
+  loc_offset          = 0;                                                                          // Resetting the neighbour offset...
 
   // For each "i" node of the elements of "j" type:
   for(i = 0; i < loc_nodes; i++)
@@ -359,26 +413,38 @@ void mesh::get_neighbours (
     neutrino::work ();                                                                              // Getting initial task time...
 
     // For each "k" element of "j" type:
-    for(k = 0; k < loc_elements; k++)
+    for(k = 0; k < loc_element_offsets; k++)
     {
+      // Computing minimum element offset index:
+      if(k == 0)
+      {
+        m_min = 0;                                                                                  // Setting minimum element offset index...
+      }
+      else
+      {
+        m_min = element_offset[k - 1];                                                              // Setting minimum element offset index...
+      }
+
+      m_max = element_offset[k];                                                                    // Setting maximum element offset index...
+
       // For each "m" node in the "k" element of "j" type:
-      for(m = 0; m < loc_type_nodes; m++)
+      for(m = m_min; m < m_max; m++)
       {
         // Checking whether the "k" element of "j" type contains the "i" central node:
-        if((element[k].node[m] == i))
+        if((element[m] == i))
         {
           // Appending the "k" element type nodes to the neighbour unit:
           loc_neighbour_unit.node.insert (
                                           loc_neighbour_unit.node.end (),                           // Insertion point.
-                                          element[k].node.begin (),                                 // Beginning of vector to be appended.
-                                          element[k].node.end ()                                    // End of vector to be appended.
+                                          element[m_min],                                           // Beginning of vector to be appended.
+                                          element[m_max]                                            // End of vector to be appended.
                                          );
 
           // Erasing the central node from the neighbour unit:
           loc_neighbour_unit.node.erase (
-                                         loc_neighbour_unit.node.end () -                           // Insertion point.
-                                         loc_type_nodes +                                           // Number of type nodes.
-                                         m                                                          // Central node.
+                                         m -                                                        // Central node.
+                                         m_min +                                                    // first index in element node stride.
+                                         loc_neighbour_unit.node.begin ()                           // Beginning of vector.
                                         );
         }
       }
@@ -402,7 +468,6 @@ void mesh::get_neighbours (
                                    );
 
     loc_neighbours            = loc_neighbour_unit.node.size ();                                    // Counting neighbour nodes...
-    loc_offset               += loc_neighbours;                                                     // Incrementing neighbour offset index...
     loc_neighbour_unit.offset = loc_offset;                                                         // Setting neighbour offset...
 
     // For each "s" neighbour node in the "i" stride:
@@ -422,6 +487,7 @@ void mesh::get_neighbours (
     neighbour.push_back (loc_neighbour_unit);                                                       // Adding "i" neighbour unit to neighbour vector...
     loc_neighbour_unit.node.clear ();                                                               // Clearing neighbour unit for next "i"...
     loc_neighbour_unit.link.clear ();                                                               // Clearing neighbour unit for next "i"...
+    loc_offset += loc_neighbours;                                                                   // Incrementing neighbour offset index...
     neutrino::progress ("finding mesh neighbours... ", 0, loc_nodes, i);                            // Printing progress message...
   }
 
