@@ -347,9 +347,14 @@ void mesh::get_neighbours (
   int                               loc_type_nodes;                                                 // Number of type nodes.
 
   // NEIGHBOUR VARIABLES:
-  gmsh_neighbour                    loc_neighbour_unit;                                             // Neighbour unit.
-  size_t                            loc_neighbours;                                                 // Number of neighbours.
-  size_t                            loc_offset;                                                     // Neighbour Offset.
+  std::vector<size_t>               loc_neighbour;                                                  // Neighbour unit.
+  GLint                             loc_neighbours;                                                 // Number of neighbours.
+  GLint                             loc_neighbour_offset;                                           // Neighbour offset.
+  std::vector<nu_float4_structure>  loc_neighbour_link;                                             // Neighbour link unit.
+  GLfloat                           loc_link_x;                                                     // Link "x" coordinate.
+  GLfloat                           loc_link_y;                                                     // Link "y" coordinate.
+  GLfloat                           loc_link_z;                                                     // Link "z" coordinate.
+  GLfloat                           loc_link_w;                                                     // Link "w" coordinate.
 
   // INDICES:
   size_t                            i;                                                              // Node index.
@@ -402,10 +407,11 @@ void mesh::get_neighbours (
     }
   }
 
-  loc_nodes           = node.size ();                                                               // Getting the number of nodes...
-  loc_elements        = element.size ();                                                            // Getting the number of elements...
-  loc_element_offsets = element_offset.size ();                                                     // Getting the number of element offsets...
-  loc_offset          = 0;                                                                          // Resetting the neighbour offset...
+  loc_nodes            = node.size ();                                                              // Getting the number of nodes...
+  loc_elements         = element.size ();                                                           // Getting the number of elements...
+  loc_element_offsets  = element_offset.size ();                                                    // Getting the number of element offsets...
+  loc_neighbour_offset = 0;                                                                         // Resetting the neighbour offset...
+  loc_neighbour.clear ();                                                                           // Clearing neighbour unit vector...
 
   // For each "i" node of the elements of "j" type:
   for(i = 0; i < loc_nodes; i++)
@@ -434,66 +440,78 @@ void mesh::get_neighbours (
         if((element[m] == i))
         {
           // Appending the "k" element type nodes to the neighbour unit:
-          loc_neighbour_unit.node.insert (
-                                          loc_neighbour_unit.node.end (),                           // Insertion point.
-                                          element[m_min],                                           // Beginning of vector to be appended.
-                                          element[m_max]                                            // End of vector to be appended.
-                                         );
+          loc_neighbour.insert (
+                                loc_neighbour.end (),                                               // Insertion point.
+                                element[m_min],                                                     // Beginning of vector to be appended.
+                                element[m_max]                                                      // End of vector to be appended.
+                               );
 
           // Erasing the central node from the neighbour unit:
-          loc_neighbour_unit.node.erase (
-                                         m -                                                        // Central node.
-                                         m_min +                                                    // first index in element node stride.
-                                         loc_neighbour_unit.node.begin ()                           // Beginning of vector.
-                                        );
+          loc_neighbour.erase (
+                               m -                                                                  // Central node.
+                               m_min +                                                              // first index in element node stride.
+                               loc_neighbour.begin ()                                               // Beginning of vector.
+                              );
         }
       }
     }
 
     // Eliminating repeated indexes:
-    std::sort (loc_neighbour_unit.node.begin (), loc_neighbour_unit.node.end ());
-    loc_neighbour_unit.node.resize (
+    std::sort (loc_neighbour.begin (), loc_neighbour.end ());
+    loc_neighbour.resize (
                                                                                                     // Eliminating null indexes...
-                                    std::distance (
+                          std::distance (
                                                                                                     // Calculating index distance...
-                                                   loc_neighbour_unit.node.begin (),
-                                                   std::unique (
+                                         loc_neighbour.begin (),
+                                         std::unique (
                                                                                                     // Finding unique indexes...
-                                                                loc_neighbour_unit.node.
-                                                                begin (),                           // Beginning of index vector.
-                                                                loc_neighbour_unit.node.
-                                                                end ()                              // End of index vector.
-                                                               )
-                                                  )
-                                   );
+                                                      loc_neighbour.begin (),                       // Beginning of index vector.
+                                                      loc_neighbour.end ()                          // End of index vector.
+                                                     )
+                                        )
+                         );
 
-    loc_neighbours            = loc_neighbour_unit.node.size ();                                    // Counting neighbour nodes...
-    loc_neighbour_unit.offset = loc_offset;                                                         // Setting neighbour offset...
+    loc_neighbours        = loc_neighbour.size ();                                                  // Counting neighbour nodes...
+    loc_neighbour_offset += loc_neighbours;                                                         // Incrementing neighbour offset index...
+    neighbour_offset.push_back (loc_neighbour_offset);                                              // Setting neighbour offset...
 
     // For each "s" neighbour node in the "i" stride:
     for(s = 0; s < loc_neighbours; s++)
     {
-      n = loc_neighbour_unit.node[s];                                                               // Getting neighbour index...
-      loc_neighbour_unit.link.push_back (
+      n          = loc_neighbour[s];                                                                // Getting neighbour index...
+      neighbour.push_back (n);                                                                      // Setting neighbour vector...
+      loc_link_x = node[n].x - node[i].x;                                                           // Setting link "x" coordinate...
+      loc_link_y = node[n].y - node[i].y;                                                           // Setting link "x" coordinate...
+      loc_link_z = node[n].z - node[i].z;                                                           // Setting link "x" coordinate...
+      loc_link_w = 0.0f;                                                                            // Setting link "x" coordinate...
+
+      // Setting neighbour link vector:
+      neighbour_link.push_back (
       {
-        node[n].x - node[i].x,                                                                      // Setting link "x" component...
-        node[n].y - node[i].y,                                                                      // Setting link "y" component...
-        node[n].z - node[i].z,                                                                      // Setting link "z" component...
-        0.0f                                                                                        // Setting link "w" component...
+        loc_link_x,                                                                                 // Setting link "x" component...
+        loc_link_y,                                                                                 // Setting link "y" component...
+        loc_link_z,                                                                                 // Setting link "z" component...
+        loc_link_w                                                                                  // Setting link "w" component...
       }
-                                        );
+                               );
+
+      // Setting neighbour length vector:
+      neighbour_length.push_back (
+                                  sqrt (
+                                        pow (loc_link_x, 2) +
+                                        pow (loc_link_y, 2) +
+                                        pow (loc_link_z, 2)
+                                       )
+                                 );
     }
 
-    neighbour.push_back (loc_neighbour_unit);                                                       // Adding "i" neighbour unit to neighbour vector...
-    loc_neighbour_unit.node.clear ();                                                               // Clearing neighbour unit for next "i"...
-    loc_neighbour_unit.link.clear ();                                                               // Clearing neighbour unit for next "i"...
-    loc_offset += loc_neighbours;                                                                   // Incrementing neighbour offset index...
+    loc_neighbour.clear ();                                                                         // Clearing neighbour unit for next "i"...
+    loc_neighbour_link.clear ();                                                                    // Clearing link unit for next "i"...
+
     neutrino::progress ("finding mesh neighbours... ", 0, loc_nodes, i);                            // Printing progress message...
   }
 
   neutrino::done ();                                                                                // Printing message...
-
-  //return loc_neighbour_vector;                                                                      // Returning neighbour vector...
 }
 
 void mesh::get_physicals (
