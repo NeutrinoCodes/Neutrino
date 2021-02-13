@@ -25,8 +25,7 @@ mesh::mesh(
 
 void mesh::get_nodes (
                       int loc_entity_dimension,                                                     // Entity dimension.
-                      int loc_entity_tag,                                                           // Entity tag.
-                      int loc_element_type                                                          // Element type.
+                      int loc_entity_tag                                                            // Entity tag.
                      )
 {
   // NODE VARIABLES:
@@ -35,26 +34,10 @@ void mesh::get_nodes (
   std::vector<double>               loc_node_parametric_coordinates;                                // Node parametric coordinates.
   std::vector<std::vector<size_t> > loc_node_tag;                                                   // Node tag list.
   nu_float4_structure               loc_node_unit;                                                  // Node unit.
-
-  // ELEMENT VARIABLES:
-  std::vector<std::vector<size_t> > loc_element_tag;                                                // Element tag list.
-  size_t                            loc_elements;                                                   // Number of elements.
-
-  // TYPE VARIABLES:
-  std::vector<int>                  loc_type_list;                                                  // Element type list.
-  size_t                            loc_types;                                                      // Number of element types.
-  std::string                       loc_type_name;                                                  // Element type name.
-  int                               loc_type_dimension;                                             // Element type dimension.
-  int                               loc_type_order;                                                 // Element type order.
-  std::vector<double>               loc_type_node_coordinates;                                      // Element type node coordinates.
-  int                               loc_type_primary_nodes;                                         // Element primary nodes
-  int                               loc_type_nodes;                                                 // Number of type nodes.
+  size_t                            loc_nodes;                                                      // Number of nodes.
 
   // INDICES:
-  size_t                            i;                                                              // Type index.
-  size_t                            j;                                                              // Current type.
   size_t                            k;                                                              // Element index.
-  size_t                            m;                                                              // Node index of current element.
 
   node.clear ();                                                                                    // Clearing node vector...
 
@@ -67,63 +50,20 @@ void mesh::get_nodes (
                                loc_entity_tag                                                       // Entity tag [#].
                               );
 
-  // Getting entity elements, where:
-  // i = type index.
-  // m = node index of current element.
-  // L = number of element types.
-  // M(i) = number of elements per element type.
-  // N(m) = number of nodes per element, for each element type.
-  gmsh::model::mesh::getElements (
-                                  loc_type_list,                                                    // Element type list [L].
-                                  loc_element_tag,                                                  // Element tag list LxM(i).
-                                  loc_node_tag,                                                     // Node tag list Lx[N(1),N(2),...,N(m),N(M(i))].
-                                  loc_entity_dimension,                                             // Entity dimension [#].
-                                  loc_entity_tag                                                    // Entity tag [#].
-                                 );
-
-  loc_types = loc_type_list.size ();                                                                // Getting number of types...
-
-  // Finding the number of elements of "j" type...
-  for(i = 0; i < loc_types; i++)
-  {
-    if(loc_type_list[i] == loc_element_type)
-    {
-      j            = i;                                                                             // Setting current element type index...
-      loc_elements = loc_element_tag[j].size ();                                                    // Getting the number of elements of "j" type...
-    }
-    else
-    {
-      loc_elements = 0;                                                                             // Resetting the number of elements of "j" type...
-    }
-  }
-
-  // Getting the element type properties:
-  gmsh::model::mesh::getElementProperties (
-                                           loc_element_type,                                        // Element type [#].
-                                           loc_type_name,                                           // Element type name [string].
-                                           loc_type_dimension,                                      // Element type dimension [#].
-                                           loc_type_order,                                          // Element type order [#].
-                                           loc_type_nodes,                                          // Element type number of type nodes [#].
-                                           loc_type_node_coordinates,                               // Element type node local coordinates [vector].
-                                           loc_type_primary_nodes                                   // Number of primary type nodes [#].
-                                          );
+  loc_nodes = loc_node_list.size ();                                                                // getting the number of nodes...
 
   // For each "k" element of "j" type:
-  for(k = 0; k < loc_elements; k++)
+  for(k = 0; k < loc_nodes; k++)
   {
     neutrino::work ();                                                                              // Getting initial task time...
 
-    // Getting the coordinates of the "m" node in the "k" element of "j" type:
-    for(m = 0; m < loc_type_nodes; m++)
-    {
-      loc_node_unit.x = (float)loc_node_coordinates[3*m + 0];                                       // Setting node unit "x" coordinate...
-      loc_node_unit.y = (float)loc_node_coordinates[3*m + 1];                                       // Setting node unit "y"coordinate...
-      loc_node_unit.z = (float)loc_node_coordinates[3*m + 2];                                       // Setting node unit "z" coordinate...
-      loc_node_unit.w = 1.0f;                                                                       // Setting node unit "w" coordinate...
-      node.push_back (loc_node_unit);                                                               // Adding node unit to node vector...
-    }
+    loc_node_unit.x = (float)loc_node_coordinates[3*k + 0];                                         // Setting node unit "x" coordinate...
+    loc_node_unit.y = (float)loc_node_coordinates[3*k + 1];                                         // Setting node unit "y"coordinate...
+    loc_node_unit.z = (float)loc_node_coordinates[3*k + 2];                                         // Setting node unit "z" coordinate...
+    loc_node_unit.w = 1.0f;                                                                         // Setting node unit "w" coordinate...
+    node.push_back (loc_node_unit);                                                                 // Adding node unit to node vector...
 
-    neutrino::progress ("finding mesh nodes... ", 0, loc_elements, k);                              // Printing progress message...
+    neutrino::progress ("finding mesh nodes... ", 0, loc_nodes, k);                                 // Printing progress message...
   }
 
   neutrino::done ();                                                                                // Printing message...
@@ -532,10 +472,10 @@ void mesh::get_physicals (
                                               );
 
   // Adjusting node index according to Neutrino (1st index = 0):
-  for(size_t i = 0; i < physical.size (); i++)
-  {
-    physical[i]--;                                                                                  // Adjusting node index...
-  }
+  //for(size_t i = 0; i < physical.size (); i++)
+  //{
+  //  physical[i]--;                                                                                  // Adjusting node index...
+  //}
 
   loc_node_coordinates.clear ();                                                                    // Clearing unnecessary coordinates vector...
 

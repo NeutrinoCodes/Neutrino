@@ -241,8 +241,7 @@ public:
 
   void get_nodes (
                   int loc_entity_dimension,
-                  int loc_entity_tag,
-                  int loc_element_type
+                  int loc_entity_tag
                  );
 
   void get_elements (
