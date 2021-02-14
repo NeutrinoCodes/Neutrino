@@ -222,9 +222,12 @@ class mesh : public neutrino                                                    
 private:
   // ENTITY VARIABLES:
   std::vector<std::pair<int, int> > entity_list;                                                    ///< Entity list.
+  std::vector<size_t>               node_list;                                                      ///< Node list.
 
 public:
-  std::vector<nu_float4_structure>  node;                                                           ///< Nodes.
+  std::vector<nu_float4_structure>  node_coordinates;                                               ///< Nodes.
+  std::vector<size_t>               node_tags;                                                      ///< Node tags.
+
   std::vector<GLint>                element;                                                        ///< Elements.
   std::vector<GLint>                element_offset;                                                 ///< Element offset indices.
   std::vector<GLint>                group;                                                          ///< Group.
@@ -240,8 +243,8 @@ public:
        );
 
   void get_nodes (
-                  int loc_entity_dimension,
-                  int loc_entity_tag
+                  int loc_physical_group_dimension,
+                  int loc_physical_group_tag
                  );
 
   void get_elements (
