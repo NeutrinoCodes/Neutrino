@@ -101,6 +101,7 @@ void mesh::get_elements (
 
   element.clear ();                                                                                 // Clearing element vector...
   element_offset.clear ();                                                                          // Clearing element offset vector...
+  loc_elements       = 0;                                                                           // Resetting the number of elements of "j" type...
   loc_element_offset = 0;                                                                           // Resetting element offset...
 
   // Getting entity elements, where:
@@ -126,10 +127,6 @@ void mesh::get_elements (
     {
       j            = i;                                                                             // Setting current element type index...
       loc_elements = loc_element_tag[j].size ();                                                    // Getting the number of elements of "j" type...
-    }
-    else
-    {
-      loc_elements = 0;                                                                             // Resetting the number of elements of "j" type...
     }
   }
 
@@ -290,7 +287,6 @@ void mesh::get_neighbours (
   std::vector<size_t>               loc_neighbour;                                                  // Neighbour unit.
   GLint                             loc_neighbours;                                                 // Number of neighbours.
   GLint                             loc_neighbour_offset;                                           // Neighbour offset.
-  std::vector<nu_float4_structure>  loc_neighbour_link;                                             // Neighbour link unit.
   GLfloat                           loc_link_x;                                                     // Link "x" coordinate.
   GLfloat                           loc_link_y;                                                     // Link "y" coordinate.
   GLfloat                           loc_link_z;                                                     // Link "z" coordinate.
@@ -333,22 +329,7 @@ void mesh::get_neighbours (
                                            loc_type_primary_nodes                                   // Number of primary type nodes [#].
                                           );
 
-  // Finding the number of elements of "j" type...
-  for(i = 0; i < loc_types; i++)
-  {
-    if(loc_type_list[i] == loc_element_type)
-    {
-      j            = i;                                                                             // Setting current element type index...
-      loc_elements = loc_element_tag[j].size ();                                                    // Getting the number of elements of "j" type...
-    }
-    else
-    {
-      loc_elements = 0;                                                                             // Resetting the number of elements of "j" type...
-    }
-  }
-
   loc_nodes            = node.size ();                                                              // Getting the number of nodes...
-  loc_elements         = element.size ();                                                           // Getting the number of elements...
   loc_element_offsets  = element_offset.size ();                                                    // Getting the number of element offsets...
   loc_neighbour_offset = 0;                                                                         // Resetting the neighbour offset...
   loc_neighbour.clear ();                                                                           // Clearing neighbour unit vector...
@@ -379,19 +360,8 @@ void mesh::get_neighbours (
         // Checking whether the "k" element of "j" type contains the "i" central node:
         if((element[m] == i))
         {
-          // Appending the "k" element type nodes to the neighbour unit:
-          loc_neighbour.insert (
-                                loc_neighbour.end (),                                               // Insertion point.
-                                element[m_min],                                                     // Beginning of vector to be appended.
-                                element[m_max]                                                      // End of vector to be appended.
-                               );
-
-          // Erasing the central node from the neighbour unit:
-          loc_neighbour.erase (
-                               m -                                                                  // Central node.
-                               m_min +                                                              // first index in element node stride.
-                               loc_neighbour.begin ()                                               // Beginning of vector.
-                              );
+          loc_neighbour.insert (loc_neighbour.end (), element[m_min], element[m_max]);              // Appending the "k" element type nodes to the neighbour unit...
+          loc_neighbour.erase (loc_neighbour.begin () + (m - m_min));                               // Erasing the central node from the neighbour unit...
         }
       }
     }
@@ -446,7 +416,6 @@ void mesh::get_neighbours (
     }
 
     loc_neighbour.clear ();                                                                         // Clearing neighbour unit for next "i"...
-    loc_neighbour_link.clear ();                                                                    // Clearing link unit for next "i"...
 
     neutrino::progress ("finding mesh neighbours... ", 0, loc_nodes, i);                            // Printing progress message...
   }
@@ -472,10 +441,10 @@ void mesh::get_physicals (
                                               );
 
   // Adjusting node index according to Neutrino (1st index = 0):
-  //for(size_t i = 0; i < physical.size (); i++)
-  //{
-  //  physical[i]--;                                                                                  // Adjusting node index...
-  //}
+  for(size_t i = 0; i < physical.size (); i++)
+  {
+    physical[i]--;                                                                                  // Adjusting node index...
+  }
 
   loc_node_coordinates.clear ();                                                                    // Clearing unnecessary coordinates vector...
 
