@@ -140,11 +140,16 @@ void mesh::get_elements (
   loc_element_offset = 0;                                                                           // Resetting element offset...
 
   // EZOR: 14FEB2021
-  // 1. Take all elements, of a given type, of all entities.
+  // 1. Take all the elements, of a given type, of all entities.
+  // 2. For each node of those elements, find the neighbours.
+  // 3. Take the nodes of a given physical group.
+  // 4. For all those nodes, select their neighbour nodes present in the same physical group.
+  // 5. Create a "stiffness" vector containing the physical group tag of the neighbours.
+
   // 2. From those ones, select only the elements having at least one node (central node of a group) being in a given pyhsical group.
   // 3. All links must have a vector telling in which physical group they stay (for later, for setting the correct stiffness).
 
-  loc_entities       = entity_list.size ();                                                         // Getting number of entities...
+  loc_entities = entity_list.size ();                                                               // Getting number of entities...
 
   for(n = 0; n < loc_entities; n++)
   {
