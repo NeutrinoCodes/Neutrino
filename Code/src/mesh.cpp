@@ -29,9 +29,9 @@ void mesh::process (
                     int loc_element_type                                                            // Element type.
                    )
 {
-  std::vector<size_t> Np;                                                                           // Node tags of given physical group.
-  std::vector<double> Np_coordinates;                                                               // Node coordinates of given physical group.
-  size_t              Np_size;                                                                      // Number of nodes of given pyhsical group.
+  std::vector<size_t> Np;                                                                           // Node tags of the given physical group.
+  std::vector<double> Np_coordinates;                                                               // Node coordinates of the given physical group.
+  size_t              Np_size;                                                                      // Number of nodes of the given pyhsical group.
   size_t              i;                                                                            // Node index.
   size_t              j;
   size_t              k;
@@ -43,7 +43,11 @@ void mesh::process (
   size_t              E_size;                                                                       // Number of all elements among all entities.
   std::vector<size_t> E;                                                                            // Tags of all elements among all entities.
   std::vector<size_t> E_node;                                                                       // Node tags of all elements among all entities.
-  std::vector<GLint>  E_offset;                                                                     // Offsets of all elements among all entities.
+  std::vector<GLint>  E_offset;                                                                     // Node offsets of all elements among all entities.
+
+  std::vector<size_t> Gp;                                                                           // Tags of the groups of all elements of the given physical group.
+  std::vector<size_t> Gp_element;                                                                   // Element tags of the groups of all elements of the given physical group.
+  std::vector<GLint>  Gp_offset;                                                                    // Offsets of the groups of all elements of the given physical group.
 
   // TYPE VARIABLES:
   std::vector<int>    loc_type_list;                                                                // Element type list.
@@ -54,7 +58,7 @@ void mesh::process (
   std::vector<double> loc_type_node_coordinates;                                                    // Element type node coordinates.
   int                 loc_type_primary_nodes;                                                       // Element primary nodes
 
-  neutrino::action ("finding mesh nodes for given physical group...");                              // Printing message...
+  neutrino::action ("finding the mesh nodes for the given physical group...");                      // Printing message...
 
   // Getting nodes for given physical group:
   gmsh::model::mesh::getNodesForPhysicalGroup (
@@ -64,13 +68,16 @@ void mesh::process (
                                                Np_coordinates                                       // Node coordinates.
                                               );
 
-  Np_size = Np.size ();
+  Np_size  = Np.size ();                                                                            // Getting node tag vector size...
+  node_tag = Np;                                                                                    // Setting node tag vector...
 
-  neutrino::done ();                                                                                // Printing message...
+  neutrino::progress ("finding mesh groups... ", 0, Np_size, i);                                    // Printing progress message...
 
-  // For each node:
+  // For each node of the given physical group:
   for(i = 0; i < Np_size; i++)
   {
+    neutrino::work ();                                                                              // Getting initial task time...
+
     node_coordinates.push_back (
     {
       (float)Np_coordinates[3*i + 0],                                                               // Setting node unit "x" coordinate...
@@ -79,11 +86,12 @@ void mesh::process (
       1.0f                                                                                          // Setting node unit "w" coordinate...
     }
                                );                                                                   // Adding node unit to node vector...
+    neutrino::progress ("finding mesh nodes... ", 0, Np_size, i);                                   // Printing progress message...
   }
 
   neutrino::done ();                                                                                // Printing message...
 
-  neutrino::action ("finding mesh elements for given physical group...");                           // Printing message...
+  neutrino::action ("finding the mesh element groups for the given physical group...");             // Printing message...
 
   // Getting element type properties:
   gmsh::model::mesh::getElementProperties (
@@ -108,46 +116,52 @@ void mesh::process (
 
   E_size = E.size ();                                                                               // Getting number of elements among all entities...
 
-  // Computing offsets of the elements of the given type:
-  for(i = 0)
+  // For each "i" node of the given physical group:
+  for(i = 0; i < Np_size; i++)
+  {
+    neutrino::work ();                                                                              // Getting initial task time...
 
-    // For each "i" node of the elements within the given physical group:
-    for(i = 0; i < Np_size; i++)
+    Gp.push_back (i + 1);                                                                           // Setting group tag...
+    j = 0;                                                                                          // Resetting group offset counter...
+
+    // For each "k" element of the given type:
+    for(k = 0; k < E_size; k++)
     {
-      neutrino::work ();                                                                            // Getting initial task time...
+      E_offset.push_back ((k + 1)*T_size);                                                          // Setting element offset...
 
-      // For each "k" element of the given type:
-      for(k = 0; k < E_size; k++)
+      // Computing minimum element offset index:
+      if(k == 0)
       {
-        E_offset[k] =
-          // Computing minimum element offset index:
-          if(k == 0)
-        {
-          m_min = 0;                                                                                // Setting minimum element offset index...
-        }
-        else
-        {
-          m_min = E_offset[k - 1];                                                                  // Setting minimum element offset index...
-        }
-
-        m_max       = E_offset[k];                                                                  // Setting maximum element offset index...
-
-        // For each "m" node in the "k" element of the given type:
-        for(m = m_min; m < m_max; m++)
-        {
-          // Checking whether the "i" node of the given physical group is present in the "k" element of the given type:
-          if(E[m] == Np[i])
-          {
-            group.push_back (k);                                                                    // Adding element index "k" to the group vector...
-            loc_group_offset++;                                                                     // Incrementing group offset...
-          }
-        }
-
-        group_offset.push_back (loc_group_offset);                                                  // Adding the "k" element offset to the element offset vector...
+        m_min = 0;                                                                                  // Setting minimum element offset index...
+      }
+      else
+      {
+        m_min = E_offset[k - 1];                                                                    // Setting minimum element offset index...
       }
 
-      neutrino::progress ("finding mesh groups... ", 0, loc_nodes, i);                              // Printing progress message...
+      m_max = E_offset[k];                                                                          // Setting maximum element offset index...
+
+      // For each "m" node in the "k" element of the given type:
+      for(m = m_min; m < m_max; m++)
+      {
+        // Checking whether the "i" node of the given physical group is present in the "k" element of the given type:
+        if(E_node[m] == Np[i])
+        {
+          j++;                                                                                      // Incrementing group offset counter...
+
+          Gp_element.push_back (E[k]);                                                              // Adding element "k" to the group...
+
+          //Gp_element.insert (Gp_element.end (), E[m_min], E[m_max]);
+        }
+      }
     }
+
+    Gp_offset.push_back (j);                                                                        // Adding group "k" offset to the group offset vector...
+
+    neutrino::progress ("finding mesh groups... ", 0, Np_size, i);                                  // Printing progress message...
+
+    // EZOR 18FEB2021.
+  }
 
   neutrino::done ();                                                                                // Printing message...
 
