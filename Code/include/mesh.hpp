@@ -225,8 +225,8 @@ private:
   std::vector<size_t>               node_list;                                                      ///< Node list.
 
 public:
-  std::vector<nu_float4_structure>  node_coordinates;                                               ///< Nodes.
-  std::vector<size_t>               node_tags;                                                      ///< Node tags.
+  std::vector<nu_float4_structure>  node_coordinates;                                               ///< Node coordinates.
+  std::vector<size_t>               node_tag;                                                       ///< Node tags.
 
   std::vector<GLint>                element;                                                        ///< Elements.
   std::vector<GLint>                element_offset;                                                 ///< Element offset indices.
@@ -242,10 +242,11 @@ public:
         std::string loc_file_name                                                                   ///< GMSH .msh file name.
        );
 
-  void get_nodes (
-                  int loc_physical_group_dimension,
-                  int loc_physical_group_tag
-                 );
+  void process (
+                int loc_physical_group_dimension,                                                   ///< Physical group dimension.
+                int loc_physical_group_tag,                                                         ///< Physical group tag.
+                int loc_element_type                                                                ///< Element type.
+               );
 
   void get_elements (
                      int loc_entity_dimension,

@@ -12,22 +12,6 @@ mesh::mesh(
            std::string loc_file_name                                                                // GMSH .msh file name.
           )
 {
-  // NODE VARIABLES:
-  std::vector<size_t>               loc_node_list;                                                  // Node list.
-  std::vector<double>               loc_node_coordinates;                                           // Node coordinates.
-  std::vector<double>               loc_node_parametric_coordinates;                                // Node parametric coordinates.
-  std::vector<std::vector<size_t> > loc_node_tag;                                                   // Node tag list.
-  nu_float4_structure               loc_node_unit;                                                  // Node unit.
-  size_t                            loc_nodes;                                                      // Number of nodes.
-
-  int                               loc_entity_dimension;                                           // Entity dimension.
-  int                               loc_entity_tag;                                                 // Entity tag.
-
-  // INDICES:
-  size_t                            k;                                                              // Element index.
-  int                               n;                                                              // Entity index.
-  int                               loc_entities;                                                   // Number of entities.
-
   neutrino::action ("initializing GMSH...");                                                        // Printing message...
   gmsh::initialize ();                                                                              // Initializing GMSH...
   gmsh::model::add ("neutrino");                                                                    // Adding a new GMSH model (named "neutrino")...
@@ -37,70 +21,136 @@ mesh::mesh(
   gmsh::model::mesh::renumberNodes ();                                                              // Renumbering the node tags in a continuous sequence...
   gmsh::model::mesh::renumberElements ();                                                           // Renumbering the element tags in a continuous sequence...
   neutrino::done ();                                                                                // Printing message...
-
-  loc_entities = entity_list.size ();                                                               // Getting number of entities...
-
-  for(n = 0; n < loc_entities; n++)
-  {
-    neutrino::work ();                                                                              // Getting initial task time...
-
-    loc_entity_dimension = entity_list[n].first;                                                    // Getting entity dimension [#]...
-    loc_entity_tag       = entity_list[n].second;                                                   // Getting entity tag [#]...
-
-    // Getting entity nodes:
-    gmsh::model::mesh::getNodes (
-                                 node_list,                                                         // Node tags list [N].
-                                 loc_node_coordinates,                                              // Node coordinates list [3*N].
-                                 loc_node_parametric_coordinates,                                   // Node parametric coordinates [dim*N].
-                                 loc_entity_dimension,                                              // Entity dimension [#].
-                                 loc_entity_tag                                                     // Entity tag [#].
-                                );
-  }
-
-  neutrino::done ();                                                                                // Printing message...
 }
 
-void mesh::get_nodes (
-                      int loc_physical_group_dimension,
-                      int loc_physical_group_tag
-                     )
+void mesh::process (
+                    int loc_physical_group_dimension,                                               // Physical group dimension.
+                    int loc_physical_group_tag,                                                     // Physical group tag.
+                    int loc_element_type                                                            // Element type.
+                   )
 {
-  std::vector<double> loc_node_coordinates;                                                         // Node coordinates.
-  size_t              loc_nodes;                                                                    // Number of nodes.
+  std::vector<size_t> Np;                                                                           // Node tags of given physical group.
+  std::vector<double> Np_coordinates;                                                               // Node coordinates of given physical group.
+  size_t              Np_size;                                                                      // Number of nodes of given pyhsical group.
   size_t              i;                                                                            // Node index.
+  size_t              j;
+  size_t              k;
+  size_t              m;
+  size_t              m_min;                                                                        // Minimum index of current element stride.
+  size_t              m_max;                                                                        // Maximum index of current element stride.
 
-  neutrino::action ("finding mesh physical groups...");                                             // Printing message...
+  int                 T_size;                                                                       // Number of nodes in element type.
+  size_t              E_size;                                                                       // Number of all elements among all entities.
+  std::vector<size_t> E;                                                                            // Tags of all elements among all entities.
+  std::vector<size_t> E_node;                                                                       // Node tags of all elements among all entities.
+  std::vector<GLint>  E_offset;                                                                     // Offsets of all elements among all entities.
+
+  // TYPE VARIABLES:
+  std::vector<int>    loc_type_list;                                                                // Element type list.
+  size_t              loc_types;                                                                    // Number of element types.
+  std::string         loc_type_name;                                                                // Element type name.
+  int                 loc_type_dimension;                                                           // Element type dimension.
+  int                 loc_type_order;                                                               // Element type order.
+  std::vector<double> loc_type_node_coordinates;                                                    // Element type node coordinates.
+  int                 loc_type_primary_nodes;                                                       // Element primary nodes
+
+  neutrino::action ("finding mesh nodes for given physical group...");                              // Printing message...
 
   // Getting nodes for given physical group:
   gmsh::model::mesh::getNodesForPhysicalGroup (
                                                loc_physical_group_dimension,                        // Physical group dimension.
                                                loc_physical_group_tag,                              // Physical group tag.
-                                               node_tags,                                           // Node tags.
-                                               loc_node_coordinates                                 // Node coordinates.
+                                               Np,                                                  // Node tags.
+                                               Np_coordinates                                       // Node coordinates.
                                               );
 
-  loc_nodes = node_tags.size ();
+  Np_size = Np.size ();
 
   neutrino::done ();                                                                                // Printing message...
 
   // For each node:
-  for(i = 0; i < loc_nodes; i++)
+  for(i = 0; i < Np_size; i++)
   {
-    neutrino::work ();                                                                              // Getting initial task time...
-
     node_coordinates.push_back (
     {
-      (float)loc_node_coordinates[3*i + 0],                                                         // Setting node unit "x" coordinate...
-      (float)loc_node_coordinates[3*i + 1],                                                         // Setting node unit "y"coordinate...
-      (float)loc_node_coordinates[3*i + 2],                                                         // Setting node unit "z" coordinate...
+      (float)Np_coordinates[3*i + 0],                                                               // Setting node unit "x" coordinate...
+      (float)Np_coordinates[3*i + 1],                                                               // Setting node unit "y"coordinate...
+      (float)Np_coordinates[3*i + 2],                                                               // Setting node unit "z" coordinate...
       1.0f                                                                                          // Setting node unit "w" coordinate...
     }
                                );                                                                   // Adding node unit to node vector...
-
-    neutrino::progress ("finding mesh nodes... ", 0, loc_nodes, i);                                 // Printing progress message...
   }
 
   neutrino::done ();                                                                                // Printing message...
+
+  neutrino::action ("finding mesh elements for given physical group...");                           // Printing message...
+
+  // Getting element type properties:
+  gmsh::model::mesh::getElementProperties (
+                                           loc_element_type,                                        // Element type [#].
+                                           loc_type_name,                                           // Element type name [string].
+                                           loc_type_dimension,                                      // Element type dimension [#].
+                                           loc_type_order,                                          // Element type order [#].
+                                           T_size,                                                  // Element type number of type nodes [#].
+                                           loc_type_node_coordinates,                               // Element type node local coordinates [vector].
+                                           loc_type_primary_nodes                                   // Number of primary type nodes [#].
+                                          );
+
+  // Getting elements for all entities:
+  gmsh::model::mesh::getElementsByType (
+                                        loc_element_type,
+                                        E,
+                                        E_node,
+                                        -1,
+                                        0,
+                                        1
+                                       );
+
+  E_size = E.size ();                                                                               // Getting number of elements among all entities...
+
+  // Computing offsets of the elements of the given type:
+  for(i = 0)
+
+    // For each "i" node of the elements within the given physical group:
+    for(i = 0; i < Np_size; i++)
+    {
+      neutrino::work ();                                                                            // Getting initial task time...
+
+      // For each "k" element of the given type:
+      for(k = 0; k < E_size; k++)
+      {
+        E_offset[k] =
+          // Computing minimum element offset index:
+          if(k == 0)
+        {
+          m_min = 0;                                                                                // Setting minimum element offset index...
+        }
+        else
+        {
+          m_min = E_offset[k - 1];                                                                  // Setting minimum element offset index...
+        }
+
+        m_max       = E_offset[k];                                                                  // Setting maximum element offset index...
+
+        // For each "m" node in the "k" element of the given type:
+        for(m = m_min; m < m_max; m++)
+        {
+          // Checking whether the "i" node of the given physical group is present in the "k" element of the given type:
+          if(E[m] == Np[i])
+          {
+            group.push_back (k);                                                                    // Adding element index "k" to the group vector...
+            loc_group_offset++;                                                                     // Incrementing group offset...
+          }
+        }
+
+        group_offset.push_back (loc_group_offset);                                                  // Adding the "k" element offset to the element offset vector...
+      }
+
+      neutrino::progress ("finding mesh groups... ", 0, loc_nodes, i);                              // Printing progress message...
+    }
+
+  neutrino::done ();                                                                                // Printing message...
+
 }
 
 void mesh::get_elements (
