@@ -62,6 +62,15 @@ void mesh::process (
   std::vector<double> loc_type_node_coordinates;                                                    // Element type node coordinates.
   int                 loc_type_primary_nodes;                                                       // Element primary nodes
 
+  // NEIGHBOUR VARIABLES:
+  std::vector<size_t> loc_neighbour;                                                                // Neighbour unit.
+  GLint               loc_neighbours;                                                               // Number of neighbours.
+  GLint               loc_neighbour_offset;                                                         // Neighbour offset.
+  GLfloat             loc_link_x;                                                                   // Link "x" coordinate.
+  GLfloat             loc_link_y;                                                                   // Link "y" coordinate.
+  GLfloat             loc_link_z;                                                                   // Link "z" coordinate.
+  GLfloat             loc_link_w;                                                                   // Link "w" coordinate.
+
   neutrino::action ("finding the mesh nodes for the given physical group...");                      // Printing message...
 
   // Getting nodes for given physical group:
@@ -152,9 +161,13 @@ void mesh::process (
       // For each "m" node in the "k" element of the given type:
       for(m = m_min; m < m_max; m++)
       {
-        // Checking whether the "i" node of the given physical group is present in the "k" element of the given type:
+        // Checking whether the "k" element of the given type contains the "i" node of the given physical group:
         if(loc_element_node[m] == loc_node_tag[i])
         {
+          for(s = m_min; s < m_max; s++)
+          {
+            if(loc_)
+          }
           loc_group_element.push_back (loc_element_tag[k]);                                         // Adding "k" element to the group...
           j++;                                                                                      // Incrementing group offset counter...
           n++;                                                                                      // Incrementing element node counter...
@@ -175,6 +188,97 @@ void mesh::process (
   }
 
   neutrino::done ();                                                                                // Printing message...
+
+  // For each "i" node of the given physical group:
+  for(i = 0; i < loc_node_size; i++)
+  {
+    neutrino::work ();                                                                              // Getting initial task time...
+
+    for(j_in = 0; j_in < loc_inbound_group_offset.size (); j_in++)
+    {
+      E = loc_group_element (loc_group_offset[j_in]);
+    }
+
+    // For each "k" element of the given type:
+    for(k = 0; k < loc_element_size; k++)
+    {
+      // Computing minimum element offset index:
+      if(k == 0)
+      {
+        m_min = 0;                                                                                  // Setting minimum element offset index...
+      }
+      else
+      {
+        m_min = loc_element_offset[k - 1];                                                          // Setting minimum element offset index...
+      }
+
+      m_max = loc_element_offset[k];                                                                // Setting maximum element offset index...
+
+      // For each "m" node in the "k" element of the given type:
+      for(m = m_min; m < m_max; m++)
+      {
+        // Checking whether the "i" node of the given physical group is present in the "k" element of the given type:
+        if(loc_element_node[m] == loc_node_tag[i])
+        {
+          loc_neighbour.insert (loc_neighbour.end (), element[m_min], element[m_max]);              // Appending the "k" element type nodes to the neighbour unit...
+          loc_neighbour.erase (loc_neighbour.begin () + (m - m_min));                               // Erasing the central node from the neighbour unit...
+        }
+      }
+    }
+
+    // Eliminating repeated indexes:
+    std::sort (loc_neighbour.begin (), loc_neighbour.end ());
+    loc_neighbour.resize (
+                                                                                                    // Eliminating null indexes...
+                          std::distance (
+                                                                                                    // Calculating index distance...
+                                         loc_neighbour.begin (),
+                                         std::unique (
+                                                                                                    // Finding unique indexes...
+                                                      loc_neighbour.begin (),                       // Beginning of index vector.
+                                                      loc_neighbour.end ()                          // End of index vector.
+                                                     )
+                                        )
+                         );
+
+    loc_neighbours        = loc_neighbour.size ();                                                  // Counting neighbour nodes...
+    loc_neighbour_offset += loc_neighbours;                                                         // Incrementing neighbour offset index...
+    neighbour_offset.push_back (loc_neighbour_offset);                                              // Setting neighbour offset...
+
+    // For each "s" neighbour node in the "i" stride:
+    for(s = 0; s < loc_neighbours; s++)
+    {
+      n          = loc_neighbour[s];                                                                // Getting neighbour index...
+      neighbour.push_back (n);                                                                      // Setting neighbour vector...
+      loc_link_x = node[n].x - node[i].x;                                                           // Setting link "x" coordinate...
+      loc_link_y = node[n].y - node[i].y;                                                           // Setting link "x" coordinate...
+      loc_link_z = node[n].z - node[i].z;                                                           // Setting link "x" coordinate...
+      loc_link_w = 0.0f;                                                                            // Setting link "x" coordinate...
+
+      // Setting neighbour link vector:
+      neighbour_link.push_back (
+      {
+        loc_link_x,                                                                                 // Setting link "x" component...
+        loc_link_y,                                                                                 // Setting link "y" component...
+        loc_link_z,                                                                                 // Setting link "z" component...
+        loc_link_w                                                                                  // Setting link "w" component...
+      }
+                               );
+
+      // Setting neighbour length vector:
+      neighbour_length.push_back (
+                                  sqrt (
+                                        pow (loc_link_x, 2) +
+                                        pow (loc_link_y, 2) +
+                                        pow (loc_link_z, 2)
+                                       )
+                                 );
+    }
+
+    loc_neighbour.clear ();                                                                         // Clearing neighbour unit for next "i"...
+
+    neutrino::progress ("finding mesh neighbours... ", 0, loc_nodes, i);                            // Printing progress message...
+  }
 }
 
 void mesh::get_elements (
