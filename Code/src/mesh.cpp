@@ -156,48 +156,70 @@ void mesh::process (
 
       m_max = loc_element_offset[k];                                                                // Setting maximum element offset index...
 
-      n     = 0;                                                                                    // Resetting element node counter...
-
       // For each "m" node in the "k" element of the given type:
       for(m = m_min; m < m_max; m++)
       {
         // Checking whether the "k" element of the given type contains the "i" node of the given physical group:
         if(loc_element_node[m] == loc_node_tag[i])
         {
-          for(s = m_min; s < m_max; s++)
-          {
-            if(loc_)
-          }
           loc_group_element.push_back (loc_element_tag[k]);                                         // Adding "k" element to the group...
           j++;                                                                                      // Incrementing group offset counter...
-          n++;                                                                                      // Incrementing element node counter...
         }
-      }
-
-      if(n == loc_type_size)
-      {
-        loc_inbound_group_element.push_back (loc_element_tag[k]);                                   // Adding "k" element to the inbound group...
-        j_in++;                                                                                     // Incrementing inbound group offset counter...
       }
     }
 
     loc_group_offset.push_back (j);                                                                 // Adding "k" group offset to the group offset vector...
-    loc_inbound_group_offset.push_back (j_in);                                                      // Adding "k" group offset to the inbound group offset vector...
 
     neutrino::progress ("finding mesh groups... ", 0, loc_node_size, i);                            // Printing progress message...
   }
 
   neutrino::done ();                                                                                // Printing message...
 
+  // For each "k" element of the given type:
+  for(k = 0; k < loc_element_size; k++)
+  {
+    // Computing minimum element offset index:
+    if(k == 0)
+    {
+      m_min = 0;                                                                                    // Setting minimum element offset index...
+    }
+    else
+    {
+      m_min = loc_element_offset[k - 1];                                                            // Setting minimum element offset index...
+    }
+
+    m_max = loc_element_offset[k];                                                                  // Setting maximum element offset index...
+
+    // For each "m" node in the "k" element of the given type:
+    for(m = m_min; m < m_max; m++)
+    {
+      // For each "i" node of the given physical group:
+      for(i = 0; i < loc_node_size; i++)
+      {
+        // Checking whether the "m" element node of the given type is present in the given physical group:
+        if(loc_element_node[m] == loc_node_tag[i])
+        {
+          found++;                                                                                  // Counting element nodes...
+        }
+      }
+
+      // Checking whether the "k" element of the given type has got all of its nodes present within the given physical group:
+      if(found < loc_type_size)
+      {
+        // EZOR 22FEB2021
+        // Erasing those element nodes:
+        loc_element_node.erase (
+                                loc_element_node.begin () + m_min,
+                                loc_element_node.begin () + m_max
+                               );
+      }
+    }
+  }
+
   // For each "i" node of the given physical group:
   for(i = 0; i < loc_node_size; i++)
   {
     neutrino::work ();                                                                              // Getting initial task time...
-
-    for(j_in = 0; j_in < loc_inbound_group_offset.size (); j_in++)
-    {
-      E = loc_group_element (loc_group_offset[j_in]);
-    }
 
     // For each "k" element of the given type:
     for(k = 0; k < loc_element_size; k++)
