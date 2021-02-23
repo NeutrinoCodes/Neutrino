@@ -234,40 +234,16 @@ public:
   std::vector<GLint>                neighbour_offset;                                               ///< Neighbour offset indices.
   std::vector<nu_float4_structure>  neighbour_link;                                                 ///< Neighbour links.
   std::vector<GLfloat>              neighbour_length;                                               ///< Neighbour link lengths.
-  std::vector<size_t>               physical;                                                       ///< Physicals.
 
   mesh (
         std::string loc_file_name                                                                   ///< GMSH .msh file name.
        );
 
   void process (
-                int loc_physical_group_dimension,                                                   ///< Physical group dimension.
                 int loc_physical_group_tag,                                                         ///< Physical group tag.
+                int loc_physical_group_dimension,                                                   ///< Physical group dimension.
                 int loc_element_type                                                                ///< Element type.
                );
-
-  void get_elements (
-                     int loc_entity_dimension,
-                     int loc_entity_tag,
-                     int loc_element_type
-                    );
-
-  void get_groups (
-                   int loc_entity_dimension,
-                   int loc_entity_tag,
-                   int loc_element_type
-                  );
-
-  void get_neighbours (
-                       int loc_entity_dimension,
-                       int loc_entity_tag,
-                       int loc_element_type
-                      );
-
-  void get_physicals (
-                      size_t loc_physical_group_dim,                                                ///< Physical group dimension.
-                      size_t loc_physical_group_tag                                                 ///< Physical group tag.
-                     );
 
   ~mesh();
 };
