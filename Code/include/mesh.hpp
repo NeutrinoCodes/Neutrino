@@ -226,8 +226,6 @@ private:
 
 public:
   std::vector<nu_float4_structure>  node_coordinates;                                               ///< Node coordinates.
-  std::vector<size_t>               node_tag;                                                       ///< Node tags.
-
   std::vector<GLint>                element;                                                        ///< Elements.
   std::vector<GLint>                element_offset;                                                 ///< Element offset indices.
   std::vector<GLint>                group;                                                          ///< Group.
