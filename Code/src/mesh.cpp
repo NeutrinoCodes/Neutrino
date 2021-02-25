@@ -31,12 +31,14 @@ void mesh::process (
 {
   // NODE VARIABLES:
   std::vector<size_t> loc_node_tag;                                                                 // Node tags of the given physical group.
+  std::vector<size_t> loc_node_tag_sorted;                                                          // Sorted node tags of the given physical group.
   std::vector<double> loc_node_coordinates;                                                         // Node coordinates of the given physical group.
   size_t              loc_node_size;                                                                // Number of nodes of the given physical group.
   size_t              loc_node_found;                                                               // Number of element nodes founded to be present in the physical group.
 
   // INDICES:
   size_t              i;                                                                            // Node index.
+  size_t              j;                                                                            // Node tag - 1;
   size_t              loc_element_offset;                                                           // Element offset.
   size_t              k;                                                                            // Element index.
   size_t              m;                                                                            // Element node index.
@@ -129,8 +131,8 @@ void mesh::process (
                                        );
 
   loc_all_element_size = loc_all_element_tag.size ();                                               // Getting number of element among all entities...
-
-  std::sort (loc_node_tag.begin (), loc_node_tag.end ());                                           // Sorting node tag vector (for fast binary search)...
+  loc_node_tag_sorted  = loc_node_tag;                                                              // Initializing sorted node tags...
+  std::sort (loc_node_tag_sorted.begin (), loc_node_tag_sorted.end ());                             // Sorting node tag vector (for fast binary search)...
   s                    = 0;                                                                         // Resetting stride index...
 
   // For each "k" element:
@@ -148,8 +150,8 @@ void mesh::process (
 
       // Counting how many "m" nodes of the "k" element are present in the physical group:
       loc_node_found += std::binary_search (
-                                            loc_node_tag.begin (),
-                                            loc_node_tag.end (),
+                                            loc_node_tag_sorted.begin (),
+                                            loc_node_tag_sorted.end (),
                                             loc_all_element_node[m]
                                            );
     }
@@ -182,6 +184,8 @@ void mesh::process (
   {
     neutrino::work ();                                                                              // Getting initial task time...
 
+    j = loc_node_tag[i] - 1;                                                                        // Setting node tag -1...
+
     // For each "k" element:
     for(k = 0; k < loc_element_size; k++)
     {
@@ -200,8 +204,8 @@ void mesh::process (
       // For each "m" node in the "k" element:
       for(m = m_min; m < m_max; m++)
       {
-        // Checking whether the "k" element contains the "i" node:
-        if(element[m] == i)
+        // Checking whether the "k" element contains the "i" node (j = loc_node_tag[i] - 1):
+        if(element[m] == j)
         {
           group.push_back (k);                                                                      // Adding "k" element to the group...
           loc_group_offset++;                                                                       // Incrementing group offset counter...
@@ -237,14 +241,14 @@ void mesh::process (
 
     std::cout << "loc_neighbour offset = " << loc_neighbour_offset << std::endl;
 
-    // For each "s" neighbour node in the "i" stride:
+    // For each "s" neighbour node in the "i" (j = loc_node_tag[i] - 1) stride:
     for(s = 0; s < loc_neighbour_size; s++)
     {
       n          = loc_neighbour[s];                                                                // Getting neighbour index...
       neighbour.push_back (n);                                                                      // Setting neighbour vector...
-      loc_link_x = node_coordinates[n].x - node_coordinates[i].x;                                   // Setting link "x" coordinate...
-      loc_link_y = node_coordinates[n].y - node_coordinates[i].y;                                   // Setting link "y" coordinate...
-      loc_link_z = node_coordinates[n].z - node_coordinates[i].z;                                   // Setting link "z" coordinate...
+      loc_link_x = node_coordinates[n].x - node_coordinates[j].x;                                   // Setting link "x" coordinate...
+      loc_link_y = node_coordinates[n].y - node_coordinates[j].y;                                   // Setting link "y" coordinate...
+      loc_link_z = node_coordinates[n].z - node_coordinates[j].z;                                   // Setting link "z" coordinate...
       loc_link_w = 0.0f;                                                                            // Setting link "w" coordinate...
 
       // Setting neighbour link vector:
@@ -270,7 +274,6 @@ void mesh::process (
     loc_neighbour.clear ();                                                                         // Clearing neighbour unit for next "i"...
 
     neutrino::progress ("building group and neighbour vectors... ", 0, loc_node_size, i);           // Printing progress message...
-    std::cout << "i = " << i << std::endl;
   }
 
   neutrino::done ();                                                                                // Printing message...
