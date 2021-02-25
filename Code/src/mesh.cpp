@@ -163,7 +163,7 @@ void mesh::process (
       for(n = 0; n < loc_type_size; n++)
       {
         m = loc_element_offset + n;                                                                 // Computing node index...
-        element.push_back (loc_all_element_node[m] - 1);                                            // Adding node to element vector (start node index = 0)...
+        element.push_back (loc_all_element_node[m]);                                                // Adding node to element vector...
       }
 
       s += loc_type_size;                                                                           // Incrementing stride index...
@@ -184,7 +184,7 @@ void mesh::process (
   {
     neutrino::work ();                                                                              // Getting initial task time...
 
-    j = loc_node_tag[i] - 1;                                                                        // Setting node tag -1...
+    j = loc_node_tag[i];                                                                            // Setting node tag...
 
     // For each "k" element:
     for(k = 0; k < loc_element_size; k++)
@@ -204,7 +204,7 @@ void mesh::process (
       // For each "m" node in the "k" element:
       for(m = m_min; m < m_max; m++)
       {
-        // Checking whether the "k" element contains the "i" node (j = loc_node_tag[i] - 1):
+        // Checking whether the "k" element contains the "i" node (j = loc_node_tag[i]):
         if(element[m] == j)
         {
           group.push_back (k);                                                                      // Adding "k" element to the group...
@@ -214,7 +214,7 @@ void mesh::process (
                                 element.begin () + m_min,
                                 element.begin () + m_max
                                );                                                                   // Appending the "k" element type nodes to the neighbour unit...
-          loc_neighbour.erase (loc_neighbour.end () - (m_max - m_min));                             // Erasing the central node from the neighbour unit...
+          loc_neighbour.erase (loc_neighbour.end () - 1 - (m_max - 1 - m_min) + (m - m_min));       // Erasing the central node from the neighbour unit...
         }
       }
     }
@@ -241,7 +241,7 @@ void mesh::process (
 
     std::cout << "loc_neighbour offset = " << loc_neighbour_offset << std::endl;
 
-    // For each "s" neighbour node in the "i" (j = loc_node_tag[i] - 1) stride:
+    // For each "s" neighbour node in the "i" (j = loc_node_tag[i]) stride:
     for(s = 0; s < loc_neighbour_size; s++)
     {
       n          = loc_neighbour[s];                                                                // Getting neighbour index...
