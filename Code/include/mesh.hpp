@@ -225,12 +225,14 @@ private:
   std::vector<size_t>               node_list;                                                      ///< Node list.
 
 public:
+  std::vector<GLint>                node;                                                           ///< Node tags.
+  std::vector<GLint>                node_index;                                                     ///< Node indices.
   std::vector<nu_float4_structure>  node_coordinates;                                               ///< Node coordinates.
-  std::vector<GLint>                element;                                                        ///< Elements.
+  std::vector<GLint>                element;                                                        ///< Element tags.
   std::vector<GLint>                element_offset;                                                 ///< Element offset indices.
-  std::vector<GLint>                group;                                                          ///< Group.
+  std::vector<GLint>                group;                                                          ///< Group tags.
   std::vector<GLint>                group_offset;                                                   ///< Group offset indices.
-  std::vector<GLint>                neighbour;                                                      ///< Neighbours.
+  std::vector<GLint>                neighbour;                                                      ///< Neighbour tags.
   std::vector<GLint>                neighbour_offset;                                               ///< Neighbour offset indices.
   std::vector<nu_float4_structure>  neighbour_link;                                                 ///< Neighbour links.
   std::vector<GLfloat>              neighbour_length;                                               ///< Neighbour link lengths.
