@@ -12,6 +12,9 @@ mesh::mesh(
            std::string loc_file_name                                                                // GMSH .msh file name.
           )
 {
+  size_t i;                                                                                         // Node index.
+  size_t e;                                                                                         // Entity index.
+
   neutrino::action ("initializing GMSH...");                                                        // Printing message...
   gmsh::initialize ();                                                                              // Initializing GMSH...
   gmsh::model::add ("neutrino");                                                                    // Adding a new GMSH model (named "neutrino")...
@@ -21,6 +24,33 @@ mesh::mesh(
   gmsh::model::mesh::renumberNodes ();                                                              // Renumbering the node tags in a continuous sequence...
   gmsh::model::mesh::renumberElements ();                                                           // Renumbering the element tags in a continuous sequence...
   neutrino::done ();                                                                                // Printing message...
+
+  entities = entity_list.size ();                                                                   // Getting number of entities...
+
+  for(e = 0; e < entities; e++)
+  {
+    entity_dimension = entity_list[e].first;                                                        // Getting entity dimension [#]...
+    entity_tag       = entity_list[e].second;                                                       // Getting entity tag [#]...
+
+    // Getting entity nodes, where:
+    // N = number of nodes
+    // dim = entity dimension
+    gmsh::model::mesh::getNodes (
+                                 node_list,                                                         // Node tags list [N].
+                                 all_node_coordinates,                                              // Node coordinates list [3*N].
+                                 all_node_parametric_coordinates,                                   // Node parametric coordinates [dim*N].
+                                 entity_dimension,                                                  // Entity dimension [#].
+                                 entity_tag                                                         // Entity tag [#].
+                                );
+
+    all_nodes = node_list.size ();                                                                  // Getting number of nodes...
+
+    for(i = 0; i < all_nodes; i++)
+    {
+      std::cout << "i = " << i << " all nodes tag = " << node_list[i] << std::endl;
+    }
+  }
+
 }
 
 void mesh::process (
