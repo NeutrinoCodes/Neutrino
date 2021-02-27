@@ -231,6 +231,7 @@ public:
   std::vector<double>               all_node_coordinates;                                           ///< All node coordinates.
   std::vector<double>               all_node_parametric_coordinates;                                ///< All node coordinates.
   size_t                            all_nodes;
+  std::vector<GLint>                all_node;                                                       ///< Node tags.
 
   std::vector<GLint>                node;                                                           ///< Node tags.
   std::vector<GLint>                node_index;                                                     ///< Node indices.

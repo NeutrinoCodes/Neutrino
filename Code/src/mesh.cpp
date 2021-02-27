@@ -45,8 +45,10 @@ mesh::mesh(
 
     all_nodes = node_list.size ();                                                                  // Getting number of nodes...
 
+
     for(i = 0; i < all_nodes; i++)
     {
+      all_node.push_back ((GLint)node_list[i]);
       std::cout << "i = " << i << " all nodes tag = " << node_list[i] << std::endl;
     }
   }
