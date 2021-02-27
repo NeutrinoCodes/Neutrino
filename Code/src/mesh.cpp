@@ -129,6 +129,8 @@ void mesh::process (
 
     node.push_back ((GLint)(loc_node_tag[i] - 1));                                                  // Setting index of node tag...
 
+    std::cout << "central here = " << (loc_node_tag[i] - 1) << std::endl;
+
     node_coordinates.push_back (
     {
       (float)all_node_coordinates[3*node[i] + 0],                                                   // Setting node unit "x" coordinate...
@@ -220,6 +222,7 @@ void mesh::process (
     neutrino::work ();                                                                              // Getting initial task time...
 
     j = loc_node_tag[i] - 1;                                                                        // Setting index of node tag...
+    node_index.push_back (j);
 
     std::cout << "i = " << i << " node tag index = " << j << std::endl;
 
