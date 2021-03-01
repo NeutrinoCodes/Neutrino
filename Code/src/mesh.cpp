@@ -36,23 +36,28 @@ mesh::mesh(
     // N = number of nodes
     // dim = entity dimension
     gmsh::model::mesh::getNodes (
-                                 node_list,                                                         // Node tags list [N].
+                                 all_node_list,                                                     // Node tags list [N].
                                  all_node_coordinates,                                              // Node coordinates list [3*N].
                                  all_node_parametric_coordinates,                                   // Node parametric coordinates [dim*N].
                                  entity_dimension,                                                  // Entity dimension [#].
                                  entity_tag                                                         // Entity tag [#].
                                 );
-
-    all_nodes = node_list.size ();                                                                  // Getting number of nodes...
-
-
-    for(i = 0; i < all_nodes; i++)
-    {
-      all_node.push_back ((GLint)node_list[i]);
-      std::cout << "i = " << i << " all nodes tag = " << node_list[i] << std::endl;
-    }
   }
 
+  all_nodes = all_node_list.size ();                                                                // Getting the nubmer of all mesh nodes...
+
+  // For each mesh node:
+  for(i = 0; i < all_nodes; i++)
+  {
+    node_coordinates.push_back (
+    {
+      (float)all_node_coordinates[3*all_node_coordinates[i] + 0],                                   // Setting node "x" coordinate...
+      (float)all_node_coordinates[3*all_node_coordinates[i] + 1],                                   // Setting node "y"coordinate...
+      (float)all_node_coordinates[3*all_node_coordinates[i] + 2],                                   // Setting node "z" coordinate...
+      1.0f                                                                                          // Setting node "w" coordinate...
+    }
+                               );                                                                   // Adding node to node vector...
+  }
 }
 
 void mesh::process (
@@ -110,7 +115,7 @@ void mesh::process (
 
   neutrino::action ("finding mesh nodes in the given physical group...");                           // Printing message...
 
-  // Getting nodes for given physical group:
+  // Getting nodes in the physical group:
   gmsh::model::mesh::getNodesForPhysicalGroup (
                                                loc_physical_group_dimension,                        // Physical group dimension.
                                                loc_physical_group_tag,                              // Physical group tag.
@@ -122,24 +127,13 @@ void mesh::process (
 
   neutrino::done ();                                                                                // Printing message...
 
-  // For each node of the given physical group:
+  // For each node of the physical group:
   for(i = 0; i < loc_node_size; i++)
   {
     neutrino::work ();                                                                              // Getting initial task time...
-
-    node.push_back ((GLint)(loc_node_tag[i] - 1));                                                  // Setting index of node tag...
-
-    std::cout << "central here = " << (loc_node_tag[i] - 1) << std::endl;
-
-    node_coordinates.push_back (
-    {
-      (float)all_node_coordinates[3*node[i] + 0],                                                   // Setting node unit "x" coordinate...
-      (float)all_node_coordinates[3*node[i] + 1],                                                   // Setting node unit "y"coordinate...
-      (float)all_node_coordinates[3*node[i] + 2],                                                   // Setting node unit "z" coordinate...
-      1.0f                                                                                          // Setting node unit "w" coordinate...
-    }
-                               );                                                                   // Adding node unit to node vector...
-    neutrino::progress ("building node vectors... ", 0, loc_node_size, i);                          // Printing progress message...
+    j = loc_node_tag[i] - 1;                                                                        // Setting index of node tag...
+    node.push_back ((GLint)j);                                                                      // Adding index of node tag to node vector...
+    neutrino::progress ("building node vector... ", 0, loc_node_size, i);                           // Printing progress message...
   }
 
   neutrino::done ();                                                                                // Printing message...
@@ -180,7 +174,7 @@ void mesh::process (
     loc_element_offset = k*loc_type_size;                                                           // Computing element offset...
     loc_node_found     = 0;                                                                         // Resetting found nodes counter...
 
-    // For each "n" node in element stride:
+    // For each "n" node in the element stride:
     for(n = 0; n < loc_type_size; n++)
     {
       m               = loc_element_offset + n;                                                     // Computing node index...
@@ -222,9 +216,6 @@ void mesh::process (
     neutrino::work ();                                                                              // Getting initial task time...
 
     j = loc_node_tag[i] - 1;                                                                        // Setting index of node tag...
-    node_index.push_back (j);
-
-    std::cout << "i = " << i << " node tag index = " << j << std::endl;
 
     // For each "k" element:
     for(k = 0; k < loc_element_size; k++)
@@ -244,7 +235,7 @@ void mesh::process (
       // For each "m" node in the "k" element:
       for(m = m_min; m < m_max; m++)
       {
-        // Checking whether the "k" element contains the "i" node (j = loc_node_tag[i] - 1): EZOR 26FEB2021
+        // Checking whether the "k" element contains the "j" node:
         if(element[m] == j)
         {
           group.push_back (k);                                                                      // Adding "k" element to the group...
@@ -279,9 +270,7 @@ void mesh::process (
     neighbour_offset.push_back (loc_neighbour_offset);                                              // Setting "i" neighbour offset...
     group_offset.push_back (loc_group_offset);                                                      // Setting "i" group offset...
 
-    std::cout << "loc_neighbour offset = " << loc_neighbour_offset << std::endl;
-
-    // For each "s" neighbour node in the "i" (j = loc_node_tag[i] - 1) stride:
+    // For each "s" neighbour node in the "j" stride:
     for(s = 0; s < loc_neighbour_size; s++)
     {
       n          = loc_neighbour[s];                                                                // Getting neighbour index...
