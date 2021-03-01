@@ -35,8 +35,8 @@ private:
                  );
 
 public:
-  GLuint     program;                                                                               ///< @brief **OpenGL program.**
-  GLsizeiptr size;                                                                                  ///< @brief **OpenGL shader argument size.**
+  GLuint  program;                                                                                  ///< @brief **OpenGL program.**
+  GLsizei size;                                                                                     ///< @brief **OpenGL shader argument size.**
 
   /// @brief **Class constructor.**
   /// @details It does nothing.
