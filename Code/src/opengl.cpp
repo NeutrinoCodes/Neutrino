@@ -408,7 +408,7 @@ void opengl::init
   int         opengl_msaa;                                                                          // OpenGL multisampling antialiasing factor.
 
   opengl_ver_major                 = 4;                                                             // EZOR 04NOV2018: to be generalized by iterative search.
-  opengl_ver_minor                 = 1;                                                             // EZOR 04NOV2018: to be generalized by iterative search.
+  opengl_ver_minor                 = 6;                                                             // EZOR 04NOV2018: to be generalized by iterative search.
   opengl_msaa                      = 4;                                                             // 3 or 4 is good due to the oversampling-decimation method.
 
   loc_title_size                   = loc_title.size ();                                             // Getting source size...
