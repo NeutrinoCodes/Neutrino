@@ -255,6 +255,7 @@ public:
   static cl_context             context_id;                                                         ///< @brief **OpenCL context ID.**
   static cl_platform_id         platform_id;                                                        ///< @brief **OpenCL platform ID.**
   static cl_device_id           device_id;                                                          ///< @brief **OpenCL device ID.**
+  static cl_command_queue       queue_id;                                                           ///< @brief **OpenCL queue ID.**
   static std::vector<cl_kernel> kernel_id;                                                          ///< @brief **OpenCL kernel ID array.**
   static GLFWwindow*            glfw_window;                                                        ///< @brief **Window handle.**
   static bool                   init_done;                                                          ///< @brief **init_done flag.**
