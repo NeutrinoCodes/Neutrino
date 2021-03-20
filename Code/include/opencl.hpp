@@ -90,6 +90,10 @@ public:
 
   void write ();
 
+  void write (
+              size_t loc_i
+             );
+
   void acquire ();
 
   void release ();
