@@ -665,6 +665,55 @@ void opencl::write ()
   }
 }
 
+void opencl::write (
+                    size_t loc_i
+                   )
+{
+  // Setting kernel argument:
+  switch(data[loc_i]->type)
+  {
+    case NU_INT:
+      ((nu_int*)neutrino::data[loc_i])->name    = std::string ("arg_") + std::to_string (loc_i);
+      opencl_queue->write ((nu_int*)neutrino::data[loc_i], loc_i);
+      break;
+
+    case NU_INT2:
+      ((nu_int2*)neutrino::data[loc_i])->name   = std::string ("arg_") + std::to_string (loc_i);
+      opencl_queue->write ((nu_int2*)neutrino::data[loc_i], loc_i);
+      break;
+
+    case NU_INT3:
+      ((nu_int3*)neutrino::data[loc_i])->name   = std::string ("arg_") + std::to_string (loc_i);
+      opencl_queue->write ((nu_int3*)neutrino::data[loc_i], loc_i);
+      break;
+
+    case NU_INT4:
+      ((nu_int4*)neutrino::data[loc_i])->name   = std::string ("arg_") + std::to_string (loc_i);
+      opencl_queue->write ((nu_int4*)neutrino::data[loc_i], loc_i);
+      break;
+
+    case NU_FLOAT:
+      ((nu_float*)neutrino::data[loc_i])->name  = std::string ("arg_") + std::to_string (loc_i);
+      opencl_queue->write ((nu_float*)neutrino::data[loc_i], loc_i);
+      break;
+
+    case NU_FLOAT2:
+      ((nu_float2*)neutrino::data[loc_i])->name = std::string ("arg_") + std::to_string (loc_i);
+      opencl_queue->write ((nu_float2*)neutrino::data[loc_i], loc_i);
+      break;
+
+    case NU_FLOAT3:
+      ((nu_float3*)neutrino::data[loc_i])->name = std::string ("arg_") + std::to_string (loc_i);
+      opencl_queue->write ((nu_float3*)neutrino::data[loc_i], loc_i);
+      break;
+
+    case NU_FLOAT4:
+      ((nu_float4*)neutrino::data[loc_i])->name = std::string ("arg_") + std::to_string (loc_i);
+      opencl_queue->write ((nu_float4*)neutrino::data[loc_i], loc_i);
+      break;
+  }
+}
+
 void opencl::acquire ()
 {
   size_t i;                                                                                         // Index.
