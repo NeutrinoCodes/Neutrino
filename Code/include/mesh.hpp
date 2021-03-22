@@ -243,6 +243,7 @@ public:
   std::vector<GLint>                group_offset;                                                   ///< Group offset indices.
 
   std::vector<GLint>                neighbour;                                                      ///< Neighbour indices.
+  std::vector<GLint>                neighbour_center;                                               ///< Neighbour center indices.
   std::vector<GLint>                neighbour_offset;                                               ///< Neighbour offset indices.
   std::vector<nu_float4_structure>  neighbour_link;                                                 ///< Neighbour links.
   std::vector<GLfloat>              neighbour_length;                                               ///< Neighbour link lengths.
