@@ -63,57 +63,57 @@ public:
   /// @brief **OpenGL shader argument setter function.**
   /// @details Sets an argument in the OpenGL shader.
   void setarg (
-               nu_int* loc_data,                                                                    ///< Data object.
-               GLuint  loc_layout_index                                                             ///< Data layout index.
-              );
-
-  /// @overload setarg(nu_int2* loc_data, GLuint loc_layout_index)
-  /// @details Sets an argument in the OpenGL shader.
-  void setarg (
-               nu_int2* loc_data,                                                                   ///< Data object.
-               GLuint   loc_layout_index                                                            ///< Data layout index.
-              );
-
-  /// @overload setarg(nu_int3* loc_data, GLuint loc_layout_index)
-  /// @details Sets an argument in the OpenGL shader.
-  void setarg (
-               nu_int3* loc_data,                                                                   ///< Data object.
-               GLuint   loc_layout_index                                                            ///< Data layout index.
-              );
-
-  /// @overload setarg(nu_int4* loc_data, GLuint loc_layout_index)
-  /// @details Sets an argument in the OpenGL shader.
-  void setarg (
-               nu_int4* loc_data,                                                                   ///< Data object.
-               GLuint   loc_layout_index                                                            ///< Data layout index.
-              );
-
-  /// @overload setarg(nu_float* loc_data, GLuint loc_layout_index)
-  /// @details Sets an argument in the OpenGL shader.
-  void setarg (
-               nu_float* loc_data,                                                                  ///< Data object.
+               nu::int1* loc_data,                                                                  ///< Data object.
                GLuint    loc_layout_index                                                           ///< Data layout index.
               );
 
-  /// @overload setarg(nu_float2* loc_data, GLuint loc_layout_index)
+  /// @overload setarg(nu::int2* loc_data, GLuint loc_layout_index)
   /// @details Sets an argument in the OpenGL shader.
   void setarg (
-               nu_float2* loc_data,                                                                 ///< Data object.
-               GLuint     loc_layout_index                                                          ///< Data layout index.
+               nu::int2* loc_data,                                                                  ///< Data object.
+               GLuint    loc_layout_index                                                           ///< Data layout index.
               );
 
-  /// @overload setarg(nu_float3* loc_data, GLuint loc_layout_index)
+  /// @overload setarg(nu::int3* loc_data, GLuint loc_layout_index)
   /// @details Sets an argument in the OpenGL shader.
   void setarg (
-               nu_float3* loc_data,                                                                 ///< Data object.
-               GLuint     loc_layout_index                                                          ///< Data layout index.
+               nu::int3* loc_data,                                                                  ///< Data object.
+               GLuint    loc_layout_index                                                           ///< Data layout index.
               );
 
-  /// @overload setarg(nu_float4* loc_data, GLuint loc_layout_index)
+  /// @overload setarg(nu::int4* loc_data, GLuint loc_layout_index)
   /// @details Sets an argument in the OpenGL shader.
   void setarg (
-               nu_float4* loc_data,                                                                 ///< Data object.
-               GLuint     loc_layout_index                                                          ///< Data layout index.
+               nu::int4* loc_data,                                                                  ///< Data object.
+               GLuint    loc_layout_index                                                           ///< Data layout index.
+              );
+
+  /// @overload setarg(nu::float1* loc_data, GLuint loc_layout_index)
+  /// @details Sets an argument in the OpenGL shader.
+  void setarg (
+               nu::float1* loc_data,                                                                ///< Data object.
+               GLuint      loc_layout_index                                                         ///< Data layout index.
+              );
+
+  /// @overload setarg(nu::float2* loc_data, GLuint loc_layout_index)
+  /// @details Sets an argument in the OpenGL shader.
+  void setarg (
+               nu::float2* loc_data,                                                                ///< Data object.
+               GLuint      loc_layout_index                                                         ///< Data layout index.
+              );
+
+  /// @overload setarg(nu::float3* loc_data, GLuint loc_layout_index)
+  /// @details Sets an argument in the OpenGL shader.
+  void setarg (
+               nu::float3* loc_data,                                                                ///< Data object.
+               GLuint      loc_layout_index                                                         ///< Data layout index.
+              );
+
+  /// @overload setarg(nu::float4* loc_data, GLuint loc_layout_index)
+  /// @details Sets an argument in the OpenGL shader.
+  void setarg (
+               nu::float4* loc_data,                                                                ///< Data object.
+               GLuint      loc_layout_index                                                         ///< Data layout index.
               );
 
   /// @brief **Class destructor.**

@@ -5,25 +5,25 @@
 
 #include "data_classes.hpp"
 
-std::vector<nu_data*> nu_data::data;                                                                // Neutrino data array.
+std::vector<nu::data*> nu::data::container;                                                         // Neutrino data array.
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////// "nu_int" class //////////////////////////////////////////
+//////////////////////////////////////////////// "int" class //////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_int::nu_int(
+nu::int1::int1(
                size_t loc_layout                                                                    // Kernel argument layout index.
               )
 {
   size_t i;                                                                                         // Data vector current index.
 
-  i                        = nu_data::data.size ();                                                 // Getting data vector current index...
-  nu_data::data.push_back (this);
-  nu_data::data[i]->type   = NU_INT;                                                                // Setting Neutrino data type...
-  nu_data::data[i]->layout = loc_layout;                                                            // Setting kernel argument layout index...
-  ready                    = false;                                                                 // Resetting "ready" flag...
+  i                              = nu::data::container.size ();                                     // Getting data vector current index...
+  nu::data::container.push_back (this);
+  nu::data::container[i]->type   = NU_INT;                                                          // Setting Neutrino data type...
+  nu::data::container[i]->layout = loc_layout;                                                      // Setting kernel argument layout index...
+  ready                          = false;                                                           // Resetting "ready" flag...
 }
 
-void nu_int::read
+void nu::int1::read
 (
  std::string loc_file_directory,                                                                    // File directory.
  std::string loc_file_name                                                                          // File name.
@@ -60,12 +60,12 @@ void nu_int::read
        {
        if(loc_file >> loc_data)
        {
-        data[i] = loc_data;                                                                         // Setting data...
+        container[i] = loc_data;                                                                         // Setting data...
        }
 
        else
        {
-        data[i] = 0;                                                                                // Resetting data...
+        container[i] = 0;                                                                                // Resetting data...
        }
        }
 
@@ -79,154 +79,154 @@ void nu_int::read
   }
 }
 
-nu_int::~nu_int()
+nu::int1::~int1()
 {
   // Doing nothing!
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// "nu_int2" class ///////////////////////////////////////////
+///////////////////////////////////////////// "int2" class ///////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_int2::nu_int2(
-                 size_t loc_layout                                                                  // Kernel argument layout index.
-                )
+nu::int2::int2 (
+                size_t loc_layout                                                                   // Kernel argument layout index.
+               )
 {
   size_t i;                                                                                         // Data vector current index.
 
-  i                        = nu_data::data.size ();                                                 // Getting data vector current index...
-  nu_data::data.push_back (this);
-  nu_data::data[i]->type   = NU_INT2;                                                               // Setting Neutrino data type...
-  nu_data::data[i]->layout = loc_layout;                                                            // Setting kernel argument layout index...
-  ready                    = false;                                                                 // Resetting "ready" flag...
+  i                              = nu::data::container.size ();                                     // Getting data vector current index...
+  nu::data::container.push_back (this);
+  nu::data::container[i]->type   = NU_INT2;                                                         // Setting Neutrino data type...
+  nu::data::container[i]->layout = loc_layout;                                                      // Setting kernel argument layout index...
+  ready                          = false;                                                           // Resetting "ready" flag...
 }
 
-nu_int2::~nu_int2()
+nu::int2::~int2 ()
 {
   // Doing nothing!
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// "nu_int3" class ///////////////////////////////////////////
+///////////////////////////////////////////// "int3" class ///////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_int3::nu_int3(
-                 size_t loc_layout                                                                  // Kernel argument layout index.
-                )
+nu::int3::int3 (
+                size_t loc_layout                                                                   // Kernel argument layout index.
+               )
 {
   size_t i;                                                                                         // Data vector current index.
 
-  i                        = nu_data::data.size ();                                                 // Getting data vector current index...
-  nu_data::data.push_back (this);
-  nu_data::data[i]->type   = NU_INT3;                                                               // Setting Neutrino data type...
-  nu_data::data[i]->layout = loc_layout;                                                            // Setting kernel argument layout index...
-  ready                    = false;                                                                 // Resetting "ready" flag...
+  i                              = nu::data::container.size ();                                     // Getting data vector current index...
+  nu::data::container.push_back (this);
+  nu::data::container[i]->type   = NU_INT3;                                                         // Setting Neutrino data type...
+  nu::data::container[i]->layout = loc_layout;                                                      // Setting kernel argument layout index...
+  ready                          = false;                                                           // Resetting "ready" flag...
 }
 
-nu_int3::~nu_int3()
+nu::int3::~int3 ()
 {
   // Doing nothing!
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// "nu_int4" class ///////////////////////////////////////////
+///////////////////////////////////////////// "int4" class ///////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_int4::nu_int4(
-                 size_t loc_layout                                                                  // Kernel argument layout index.
-                )
+nu::int4::int4 (
+                size_t loc_layout                                                                   // Kernel argument layout index.
+               )
 {
   size_t i;                                                                                         // Data vector current index.
 
-  i                        = nu_data::data.size ();                                                 // Getting data vector current index...
-  nu_data::data.push_back (this);
-  nu_data::data[i]->type   = NU_INT4;                                                               // Setting Neutrino data type...
-  nu_data::data[i]->layout = loc_layout;                                                            // Setting kernel argument layout index...
-  ready                    = false;                                                                 // Resetting "ready" flag...
+  i                              = nu::data::container.size ();                                     // Getting data vector current index...
+  nu::data::container.push_back (this);
+  nu::data::container[i]->type   = NU_INT4;                                                         // Setting Neutrino data type...
+  nu::data::container[i]->layout = loc_layout;                                                      // Setting kernel argument layout index...
+  ready                          = false;                                                           // Resetting "ready" flag...
 }
 
-nu_int4::~nu_int4()
+nu::int4::~int4 ()
 {
   // Doing nothing!
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// "nu_float" class /////////////////////////////////////////
+///////////////////////////////////////////// "float1" class /////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_float::nu_float(
-                   size_t loc_layout                                                                // Kernel argument layout index.
-                  )
+nu::float1::float1 (
+                    size_t loc_layout                                                               // Kernel argument layout index.
+                   )
 {
   size_t i;                                                                                         // Data vector current index.
 
-  i                        = nu_data::data.size ();                                                 // Getting data vector current index...
-  nu_data::data.push_back (this);
-  nu_data::data[i]->type   = NU_FLOAT;                                                              // Setting Neutrino data type...
-  nu_data::data[i]->layout = loc_layout;                                                            // Setting kernel argument layout index...
-  ready                    = false;                                                                 // Resetting "ready" flag...
+  i                              = nu::data::container.size ();                                     // Getting data vector current index...
+  nu::data::container.push_back (this);
+  nu::data::container[i]->type   = NU_FLOAT;                                                        // Setting Neutrino data type...
+  nu::data::container[i]->layout = loc_layout;                                                      // Setting kernel argument layout index...
+  ready                          = false;                                                           // Resetting "ready" flag...
 }
 
-nu_float::~nu_float()
+nu::float1::~float1 ()
 {
   // Doing nothing!
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////// "nu_float2" class ///////////////////////////////////////
+/////////////////////////////////////////////// "float2" class ///////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_float2::nu_float2(
-                     size_t loc_layout                                                              // Kernel argument layout index.
-                    )
+nu::float2::float2 (
+                    size_t loc_layout                                                               // Kernel argument layout index.
+                   )
 {
   size_t i;                                                                                         // Data vector current index.
 
-  i                        = nu_data::data.size ();                                                 // Getting data vector current index...
-  nu_data::data.push_back (this);
-  nu_data::data[i]->type   = NU_FLOAT2;                                                             // Setting Neutrino data type...
-  nu_data::data[i]->layout = loc_layout;                                                            // Setting kernel argument layout index...
-  ready                    = false;                                                                 // Resetting "ready" flag...
+  i                              = nu::data::container.size ();                                     // Getting data vector current index...
+  nu::data::container.push_back (this);
+  nu::data::container[i]->type   = NU_FLOAT2;                                                       // Setting Neutrino data type...
+  nu::data::container[i]->layout = loc_layout;                                                      // Setting kernel argument layout index...
+  ready                          = false;                                                           // Resetting "ready" flag...
 }
 
-nu_float2::~nu_float2()
+nu::float2::~float2 ()
 {
   // Doing nothing!
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////// "nu_float3" class ///////////////////////////////////////
+/////////////////////////////////////////////// "float3" class ///////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_float3::nu_float3(
-                     size_t loc_layout                                                              // Kernel argument layout index.
-                    )
+nu::float3::float3 (
+                    size_t loc_layout                                                               // Kernel argument layout index.
+                   )
 {
   size_t i;                                                                                         // Data vector current index.
 
-  i                        = nu_data::data.size ();                                                 // Getting data vector current index...
-  nu_data::data.push_back (this);
-  nu_data::data[i]->type   = NU_FLOAT3;                                                             // Setting Neutrino data type...
-  nu_data::data[i]->layout = loc_layout;                                                            // Setting kernel argument layout index...
-  ready                    = false;                                                                 // Resetting "ready" flag...
+  i                              = nu::data::container.size ();                                     // Getting data vector current index...
+  nu::data::container.push_back (this);
+  nu::data::container[i]->type   = NU_FLOAT3;                                                       // Setting Neutrino data type...
+  nu::data::container[i]->layout = loc_layout;                                                      // Setting kernel argument layout index...
+  ready                          = false;                                                           // Resetting "ready" flag...
 }
 
-nu_float3::~nu_float3()
+nu::float3::~float3 ()
 {
   // Doing nothing!
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////// "nu_float4" class //////////////////////////////////////
+//////////////////////////////////////////////// "float4" class //////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_float4::nu_float4(
-                     size_t loc_layout                                                              // Kernel argument layout index.
-                    )
+nu::float4::float4 (
+                    size_t loc_layout                                                               // Kernel argument layout index.
+                   )
 {
   size_t i;                                                                                         // Data vector current index.
 
-  i                        = nu_data::data.size ();                                                 // Getting data vector current index...
-  nu_data::data.push_back (this);
-  nu_data::data[i]->type   = NU_FLOAT4;                                                             // Setting Neutrino data type...
-  nu_data::data[i]->layout = loc_layout;                                                            // Setting kernel argument layout index...
-  ready                    = false;                                                                 // Resetting "ready" flag...
+  i                              = nu::data::container.size ();                                     // Getting data vector current index...
+  nu::data::container.push_back (this);
+  nu::data::container[i]->type   = NU_FLOAT4;                                                       // Setting Neutrino data type...
+  nu::data::container[i]->layout = loc_layout;                                                      // Setting kernel argument layout index...
+  ready                          = false;                                                           // Resetting "ready" flag...
 }
 
-nu_float4::~nu_float4()
+nu::float4::~float4 ()
 {
   // Doing nothing!
 }

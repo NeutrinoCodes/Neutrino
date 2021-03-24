@@ -40,8 +40,8 @@ queue::queue()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void queue::read
 (
- nu_int* loc_data,                                                                                  // nu_int object.
- GLuint  loc_layout_index                                                                           // Layout index.
+ nu::int1* loc_data,                                                                                // nu::int1 object.
+ GLuint    loc_layout_index                                                                         // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -90,8 +90,8 @@ void queue::read
 
 void queue::read
 (
- nu_int2* loc_data,                                                                                 // nu_int2 object.
- GLuint   loc_layout_index                                                                          // Layout index.
+ nu::int2* loc_data,                                                                                // nu::int2 object.
+ GLuint    loc_layout_index                                                                         // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -140,8 +140,8 @@ void queue::read
 
 void queue::read
 (
- nu_int3* loc_data,                                                                                 // nu_int3 object.
- GLuint   loc_layout_index                                                                          // Layout index.
+ nu::int3* loc_data,                                                                                // nu::int3 object.
+ GLuint    loc_layout_index                                                                         // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -190,8 +190,8 @@ void queue::read
 
 void queue::read
 (
- nu_int4* loc_data,                                                                                 // nu_int4 object.
- GLuint   loc_layout_index                                                                          // Layout index.
+ nu::int4* loc_data,                                                                                // nu::int4 object.
+ GLuint    loc_layout_index                                                                         // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -240,8 +240,8 @@ void queue::read
 
 void queue::read
 (
- nu_float* loc_data,                                                                                // nu_floatloat object.
- GLuint    loc_layout_index                                                                         // Layout index.
+ nu::float1* loc_data,                                                                              // nu_floatloat object.
+ GLuint      loc_layout_index                                                                       // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -290,8 +290,8 @@ void queue::read
 
 void queue::read
 (
- nu_float2* loc_data,                                                                               // nu_float2 object.
- GLuint     loc_layout_index                                                                        // Layout index.
+ nu::float2* loc_data,                                                                              // nu::float2 object.
+ GLuint      loc_layout_index                                                                       // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -340,8 +340,8 @@ void queue::read
 
 void queue::read
 (
- nu_float3* loc_data,                                                                               // nu_float3 object.
- GLuint     loc_layout_index                                                                        // Layout index.
+ nu::float3* loc_data,                                                                              // nu::float3 object.
+ GLuint      loc_layout_index                                                                       // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -390,8 +390,8 @@ void queue::read
 
 void queue::read
 (
- nu_float4* loc_data,                                                                               // nu_float4 object.
- GLuint     loc_layout_index                                                                        // Layout index.
+ nu::float4* loc_data,                                                                              // nu::float4 object.
+ GLuint      loc_layout_index                                                                       // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -443,8 +443,8 @@ void queue::read
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void queue::write
 (
- nu_int* loc_data,                                                                                  // nu_int object.
- GLuint  loc_layout_index                                                                           // Layout index.
+ nu::int1* loc_data,                                                                                // nu::int1 object.
+ GLuint    loc_layout_index                                                                         // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -493,8 +493,8 @@ void queue::write
 
 void queue::write
 (
- nu_int2* loc_data,                                                                                 // nu_int2 object.
- GLuint   loc_layout_index                                                                          // Layout index.
+ nu::int2* loc_data,                                                                                // nu::int2 object.
+ GLuint    loc_layout_index                                                                         // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -543,8 +543,8 @@ void queue::write
 
 void queue::write
 (
- nu_int3* loc_data,                                                                                 // nu_int3 object.
- GLuint   loc_layout_index                                                                          // Layout index.
+ nu::int3* loc_data,                                                                                // nu::int3 object.
+ GLuint    loc_layout_index                                                                         // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -593,8 +593,8 @@ void queue::write
 
 void queue::write
 (
- nu_int4* loc_data,                                                                                 // nu_int4 object.
- GLuint   loc_layout_index                                                                          // Layout index.
+ nu::int4* loc_data,                                                                                // nu::int4 object.
+ GLuint    loc_layout_index                                                                         // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -643,8 +643,8 @@ void queue::write
 
 void queue::write
 (
- nu_float* loc_data,                                                                                // nu_float object.
- GLuint    loc_layout_index                                                                         // Layout index.
+ nu::float1* loc_data,                                                                              // nu::float1 object.
+ GLuint      loc_layout_index                                                                       // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -693,8 +693,8 @@ void queue::write
 
 void queue::write
 (
- nu_float2* loc_data,                                                                               // nu_float2 object.
- GLuint     loc_layout_index                                                                        // Layout index.
+ nu::float2* loc_data,                                                                              // nu::float2 object.
+ GLuint      loc_layout_index                                                                       // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -743,8 +743,8 @@ void queue::write
 
 void queue::write
 (
- nu_float3* loc_data,                                                                               // nu_float3 object.
- GLuint     loc_layout_index                                                                        // Layout index.
+ nu::float3* loc_data,                                                                              // nu::float3 object.
+ GLuint      loc_layout_index                                                                       // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -793,8 +793,8 @@ void queue::write
 
 void queue::write
 (
- nu_float4* loc_data,                                                                               // nu_float4 object.
- GLuint     loc_layout_index                                                                        // Layout index.
+ nu::float4* loc_data,                                                                              // nu::float4 object.
+ GLuint      loc_layout_index                                                                       // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -843,163 +843,7 @@ void queue::write
 
 void queue::acquire
 (
- nu_int* loc_data,                                                                                  // Data object.
- GLuint  loc_layout_index                                                                           // OpenGL shader layout index.
-)
-{
-  cl_int loc_error;                                                                                 // Local error code.
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
-
-  // Checking layout index:
-  if(loc_layout_index != loc_data->layout)
-  {
-    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
-    exit (EXIT_FAILURE);                                                                            // Exiting...
-  }
-
-  // Setting layout index in vertex shader...
-  glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  // Acquiring OpenCL buffer:
-  loc_error = clEnqueueAcquireGLObjects
-              (
-               queue_id,                                                                            // Queue.
-               1,                                                                                   // Number of memory objects.
-               &loc_data->buffer,                                                                   // Memory object array.
-               0,                                                                                   // Number of events in event list.
-               NULL,                                                                                // Event list.
-               NULL                                                                                 // Event.
-              );
-
-  neutrino::check_error (loc_error);                                                                // Checking returned error code...
-
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
-};
-
-void queue::acquire
-(
- nu_int2* loc_data,                                                                                 // Data object.
- GLuint   loc_layout_index                                                                          // OpenGL shader layout index.
-)
-{
-  cl_int loc_error;                                                                                 // Local error code.
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
-
-  // Checking layout index:
-  if(loc_layout_index != loc_data->layout)
-  {
-    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
-    exit (EXIT_FAILURE);                                                                            // Exiting...
-  }
-
-  // Setting layout index in vertex shader...
-  glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  // Acquiring OpenCL buffer:
-  loc_error = clEnqueueAcquireGLObjects
-              (
-               queue_id,                                                                            // Queue.
-               2,                                                                                   // Number of memory objects.
-               &loc_data->buffer,                                                                   // Memory object array.
-               0,                                                                                   // Number of events in event list.
-               NULL,                                                                                // Event list.
-               NULL                                                                                 // Event.
-              );
-
-  neutrino::check_error (loc_error);                                                                // Checking returned error code...
-
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
-};
-
-void queue::acquire
-(
- nu_int3* loc_data,                                                                                 // Data object.
- GLuint   loc_layout_index                                                                          // OpenGL shader layout index.
-)
-{
-  cl_int loc_error;                                                                                 // Local error code.
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
-
-  // Checking layout index:
-  if(loc_layout_index != loc_data->layout)
-  {
-    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
-    exit (EXIT_FAILURE);                                                                            // Exiting...
-  }
-
-  // Setting layout index in vertex shader...
-  glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  // Acquiring OpenCL buffer:
-  loc_error = clEnqueueAcquireGLObjects
-              (
-               queue_id,                                                                            // Queue.
-               3,                                                                                   // Number of memory objects.
-               &loc_data->buffer,                                                                   // Memory object array.
-               0,                                                                                   // Number of events in event list.
-               NULL,                                                                                // Event list.
-               NULL                                                                                 // Event.
-              );
-
-  neutrino::check_error (loc_error);                                                                // Checking returned error code...
-
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
-};
-
-void queue::acquire
-(
- nu_int4* loc_data,                                                                                 // Data object.
- GLuint   loc_layout_index                                                                          // OpenGL shader layout index.
-)
-{
-  cl_int loc_error;                                                                                 // Local error code.
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
-
-  // Checking layout index:
-  if(loc_layout_index != loc_data->layout)
-  {
-    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
-    exit (EXIT_FAILURE);                                                                            // Exiting...
-  }
-
-  // Setting layout index in vertex shader...
-  glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  // Acquiring OpenCL buffer:
-  loc_error = clEnqueueAcquireGLObjects
-              (
-               queue_id,                                                                            // Queue.
-               4,                                                                                   // Number of memory objects.
-               &loc_data->buffer,                                                                   // Memory object array.
-               0,                                                                                   // Number of events in event list.
-               NULL,                                                                                // Event list.
-               NULL                                                                                 // Event.
-              );
-
-  neutrino::check_error (loc_error);                                                                // Checking returned error code...
-
-  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
-};
-
-void queue::acquire
-(
- nu_float* loc_data,                                                                                // Data object.
+ nu::int1* loc_data,                                                                                // Data object.
  GLuint    loc_layout_index                                                                         // OpenGL shader layout index.
 )
 {
@@ -1038,8 +882,8 @@ void queue::acquire
 
 void queue::acquire
 (
- nu_float2* loc_data,                                                                               // Data object.
- GLuint     loc_layout_index                                                                        // OpenGL shader layout index.
+ nu::int2* loc_data,                                                                                // Data object.
+ GLuint    loc_layout_index                                                                         // OpenGL shader layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -1077,8 +921,8 @@ void queue::acquire
 
 void queue::acquire
 (
- nu_float3* loc_data,                                                                               // Data object.
- GLuint     loc_layout_index                                                                        // OpenGL shader layout index.
+ nu::int3* loc_data,                                                                                // Data object.
+ GLuint    loc_layout_index                                                                         // OpenGL shader layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -1116,8 +960,164 @@ void queue::acquire
 
 void queue::acquire
 (
- nu_float4* loc_data,                                                                               // Data object.
- GLuint     loc_layout_index                                                                        // OpenGL shader layout index.
+ nu::int4* loc_data,                                                                                // Data object.
+ GLuint    loc_layout_index                                                                         // OpenGL shader layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
+    exit (EXIT_FAILURE);                                                                            // Exiting...
+  }
+
+  // Setting layout index in vertex shader...
+  glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  // Acquiring OpenCL buffer:
+  loc_error = clEnqueueAcquireGLObjects
+              (
+               queue_id,                                                                            // Queue.
+               4,                                                                                   // Number of memory objects.
+               &loc_data->buffer,                                                                   // Memory object array.
+               0,                                                                                   // Number of events in event list.
+               NULL,                                                                                // Event list.
+               NULL                                                                                 // Event.
+              );
+
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
+
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+};
+
+void queue::acquire
+(
+ nu::float1* loc_data,                                                                              // Data object.
+ GLuint      loc_layout_index                                                                       // OpenGL shader layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
+    exit (EXIT_FAILURE);                                                                            // Exiting...
+  }
+
+  // Setting layout index in vertex shader...
+  glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  // Acquiring OpenCL buffer:
+  loc_error = clEnqueueAcquireGLObjects
+              (
+               queue_id,                                                                            // Queue.
+               1,                                                                                   // Number of memory objects.
+               &loc_data->buffer,                                                                   // Memory object array.
+               0,                                                                                   // Number of events in event list.
+               NULL,                                                                                // Event list.
+               NULL                                                                                 // Event.
+              );
+
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
+
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+};
+
+void queue::acquire
+(
+ nu::float2* loc_data,                                                                              // Data object.
+ GLuint      loc_layout_index                                                                       // OpenGL shader layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
+    exit (EXIT_FAILURE);                                                                            // Exiting...
+  }
+
+  // Setting layout index in vertex shader...
+  glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  // Acquiring OpenCL buffer:
+  loc_error = clEnqueueAcquireGLObjects
+              (
+               queue_id,                                                                            // Queue.
+               2,                                                                                   // Number of memory objects.
+               &loc_data->buffer,                                                                   // Memory object array.
+               0,                                                                                   // Number of events in event list.
+               NULL,                                                                                // Event list.
+               NULL                                                                                 // Event.
+              );
+
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
+
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+};
+
+void queue::acquire
+(
+ nu::float3* loc_data,                                                                              // Data object.
+ GLuint      loc_layout_index                                                                       // OpenGL shader layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Local error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+
+  // Checking layout index:
+  if(loc_layout_index != loc_data->layout)
+  {
+    neutrino::error ("Layout index mismatch!");                                                     // Printing message...
+    exit (EXIT_FAILURE);                                                                            // Exiting...
+  }
+
+  // Setting layout index in vertex shader...
+  glDisableVertexAttribArray (loc_layout_index);                                                    // Unbinding data array...
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  // Acquiring OpenCL buffer:
+  loc_error = clEnqueueAcquireGLObjects
+              (
+               queue_id,                                                                            // Queue.
+               3,                                                                                   // Number of memory objects.
+               &loc_data->buffer,                                                                   // Memory object array.
+               0,                                                                                   // Number of events in event list.
+               NULL,                                                                                // Event list.
+               NULL                                                                                 // Event.
+              );
+
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
+
+  clFinish (queue_id);                                                                              // Waiting for OpenCL to finish...
+};
+
+void queue::acquire
+(
+ nu::float4* loc_data,                                                                              // Data object.
+ GLuint      loc_layout_index                                                                       // OpenGL shader layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -1155,8 +1155,8 @@ void queue::acquire
 
 void queue::release
 (
- nu_int* loc_data,                                                                                  // Data object.
- GLuint  loc_layout_index                                                                           // OpenGL shader layout index.
+ nu::int1* loc_data,                                                                                // Data object.
+ GLuint    loc_layout_index                                                                         // OpenGL shader layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -1205,8 +1205,8 @@ void queue::release
 
 void queue::release
 (
- nu_int2* loc_data,                                                                                 // Data object.
- GLuint   loc_layout_index                                                                          // OpenGL shader layout index.
+ nu::int2* loc_data,                                                                                // Data object.
+ GLuint    loc_layout_index                                                                         // OpenGL shader layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -1255,8 +1255,8 @@ void queue::release
 
 void queue::release
 (
- nu_int3* loc_data,                                                                                 // Data object.
- GLuint   loc_layout_index                                                                          // OpenGL shader layout index.
+ nu::int3* loc_data,                                                                                // Data object.
+ GLuint    loc_layout_index                                                                         // OpenGL shader layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -1305,8 +1305,8 @@ void queue::release
 
 void queue::release
 (
- nu_int4* loc_data,                                                                                 // Data object.
- GLuint   loc_layout_index                                                                          // OpenGL shader layout index.
+ nu::int4* loc_data,                                                                                // Data object.
+ GLuint    loc_layout_index                                                                         // OpenGL shader layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -1355,8 +1355,8 @@ void queue::release
 
 void queue::release
 (
- nu_float* loc_data,                                                                                // Data object.
- GLuint    loc_layout_index                                                                         // OpenGL shader layout index.
+ nu::float1* loc_data,                                                                              // Data object.
+ GLuint      loc_layout_index                                                                       // OpenGL shader layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -1405,8 +1405,8 @@ void queue::release
 
 void queue::release
 (
- nu_float2* loc_data,                                                                               // Data object.
- GLuint     loc_layout_index                                                                        // OpenGL shader layout index.
+ nu::float2* loc_data,                                                                              // Data object.
+ GLuint      loc_layout_index                                                                       // OpenGL shader layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -1455,8 +1455,8 @@ void queue::release
 
 void queue::release
 (
- nu_float3* loc_data,                                                                               // Data object.
- GLuint     loc_layout_index                                                                        // OpenGL shader layout index.
+ nu::float3* loc_data,                                                                              // Data object.
+ GLuint      loc_layout_index                                                                       // OpenGL shader layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.
@@ -1505,8 +1505,8 @@ void queue::release
 
 void queue::release
 (
- nu_float4* loc_data,                                                                               // Data object.
- GLuint     loc_layout_index                                                                        // OpenGL shader layout index.
+ nu::float4* loc_data,                                                                              // Data object.
+ GLuint      loc_layout_index                                                                       // OpenGL shader layout index.
 )
 {
   cl_int loc_error;                                                                                 // Local error code.

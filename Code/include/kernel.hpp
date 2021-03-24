@@ -76,75 +76,11 @@ public:
   ///   by the user for each instace of this function. This number tells Neutrino the place of the
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
-               nu_int* loc_data,                                                                    ///< nu_int data.
-               GLuint  loc_layout_index                                                             ///< Layout index.
-              );
-
-  /// @overload setarg(nu_int2* loc_data, cl_uint loc_layout_index)
-  /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
-  /// must correspond to the argument in the OpenCL kernel source file.
-  /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
-  /// function of the kernel source file.
-  /// The setter function has two arguments:
-  /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
-  ///   client GPU.
-  /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
-  ///   by the user for each instace of this function. This number tells Neutrino the place of the
-  ///   argument in the @link thekernel @endlink function of the kernel source file.
-  void setarg (
-               nu_int2* loc_data,                                                                   ///< nu_int2 data.
-               GLuint   loc_layout_index                                                            ///< Layout index.
-              );
-
-  /// @overload setarg(nu_int3* loc_data, cl_uint loc_layout_index)
-  /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
-  /// must correspond to the argument in the OpenCL kernel source file.
-  /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
-  /// function of the kernel source file.
-  /// The setter function has two arguments:
-  /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
-  ///   client GPU.
-  /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
-  ///   by the user for each instace of this function. This number tells Neutrino the place of the
-  ///   argument in the @link thekernel @endlink function of the kernel source file.
-  void setarg (
-               nu_int3* loc_data,                                                                   ///< nu_int3 data.
-               GLuint   loc_layout_index                                                            ///< Layout index.
-              );
-
-  /// @overload setarg(nu_int4* loc_data, cl_uint loc_layout_index)
-  /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
-  /// must correspond to the argument in the OpenCL kernel source file.
-  /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
-  /// function of the kernel source file.
-  /// The setter function has two arguments:
-  /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
-  ///   client GPU.
-  /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
-  ///   by the user for each instace of this function. This number tells Neutrino the place of the
-  ///   argument in the @link thekernel @endlink function of the kernel source file.
-  void setarg (
-               nu_int4* loc_data,                                                                   ///< nu_int4 data.
-               GLuint   loc_layout_index                                                            ///< Layout index.
-              );
-
-  /// @overload setarg(nu_float* loc_data, cl_uint loc_layout_index)
-  /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
-  /// must correspond to the argument in the OpenCL kernel source file.
-  /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
-  /// function of the kernel source file.
-  /// The setter function has two arguments:
-  /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
-  ///   client GPU.
-  /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
-  ///   by the user for each instace of this function. This number tells Neutrino the place of the
-  ///   argument in the @link thekernel @endlink function of the kernel source file.
-  void setarg (
-               nu_float* loc_data,                                                                  ///< nu_float data.
+               nu::int1* loc_data,                                                                  ///< nu::int1 data.
                GLuint    loc_layout_index                                                           ///< Layout index.
               );
 
-  /// @overload setarg(nu_float2* loc_data, cl_uint loc_layout_index)
+  /// @overload setarg(nu::int2* loc_data, cl_uint loc_layout_index)
   /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
@@ -156,11 +92,11 @@ public:
   ///   by the user for each instace of this function. This number tells Neutrino the place of the
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
-               nu_float2* loc_data,                                                                 ///< nu_float2 data.
-               GLuint     loc_layout_index                                                          ///< Layout index.
+               nu::int2* loc_data,                                                                  ///< nu::int2 data.
+               GLuint    loc_layout_index                                                           ///< Layout index.
               );
 
-  /// @overload setarg(nu_float3* loc_data, cl_uint loc_layout_index)
+  /// @overload setarg(nu::int3* loc_data, cl_uint loc_layout_index)
   /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
@@ -172,11 +108,11 @@ public:
   ///   by the user for each instace of this function. This number tells Neutrino the place of the
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
-               nu_float3* loc_data,                                                                 ///< nu_float3 data.
-               GLuint     loc_layout_index                                                          ///< Layout index.
+               nu::int3* loc_data,                                                                  ///< nu::int3 data.
+               GLuint    loc_layout_index                                                           ///< Layout index.
               );
 
-  /// @overload setarg(nu_float4* loc_data, cl_uint loc_layout_index)
+  /// @overload setarg(nu::int4* loc_data, cl_uint loc_layout_index)
   /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
   /// must correspond to the argument in the OpenCL kernel source file.
   /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
@@ -188,8 +124,72 @@ public:
   ///   by the user for each instace of this function. This number tells Neutrino the place of the
   ///   argument in the @link thekernel @endlink function of the kernel source file.
   void setarg (
-               nu_float4* loc_data,                                                                 ///< nu_float4 data.
-               GLuint     loc_layout_index                                                          ///< Layout index.
+               nu::int4* loc_data,                                                                  ///< nu::int4 data.
+               GLuint    loc_layout_index                                                           ///< Layout index.
+              );
+
+  /// @overload setarg(nu::float1* loc_data, cl_uint loc_layout_index)
+  /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
+  /// must correspond to the argument in the OpenCL kernel source file.
+  /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
+  /// function of the kernel source file.
+  /// The setter function has two arguments:
+  /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
+  ///   client GPU.
+  /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
+  ///   by the user for each instace of this function. This number tells Neutrino the place of the
+  ///   argument in the @link thekernel @endlink function of the kernel source file.
+  void setarg (
+               nu::float1* loc_data,                                                                ///< nu::float1 data.
+               GLuint      loc_layout_index                                                         ///< Layout index.
+              );
+
+  /// @overload setarg(nu::float2* loc_data, cl_uint loc_layout_index)
+  /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
+  /// must correspond to the argument in the OpenCL kernel source file.
+  /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
+  /// function of the kernel source file.
+  /// The setter function has two arguments:
+  /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
+  ///   client GPU.
+  /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
+  ///   by the user for each instace of this function. This number tells Neutrino the place of the
+  ///   argument in the @link thekernel @endlink function of the kernel source file.
+  void setarg (
+               nu::float2* loc_data,                                                                ///< nu::float2 data.
+               GLuint      loc_layout_index                                                         ///< Layout index.
+              );
+
+  /// @overload setarg(nu::float3* loc_data, cl_uint loc_layout_index)
+  /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
+  /// must correspond to the argument in the OpenCL kernel source file.
+  /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
+  /// function of the kernel source file.
+  /// The setter function has two arguments:
+  /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
+  ///   client GPU.
+  /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
+  ///   by the user for each instace of this function. This number tells Neutrino the place of the
+  ///   argument in the @link thekernel @endlink function of the kernel source file.
+  void setarg (
+               nu::float3* loc_data,                                                                ///< nu::float3 data.
+               GLuint      loc_layout_index                                                         ///< Layout index.
+              );
+
+  /// @overload setarg(nu::float4* loc_data, cl_uint loc_layout_index)
+  /// @details Sets an argument on the Neutrino kernel object. The argument in the kernel object
+  /// must correspond to the argument in the OpenCL kernel source file.
+  /// This operation tells Neutrino which are the arguments present in the @link thekernel @endlink
+  /// function of the kernel source file.
+  /// The setter function has two arguments:
+  /// - **loc_data**, which contains the user data to be exchanged between the host PC and the
+  ///   client GPU.
+  /// - **loc_layout_index**, which is an integer incremental number starting from 0 and specified
+  ///   by the user for each instace of this function. This number tells Neutrino the place of the
+  ///   argument in the @link thekernel @endlink function of the kernel source file.
+  void setarg (
+               nu::float4* loc_data,                                                                ///< nu::float4 data.
+               GLuint      loc_layout_index                                                         ///< Layout index.
               );
 
   /// @brief **Class destructor.**
