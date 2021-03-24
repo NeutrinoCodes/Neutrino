@@ -1,50 +1,50 @@
 /// @file     opengl.cpp
 /// @author   Erik ZORZIN
 /// @date     24OCT2019
-/// @brief    Definition of the "opengl" class.
+/// @brief    Definition of the "nu_opengl" class.
 
 #include "opengl.hpp"
 
-bool opengl::init_done = false;                                                                     // init_done flag.
+bool nu_opengl::init_done = false;                                                                  // init_done flag.
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////// "opengl" class /////////////////////////////////////////////
+///////////////////////////////////////// "nu_opengl" class /////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-opengl::opengl(
-               std::string loc_title,                                                               ///< Window title.
-               int         loc_window_size_x,                                                       ///< Window x-size [px].
-               int         loc_window_size_y,                                                       ///< Window y-size [px].
-               float       loc_orbit_x_initial,                                                     ///< Initial "near clipping-plane" x-coordinate.
-               float       loc_orbit_y_initial,                                                     ///< Initial "near clipping-plane" y-coordinate.
-               float       loc_pan_x_initial,                                                       ///< Initial pan-x coordinate.
-               float       loc_pan_y_initial,                                                       ///< Initial pan-y coordinate.
-               float       loc_pan_z_initial                                                        ///< Initial pan-z coordinate.
-              )
+nu_opengl::nu_opengl(
+                     std::string loc_title,                                                         ///< Window title.
+                     int         loc_window_size_x,                                                 ///< Window x-size [px].
+                     int         loc_window_size_y,                                                 ///< Window y-size [px].
+                     float       loc_orbit_x_initial,                                               ///< Initial "near clipping-plane" x-coordinate.
+                     float       loc_orbit_y_initial,                                               ///< Initial "near clipping-plane" y-coordinate.
+                     float       loc_pan_x_initial,                                                 ///< Initial pan-x coordinate.
+                     float       loc_pan_y_initial,                                                 ///< Initial pan-y coordinate.
+                     float       loc_pan_z_initial                                                  ///< Initial pan-z coordinate.
+                    )
 {
   if(neutrino::init_done != true)
   {
     neutrino::init ();                                                                              // Initializing Neutrino...
   }
 
-  if(opengl::init_done != true)
+  if(nu_opengl::init_done != true)
   {
-    opengl::init (
-                  loc_title,                                                                        // Window title.
-                  loc_window_size_x,                                                                // Window x-size [px].
-                  loc_window_size_y,                                                                // Window y-size [px].
-                  loc_orbit_x_initial,                                                              // Initial "near clipping-plane" x-coordinate.
-                  loc_orbit_y_initial,                                                              // Initial "near clipping-plane" y-coordinate.
-                  loc_pan_x_initial,                                                                // Initial pan-x coordinate.
-                  loc_pan_y_initial,                                                                // Initial pan-y coordinate.
-                  loc_pan_z_initial                                                                 // Initial pan-z coordinate.
-                 );
+    nu_opengl::init (
+                     loc_title,                                                                     // Window title.
+                     loc_window_size_x,                                                             // Window x-size [px].
+                     loc_window_size_y,                                                             // Window y-size [px].
+                     loc_orbit_x_initial,                                                           // Initial "near clipping-plane" x-coordinate.
+                     loc_orbit_y_initial,                                                           // Initial "near clipping-plane" y-coordinate.
+                     loc_pan_x_initial,                                                             // Initial pan-x coordinate.
+                     loc_pan_y_initial,                                                             // Initial pan-y coordinate.
+                     loc_pan_z_initial                                                              // Initial pan-z coordinate.
+                    );
   }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// PRIVATE METHODS ///////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void opengl::set_shader
+void nu_opengl::set_shader
 (
  shader* loc_shader,                                                                                // Shader.
  float   view_matrix[16],                                                                           // View matrix.
@@ -122,38 +122,38 @@ void opengl::set_shader
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// CALLBACKS /////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void opengl::refresh_callback
+void nu_opengl::refresh_callback
 (
  GLFWwindow* loc_window                                                                             // Window.
 )
 {
-  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
+  nu_opengl* win = (nu_opengl*) glfwGetWindowUserPointer (loc_window);                              // Getting window pointer...
   win->refresh ();                                                                                  // Calling refresh retpoline...
 }
 
-void opengl::window_resize_callback
+void nu_opengl::window_resize_callback
 (
  GLFWwindow* loc_window,                                                                            // Window.
  int         loc_x_size,                                                                            // Window x-size [screen coordinates].
  int         loc_y_size                                                                             // Window y-size [screen coordinates].
 )
 {
-  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
+  nu_opengl* win = (nu_opengl*) glfwGetWindowUserPointer (loc_window);                              // Getting window pointer...
   win->window_resize (loc_x_size, loc_y_size);                                                      // Calling window resize retpoline...
 }
 
-void opengl::framebuffer_resize_callback
+void nu_opengl::framebuffer_resize_callback
 (
  GLFWwindow* loc_window,                                                                            // Window.
  int         loc_x_size,                                                                            // Framebuffer x-size [px].
  int         loc_y_size                                                                             // Framebuffer y-size [px].
 )
 {
-  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
+  nu_opengl* win = (nu_opengl*) glfwGetWindowUserPointer (loc_window);                              // Getting window pointer...
   win->framebuffer_resize (loc_x_size, loc_y_size);                                                 // Calling framebuffer resize retpoline...
 }
 
-void opengl::key_pressed_callback
+void nu_opengl::key_pressed_callback
 (
  GLFWwindow* loc_window,                                                                            // Window.
  int         loc_key,                                                                               // Key.
@@ -162,11 +162,11 @@ void opengl::key_pressed_callback
  int         loc_mods                                                                               // Mods.
 )
 {
-  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
+  nu_opengl* win = (nu_opengl*) glfwGetWindowUserPointer (loc_window);                              // Getting window pointer...
   win->key_pressed (loc_key, loc_scancode, loc_action, loc_mods);                                   // Calling key pressed retpoline...
 }
 
-void opengl::mouse_button_callback
+void nu_opengl::mouse_button_callback
 (
  GLFWwindow* loc_window,                                                                            // Window.
  int         loc_button,                                                                            // Button.
@@ -174,33 +174,33 @@ void opengl::mouse_button_callback
  int         loc_mods                                                                               // Mods.
 )
 {
-  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
+  nu_opengl* win = (nu_opengl*) glfwGetWindowUserPointer (loc_window);                              // Getting window pointer...
   win->mouse_button (loc_button, loc_action, loc_mods);                                             // Calling mouse pressed retpoline...
 }
 
-void opengl::mouse_moved_callback
+void nu_opengl::mouse_moved_callback
 (
  GLFWwindow* loc_window,                                                                            // Window.
  double      loc_xpos,                                                                              // Mouse x-position [px].
  double      loc_ypos                                                                               // Mouse y-position [px].
 )
 {
-  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
+  nu_opengl* win = (nu_opengl*) glfwGetWindowUserPointer (loc_window);                              // Getting window pointer...
   win->mouse_moved (loc_xpos, loc_ypos);                                                            // Calling mouse moved retpoline...
 }
 
-void opengl::mouse_scrolled_callback
+void nu_opengl::mouse_scrolled_callback
 (
  GLFWwindow* loc_window,                                                                            // Window.
  double      loc_xoffset,                                                                           // Mouse scroll x-offset [px].
  double      loc_yoffset                                                                            // Mouse scroll y-offset [px].
 )
 {
-  opengl* win = (opengl*) glfwGetWindowUserPointer (loc_window);                                    // Getting window pointer...
+  nu_opengl* win = (nu_opengl*) glfwGetWindowUserPointer (loc_window);                              // Getting window pointer...
   win->mouse_scrolled (loc_xoffset, loc_yoffset);                                                   // Calling mouse scrolled retpoline...
 }
 
-void opengl::joystick_connected_callback
+void nu_opengl::joystick_connected_callback
 (
  int loc_joystick,                                                                                  // Joystick.
  int loc_event                                                                                      // Joystick-connected event.
@@ -222,7 +222,7 @@ void opengl::joystick_connected_callback
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// PRIVATE RETPOLINES ////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void opengl::key_pressed
+void nu_opengl::key_pressed
 (
  int loc_key,                                                                                       // Key.
  int loc_scancode,                                                                                  // Scancode.
@@ -257,7 +257,7 @@ void opengl::key_pressed
 
 }
 
-void opengl::mouse_button
+void nu_opengl::mouse_button
 (
  int loc_button,                                                                                    // Button.
  int loc_action,                                                                                    // Action.
@@ -299,7 +299,7 @@ void opengl::mouse_button
   }
 }
 
-void opengl::mouse_moved
+void nu_opengl::mouse_moved
 (
  double loc_xpos,                                                                                   // Mouse position [px].
  double loc_ypos                                                                                    // Mouse position [px].
@@ -309,7 +309,7 @@ void opengl::mouse_moved
   mouse_Y = loc_ypos;                                                                               // Getting mouse position...
 }
 
-void opengl::mouse_scrolled
+void nu_opengl::mouse_scrolled
 (
  double loc_xoffset,                                                                                // Mouse scrolled x-position [px].
  double loc_yoffset                                                                                 // Mouse scrolled y-position [px].
@@ -322,7 +322,7 @@ void opengl::mouse_scrolled
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////// PUBLIC METHODS ///////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void opengl::init
+void nu_opengl::init
 (
  std::string loc_title,                                                                             // Window title.
  int         loc_window_size_x,                                                                     // Window x-size [px].
@@ -545,12 +545,12 @@ void opengl::init
   glfwPollEvents ();                                                                                // Polling GLFW events...
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
   neutrino::glfw_window = glfw_window;                                                              // Setting glfw window...
-  opengl::init_done     = true;                                                                     // Setting init_done flag...
+  nu_opengl::init_done  = true;                                                                     // Setting init_done flag...
 
   neutrino::done ();                                                                                // Printing message...
 }
 
-void opengl::poll_events ()
+void nu_opengl::poll_events ()
 {
 
   glfwPollEvents ();                                                                                // Polling GLFW events...
@@ -594,7 +594,7 @@ void opengl::poll_events ()
   }
 }
 
-void opengl::orbit
+void nu_opengl::orbit
 (
  float loc_orbit_x,                                                                                 // "Near clipping-plane" x-coordinates.
  float loc_orbit_y,                                                                                 // "Near clipping-plane" y-coordinates.
@@ -701,7 +701,7 @@ void opengl::orbit
   }
 }
 
-void opengl::pan
+void nu_opengl::pan
 (
  float loc_pan_x,                                                                                   // World x-pan.
  float loc_pan_y,                                                                                   // World y-pan.
@@ -787,11 +787,11 @@ void opengl::pan
   );                                                                                                // Backing up translation matrix...
 }
 
-void opengl::mouse_navigation (
-                               float loc_orbit_rate,                                                // Orbit angular rate coefficient [rev/s].
-                               float loc_pan_rate,                                                  // Pan translation rate [m/s].
-                               float loc_decaytime                                                  // Low pass filter decay time [s].
-                              )
+void nu_opengl::mouse_navigation (
+                                  float loc_orbit_rate,                                             // Orbit angular rate coefficient [rev/s].
+                                  float loc_pan_rate,                                               // Pan translation rate [m/s].
+                                  float loc_decaytime                                               // Low pass filter decay time [s].
+                                 )
 {
   float dt          = 0.0;
   float dt_min      = 0.01;
@@ -868,12 +868,12 @@ void opengl::mouse_navigation (
   scroll_Y = 0;                                                                                     // Resetting scroll_Y...
 }
 
-void opengl::gamepad_navigation (
-                                 float loc_orbit_rate,                                              // Orbit angular rate coefficient [rev/s].
-                                 float loc_pan_rate,                                                // Pan translation rate [m/s].
-                                 float loc_decaytime,                                               // Low pass filter decay time [s].
-                                 float loc_deadzone                                                 // Gamepad joystick deadzone [0...1].
-                                )
+void nu_opengl::gamepad_navigation (
+                                    float loc_orbit_rate,                                           // Orbit angular rate coefficient [rev/s].
+                                    float loc_pan_rate,                                             // Pan translation rate [m/s].
+                                    float loc_decaytime,                                            // Low pass filter decay time [s].
+                                    float loc_deadzone                                              // Gamepad joystick deadzone [0...1].
+                                   )
 {
   float loc_orbit_x;
   float loc_orbit_y;
@@ -905,12 +905,12 @@ void opengl::gamepad_navigation (
       );
 }
 
-void opengl::close ()
+void nu_opengl::close ()
 {
   glfwSetWindowShouldClose (glfw_window, GL_TRUE);                                                  // Setting window "closed" flag...
 }
 
-bool opengl::closed ()
+bool nu_opengl::closed ()
 {
   if(glfwWindowShouldClose (glfw_window))
   {
@@ -922,14 +922,14 @@ bool opengl::closed ()
   return(glfwWindowShouldClose (glfw_window));                                                      // Returning window closure status...
 }
 
-void opengl::clear ()
+void nu_opengl::clear ()
 {
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                                              // Clearing window...
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 }
 
-void opengl::plot
+void nu_opengl::plot
 (
  shader* loc_shader                                                                                 // OpenGL shader.
 )
@@ -1024,14 +1024,14 @@ void opengl::plot
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// PUBLIC RETPOLINES /////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void opengl::refresh ()
+void nu_opengl::refresh ()
 {
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
   glfwSwapBuffers (glfw_window);                                                                    // Swapping front and back buffers...
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 }
 
-void opengl::window_resize
+void nu_opengl::window_resize
 (
  int loc_x_size,                                                                                    // Window x-size [screen coordinates].
  int loc_y_size                                                                                     // Window y-size [screen coordinates].
@@ -1041,7 +1041,7 @@ void opengl::window_resize
   window_size_y = loc_y_size;                                                                       // Setting window_size_y...
 }
 
-void opengl::framebuffer_resize
+void nu_opengl::framebuffer_resize
 (
  int loc_x_size,                                                                                    // Window x-size [screen coordinates].
  int loc_y_size                                                                                     // Window y-size [screen coordinates].
@@ -1078,7 +1078,7 @@ void opengl::framebuffer_resize
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 }
 
-opengl::~opengl()
+nu_opengl::~nu_opengl()
 {
   glfwTerminate ();                                                                                 // Terminating GLFW...
 }
