@@ -802,7 +802,7 @@ void nu_opencl::release ()
 
 void nu_opencl::execute
 (
- kernel*     loc_kernel,                                                                            // OpenCL kernel.
+ nu_kernel*  loc_kernel,                                                                            // OpenCL kernel.
  kernel_mode loc_kernel_mode                                                                        // Kernel mode.
 )
 {
