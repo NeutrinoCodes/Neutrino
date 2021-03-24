@@ -1,7 +1,7 @@
 /// @file     kernel.hpp
 /// @author   Erik ZORZIN
 /// @date     24OCT2019
-/// @brief    Declaration of an OpenCL "nu_kernel" class.
+/// @brief    Declaration of an OpenCL "kernel" class.
 ///
 /// @details  A Neutrino "kernel" is an [OpenCL kernel]
 /// (https://en.wikipedia.org/wiki/OpenCL#OpenCL_C_language). The @link kernel @endlink class has
@@ -10,20 +10,22 @@
 /// The argument in the kernel object must correspond to the argument in the OpenCL kernel
 /// source file.
 
-#ifndef nu_kernel_hpp
-#define nu_kernel_hpp
+#ifndef kernel_hpp
+#define kernel_hpp
 
 #include "neutrino.hpp"
 #include "data_classes.hpp"
 
+namespace nu
+{
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// "nu_kernel" class //////////////////////////////////////////
+///////////////////////////////////////////// "kernel" class //////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @class kernel
 /// ### OpenCL kernel.
 /// Declares an OpenCL kernel.
 /// To be used to run OpenCL computation.
-class nu_kernel : public neutrino                                                                   ///< @brief **OpenCL kernel.**
+class kernel : public neutrino                                                                      ///< @brief **OpenCL kernel.**
 {
 private:
   cl_device_id*            device_id;                                                               ///< @brief **Device ID array.**
@@ -46,7 +48,7 @@ public:
   /// The initialization of the class must occur
   /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
   /// therefore it must be done by invoking the @link kernel::init @endlink method.
-  nu_kernel();
+  kernel();
 
   /// @brief **Kernel source adder function.**
   /// @details Loads an OpenCL kernel source from its corresponding source file.
@@ -193,7 +195,7 @@ public:
   /// @brief **Class destructor.**
   /// @details Releases the OpenCL kernel object, releases the OpenCL kernel event,
   /// releases the OpenCL program, releases the device ID array.
-  ~nu_kernel();
+  ~kernel();
 };
-
+}
 #endif
