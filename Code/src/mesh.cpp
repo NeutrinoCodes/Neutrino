@@ -1,16 +1,16 @@
 /// @file     mesh.cpp
 /// @author   Erik ZORZIN
 /// @date     27JAN2020
-/// @brief    Declaration of a "mesh" class.
+/// @brief    Declaration of a "nu_mesh" class.
 
 #include "mesh.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// "mesh" class /////////////////////////////////////////////
+///////////////////////////////////////// "nu_mesh" class ////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-mesh::mesh(
-           std::string loc_file_name                                                                // GMSH .msh file name.
-          )
+nu_mesh::nu_mesh(
+                 std::string loc_file_name                                                          // GMSH .msh file name.
+                )
 {
   neutrino::action ("initializing GMSH...");                                                        // Printing message...
   gmsh::initialize ();                                                                              // Initializing GMSH...
@@ -24,11 +24,11 @@ mesh::mesh(
   neutrino::done ();                                                                                // Printing message...
 }
 
-void mesh::process (
-                    int loc_physical_group_tag,                                                     // Physical group tag.
-                    int loc_physical_group_dimension,                                               // Physical group dimension.
-                    int loc_element_type                                                            // Element type.
-                   )
+void nu_mesh::process (
+                       int loc_physical_group_tag,                                                  // Physical group tag.
+                       int loc_physical_group_dimension,                                            // Physical group dimension.
+                       int loc_element_type                                                         // Element type.
+                      )
 {
   // NODE VARIABLES:
   std::vector<size_t> loc_node_tag;                                                                 // Node tags of the given physical group.
@@ -325,7 +325,7 @@ void mesh::process (
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////// DESTRUCTOR ////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-mesh::~mesh()
+nu_mesh::~nu_mesh()
 {
   gmsh::finalize ();                                                                                // Finalizing GMSH...
 }

@@ -1,15 +1,15 @@
 /// @file     mesh.hpp
 /// @author   Erik ZORZIN
 /// @date     27JAN2020
-/// @brief    Declaration of a "mesh" class based on GMSH.
+/// @brief    Declaration of a "nu_mesh" class based on GMSH.
 ///
 /// @details  **GMSH** (http://gmsh.info) is "a three-dimensional finite element mesh generator
 /// with built-in pre- and post-processing facilities".
 /// Neutrino reads GMSH files and reconstructs a group complex out of it.
 /// The group complex is used for both computational and rendering purposes.
 
-#ifndef mesh_hpp
-#define mesh_hpp
+#ifndef nu_mesh_hpp
+#define nu_mesh_hpp
 
 #include "neutrino.hpp"
 #include "data_classes.hpp"
@@ -211,13 +211,13 @@ typedef struct _gmsh_neighbour
 #define NU_MSH_MAX_NUM  140                                                                         ///< GMSH: keep this up-to-date when adding new type!
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////// "mesh" class ///////////////////////////////////////////
+///////////////////////////////////////////// "nu_mesh" class /////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @class mesh
+/// @class nu_mesh
 /// ### Mesh.
 /// Declares a mesh class.
 /// To be used to run mesh operations.
-class mesh : public neutrino                                                                        /// @brief **Mesh.**
+class nu_mesh : public neutrino                                                                     /// @brief **Mesh.**
 {
 private:
   // ENTITY VARIABLES:
@@ -248,9 +248,9 @@ public:
   std::vector<nu_float4_structure>  neighbour_link;                                                 ///< Neighbour links.
   std::vector<GLfloat>              neighbour_length;                                               ///< Neighbour link lengths.
 
-  mesh (
-        std::string loc_file_name                                                                   ///< GMSH .msh file name.
-       );
+  nu_mesh (
+           std::string loc_file_name                                                                ///< GMSH .msh file name.
+          );
 
   void process (
                 int loc_physical_group_tag,                                                         ///< Physical group tag.
@@ -258,7 +258,7 @@ public:
                 int loc_element_type                                                                ///< Element type.
                );
 
-  ~mesh();
+  ~nu_mesh();
 };
 
 #endif
