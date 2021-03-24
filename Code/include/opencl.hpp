@@ -1,7 +1,7 @@
 /// @file     opencl.hpp
 /// @author   Erik ZORZIN
 /// @date     24OCT2019
-/// @brief    Declaration of the "opencl" class.
+/// @brief    Declaration of the "nu_opencl" class.
 ///
 /// @details  This class builds up the OpenCL context.
 /// The OpenCL context is the hardware place where doing OpenCL computation.
@@ -10,8 +10,8 @@
 /// the OpenGL context for graphics rendering of data already present on the GPU memory thanks to
 /// the OpenCL context. This modality allows fast rendering of the results of the computation.
 
-#ifndef opencl_hpp
-#define opencl_hpp
+#ifndef nu_opencl_hpp
+#define nu_opencl_hpp
 
 #include "neutrino.hpp"
 #include "opengl.hpp"
@@ -22,13 +22,13 @@
 #include "data_classes.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// "opencl" class /////////////////////////////////////////////
+////////////////////////////////////////// "nu_opencl" class /////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @class opencl
+/// @class nu_opencl
 /// ### OpenCL class.
 /// Declares an OpenCL class.
 /// To be used to run OpenCL computation.
-class opencl : public neutrino                                                                      ///< @brief **OpenCL context.**
+class nu_opencl : public neutrino                                                                   ///< @brief **OpenCL context.**
 {
 private:
   cl_device_type device_type;                                                                       ///< @brief **OpenCL device type.**
@@ -74,9 +74,9 @@ public:
   /// @brief **Class constructor.**
   /// @details It initializes the opencl_platform, platforms_number, devices_number,
   /// properties, context_id and device_type to their default values.
-  opencl(
-         compute_device_type loc_device_type                                                        ///< OpenCL device type.
-        );
+  nu_opencl(
+            compute_device_type loc_device_type                                                     ///< OpenCL device type.
+           );
 
   /// @brief **Class initializer.**
   /// @details It checks whether the interoperability modality
@@ -121,7 +121,7 @@ public:
 
   /// @brief **Class destructor.**
   /// @details It deletes the OpenCL device, platform and context.
-  ~opencl();
+  ~nu_opencl();
 
 };
 
