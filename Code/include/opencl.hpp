@@ -117,7 +117,7 @@ public:
   /// (https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/barrier.html) in order to
   /// synchronize different OpenCL work-items within a given OpenCL work-group.
   void execute (
-                nu_kernel*  loc_kernel,                                                             ///< OpenCL kernel.
+                nu::kernel* loc_kernel,                                                             ///< OpenCL kernel.
                 kernel_mode loc_kernel_mode                                                         ///< OpenCL kernel mode.
                );
 

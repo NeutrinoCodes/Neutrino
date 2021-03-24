@@ -1,14 +1,14 @@
 /// @file     kernel.cpp
 /// @author   Erik ZORZIN
 /// @date     24OCT2019
-/// @brief    Definition of an OpenCL "nu_kernel" class.
+/// @brief    Definition of an OpenCL "kernel" class.
 
 #include "kernel.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// "nu_kernel" class ////////////////////////////////////////
+////////////////////////////////////////////// "kernel" class ////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_kernel::nu_kernel()
+nu::kernel::kernel ()
 {
   program          = NULL;                                                                          // Initializing kernel program...
   size_i           = 0;                                                                             // Initializing kernel size (i-index)...
@@ -25,9 +25,9 @@ nu_kernel::nu_kernel()
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////// addsource /////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void nu_kernel::addsource (
-                           std::string loc_kernel_file_name                                         // OpenCL kernel file name.
-                          )
+void nu::kernel::addsource (
+                            std::string loc_kernel_file_name                                        // OpenCL kernel file name.
+                           )
 {
   std::string loc_kernel_source;
 
@@ -41,11 +41,11 @@ void nu_kernel::addsource (
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////// build ///////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void nu_kernel::build (
-                       size_t loc_kernel_size_i,                                                    // OpenCL kernel size (i-index).
-                       size_t loc_kernel_size_j,                                                    // OpenCL kernel size (j-index).
-                       size_t loc_kernel_size_k                                                     // OpenCL kernel size (k-index).
-                      )
+void nu::kernel::build (
+                        size_t loc_kernel_size_i,                                                   // OpenCL kernel size (i-index).
+                        size_t loc_kernel_size_j,                                                   // OpenCL kernel size (j-index).
+                        size_t loc_kernel_size_k                                                    // OpenCL kernel size (k-index).
+                       )
 {
   cl_int  loc_error;                                                                                // Error code.
   char*   loc_options;                                                                              // Options temporary char buffer.
@@ -217,7 +217,7 @@ void nu_kernel::build (
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////// setarg "nu_int" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void nu_kernel::setarg
+void nu::kernel::setarg
 (
  nu_int* loc_data,                                                                                  // nu_int data.
  cl_uint loc_layout_index                                                                           // Layout index.
@@ -348,7 +348,7 @@ void nu_kernel::setarg
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////// setarg "nu_int2" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void nu_kernel::setarg
+void nu::kernel::setarg
 (
  nu_int2* loc_data,                                                                                 // nu_int2 data.
  cl_uint  loc_layout_index                                                                          // Layout index.
@@ -479,7 +479,7 @@ void nu_kernel::setarg
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////// setarg "nu_int3" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void nu_kernel::setarg
+void nu::kernel::setarg
 (
  nu_int3* loc_data,                                                                                 // nu_int3 data.
  cl_uint  loc_layout_index                                                                          // Layout index.
@@ -610,7 +610,7 @@ void nu_kernel::setarg
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////// setarg "nu_int4" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void nu_kernel::setarg
+void nu::kernel::setarg
 (
  nu_int4* loc_data,                                                                                 // nu_int4 data.
  cl_uint  loc_layout_index                                                                          // Layout index.
@@ -741,7 +741,7 @@ void nu_kernel::setarg
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////// setarg "nu_float" overload ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void nu_kernel::setarg
+void nu::kernel::setarg
 (
  nu_float* loc_data,                                                                                // nu_float data.
  GLuint    loc_layout_index                                                                         // Layout index.
@@ -872,7 +872,7 @@ void nu_kernel::setarg
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////// setarg "nu_float2" overload /////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void nu_kernel::setarg
+void nu::kernel::setarg
 (
  nu_float2* loc_data,                                                                               // nu_float2 data.
  cl_uint    loc_layout_index                                                                        // Layout index.
@@ -1003,7 +1003,7 @@ void nu_kernel::setarg
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////// setarg "nu_float3" overload /////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void nu_kernel::setarg
+void nu::kernel::setarg
 (
  nu_float3* loc_data,                                                                               // nu_float3 data.
  cl_uint    loc_layout_index                                                                        // Layout index.
@@ -1134,7 +1134,7 @@ void nu_kernel::setarg
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////// setarg "nu_float4" overload /////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void nu_kernel::setarg
+void nu::kernel::setarg
 (
  nu_float4* loc_data,                                                                               // nu_float4 data.
  cl_uint    loc_layout_index                                                                        // Layout index.
@@ -1265,7 +1265,7 @@ void nu_kernel::setarg
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////// DESTRUCTOR ////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_kernel::~nu_kernel()
+nu::kernel::~kernel ()
 {
   cl_int loc_error;                                                                                 // Error code.
 
