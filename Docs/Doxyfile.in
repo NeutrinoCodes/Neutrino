@@ -13,11 +13,11 @@ PROJECT_BRIEF           = "A fast and light library for GPU-based parallel compu
 
 ## Project logo.
 #  This logo will appear on the headline of each page of the documentation.
-PROJECT_LOGO            = @CMAKE_CURRENT_SOURCE_DIR@/../Logos/neutrino_logo_enso.png
+PROJECT_LOGO            = @CMAKE_CURRENT_SOURCE_DIR@/Logos/neutrino_logo_enso.png
 
 ## Doxygen documentation output directory.
 #  This is the directory where Doxygen puts all documentation files it generates.
-OUTPUT_DIRECTORY        = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/Doxygen
+OUTPUT_DIRECTORY        = @CMAKE_CURRENT_SOURCE_DIR@/Docs/Doxygen
 
 ## Valid file types to be considered in Doxygen.
 #  These are the file types Doxygen will consider for generating the documentation.
@@ -31,11 +31,11 @@ EXTENSION_MAPPING       = frag=C++ vert=C++ geom=C++ tess=C++ cl=C++ in=Python t
 #  Others doc files: e.g.  @CMAKE_CURRENT_SOURCE_DIR@/../Docs/some_documentation.md
 #  1. Remember to put "\" before adding a file in this list.
 #  2. Latex code in mardown files in Doxygen is accepted between "\f...latex...\f".
-INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/ \
-                          @CMAKE_CURRENT_SOURCE_DIR@/src/ \
-                          @CMAKE_CURRENT_SOURCE_DIR@/include/ \
-                          @CMAKE_CURRENT_SOURCE_DIR@/kernel/ \
-                          @CMAKE_CURRENT_SOURCE_DIR@/shader/ \
+INPUT                   = @CMAKE_CURRENT_SOURCE_DIR@/Docs/ \
+                          @CMAKE_CURRENT_SOURCE_DIR@/Code/src/ \
+                          @CMAKE_CURRENT_SOURCE_DIR@/Code/include/ \
+                          @CMAKE_CURRENT_SOURCE_DIR@/Code/kernel/ \
+                          @CMAKE_CURRENT_SOURCE_DIR@/Code/shader/ \
 
 ## Search on input subdirectories.
 #  This option tells Doxygen whether to do a recursive search in the input directories.
@@ -51,15 +51,15 @@ GENERATE_HTML           = YES
 
 ## HTML header.
 #  Sets HTML header on each documentation page.
-HTML_HEADER             = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/header.html
+HTML_HEADER             = @CMAKE_CURRENT_SOURCE_DIR@/Docs/header.html
 
 ## HTML footer.
 #  Sets HTML footer on each documentation page.
-HTML_FOOTER             = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/footer.html
+HTML_FOOTER             = @CMAKE_CURRENT_SOURCE_DIR@/Docs/footer.html
 
 ## HTML custom settings.
 #  Contains extra settings for the generation of the style of the HTML documentation.
-HTML_EXTRA_STYLESHEET   = @CMAKE_CURRENT_SOURCE_DIR@/../Docs/customdoxygen.css
+HTML_EXTRA_STYLESHEET   = @CMAKE_CURRENT_SOURCE_DIR@/Docs/customdoxygen.css
 
 ## HTML hue color style.
 #  Tells Doxygen the hue of the color of the menu bars.
