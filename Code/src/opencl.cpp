@@ -1,33 +1,33 @@
 /// @file     opencl.cpp
 /// @author   Erik ZORZIN
 /// @date     24OCT2019
-/// @brief    Definition of the "nu_opencl" class.
+/// @brief    Definition of the "nu::opencl" class.
 
 #include "opencl.hpp"
 
-queue* nu_opencl::opencl_queue;                                                                     // OpenCL queue.
-bool   nu_opencl::init_done = false;                                                                // init_done flag.
+queue* nu::opencl::opencl_queue;                                                                    // OpenCL queue.
+bool   nu::opencl::init_done = false;                                                               // init_done flag.
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////// "nu_opencl" class /////////////////////////////////////////
+///////////////////////////////////////////// "nu::opencl" class /////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-nu_opencl::nu_opencl(
-                     compute_device_type loc_device_type                                            // OpenCL device type.
-                    )
+nu::opencl::opencl (
+                    compute_device_type loc_device_type                                             // OpenCL device type.
+                   )
 {
   if(neutrino::init_done != true)
   {
     neutrino::init ();                                                                              // Initializing Neutrino...
   }
 
-  if(nu_opencl::init_done != true)
+  if(nu::opencl::init_done != true)
   {
-    nu_opencl::init (loc_device_type);                                                              // OpenCL device type.)
-    nu_opencl::opencl_queue = new queue ();                                                         // OpenCL queue.
+    nu::opencl::init (loc_device_type);                                                             // OpenCL device type.)
+    nu::opencl::opencl_queue = new queue ();                                                        // OpenCL queue.
   }
 }
 
-cl_uint nu_opencl::get_platforms_number ()
+cl_uint nu::opencl::get_platforms_number ()
 {
   cl_int  loc_error;                                                                                // Error code.
   cl_uint loc_platforms_number;                                                                     // Number of platforms.
@@ -47,7 +47,7 @@ cl_uint nu_opencl::get_platforms_number ()
   return loc_platforms_number;                                                                      // Returning number of existing platforms...
 }
 
-cl_platform_id nu_opencl::get_platform_id
+cl_platform_id nu::opencl::get_platform_id
 (
  cl_uint loc_platform_index                                                                         // OpenCL platform index.
 )
@@ -80,7 +80,7 @@ cl_platform_id nu_opencl::get_platform_id
   return(loc_selected_platform_id);                                                                 // Returning selected platform ID...
 }
 
-cl_uint nu_opencl::get_devices_number
+cl_uint nu::opencl::get_devices_number
 (
  cl_uint loc_platform_index                                                                         // OpenCL platform index.
 )
@@ -105,7 +105,7 @@ cl_uint nu_opencl::get_devices_number
   return(loc_devices_number);                                                                       // Returning number of existing devices...
 }
 
-cl_device_id nu_opencl::get_device_id
+cl_device_id nu::opencl::get_device_id
 (
  cl_uint loc_device_index,                                                                          // OpenCL platform index.
  cl_uint loc_platform_index                                                                         // OpenCL device index.
@@ -142,17 +142,17 @@ cl_device_id nu_opencl::get_device_id
   return(loc_selected_device_id);                                                                   // Returning selected device ID...
 }
 
-void nu_opencl::init
+void nu::opencl::init
 (
  compute_device_type loc_device_type                                                                // OpenCL device type.
 )
 {
-  opencl_platform       = NULL;                                                                     // Initializing platforms IDs array...
-  platforms_number      = 0;                                                                        // Initializing number of platforms...
-  devices_number        = 0;                                                                        // Initializing number of devices...
-  properties            = NULL;                                                                     // Initializing platforms' properties...
-  nu_opencl::context_id = NULL;                                                                     // Initializing platforms' context...
-  device_type           = NU_DEFAULT;                                                               // Initializing device type...
+  opencl_platform        = NULL;                                                                    // Initializing platforms IDs array...
+  platforms_number       = 0;                                                                       // Initializing number of platforms...
+  devices_number         = 0;                                                                       // Initializing number of devices...
+  properties             = NULL;                                                                    // Initializing platforms' properties...
+  nu::opencl::context_id = NULL;                                                                    // Initializing platforms' context...
+  device_type            = NU_DEFAULT;                                                              // Initializing device type...
 
   cl_int  loc_error;                                                                                // Error code.
   cl_uint i;                                                                                        // Index.
@@ -162,7 +162,7 @@ void nu_opencl::init
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
 
   neutrino::action ("initializing OpenCL...");                                                      // Printing message...
-  device_type_text      = new char[NU_MAX_TEXT_SIZE]();                                             // Device type text [string].
+  device_type_text       = new char[NU_MAX_TEXT_SIZE]();                                            // Device type text [string].
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// SETTING TARGET DEVICE TYPE ///////////////////////////////////
@@ -596,24 +596,24 @@ void nu_opencl::init
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   neutrino::action ("creating OpenCL context...");                                                  // Printing message...
 
-  nu_opencl::context_id = clCreateContext
-                          (
-                           properties,                                                              // Context properties.
-                           1,                                                                       // Number of devices on selected platform.
-                           &opencl_device[selected_device]->id,                                     // Pointer to the selected device on selected platform.
-                           NULL,                                                                    // Context error report callback function.
-                           NULL,                                                                    // Context error report callback function argument.
-                           &loc_error                                                               // Error code.
-                          );
+  nu::opencl::context_id = clCreateContext
+                           (
+                            properties,                                                             // Context properties.
+                            1,                                                                      // Number of devices on selected platform.
+                            &opencl_device[selected_device]->id,                                    // Pointer to the selected device on selected platform.
+                            NULL,                                                                   // Context error report callback function.
+                            NULL,                                                                   // Context error report callback function argument.
+                            &loc_error                                                              // Error code.
+                           );
 
   neutrino::check_error (loc_error);                                                                // Checking returned error code...
-  neutrino::context_id = nu_opencl::context_id;                                                     // Setting neutrino OpenCL context ID...
-  nu_opencl::init_done = true;                                                                      // Setting init_done flag...
+  neutrino::context_id  = nu::opencl::context_id;                                                   // Setting neutrino OpenCL context ID...
+  nu::opencl::init_done = true;                                                                     // Setting init_done flag...
 
   neutrino::done ();                                                                                // Printing message...
 }
 
-void nu_opencl::write ()
+void nu::opencl::write ()
 {
   size_t i;                                                                                         // Index.
 
@@ -665,9 +665,9 @@ void nu_opencl::write ()
   }
 }
 
-void nu_opencl::write (
-                       size_t loc_i
-                      )
+void nu::opencl::write (
+                        size_t loc_i
+                       )
 {
   // Setting kernel argument:
   switch(data[loc_i]->type)
@@ -714,7 +714,7 @@ void nu_opencl::write (
   }
 }
 
-void nu_opencl::acquire ()
+void nu::opencl::acquire ()
 {
   size_t i;                                                                                         // Index.
 
@@ -757,7 +757,7 @@ void nu_opencl::acquire ()
   }
 }
 
-void nu_opencl::release ()
+void nu::opencl::release ()
 {
   size_t i;                                                                                         // Index.
 
@@ -800,7 +800,7 @@ void nu_opencl::release ()
   }
 }
 
-void nu_opencl::execute
+void nu::opencl::execute
 (
  nu_kernel*  loc_kernel,                                                                            // OpenCL kernel.
  kernel_mode loc_kernel_mode                                                                        // Kernel mode.
@@ -897,7 +897,7 @@ void nu_opencl::execute
   }
 }
 
-nu_opencl::~nu_opencl()
+nu::opencl::~opencl ()
 {
   cl_int loc_error;                                                                                 // Error code.
 
@@ -908,7 +908,7 @@ nu_opencl::~nu_opencl()
   delete[] opencl_device;                                                                           // Deleting device...
 
   neutrino::action ("releasing OpenCL context...");                                                 // Printing message...
-  loc_error = clReleaseContext (nu_opencl::context_id);                                             // Releasing OpenCL context...
+  loc_error = clReleaseContext (nu::opencl::context_id);                                            // Releasing OpenCL context...
   neutrino::check_error (loc_error);                                                                // Checking returned error code...
   neutrino::done ();                                                                                // Printing message...
 }
