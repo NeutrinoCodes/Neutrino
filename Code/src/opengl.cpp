@@ -46,12 +46,12 @@ nu_opengl::nu_opengl(
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu_opengl::set_shader
 (
- shader* loc_shader,                                                                                // Shader.
- float   view_matrix[16],                                                                           // View matrix.
- float   projection_matrix[16],                                                                     // Projection matrix.
- float   framebuffer_size_x,                                                                        // Framebuffer x-size [px_float].
- float   framebuffer_size_y,                                                                        // Framebuffer y-size [px_float].
- float   framebuffer_AR                                                                             // Framebuffer aspect ratio.
+ nu_shader* loc_shader,                                                                             // Shader.
+ float      view_matrix[16],                                                                        // View matrix.
+ float      projection_matrix[16],                                                                  // Projection matrix.
+ float      framebuffer_size_x,                                                                     // Framebuffer x-size [px_float].
+ float      framebuffer_size_y,                                                                     // Framebuffer y-size [px_float].
+ float      framebuffer_AR                                                                          // Framebuffer aspect ratio.
 )
 {
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
@@ -931,7 +931,7 @@ void nu_opengl::clear ()
 
 void nu_opengl::plot
 (
- shader* loc_shader                                                                                 // OpenGL shader.
+ nu_shader* loc_shader                                                                              // OpenGL shader.
 )
 {
   switch(PR_mode)
