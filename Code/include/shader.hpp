@@ -1,7 +1,7 @@
 /// @file     shader.hpp
 /// @author   Erik ZORZIN
 /// @date     24OCT2019
-/// @brief    Declaration of an OpenGL "shader" class.
+/// @brief    Declaration of an OpenGL "nu_shader" class.
 ///
 /// @details  This class has got methods for initializing and build an OpenGL shader of
 /// [vertex](https://www.khronos.org/opengl/wiki/Vertex_Shader),
@@ -11,23 +11,23 @@
 /// is used to tell Neutrino which arguments are presents in the source file of each shader of
 /// interest.
 
-#ifndef shader_hpp
-#define shader_hpp
+#ifndef nu_shader_hpp
+#define nu_shader_hpp
 
 #include "neutrino.hpp"
 #include "data_classes.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// "shader" class ////////////////////////////////////////////
+///////////////////////////////////////// "nu_shader" class ///////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @class shader
-/// ### OpenCL shader class.
+/// @class nu_shader
+/// ### OpenCL nu_shader class.
 /// Declares an OpenCL shader class. To be used in order to do graphics rendition of OpenCL data.
-class shader : public neutrino                                                                      /// @brief **OpenGL shader.**
+class nu_shader : public neutrino                                                                   /// @brief **OpenGL nu_shader.**
 {
 private:
 
-  /// @brief    **OpenGL shader compilation.**
+  /// @brief    **OpenGL nu_shader compilation.**
   /// @details  It compiles an OpenGL shader.
   GLuint compile (
                   std::string loc_shader_filename,                                                  ///< Shader file name.
@@ -40,7 +40,7 @@ public:
 
   /// @brief **Class constructor.**
   /// @details It does nothing.
-  shader ();
+  nu_shader ();
 
   /// @brief **Shader source adder function.**
   /// @details Loads an OpenGL shader source from its corresponding source file.
@@ -116,7 +116,7 @@ public:
 
   /// @brief **Class destructor.**
   /// @details It does nothing.
-  ~shader ();
+  ~nu_shader ();
 };
 
 #endif

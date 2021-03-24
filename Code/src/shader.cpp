@@ -1,11 +1,11 @@
 /// @file     shader.cpp
 /// @author   Erik ZORZIN
 /// @date     24OCT2019
-/// @brief    Definition of an OpenCL "shader" class.
+/// @brief    Definition of an OpenCL "nu_shader" class.
 
 #include "shader.hpp"
 
-shader::shader ()
+nu_shader::nu_shader ()
 {
   neutrino::action ("initializing OpenGL shader object...");                                        // Printing message...
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
@@ -14,7 +14,7 @@ shader::shader ()
   neutrino::done ();                                                                                // Printing message...
 }
 
-void shader::addsource
+void nu_shader::addsource
 (
  std::string loc_shader_filename,                                                                   // GLSL shader file name.
  shader_type loc_shader_type                                                                        // GLSL shader type.
@@ -107,9 +107,9 @@ void shader::addsource
   neutrino::done ();                                                                                // Printing message...
 }
 
-void shader::build (
-                    size_t loc_points                                                               // Number of points to be rendered...
-                   )
+void nu_shader::build (
+                       size_t loc_points                                                            // Number of points to be rendered...
+                      )
 {
   size_t i;                                                                                         // Index.
 
@@ -176,7 +176,7 @@ void shader::build (
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////// setarg "functions" //////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void shader::setarg
+void nu_shader::setarg
 (
  nu_int* loc_data,                                                                                  // Data object.
  GLuint  loc_layout_index                                                                           // Data layout index.
@@ -203,7 +203,7 @@ void shader::setarg
   delete loc_name_buffer;
 };
 
-void shader::setarg
+void nu_shader::setarg
 (
  nu_int2* loc_data,                                                                                 // Data object.
  GLuint   loc_layout_index                                                                          // Data layout index.
@@ -230,7 +230,7 @@ void shader::setarg
   delete loc_name_buffer;
 };
 
-void shader::setarg
+void nu_shader::setarg
 (
  nu_int3* loc_data,                                                                                 // Data object.
  GLuint   loc_layout_index                                                                          // Data layout index.
@@ -257,7 +257,7 @@ void shader::setarg
   delete loc_name_buffer;
 };
 
-void shader::setarg
+void nu_shader::setarg
 (
  nu_int4* loc_data,                                                                                 // Data object.
  GLuint   loc_layout_index                                                                          // Data layout index.
@@ -284,7 +284,7 @@ void shader::setarg
   delete loc_name_buffer;
 };
 
-void shader::setarg
+void nu_shader::setarg
 (
  nu_float* loc_data,                                                                                // Data object.
  GLuint    loc_layout_index                                                                         // Data layout index.
@@ -311,7 +311,7 @@ void shader::setarg
   delete loc_name_buffer;
 };
 
-void shader::setarg
+void nu_shader::setarg
 (
  nu_float2* loc_data,                                                                               // Data object.
  GLuint     loc_layout_index                                                                        // Data layout index.
@@ -338,7 +338,7 @@ void shader::setarg
   delete loc_name_buffer;
 };
 
-void shader::setarg
+void nu_shader::setarg
 (
  nu_float3* loc_data,                                                                               // Data object.
  GLuint     loc_layout_index                                                                        // Data layout index.
@@ -365,7 +365,7 @@ void shader::setarg
   delete loc_name_buffer;
 };
 
-void shader::setarg
+void nu_shader::setarg
 (
  nu_float4* loc_data,                                                                               // Data object.
  GLuint     loc_layout_index                                                                        // Data layout index.
@@ -392,7 +392,7 @@ void shader::setarg
   delete loc_name_buffer;
 };
 
-shader::~shader ()
+nu_shader::~nu_shader ()
 {
   // Doing nothing.
 }
