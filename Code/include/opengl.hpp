@@ -1,20 +1,23 @@
 /// @file   opengl.hpp
 /// @author Erik ZORZIN
 /// @date   24OCT2019
-/// @brief  Declaration of the "nu_opengl" class.
+/// @brief  Declaration of the "opengl" class.
 
-#ifndef nu_opengl_hpp
-#define nu_opengl_hpp
+#ifndef opengl_hpp
+#define opengl_hpp
 
 #include "neutrino.hpp"
 #include "shader.hpp"
 #include "linear_algebra.hpp"
 #include "projective_geometry.hpp"
 
+namespace nu
+{
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////// "nu_opengl" class ///////////////////////////////////////////
+//////////////////////////////////////////// "opengl" class ///////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-class nu_opengl : public neutrino                                                                   /// @brief **OpenGL GUI.**
+class opengl : public neutrino                                                                      /// @brief **OpenGL GUI.**
 {
 private:
   GLFWgamepadstate gamepad;                                                                         ///< @brief **Gamepad state.**
@@ -311,16 +314,16 @@ public:
 
   /// @brief **Class constructor.**
   /// @details It does nothing.
-  nu_opengl(
-            std::string loc_title,                                                                  ///< Window title.
-            int         loc_window_size_x,                                                          ///< Window x-size [px].
-            int         loc_window_size_y,                                                          ///< Window y-size [px].
-            float       loc_orbit_x_initial,                                                        ///< Initial "near clipping-plane" x-coordinate.
-            float       loc_orbit_y_initial,                                                        ///< Initial "near clipping-plane" y-coordinate.
-            float       loc_pan_x_initial,                                                          ///< Initial pan-x coordinate.
-            float       loc_pan_y_initial,                                                          ///< Initial pan-y coordinate.
-            float       loc_pan_z_initial                                                           ///< Initial pan-z coordinate.
-           );
+  opengl(
+         std::string loc_title,                                                                     ///< Window title.
+         int         loc_window_size_x,                                                             ///< Window x-size [px].
+         int         loc_window_size_y,                                                             ///< Window y-size [px].
+         float       loc_orbit_x_initial,                                                           ///< Initial "near clipping-plane" x-coordinate.
+         float       loc_orbit_y_initial,                                                           ///< Initial "near clipping-plane" y-coordinate.
+         float       loc_pan_x_initial,                                                             ///< Initial pan-x coordinate.
+         float       loc_pan_y_initial,                                                             ///< Initial pan-y coordinate.
+         float       loc_pan_z_initial                                                              ///< Initial pan-z coordinate.
+        );
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////// PUBLIC METHODS //////////////////////////////////////////
@@ -426,8 +429,8 @@ public:
 
   /// @brief **Class destructor.**
   /// @details Terminates the GLFW context.
-  ~nu_opengl();
+  ~opengl();
 
 };
-
+}
 #endif
