@@ -124,48 +124,48 @@ void nu::shader::build (
   // Setting shader arguments:
   neutrino::action ("setting OpenGL shader arguments...");                                          // Printing message...
 
-  for(i = 0; i < neutrino::data.size (); i++)
+  for(i = 0; i < neutrino::container.size (); i++)
   {
-    switch(data[i]->type)
+    switch(container[i]->type)
     {
       case NU_INT:
-        ((nu_int*)neutrino::data[i])->name    = std::string ("arg_") + std::to_string (i);
-        this->setarg ((nu_int*)neutrino::data[i], i);
+        ((nu::int1*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::int1*)neutrino::container[i], i);
         break;
 
       case NU_INT2:
-        ((nu_int2*)neutrino::data[i])->name   = std::string ("arg_") + std::to_string (i);
-        this->setarg ((nu_int2*)neutrino::data[i], i);
+        ((nu::int2*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::int2*)neutrino::container[i], i);
         break;
 
       case NU_INT3:
-        ((nu_int3*)neutrino::data[i])->name   = std::string ("arg_") + std::to_string (i);
-        this->setarg ((nu_int3*)neutrino::data[i], i);
+        ((nu::int3*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::int3*)neutrino::container[i], i);
         break;
 
       case NU_INT4:
-        ((nu_int4*)neutrino::data[i])->name   = std::string ("arg_") + std::to_string (i);
-        this->setarg ((nu_int4*)neutrino::data[i], i);
+        ((nu::int4*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::int4*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT:
-        ((nu_float*)neutrino::data[i])->name  = std::string ("arg_") + std::to_string (i);
-        this->setarg ((nu_float*)neutrino::data[i], i);
+        ((nu::float1*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::float1*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT2:
-        ((nu_float2*)neutrino::data[i])->name = std::string ("arg_") + std::to_string (i);
-        this->setarg ((nu_float2*)neutrino::data[i], i);
+        ((nu::float2*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::float2*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT3:
-        ((nu_float3*)neutrino::data[i])->name = std::string ("arg_") + std::to_string (i);
-        this->setarg ((nu_float3*)neutrino::data[i], i);
+        ((nu::float3*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::float3*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT4:
-        ((nu_float4*)neutrino::data[i])->name = std::string ("arg_") + std::to_string (i);
-        this->setarg ((nu_float4*)neutrino::data[i], i);
+        ((nu::float4*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::float4*)neutrino::container[i], i);
         break;
     }
   }
@@ -178,115 +178,7 @@ void nu::shader::build (
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::shader::setarg
 (
- nu_int* loc_data,                                                                                  // Data object.
- GLuint  loc_layout_index                                                                           // Data layout index.
-)
-{
-  size_t loc_name_size;
-  char*  loc_name_buffer;
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
-  loc_name_buffer                = new char[loc_name_size + 1]();
-  loc_data->name.copy (loc_name_buffer, loc_name_size);
-  loc_name_buffer[loc_name_size] = '\0';
-
-  glBindAttribLocation (
-                        program,                                                                    // OpenGL GLSL program.
-                        loc_layout_index,                                                           // Data layout index.
-                        loc_name_buffer                                                             // Data name.
-                       );
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  delete loc_name_buffer;
-};
-
-void nu::shader::setarg
-(
- nu_int2* loc_data,                                                                                 // Data object.
- GLuint   loc_layout_index                                                                          // Data layout index.
-)
-{
-  size_t loc_name_size;
-  char*  loc_name_buffer;
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
-  loc_name_buffer                = new char[loc_name_size + 1]();
-  loc_data->name.copy (loc_name_buffer, loc_name_size);
-  loc_name_buffer[loc_name_size] = '\0';
-
-  glBindAttribLocation (
-                        program,                                                                    // OpenGL GLSL program.
-                        loc_layout_index,                                                           // Data layout index.
-                        loc_name_buffer                                                             // Data name.
-                       );
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  delete loc_name_buffer;
-};
-
-void nu::shader::setarg
-(
- nu_int3* loc_data,                                                                                 // Data object.
- GLuint   loc_layout_index                                                                          // Data layout index.
-)
-{
-  size_t loc_name_size;
-  char*  loc_name_buffer;
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
-  loc_name_buffer                = new char[loc_name_size + 1]();
-  loc_data->name.copy (loc_name_buffer, loc_name_size);
-  loc_name_buffer[loc_name_size] = '\0';
-
-  glBindAttribLocation (
-                        program,                                                                    // OpenGL GLSL program.
-                        loc_layout_index,                                                           // Data layout index.
-                        loc_name_buffer                                                             // Data name.
-                       );
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  delete loc_name_buffer;
-};
-
-void nu::shader::setarg
-(
- nu_int4* loc_data,                                                                                 // Data object.
- GLuint   loc_layout_index                                                                          // Data layout index.
-)
-{
-  size_t loc_name_size;
-  char*  loc_name_buffer;
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
-  loc_name_buffer                = new char[loc_name_size + 1]();
-  loc_data->name.copy (loc_name_buffer, loc_name_size);
-  loc_name_buffer[loc_name_size] = '\0';
-
-  glBindAttribLocation (
-                        program,                                                                    // OpenGL GLSL program.
-                        loc_layout_index,                                                           // Data layout index.
-                        loc_name_buffer                                                             // Data name.
-                       );
-
-  glFinish ();                                                                                      // Waiting for OpenGL to finish...
-
-  delete loc_name_buffer;
-};
-
-void nu::shader::setarg
-(
- nu_float* loc_data,                                                                                // Data object.
+ nu::int1* loc_data,                                                                                // Data object.
  GLuint    loc_layout_index                                                                         // Data layout index.
 )
 {
@@ -313,8 +205,8 @@ void nu::shader::setarg
 
 void nu::shader::setarg
 (
- nu_float2* loc_data,                                                                               // Data object.
- GLuint     loc_layout_index                                                                        // Data layout index.
+ nu::int2* loc_data,                                                                                // Data object.
+ GLuint    loc_layout_index                                                                         // Data layout index.
 )
 {
   size_t loc_name_size;
@@ -340,8 +232,8 @@ void nu::shader::setarg
 
 void nu::shader::setarg
 (
- nu_float3* loc_data,                                                                               // Data object.
- GLuint     loc_layout_index                                                                        // Data layout index.
+ nu::int3* loc_data,                                                                                // Data object.
+ GLuint    loc_layout_index                                                                         // Data layout index.
 )
 {
   size_t loc_name_size;
@@ -367,8 +259,116 @@ void nu::shader::setarg
 
 void nu::shader::setarg
 (
- nu_float4* loc_data,                                                                               // Data object.
- GLuint     loc_layout_index                                                                        // Data layout index.
+ nu::int4* loc_data,                                                                                // Data object.
+ GLuint    loc_layout_index                                                                         // Data layout index.
+)
+{
+  size_t loc_name_size;
+  char*  loc_name_buffer;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
+  loc_name_buffer                = new char[loc_name_size + 1]();
+  loc_data->name.copy (loc_name_buffer, loc_name_size);
+  loc_name_buffer[loc_name_size] = '\0';
+
+  glBindAttribLocation (
+                        program,                                                                    // OpenGL GLSL program.
+                        loc_layout_index,                                                           // Data layout index.
+                        loc_name_buffer                                                             // Data name.
+                       );
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  delete loc_name_buffer;
+};
+
+void nu::shader::setarg
+(
+ nu::float1* loc_data,                                                                              // Data object.
+ GLuint      loc_layout_index                                                                       // Data layout index.
+)
+{
+  size_t loc_name_size;
+  char*  loc_name_buffer;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
+  loc_name_buffer                = new char[loc_name_size + 1]();
+  loc_data->name.copy (loc_name_buffer, loc_name_size);
+  loc_name_buffer[loc_name_size] = '\0';
+
+  glBindAttribLocation (
+                        program,                                                                    // OpenGL GLSL program.
+                        loc_layout_index,                                                           // Data layout index.
+                        loc_name_buffer                                                             // Data name.
+                       );
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  delete loc_name_buffer;
+};
+
+void nu::shader::setarg
+(
+ nu::float2* loc_data,                                                                              // Data object.
+ GLuint      loc_layout_index                                                                       // Data layout index.
+)
+{
+  size_t loc_name_size;
+  char*  loc_name_buffer;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
+  loc_name_buffer                = new char[loc_name_size + 1]();
+  loc_data->name.copy (loc_name_buffer, loc_name_size);
+  loc_name_buffer[loc_name_size] = '\0';
+
+  glBindAttribLocation (
+                        program,                                                                    // OpenGL GLSL program.
+                        loc_layout_index,                                                           // Data layout index.
+                        loc_name_buffer                                                             // Data name.
+                       );
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  delete loc_name_buffer;
+};
+
+void nu::shader::setarg
+(
+ nu::float3* loc_data,                                                                              // Data object.
+ GLuint      loc_layout_index                                                                       // Data layout index.
+)
+{
+  size_t loc_name_size;
+  char*  loc_name_buffer;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
+  loc_name_buffer                = new char[loc_name_size + 1]();
+  loc_data->name.copy (loc_name_buffer, loc_name_size);
+  loc_name_buffer[loc_name_size] = '\0';
+
+  glBindAttribLocation (
+                        program,                                                                    // OpenGL GLSL program.
+                        loc_layout_index,                                                           // Data layout index.
+                        loc_name_buffer                                                             // Data name.
+                       );
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  delete loc_name_buffer;
+};
+
+void nu::shader::setarg
+(
+ nu::float4* loc_data,                                                                              // Data object.
+ GLuint      loc_layout_index                                                                       // Data layout index.
 )
 {
   size_t loc_name_size;

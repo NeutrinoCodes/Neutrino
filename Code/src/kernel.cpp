@@ -167,60 +167,60 @@ void nu::kernel::build (
   neutrino::done ();                                                                                // Printing message...
 
   // Setting kernel arguments:
-  for(i = 0; i < neutrino::data.size (); i++)
+  for(i = 0; i < neutrino::container.size (); i++)
   {
-    switch(data[i]->type)
+    switch(container[i]->type)
     {
       case NU_INT:
-        ((nu_int*)neutrino::data[i])->name    = std::string ("arg_") + std::to_string (i);
-        this->setarg ((nu_int*)neutrino::data[i], i);
+        ((nu::int1*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::int1*)neutrino::container[i], i);
         break;
 
       case NU_INT2:
-        ((nu_int2*)neutrino::data[i])->name   = std::string ("arg_") + std::to_string (i);
-        this->setarg ((nu_int2*)neutrino::data[i], i);
+        ((nu::int2*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::int2*)neutrino::container[i], i);
         break;
 
       case NU_INT3:
-        ((nu_int3*)neutrino::data[i])->name   = std::string ("arg_") + std::to_string (i);
-        this->setarg ((nu_int3*)neutrino::data[i], i);
+        ((nu::int3*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::int3*)neutrino::container[i], i);
         break;
 
       case NU_INT4:
-        ((nu_int4*)neutrino::data[i])->name   = std::string ("arg_") + std::to_string (i);
-        this->setarg ((nu_int4*)neutrino::data[i], i);
+        ((nu::int4*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::int4*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT:
-        ((nu_float*)neutrino::data[i])->name  = std::string ("arg_") + std::to_string (i);
-        this->setarg ((nu_float*)neutrino::data[i], i);
+        ((nu::float1*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::float1*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT2:
-        ((nu_float2*)neutrino::data[i])->name = std::string ("arg_") + std::to_string (i);
-        this->setarg ((nu_float2*)neutrino::data[i], i);
+        ((nu::float2*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::float2*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT3:
-        ((nu_float3*)neutrino::data[i])->name = std::string ("arg_") + std::to_string (i);
-        this->setarg ((nu_float3*)neutrino::data[i], i);
+        ((nu::float3*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::float3*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT4:
-        ((nu_float4*)neutrino::data[i])->name = std::string ("arg_") + std::to_string (i);
-        this->setarg ((nu_float4*)neutrino::data[i], i);
+        ((nu::float4*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::float4*)neutrino::container[i], i);
         break;
     }
   }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////// setarg "nu_int" overload ///////////////////////////////////
+///////////////////////////////////////// setarg "nu::int1" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::kernel::setarg
 (
- nu_int* loc_data,                                                                                  // nu_int data.
- cl_uint loc_layout_index                                                                           // Layout index.
+ nu::int1* loc_data,                                                                                // nu::int1 data.
+ cl_uint   loc_layout_index                                                                         // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Error code.
@@ -346,12 +346,12 @@ void nu::kernel::setarg
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// setarg "nu_int2" overload ///////////////////////////////////
+/////////////////////////////////////////// setarg "nu::int2" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::kernel::setarg
 (
- nu_int2* loc_data,                                                                                 // nu_int2 data.
- cl_uint  loc_layout_index                                                                          // Layout index.
+ nu::int2* loc_data,                                                                                // nu::int2 data.
+ cl_uint   loc_layout_index                                                                         // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Error code.
@@ -477,12 +477,12 @@ void nu::kernel::setarg
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// setarg "nu_int3" overload ///////////////////////////////////
+/////////////////////////////////////////// setarg "nu::int3" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::kernel::setarg
 (
- nu_int3* loc_data,                                                                                 // nu_int3 data.
- cl_uint  loc_layout_index                                                                          // Layout index.
+ nu::int3* loc_data,                                                                                // nu::int3 data.
+ cl_uint   loc_layout_index                                                                         // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Error code.
@@ -608,12 +608,12 @@ void nu::kernel::setarg
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// setarg "nu_int4" overload ///////////////////////////////////
+/////////////////////////////////////////// setarg "nu::int4" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::kernel::setarg
 (
- nu_int4* loc_data,                                                                                 // nu_int4 data.
- cl_uint  loc_layout_index                                                                          // Layout index.
+ nu::int4* loc_data,                                                                                // nu::int4 data.
+ cl_uint   loc_layout_index                                                                         // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Error code.
@@ -739,12 +739,12 @@ void nu::kernel::setarg
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////// setarg "nu_float" overload ////////////////////////////////////
+//////////////////////////////////////// setarg "nu::float1" overload ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::kernel::setarg
 (
- nu_float* loc_data,                                                                                // nu_float data.
- GLuint    loc_layout_index                                                                         // Layout index.
+ nu::float1* loc_data,                                                                              // nu::float1 data.
+ GLuint      loc_layout_index                                                                       // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Error code.
@@ -870,12 +870,12 @@ void nu::kernel::setarg
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// setarg "nu_float2" overload /////////////////////////////////////
+/////////////////////////////////////// setarg "nu::float2" overload /////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::kernel::setarg
 (
- nu_float2* loc_data,                                                                               // nu_float2 data.
- cl_uint    loc_layout_index                                                                        // Layout index.
+ nu::float2* loc_data,                                                                              // nu::float2 data.
+ cl_uint     loc_layout_index                                                                       // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Error code.
@@ -1001,12 +1001,12 @@ void nu::kernel::setarg
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// setarg "nu_float3" overload /////////////////////////////////////
+/////////////////////////////////////// setarg "nu::float3" overload /////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::kernel::setarg
 (
- nu_float3* loc_data,                                                                               // nu_float3 data.
- cl_uint    loc_layout_index                                                                        // Layout index.
+ nu::float3* loc_data,                                                                              // nu::float3 data.
+ cl_uint     loc_layout_index                                                                       // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Error code.
@@ -1132,12 +1132,12 @@ void nu::kernel::setarg
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// setarg "nu_float4" overload /////////////////////////////////////
+/////////////////////////////////////// setarg "nu::float4" overload /////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::kernel::setarg
 (
- nu_float4* loc_data,                                                                               // nu_float4 data.
- cl_uint    loc_layout_index                                                                        // Layout index.
+ nu::float4* loc_data,                                                                              // nu::float4 data.
+ cl_uint     loc_layout_index                                                                       // Layout index.
 )
 {
   cl_int loc_error;                                                                                 // Error code.

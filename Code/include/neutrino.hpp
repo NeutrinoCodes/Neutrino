@@ -236,7 +236,7 @@ typedef enum
 /// Declares a Neutrino baseline object.
 /// This class contains common definitions and utility functions which are used in various points
 /// in the code.
-class neutrino : public nu_data                                                                     /// @brief **Neutrino baseline.**
+class neutrino : public nu::data                                                                    /// @brief **Neutrino baseline.**
 {
 private:
   size_t                        terminal_time;                                                      ///< @brief **Terminal time (for refresh) [us].**
