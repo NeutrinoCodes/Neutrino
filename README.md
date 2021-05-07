@@ -11,10 +11,10 @@
 # Overview
 Neutrino is a C++ library that facilitates writing parallel code running on GPU hardware combining the power of the OpenCL computational framework with the OpenGL graphics language (see https://www.neutrino.codes).
 
-Neutrino can be successfully installed and used on Linux (see: [Linux installation](./Installation/Linux/installation_linux.md)), Mac (see: [Mac installation](./Installation/Mac/installation_mac.md)) or Windows (see: [Windows installation](./Installation/Windows/installation_windows.md)).
+Neutrino can be installed on Linux (see: [Linux installation](./Installation/Linux/installation_linux.md)) or Windows (see: [Windows installation](./Installation/Windows/installation_windows.md)).
 
 # Hardware requirements
-- GPU having the **OpenCL-OpenGL interoperability mode** (`cl_khr_gl_sharing` extension under Linux or Windows, `cl_APPLE_gl_sharing` extension under Mac).
+- GPU having the **OpenCL-OpenGL interoperability mode** (`cl_khr_gl_sharing` extension available: it can be verified by running Clinfo).
 
 # Software requirements
 - Clinfo (https://github.com/Oblomov/clinfo)
@@ -24,12 +24,13 @@ Neutrino can be successfully installed and used on Linux (see: [Linux installati
 - GLAD (https://glad.dav1d.de/)
 - GLFW (https://www.glfw.org/)
 - GMSH (https://gmsh.info/)
-- GCC (https://gcc.gnu.org)
+- GCC (https://gcc.gnu.org) if using Linux
+- Visual Studio (https://visualstudio.microsoft.com/) is using Windows
 - CMake (https://cmake.org)
 - GraphViz (https://graphviz.org/)
 - Doxygen (https://www.doxygen.nl/)
 
 ## Examples
-In order to test the installation of Neutrino and to start experimenting with it, please go to the *Examples* repository: https://github.com/NeutrinoCodes/Examples.
+Neutrino-based example applications che be found at the *Examples* repository: https://github.com/NeutrinoCodes/Examples.
 
-© Alessandro LUCANTONIO, Erik ZORZIN - 2018-2020
+© Alessandro LUCANTONIO, Erik ZORZIN - 2018-2021
