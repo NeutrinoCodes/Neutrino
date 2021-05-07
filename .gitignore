@@ -1,9 +1,8 @@
-/Code/cmake
+/cmake
 /build
 /Code/out
 /Docs/Doxygen/html
 .vs
 .vscode
-/Code/configure*
-libnu
+.configure*
 /Code/CMakeSettings.json
