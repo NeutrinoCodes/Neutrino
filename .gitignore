@@ -2,5 +2,5 @@
 /build
 .vs
 .vscode
-.configure*
+configure*
 CMakeSettings.json
