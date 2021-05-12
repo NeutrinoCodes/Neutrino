@@ -1,8 +1,6 @@
-/cmake
+/Docs/Doxygen
 /build
-/Code/out
-/Docs/Doxygen/html
 .vs
 .vscode
 .configure*
-/Code/CMakeSettings.json
+CMakeSettings.json
