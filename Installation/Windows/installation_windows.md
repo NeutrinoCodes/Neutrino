@@ -3,13 +3,16 @@
 ## Overview
 Neutrino is a C++ library that facilitates writing parallel code running on GPU hardware combining the power of the OpenCL computational framework with the OpenGL graphics language (see https://www.neutrino.codes).
 
-Neutrino can be successfully installed and used on Windows by using its native **Visual Studio** environment. Here we suggest the **VScode** editor toolchain, because this exists in all three operating systems and it works in combination of their corresponding native C/C++ environments. This provides a universal toolchain that gives advantages when working from different types of machines.
+Neutrino can be successfully installed and used on Windows by using the **Visual Studio** IDE or **VScode** editor toolchain.
 
 ## Hardware requirements:
-- **OpenCL-OpenGL interoperability GPU mode**. Use the command line tool `clinfo` (see *Software requirements*) to check for the availability of this mode. On a terminal do:\
+A GPU having the following characteristic is necessary:
+- **OpenCL-OpenGL interoperability GPU mode**
+
+This can be verified by installing and using the `clinfo` command line tool (https://github.com/Oblomov/clinfo). After its installation, on a command terminal do:\
 `clinfo`\
 \
-In the text output (it can be long!) there should be a section regarding your GPU similar to this one:\
+In the text output (it can be long!) there should be a section regarding your GPU, similar to this one:\
 ...\
 `Name:                                          GeForce GTX 1060 6GB`\
 `Vendor:                                        NVIDIA Corporation`\
@@ -19,10 +22,9 @@ In the text output (it can be long!) there should be a section regarding your GP
 `Extensions:                                    cl_khr_global_int32_base_atomics cl_khr_global_int32_extended_atomics cl_khr_local_int32_base_atomics cl_khr_local_int32_extended_atomics cl_khr_fp64 cl_khr_byte_addressable_store cl_khr_icd cl_khr_gl_sharing cl_nv_compiler_options cl_nv_device_attribute_query cl_nv_pragma_unroll cl_nv_d3d10_sharing cl_khr_d3d10_sharing cl_nv_d3d11_sharing cl_nv_copy_opts cl_nv_create_buffer cl_khr_int64_base_atomics cl_khr_int64_extended_atomics`\
 ...\
 \
-and verify the presence of the `cl_khr_gl_sharing` extension.
+Please verify the presence of the `cl_khr_gl_sharing` extension. Some old GPU models do not have it: those ones would not be compatible with Neutrino.
 
 ## Software requirements:
-- Clinfo (https://github.com/Oblomov/clinfo)
 - OpenCL (runtime/loader + headers), coming along the installation of the graphics drivers.
 - OpenGL (library + headers), coming along the installation of the graphics drivers.
 - GIT (https://git-scm.com)
@@ -36,18 +38,12 @@ and verify the presence of the `cl_khr_gl_sharing` extension.
 
 \* The GLAD loader should be generated from its webpage using the following settings:
 - Language = C/C++
-- gl = Version 4.6 (or greater)
+- gl = Version 4.6 (or higher)
 - Profile = Core
 
 After having generated it, download the zip file containing the code and extract it in a custom directory (see *Installation*).
 
-\** When using the **VScode editor**, please follow the instructions (https://code.visualstudio.com/docs/cpp/config-msvc) in order to install it and verify the installation of Visual Studio, as well as the instructions (https://code.visualstudio.com/docs/cpp/cmake-linux, there are no specific instructions for Windows) to verify the installation of Cmake and to install the Cmake Tools extension for VSCode.
-
-## Installation: (VScode toolchain compilation)
-In this method we assume Neutrino is going to be installed in a directory named *NeutrinoCodes* containing the following subdirectories:
-- glad
-- glfw
-- gmsh
+\** When using the **VScode editor**, please follow the instructions (https://code.visualstudio.com/docs/cpp/config-msvc) in order to install it and verify the installation of Visual Studio, as well as the instructions (https://code.visualstudio.com/docs/cpp/cmake-linux, there are no specific instructions for Windows) to verify the installation of Cmake and to install the Cmake Tools extension for VSCode. If using only the **Visual Studio** IDE instead of the VScode editor, please install also the Cmake Tools extension for Visual Studio.
 
 **IMPORTANT NOTE FOR GMSH INSTALLATION ON WINDOWS**: GMSH is used in Neutrino as an API library. Under a Windows purely native environment (which is the case of Windows + the Visual Studio compiler) there is a limitation (see https://gitlab.onelab.info/gmsh/gmsh/-/issues/894) and because of this the GMSH API can used only as an external DLL. In order to install it on Windows, please download the GMSH's *Software Development Kit (SDK) for Windows* (64-bit or 32-bit, according to your operating system) and follow this procedure:
 - after having downloaded the GMSH's SDK `.zip` file, extract it and copy the `gmsh` directory into the `NeutrinoCodes` directory.
@@ -57,31 +53,35 @@ In this method we assume Neutrino is going to be installed in a directory named 
 
 This should make the GMSH's API working on Windows.
 
-Continuing with the installation of Neutrino:
+We assume Neutrino is going to be installed in a directory named *NeutrinoCodes* containing the following subdirectories:
+- glad
+- glfw
+- gmsh
 
-1. From the command shell (either VScode's or system's), navigate into *NeutrinoCodes* and create a `libnu` directory using the command:\
+From the command shell (either VScode's or system's), navigate into *NeutrinoCodes* and create a `libnu` directory using the command:\
 `mkdir libnu`\
 \
 This will create the `libnu` directory.
 
-2. From the command shell (either VScode's or system's), navigate into *NeutrinoCodes* and clone the Neutrino project using the command:\
+From the command shell (either VScode's or system's), navigate into *NeutrinoCodes* and clone the Neutrino project using the command:\
 `git clone https://github.com/NeutrinoCodes/neutrino.git` \
 \
 This will create the `neutrino` directory.
 
-3. Go to the `neutrino` directory and create a `.vscode` hidden directory:\
+## Installation: (VScode toolchain)
+Go to the `neutrino` directory and create a `.vscode` hidden directory:\
 `mkdir .vscode`\
 \
 and create a new file `settings.json` in it, then fill it with the following information:\
 `{`\
-&nbsp;&nbsp;`"C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",`\
-&nbsp;&nbsp;`"cmake.configureArgs" : [   `\
-&nbsp;&nbsp;&nbsp;&nbsp;`"-DGLAD_PATH=your_path_to_NeutrinoCodes\\glad,`\
-&nbsp;&nbsp;&nbsp;&nbsp;`"-DGLFW_PATH=your_path_to_NeutrinoCodes\\glfw",`\
-&nbsp;&nbsp;&nbsp;&nbsp;`"-DGMSH_PATH=your_path_to_NeutrinoCodes\\gmsh",`\
-&nbsp;&nbsp;&nbsp;&nbsp;`"-DCL_PATH=your_path_to_OpenCL",`\
-&nbsp;&nbsp;&nbsp;&nbsp;`"-DNEUTRINO_PATH=your_path_to_NeutrinoCodes\\libnu"`\
-&nbsp;&nbsp;`]`\
+&nbsp;&nbsp;`"cmake.configureSettings":`\
+&nbsp;&nbsp;`{`\
+&nbsp;&nbsp;&nbsp;&nbsp;`"GLAD_PATH": "your_path_to_NeutrinoCodes\\glad",`\
+&nbsp;&nbsp;&nbsp;&nbsp;`"GLFW_PATH": "your_path_to_NeutrinoCodes\\glfw",`\
+&nbsp;&nbsp;&nbsp;&nbsp;`"GMSH_PATH": "your_path_to_NeutrinoCodes\\gmsh",`\
+&nbsp;&nbsp;&nbsp;&nbsp;`"CL_PATH": "your_path_to_OpenCL",`\
+&nbsp;&nbsp;&nbsp;&nbsp;`"NEUTRINO_PATH": "your_path_to_NeutrinoCodes\\libnu"`\
+&nbsp;&nbsp;`}`\
 `}`\
 \
 and save it.\
@@ -92,12 +92,14 @@ Also notice that `your_path_to_OpenCL` might be something like this (it depends 
 \
 At this point, Neutrino is configured for your system. 
 
-4. In VScode, go to the left bar and locate the **CMake** button (it comes after the installation of the CMake Tools extension for VScode) and push it: a CMake panel will open, push the **Configure All Projects** button on it.
+In VScode, open a folder from the file menu and select NeutrinoCodes. Go to the left bar and locate the **CMake** button (it comes after the installation of the CMake Tools extension for VScode) and push it: a CMake panel will open, push the **Configure All Projects** button on it.
 
-5. In VScode, go to the bottom bar and locate the **Target** button: verify it has been selected to **[install]**.
+Go to the bottom bar and locate:
+- the **Build variant** button: verify it has been selected to **[Release]**.
+- the **Active kit** button: verify it has been selected according to your system's characteristics. e.g. **[Visual Studio Community 2019 Release - amd64]**.
+- the **Target** button: verify it has been selected to **[install]**.
+- the **Build** button: push it in order to build the Neutrino project.
 
-6. In VScode, go to the bottom bar and locate the **Build** button: push it in order to build the Neutrino project.\
-\
 At this point the NeutrinoCodes directory should appear like this:
 - glad
 - glfw
@@ -105,7 +107,7 @@ At this point the NeutrinoCodes directory should appear like this:
 - libnu
 - neutrino
 
-7. We all like tidy code! For this, we provide an **Uncrustify** (sources: https://github.com/uncrustify/uncrustify) configuration file specific for Neutrino. In order to use it, please first install Uncrustify according to your operating system (e.g. use Homebrew under Mac), then install the VScode's *Uncrustify extension* (https://marketplace.visualstudio.com/items?itemName=LaurentTreguier.uncrustify).\
+We all like tidy code! For this, we provide an **Uncrustify** (sources: https://github.com/uncrustify/uncrustify) configuration file specific for Neutrino. In order to use it, please first install Uncrustify according to your operating system (e.g. use Homebrew under Mac), then install the VScode's *Uncrustify extension* (https://marketplace.visualstudio.com/items?itemName=LaurentTreguier.uncrustify).\
 \
 Add the following lines to either the *global* or *project* **settings.json** file:
 `"uncrustify.executablePath.windows": "your_path_to_uncrustify",`\
@@ -116,4 +118,37 @@ To edit the *global* settings, on VScode go to the left bar: push the **Extensio
 \
 To edit the *project* settings, open `settings.json` file in the `.vscode` you created for Neutrino (the hidden directory inside the `Neutrino` directory) and put the same lines in it. This will set Uncrustify as code formatter (together with the configuration file we provide) only for the Neutrino project.
 
-Congratulations, you have installed Neutrino on Windows!
+Congratulations, you have installed Neutrino on Windows within the VScode toolchain!
+
+## Installation: (Visual Studio toolchain)
+Go to the `neutrino` directory and edit the `CMakeSettings.json` file in it, then fill it with the following information:\
+`{`\
+&nbsp;&nbsp;`"configurations": [`\
+&nbsp;&nbsp;&nbsp;&nbsp;`{`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"name": "x64-Release",`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"generator": "Ninja",`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"configurationType": "Release",`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"buildRoot": "${projectDir}\\build\\cmake\\${name}",`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"installRoot": "${projectDir}\\out\\install\\${name}",`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"cmakeCommandArgs": "-DGLAD_PATH=\"your_path_to_NeutrinoCodes\\glad\" -DGLFW_PATH=\"your_path_to_NeutrinoCodes\\glfw\" -DGMSH_PATH=\"your_path_to_NeutrinoCodes\\gmsh\" -DCL_PATH=\"your_path_to_OpenCL\\opencl\" -DNEUTRINO_PATH=\"your_path_to_NeutrinoCodes\\libnu\"",`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"buildCommandArgs": "",`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"ctestCommandArgs": "",`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"inheritEnvironments": [ "msvc_x64_x64" ],`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"variables": [`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`{`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"name": "CMAKE_INSTALL_PREFIX",`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"value": "E:/BookHouseBoys/ezor/NeutrinoCodes/libnu",`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"type": "PATH"`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`}`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`]`\
+&nbsp;&nbsp;&nbsp;&nbsp;`}`\
+&nbsp;&nbsp;`]`\
+`}`\
+\
+and save it.
+
+Then, in Visual Studio open a folder from the file menu and select NeutrinoCodes. Visual Studio will invoke Cmake. After it finished configuring the project, go to the Build menu and push the **Build** button. Once the Neutrino library has been built, it has to be installed: to do so, go to the Build menu and push the **Install** button.
+
+Alternatively, the same file can edited in Visual Studio by right-clicking the CMakeLists.txt file in the Solution Explorer - Folder View and then selecting the **CMake Settings for 'project_name'** button. This will open the CMake Settings editor. The string to be edited, containing all user's paths, is the one in the **CMake command arguments** text field.
+
+Congratulations, you have installed Neutrino on Windows within the Visual Studio toolchain!
