@@ -29,8 +29,10 @@ void nu::int1::read
  std::string loc_file_name                                                                          // File name.
 )
 {
-  size_t      i;                                                                                    // Data index.
-  GLint       loc_data;                                                                             // File data.
+  // EZOR 13MAY2021 to be modified according to std::vector data.
+  //size_t      i;                                                                                    // Data index.
+  //GLint       loc_data;                                                                             // File data.
+
   std::string loc_full_name;                                                                        // Full file name.
 
   #ifdef __linux__

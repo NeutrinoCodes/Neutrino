@@ -226,8 +226,8 @@ private:
   // ENTITY VARIABLES:
   size_t                            entities;                                                       ///< Number of entities.
   std::vector<std::pair<int, int> > entity_list;                                                    ///< Entity list.
-  size_t                            entity_dimension;                                               ///< Entity dimension.
-  size_t                            entity_tag;                                                     ///< Entity tag.
+  GLint                             entity_dimension;                                               ///< Entity dimension.
+  GLint                             entity_tag;                                                     ///< Entity tag.
   std::vector<size_t>               all_node_list;                                                  ///< Node list.
   std::vector<double>               all_node_coordinates;                                           ///< All node coordinates.
   std::vector<double>               all_node_parametric_coordinates;                                ///< All node coordinates.
