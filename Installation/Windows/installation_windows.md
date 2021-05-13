@@ -6,8 +6,7 @@ Neutrino is a C++ library that facilitates writing parallel code running on GPU 
 Neutrino can be successfully installed and used on Windows by using the **Visual Studio** IDE or **VScode** editor toolchain.
 
 ## Hardware requirements:
-A GPU having the following characteristic is necessary:
-- **OpenCL-OpenGL interoperability GPU mode**
+A GPU having the **OpenCL-OpenGL interoperability GPU mode** is necessary.
 
 This can be verified by installing and using the `clinfo` command line tool (https://github.com/Oblomov/clinfo). After its installation, on a command terminal do:\
 `clinfo`\

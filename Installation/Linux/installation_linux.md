@@ -6,10 +6,9 @@ Neutrino is a C++ library that facilitates writing parallel code running on GPU 
 Neutrino can be successfully installed and used on Linux by using the **VScode** editor toolchain or manually from a command shell.
 
 ## Hardware requirements:
-A GPU having the following characteristic is necessary:
-- **OpenCL-OpenGL interoperability GPU mode**
+A GPU having the **OpenCL-OpenGL interoperability GPU mode** is necessary.
 
-This can be verified by installing and using the `clinfo` command line tool (https://github.com/Oblomov/clinfo). After its installation, on a command terminal do:\
+This can be verified by installing and using the `clinfo` command line tool. After its installation, on a command terminal do:\
 `clinfo`\
 \
 In the text output (it can be long!) there should be a section regarding your GPU, similar to this one:\
@@ -68,20 +67,16 @@ and create a new file `settings.json` in it, then fill it with the following inf
 `{`\
 &nbsp;&nbsp;`"cmake.configureSettings":`\
 &nbsp;&nbsp;`{`\
-&nbsp;&nbsp;&nbsp;&nbsp;`"GLAD_PATH": "your_path_to_NeutrinoCodes\\glad",`\
-&nbsp;&nbsp;&nbsp;&nbsp;`"GLFW_PATH": "your_path_to_NeutrinoCodes\\glfw",`\
-&nbsp;&nbsp;&nbsp;&nbsp;`"GMSH_PATH": "your_path_to_NeutrinoCodes\\gmsh",`\
+&nbsp;&nbsp;&nbsp;&nbsp;`"GLAD_PATH": "your_path_to_NeutrinoCodes/glad",`\
+&nbsp;&nbsp;&nbsp;&nbsp;`"GLFW_PATH": "your_path_to_NeutrinoCodes/glfw",`\
+&nbsp;&nbsp;&nbsp;&nbsp;`"GMSH_PATH": "your_path_to_NeutrinoCodes/gmsh",`\
 &nbsp;&nbsp;&nbsp;&nbsp;`"CL_PATH": "your_path_to_OpenCL",`\
-&nbsp;&nbsp;&nbsp;&nbsp;`"NEUTRINO_PATH": "your_path_to_NeutrinoCodes\\libnu"`\
+&nbsp;&nbsp;&nbsp;&nbsp;`"NEUTRINO_PATH": "your_path_to_NeutrinoCodes/libnu"`\
 &nbsp;&nbsp;`}`\
 `}`\
 \
-and save it.\
-\
-Notice all paths **must** be specificed with *double backslashes*, in order to correctly manage the possibility of space characters in the them.
-Also notice that `your_path_to_OpenCL` might be something like this (it depends on your GPU's graphics drivers):\
-`C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v10.1`\
-\
+and save it.
+
 At this point, Neutrino is configured for your system. 
 
 In VScode, open a folder from the file menu and select NeutrinoCodes. Go to the left bar and locate the **CMake** button (it comes after the installation of the CMake Tools extension for VScode) and push it: a CMake panel will open, push the **Configure All Projects** button on it.
@@ -102,15 +97,15 @@ At this point the NeutrinoCodes directory should appear like this:
 We all like tidy code! For this, we provide an **Uncrustify** (sources: https://github.com/uncrustify/uncrustify) configuration file specific for Neutrino. In order to use it, please first install Uncrustify according to your operating system (e.g. use Homebrew under Mac), then install the VScode's *Uncrustify extension* (https://marketplace.visualstudio.com/items?itemName=LaurentTreguier.uncrustify).\
 \
 Add the following lines to either the *global* or *project* **settings.json** file:
-`"uncrustify.executablePath.windows": "your_path_to_uncrustify",`\
+`"uncrustify.executablePath.linux": "your_path_to_uncrustify",`\
 `"editor.defaultFormatter": "LaurentTreguier.uncrustify",`\
-`"editor.formatOnSave": true`\
+`"editor.formatOnSave": true`
 \
 To edit the *global* settings, on VScode go to the left bar: push the **Extensions** button and select the Uncrustify extension. Then go to **Manage --> Extension Settings** (gear-like icon) and edit the `settings.json` file by clicking one of the links in that section. This will set the Uncrustify code formatter globally in all your VScode projects (but still with per-project custom uncrustify configuration files).\
 \
 To edit the *project* settings, open `settings.json` file in the `.vscode` you created for Neutrino (the hidden directory inside the `Neutrino` directory) and put the same lines in it. This will set Uncrustify as code formatter (together with the configuration file we provide) only for the Neutrino project.
 
-Congratulations, you have installed Neutrino on Windows within the VScode toolchain!
+Congratulations, you have installed Neutrino on Linux within the VScode toolchain!
 
 ## Installation: (command shell)
 From a system command shell, navigate into your favourite directory and clone the Neutrino project using the command git clone https://github.com/NeutrinoCodes/neutrino.git.
@@ -139,4 +134,4 @@ Make the configuration script to be executable (`chmod a+x configure_linux`) and
 
 Enter the cmake directory and type `make install` (use `make clean` to remove old build files if necessary).
 
-Congratulations, you have installed Neutrino on Windows within the command shell toolchain!
+Congratulations, you have installed Neutrino on Linux within the command shell toolchain!

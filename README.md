@@ -8,6 +8,8 @@
 
 [www.neutrino.codes](https://www.neutrino.codes)
 
+© Alessandro LUCANTONIO, Erik ZORZIN - 2018-2021
+
 # Overview
 Neutrino is a C++ library that facilitates writing parallel code running on GPU hardware combining the power of the OpenCL computational framework with the OpenGL graphics language (see https://www.neutrino.codes).
 
