@@ -269,6 +269,133 @@ public:
                             0.0, 0.0, 0.0, 1.0};                                                    ///< @brief **Right eye stereoscopic perspective projection matrix.**
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////// KEYBOARD //////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  // KEYS:
+  bool        key_UNKNOWN;                                                                          ///< @brief **Unknown key.**
+  bool        key_SPACE;                                                                            ///< @brief **Space**
+  bool        key_APOSTROPHE;                                                                       ///< @brief ** ' **
+  bool        key_COMMA;                                                                            ///< @brief ** , **
+  bool        key_MINUS;                                                                            ///< @brief ** - **
+  bool        key_PERIOD;                                                                           ///< @brief ** . **
+  bool        key_SLASH;                                                                            ///< @brief ** / **
+  bool        key_0;                                                                                ///< @brief ** 0 **
+  bool        key_1;                                                                                ///< @brief ** 1 **
+  bool        key_2;                                                                                ///< @brief ** 2 **
+  bool        key_3;                                                                                ///< @brief ** 3 **
+  bool        key_4;                                                                                ///< @brief ** 4 **
+  bool        key_5;                                                                                ///< @brief ** 5 **
+  bool        key_6;                                                                                ///< @brief ** 6 **
+  bool        key_7;                                                                                ///< @brief ** 7 **
+  bool        key_8;                                                                                ///< @brief ** 8 **
+  bool        key_9;                                                                                ///< @brief ** 9 **
+  bool        key_SEMICOLON;                                                                        ///< @brief ** ; **
+  bool        key_EQUAL;                                                                            ///< @brief ** = **
+  bool        key_A;                                                                                ///< @brief ** A **
+  bool        key_B;                                                                                ///< @brief ** B **
+  bool        key_C;                                                                                ///< @brief ** C **
+  bool        key_D;                                                                                ///< @brief ** D **
+  bool        key_E;                                                                                ///< @brief ** E **
+  bool        key_F;                                                                                ///< @brief ** F **
+  bool        key_G;                                                                                ///< @brief ** G **
+  bool        key_H;                                                                                ///< @brief ** H **
+  bool        key_I;                                                                                ///< @brief ** I **
+  bool        key_J;                                                                                ///< @brief ** J **
+  bool        key_K;                                                                                ///< @brief ** K **
+  bool        key_L;                                                                                ///< @brief ** L **
+  bool        key_M;                                                                                ///< @brief ** M **
+  bool        key_N;                                                                                ///< @brief ** N **
+  bool        key_O;                                                                                ///< @brief ** O **
+  bool        key_P;                                                                                ///< @brief ** P **
+  bool        key_Q;                                                                                ///< @brief ** Q **
+  bool        key_R;                                                                                ///< @brief ** R **
+  bool        key_S;                                                                                ///< @brief ** S **
+  bool        key_T;                                                                                ///< @brief ** T **
+  bool        key_U;                                                                                ///< @brief ** U **
+  bool        key_V;                                                                                ///< @brief ** V **
+  bool        key_W;                                                                                ///< @brief ** W **
+  bool        key_X;                                                                                ///< @brief ** X **
+  bool        key_Y;                                                                                ///< @brief ** Y **
+  bool        key_Z;                                                                                ///< @brief ** Z **
+  bool        key_LEFT_BRACKET;                                                                     ///< @brief ** [ **
+  bool        key_BACKSLASH;                                                                        ///< @brief ** \ **
+  bool        key_RIGHT_BRACKET;                                                                    ///< @brief ** ] **
+  bool        key_GRAVE_ACCENT;                                                                     ///< @brief ** ` **
+  bool        key_WORLD_1;                                                                          ///< @brief **Non-US #1.**
+  bool        key_WORLD_2;                                                                          ///< @brief **Non-US #2.**
+  bool        key_ESCAPE;                                                                           ///< @brief **Escape.**
+  bool        key_ENTER;                                                                            ///< @brief **Enter.**
+  bool        key_TAB;                                                                              ///< @brief **Tab.**
+  bool        key_BACKSPACE;                                                                        ///< @brief **Backspace.**
+  bool        key_INSERT;                                                                           ///< @brief **Insert.**
+  bool        key_DELETE;                                                                           ///< @brief **Delete.**
+  bool        key_RIGHT;                                                                            ///< @brief **Right.**
+  bool        key_LEFT;                                                                             ///< @brief **Left.**
+  bool        key_DOWN;                                                                             ///< @brief **Up.**
+  bool        key_UP;                                                                               ///< @brief **Down.**
+  bool        key_PAGE_UP;                                                                          ///< @brief **Page up.**
+  bool        key_PAGE_DOWN;                                                                        ///< @brief **Page down.**
+  bool        key_HOME;                                                                             ///< @brief **Home.**
+  bool        key_END;                                                                              ///< @brief **End.**
+  bool        key_CAPS_LOCK;                                                                        ///< @brief **Caps lock.**
+  bool        key_SCROLL_LOCK;                                                                      ///< @brief **Scroll lock.**
+  bool        key_NUM_LOCK;                                                                         ///< @brief **Num lock.**
+  bool        key_PRINT_SCREEN;                                                                     ///< @brief **Print screen.**
+  bool        key_PAUSE;                                                                            ///< @brief **Pause.**
+  bool        key_F1;                                                                               ///< @brief ** F1 **
+  bool        key_F2;                                                                               ///< @brief ** F2 **
+  bool        key_F3;                                                                               ///< @brief ** F3 **
+  bool        key_F4;                                                                               ///< @brief ** F4 **
+  bool        key_F5;                                                                               ///< @brief ** F5 **
+  bool        key_F6;                                                                               ///< @brief ** F6 **
+  bool        key_F7;                                                                               ///< @brief ** F7 **
+  bool        key_F8;                                                                               ///< @brief ** F8 **
+  bool        key_F9;                                                                               ///< @brief ** F9 **
+  bool        key_F10;                                                                              ///< @brief ** F10 **
+  bool        key_F11;                                                                              ///< @brief ** F11 **
+  bool        key_F12;                                                                              ///< @brief ** F12 **
+  bool        key_F13;                                                                              ///< @brief ** F13 **
+  bool        key_F14;                                                                              ///< @brief ** F14 **
+  bool        key_F15;                                                                              ///< @brief ** F15 **
+  bool        key_F16;                                                                              ///< @brief ** F16 **
+  bool        key_F17;                                                                              ///< @brief ** F17 **
+  bool        key_F18;                                                                              ///< @brief ** F18 **
+  bool        key_F19;                                                                              ///< @brief ** F19 **
+  bool        key_F20;                                                                              ///< @brief ** F20 **
+  bool        key_F21;                                                                              ///< @brief ** F21 **
+  bool        key_F22;                                                                              ///< @brief ** F22 **
+  bool        key_F23;                                                                              ///< @brief ** F23 **
+  bool        key_F24;                                                                              ///< @brief ** F24 **
+  bool        key_F25;                                                                              ///< @brief ** F25 **
+  bool        key_KP_0;                                                                             ///< @brief ** 0 (keypad).**
+  bool        key_KP_1;                                                                             ///< @brief ** 1 (keypad).**
+  bool        key_KP_2;                                                                             ///< @brief ** 2 (keypad).**
+  bool        key_KP_3;                                                                             ///< @brief ** 3 (keypad).**
+  bool        key_KP_4;                                                                             ///< @brief ** 4 (keypad).**
+  bool        key_KP_5;                                                                             ///< @brief ** 5 (keypad).**
+  bool        key_KP_6;                                                                             ///< @brief ** 6 (keypad).**
+  bool        key_KP_7;                                                                             ///< @brief ** 7 (keypad).**
+  bool        key_KP_8;                                                                             ///< @brief ** 8 (keypad).**
+  bool        key_KP_9;                                                                             ///< @brief ** 9 (keypad).**
+  bool        key_KP_DECIMAL;                                                                       ///< @brief ** . (keypad).**
+  bool        key_KP_DIVIDE;                                                                        ///< @brief ** / (keypad).**
+  bool        key_KP_MULTIPLY;                                                                      ///< @brief ** * (keypad).**
+  bool        key_KP_SUBTRACT;                                                                      ///< @brief ** - (keypad).**
+  bool        key_KP_ADD;                                                                           ///< @brief ** + (keypad).**
+  bool        key_KP_ENTER;                                                                         ///< @brief **Enter (keypad).**
+  bool        key_KP_EQUAL;                                                                         ///< @brief ** = (keypad).**
+  bool        key_LEFT_SHIFT;                                                                       ///< @brief **Left shift.**
+  bool        key_LEFT_CONTROL;                                                                     ///< @brief **Left control.**
+  bool        key_LEFT_ALT;                                                                         ///< @brief **Left alt.**
+  bool        key_LEFT_SUPER;                                                                       ///< @brief **Left super.**
+  bool        key_RIGHT_SHIFT;                                                                      ///< @brief **Right shift.**
+  bool        key_RIGHT_CONTROL;                                                                    ///< @brief **Right control.**
+  bool        key_RIGHT_ALT;                                                                        ///< @brief **Right alt.**
+  bool        key_RIGHT_SUPER;                                                                      ///< @brief **Right super.**
+  bool        key_MENU;                                                                             ///< @brief **Menu.**
+  bool        key_LAST;                                                                             ///< @brief **Last.**
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////// GAMEPAD //////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   // BUTTONS:

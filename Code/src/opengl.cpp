@@ -233,26 +233,28 @@ void nu::opengl::key_pressed
   // Checking key pressed:
   switch(loc_key)
   {
-    case GLFW_KEY_ESCAPE:
-      if(loc_action == GLFW_PRESS)
-      {
+    /*
+       case GLFW_KEY_ESCAPE:
+       if(loc_action == GLFW_PRESS)
+       {
         glfwSetWindowShouldClose (glfw_window, GL_TRUE);                                            // Setting window "closed" flag...
-      }
-      break;
+       }
+       break;
 
-    case GLFW_KEY_2:
-      if(loc_action == GLFW_PRESS)
-      {
+       case GLFW_KEY_2:
+       if(loc_action == GLFW_PRESS)
+       {
         PR_mode = NU_MODE_MONO;                                                                     // Switching to monoscopic mode...
-      }
-      break;
+       }
+       break;
 
-    case GLFW_KEY_3:
-      if(loc_action == GLFW_PRESS)
-      {
+       case GLFW_KEY_3:
+       if(loc_action == GLFW_PRESS)
+       {
         PR_mode = NU_MODE_STEREO;                                                                   // Switching to stereoscopic mode...
-      }
-      break;
+       }
+       break;
+     */
   }
 
 }
