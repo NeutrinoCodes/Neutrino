@@ -8,17 +8,17 @@
 bool nu::opengl::init_done = false;                                                                 // init_done flag.
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////// "nu::opengl" class /////////////////////////////////////////////
+///////////////////////////////////////// "nu::opengl" class /////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 nu::opengl::opengl (
-                    std::string loc_title,                                                          ///< Window title.
-                    int         loc_window_size_x,                                                  ///< Window x-size [px].
-                    int         loc_window_size_y,                                                  ///< Window y-size [px].
-                    float       loc_orbit_x_initial,                                                ///< Initial "near clipping-plane" x-coordinate.
-                    float       loc_orbit_y_initial,                                                ///< Initial "near clipping-plane" y-coordinate.
-                    float       loc_pan_x_initial,                                                  ///< Initial pan-x coordinate.
-                    float       loc_pan_y_initial,                                                  ///< Initial pan-y coordinate.
-                    float       loc_pan_z_initial                                                   ///< Initial pan-z coordinate.
+                    std::string loc_title,                                                          // Window title.
+                    int         loc_window_size_x,                                                  // Window x-size [px].
+                    int         loc_window_size_y,                                                  // Window y-size [px].
+                    float       loc_orbit_x_initial,                                                // Initial "near clipping-plane" x-coordinate.
+                    float       loc_orbit_y_initial,                                                // Initial "near clipping-plane" y-coordinate.
+                    float       loc_pan_x_initial,                                                  // Initial pan-x coordinate.
+                    float       loc_pan_y_initial,                                                  // Initial pan-y coordinate.
+                    float       loc_pan_z_initial                                                   // Initial pan-z coordinate.
                    )
 {
   if(neutrino::init_done != true)
@@ -233,6 +233,104 @@ void nu::opengl::key_pressed
   // Checking key pressed:
   switch(loc_key)
   {
+    case GLFW_KEY_UNKNOWN:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_UNKNOWN = true;
+          break;
+        case GLFW_RELEASE:
+          key_UNKNOWN = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_SPACE:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_SPACE = true;
+          break;
+        case GLFW_RELEASE:
+          key_SPACE = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_APOSTROPHE:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_APOSTROPHE = true;
+          break;
+        case GLFW_RELEASE:
+          key_APOSTROPHE = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_COMMA:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_COMMA = true;
+          break;
+        case GLFW_RELEASE:
+          key_COMMA = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_MINUS:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_MINUS = true;
+          break;
+        case GLFW_RELEASE:
+          key_MINUS = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_PERIOD:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_PERIOD = true;
+          break;
+        case GLFW_RELEASE:
+          key_PERIOD = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_SLASH:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_SLASH = true;
+          break;
+        case GLFW_RELEASE:
+          key_SLASH = false;
+          break;
+      }
+
+      break;
+
     case GLFW_KEY_0:
 
       switch(loc_action)
@@ -270,6 +368,1560 @@ void nu::opengl::key_pressed
           break;
         case GLFW_RELEASE:
           key_2 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_3:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_3 = true;
+          break;
+        case GLFW_RELEASE:
+          key_3 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_4:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_4 = true;
+          break;
+        case GLFW_RELEASE:
+          key_4 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_5:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_5 = true;
+          break;
+        case GLFW_RELEASE:
+          key_5 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_6:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_6 = true;
+          break;
+        case GLFW_RELEASE:
+          key_6 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_7:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_7 = true;
+          break;
+        case GLFW_RELEASE:
+          key_7 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_8:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_8 = true;
+          break;
+        case GLFW_RELEASE:
+          key_8 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_9:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_9 = true;
+          break;
+        case GLFW_RELEASE:
+          key_9 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_SEMICOLON:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_SEMICOLON = true;
+          break;
+        case GLFW_RELEASE:
+          key_SEMICOLON = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_EQUAL:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_EQUAL = true;
+          break;
+        case GLFW_RELEASE:
+          key_EQUAL = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_A:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_A = true;
+          break;
+        case GLFW_RELEASE:
+          key_A = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_B:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_B = true;
+          break;
+        case GLFW_RELEASE:
+          key_B = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_C:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_C = true;
+          break;
+        case GLFW_RELEASE:
+          key_C = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_D:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_D = true;
+          break;
+        case GLFW_RELEASE:
+          key_D = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_E:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_E = true;
+          break;
+        case GLFW_RELEASE:
+          key_E = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F = true;
+          break;
+        case GLFW_RELEASE:
+          key_F = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_G:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_G = true;
+          break;
+        case GLFW_RELEASE:
+          key_G = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_H:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_H = true;
+          break;
+        case GLFW_RELEASE:
+          key_H = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_I:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_I = true;
+          break;
+        case GLFW_RELEASE:
+          key_I = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_J:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_J = true;
+          break;
+        case GLFW_RELEASE:
+          key_J = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_K:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_K = true;
+          break;
+        case GLFW_RELEASE:
+          key_K = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_L:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_L = true;
+          break;
+        case GLFW_RELEASE:
+          key_L = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_M:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_M = true;
+          break;
+        case GLFW_RELEASE:
+          key_M = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_N:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_N = true;
+          break;
+        case GLFW_RELEASE:
+          key_N = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_O:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_O = true;
+          break;
+        case GLFW_RELEASE:
+          key_O = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_P:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_P = true;
+          break;
+        case GLFW_RELEASE:
+          key_P = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_Q:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_Q = true;
+          break;
+        case GLFW_RELEASE:
+          key_Q = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_R:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_R = true;
+          break;
+        case GLFW_RELEASE:
+          key_R = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_S:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_S = true;
+          break;
+        case GLFW_RELEASE:
+          key_S = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_T:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_T = true;
+          break;
+        case GLFW_RELEASE:
+          key_T = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_U:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_U = true;
+          break;
+        case GLFW_RELEASE:
+          key_U = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_V:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_V = true;
+          break;
+        case GLFW_RELEASE:
+          key_V = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_W:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_W = true;
+          break;
+        case GLFW_RELEASE:
+          key_W = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_X:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_X = true;
+          break;
+        case GLFW_RELEASE:
+          key_X = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_Y:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_Y = true;
+          break;
+        case GLFW_RELEASE:
+          key_Y = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_Z:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_Z = true;
+          break;
+        case GLFW_RELEASE:
+          key_Z = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_LEFT_BRACKET:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_LEFT_BRACKET = true;
+          break;
+        case GLFW_RELEASE:
+          key_LEFT_BRACKET = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_BACKSLASH:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_BACKSLASH = true;
+          break;
+        case GLFW_RELEASE:
+          key_BACKSLASH = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_RIGHT_BRACKET:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_RIGHT_BRACKET = true;
+          break;
+        case GLFW_RELEASE:
+          key_RIGHT_BRACKET = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_GRAVE_ACCENT:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_GRAVE_ACCENT = true;
+          break;
+        case GLFW_RELEASE:
+          key_GRAVE_ACCENT = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_WORLD_1:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_WORLD_1 = true;
+          break;
+        case GLFW_RELEASE:
+          key_WORLD_1 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_WORLD_2:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_WORLD_2 = true;
+          break;
+        case GLFW_RELEASE:
+          key_WORLD_2 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_ESCAPE:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_ESCAPE = true;
+          break;
+        case GLFW_RELEASE:
+          key_ESCAPE = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_ENTER:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_ENTER = true;
+          break;
+        case GLFW_RELEASE:
+          key_ENTER = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_TAB:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_TAB = true;
+          break;
+        case GLFW_RELEASE:
+          key_TAB = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_BACKSPACE:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_BACKSPACE = true;
+          break;
+        case GLFW_RELEASE:
+          key_BACKSPACE = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_INSERT:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_INSERT = true;
+          break;
+        case GLFW_RELEASE:
+          key_INSERT = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_DELETE:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_DELETE = true;
+          break;
+        case GLFW_RELEASE:
+          key_DELETE = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_RIGHT:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_RIGHT = true;
+          break;
+        case GLFW_RELEASE:
+          key_RIGHT = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_LEFT:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_LEFT = true;
+          break;
+        case GLFW_RELEASE:
+          key_LEFT = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_DOWN:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_DOWN = true;
+          break;
+        case GLFW_RELEASE:
+          key_DOWN = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_UP:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_UP = true;
+          break;
+        case GLFW_RELEASE:
+          key_UP = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_PAGE_UP:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_PAGE_UP = true;
+          break;
+        case GLFW_RELEASE:
+          key_PAGE_UP = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_PAGE_DOWN:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_PAGE_DOWN = true;
+          break;
+        case GLFW_RELEASE:
+          key_PAGE_DOWN = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_HOME:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_HOME = true;
+          break;
+        case GLFW_RELEASE:
+          key_HOME = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_END:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_END = true;
+          break;
+        case GLFW_RELEASE:
+          key_END = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_CAPS_LOCK:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_CAPS_LOCK = true;
+          break;
+        case GLFW_RELEASE:
+          key_CAPS_LOCK = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_SCROLL_LOCK:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_SCROLL_LOCK = true;
+          break;
+        case GLFW_RELEASE:
+          key_SCROLL_LOCK = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_NUM_LOCK:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_NUM_LOCK = true;
+          break;
+        case GLFW_RELEASE:
+          key_NUM_LOCK = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_PRINT_SCREEN:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_PRINT_SCREEN = true;
+          break;
+        case GLFW_RELEASE:
+          key_PRINT_SCREEN = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_PAUSE:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_PAUSE = true;
+          break;
+        case GLFW_RELEASE:
+          key_PAUSE = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F1:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F1 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F1 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F2:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F2 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F2 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F3:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F3 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F3 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F4:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F4 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F4 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F5:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F5 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F5 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F6:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F6 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F6 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F7:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F7 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F7 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F8:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F8 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F8 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F9:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F9 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F9 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F10:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F10 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F10 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F11:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F11 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F11 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F12:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F12 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F12 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F13:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F13 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F13 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F14:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F14 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F14 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F15:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F15 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F15 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F16:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F16 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F16 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F17:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F17 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F17 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F18:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F18 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F18 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F19:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F19 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F19 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F20:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F20 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F20 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F21:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F21 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F21 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F22:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F22 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F22 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F23:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F23 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F23 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F24:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F24 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F24 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_F25:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_F25 = true;
+          break;
+        case GLFW_RELEASE:
+          key_F25 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_0:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_0 = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_0 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_1:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_1 = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_1 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_2:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_2 = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_2 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_3:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_3 = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_3 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_4:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_4 = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_4 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_5:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_5 = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_5 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_6:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_6 = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_6 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_7:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_7 = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_7 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_8:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_8 = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_8 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_9:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_9 = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_9 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_DECIMAL:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_DECIMAL = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_DECIMAL = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_DIVIDE:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_DIVIDE = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_DIVIDE = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_MULTIPLY:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_MULTIPLY = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_MULTIPLY = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_SUBTRACT:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_SUBTRACT = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_SUBTRACT = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_ADD:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_ADD = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_ADD = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_ENTER:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_ENTER = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_ENTER = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_KP_EQUAL:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_KP_EQUAL = true;
+          break;
+        case GLFW_RELEASE:
+          key_KP_EQUAL = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_LEFT_SHIFT:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_LEFT_SHIFT = true;
+          break;
+        case GLFW_RELEASE:
+          key_LEFT_SHIFT = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_LEFT_CONTROL:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_LEFT_CONTROL = true;
+          break;
+        case GLFW_RELEASE:
+          key_LEFT_CONTROL = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_LEFT_ALT:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_LEFT_ALT = true;
+          break;
+        case GLFW_RELEASE:
+          key_LEFT_ALT = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_LEFT_SUPER:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_LEFT_SUPER = true;
+          break;
+        case GLFW_RELEASE:
+          key_LEFT_SUPER = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_RIGHT_SHIFT:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_RIGHT_SHIFT = true;
+          break;
+        case GLFW_RELEASE:
+          key_RIGHT_SHIFT = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_RIGHT_CONTROL:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_RIGHT_CONTROL = true;
+          break;
+        case GLFW_RELEASE:
+          key_RIGHT_CONTROL = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_RIGHT_ALT:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_RIGHT_ALT = true;
+          break;
+        case GLFW_RELEASE:
+          key_RIGHT_ALT = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_RIGHT_SUPER:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_RIGHT_SUPER = true;
+          break;
+        case GLFW_RELEASE:
+          key_RIGHT_SUPER = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_MENU:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_MENU = true;
+          break;
+        case GLFW_RELEASE:
+          key_MENU = false;
           break;
       }
 
@@ -400,51 +2052,172 @@ void nu::opengl::init
   scroll_X                  = 0.0f;                                                                 // Initializing scroll x-coordinate [px]...
   scroll_Y                  = 0.0f;                                                                 // Initializing scroll y-coordinate [px]...
 
-  orbit_x                   = 0.0f;
-  orbit_y                   = 0.0f;
-  orbit_x_old               = 0.0f;
-  orbit_y_old               = 0.0f;
+  orbit_x                   = 0.0f;                                                                 // Initializing orbit x-coordinate...
+  orbit_y                   = 0.0f;                                                                 // Initializing orbit y-coordinate...
+  orbit_x_old               = 0.0f;                                                                 // Initializing orbit x-coordinate (old)...
+  orbit_y_old               = 0.0f;                                                                 // Initializing orbit y-coordinate (old)...
   orbit_on                  = false;                                                                // Initializing orbit activation flag...
 
-  pan_x                     = 0.0f;
-  pan_y                     = 0.0f;
-  pan_z                     = 0.0f;
-  pan_x_old                 = 0.0f;
-  pan_y_old                 = 0.0f;
-  pan_z_old                 = 0.0f;
-  pan_on                    = false;
+  pan_x                     = 0.0f;                                                                 // Initializing pan x-coordinate...
+  pan_y                     = 0.0f;                                                                 // Initializing pan y-coordinate...
+  pan_z                     = 0.0f;                                                                 // Initializing pan z-coordinate...
+  pan_x_old                 = 0.0f;                                                                 // Initializing pan x-coordinate (old)...
+  pan_y_old                 = 0.0f;                                                                 // Initializing pan y-coordinate (old)...
+  pan_z_old                 = 0.0f;                                                                 // Initializing pan z-coordinate (old)...
+  pan_on                    = false;                                                                // Initializing pan activation flag...
 
-  key_0                     = false;
-  key_1                     = false;
-  key_2                     = false;
+  // KEYS:
+  key_UNKNOWN               = false;                                                                // Initializing key value...
+  key_SPACE                 = false;                                                                // Initializing key value...
+  key_APOSTROPHE            = false;                                                                // Initializing key value...
+  key_COMMA                 = false;                                                                // Initializing key value...
+  key_MINUS                 = false;                                                                // Initializing key value...
+  key_PERIOD                = false;                                                                // Initializing key value...
+  key_SLASH                 = false;                                                                // Initializing key value...
+  key_0                     = false;                                                                // Initializing key value...
+  key_1                     = false;                                                                // Initializing key value...
+  key_2                     = false;                                                                // Initializing key value...
+  key_3                     = false;                                                                // Initializing key value...
+  key_4                     = false;                                                                // Initializing key value...
+  key_5                     = false;                                                                // Initializing key value...
+  key_6                     = false;                                                                // Initializing key value...
+  key_7                     = false;                                                                // Initializing key value...
+  key_8                     = false;                                                                // Initializing key value...
+  key_9                     = false;                                                                // Initializing key value...
+  key_SEMICOLON             = false;                                                                // Initializing key value...
+  key_EQUAL                 = false;                                                                // Initializing key value...
+  key_A                     = false;                                                                // Initializing key value...
+  key_B                     = false;                                                                // Initializing key value...
+  key_C                     = false;                                                                // Initializing key value...
+  key_D                     = false;                                                                // Initializing key value...
+  key_E                     = false;                                                                // Initializing key value...
+  key_F                     = false;                                                                // Initializing key value...
+  key_G                     = false;                                                                // Initializing key value...
+  key_H                     = false;                                                                // Initializing key value...
+  key_I                     = false;                                                                // Initializing key value...
+  key_J                     = false;                                                                // Initializing key value...
+  key_K                     = false;                                                                // Initializing key value...
+  key_L                     = false;                                                                // Initializing key value...
+  key_M                     = false;                                                                // Initializing key value...
+  key_N                     = false;                                                                // Initializing key value...
+  key_O                     = false;                                                                // Initializing key value...
+  key_P                     = false;                                                                // Initializing key value...
+  key_Q                     = false;                                                                // Initializing key value...
+  key_R                     = false;                                                                // Initializing key value...
+  key_S                     = false;                                                                // Initializing key value...
+  key_T                     = false;                                                                // Initializing key value...
+  key_U                     = false;                                                                // Initializing key value...
+  key_V                     = false;                                                                // Initializing key value...
+  key_W                     = false;                                                                // Initializing key value...
+  key_X                     = false;                                                                // Initializing key value...
+  key_Y                     = false;                                                                // Initializing key value...
+  key_Z                     = false;                                                                // Initializing key value...
+  key_LEFT_BRACKET          = false;                                                                // Initializing key value...
+  key_BACKSLASH             = false;                                                                // Initializing key value...
+  key_RIGHT_BRACKET         = false;                                                                // Initializing key value...
+  key_GRAVE_ACCENT          = false;                                                                // Initializing key value...
+  key_WORLD_1               = false;                                                                // Initializing key value...
+  key_WORLD_2               = false;                                                                // Initializing key value...
+  key_ESCAPE                = false;                                                                // Initializing key value...
+  key_ENTER                 = false;                                                                // Initializing key value...
+  key_TAB                   = false;                                                                // Initializing key value...
+  key_BACKSPACE             = false;                                                                // Initializing key value...
+  key_INSERT                = false;                                                                // Initializing key value...
+  key_DELETE                = false;                                                                // Initializing key value...
+  key_RIGHT                 = false;                                                                // Initializing key value...
+  key_LEFT                  = false;                                                                // Initializing key value...
+  key_DOWN                  = false;                                                                // Initializing key value...
+  key_UP                    = false;                                                                // Initializing key value...
+  key_PAGE_UP               = false;                                                                // Initializing key value...
+  key_PAGE_DOWN             = false;                                                                // Initializing key value...
+  key_HOME                  = false;                                                                // Initializing key value...
+  key_END                   = false;                                                                // Initializing key value...
+  key_CAPS_LOCK             = false;                                                                // Initializing key value...
+  key_SCROLL_LOCK           = false;                                                                // Initializing key value...
+  key_NUM_LOCK              = false;                                                                // Initializing key value...
+  key_PRINT_SCREEN          = false;                                                                // Initializing key value...
+  key_PAUSE                 = false;                                                                // Initializing key value...
+  key_F1                    = false;                                                                // Initializing key value...
+  key_F2                    = false;                                                                // Initializing key value...
+  key_F3                    = false;                                                                // Initializing key value...
+  key_F4                    = false;                                                                // Initializing key value...
+  key_F5                    = false;                                                                // Initializing key value...
+  key_F6                    = false;                                                                // Initializing key value...
+  key_F7                    = false;                                                                // Initializing key value...
+  key_F8                    = false;                                                                // Initializing key value...
+  key_F9                    = false;                                                                // Initializing key value...
+  key_F10                   = false;                                                                // Initializing key value...
+  key_F11                   = false;                                                                // Initializing key value...
+  key_F12                   = false;                                                                // Initializing key value...
+  key_F13                   = false;                                                                // Initializing key value...
+  key_F14                   = false;                                                                // Initializing key value...
+  key_F15                   = false;                                                                // Initializing key value...
+  key_F16                   = false;                                                                // Initializing key value...
+  key_F17                   = false;                                                                // Initializing key value...
+  key_F18                   = false;                                                                // Initializing key value...
+  key_F19                   = false;                                                                // Initializing key value...
+  key_F20                   = false;                                                                // Initializing key value...
+  key_F21                   = false;                                                                // Initializing key value...
+  key_F22                   = false;                                                                // Initializing key value...
+  key_F23                   = false;                                                                // Initializing key value...
+  key_F24                   = false;                                                                // Initializing key value...
+  key_F25                   = false;                                                                // Initializing key value...
+  key_KP_0                  = false;                                                                // Initializing key value...
+  key_KP_1                  = false;                                                                // Initializing key value...
+  key_KP_2                  = false;                                                                // Initializing key value...
+  key_KP_3                  = false;                                                                // Initializing key value...
+  key_KP_4                  = false;                                                                // Initializing key value...
+  key_KP_5                  = false;                                                                // Initializing key value...
+  key_KP_6                  = false;                                                                // Initializing key value...
+  key_KP_7                  = false;                                                                // Initializing key value...
+  key_KP_8                  = false;                                                                // Initializing key value...
+  key_KP_9                  = false;                                                                // Initializing key value...
+  key_KP_DECIMAL            = false;                                                                // Initializing key value...
+  key_KP_DIVIDE             = false;                                                                // Initializing key value...
+  key_KP_MULTIPLY           = false;                                                                // Initializing key value...
+  key_KP_SUBTRACT           = false;                                                                // Initializing key value...
+  key_KP_ADD                = false;                                                                // Initializing key value...
+  key_KP_ENTER              = false;                                                                // Initializing key value...
+  key_KP_EQUAL              = false;                                                                // Initializing key value...
+  key_LEFT_SHIFT            = false;                                                                // Initializing key value...
+  key_LEFT_CONTROL          = false;                                                                // Initializing key value...
+  key_LEFT_ALT              = false;                                                                // Initializing key value...
+  key_LEFT_SUPER            = false;                                                                // Initializing key value...
+  key_RIGHT_SHIFT           = false;                                                                // Initializing key value...
+  key_RIGHT_CONTROL         = false;                                                                // Initializing key value...
+  key_RIGHT_ALT             = false;                                                                // Initializing key value...
+  key_RIGHT_SUPER           = false;                                                                // Initializing key value...
+  key_MENU                  = false;                                                                // Initializing key value...
+  key_LAST                  = false;                                                                // Initializing key value...
 
-  button_A                  = false;
-  button_B                  = false;
-  button_X                  = false;
-  button_Y                  = false;
-  button_CROSS              = false;                                                                // = A;
-  button_CIRCLE             = false;                                                                // = B;
-  button_SQUARE             = false;                                                                // = X;
-  button_TRIANGLE           = false;                                                                // = Y;
-  button_LEFT_BUMPER        = false;
-  button_RIGHT_BUMPER       = false;
-  button_BACK               = false;
-  button_START              = false;
-  button_GUIDE              = false;
-  button_LEFT_THUMB         = false;
-  button_RIGHT_THUMB        = false;
-  button_DPAD_UP            = false;
-  button_DPAD_RIGHT         = false;
-  button_DPAD_DOWN          = false;
-  button_DPAD_LEFT          = false;
+  // BUTTONS:
+  button_A                  = false;                                                                // Initializing button value...
+  button_B                  = false;                                                                // Initializing button value...
+  button_X                  = false;                                                                // Initializing button value...
+  button_Y                  = false;                                                                // Initializing button value...
+  button_CROSS              = false;                                                                // Initializing button value...
+  button_CIRCLE             = false;                                                                // Initializing button value...
+  button_SQUARE             = false;                                                                // Initializing button value...
+  button_TRIANGLE           = false;                                                                // Initializing button value...
+  button_LEFT_BUMPER        = false;                                                                // Initializing button value...
+  button_RIGHT_BUMPER       = false;                                                                // Initializing button value...
+  button_BACK               = false;                                                                // Initializing button value...
+  button_START              = false;                                                                // Initializing button value...
+  button_GUIDE              = false;                                                                // Initializing button value...
+  button_LEFT_THUMB         = false;                                                                // Initializing button value...
+  button_RIGHT_THUMB        = false;                                                                // Initializing button value...
+  button_DPAD_UP            = false;                                                                // Initializing button value...
+  button_DPAD_RIGHT         = false;                                                                // Initializing button value...
+  button_DPAD_DOWN          = false;                                                                // Initializing button value...
+  button_DPAD_LEFT          = false;                                                                // Initializing button value...
 
   // AXES:
-  axis_RIGHT_X              = 0.0f;
-  axis_RIGHT_Y              = 0.0f;
-  axis_RIGHT_TRIGGER        = -1.0f;
-  axis_LEFT_X               = 0.0f;
-  axis_LEFT_Y               = 0.0f;
-  axis_LEFT_TRIGGER         = -1.0f;
+  axis_RIGHT_X              = 0.0f;                                                                 // Initializing axis value...
+  axis_RIGHT_Y              = 0.0f;                                                                 // Initializing axis value...
+  axis_RIGHT_TRIGGER        = -1.0f;                                                                // Initializing axis value...
+  axis_LEFT_X               = 0.0f;                                                                 // Initializing axis value...
+  axis_LEFT_Y               = 0.0f;                                                                 // Initializing axis value...
+  axis_LEFT_TRIGGER         = -1.0f;                                                                // Initializing axis value...
 
   int         glfw_ver_major;
   int         glfw_ver_minor;
