@@ -233,28 +233,70 @@ void nu::opengl::key_pressed
   // Checking key pressed:
   switch(loc_key)
   {
-    /*
-       case GLFW_KEY_ESCAPE:
-       if(loc_action == GLFW_PRESS)
-       {
-        glfwSetWindowShouldClose (glfw_window, GL_TRUE);                                            // Setting window "closed" flag...
-       }
-       break;
+    case GLFW_KEY_0:
 
-       case GLFW_KEY_2:
-       if(loc_action == GLFW_PRESS)
-       {
-        PR_mode = NU_MODE_MONO;                                                                     // Switching to monoscopic mode...
-       }
-       break;
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_0 = true;
+          break;
+        case GLFW_RELEASE:
+          key_0 = false;
+          break;
+      }
 
-       case GLFW_KEY_3:
-       if(loc_action == GLFW_PRESS)
-       {
-        PR_mode = NU_MODE_STEREO;                                                                   // Switching to stereoscopic mode...
-       }
-       break;
-     */
+      break;
+
+    case GLFW_KEY_1:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_1 = true;
+          break;
+        case GLFW_RELEASE:
+          key_1 = false;
+          break;
+      }
+
+      break;
+
+    case GLFW_KEY_2:
+
+      switch(loc_action)
+      {
+        case GLFW_PRESS:
+          key_2 = true;
+          break;
+        case GLFW_RELEASE:
+          key_2 = false;
+          break;
+      }
+
+      break;
+
+      /*
+         case GLFW_KEY_ESCAPE:
+         if(loc_action == GLFW_PRESS)
+         {
+          glfwSetWindowShouldClose (glfw_window, GL_TRUE);                                            // Setting window "closed" flag...
+         }
+         break;
+
+         case GLFW_KEY_2:
+         if(loc_action == GLFW_PRESS)
+         {
+          PR_mode = NU_MODE_MONO;                                                                     // Switching to monoscopic mode...
+         }
+         break;
+
+         case GLFW_KEY_3:
+         if(loc_action == GLFW_PRESS)
+         {
+          PR_mode = NU_MODE_STEREO;                                                                   // Switching to stereoscopic mode...
+         }
+         break;
+       */
   }
 
 }
@@ -371,6 +413,10 @@ void nu::opengl::init
   pan_y_old                 = 0.0f;
   pan_z_old                 = 0.0f;
   pan_on                    = false;
+
+  key_0                     = false;
+  key_1                     = false;
+  key_2                     = false;
 
   button_A                  = false;
   button_B                  = false;
