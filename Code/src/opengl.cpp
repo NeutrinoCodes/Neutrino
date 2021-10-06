@@ -1960,6 +1960,8 @@ void nu::opengl::mouse_button
  int loc_mods                                                                                       // Mods.
 )
 {
+  ImGuiIO &io = ImGui::GetIO ();                                                                    // Getting ImGuiIO handle...
+
   // Reading mouse buttons:
   switch(loc_button)
   {
@@ -1968,11 +1970,17 @@ void nu::opengl::mouse_button
       switch(loc_action)
       {
         case GLFW_PRESS:
-          mouse_LEFT = true;
+          io.MouseDown[loc_button] = true;
+
+          if(!io.WantCaptureMouse)
+          {
+            mouse_LEFT = true;
+          }
           break;
 
         case GLFW_RELEASE:
-          mouse_LEFT = false;
+          io.MouseDown[loc_button] = false;
+          mouse_LEFT               = false;
           break;
       }
 
@@ -1983,11 +1991,17 @@ void nu::opengl::mouse_button
       switch(loc_action)
       {
         case GLFW_PRESS:
-          mouse_RIGHT = true;
+          io.MouseDown[loc_button] = true;
+
+          if(!io.WantCaptureMouse)
+          {
+            mouse_RIGHT = true;
+          }
           break;
 
         case GLFW_RELEASE:
-          mouse_RIGHT = false;
+          io.MouseDown[loc_button] = false;
+          mouse_RIGHT              = false;
           break;
       }
 
@@ -2227,6 +2241,7 @@ void nu::opengl::init
   int         opengl_ver_major;                                                                     // OpenGL version major number.
   int         opengl_ver_minor;                                                                     // OpenGL version minor number.
   int         opengl_msaa;                                                                          // OpenGL multisampling antialiasing factor.
+  char        opengl_ver_string[64];                                                                // OpenGL version as string (for ImGui initializaton).
 
   opengl_ver_major                 = 4;                                                             // EZOR 04NOV2018: to be generalized by iterative search.
   opengl_ver_minor                 = 6;                                                             // EZOR 04NOV2018: to be generalized by iterative search.
@@ -2366,6 +2381,16 @@ void nu::opengl::init
   glfwPollEvents ();                                                                                // Polling GLFW events...
   glFinish ();                                                                                      // Waiting for OpenGL to finish...
   neutrino::glfw_window = glfw_window;                                                              // Setting glfw window...
+
+  snprintf (opengl_ver_string, 64, "#version %d%d0", opengl_ver_major, opengl_ver_minor);           // Building OpenGL version string...
+  IMGUI_CHECKVERSION ();                                                                            // Checking ImGui version...
+  ImGui::CreateContext ();                                                                          // Creating ImGui context...
+  ImGuiIO &io = ImGui::GetIO ();                                                                    // Getting ImGuiIO handle...
+  (void)io;                                                                                         // Casting ImGuiIO handle to void...
+  ImGui::StyleColorsDark ();                                                                        // Setting ImGui style...
+  ImGui_ImplGlfw_InitForOpenGL (glfw_window, true);                                                 // Initializing ImGui context...
+  ImGui_ImplOpenGL3_Init (opengl_ver_string);                                                       // Initializing ImGui renderer...
+
   nu::opengl::init_done = true;                                                                     // Setting init_done flag...
 
   neutrino::done ();                                                                                // Printing message...
