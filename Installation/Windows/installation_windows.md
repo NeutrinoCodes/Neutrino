@@ -30,6 +30,7 @@ Please verify the presence of the `cl_khr_gl_sharing` extension. Some old GPU mo
 - GLAD (https://glad.dav1d.de/) *
 - GLFW (https://www.glfw.org/)
 - GMSH (https://gmsh.info/)
+- IMGUI (https://github.com/ocornut/imgui)
 - Visual Studio (https://visualstudio.microsoft.com/) **
 - CMake (https://cmake.org) **
 - GraphViz (https://graphviz.org/)
@@ -56,6 +57,7 @@ We assume Neutrino is going to be installed in a directory named *NeutrinoCodes*
 - glad
 - glfw
 - gmsh
+- imgui
 
 From the command shell (either VScode's or system's), navigate into *NeutrinoCodes* and create a `libnu` directory using the command:\
 `mkdir libnu`\
@@ -79,6 +81,7 @@ and create a new file `settings.json` in it, then fill it with the following inf
 &nbsp;&nbsp;&nbsp;&nbsp;`"GLFW_PATH": "your_path_to_NeutrinoCodes\\glfw",`\
 &nbsp;&nbsp;&nbsp;&nbsp;`"GMSH_PATH": "your_path_to_NeutrinoCodes\\gmsh",`\
 &nbsp;&nbsp;&nbsp;&nbsp;`"CL_PATH": "your_path_to_OpenCL",`\
+&nbsp;&nbsp;&nbsp;&nbsp;`"IMGUI_PATH": "your_path_to_NeutrinoCodes\\imgui",`\
 &nbsp;&nbsp;&nbsp;&nbsp;`"NEUTRINO_PATH": "your_path_to_NeutrinoCodes\\libnu"`\
 &nbsp;&nbsp;`}`\
 `}`\
@@ -103,6 +106,7 @@ At this point the NeutrinoCodes directory should appear like this:
 - glad
 - glfw
 - gmsh
+- imgui
 - libnu
 - neutrino
 
@@ -129,7 +133,7 @@ Go to the `neutrino` directory and edit the `CMakeSettings.json` file in it, the
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"configurationType": "Release",`\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"buildRoot": "${projectDir}\\build\\cmake\\${name}",`\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"installRoot": "${projectDir}\\out\\install\\${name}",`\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"cmakeCommandArgs": "-DGLAD_PATH=\"your_path_to_NeutrinoCodes\\glad\" -DGLFW_PATH=\"your_path_to_NeutrinoCodes\\glfw\" -DGMSH_PATH=\"your_path_to_NeutrinoCodes\\gmsh\" -DCL_PATH=\"your_path_to_OpenCL\\opencl\" -DNEUTRINO_PATH=\"your_path_to_NeutrinoCodes\\libnu\"",`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"cmakeCommandArgs": "-DGLAD_PATH=\"your_path_to_NeutrinoCodes\\glad\" -DGLFW_PATH=\"your_path_to_NeutrinoCodes\\glfw\" -DGMSH_PATH=\"your_path_to_NeutrinoCodes\\gmsh\" -DCL_PATH=\"your_path_to_OpenCL\\opencl\" -DIMGUI_PATH=\"your_path_to_NeutrinoCodes\\imgui" -DNEUTRINO_PATH=\"your_path_to_NeutrinoCodes\\libnu\"",`\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"buildCommandArgs": "",`\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"ctestCommandArgs": "",`\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"inheritEnvironments": [ "msvc_x64_x64" ],`\

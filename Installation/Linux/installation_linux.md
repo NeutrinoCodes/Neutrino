@@ -30,6 +30,7 @@ Please verify the presence of the `cl_khr_gl_sharing` extension. Some old GPU mo
 - GLAD (https://glad.dav1d.de/) *
 - GLFW (https://www.glfw.org/)
 - GMSH (https://gmsh.info/)
+- IMGUI (https://github.com/ocornut/imgui)
 - VScode (https://code.visualstudio.com/) **
 - CMake (https://cmake.org) **
 - GraphViz (https://graphviz.org/)
@@ -48,6 +49,7 @@ We assume Neutrino is going to be installed in a directory named *NeutrinoCodes*
 - glad
 - glfw
 - gmsh
+- imgui
 
 From the command shell (either VScode's or system's), navigate into *NeutrinoCodes* and create a `libnu` directory using the command:\
 `mkdir libnu`\
@@ -71,6 +73,7 @@ and create a new file `settings.json` in it, then fill it with the following inf
 &nbsp;&nbsp;&nbsp;&nbsp;`"GLFW_PATH": "your_path_to_NeutrinoCodes/glfw",`\
 &nbsp;&nbsp;&nbsp;&nbsp;`"GMSH_PATH": "your_path_to_NeutrinoCodes/gmsh",`\
 &nbsp;&nbsp;&nbsp;&nbsp;`"CL_PATH": "your_path_to_OpenCL",`\
+&nbsp;&nbsp;&nbsp;&nbsp;`"IMGUI_PATH": "your_path_to_NeutrinoCodes\\imgui",`\
 &nbsp;&nbsp;&nbsp;&nbsp;`"NEUTRINO_PATH": "your_path_to_NeutrinoCodes/libnu"`\
 &nbsp;&nbsp;`}`\
 `}`\
@@ -91,6 +94,7 @@ At this point the NeutrinoCodes directory should appear like this:
 - glad
 - glfw
 - gmsh
+- imgui
 - libnu
 - neutrino
 
@@ -116,6 +120,7 @@ Into the Neutrino's project directory, create a configuration script file called
 `-DGLFW_PATH=your_path_to_glfw \`\
 `-DGMSH_PATH=your_path_to_gmsh \`\
 `-DCL_PATH=your_path_to_opencl \`\
+`-DIMGUI_PATH=your_path_to_imgui \`\
 `-DNEUTRINO_PATH=your_path_to_neutrino`\
 \
 and specify the paths accordingly, where:
@@ -127,6 +132,9 @@ and specify the paths accordingly, where:
 *GMSH_PATH* is the path of the root directory of the Gmsh library: it contains the include and lib subdirectories;
 
 *CL_PATH* is the path of the root directory of the OpenCL library: it contains the include and lib subdirectories;
+
+*IMGUI_PATH* is the path of the root directory of the Imgui library: it contains all the .cpp and .h files in
+the root directory of the Imgui repository (see instructions on its repository);
 
 *NEUTRINO_PATH* is the path of Neutrino's project folder and should be followed by /libnu, where the library will be installed.
 
