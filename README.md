@@ -26,6 +26,7 @@ Neutrino can be installed on Linux (see: [Linux installation](./Installation/Lin
 - GLAD (https://glad.dav1d.de/)
 - GLFW (https://www.glfw.org/)
 - GMSH (https://gmsh.info/)
+- IMGUI (https://github.com/ocornut/imgui)
 - GCC (https://gcc.gnu.org) if using Linux
 - Visual Studio (https://visualstudio.microsoft.com/) is using Windows
 - CMake (https://cmake.org)
