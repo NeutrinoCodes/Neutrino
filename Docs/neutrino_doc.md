@@ -30,8 +30,8 @@ framework, if necessary.
 @dot
 graph neutrino_nutshell
 {
-  "host program\n(NU_CPU)" -- "client kernel\n(GPU)" [label = " OpenCL"]
-  "host program\n(NU_CPU)" -- "OpenGL GUI" [label = " OpenGL"]
+  "host program\n(CPU)" -- "client kernel\n(GPU)" [label = " OpenCL"]
+  "host program\n(CPU)" -- "OpenGL GUI" [label = " OpenGL"]
   "client kernel\n(GPU)" -- "OpenGL GUI" [label = " OpenCL/GL\ninteroperability"]
   {rank=same; "client kernel\n(GPU)", "OpenGL GUI"}
 }
@@ -88,7 +88,7 @@ to program different GPUs by a same common programming language.
 It is therefore not necessary to know how the hardware architecture is implemented
 at a low level inside the GPU: it is sufficient to know there is an *array of
 compute units* available to the user. Each of the compute units can be functionally
-considered as like as an individual NU_CPU.
+considered as like as an individual CPU.
 
 @dot
 digraph Modern_GPU
@@ -145,7 +145,7 @@ for (i = 0; i < N; i++)
   c[i] = a[i]*b[i];
 }
 ```
-This program takes *N-cycles* to be completed on a NU_CPU.
+This program takes *N-cycles* to be completed on a CPU.
 
 The same program can be rewritten, in OpenCL kernel language, this way:
 ```

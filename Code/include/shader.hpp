@@ -22,9 +22,9 @@ namespace nu
 // Shader types:
 typedef enum
 {
-  NU_VERTEX,                                                                                        ///< GLSL shader interpretation set as vertex.
-  NU_FRAGMENT,                                                                                      ///< GLSL shader interpretation set as fragment.
-  NU_GEOMETRY                                                                                       ///< GLSL shader interpretation set as geometry.
+  VERTEX,                                                                                           ///< GLSL shader interpretation set as vertex.
+  FRAGMENT,                                                                                         ///< GLSL shader interpretation set as fragment.
+  GEOMETRY                                                                                          ///< GLSL shader interpretation set as geometry.
 } shader_type;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////

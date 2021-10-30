@@ -45,15 +45,15 @@ void nu::shader::addsource
   // Selecting shader type:
   switch(loc_shader_type)
   {
-    case NU_VERTEX:
+    case VERTEX:
       loc_shader = glCreateShader (GL_VERTEX_SHADER);                                               // Creating shader...
       break;
 
-    case NU_FRAGMENT:
+    case FRAGMENT:
       loc_shader = glCreateShader (GL_FRAGMENT_SHADER);                                             // Creating shader...
       break;
 
-    case NU_GEOMETRY:
+    case GEOMETRY:
       loc_shader = glCreateShader (GL_GEOMETRY_SHADER);                                             // Creating shader...
       break;
   }

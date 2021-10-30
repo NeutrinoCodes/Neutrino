@@ -1938,14 +1938,14 @@ void nu::opengl::key_pressed
          case GLFW_KEY_2:
          if(loc_action == GLFW_PRESS)
          {
-          PR_mode = NU_MODE_MONO;                                                                     // Switching to monoscopic mode...
+          PR_mode = MONOCULAR;                                                                     // Switching to monoscopic mode...
          }
          break;
 
          case GLFW_KEY_3:
          if(loc_action == GLFW_PRESS)
          {
-          PR_mode = NU_MODE_STEREO;                                                                   // Switching to stereoscopic mode...
+          PR_mode = BINOCULAR;                                                                   // Switching to stereoscopic mode...
          }
          break;
        */
@@ -2347,7 +2347,7 @@ void nu::opengl::init
   glBlendFunc (GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);                                                // Setting blending function...
   glEnable (GL_BLEND);                                                                              // Enabling alpha blending...
 
-  PR_mode = NU_MODE_MONO;                                                                           // Setting monoscopic projection mode...
+  PR_mode = MONOCULAR;                                                                              // Setting monoscopic projection mode...
 
   // Setting monoscopic perspective:
   perspective_mono
@@ -2785,7 +2785,7 @@ void nu::opengl::plot
 
   switch(PR_mode)
   {
-    case NU_MODE_MONO:
+    case MONOCULAR:
       glFinish ();                                                                                  // Waiting for OpenGL to finish...
 
       // Computing view matrix:
@@ -2811,7 +2811,7 @@ void nu::opengl::plot
       glFinish ();                                                                                  // Waiting for OpenGL to finish...
       break;
 
-    case NU_MODE_STEREO:
+    case BINOCULAR:
       glFinish ();                                                                                  // Waiting for OpenGL to finish...
 
       multiplicate (V_mat, T_mat, R_mat);                                                           // Setting view matrix...

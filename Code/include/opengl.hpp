@@ -16,8 +16,8 @@ namespace nu
 // Projection mode:
 typedef enum
 {
-  NU_MODE_MONO,                                                                                     ///< Projection mode set as 2D.
-  NU_MODE_STEREO                                                                                    ///< Projection mode set as 3D.
+  MONOCULAR,                                                                                        ///< Projection mode set as monocular.
+  BINOCULAR                                                                                         ///< Projection mode set as binocular.
 } projection_mode;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
