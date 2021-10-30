@@ -16,8 +16,8 @@ nu::shader::shader ()
 
 void nu::shader::addsource
 (
- std::string loc_shader_filename,                                                                   // GLSL shader file name.
- shader_type loc_shader_type                                                                        // GLSL shader type.
+ std::string     loc_shader_filename,                                                               // GLSL shader file name.
+ nu::shader_type loc_shader_type                                                                    // GLSL shader type.
 )
 {
   GLuint      loc_shader;                                                                           // Shader.

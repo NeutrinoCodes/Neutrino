@@ -75,29 +75,18 @@
 #define NU_GAMEPAD_MAX_PAN_RATE           10.0f                                                     ///< Maximum orbit angular rate [rev/s].
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////// ENUMS /////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-// Shader types:
-typedef enum
-{
-  NU_VERTEX,                                                                                        ///< GLSL shader interpretation set as vertex.
-  NU_FRAGMENT,                                                                                      ///< GLSL shader interpretation set as fragment.
-  NU_GEOMETRY                                                                                       ///< GLSL shader interpretation set as geometry.
-} shader_type;
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////// OpenCL/GL interoperability ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef __APPLE__
-  #define NU_INTEROP "cl_APPLE_gl_sharing"
+  #define NU_INTEROP                      "cl_APPLE_gl_sharing"
 #endif
 
 #ifdef __linux__
-  #define NU_INTEROP "cl_khr_gl_sharing"
+  #define NU_INTEROP                      "cl_khr_gl_sharing"
 #endif
 
 #ifdef WIN32
-  #define NU_INTEROP "cl_khr_gl_sharing"
+  #define NU_INTEROP                      "cl_khr_gl_sharing"
 #endif
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
