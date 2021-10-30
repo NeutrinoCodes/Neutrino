@@ -810,8 +810,8 @@ void nu::opencl::release ()
 
 void nu::opencl::execute
 (
- nu::kernel* loc_kernel,                                                                            // OpenCL kernel.
- kernel_mode loc_kernel_mode                                                                        // Kernel mode.
+ nu::kernel*     loc_kernel,                                                                        // OpenCL kernel.
+ nu::kernel_mode loc_kernel_mode                                                                    // Kernel mode.
 )
 {
   cl_int  loc_error;                                                                                // Error code.

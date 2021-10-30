@@ -85,13 +85,6 @@ typedef enum
   NU_GEOMETRY                                                                                       ///< GLSL shader interpretation set as geometry.
 } shader_type;
 
-// Kernel modes:
-typedef enum
-{
-  NU_WAIT,                                                                                          ///< OpenCL kernel set as blocking mode.
-  NU_DONT_WAIT                                                                                      ///< OpenCL kernel set as non-blocking mode.
-} kernel_mode;
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////// OpenCL/GL interoperability ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
