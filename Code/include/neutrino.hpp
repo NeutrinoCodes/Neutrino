@@ -92,16 +92,6 @@ typedef enum
   NU_DONT_WAIT                                                                                      ///< OpenCL kernel set as non-blocking mode.
 } kernel_mode;
 
-// Compute device types:
-typedef enum
-{
-  NU_CPU,                                                                                           ///< OpenCL NU_CPU device.
-  NU_GPU,                                                                                           ///< OpenCL NU_GPU device.
-  NU_ACCELERATOR,                                                                                   ///< OpenCL NU_ACCELERATOR device.
-  NU_DEFAULT,                                                                                       ///< OpenCL NU_DEFAULT device.
-  NU_ALL                                                                                            ///< OpenCL NU_ALL devices.
-} compute_device_type;
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////// OpenCL/GL interoperability ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////

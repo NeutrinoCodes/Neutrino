@@ -23,6 +23,16 @@
 
 namespace nu
 {
+// Compute device types:
+typedef enum
+{
+  NU_CPU,                                                                                           ///< OpenCL NU_CPU device.
+  NU_GPU,                                                                                           ///< OpenCL NU_GPU device.
+  NU_ACCELERATOR,                                                                                   ///< OpenCL NU_ACCELERATOR device.
+  NU_DEFAULT,                                                                                       ///< OpenCL NU_DEFAULT device.
+  NU_ALL                                                                                            ///< OpenCL NU_ALL devices.
+} compute_device_type;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// "opencl" class /////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +87,7 @@ public:
   /// @details It initializes the opencl_platform, platforms_number, devices_number,
   /// properties, context_id and device_type to their default values.
   opencl(
-         compute_device_type loc_device_type                                                        ///< OpenCL device type.
+         nu::compute_device_type loc_device_type                                                    ///< OpenCL device type.
         );
 
   /// @brief **Class initializer.**
@@ -87,7 +97,7 @@ public:
   /// it identifies the operating system of hte host PC and it creates the OpenCL context.
   /// The OpenCL context must be created after the OpenGL context.
   void init (
-             compute_device_type loc_device_type                                                    ///< Compute device type.
+             nu::compute_device_type loc_device_type                                                ///< Compute device type.
             );
 
   void write ();
