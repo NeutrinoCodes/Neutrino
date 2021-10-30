@@ -19,6 +19,14 @@
 
 namespace nu
 {
+// Shader types:
+typedef enum
+{
+  NU_VERTEX,                                                                                        ///< GLSL shader interpretation set as vertex.
+  NU_FRAGMENT,                                                                                      ///< GLSL shader interpretation set as fragment.
+  NU_GEOMETRY                                                                                       ///< GLSL shader interpretation set as geometry.
+} shader_type;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////// "shader" class ///////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,8 +40,8 @@ private:
   /// @brief    **OpenGL nu::shader compilation.**
   /// @details  It compiles an OpenGL shader.
   GLuint compile (
-                  std::string loc_shader_filename,                                                  ///< Shader file name.
-                  shader_type loc_shader_type                                                       ///< Shader type.
+                  std::string     loc_shader_filename,                                              ///< Shader file name.
+                  nu::shader_type loc_shader_type                                                   ///< Shader type.
                  );
 
 public:
@@ -47,8 +55,8 @@ public:
   /// @brief **Shader source adder function.**
   /// @details Loads an OpenGL shader source from its corresponding source file.
   void addsource (
-                  std::string loc_shader_filename,                                                  ///< GLSL shader file name.
-                  shader_type loc_shader_type                                                       ///< GLSL shader type.
+                  std::string     loc_shader_filename,                                              ///< GLSL shader file name.
+                  nu::shader_type loc_shader_type                                                   ///< GLSL shader type.
                  );
 
   /// @brief    **OpenGL shader builder.**
