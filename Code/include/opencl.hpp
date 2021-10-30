@@ -26,18 +26,18 @@ namespace nu
 // Kernel modes:
 typedef enum
 {
-  NU_WAIT,                                                                                          ///< OpenCL kernel set as blocking mode.
-  NU_DONT_WAIT                                                                                      ///< OpenCL kernel set as non-blocking mode.
+  WAIT,                                                                                             ///< OpenCL kernel set as blocking mode.
+  DONT_WAIT                                                                                         ///< OpenCL kernel set as non-blocking mode.
 } kernel_mode;
 
 // Compute device types:
 typedef enum
 {
-  NU_CPU,                                                                                           ///< OpenCL NU_CPU device.
-  NU_GPU,                                                                                           ///< OpenCL NU_GPU device.
-  NU_ACCELERATOR,                                                                                   ///< OpenCL NU_ACCELERATOR device.
-  NU_DEFAULT,                                                                                       ///< OpenCL NU_DEFAULT device.
-  NU_ALL                                                                                            ///< OpenCL NU_ALL devices.
+  CPU,                                                                                              ///< OpenCL CPU device.
+  GPU,                                                                                              ///< OpenCL GPU device.
+  ACCELERATOR,                                                                                      ///< OpenCL ACCELERATOR device.
+  DEFAULT,                                                                                          ///< OpenCL DEFAULT device.
+  ALL                                                                                               ///< OpenCL ALL devices.
 } compute_device_type;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,11 +121,11 @@ public:
   /// @details This function invokes the execution of an [OpenCL kernel]
   /// (https://en.wikipedia.org/wiki/OpenCL#OpenCL_C_language) on an OpenCL @link queue @endlink .
   /// The execution of different kernels can be scheduled sequentially or concurrently by selecting
-  /// appropriate (NU_WAIT or NU_DONT_WAIT) @link kernel_mode @endlink .
+  /// appropriate (WAIT or DONT_WAIT) @link kernel_mode @endlink .
   /// The sequential kernel execution scheme guarantees that the subsequent kernel execution starts
   /// after the execution of the current kernel is totally ended. The concurrent scheme is managed
   /// by the GPU: it can be parallelized of serialized depending on the underlying hardware.
-  /// Therefore, only the sequential kernel execution (NU_WAIT kernel_mode) can guarantee the
+  /// Therefore, only the sequential kernel execution (WAIT kernel_mode) can guarantee the
   /// the absence of memory leakages in the GPU memory space if the differnt kernels shares the same
   /// memory (e.g. in case one kernel needs to have all computation done by a previous one before
   /// proceeding with further computation). This is very important in order to implement
