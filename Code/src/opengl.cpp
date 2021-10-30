@@ -2777,9 +2777,12 @@ void nu::opengl::clear ()
 
 void nu::opengl::plot
 (
- nu::shader* loc_shader                                                                             // OpenGL shader.
+ nu::shader*         loc_shader,                                                                    // OpenGL shader.
+ nu::projection_mode loc_mode                                                                       // OpenGL projection mode.
 )
 {
+  PR_mode = loc_mode;                                                                               // Setting OpenGL projection mode...
+
   switch(PR_mode)
   {
     case NU_MODE_MONO:

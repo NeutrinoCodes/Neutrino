@@ -13,6 +13,12 @@
 
 namespace nu
 {
+// Projection mode:
+typedef enum
+{
+  NU_MODE_MONO,                                                                                     ///< Projection mode set as 2D.
+  NU_MODE_STEREO                                                                                    ///< Projection mode set as 3D.
+} projection_mode;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////// "opengl" class ///////////////////////////////////////////
@@ -526,7 +532,8 @@ public:
   /// @brief **GUI "plot" function.**
   /// Plots graphics in the GUI. TO be invoked by the user.
   void plot (
-             nu::shader* loc_shader                                                                 ///< OpenGL shader.
+             nu::shader*         loc_shader,                                                        ///< OpenGL shader.
+             nu::projection_mode loc_mode                                                           ///< OpenGL projection mode.
             );
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
