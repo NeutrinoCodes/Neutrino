@@ -12,7 +12,7 @@ bool   nu::opencl::init_done = false;                                           
 ///////////////////////////////////////////// "nu::opencl" class /////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 nu::opencl::opencl (
-                    compute_device_type loc_device_type                                             // OpenCL device type.
+                    nu::compute_device_type loc_device_type                                         // OpenCL device type.
                    )
 {
   if(neutrino::init_done != true)
@@ -144,7 +144,7 @@ cl_device_id nu::opencl::get_device_id
 
 void nu::opencl::init
 (
- compute_device_type loc_device_type                                                                // OpenCL device type.
+ nu::compute_device_type loc_device_type                                                            // OpenCL device type.
 )
 {
   opencl_platform        = NULL;                                                                    // Initializing platforms IDs array...
