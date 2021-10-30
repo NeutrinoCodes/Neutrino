@@ -23,6 +23,13 @@
 
 namespace nu
 {
+// Kernel modes:
+typedef enum
+{
+  NU_WAIT,                                                                                          ///< OpenCL kernel set as blocking mode.
+  NU_DONT_WAIT                                                                                      ///< OpenCL kernel set as non-blocking mode.
+} kernel_mode;
+
 // Compute device types:
 typedef enum
 {
@@ -127,8 +134,8 @@ public:
   /// (https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/barrier.html) in order to
   /// synchronize different OpenCL work-items within a given OpenCL work-group.
   void execute (
-                nu::kernel* loc_kernel,                                                             ///< OpenCL kernel.
-                kernel_mode loc_kernel_mode                                                         ///< OpenCL kernel mode.
+                nu::kernel*     loc_kernel,                                                         ///< OpenCL kernel.
+                nu::kernel_mode loc_kernel_mode                                                     ///< OpenCL kernel mode.
                );
 
   /// @brief **Class destructor.**
