@@ -2825,7 +2825,7 @@ void nu::opengl::plot
                   PL_mat,                                                                           // Projection matrix.
                   (float)floor (framebuffer_size_x/2.0),                                            // Framebuffer size_x.
                   (float)framebuffer_size_y,                                                        // Framebuffer size_y.
-                  aspect_ratio                                                                      // Framebuffer aspect ratio.
+                  aspect_ratio/2.0f                                                                 // Framebuffer aspect ratio.
                  );                                                                                 // Setting plot style...
 
       glViewport (
@@ -2849,7 +2849,7 @@ void nu::opengl::plot
                   PR_mat,                                                                           // Projection matrix.
                   (float)floor (framebuffer_size_x/2.0),                                            // Framebuffer size_x.
                   (float)framebuffer_size_y,                                                        // Framebuffer size_y.
-                  aspect_ratio                                                                      // Framebuffer aspect ratio.
+                  aspect_ratio/2.0f                                                                 // Framebuffer aspect ratio.
                  );                                                                                 // Setting plot style...
 
       // Setting plot style:
