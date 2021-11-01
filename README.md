@@ -32,6 +32,7 @@ Neutrino can be installed on Linux (see: [Linux installation](./Installation/Lin
 - CMake (https://cmake.org)
 - GraphViz (https://graphviz.org/)
 - Doxygen (https://www.doxygen.nl/)
+- DS4Windows (https://ryochan7.github.io/ds4windows-site/) optional for Windows, in case you want to use the PS4 Dual Shock gamepad (not required others for HID compliant gamepads).
 
 ## Examples
 Neutrino-based example applications che be found at the *Examples* repository: https://github.com/NeutrinoCodes/Examples.

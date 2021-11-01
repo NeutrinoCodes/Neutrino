@@ -134,7 +134,7 @@ and specify the paths accordingly, where:
 *CL_PATH* is the path of the root directory of the OpenCL library: it contains the include and lib subdirectories;
 
 *IMGUI_PATH* is the path of the root directory of the Imgui library: it contains all the .cpp and .h files in
-the root directory of the Imgui repository (see instructions on its repository);
+the root directory of the Imgui repository and all imgui_impl_opengl3.* files present in the backends directory (see instructions on its repository);
 
 *NEUTRINO_PATH* is the path of Neutrino's project folder and should be followed by /libnu, where the library will be installed.
 
