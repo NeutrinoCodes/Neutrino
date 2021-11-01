@@ -35,6 +35,7 @@ Please verify the presence of the `cl_khr_gl_sharing` extension. Some old GPU mo
 - CMake (https://cmake.org) **
 - GraphViz (https://graphviz.org/)
 - Doxygen (https://www.doxygen.nl/)
+- DS4Windows (https://ryochan7.github.io/ds4windows-site/) optional for Windows, in case you want to use the PS4 Dual Shock gamepad (not required others for HID compliant gamepads).
 
 \* The GLAD loader should be generated from its webpage using the following settings:
 - Language = C/C++
@@ -106,9 +107,11 @@ At this point the NeutrinoCodes directory should appear like this:
 - glad
 - glfw
 - gmsh
-- imgui
+- imgui *
 - libnu
 - neutrino
+
+\* Notice that the "imgui" directory should contain all the .cpp and .h files in the root directory of the Imgui repository and all imgui_impl_opengl3.* files present in the backends directory (see instructions on its repository).
 
 We all like tidy code! For this, we provide an **Uncrustify** (sources: https://github.com/uncrustify/uncrustify) configuration file specific for Neutrino. In order to use it, please first install Uncrustify according to your operating system (e.g. use Homebrew under Mac), then install the VScode's *Uncrustify extension* (https://marketplace.visualstudio.com/items?itemName=LaurentTreguier.uncrustify).\
 \
