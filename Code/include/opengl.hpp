@@ -529,6 +529,14 @@ public:
   /// present in the framebuffer.
   void clear ();
 
+  /// @brief **Begin method.**
+  /// @details To be invoked by the user in order to start using OpenGL inside the application loop.
+  void begin ();
+
+  /// @brief **End method.**
+  /// @details To be invoked by the user in order to stop using OpenGL inside the application loop.
+  void end ();
+
   /// @brief **GUI "plot" function.**
   /// Plots graphics in the GUI. TO be invoked by the user.
   void plot (
