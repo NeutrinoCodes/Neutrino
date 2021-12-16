@@ -107,6 +107,12 @@ public:
              nu::compute_device_type loc_device_type                                                ///< Compute device type.
             );
 
+  void read ();
+
+  void read (
+             size_t loc_i
+            );
+
   void write ();
 
   void write (
