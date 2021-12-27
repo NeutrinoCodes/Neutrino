@@ -13,5 +13,5 @@
   #include "mesh.hpp"                                                                               // Neutrino's mesh context declarations.
   #include "opengl.hpp"                                                                             // Neutrino's OpenGL context declarations.
   #include "opencl.hpp"                                                                             // Neutrino's OpenCL context declarations.
-//#include "hud.hpp"                                                                                // Neutrino's HUD context declarations.
+  #include "imgui.hpp"                                                                              // Neutrino's ImGui context declarations.
 #endif
