@@ -71,7 +71,45 @@ void nu::imgui::plot (
                       float       loc_error                                                         // Error.
                      )
 {
+  static ScrollingBuffer data_avg;
+  static ScrollingBuffer data_std_up;
+  static ScrollingBuffer data_std_down;
+  static float           t       = 0;
+  static float           history = 10.0f;
+  ImGui::SliderFloat ("History", &history, 1, 30, "%.1f s");
+  static ImPlotAxisFlags flags   = ImPlotAxisFlags_AutoFit;
 
+  t += ImGui::GetIO ().DeltaTime;
+  data_avg.AddPoint (t, loc_value);
+  data_std_up.AddPoint (t, loc_value + loc_error);
+  data_std_down.AddPoint (t, loc_value - loc_error);
+
+  if(ImPlot::BeginPlot ("##Scrolling", ImVec2 (-1,150)))
+  {
+    ImPlot::SetupAxes ("time [s]", loc_value_description.c_str (), flags, flags);
+    ImPlot::SetupAxisLimits (ImAxis_X1, t - history, t, ImGuiCond_Always);
+    ImPlot::SetupAxisLimits (ImAxis_Y1, -1, 1);
+    ImPlot::SetNextFillStyle (IMPLOT_AUTO_COL, 0.5f);
+    ImPlot::PlotShaded (
+                        loc_error_name.c_str (),
+                        &data_avg.Data[0].x,
+                        &data_std_up.Data[0].y,
+                        &data_std_down.Data[0].y,
+                        data_avg.Data.size (),
+                        data_avg.Offset,
+                        2*sizeof(float)
+                       );
+    ImPlot::PlotLine (
+                      loc_value_name.c_str (),
+                      &data_avg.Data[0].x,
+                      &data_avg.Data[0].y,
+                      data_avg.Data.size (),
+                      data_avg.Offset,
+                      2*sizeof(float)
+                     );
+
+    ImPlot::EndPlot ();
+  }
 }
 
 void nu::imgui::button (
