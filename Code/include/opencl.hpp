@@ -10,8 +10,8 @@
 /// the OpenGL context for graphics rendering of data already present on the GPU memory thanks to
 /// the OpenCL context. This modality allows fast rendering of the results of the computation.
 
-#ifndef nu_opencl_hpp
-#define nu_opencl_hpp
+#ifndef opencl_hpp
+#define opencl_hpp
 
 #include "neutrino.hpp"
 #include "opengl.hpp"

@@ -439,11 +439,11 @@ public:
   bool        mouse_LEFT;                                                                           ///< @brief **Mouse "LEFT" button.**
   bool        mouse_RIGHT;                                                                          ///< @brief **Mouse "RIGHT" button.**
 
-  double      mouse_X;                                                                              ///< @brief **Mouse x-coordinate [px].**
-  double      mouse_Y;                                                                              ///< @brief **Mouse y-coordinate [px].**
+  float       mouse_X;                                                                              ///< @brief **Mouse x-coordinate [px].**
+  float       mouse_Y;                                                                              ///< @brief **Mouse y-coordinate [px].**
 
-  double      scroll_X;                                                                             ///< @brief **Mouse scroll x-coordinate [px].**
-  double      scroll_Y;                                                                             ///< @brief **Mouse scroll y-coordinate [px].**
+  float       scroll_X;                                                                             ///< @brief **Mouse scroll x-coordinate [px].**
+  float       scroll_Y;                                                                             ///< @brief **Mouse scroll y-coordinate [px].**
 
   /// @brief **Class constructor.**
   /// @details It does nothing.
