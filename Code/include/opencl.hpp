@@ -110,13 +110,13 @@ public:
   void read ();
 
   void read (
-             size_t loc_i
+             GLuint loc_i
             );
 
   void write ();
 
   void write (
-              size_t loc_i
+              GLuint loc_i
              );
 
   void acquire ();
