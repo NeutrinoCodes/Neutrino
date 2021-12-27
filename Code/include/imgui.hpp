@@ -1,7 +1,7 @@
-/// @file   hud.hpp
+/// @file   imgui.hpp
 /// @author Erik ZORZIN
 /// @date   27DEC2021
-/// @brief  Declaration of the "hud" class.
+/// @brief  Declaration of the "imgui" class.
 
 #ifndef imgui_hpp
 #define imgui_hpp
@@ -43,22 +43,37 @@ public:
   void begin ();
 
   void window (
-               std::string loc_name,
-               int         loc_width
+               std::string loc_name,                                                                ///< Window name.
+               int         loc_width                                                                ///< Window width [px].
               );
 
   void parameter (
-                  std::string loc_description,
-                  std::string loc_unit,
-                  std::string loc_name,
-                  float       loc_value
+                  std::string loc_description,                                                      ///< Parameter description.
+                  std::string loc_unit,                                                             ///< Parameter dimensional unit.
+                  std::string loc_name,                                                             ///< Parameter name.
+                  float*      loc_value                                                             ///< Parameter value.
                  );
 
-  void slider ();
+  void slider (
+               std::string loc_description,                                                         ///< Parameter description.
+               std::string loc_unit,                                                                ///< Parameter dimensional unit.
+               std::string loc_name,                                                                ///< Parameter name.
+               float*      loc_value,                                                               ///< Parameter value.
+               float       loc_min_value,                                                           ///< Parameter minimum value.
+               float       loc_max_value                                                            ///< Parameter maximum value.
+              );
 
-  void plot ();
+  void plot (
+             std::string loc_value_description,                                                     ///< Value description.
+             std::string loc_value_name,                                                            ///< Value name.
+             std::string loc_error_name,                                                            ///< Error name.
+             float       loc_value,                                                                 ///< Value.
+             float       loc_error                                                                  ///< Error.
+            );
 
-  void button ();
+  void button (
+               std::string loc_name                                                                 ///< Button name.
+              );
 
   void finish ();
 
