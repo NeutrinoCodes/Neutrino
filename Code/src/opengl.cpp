@@ -2015,8 +2015,8 @@ void nu::opengl::mouse_moved
  double loc_ypos                                                                                    // Mouse position [px].
 )
 {
-  mouse_X = loc_xpos;                                                                               // Getting mouse position...
-  mouse_Y = loc_ypos;                                                                               // Getting mouse position...
+  mouse_X = (float)loc_xpos;                                                                        // Getting mouse position...
+  mouse_Y = (float)loc_ypos;                                                                        // Getting mouse position...
 }
 
 void nu::opengl::mouse_scrolled
@@ -2029,8 +2029,8 @@ void nu::opengl::mouse_scrolled
 
   if(!io.WantCaptureMouse)
   {
-    scroll_X = loc_xoffset;                                                                         // Getting scroll position...
-    scroll_Y = loc_yoffset;                                                                         // Getting scroll position...
+    scroll_X = (float)loc_xoffset;                                                                  // Getting scroll position...
+    scroll_Y = (float)loc_yoffset;                                                                  // Getting scroll position...
   }
 }
 
@@ -2644,17 +2644,17 @@ void nu::opengl::mouse_navigation (
                                    float loc_decaytime                                              // Low pass filter decay time [s].
                                   )
 {
-  float dt          = 0.0;
-  float dt_min      = 0.01;
-  float dt_max      = 0.05;
-  float loc_orbit_x = 0.0;
-  float loc_orbit_y = 0.0;
-  float loc_pan_x   = 0.0;
-  float loc_pan_y   = 0.0;
-  float loc_pan_z   = 0.0;
-  float loc_vx      = 0.0;
-  float loc_vy      = 0.0;
-  float loc_vz      = 0.0;
+  float dt          = 0.0f;
+  float dt_min      = 0.01f;
+  float dt_max      = 0.05f;
+  float loc_orbit_x = 0.0f;
+  float loc_orbit_y = 0.0f;
+  float loc_pan_x   = 0.0f;
+  float loc_pan_y   = 0.0f;
+  float loc_pan_z   = 0.0f;
+  float loc_vx      = 0.0f;
+  float loc_vy      = 0.0f;
+  float loc_vz      = 0.0f;
 
   if(mouse_sample)                                                                                  // Sampling mouse position...
   {
@@ -2674,7 +2674,7 @@ void nu::opengl::mouse_navigation (
     mouse_sample = true;                                                                            // Setting sample flag...
   }
 
-  dt     = neutrino::constrain_float (neutrino::loop_time, dt_min, dt_max);                         // Getting loop time...
+  dt     = neutrino::constrain_float ((float)neutrino::loop_time, dt_min, dt_max);                  // Getting loop time...
   loc_vx = +(mouse_x - mouse_x_old)/(window_size_x*dt);                                             // Computing mouse x-velocity [px/s]...
   loc_vy = -(mouse_y - mouse_y_old)/(window_size_y*dt);                                             // Computing mouse y-velocity [px/s]...
   loc_vz = +(mouse_z - mouse_z_old)/(window_size_y*dt);                                             // Computing mouse z-velocity [px/s]...
@@ -2736,7 +2736,7 @@ void nu::opengl::gamepad_navigation (
   loc_orbit_y = -axis_LEFT_Y;                                                                       // Setting "Near clipping-plane" y-coordinate...
   loc_pan_x   = +axis_RIGHT_X;                                                                      // Setting world x-pan...
   loc_pan_y   = -axis_RIGHT_Y;                                                                      // Setting world y-pan...
-  loc_pan_z   = (axis_RIGHT_TRIGGER + 1.0)/2.0 - (axis_LEFT_TRIGGER + 1.0)/2.0;                     // Setting world z-pan...
+  loc_pan_z   = (axis_RIGHT_TRIGGER + 1.0f)/2.0f - (axis_LEFT_TRIGGER + 1.0f)/2.0f;                 // Setting world z-pan...
 
   orbit (
          loc_orbit_x,                                                                               // "Near clipping-plane" x-coordinate.
