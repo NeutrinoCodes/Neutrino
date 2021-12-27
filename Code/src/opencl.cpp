@@ -615,7 +615,7 @@ void nu::opencl::init
 
 void nu::opencl::read ()
 {
-  size_t i;                                                                                         // Index.
+  GLuint i;                                                                                         // Index.
 
   // Setting kernel arguments:
   for(i = 0; i < neutrino::container.size (); i++)
@@ -666,7 +666,7 @@ void nu::opencl::read ()
 }
 
 void nu::opencl::read (
-                       size_t loc_i
+                       GLuint loc_i
                       )
 {
   // Setting kernel argument:
@@ -724,7 +724,7 @@ void nu::opencl::read (
 
 void nu::opencl::write ()
 {
-  size_t i;                                                                                         // Index.
+  GLuint i;                                                                                         // Index.
 
   // Setting kernel arguments:
   for(i = 0; i < neutrino::container.size (); i++)
@@ -775,7 +775,7 @@ void nu::opencl::write ()
 }
 
 void nu::opencl::write (
-                        size_t loc_i
+                        GLuint loc_i
                        )
 {
   // Setting kernel argument:
@@ -833,7 +833,7 @@ void nu::opencl::write (
 
 void nu::opencl::acquire ()
 {
-  size_t i;                                                                                         // Index.
+  GLuint i;                                                                                         // Index.
 
   for(i = 0; i < container.size (); i++)
   {
@@ -876,7 +876,7 @@ void nu::opencl::acquire ()
 
 void nu::opencl::release ()
 {
-  size_t i;                                                                                         // Index.
+  GLuint i;                                                                                         // Index.
 
   for(i = 0; i < container.size (); i++)
   {
