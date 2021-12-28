@@ -120,6 +120,12 @@ public:
                std::string loc_name                                                                 ///< Button name.
               );
 
+  void sameline (
+                 int loc_position                                                                   ///< Absolute x-position.
+                );
+
+  void newline ();                                                                                  ///< New line.
+
   void finish ();
 
   /// @brief **End method.**
