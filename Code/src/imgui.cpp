@@ -119,6 +119,18 @@ bool nu::imgui::button (
   return ImGui::Button (loc_name.c_str ());                                                         // Adding button...
 }
 
+void nu::imgui::sameline (
+                          int loc_position                                                          ///< Absolute x-position.
+                         )
+{
+  ImGui::SameLine ((float)loc_position);
+}
+
+void nu::imgui::newline ()
+{
+  ImGui::NewLine ();
+}
+
 void nu::imgui::finish ()
 {
   ImGui::End ();                                                                                    // Finishing window...
