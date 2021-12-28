@@ -116,7 +116,7 @@ public:
              float       loc_error                                                                  ///< Error.
             );
 
-  void button (
+  bool button (
                std::string loc_name                                                                 ///< Button name.
               );
 
