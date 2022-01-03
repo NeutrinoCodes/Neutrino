@@ -120,7 +120,7 @@ bool nu::imgui::button (
 }
 
 void nu::imgui::sameline (
-                          int loc_position                                                          ///< Absolute x-position.
+                          int loc_position                                                          // Absolute x-position.
                          )
 {
   ImGui::SameLine ((float)loc_position);
@@ -128,7 +128,7 @@ void nu::imgui::sameline (
 
 void nu::imgui::newline ()
 {
-  ImGui::NewLine ();
+  ImGui::NewLine ();                                                                                // Adding new line...
 }
 
 void nu::imgui::finish ()

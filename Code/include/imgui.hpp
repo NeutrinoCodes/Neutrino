@@ -133,7 +133,7 @@ public:
   void end ();
 
   /// @brief **Class destructor.**
-  /// @details Terminates the GLFW context.
+  /// @details Terminates the HUD context.
   ~imgui();
 };
 }
