@@ -14,9 +14,10 @@ nu::logfile::logfile ()
 }
 
 void nu::logfile::open (
-                        std::string loc_log_file_name,                                              // Log file name.
-                        std::string loc_log_file_extension,                                         // Log file extension.
-                        bool        loc_datetime                                                    // If **true** adds the current date and time to the file name.
+                        std::string  loc_log_file_name,                                             // Log file name.
+                        std::string  loc_log_file_extension,                                        // Log file extension.
+                        std::string  loc_log_header,                                                // Log file header.
+                        logfile_mode loc_timestamp                                                  // Log file mode.
                        )
 {
   time_t      file_time = time (0);
@@ -24,34 +25,47 @@ void nu::logfile::open (
   char        time_text [256];
   localtime_s (&now, &file_time);
   std::string file_name = loc_log_file_name;
+  strftime (time_text, 256, "%Y-%b-%d_%H-%M-%S", &now);                                             // Compiling time string...
 
-  if(loc_datetime)
+  switch(loc_timestamp)
   {
-    strftime (time_text, 256, "_%Y-%b-%d_%H-%M-%S.", &now);                                         // Compiling time string...
-    file_name += time_text + loc_log_file_extension;                                                // Adding time string and file extension...
-  }
-  else
-  {
-    file_name += "." + loc_log_file_extension;                                                      // Adding file extension...
+    case TIMESTAMP:
+      file_name += "_";                                                                             // Adding underscore...
+      file_name += time_text;                                                                       // Adding time stamp...
+      file_name += "." + loc_log_file_extension;                                                    // Adding time file extension...
+      break;
+
+    case NO_TIMESTAMP:
+      file_name += "." + loc_log_file_extension;                                                    // Adding file extension...
+      break;
+
+    default:
+      file_name += "_";                                                                             // Adding underscore...
+      file_name += time_text;                                                                       // Adding time stamp...
+      file_name += "." + loc_log_file_extension;                                                    // Adding file extension...
+      break;
   }
 
-  datafile.open (file_name);                                                                        // Opening data log file...
+  datafile.open (file_name, std::ios::app);                                                         // Opening data log file (appending mode)...
+  datafile << loc_log_header << std::endl;                                                          // Writing header...
+  datafile << "Time stamp: " << time_text << std::endl;                                             // Writing time stamp...
+  datafile << std::endl;                                                                            // Writing blank line...
 }
 
-void nu::write (
-                std::string loc_name,                                                               // Variable name.
-                float       loc_data                                                                // Variable value.
-               )
+void nu::logfile::write (
+                         std::string loc_name,                                                      // Variable name.
+                         float       loc_data                                                       // Variable value.
+                        )
 {
   datafile << loc_name << " = " << loc_data << "; ";                                                // Writing data...
 }
 
-void nu::endline ()
+void nu::logfile::endline ()
 {
   datafile << std::endl;
 }
 
-void nu::close ()
+void nu::logfile::close ()
 {
   datafile.close ();                                                                                // Closing file...
 }

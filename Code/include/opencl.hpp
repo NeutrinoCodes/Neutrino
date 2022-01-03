@@ -20,6 +20,7 @@
 #include "queue.hpp"
 #include "kernel.hpp"
 #include "data_classes.hpp"
+#include "logfile.hpp"                                                                              // Neutrino's logfile declarations.
 
 namespace nu
 {

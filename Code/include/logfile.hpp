@@ -13,8 +13,15 @@
 
 namespace nu
 {
+// Kernel modes:
+typedef enum
+{
+  TIMESTAMP,                                                                                        ///< Adds timestamp to log file name.
+  NO_TIMESTAMP                                                                                      ///< Does not add timestamp to log file name.
+} logfile_mode;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////// "opengl" class ///////////////////////////////////////////
+///////////////////////////////////////// "nu::logfile" class /////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 class logfile : public neutrino                                                                     /// @brief **Logfile.**
 {
@@ -32,9 +39,10 @@ public:
   /// @brief **Open method.**
   /// @details To be invoked by the user in order to open/create a log file.
   void open (
-             std::string loc_log_file_name,                                                         ///< Log file name.
-             std::string loc_log_file_extension,                                                    ///< Log file extension.
-             bool        loc_datetime                                                               ///< If **true** adds the current date and time to the file name.
+             std::string  loc_log_file_name,                                                        ///< Log file name.
+             std::string  loc_log_file_extension,                                                   ///< Log file extension.
+             std::string  loc_log_header,                                                           ///< Log file header.
+             logfile_mode loc_timestamp                                                             ///< Log file mode, adds time stamp to file and to file name.
             );
 
   /// @brief **Write method.**
