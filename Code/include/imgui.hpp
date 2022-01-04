@@ -87,17 +87,40 @@ public:
   /// @details To be invoked by the user in order to start using Imgui inside the application loop.
   void begin ();
 
+  /// @brief **Window method.**
+  /// @details To be invoked by the user in order to create a window.
   void window (
                std::string loc_name,                                                                ///< Window name.
                int         loc_width                                                                ///< Window width [px].
               );
 
-  void parameter (
-                  std::string loc_description,                                                      ///< Parameter description.
-                  std::string loc_unit,                                                             ///< Parameter dimensional unit.
-                  std::string loc_name,                                                             ///< Parameter name.
-                  float*      loc_value                                                             ///< Parameter value.
-                 );
+  /// @brief **Input method.**
+  /// @details To be invoked by the user in order to create an input parameter.
+  void input (
+              std::string loc_description,                                                          ///< Parameter description.
+              std::string loc_unit,                                                                 ///< Parameter dimensional unit.
+              std::string loc_name,                                                                 ///< Parameter name.
+              int*        loc_value                                                                 ///< Parameter value.
+             );
+
+  void input (
+              std::string loc_description,                                                          ///< Parameter description.
+              std::string loc_unit,                                                                 ///< Parameter dimensional unit.
+              std::string loc_name,                                                                 ///< Parameter name.
+              float*      loc_value,                                                                ///< Parameter value.
+              const char* format = "%+.6E"                                                          ///< Parameter format.
+             );
+
+  /// @brief **Slider method.**
+  /// @details To be invoked by the user in order to create a slider input parameter.
+  void slider (
+               std::string loc_description,                                                         ///< Parameter description.
+               std::string loc_unit,                                                                ///< Parameter dimensional unit.
+               std::string loc_name,                                                                ///< Parameter name.
+               int*        loc_value,                                                               ///< Parameter value.
+               int         loc_min_value,                                                           ///< Parameter minimum value.
+               int         loc_max_value                                                            ///< Parameter maximum value.
+              );
 
   void slider (
                std::string loc_description,                                                         ///< Parameter description.
@@ -105,9 +128,29 @@ public:
                std::string loc_name,                                                                ///< Parameter name.
                float*      loc_value,                                                               ///< Parameter value.
                float       loc_min_value,                                                           ///< Parameter minimum value.
-               float       loc_max_value                                                            ///< Parameter maximum value.
+               float       loc_max_value,                                                           ///< Parameter maximum value.
+               const char* format = "%+.6E"                                                         ///< Parameter format.
               );
 
+  /// @brief **Output method.**
+  /// @details To be invoked by the user in order to create an output parameter.
+  void output (
+               std::string loc_description,                                                         ///< Parameter description.
+               std::string loc_unit,                                                                ///< Parameter dimensional unit.
+               std::string loc_name,                                                                ///< Parameter name.
+               int         loc_value                                                                ///< Parameter value.
+              );
+
+  void output (
+               std::string loc_description,                                                         ///< Parameter description.
+               std::string loc_unit,                                                                ///< Parameter dimensional unit.
+               std::string loc_name,                                                                ///< Parameter name.
+               float       loc_value,                                                               ///< Parameter value.
+               const char* format = "%+.6E"                                                         ///< Parameter format.
+              );
+
+  /// @brief **Plot method.**
+  /// @details To be invoked by the user in order to create a scrolling plot of a parameter.
   void plot (
              std::string loc_value_description,                                                     ///< Value description.
              std::string loc_value_name,                                                            ///< Value name.
@@ -116,13 +159,16 @@ public:
              float       loc_error                                                                  ///< Error.
             );
 
+  /// @brief **Button method.**
+  /// @details To be invoked by the user in order to create a button.
   bool button (
-               std::string loc_name                                                                 ///< Button name.
+               std::string loc_name,                                                                ///< Button name.
+               int         loc_width                                                                ///< Button width.
               );
 
-  void sameline (
-                 int loc_position                                                                   ///< Absolute x-position.
-                );
+  void space (
+              int loc_space                                                                         ///< Horizontal space [px].
+             );
 
   void newline ();                                                                                  ///< New line.
 
