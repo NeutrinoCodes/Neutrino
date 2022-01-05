@@ -189,7 +189,7 @@ void nu::imgui::space (
                        int loc_space                                                                // Horizontal space [px].
                       )
 {
-  ImGui::SameLine ( ImGui::GetCursorPosX () + (float)loc_space);
+  ImGui::SameLine (0.0f,  (float)loc_space);
 }
 
 void nu::imgui::newline ()
