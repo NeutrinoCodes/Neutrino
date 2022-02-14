@@ -71,9 +71,7 @@ void nu::imgui::slider (
   ImGui::SameLine ();                                                                               // Staying on same line...
   ImGui::TextColored (ImVec4 (0.0f, 1.0f, 0.0f, 1.0f), loc_unit.c_str ());                          // Writing text...
   ImGui::SameLine ();                                                                               // Staying on same line...                                                                                // Staying on same line...
-  ImGui::SliderInt ("", loc_value, loc_min_value, loc_max_value);                                   // Adding input field...
-  ImGui::SameLine ();                                                                               // Staying on same line...
-  ImGui::TextColored (ImVec4 (0.0f, 1.0f, 0.0f, 1.0f), (" = " + loc_name).c_str ());                // Writing text...
+  ImGui::SliderInt ((" = " + loc_name).c_str (), loc_value, loc_min_value, loc_max_value);          // Adding input field...
 }
 
 void nu::imgui::slider (
@@ -90,9 +88,7 @@ void nu::imgui::slider (
   ImGui::SameLine ();                                                                               // Staying on same line...
   ImGui::TextColored (ImVec4 (0.0f, 1.0f, 0.0f, 1.0f), loc_unit.c_str ());                          // Writing text...
   ImGui::SameLine ();                                                                               // Staying on same line...                                                                                // Staying on same line...
-  ImGui::SliderFloat ("", loc_value, loc_min_value, loc_max_value, format);                         // Adding input field...
-  ImGui::SameLine ();                                                                               // Staying on same line...
-  ImGui::TextColored (ImVec4 (0.0f, 1.0f, 0.0f, 1.0f), (" = " + loc_name).c_str ());                // Writing text...
+  ImGui::SliderFloat ((" = " + loc_name).c_str (), loc_value, loc_min_value, loc_max_value);        // Adding input field...
 }
 
 void nu::imgui::output (
@@ -133,7 +129,8 @@ void nu::imgui::plot (
                       std::string loc_value_name,                                                   // Value name.
                       std::string loc_error_name,                                                   // Error name.
                       float       loc_value,                                                        // Value.
-                      float       loc_error                                                         // Error.
+                      float       loc_error,                                                        // Error.
+                      float       loc_dt                                                            // Time delta [s].
                      )
 {
   static ScrollingBuffer data_avg;
@@ -144,12 +141,12 @@ void nu::imgui::plot (
   ImGui::SliderFloat ("History", &history, 1, 30, "%.1f s");
   static ImPlotAxisFlags flags   = ImPlotAxisFlags_AutoFit;
 
-  t += ImGui::GetIO ().DeltaTime;
+  t += loc_dt;
   data_avg.AddPoint (t, loc_value);
   data_std_up.AddPoint (t, loc_value + loc_error);
   data_std_down.AddPoint (t, loc_value - loc_error);
 
-  if(ImPlot::BeginPlot ("##Scrolling", ImVec2 (-1,150)))
+  if(ImPlot::BeginPlot ("##Scrolling", ImVec2 (-1, 150)))
   {
     ImPlot::SetupAxes ("time [s]", loc_value_description.c_str (), flags, flags);
     ImPlot::SetupAxisLimits (ImAxis_X1, t - history, t, ImGuiCond_Always);

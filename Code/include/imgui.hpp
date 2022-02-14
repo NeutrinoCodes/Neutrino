@@ -156,7 +156,8 @@ public:
              std::string loc_value_name,                                                            ///< Value name.
              std::string loc_error_name,                                                            ///< Error name.
              float       loc_value,                                                                 ///< Value.
-             float       loc_error                                                                  ///< Error.
+             float       loc_error,                                                                 ///< Error.
+             float       loc_dt                                                                     ///< Time delta [s].
             );
 
   /// @brief **Button method.**
