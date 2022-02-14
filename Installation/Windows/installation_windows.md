@@ -70,9 +70,9 @@ This will create the `libnu` directory.
 From the command shell (either VScode's or system's), navigate into *NeutrinoCodes* and clone the Neutrino project using the command:\
 `git clone https://github.com/NeutrinoCodes/neutrino.git` \
 \
-This will create the `neutrino` directory.
+This will create the `neutrino` directory. Now we offer two alternative methods for continuing the installation.
 
-## Installation: (VScode toolchain)
+## Installation: 1st method - VScode toolchain
 Go to the `neutrino` directory and create a `.vscode` hidden directory:\
 `mkdir .vscode`\
 \
@@ -90,15 +90,9 @@ and create a new file `settings.json` in it, then fill it with the following inf
 &nbsp;&nbsp;`}`\
 `}`\
 \
-and save it.\
-\
-Notice all paths **must** be specificed with *double backslashes*, in order to correctly manage the possibility of space characters in the them.
-Also notice that `your_path_to_OpenCL` might be something like this (it depends on your GPU's graphics drivers):\
-`C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v10.1`\
-\
-At this point, Neutrino is configured for your system. 
+and save it.
 
-In VScode, open a folder from the file menu and select NeutrinoCodes. Go to the left bar and locate the **CMake** button (it comes after the installation of the CMake Tools extension for VScode) and push it: a CMake panel will open, push the **Configure All Projects** button on it.
+Then in VScode, open a folder from the file menu and select NeutrinoCodes. Go to the left bar and locate the **CMake** button (it comes after the installation of the CMake Tools extension for VScode) and push it: a CMake panel will open, push the **Configure All Projects** button on it.
 
 Go to the bottom bar and locate:
 - the **Build variant** button: verify it has been selected to **[Release]**.
@@ -106,33 +100,7 @@ Go to the bottom bar and locate:
 - the **Target** button: verify it has been selected to **[install]**.
 - the **Build** button: push it in order to build the Neutrino project.
 
-At this point the NeutrinoCodes directory should appear like this:
-- glad
-- glfw
-- gmsh
-- imgui *
-- implot **
-- libnu
-- neutrino
-
-\* Notice that the "imgui" directory should contain all the .cpp and .h files in the root directory of the Imgui repository and all imgui_impl_opengl3.* files present in the backends directory (see instructions on its repository).
-
-\** Notice that the "implot" directory should contain all the .cpp and .h files in the root directory of the Implot repository.
-
-We all like tidy code! For this, we provide an **Uncrustify** (sources: https://github.com/uncrustify/uncrustify) configuration file specific for Neutrino. In order to use it, please first install Uncrustify according to your operating system (e.g. use Homebrew under Mac), then install the VScode's *Uncrustify extension* (https://marketplace.visualstudio.com/items?itemName=LaurentTreguier.uncrustify).\
-\
-Add the following lines to either the *global* or *project* **settings.json** file:
-`"uncrustify.executablePath.windows": "your_path_to_uncrustify",`\
-`"editor.defaultFormatter": "LaurentTreguier.uncrustify",`\
-`"editor.formatOnSave": true`\
-\
-To edit the *global* settings, on VScode go to the left bar: push the **Extensions** button and select the Uncrustify extension. Then go to **Manage --> Extension Settings** (gear-like icon) and edit the `settings.json` file by clicking one of the links in that section. This will set the Uncrustify code formatter globally in all your VScode projects (but still with per-project custom uncrustify configuration files).\
-\
-To edit the *project* settings, open `settings.json` file in the `.vscode` you created for Neutrino (the hidden directory inside the `Neutrino` directory) and put the same lines in it. This will set Uncrustify as code formatter (together with the configuration file we provide) only for the Neutrino project.
-
-Congratulations, you have installed Neutrino on Windows within the VScode toolchain!
-
-## Installation: (Visual Studio toolchain)
+## Installation: 2nd method - Visual Studio toolchain
 Go to the `neutrino` directory and edit the `CMakeSettings.json` file in it, then fill it with the following information:\
 `{`\
 &nbsp;&nbsp;`"configurations": [`\
@@ -159,8 +127,34 @@ Go to the `neutrino` directory and edit the `CMakeSettings.json` file in it, the
 \
 and save it.
 
-Then, in Visual Studio open a folder from the file menu and select NeutrinoCodes. Visual Studio will invoke Cmake. After it finished configuring the project, go to the Build menu and push the **Build** button. Once the Neutrino library has been built, it has to be installed: to do so, go to the Build menu and push the **Install** button.
+Then in Visual Studio, open a folder from the file menu and select NeutrinoCodes. Visual Studio will invoke Cmake. After it finished configuring the project, go to the Build menu and push the **Build** button. Once the Neutrino library has been built, it has to be installed: to do so, go to the Build menu and push the **Install** button.
 
 Alternatively, the same file can edited in Visual Studio by right-clicking the CMakeLists.txt file in the Solution Explorer - Folder View and then selecting the **CMake Settings for 'project_name'** button. This will open the CMake Settings editor. The string to be edited, containing all user's paths, is the one in the **CMake command arguments** text field.
 
-Congratulations, you have installed Neutrino on Windows within the Visual Studio toolchain!
+## Post installation notes
+
+Notice all paths **must** be specificed with *double backslashes*, in order to correctly manage the possibility of space characters in the them.
+Also notice that `your_path_to_OpenCL` might be something like this (it depends on your GPU's graphics drivers):\
+`C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v10.1`\
+\
+At this point, Neutrino is configured for your system and the NeutrinoCodes directory should appear like this:
+- glad
+- glfw
+- gmsh
+- imgui
+- implot
+- libnu
+- neutrino
+
+We all like tidy code! For this, we provide an **Uncrustify** (sources: https://github.com/uncrustify/uncrustify) configuration file specific for Neutrino. In order to use it, please first install Uncrustify according to your operating system (e.g. use Homebrew under Mac), then install the VScode's *Uncrustify extension* (https://marketplace.visualstudio.com/items?itemName=LaurentTreguier.uncrustify).\
+\
+Add the following lines to either the *global* or *project* **settings.json** file:
+`"uncrustify.executablePath.windows": "your_path_to_uncrustify",`\
+`"editor.defaultFormatter": "LaurentTreguier.uncrustify",`\
+`"editor.formatOnSave": true`\
+\
+To edit the *global* settings, on VScode go to the left bar: push the **Extensions** button and select the Uncrustify extension. Then go to **Manage --> Extension Settings** (gear-like icon) and edit the `settings.json` file by clicking one of the links in that section. This will set the Uncrustify code formatter globally in all your VScode projects (but still with per-project custom uncrustify configuration files).\
+\
+To edit the *project* settings, open `settings.json` file in the `.vscode` you created for Neutrino (the hidden directory inside the `Neutrino` directory) and put the same lines in it. This will set Uncrustify as code formatter (together with the configuration file we provide) only for the Neutrino project.
+
+Congratulations, you have installed Neutrino on Windows!
