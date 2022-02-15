@@ -5,23 +5,7 @@ Neutrino is a C++ library that facilitates writing parallel code running on GPU 
 
 Neutrino can be successfully installed and used on Windows by using the **Visual Studio** IDE or **VScode** editor toolchain.
 
-## Hardware requirements:
-A GPU having the **OpenCL-OpenGL interoperability GPU mode** is necessary.
 
-This can be verified by installing and using the `clinfo` command line tool (https://github.com/Oblomov/clinfo). After its installation, on a command terminal do:\
-`clinfo`\
-\
-In the text output (it can be long!) there should be a section regarding your GPU, similar to this one:\
-...\
-`Name:                                          GeForce GTX 1060 6GB`\
-`Vendor:                                        NVIDIA Corporation`\
-`Driver version:                                451.67`\
-`Profile:                                       FULL_PROFILE`\
-`Version:                                       OpenCL 1.2 CUDA`\
-`Extensions:                                    cl_khr_global_int32_base_atomics cl_khr_global_int32_extended_atomics cl_khr_local_int32_base_atomics cl_khr_local_int32_extended_atomics cl_khr_fp64 cl_khr_byte_addressable_store cl_khr_icd cl_khr_gl_sharing cl_nv_compiler_options cl_nv_device_attribute_query cl_nv_pragma_unroll cl_nv_d3d10_sharing cl_khr_d3d10_sharing cl_nv_d3d11_sharing cl_nv_copy_opts cl_nv_create_buffer cl_khr_int64_base_atomics cl_khr_int64_extended_atomics`\
-...\
-\
-Please verify the presence of the `cl_khr_gl_sharing` extension. Some old GPU models do not have it: those ones would not be compatible with Neutrino.
 
 ## Software requirements:
 - OpenCL (runtime/loader + headers), coming along the installation of the graphics drivers.
