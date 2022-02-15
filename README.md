@@ -33,17 +33,62 @@ In the text output (it can be long!) there should be a section regarding your GP
 \
 Please **verify the presence** of the `cl_khr_gl_sharing` extension. Some **old GPU** models **do not have it**: those ones **would not work** with Neutrino.
 
-# Software requirements 
-## Video drivers
+# Installation
+## Foreword
+On Linux many (possibly all) of the following requirements can be obtained directly by installing them from its own available **package manager**, according to the distribution of Linux you have installed on your PC. Alternatively, they can be downloaded (also cloned via GIT, if they are Github repositories) from the suggested links.
+
+On Windows, since there is no package manager, you should follow this alternative only.
+
+## 1. Install GIT
+It is used for downloading/cloning other Neutrino dependencies. Moreover, it is very useful also for organizing your own projects as well.
+Go to: https://git-scm.com and download/install it wherever it suggests you.
+
+## 2. Install Neutrino
+
+From a **command shell** create a *NeutrinoCodes* directory, then navigate into it and clone the Neutrino project using the command:\
+`git clone https://github.com/NeutrinoCodes/neutrino.git`
+
+This will create the following directory structure:\
+`NeutrinoCodes`\
+` └───neutrino`
+
+
+## 2. Install the OpenGL/CL video drivers
+Please refere to the **manufacturer** of your **video card**. What you need is: 
 - OpenCL (runtime/loader + headers)
 - OpenGL (library + headers)
+  
+e.g. if you have an Nvidia card, go to their webpage and download their SDK. 
 
-those can be obtained on Linux using its own Package Manager (according to the Linux distribution you have) or from the video card vendor on Windows (e.g. download them from the Nvidia web page).
+Do this on Windows. On Linux you can search the package manager as well.
+Download/install it wherever it suggests you, but **take note of its location for later!**
+
+e.g. on Windows, if you have an Nvidia card, it can be something like this: 
+`C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1`
+
+Notice the path **must** be specificed with *double backslashes*, in order to correctly manage the possibility of space characters in the them.
+Also notice that `your_path_to_OpenCL` might be something like this (it depends on your GPU's graphics drivers):\
+
+## 3. Install the GLAD loader
+This library is for loading the OpenGL context. Goto: https://glad.dav1d.de/
+ and **generate the loader from its webpage** using the following settings:
+- Language = C/C++
+- gl = Version 4.6 (or higher)
+- Profile = Core
+
+After having generated it, **download the zip file** containing the code and extract it in: `glad` inside `NeutrinoCodes`.
+
+At this point you should have this directory structure:\
+`NeutrinoCodes`\
+` ├───glad`\
+` └───neutrino`
 
 
-- GIT (https://git-scm.com)
-- GLAD (https://glad.dav1d.de/) *
+This other library is for creating an OpenGL window:
 - GLFW (https://www.glfw.org/)
+
+
+
 - GMSH (https://gmsh.info/) **
 - IMGUI (https://github.com/ocornut/imgui)
 - IMPLOT (https://github.com/epezent/implot)
