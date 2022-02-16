@@ -255,7 +255,7 @@ e.g. `your_path_to_OpenCL` might be something like this (it depends on your GPU'
 `C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.5`
 
 ### **Visual Studio**:
-Go to the `neutrino` directory: create and edit a `CMakeSettings.json` file in it, then fill it with the following information:\
+Go to the `examples` directory: create and edit a `CMakeSettings.json` file in it, then fill it with the following information:\
 `{`\
 &nbsp;&nbsp;`"configurations": [`\
 &nbsp;&nbsp;&nbsp;&nbsp;`{`\
@@ -267,14 +267,8 @@ Go to the `neutrino` directory: create and edit a `CMakeSettings.json` file in i
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"cmakeCommandArgs": "-DGLAD_PATH=\"your_path_to_NeutrinoCodes\\glad\" -DGLFW_PATH=\"your_path_to_NeutrinoCodes\\glfw\" -DGMSH_PATH=\"your_path_to_NeutrinoCodes\\gmsh\" -DCL_PATH=\"your_path_to_OpenCL\\opencl\" -DIMGUI_PATH=\"your_path_to_NeutrinoCodes\\imgui" -DIMPLOT_PATH=\"your_path_to_NeutrinoCodes\\implot" -DNEUTRINO_PATH=\"your_path_to_NeutrinoCodes\\libnu\"",`\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"buildCommandArgs": "",`\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"ctestCommandArgs": "",`\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"inheritEnvironments": [ "msvc_x64_x64" ],`\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"variables": [`\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`{`\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"name": "CMAKE_INSTALL_PREFIX",`\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"value": "E:/BookHouseBoys/ezor/NeutrinoCodes/libnu",`\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"type": "PATH"`\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`}`\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`]`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"inheritEnvironments": [ "msvc_x64_x64" ]`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"variables": [ "msvc_x64_x64" ]`\
 &nbsp;&nbsp;&nbsp;&nbsp;`}`\
 &nbsp;&nbsp;`]`\
 `}`\
