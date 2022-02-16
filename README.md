@@ -6,12 +6,14 @@
 
 *A fast and light library for GPU-based computation and interactive data visualization.*
 
-[![Alt text](https://img.youtube.com/vi/m1v9UXB3lYE/0.jpg)](https://www.youtube.com/watch?v=m1v9UXB3lYE) [![Alt text](https://img.youtube.com/vi/jYHdJxtJkGM/0.jpg)](https://www.youtube.com/watch?v=jYHdJxtJkGM) [![Alt text](https://img.youtube.com/vi/FQlTP2k5KQc/0.jpg)](https://www.youtube.com/watch?v=FQlTP2k5KQc) [![Alt text](https://img.youtube.com/vi/AEb4Jw_x-WA/0.jpg)](https://www.youtube.com/watch?v=AEb4Jw_x-WA)
-
-
 [www.neutrino.codes](https://www.neutrino.codes)
 
 © Alessandro LUCANTONIO, Erik ZORZIN - 2018-2022
+
+[![Neutrino - Sinusoid](./Logos/Neutrino-Sinusoid.png)](https://www.youtube.com/watch?v=m1v9UXB3lYE)
+[![Neutrino - Cloth](./Logos/Neutrino-Cloth.png)](https://www.youtube.com/watch?v=jYHdJxtJkGM)
+[![Neutrino - Gravity](./Logos/Neutrino-Gravity.png)](https://www.youtube.com/watch?v=FQlTP2k5KQc)
+[![Neutrino - Mesh](./Logos/Neutrino-Mesh.png)](https://www.youtube.com/watch?v=AEb4Jw_x-WA)
 
 # 1. Overview
 Neutrino is a C++ library that facilitates writing parallel code running on GPU hardware combining the power of the OpenCL computational framework with the OpenGL graphics language (see https://www.neutrino.codes).
