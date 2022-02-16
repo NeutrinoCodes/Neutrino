@@ -64,7 +64,7 @@ Please refer to the **manufacturer** of your **video card**. What you need is:
 - OpenGL (library + headers)
   
 e.g. On Windows, if you have an Nvidia card go to their webpage and download their SDK. Then install it wherever it suggests you, it can be something like this:\
-`C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v10.1`
+`C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.5`
 
 **Take note of this path**, later on we will refer to it as: `your_path_to_OpenCL`.
 
@@ -241,7 +241,7 @@ In VScode, open a folder from the file menu and select NeutrinoCodes. Go to the 
 
 Go to the bottom bar and locate:
 - the **Build variant** button: verify it has been selected to **[Release]**.
-- the **Active kit** button: verify it has been selected according to your system's characteristics. e.g. **[Visual Studio Community 2019 Release - amd64]**.
+- the **Active kit** button: verify it has been selected according to your system's characteristics. e.g. **[Visual Studio Community 2022 Release - amd64]**.
 - the **Target** button: verify it has been selected to **[install]**.
 - the **Build** button: push it in order to build the Neutrino project.
 
@@ -252,7 +252,7 @@ This can be done either via **Visual Studio** or via **VScode**.
 
 **Notice**, as opposed to Linux, that for the configuration of Neutrino on Windows **all paths must be specificed with *double backslashes*, in order to correctly manage the possibility of space characters in the them**.
 e.g. `your_path_to_OpenCL` might be something like this (it depends on your GPU's graphics drivers):\
-`C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v10.1`
+`C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.5`
 
 ### **Visual Studio**:
 Go to the `neutrino` directory: create and edit a `CMakeSettings.json` file in it, then fill it with the following information:\
@@ -311,7 +311,7 @@ Then in VScode, open a folder from the file menu and select NeutrinoCodes. Go to
 
 Go to the bottom bar and locate:
 - the **Build variant** button: verify it has been selected to **[Release]**.
-- the **Active kit** button: verify it has been selected according to your system's characteristics. e.g. **[Visual Studio Community 2019 Release - amd64]**.
+- the **Active kit** button: verify it has been selected according to your system's characteristics. e.g. **[Visual Studio Community 2022 Release - amd64]**.
 - the **Target** button: verify it has been selected to **[install]**.
 - the **Build** button: push it in order to build the Neutrino project.
 
