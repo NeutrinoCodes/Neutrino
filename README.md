@@ -6,6 +6,9 @@
 
 *A fast and light library for GPU-based computation and interactive data visualization.*
 
+[![Alt text](https://img.youtube.com/vi/m1v9UXB3lYE/0.jpg)](https://www.youtube.com/watch?v=m1v9UXB3lYE) [![Alt text](https://img.youtube.com/vi/jYHdJxtJkGM/0.jpg)](https://www.youtube.com/watch?v=jYHdJxtJkGM) [![Alt text](https://img.youtube.com/vi/FQlTP2k5KQc/0.jpg)](https://www.youtube.com/watch?v=FQlTP2k5KQc) [![Alt text](https://img.youtube.com/vi/AEb4Jw_x-WA/0.jpg)](https://www.youtube.com/watch?v=AEb4Jw_x-WA)
+
+
 [www.neutrino.codes](https://www.neutrino.codes)
 
 © Alessandro LUCANTONIO, Erik ZORZIN - 2018-2022
@@ -15,13 +18,17 @@ Neutrino is a C++ library that facilitates writing parallel code running on GPU 
 
 Neutrino can be installed on **Linux** and **Windows**.
 
+...and **on Mac**?
+
+There used to be an early version of Neutrino on Mac too, but sadly Apple deprecated OpenGL in macOS Mojave 10.14 in the favour of Metal, Apple's proprietary low-level graphics API. After this, OpenGL still exists on Mac but now it is stuck at a very old version (4.1) which is not enough to run the modern OpenGL since it lacks the implementation of the SSBO buffers :(
+
 **On Linux** the following requirements can be fulfilled directly by installing software packages from its own **package manager**, according to the distribution of Linux you have installed on your PC. Alternatively, they can be downloaded (also cloned via GIT, if they are Github repositories) from the suggested links.
 
 **On Windows**, since there is no package manager, you should follow this latter alternative only.
 
 Neutrino requires a GPU having the **OpenCL-OpenGL interoperability mode**.
 
-This can be verified by installing and using the `clinfo` command line tool. The tool can be obtained from: https://github.com/Oblomov/clinfo. After its installation, on a command terminal window do:\
+This can be verified by installing and using the `clinfo` command line tool. The tool can be obtained from: https://github.com/Oblomov/clinfo. A binary package is available for Windows. After its installation, on a shell terminal window do:\
 `clinfo`\
 \
 In the **text output** (it can be long!) there should be a section regarding your GPU, similar to this one:\
@@ -34,7 +41,9 @@ In the **text output** (it can be long!) there should be a section regarding you
 `Extensions:                                    cl_khr_global_int32_base_atomics cl_khr_global_int32_extended_atomics cl_khr_local_int32_base_atomics cl_khr_local_int32_extended_atomics cl_khr_fp64 cl_khr_byte_addressable_store cl_khr_icd cl_khr_gl_sharing cl_nv_compiler_options cl_nv_device_attribute_query cl_nv_pragma_unroll cl_nv_d3d10_sharing cl_khr_d3d10_sharing cl_nv_d3d11_sharing cl_nv_copy_opts cl_nv_create_buffer cl_khr_int64_base_atomics cl_khr_int64_extended_atomics`\
 ...\
 \
-Please **verify the presence** of the `cl_khr_gl_sharing` extension. Some **old GPU** models **do not have it**: those ones **would not work** with Neutrino.
+Please **verify the presence** of the `cl_khr_gl_sharing` extension.
+
+It is **strongly recommended** you check this before you start with all the rest of the installation: some **legacy GPU** models **do not have this extension**. Those ones **would not work** with Neutrino, in that case you have to upgrade your hardware before proceeding with this installation.
 
 # 2. Toolchain installation
 
@@ -140,9 +149,9 @@ The following tools are not mandatory, but **recommended**:
   - **DO NOT extract it inside a directory the requires elevated privilegies** (e.g.: Program Files, Windows)
 
 - Uncrustify: https://github.com/uncrustify/uncrustify
-  This tool is for gracefully indent the code. We provide an uncrustify file for Neutrino and its Examples. [See later for this configuration](#vscode) under VScode.
+  This tool is for gracefully indent the code. We provide an uncrustify file for Neutrino and its Examples. [See later for this configuration](#4-uncrustify-configuration) under VScode.
 - VScode: https://code.visualstudio.com/
-  This editor is useful when working on the same project both on Linux and Windows, because the environment is identical in both operating systems.
+  This editor can be particularly useful when working on the same project both on Linux and Windows, because the environment is identical in both operating systems.
   
   On Linux, please follow the instructions (https://code.visualstudio.com/docs/cpp/config-linux) in order to install it and verify the installation of GCC, as well as the instructions (https://code.visualstudio.com/docs/cpp/cmake-linux) to verify the installation of Cmake and to install the Cmake Tools extension for VSCode.
 
@@ -234,16 +243,7 @@ Go to the bottom bar and locate:
 - the **Target** button: verify it has been selected to **[install]**.
 - the **Build** button: push it in order to build the Neutrino project.
 
-We all like tidy code! For this, we provide an **Uncrustify** (sources: https://github.com/uncrustify/uncrustify) configuration file specific for Neutrino. In order to use it, please first install Uncrustify according to your operating system, then install the VScode's *Uncrustify extension* (https://marketplace.visualstudio.com/items?itemName=LaurentTreguier.uncrustify).\
-\
-Add the following lines to either the *global* or *project* **settings.json** file:
-`"uncrustify.executablePath.linux": "your_path_to_uncrustify",`\
-`"editor.defaultFormatter": "LaurentTreguier.uncrustify",`\
-`"editor.formatOnSave": true`
-\
-To edit the *global* settings, on VScode go to the left bar: push the **Extensions** button and select the Uncrustify extension. Then go to **Manage --> Extension Settings** (gear-like icon) and edit the `settings.json` file by clicking one of the links in that section. This will set the Uncrustify code formatter globally in all your VScode projects (but still with per-project custom uncrustify configuration files).\
-\
-To edit the *project* settings, open `settings.json` file in the `.vscode` you created for Neutrino (the hidden directory inside the `Neutrino` directory) and put the same lines in it. This will set Uncrustify as code formatter (together with the configuration file we provide) only for the Neutrino project.
+**You are done! Neutrino as been fully installed and configured on your Linux system!**
 
 ## 3.3 Configuring Neutrino on Windows
 This can be done either via **Visual Studio** or via **VScode**.
@@ -312,6 +312,27 @@ Go to the bottom bar and locate:
 - the **Active kit** button: verify it has been selected according to your system's characteristics. e.g. **[Visual Studio Community 2019 Release - amd64]**.
 - the **Target** button: verify it has been selected to **[install]**.
 - the **Build** button: push it in order to build the Neutrino project.
+
+**You are done! Neutrino as been fully installed and configured on your Windows system!**
+
+# 4. Uncrustify configuration
+We all like tidy code! For this, we provide an **Uncrustify** (sources: https://github.com/uncrustify/uncrustify) configuration file specific for Neutrino to be used in VScode. In order to use it, please first install Uncrustify according to your operating system, then install the VScode's *Uncrustify extension* (https://marketplace.visualstudio.com/items?itemName=LaurentTreguier.uncrustify).
+
+- On Linux:
+Add the following lines to either the *global* or *project* **settings.json** file:
+`"uncrustify.executablePath.linux": "your_path_to_uncrustify",`\
+`"editor.defaultFormatter": "LaurentTreguier.uncrustify",`\
+`"editor.formatOnSave": true`
+
+- On Windows:
+Add the following lines to either the *global* or *project* **settings.json** file:
+`"uncrustify.executablePath.windows": "your_path_to_uncrustify",`\
+`"editor.defaultFormatter": "LaurentTreguier.uncrustify",`\
+`"editor.formatOnSave": true`
+
+To edit the *global* settings, on VScode go to the left bar: push the **Extensions** button and select the Uncrustify extension. Then go to **Manage --> Extension Settings** (gear-like icon) and edit the `settings.json` file by clicking one of the links in that section. This will set the Uncrustify code formatter globally in all your VScode projects (but still with per-project custom uncrustify configuration files).\
+\
+To edit the *project* settings, open `settings.json` file in the `.vscode` you created for Neutrino (the hidden directory inside the `Neutrino` directory) and put the same lines in it. This will set Uncrustify as code formatter (together with the configuration file we provide) only for the Neutrino project.
 
 ## Examples
 Neutrino-based example applications che be found, **together with their installation instructions as well**, at the *Examples* repository: https://github.com/NeutrinoCodes/Examples.
