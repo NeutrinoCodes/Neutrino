@@ -46,10 +46,19 @@ public:
             );
 
   /// @brief **Write method.**
+  /// @details To be invoked by the user in order to write **string** data on the log file.
+  void write (
+              std::string loc_string                                                                ///< String value.
+             );
+
+  /// @details To be invoked by the user in order to write **integer** data on the log file.
+  void write (
+              int loc_int                                                                           ///< Integer value.
+             );
+
   /// @details To be invoked by the user in order to write **float** data on the log file.
   void write (
-              std::string loc_name,                                                                 ///< Variable name.
-              float       loc_data                                                                  ///< Variable value.
+              float loc_float                                                                       ///< Float value.
              );
 
   /// @brief **Endline method.**

@@ -53,11 +53,27 @@ void nu::logfile::open (
 }
 
 void nu::logfile::write (
-                         std::string loc_name,                                                      // Variable name.
-                         float       loc_data                                                       // Variable value.
+                         std::string loc_string                                                     // String value.
                         )
 {
-  datafile << loc_name << " = " << loc_data << "; ";                                                // Writing data...
+  datafile << loc_string;                                                                           // Writing data...
+}
+
+void nu::logfile::write (
+                         int loc_int                                                                // Integer value.
+                        )
+{
+  datafile << loc_int;                                                                              // Writing data...
+}
+
+void nu::logfile::write (
+                         float loc_float                                                            // Float value.
+                        )
+{
+  datafile <<                                                                                       // File...
+    loc_float <<                                                                                    // Data...
+    //std::setprecision (8) <<                                                                        // Precision (max)...
+    std::scientific;                                                                                // Notation...
 }
 
 void nu::logfile::endline ()
