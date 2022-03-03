@@ -51,6 +51,11 @@ public:
               std::string loc_string                                                                ///< String value.
              );
 
+  /// @details To be invoked by the user in order to write **unsigned integer** data on the log file.
+  void write (
+              unsigned int loc_int                                                                  ///< Unsigned integer value.
+             );
+
   /// @details To be invoked by the user in order to write **integer** data on the log file.
   void write (
               int loc_int                                                                           ///< Integer value.
