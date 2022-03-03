@@ -60,20 +60,33 @@ void nu::logfile::write (
 }
 
 void nu::logfile::write (
+                         unsigned int loc_int                                                       // Integer value.
+                        )
+{
+  char buffer[1024];                                                                                // Text buffer.
+
+  sprintf_s (buffer, "%d", loc_int);                                                                // Compiling data string...
+  datafile << std::string (buffer);                                                                 // Writing data to file...
+}
+
+void nu::logfile::write (
                          int loc_int                                                                // Integer value.
                         )
 {
-  datafile << loc_int;                                                                              // Writing data...
+  char buffer[1024];                                                                                // Text buffer.
+
+  sprintf_s (buffer, "%+d", loc_int);                                                               // Compiling data string...
+  datafile << std::string (buffer);                                                                 // Writing data to file...
 }
 
 void nu::logfile::write (
                          float loc_float                                                            // Float value.
                         )
 {
-  datafile <<                                                                                       // File...
-    loc_float <<                                                                                    // Data...
-    //std::setprecision (8) <<                                                                        // Precision (max)...
-    std::scientific;                                                                                // Notation...
+  char buffer[1024];                                                                                // Text buffer.
+
+  sprintf_s (buffer, "%+.6E", loc_float);                                                           // Compiling data string...
+  datafile << std::string (buffer);                                                                 // Writing data to file...
 }
 
 void nu::logfile::endline ()
