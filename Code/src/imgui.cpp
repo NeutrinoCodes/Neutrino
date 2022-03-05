@@ -146,7 +146,7 @@ void nu::imgui::plot (
   data_std_up.AddPoint (t, loc_value + loc_error);
   data_std_down.AddPoint (t, loc_value - loc_error);
 
-  if(ImPlot::BeginPlot ("##Scrolling", ImVec2 (-1, 150)))
+  if(ImPlot::BeginPlot (loc_value_description.c_str (), ImVec2 (-1, 150)))
   {
     ImPlot::SetupAxes ("time [s]", loc_value_description.c_str (), flags, flags);
     ImPlot::SetupAxisLimits (ImAxis_X1, t - history, t, ImGuiCond_Always);
@@ -168,6 +168,34 @@ void nu::imgui::plot (
                       data_avg.Data.size (),
                       data_avg.Offset,
                       2*sizeof(float)
+                     );
+
+    ImPlot::EndPlot ();
+  }
+}
+
+void nu::imgui::lineplot (
+                          std::string        loc_title,                                             // Plot title.
+                          std::string        loc_x_label,                                           // Value description.
+                          std::string        loc_y_label,                                           // Value name.
+                          std::vector<float> loc_x,                                                 // x-values.
+                          std::vector<float> loc_y                                                  // y-values.
+                         )
+{
+  static ImPlotAxisFlags flags = ImPlotAxisFlags_AutoFit;
+
+  if(ImPlot::BeginPlot (loc_title.c_str (), ImVec2 (-1, 150)))
+  {
+    ImPlot::SetupAxes (loc_x_label.c_str (), loc_y_label.c_str (), flags, flags);
+    ImPlot::SetupAxisLimits (ImAxis_X1, loc_x[0], loc_x[loc_x.size () - 1], ImGuiCond_Always);
+    ImPlot::SetupAxisLimits (ImAxis_Y1, -1, 1);
+    ImPlot::SetNextFillStyle (IMPLOT_AUTO_COL, 0.5f);
+
+    ImPlot::PlotLine (
+                      loc_title.c_str (),
+                      &loc_x[0],
+                      &loc_y[0],
+                      (int)loc_x.size ()
                      );
 
     ImPlot::EndPlot ();
