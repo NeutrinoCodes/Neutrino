@@ -160,6 +160,16 @@ public:
              float       loc_dt                                                                     ///< Time delta [s].
             );
 
+  /// @brief **Lineplot method.**
+  /// @details To be invoked by the user in order to create a fixed plot of a parameter.
+  void lineplot (
+                 std::string        loc_title,                                                      ///< Plot title.
+                 std::string        loc_x_label,                                                    ///< Value description.
+                 std::string        loc_y_label,                                                    ///< Value name.
+                 std::vector<float> loc_x,                                                          ///< x-values.
+                 std::vector<float> loc_y                                                           ///< y-values.
+                );
+
   /// @brief **Button method.**
   /// @details To be invoked by the user in order to create a button.
   bool button (
