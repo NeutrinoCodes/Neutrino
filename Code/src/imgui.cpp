@@ -124,33 +124,35 @@ void nu::imgui::output (
   ImGui::TextColored (ImVec4 (1.0f, 1.0f, 1.0f, 1.0f), (" = " + loc_name).c_str ());                // Writing text...
 }
 
-void nu::imgui::plot (
-                      std::string loc_value_description,                                            // Value description.
-                      std::string loc_value_name,                                                   // Value name.
-                      std::string loc_error_name,                                                   // Error name.
-                      float       loc_value,                                                        // Value.
-                      float       loc_error,                                                        // Error.
-                      float       loc_dt                                                            // Time delta [s].
-                     )
+void nu::imgui::scrollplot (
+                            int         loc_ID,                                                     // Plot unique ID.
+                            float       loc_x_data,                                                 // x-axis data value.
+                            float       loc_y_data,                                                 // y-axis data value.
+                            float       loc_y_error,                                                // y-axis error value.
+                            std::string loc_title,                                                  // Plot title.
+                            std::string loc_x_label,                                                // x-axis label.
+                            std::string loc_y_label,                                                // y-axis label.
+                            std::string loc_x_name,                                                 // x-axis value name.
+                            std::string loc_y_name,                                                 // y-axis value name.
+                            std::string loc_y_error_name,                                           //  y-axis error name.
+                           )
 {
-  static ScrollingBuffer data_avg;
-  ScrollingBuffer        data_std_up;
-  ScrollingBuffer        data_std_down;
-  static float           t        = 0;
-  float                  history  = 10.0f;
-  std::string            loc_name = "History##_";                                                   // Writing data to file...
+  ScrollingBuffer data_avg;
+  ScrollingBuffer data_std;
+  float           t        = 0;
+  float           history  = 10.0f;
+  std::string     loc_name = "History##_";                                                          // Writing data to file...
 
-  //ImGui::SliderFloat ((loc_name + loc_value_description).c_str (), &history, 1, 30, "%.1f s");      // Setting unique ID for History widget...
-  ImPlotAxisFlags        flags    = ImPlotAxisFlags_AutoFit;
+  ImGui::SliderFloat ((loc_name + loc_title).c_str (), &history, 1, 30, "%.1f s");                  // Setting unique ID for History widget...
+  ImPlotAxisFlags flags    = ImPlotAxisFlags_AutoFit;
 
   t += loc_dt;
   data_avg.AddPoint (t, loc_value);
-  data_std_up.AddPoint (t, loc_value + loc_error);
-  data_std_down.AddPoint (t, loc_value - loc_error);
+  data_std.AddPoint (t, loc_error);
 
-  if(ImPlot::BeginPlot (loc_value_description.c_str (), ImVec2 (-1, 150)))
+  if(ImPlot::BeginPlot (loc_title.c_str (), ImVec2 (-1, 150)))
   {
-    ImPlot::SetupAxes ("time [s]", loc_value_description.c_str (), flags, flags);
+    ImPlot::SetupAxes ("time [s]", loc_value_unit.c_str (), flags, flags);
     ImPlot::SetupAxisLimits (ImAxis_X1, t - history, t, ImGuiCond_Always);
     ImPlot::SetupAxisLimits (ImAxis_Y1, -1, 1);
     ImPlot::SetNextFillStyle (IMPLOT_AUTO_COL, 0.5f);
@@ -184,7 +186,7 @@ void nu::imgui::lineplot (
                           std::vector<float> loc_y                                                  // y-values.
                          )
 {
-  static ImPlotAxisFlags flags = ImPlotAxisFlags_AutoFit;
+  ImPlotAxisFlags flags = ImPlotAxisFlags_AutoFit;
 
   if(ImPlot::BeginPlot (loc_title.c_str (), ImVec2 (-1, 150)))
   {
