@@ -133,15 +133,15 @@ void nu::imgui::plot (
                       float       loc_dt                                                            // Time delta [s].
                      )
 {
-  ScrollingBuffer data_avg;
-  ScrollingBuffer data_std_up;
-  ScrollingBuffer data_std_down;
-  float           t        = 0;
-  float           history  = 10.0f;
-  std::string     loc_name = "History##_";                                                          // Writing data to file...
+  static ScrollingBuffer data_avg;
+  ScrollingBuffer        data_std_up;
+  ScrollingBuffer        data_std_down;
+  static float           t        = 0;
+  float                  history  = 10.0f;
+  std::string            loc_name = "History##_";                                                   // Writing data to file...
 
   //ImGui::SliderFloat ((loc_name + loc_value_description).c_str (), &history, 1, 30, "%.1f s");      // Setting unique ID for History widget...
-  ImPlotAxisFlags flags    = ImPlotAxisFlags_AutoFit;
+  ImPlotAxisFlags        flags    = ImPlotAxisFlags_AutoFit;
 
   t += loc_dt;
   data_avg.AddPoint (t, loc_value);
