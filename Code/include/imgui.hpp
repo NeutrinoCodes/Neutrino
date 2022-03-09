@@ -74,6 +74,10 @@ namespace nu
 class imgui : public neutrino                                                                       /// @brief **ImGui HUD.**
 {
 private:
+  std::vector<ScrollingBuffer> scrollplot_x;                                                        ///< Scroll plot x-axis buffer array.
+  std::vector<ScrollingBuffer> scrollplot_y;                                                        ///< Scroll plot y-axis buffer array.
+  std::vector<ScrollingBuffer> scrollplot_up_error;                                                 ///< Scroll plot up errorbar buffer array.
+  std::vector<ScrollingBuffer> scrollplot_down_error;                                               ///< Scroll plot down errorbar buffer array.
 
 public:
   /// @brief **Class constructor.**
@@ -150,15 +154,16 @@ public:
               );
 
   /// @brief **Plot method.**
-  /// @details To be invoked by the user in order to create a scrolling plot of a parameter.
-  void plot (
-             std::string loc_value_description,                                                     ///< Value description.
-             std::string loc_value_name,                                                            ///< Value name.
-             std::string loc_error_name,                                                            ///< Error name.
-             float       loc_value,                                                                 ///< Value.
-             float       loc_error,                                                                 ///< Error.
-             float       loc_dt                                                                     ///< Time delta [s].
-            );
+  /// @details To be invoked by the user in order to create a scrolling time plot of a parameter.
+  void timeplot (
+                 int         loc_ID,                                                                // Plot unique ID.
+                 float       loc_data,                                                              // Data value.
+                 float       loc_error,                                                             // Data error.
+                 std::string loc_title,                                                             // Plot title.
+                 std::string loc_label,                                                             // Axis label.
+                 std::string loc_y_name,                                                            // Value name.
+                 std::string loc_y_error_name                                                       // Error name.
+                );
 
   /// @brief **Lineplot method.**
   /// @details To be invoked by the user in order to create a fixed plot of a parameter.

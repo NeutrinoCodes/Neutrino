@@ -124,21 +124,24 @@ void nu::imgui::output (
   ImGui::TextColored (ImVec4 (1.0f, 1.0f, 1.0f, 1.0f), (" = " + loc_name).c_str ());                // Writing text...
 }
 
-void nu::imgui::scrollplot (
-                            int         loc_ID,                                                     // Plot unique ID.
-                            float       loc_x_data,                                                 // x-axis data value.
-                            float       loc_y_data,                                                 // y-axis data value.
-                            float       loc_y_error,                                                // y-axis error value.
-                            std::string loc_title,                                                  // Plot title.
-                            std::string loc_x_label,                                                // x-axis label.
-                            std::string loc_y_label,                                                // y-axis label.
-                            std::string loc_x_name,                                                 // x-axis value name.
-                            std::string loc_y_name,                                                 // y-axis value name.
-                            std::string loc_y_error_name,                                           //  y-axis error name.
-                           )
+void nu::imgui::timeplot (
+                          int         loc_ID,                                                       // Plot unique ID.
+                          float       loc_data,                                                     // Data value.
+                          float       loc_error,                                                    // Data error.
+                          std::string loc_title,                                                    // Plot title.
+                          std::string loc_label,                                                    // Axis label.
+                          std::string loc_y_name,                                                   // Value name.
+                          std::string loc_y_error_name                                              // Error name.
+                         )
 {
-  ScrollingBuffer data_avg;
-  ScrollingBuffer data_std;
+  if(scrollplot_x.size () < (loc_ID + 1))
+  {
+    scrollplot_x.push_back (ScrollingBuffer ());                                                    // Adding scroll x-axis data buffer...
+    scrollplot_y.push_back (ScrollingBuffer ());                                                    // Adding scroll y-axis data buffer...
+    scrollplot_up_error.push_back (ScrollingBuffer ());                                             // Adding scroll plot up errorbar buffer...
+    scrollplot_down_error.push_back (ScrollingBuffer ());                                           // Adding scroll plot down errorbar buffer...
+  }
+
   float           t        = 0;
   float           history  = 10.0f;
   std::string     loc_name = "History##_";                                                          // Writing data to file...
@@ -147,8 +150,9 @@ void nu::imgui::scrollplot (
   ImPlotAxisFlags flags    = ImPlotAxisFlags_AutoFit;
 
   t += loc_dt;
-  data_avg.AddPoint (t, loc_value);
-  data_std.AddPoint (t, loc_error);
+  scrollplot_y[loc_ID].AddPoint (t, loc_y_data);                                                    // Adding point to y-axis buffer...
+  scrollplot_up_error[loc_ID].AddPoint (t, loc_y_data + loc_y_error);                               // Adding point to y-axis up errorbar buffer...
+  scrollplot_up_error[loc_ID].AddPoint (t, loc_y_data - loc_y_error);                               // Adding point to y-axis down errorbar buffer...
 
   if(ImPlot::BeginPlot (loc_title.c_str (), ImVec2 (-1, 150)))
   {
