@@ -74,8 +74,8 @@ namespace nu
 class imgui : public neutrino                                                                       /// @brief **ImGui HUD.**
 {
 private:
-  std::vector<ScrollingBuffer> scrollplot_x;                                                        ///< Scroll plot x-axis buffer array.
-  std::vector<ScrollingBuffer> scrollplot_y;                                                        ///< Scroll plot y-axis buffer array.
+  std::vector<ScrollingBuffer> scrollplot_data;                                                     ///< Scroll plot data buffer array.
+  std::vector<float>           scrollplot_time;                                                     ///< Scroll plot time buffer array.
   std::vector<ScrollingBuffer> scrollplot_up_error;                                                 ///< Scroll plot up errorbar buffer array.
   std::vector<ScrollingBuffer> scrollplot_down_error;                                               ///< Scroll plot down errorbar buffer array.
 
@@ -153,26 +153,29 @@ public:
                const char* format = "%+.6E"                                                         ///< Parameter format.
               );
 
-  /// @brief **Plot method.**
-  /// @details To be invoked by the user in order to create a scrolling time plot of a parameter.
+  /// @brief **Timeplot method.**
+  /// @details To be invoked by the user in order to create a scrolling plot of a variable vs time.
   void timeplot (
-                 int         loc_ID,                                                                // Plot unique ID.
-                 float       loc_data,                                                              // Data value.
-                 float       loc_error,                                                             // Data error.
-                 std::string loc_title,                                                             // Plot title.
-                 std::string loc_label,                                                             // Axis label.
-                 std::string loc_y_name,                                                            // Value name.
-                 std::string loc_y_error_name                                                       // Error name.
+                 int         loc_ID,                                                                ///< Plot unique ID.
+                 float       dt,                                                                    ///< Time step.
+                 float       loc_data,                                                              ///< Data value.
+                 float       loc_error,                                                             ///< Error value.
+                 std::string loc_title,                                                             ///< Plot title.
+                 std::string loc_data_axis,                                                         ///< Data axis label.
+                 std::string loc_data_legend,                                                       ///< Data legend.
+                 std::string loc_error_legend                                                       ///< Error legend.
                 );
 
   /// @brief **Lineplot method.**
-  /// @details To be invoked by the user in order to create a fixed plot of a parameter.
+  /// @details To be invoked by the user in order to create a plot of a variable vs another one.
   void lineplot (
+                 int                loc_ID,                                                         ///< Plot unique ID.
+                 std::vector<float> loc_x_data,                                                     ///< x-data values.
+                 std::vector<float> loc_y_data,                                                     ///< y-data values.
                  std::string        loc_title,                                                      ///< Plot title.
-                 std::string        loc_x_label,                                                    ///< Value description.
-                 std::string        loc_y_label,                                                    ///< Value name.
-                 std::vector<float> loc_x,                                                          ///< x-values.
-                 std::vector<float> loc_y                                                           ///< y-values.
+                 std::string        loc_x_axis,                                                     ///< x-axis label.
+                 std::string        loc_y_axis,                                                     ///< y-axis label.
+                 std::string        loc_data_legend                                                 ///< Data legend.
                 );
 
   /// @brief **Button method.**
