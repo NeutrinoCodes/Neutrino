@@ -126,55 +126,61 @@ void nu::imgui::output (
 
 void nu::imgui::timeplot (
                           int         loc_ID,                                                       // Plot unique ID.
+                          float       dt,                                                           // Time step.
                           float       loc_data,                                                     // Data value.
-                          float       loc_error,                                                    // Data error.
+                          float       loc_error,                                                    // Error value.
                           std::string loc_title,                                                    // Plot title.
-                          std::string loc_label,                                                    // Axis label.
-                          std::string loc_y_name,                                                   // Value name.
-                          std::string loc_y_error_name                                              // Error name.
+                          std::string loc_data_axis,                                                // Data axis label.
+                          std::string loc_data_legend,                                              // Data legend.
+                          std::string loc_error_legend                                              // Error legend.
                          )
 {
-  if(scrollplot_x.size () < (loc_ID + 1))
+  if(scrollplot_time.size () < (loc_ID + 1))
   {
-    scrollplot_x.push_back (ScrollingBuffer ());                                                    // Adding scroll x-axis data buffer...
-    scrollplot_y.push_back (ScrollingBuffer ());                                                    // Adding scroll y-axis data buffer...
-    scrollplot_up_error.push_back (ScrollingBuffer ());                                             // Adding scroll plot up errorbar buffer...
-    scrollplot_down_error.push_back (ScrollingBuffer ());                                           // Adding scroll plot down errorbar buffer...
+    scrollplot_time.push_back (0.0f);                                                               // Adding scroll time buffer...
+    scrollplot_data.push_back (ScrollingBuffer ());                                                 // Adding scroll data buffer...
+    scrollplot_up_error.push_back (ScrollingBuffer ());                                             // Adding scroll up-errorbar buffer...
+    scrollplot_down_error.push_back (ScrollingBuffer ());                                           // Adding scroll down-errorbar buffer...
   }
 
-  float           t        = 0;
-  float           history  = 10.0f;
-  std::string     loc_name = "History##_";                                                          // Writing data to file...
+  float           history_time = 10.0f;                                                             // History time [s].
+  std::string     history_name = "History##_" + std::to_string (loc_ID);                            // History slider unique name.
+  std::string     plot_name    = loc_title + "##_Timeplot_" + std::to_string (loc_ID);              // Timeplot unique name...
 
-  ImGui::SliderFloat ((loc_name + loc_title).c_str (), &history, 1, 30, "%.1f s");                  // Setting unique ID for History widget...
-  ImPlotAxisFlags flags    = ImPlotAxisFlags_AutoFit;
+  ImGui::SliderFloat (history_name.c_str (), &history_time, 1, 30, "%.1f s");                       // Setting history slider...
+  ImPlotAxisFlags flags        = ImPlotAxisFlags_AutoFit;
 
-  t += loc_dt;
-  scrollplot_y[loc_ID].AddPoint (t, loc_y_data);                                                    // Adding point to y-axis buffer...
-  scrollplot_up_error[loc_ID].AddPoint (t, loc_y_data + loc_y_error);                               // Adding point to y-axis up errorbar buffer...
-  scrollplot_up_error[loc_ID].AddPoint (t, loc_y_data - loc_y_error);                               // Adding point to y-axis down errorbar buffer...
+  scrollplot_time[loc_ID] += dt;
+  scrollplot_data[loc_ID].AddPoint (scrollplot_time[loc_ID], loc_data);                             // Adding point to data buffer...
+  scrollplot_up_error[loc_ID].AddPoint (scrollplot_time[loc_ID], loc_data + loc_error);             // Adding point to up-errorbar buffer...
+  scrollplot_down_error[loc_ID].AddPoint (scrollplot_time[loc_ID], loc_data - loc_error);           // Adding point to down-errorbar buffer...
 
-  if(ImPlot::BeginPlot (loc_title.c_str (), ImVec2 (-1, 150)))
+  if(ImPlot::BeginPlot (plot_name.c_str (), ImVec2 (-1, 150)))
   {
-    ImPlot::SetupAxes ("time [s]", loc_value_unit.c_str (), flags, flags);
-    ImPlot::SetupAxisLimits (ImAxis_X1, t - history, t, ImGuiCond_Always);
+    ImPlot::SetupAxes ("time [s]", loc_data_axis.c_str (), flags, flags);
+    ImPlot::SetupAxisLimits (
+                             ImAxis_X1,
+                             scrollplot_time[loc_ID] - history_time,
+                             scrollplot_time[loc_ID],
+                             ImGuiCond_Always
+                            );
     ImPlot::SetupAxisLimits (ImAxis_Y1, -1, 1);
     ImPlot::SetNextFillStyle (IMPLOT_AUTO_COL, 0.5f);
     ImPlot::PlotShaded (
-                        loc_error_name.c_str (),
-                        &data_avg.Data[0].x,
-                        &data_std_up.Data[0].y,
-                        &data_std_down.Data[0].y,
-                        data_avg.Data.size (),
-                        data_avg.Offset,
+                        loc_error_legend.c_str (),
+                        &scrollplot_data[loc_ID].Data[0].x,
+                        &scrollplot_up_error[loc_ID].Data[0].y,
+                        &scrollplot_down_error[loc_ID].Data[0].y,
+                        scrollplot_data[loc_ID].Data.size (),
+                        scrollplot_data[loc_ID].Offset,
                         2*sizeof(float)
                        );
     ImPlot::PlotLine (
-                      loc_value_name.c_str (),
-                      &data_avg.Data[0].x,
-                      &data_avg.Data[0].y,
-                      data_avg.Data.size (),
-                      data_avg.Offset,
+                      loc_data_legend.c_str (),
+                      &scrollplot_data[loc_ID].Data[0].x,
+                      &scrollplot_data[loc_ID].Data[0].y,
+                      scrollplot_data[loc_ID].Data.size (),
+                      scrollplot_data[loc_ID].Offset,
                       2*sizeof(float)
                      );
 
@@ -183,27 +189,35 @@ void nu::imgui::timeplot (
 }
 
 void nu::imgui::lineplot (
+                          int                loc_ID,                                                // Plot unique ID.
+                          std::vector<float> loc_x_data,                                            // x-data values.
+                          std::vector<float> loc_y_data,                                            // y-data values.
                           std::string        loc_title,                                             // Plot title.
-                          std::string        loc_x_label,                                           // Value description.
-                          std::string        loc_y_label,                                           // Value name.
-                          std::vector<float> loc_x,                                                 // x-values.
-                          std::vector<float> loc_y                                                  // y-values.
+                          std::string        loc_x_axis,                                            // x-axis label.
+                          std::string        loc_y_axis,                                            // y-axis label.
+                          std::string        loc_data_legend                                        // Data legend.
                          )
 {
-  ImPlotAxisFlags flags = ImPlotAxisFlags_AutoFit;
+  ImPlotAxisFlags flags     = ImPlotAxisFlags_AutoFit;
+  std::string     plot_name = loc_title + "##_Lineplot_" + std::to_string (loc_ID);                 // Lineplot unique name...
 
-  if(ImPlot::BeginPlot (loc_title.c_str (), ImVec2 (-1, 150)))
+  if(ImPlot::BeginPlot (plot_name.c_str (), ImVec2 (-1, 150)))
   {
-    ImPlot::SetupAxes (loc_x_label.c_str (), loc_y_label.c_str (), flags, flags);
-    ImPlot::SetupAxisLimits (ImAxis_X1, loc_x[0], loc_x[loc_x.size () - 1], ImGuiCond_Always);
+    ImPlot::SetupAxes (loc_x_axis.c_str (), loc_y_axis.c_str (), flags, flags);
+    ImPlot::SetupAxisLimits (
+                             ImAxis_X1,
+                             loc_x_data[0],
+                             loc_x_data[loc_x_data.size () - 1],
+                             ImGuiCond_Always
+                            );
     ImPlot::SetupAxisLimits (ImAxis_Y1, -1, 1);
     ImPlot::SetNextFillStyle (IMPLOT_AUTO_COL, 0.5f);
 
     ImPlot::PlotLine (
-                      loc_title.c_str (),
-                      &loc_x[0],
-                      &loc_y[0],
-                      (int)loc_x.size ()
+                      loc_data_legend.c_str (),
+                      &loc_x_data[0],
+                      &loc_y_data[0],
+                      (int)loc_x_data.size ()
                      );
 
     ImPlot::EndPlot ();
