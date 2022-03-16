@@ -312,18 +312,18 @@ Go to the bottom bar and locate:
 **You are done! Neutrino as been fully installed and configured on your Windows system!**
 
 # 4. Uncrustify configuration
-We all like tidy code! For this, we provide an **Uncrustify** (sources: https://github.com/uncrustify/uncrustify) configuration file specific for Neutrino to be used in VScode. In order to use it, please first install Uncrustify according to your operating system, then install the VScode's *Uncrustify extension* (https://marketplace.visualstudio.com/items?itemName=LaurentTreguier.uncrustify).
+We all like tidy code! For this, we provide an **Uncrustify** (sources: https://github.com/uncrustify/uncrustify) configuration file specific for Neutrino to be used in VScode. In order to use it, please first install Uncrustify according to your operating system, then install the VScode's *Uncrustify extension* (https://marketplace.visualstudio.com/items?itemName=zachflower.uncrustify).
 
 - On Linux:
 Add the following lines to either the *global* or *project* **settings.json** file:
 `"uncrustify.executablePath.linux": "your_path_to_uncrustify",`\
-`"editor.defaultFormatter": "LaurentTreguier.uncrustify",`\
+`"editor.defaultFormatter": "zachflower.uncrustify",`\
 `"editor.formatOnSave": true`
 
 - On Windows:
 Add the following lines to either the *global* or *project* **settings.json** file:
 `"uncrustify.executablePath.windows": "your_path_to_uncrustify",`\
-`"editor.defaultFormatter": "LaurentTreguier.uncrustify",`\
+`"editor.defaultFormatter": "zachflower.uncrustify",`\
 `"editor.formatOnSave": true`
 
 To edit the *global* settings, on VScode go to the left bar: push the **Extensions** button and select the Uncrustify extension. Then go to **Manage --> Extension Settings** (gear-like icon) and edit the `settings.json` file by clicking one of the links in that section. This will set the Uncrustify code formatter globally in all your VScode projects (but still with per-project custom uncrustify configuration files).\
