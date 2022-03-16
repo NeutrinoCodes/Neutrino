@@ -23,7 +23,15 @@ void nu::logfile::open (
   time_t      file_time = time (0);
   struct tm   now;
   char        time_text [256];
-  localtime_s (&now, &file_time);
+
+  #ifdef WIN32
+    localtime_s (&now, &file_time);                                                                 // Getting local date and time...
+  #endif
+
+  #ifdef __linux__
+    localtime_r (&file_time, &now);                                                                 // Getting local date and time...
+  #endif
+
   std::string file_name = loc_log_file_name;
   strftime (time_text, 256, "%Y-%b-%d_%H-%M-%S", &now);                                             // Compiling time string...
 
