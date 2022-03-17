@@ -2008,17 +2008,17 @@ void nu::opengl::mouse_moved
  double loc_ypos                                                                                    // Mouse position [px].
 )
 {
-  ImGuiIO &io = ImGui::GetIO ();                                                                    // Getting ImGuiIO handle...
+  //ImGuiIO &io = ImGui::GetIO ();                                                                    // Getting ImGuiIO handle...
 
-  if(io.WantCaptureMouse)
-  {
-    // Doing nothing...
-  }
-  else
-  {
-    mouse_X = (float)loc_xpos;                                                                      // Getting mouse position...
-    mouse_Y = (float)loc_ypos;                                                                      // Getting mouse position...
-  }
+  //if(io.WantCaptureMouse)
+  //{
+  // Doing nothing...
+  //}
+  //else
+  //{
+  mouse_X = (float)loc_xpos;                                                                        // Getting mouse position...
+  mouse_Y = (float)loc_ypos;                                                                        // Getting mouse position...
+  //}
 }
 
 void nu::opengl::mouse_scrolled
@@ -2027,17 +2027,17 @@ void nu::opengl::mouse_scrolled
  double loc_yoffset                                                                                 // Mouse scrolled y-position [px].
 )
 {
-  ImGuiIO &io = ImGui::GetIO ();                                                                    // Getting ImGuiIO handle...
+  //ImGuiIO &io = ImGui::GetIO ();                                                                    // Getting ImGuiIO handle...
 
-  if(io.WantCaptureMouse)
-  {
-    // Doing nothing...
-  }
-  else
-  {
-    scroll_X = (float)loc_xoffset;                                                                  // Getting scroll position...
-    scroll_Y = (float)loc_yoffset;                                                                  // Getting scroll position...
-  }
+  //if(io.WantCaptureMouse)
+  //{
+  // Doing nothing...
+  //}
+  //else
+  //{
+  scroll_X = (float)loc_xoffset;                                                                    // Getting scroll position...
+  scroll_Y = (float)loc_yoffset;                                                                    // Getting scroll position...
+  //}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
