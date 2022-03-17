@@ -1926,29 +1926,6 @@ void nu::opengl::key_pressed
       }
 
       break;
-
-      /*
-         case GLFW_KEY_ESCAPE:
-         if(loc_action == GLFW_PRESS)
-         {
-          glfwSetWindowShouldClose (glfw_window, GL_TRUE);                                            // Setting window "closed" flag...
-         }
-         break;
-
-         case GLFW_KEY_2:
-         if(loc_action == GLFW_PRESS)
-         {
-          PR_mode = MONOCULAR;                                                                     // Switching to monoscopic mode...
-         }
-         break;
-
-         case GLFW_KEY_3:
-         if(loc_action == GLFW_PRESS)
-         {
-          PR_mode = BINOCULAR;                                                                   // Switching to stereoscopic mode...
-         }
-         break;
-       */
   }
 
 }
@@ -1970,17 +1947,25 @@ void nu::opengl::mouse_button
       switch(loc_action)
       {
         case GLFW_PRESS:
-          io.MouseDown[loc_button] = true;
-
-          if(!io.WantCaptureMouse)
+          if(io.WantCaptureMouse)
+          {
+            io.MouseDown[loc_button] = true;
+          }
+          else
           {
             mouse_LEFT = true;
           }
           break;
 
         case GLFW_RELEASE:
-          io.MouseDown[loc_button] = false;
-          mouse_LEFT               = false;
+          if(io.WantCaptureMouse)
+          {
+            io.MouseDown[loc_button] = false;
+          }
+          else
+          {
+            mouse_LEFT = false;
+          }
           break;
       }
 
@@ -1991,17 +1976,25 @@ void nu::opengl::mouse_button
       switch(loc_action)
       {
         case GLFW_PRESS:
-          io.MouseDown[loc_button] = true;
-
-          if(!io.WantCaptureMouse)
+          if(io.WantCaptureMouse)
+          {
+            io.MouseDown[loc_button] = true;
+          }
+          else
           {
             mouse_RIGHT = true;
           }
           break;
 
         case GLFW_RELEASE:
-          io.MouseDown[loc_button] = false;
-          mouse_RIGHT              = false;
+          if(io.WantCaptureMouse)
+          {
+            io.MouseDown[loc_button] = false;
+          }
+          else
+          {
+            mouse_RIGHT = false;
+          }
           break;
       }
 
@@ -2015,8 +2008,17 @@ void nu::opengl::mouse_moved
  double loc_ypos                                                                                    // Mouse position [px].
 )
 {
-  mouse_X = (float)loc_xpos;                                                                        // Getting mouse position...
-  mouse_Y = (float)loc_ypos;                                                                        // Getting mouse position...
+  ImGuiIO &io = ImGui::GetIO ();                                                                    // Getting ImGuiIO handle...
+
+  if(io.WantCaptureMouse)
+  {
+    // Doing nothing...
+  }
+  else
+  {
+    mouse_X = (float)loc_xpos;                                                                      // Getting mouse position...
+    mouse_Y = (float)loc_ypos;                                                                      // Getting mouse position...
+  }
 }
 
 void nu::opengl::mouse_scrolled
@@ -2027,7 +2029,11 @@ void nu::opengl::mouse_scrolled
 {
   ImGuiIO &io = ImGui::GetIO ();                                                                    // Getting ImGuiIO handle...
 
-  if(!io.WantCaptureMouse)
+  if(io.WantCaptureMouse)
+  {
+    // Doing nothing...
+  }
+  else
   {
     scroll_X = (float)loc_xoffset;                                                                  // Getting scroll position...
     scroll_Y = (float)loc_yoffset;                                                                  // Getting scroll position...
