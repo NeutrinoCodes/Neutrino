@@ -1947,22 +1947,18 @@ void nu::opengl::mouse_button
       switch(loc_action)
       {
         case GLFW_PRESS:
-          if(io.WantCaptureMouse)
-          {
-            io.MouseDown[loc_button] = true;
-          }
-          else
+          io.AddMouseButtonEvent (loc_button, true);
+
+          if(!io.WantCaptureMouse)
           {
             mouse_LEFT = true;
           }
           break;
 
         case GLFW_RELEASE:
-          if(io.WantCaptureMouse)
-          {
-            io.MouseDown[loc_button] = false;
-          }
-          else
+          io.AddMouseButtonEvent (loc_button, false);
+
+          if(!io.WantCaptureMouse)
           {
             mouse_LEFT = false;
           }
@@ -1976,22 +1972,18 @@ void nu::opengl::mouse_button
       switch(loc_action)
       {
         case GLFW_PRESS:
-          if(io.WantCaptureMouse)
-          {
-            io.MouseDown[loc_button] = true;
-          }
-          else
+          io.AddMouseButtonEvent (loc_button, true);
+
+          if(!io.WantCaptureMouse)
           {
             mouse_RIGHT = true;
           }
           break;
 
         case GLFW_RELEASE:
-          if(io.WantCaptureMouse)
-          {
-            io.MouseDown[loc_button] = false;
-          }
-          else
+          io.AddMouseButtonEvent (loc_button, false);
+
+          if(!io.WantCaptureMouse)
           {
             mouse_RIGHT = false;
           }
@@ -2008,17 +2000,14 @@ void nu::opengl::mouse_moved
  double loc_ypos                                                                                    // Mouse position [px].
 )
 {
-  //ImGuiIO &io = ImGui::GetIO ();                                                                    // Getting ImGuiIO handle...
+  ImGuiIO &io = ImGui::GetIO ();                                                                    // Getting ImGuiIO handle...
+  io.AddMousePosEvent ((float)loc_xpos, (float)loc_ypos);
 
-  //if(io.WantCaptureMouse)
-  //{
-  // Doing nothing...
-  //}
-  //else
-  //{
-  mouse_X = (float)loc_xpos;                                                                        // Getting mouse position...
-  mouse_Y = (float)loc_ypos;                                                                        // Getting mouse position...
-  //}
+  if(!io.WantCaptureMouse)
+  {
+    mouse_X = (float)loc_xpos;                                                                      // Getting mouse position...
+    mouse_Y = (float)loc_ypos;                                                                      // Getting mouse position...
+  }
 }
 
 void nu::opengl::mouse_scrolled
@@ -2027,17 +2016,14 @@ void nu::opengl::mouse_scrolled
  double loc_yoffset                                                                                 // Mouse scrolled y-position [px].
 )
 {
-  //ImGuiIO &io = ImGui::GetIO ();                                                                    // Getting ImGuiIO handle...
+  ImGuiIO &io = ImGui::GetIO ();                                                                    // Getting ImGuiIO handle...
+  io.AddMouseWheelEvent ((float)loc_xoffset, (float)loc_yoffset);
 
-  //if(io.WantCaptureMouse)
-  //{
-  // Doing nothing...
-  //}
-  //else
-  //{
-  scroll_X = (float)loc_xoffset;                                                                    // Getting scroll position...
-  scroll_Y = (float)loc_yoffset;                                                                    // Getting scroll position...
-  //}
+  if(!io.WantCaptureMouse)
+  {
+    scroll_X = (float)loc_xoffset;                                                                  // Getting scroll position...
+    scroll_Y = (float)loc_yoffset;                                                                  // Getting scroll position...
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2398,6 +2384,7 @@ void nu::opengl::init
   ImGui::CreateContext ();                                                                          // Creating ImGui context...
   ImGuiIO &io = ImGui::GetIO ();                                                                    // Getting ImGuiIO handle...
   (void)io;                                                                                         // Casting ImGuiIO handle to void...
+  io.IniFilename        = NULL;                                                                     // Disabling imgui frames position log (imgui.ini)...
   ImGui::StyleColorsDark ();                                                                        // Setting ImGui style...
   ImGui_ImplGlfw_InitForOpenGL (glfw_window, true);                                                 // Initializing ImGui context...
   ImGui_ImplOpenGL3_Init (opengl_ver_string);                                                       // Initializing ImGui renderer...
