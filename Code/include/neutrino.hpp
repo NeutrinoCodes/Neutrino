@@ -15,79 +15,52 @@
 #ifndef neutrino_hpp
 #define neutrino_hpp
 
-#define CL_USE_DEPRECATED_OPENCL_1_2_APIS                                                           ///< Allows the usage of "OpenCL 1.2" functions in newer versions.
-
-#ifdef WIN32                                                                                        // Detecting Windows...
-  #define GLFW_EXPOSE_NATIVE_WIN32                                                                  ///< Enabling Windows native access functions...
-  #define GLFW_EXPOSE_NATIVE_WGL                                                                    ///< Enabling Windows native access functions...
-#endif
-
-#ifdef __linux__                                                                                    // Detecting Linux...
-  #define GLFW_EXPOSE_NATIVE_X11                                                                    ///< Enabling Linux native access functions...
-  #define GLFW_EXPOSE_NATIVE_GLX                                                                    ///< Enabling Linux native access functions...
-#endif
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////// TERMINAL PARAMETERS ////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-#define NU_TERMINAL_REFRESH               20000                                                     ///< Terminal refresh time [us].
-#define NU_COLOR_NORMAL                   "\x1B[0m"                                                 ///< Default terminal color.
-#define NU_COLOR_RED                      "\x1B[31m"                                                ///< Red.
-#define NU_COLOR_GREEN                    "\x1B[32m"                                                ///< Green.
-#define NU_COLOR_YELLOW                   "\x1B[33m"                                                ///< Yellow.
-#define NU_COLOR_BLUE                     "\x1B[34m"                                                ///< Blue.
-#define NU_COLOR_MAGENTA                  "\x1B[35m"                                                ///< Magenta.
-#define NU_COLOR_CYAN                     "\x1B[36m"                                                ///< Cyan.
-#define NU_COLOR_WHITE                    "\x1B[37m"                                                ///< White.
-#define NU_ERASE                          "\33[2K\r"                                                ///< Erase character.
+#define NU_TERMINAL_REFRESH       20000                                                             ///< Terminal refresh time [us].
+#define NU_COLOR_NORMAL           "\x1B[0m"                                                         ///< Default terminal color.
+#define NU_COLOR_RED              "\x1B[31m"                                                        ///< Red.
+#define NU_COLOR_GREEN            "\x1B[32m"                                                        ///< Green.
+#define NU_COLOR_YELLOW           "\x1B[33m"                                                        ///< Yellow.
+#define NU_COLOR_BLUE             "\x1B[34m"                                                        ///< Blue.
+#define NU_COLOR_MAGENTA          "\x1B[35m"                                                        ///< Magenta.
+#define NU_COLOR_CYAN             "\x1B[36m"                                                        ///< Cyan.
+#define NU_COLOR_WHITE            "\x1B[37m"                                                        ///< White.
+#define NU_ERASE                  "\33[2K\r"                                                        ///< Erase character.
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// WINDOW PARAMETERS /////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-#define NU_ZOOM_INCREMENT                 0.1f                                                      ///< Mouse wheel zoom increment [].
-#define NU_ZOOM_INCREMENT_PS4             0.02f                                                     ///< PS4 gamepad zoom increment [].
-#define NU_ZOOM_THRESHOLD_PS4             -0.95f                                                    ///< PS4 gamepad zoom threshold [].
-#define NU_PAN_FACTOR                     0.01f                                                     ///< Mouse pan translation factor [].
-#define NU_ROTATION_FACTOR                2.0f                                                      ///< Mouse orbit rotation factor [].
-#define NU_ROTATION_FACTOR_PS4            4.0f                                                      ///< PS4 gampad rotation factor [].
-#define NU_ROTATION_THRESHOLD_PS4         0.1f                                                      ///< PS4 gampad rotation thrshold [].
-#define NU_NEAR_Z_CLIP                    0.1f                                                      ///< Near z-clipping distance [small, but > 0.0].
-#define NU_FAR_Z_CLIP                     100.0f                                                    ///< Far z-clipping distance [big, but < +inf].
-#define NU_FOV                            60.0f                                                     ///< Field of view [deg].
-#define NU_IOD                            0.02f                                                     ///< Intraocular distance.
-#define NU_SCREEN_DISTANCE                -2.5f                                                     ///< Screen distance.
-#define NU_LINE_WIDTH                     3                                                         ///< Line width [px].
-#define NU_KERNEL_NAME                    "thekernel"                                               ///< OpenCL kernel function name.
-#define NU_MAX_TEXT_SIZE                  128                                                       ///< Maximum number of characters in a text string.
-#define NU_MAX_MESSAGE_SIZE               128                                                       ///< Maximum number of characters in a text message.
-#define NU_MAX_PATH_SIZE                  32768                                                     ///< Maximum number of characters in a text file path.
+#define NU_ZOOM_INCREMENT         0.1f                                                              ///< Mouse wheel zoom increment [].
+#define NU_ZOOM_INCREMENT_PS4     0.02f                                                             ///< PS4 gamepad zoom increment [].
+#define NU_ZOOM_THRESHOLD_PS4     -0.95f                                                            ///< PS4 gamepad zoom threshold [].
+#define NU_PAN_FACTOR             0.01f                                                             ///< Mouse pan translation factor [].
+#define NU_ROTATION_FACTOR        2.0f                                                              ///< Mouse orbit rotation factor [].
+#define NU_ROTATION_FACTOR_PS4    4.0f                                                              ///< PS4 gampad rotation factor [].
+#define NU_ROTATION_THRESHOLD_PS4 0.1f                                                              ///< PS4 gampad rotation thrshold [].
+#define NU_NEAR_Z_CLIP            0.1f                                                              ///< Near z-clipping distance [small, but > 0.0].
+#define NU_FAR_Z_CLIP             100.0f                                                            ///< Far z-clipping distance [big, but < +inf].
+#define NU_FOV                    60.0f                                                             ///< Field of view [deg].
+#define NU_IOD                    0.02f                                                             ///< Intraocular distance.
+#define NU_SCREEN_DISTANCE        -2.5f                                                             ///< Screen distance.
+#define NU_LINE_WIDTH             3                                                                 ///< Line width [px].
+#define NU_KERNEL_NAME            "thekernel"                                                       ///< OpenCL kernel function name.
+#define NU_MAX_TEXT_SIZE          128                                                               ///< Maximum number of characters in a text string.
+#define NU_MAX_MESSAGE_SIZE       128                                                               ///< Maximum number of characters in a text message.
+#define NU_MAX_PATH_SIZE          32768                                                             ///< Maximum number of characters in a text file path.
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// GAMEPAD PARAMETERS ////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-#define NU_GAMEPAD_MIN_DECAYTIME          0.01f                                                     ///< Minimum decay time for LP filter [s].
-#define NU_GAMEPAD_MAX_DECAYTIME          10.0f                                                     ///< Maximum decay time for LP filter [s].
-#define NU_GAMEPAD_MIN_AXES               -1.0f                                                     ///< Minimum axes value.
-#define NU_GAMEPAD_MAX_AXES               1.0f                                                      ///< Maximum axes value.
-#define NU_GAMEPAD_MIN_ORBIT_RATE         0.01f                                                     ///< Minimum orbit angular rate [rev/s].
-#define NU_GAMEPAD_MAX_ORBIT_RATE         10.0f                                                     ///< Maximum orbit angular rate [rev/s].
-#define NU_GAMEPAD_MIN_PAN_RATE           0.01f                                                     ///< Minimum orbit angular rate [rev/s].
-#define NU_GAMEPAD_MAX_PAN_RATE           10.0f                                                     ///< Maximum orbit angular rate [rev/s].
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// OpenCL/GL interoperability ///////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-#ifdef __APPLE__
-  #define NU_INTEROP                      "cl_APPLE_gl_sharing"
-#endif
-
-#ifdef __linux__
-  #define NU_INTEROP                      "cl_khr_gl_sharing"
-#endif
-
-#ifdef WIN32
-  #define NU_INTEROP                      "cl_khr_gl_sharing"
-#endif
+#define NU_GAMEPAD_MIN_DECAYTIME  0.01f                                                             ///< Minimum decay time for LP filter [s].
+#define NU_GAMEPAD_MAX_DECAYTIME  10.0f                                                             ///< Maximum decay time for LP filter [s].
+#define NU_GAMEPAD_MIN_AXES       -1.0f                                                             ///< Minimum axes value.
+#define NU_GAMEPAD_MAX_AXES       1.0f                                                              ///< Maximum axes value.
+#define NU_GAMEPAD_MIN_ORBIT_RATE 0.01f                                                             ///< Minimum orbit angular rate [rev/s].
+#define NU_GAMEPAD_MAX_ORBIT_RATE 10.0f                                                             ///< Maximum orbit angular rate [rev/s].
+#define NU_GAMEPAD_MIN_PAN_RATE   0.01f                                                             ///< Minimum orbit angular rate [rev/s].
+#define NU_GAMEPAD_MAX_PAN_RATE   10.0f                                                             ///< Maximum orbit angular rate [rev/s].
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////// Standard C/C++ header files //////////////////////////////////
@@ -124,76 +97,7 @@
   #endif
 #endif
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// GLAD header files ////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-#ifdef __APPLE__                                                                                    // Detecting Mac OS...
-  #include <glad/glad.h>                                                                            // https://glad.dav1d.de
-#endif
-
-#ifdef __linux__                                                                                    // Detecting Linux...
-  #include <glad/glad.h>                                                                            // https://glad.dav1d.de
-#endif
-
-#ifdef WIN32                                                                                        // Detecting Windows...
-  #include <glad\glad.h>                                                                            // https://glad.dav1d.de
-#endif
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// GLFW header files ////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-#ifdef __APPLE__                                                                                    // Detecting Mac OS...
-  #include <GLFW/glfw3.h>                                                                           // https://www.glfw.org
-  #include <GLFW/glfw3native.h>                                                                     // https://www.glfw.org
-#endif
-
-#ifdef __linux__                                                                                    // Detecting Linux...
-  #include <GLFW/glfw3.h>                                                                           // https://www.glfw.org
-  #include <GLFW/glfw3native.h>                                                                     // https://www.glfw.org
-#endif
-
-#ifdef WIN32                                                                                        // Detecting Windows...
-  #include <GLFW\glfw3.h>                                                                           // https://www.glfw.org
-  #include <GLFW\glfw3native.h>                                                                     // https://www.glfw.org
-#endif
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// OpenGL header files ///////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-#ifdef __APPLE__
-  #include <OpenGL/OpenGL.h>                                                                        // Apple deprecated the OpenGL framework in 2018, OS-X 10.14 Mojave.
-#endif
-
-#ifdef __linux__                                                                                    // Detecting Linux...
-  #include <GL/gl.h>                                                                                // https://www.opengl.org
-#endif
-
-#ifdef WIN32                                                                                        // Detecting Windows...
-  #include <GL\gl.h>                                                                                // https://www.opengl.org
-#endif
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// OpenCL header files ///////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-#ifdef __APPLE__
-  #include <OpenCL/opencl.h>                                                                        // Apple deprecated the OpenCL framework in 2018, OS-X 10.14 Mojave.
-#endif
-
-#ifdef __linux__                                                                                    // Detecting Linux...
-  #include <CL/cl.h>                                                                                // https://www.opengl.org
-  #include <CL/cl_gl.h>                                                                             // https://www.opengl.org
-#endif
-
-#ifdef WIN32                                                                                        // Detecting Windows...
-  #include <CL\cl.h>                                                                                // https://www.opengl.org
-  #include <CL\cl_gl.h>                                                                             // https://www.opengl.org
-#endif
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// Geometry header files /////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "data_classes.hpp"
+#include "data_classes.hpp"                                                                         // Neutrino data classes.
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////// "neutrino" class ///////////////////////////////////////

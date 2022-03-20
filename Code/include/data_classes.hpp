@@ -20,33 +20,6 @@
 #ifndef data_classes_hpp
 #define data_classes_hpp
 
-#define CL_USE_DEPRECATED_OPENCL_1_2_APIS                                                           ///< Allows the usage of "OpenCL 1.2" functions in newer versions.
-
-#ifdef WIN32                                                                                        // Detecting Windows...
-  #define GLFW_EXPOSE_NATIVE_WIN32                                                                  ///< Enabling Windows native access functions...
-  #define GLFW_EXPOSE_NATIVE_WGL                                                                    ///< Enabling Windows native access functions...
-#endif
-
-#ifdef __linux__                                                                                    // Detecting Linux...
-  #define GLFW_EXPOSE_NATIVE_X11                                                                    ///< Enabling Linux native access functions...
-  #define GLFW_EXPOSE_NATIVE_GLX                                                                    ///< Enabling Linux native access functions...
-#endif
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// OpenCL/GL interoperability ///////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-#ifdef __APPLE__
-  #define NU_INTEROP                      "cl_APPLE_gl_sharing"
-#endif
-
-#ifdef __linux__
-  #define NU_INTEROP                      "cl_khr_gl_sharing"
-#endif
-
-#ifdef WIN32
-  #define NU_INTEROP                      "cl_khr_gl_sharing"
-#endif
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////// Standard C/C++ header files //////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,6 +68,31 @@
   #include <glad\glad.h>                                                                            // https://glad.dav1d.de
 #endif
 
+#ifdef WIN32                                                                                        // Detecting Windows...
+  #define GLFW_EXPOSE_NATIVE_WIN32                                                                  ///< Enabling Windows native access functions...
+  #define GLFW_EXPOSE_NATIVE_WGL                                                                    ///< Enabling Windows native access functions...
+#endif
+
+#ifdef __linux__                                                                                    // Detecting Linux...
+  #define GLFW_EXPOSE_NATIVE_X11                                                                    ///< Enabling Linux native access functions...
+  #define GLFW_EXPOSE_NATIVE_GLX                                                                    ///< Enabling Linux native access functions...
+#endif
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// OpenCL/GL interoperability ///////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef __APPLE__
+  #define NU_INTEROP               "cl_APPLE_gl_sharing"
+#endif
+
+#ifdef __linux__
+  #define NU_INTEROP               "cl_khr_gl_sharing"
+#endif
+
+#ifdef WIN32
+  #define NU_INTEROP               "cl_khr_gl_sharing"
+#endif
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////// GLFW header files ////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +110,6 @@
   #include <GLFW\glfw3.h>                                                                           // https://www.glfw.org
   #include <GLFW\glfw3native.h>                                                                     // https://www.glfw.org
 #endif
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// OpenGL header files ///////////////////////////////////////
@@ -132,6 +129,9 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// OpenCL header files ///////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
+#define CL_TARGET_OPENCL_VERSION          120                                                       // Using OpenCL 1.2.
+#define CL_USE_DEPRECATED_OPENCL_1_2_APIS                                                           ///< Allows the usage of "OpenCL 1.2" functions in newer versions.
+
 #ifdef __APPLE__
   #include <OpenCL/opencl.h>                                                                        // Apple deprecated the OpenCL framework in 2018, OS-X 10.14 Mojave.
 #endif
