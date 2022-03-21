@@ -230,6 +230,8 @@ void nu::opengl::key_pressed
  int loc_mods                                                                                       // Mods.
 )
 {
+  ImGuiIO &io = ImGui::GetIO ();                                                                    // Getting ImGuiIO handle...
+
   // Checking key pressed:
   switch(loc_key)
   {
@@ -238,10 +240,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_UNKNOWN = true;
+          io.AddKeyEvent (ImGuiKey_None, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_UNKNOWN = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_UNKNOWN = false;
+          io.AddKeyEvent (ImGuiKey_None, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_UNKNOWN = false;
+          }
+
           break;
       }
 
@@ -252,10 +267,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_SPACE = true;
+          io.AddKeyEvent (ImGuiKey_Space, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_SPACE = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_SPACE = false;
+          io.AddKeyEvent (ImGuiKey_Space, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_SPACE = false;
+          }
+
           break;
       }
 
@@ -266,10 +294,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_APOSTROPHE = true;
+          io.AddKeyEvent (ImGuiKey_Apostrophe, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_APOSTROPHE = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_APOSTROPHE = false;
+          io.AddKeyEvent (ImGuiKey_Apostrophe, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_APOSTROPHE = false;
+          }
+
           break;
       }
 
@@ -280,10 +321,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_COMMA = true;
+          io.AddKeyEvent (ImGuiKey_Comma, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_COMMA = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_COMMA = false;
+          io.AddKeyEvent (ImGuiKey_Comma, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_COMMA = false;
+          }
+
           break;
       }
 
@@ -294,10 +348,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_MINUS = true;
+          io.AddKeyEvent (ImGuiKey_Minus, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_MINUS = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_MINUS = false;
+          io.AddKeyEvent (ImGuiKey_Minus, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_MINUS = false;
+          }
+
           break;
       }
 
@@ -308,10 +375,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_PERIOD = true;
+          io.AddKeyEvent (ImGuiKey_Period, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_PERIOD = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_PERIOD = false;
+          io.AddKeyEvent (ImGuiKey_Period, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_PERIOD = false;
+          }
+
           break;
       }
 
@@ -322,10 +402,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_SLASH = true;
+          io.AddKeyEvent (ImGuiKey_Slash, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_SLASH = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_SLASH = false;
+          io.AddKeyEvent (ImGuiKey_Slash, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_SLASH = false;
+          }
+
           break;
       }
 
@@ -336,10 +429,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_0 = true;
+          io.AddKeyEvent (ImGuiKey_0, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_0 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_0 = false;
+          io.AddKeyEvent (ImGuiKey_0, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_0 = false;
+          }
+
           break;
       }
 
@@ -350,10 +456,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_1 = true;
+          io.AddKeyEvent (ImGuiKey_1, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_1 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_1 = false;
+          io.AddKeyEvent (ImGuiKey_1, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_1 = false;
+          }
           break;
       }
 
@@ -364,10 +482,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_2 = true;
+          io.AddKeyEvent (ImGuiKey_2, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_2 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_2 = false;
+          io.AddKeyEvent (ImGuiKey_2, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_2 = false;
+          }
+
           break;
       }
 
@@ -378,10 +509,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_3 = true;
+          io.AddKeyEvent (ImGuiKey_3, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_3 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_3 = false;
+          io.AddKeyEvent (ImGuiKey_3, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_3 = false;
+          }
           break;
       }
 
@@ -392,10 +535,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_4 = true;
+          io.AddKeyEvent (ImGuiKey_4, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_4 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_4 = false;
+          io.AddKeyEvent (ImGuiKey_4, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_4 = false;
+          }
+
           break;
       }
 
@@ -406,10 +562,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_5 = true;
+          io.AddKeyEvent (ImGuiKey_5, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_5 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_5 = false;
+          io.AddKeyEvent (ImGuiKey_5, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_5 = false;
+          }
           break;
       }
 
@@ -420,10 +588,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_6 = true;
+          io.AddKeyEvent (ImGuiKey_6, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_6 = true;
+          }
+
           break;
         case GLFW_RELEASE:
-          key_6 = false;
+          io.AddKeyEvent (ImGuiKey_6, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_6 = false;
+          }
+
           break;
       }
 
@@ -434,10 +614,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_7 = true;
+          io.AddKeyEvent (ImGuiKey_7, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_7 = true;
+          }
+
           break;
         case GLFW_RELEASE:
-          key_7 = false;
+          io.AddKeyEvent (ImGuiKey_7, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_7 = false;
+          }
+
           break;
       }
 
@@ -448,10 +640,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_8 = true;
+          io.AddKeyEvent (ImGuiKey_8, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_8 = true;
+          }
+
           break;
         case GLFW_RELEASE:
-          key_8 = false;
+          io.AddKeyEvent (ImGuiKey_8, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_8 = false;
+          }
+
           break;
       }
 
@@ -462,10 +666,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_9 = true;
+          io.AddKeyEvent (ImGuiKey_9, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_9 = true;
+          }
+
           break;
         case GLFW_RELEASE:
-          key_9 = false;
+          io.AddKeyEvent (ImGuiKey_9, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_9 = false;
+          }
+
           break;
       }
 
@@ -476,10 +692,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_SEMICOLON = true;
+          io.AddKeyEvent (ImGuiKey_Semicolon, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_SEMICOLON = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_SEMICOLON = false;
+          io.AddKeyEvent (ImGuiKey_Semicolon, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_SEMICOLON = false;
+          }
+
           break;
       }
 
@@ -490,10 +719,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_EQUAL = true;
+          io.AddKeyEvent (ImGuiKey_Equal, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_EQUAL = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_EQUAL = false;
+          io.AddKeyEvent (ImGuiKey_Equal, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_EQUAL = false;
+          }
+
           break;
       }
 
@@ -504,10 +746,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_A = true;
+          io.AddKeyEvent (ImGuiKey_A, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_A = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_A = false;
+          io.AddKeyEvent (ImGuiKey_A, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_A = false;
+          }
           break;
       }
 
@@ -518,10 +772,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_B = true;
+          io.AddKeyEvent (ImGuiKey_B, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_B = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_B = false;
+          io.AddKeyEvent (ImGuiKey_B, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_B = false;
+          }
+
           break;
       }
 
@@ -532,10 +799,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_C = true;
+          io.AddKeyEvent (ImGuiKey_C, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_C = true;
+          }
+
           break;
         case GLFW_RELEASE:
-          key_C = false;
+          io.AddKeyEvent (ImGuiKey_C, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_C = false;
+          }
+
           break;
       }
 
@@ -546,10 +825,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_D = true;
+          io.AddKeyEvent (ImGuiKey_D, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_D = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_D = false;
+          io.AddKeyEvent (ImGuiKey_D, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_D = false;
+          }
+
           break;
       }
 
@@ -560,10 +852,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_E = true;
+          io.AddKeyEvent (ImGuiKey_E, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_E = true;
+          }
+
           break;
         case GLFW_RELEASE:
-          key_E = false;
+          io.AddKeyEvent (ImGuiKey_E, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_E = false;
+          }
+
           break;
       }
 
@@ -574,10 +878,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_F = true;
+          io.AddKeyEvent (ImGuiKey_F, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F = true;
+          }
+
           break;
         case GLFW_RELEASE:
-          key_F = false;
+          io.AddKeyEvent (ImGuiKey_F, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F = false;
+          }
+
           break;
       }
 
@@ -588,10 +904,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_G = true;
+          io.AddKeyEvent (ImGuiKey_G, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_G = true;
+          }
+
           break;
         case GLFW_RELEASE:
-          key_G = false;
+          io.AddKeyEvent (ImGuiKey_G, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_G = false;
+          }
+
           break;
       }
 
@@ -602,10 +930,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_H = true;
+          io.AddKeyEvent (ImGuiKey_H, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_H = true;
+          }
+
           break;
         case GLFW_RELEASE:
-          key_H = false;
+          io.AddKeyEvent (ImGuiKey_H, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_H = false;
+          }
+
           break;
       }
 
@@ -616,10 +956,21 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_I = true;
+          io.AddKeyEvent (ImGuiKey_I, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_I = true;
+          }
+
           break;
         case GLFW_RELEASE:
-          key_I = false;
+          io.AddKeyEvent (ImGuiKey_I, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_I = false;
+          }
           break;
       }
 
@@ -630,10 +981,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_J = true;
+          io.AddKeyEvent (ImGuiKey_J, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_J = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_J = false;
+          io.AddKeyEvent (ImGuiKey_J, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_J = false;
+          }
+
           break;
       }
 
@@ -644,10 +1008,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_K = true;
+          io.AddKeyEvent (ImGuiKey_K, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_K = true;
+          }
+
           break;
         case GLFW_RELEASE:
-          key_K = false;
+          io.AddKeyEvent (ImGuiKey_K, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_K = false;
+          }
+
           break;
       }
 
@@ -658,10 +1034,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_L = true;
+          io.AddKeyEvent (ImGuiKey_L, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_L = true;
+          }
+
           break;
         case GLFW_RELEASE:
-          key_L = false;
+          io.AddKeyEvent (ImGuiKey_L, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_L = false;
+          }
+
           break;
       }
 
@@ -672,10 +1060,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_M = true;
+          io.AddKeyEvent (ImGuiKey_M, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_M = true;
+          }
+
           break;
         case GLFW_RELEASE:
-          key_M = false;
+          io.AddKeyEvent (ImGuiKey_M, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_M = false;
+          }
+
           break;
       }
 
@@ -686,10 +1086,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_N = true;
+          io.AddKeyEvent (ImGuiKey_N, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_N = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_N = false;
+          io.AddKeyEvent (ImGuiKey_N, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_N = false;
+          }
+
           break;
       }
 
@@ -700,10 +1113,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_O = true;
+          io.AddKeyEvent (ImGuiKey_O, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_O = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_O = false;
+          io.AddKeyEvent (ImGuiKey_O, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_O = false;
+          }
+
           break;
       }
 
@@ -714,10 +1140,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_P = true;
+          io.AddKeyEvent (ImGuiKey_P, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_P = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_P = false;
+          io.AddKeyEvent (ImGuiKey_P, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_P = false;
+          }
+
           break;
       }
 
@@ -728,10 +1167,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_Q = true;
+          io.AddKeyEvent (ImGuiKey_Q, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_Q = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_Q = false;
+          io.AddKeyEvent (ImGuiKey_Q, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_Q = false;
+          }
+
           break;
       }
 
@@ -742,10 +1194,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_R = true;
+          io.AddKeyEvent (ImGuiKey_R, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_R = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_R = false;
+          io.AddKeyEvent (ImGuiKey_R, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_R = false;
+          }
+
           break;
       }
 
@@ -756,10 +1221,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_S = true;
+          io.AddKeyEvent (ImGuiKey_S, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_S = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_S = false;
+          io.AddKeyEvent (ImGuiKey_S, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_S = false;
+          }
+
           break;
       }
 
@@ -770,10 +1248,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_T = true;
+          io.AddKeyEvent (ImGuiKey_T, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_T = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_T = false;
+          io.AddKeyEvent (ImGuiKey_T, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_T = false;
+          }
+
           break;
       }
 
@@ -784,10 +1275,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_U = true;
+          io.AddKeyEvent (ImGuiKey_U, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_U = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_U = false;
+          io.AddKeyEvent (ImGuiKey_U, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_U = false;
+          }
+
           break;
       }
 
@@ -798,10 +1302,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_V = true;
+          io.AddKeyEvent (ImGuiKey_V, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_V = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_V = false;
+          io.AddKeyEvent (ImGuiKey_V, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_V = false;
+          }
+
           break;
       }
 
@@ -812,10 +1329,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_W = true;
+          io.AddKeyEvent (ImGuiKey_W, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_W = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_W = false;
+          io.AddKeyEvent (ImGuiKey_W, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_W = false;
+          }
+
           break;
       }
 
@@ -826,10 +1356,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_X = true;
+          io.AddKeyEvent (ImGuiKey_X, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_X = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_X = false;
+          io.AddKeyEvent (ImGuiKey_X, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_X = false;
+          }
+
           break;
       }
 
@@ -840,10 +1383,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_Y = true;
+          io.AddKeyEvent (ImGuiKey_Y, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_Y = true;
+          }
+
           break;
         case GLFW_RELEASE:
-          key_Y = false;
+          io.AddKeyEvent (ImGuiKey_Y, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_Y = false;
+          }
+
           break;
       }
 
@@ -854,10 +1409,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_Z = true;
+          io.AddKeyEvent (ImGuiKey_Z, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_Z = true;
+          }
+
           break;
         case GLFW_RELEASE:
-          key_Z = false;
+          io.AddKeyEvent (ImGuiKey_Z, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_Z = false;
+          }
+
           break;
       }
 
@@ -868,10 +1435,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_LEFT_BRACKET = true;
+          io.AddKeyEvent (ImGuiKey_LeftBracket, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_LEFT_BRACKET = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_LEFT_BRACKET = false;
+          io.AddKeyEvent (ImGuiKey_LeftBracket, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_LEFT_BRACKET = false;
+          }
+
           break;
       }
 
@@ -882,10 +1462,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_BACKSLASH = true;
+          io.AddKeyEvent (ImGuiKey_Backslash, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_BACKSLASH = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_BACKSLASH = false;
+          io.AddKeyEvent (ImGuiKey_Backslash, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_BACKSLASH = false;
+          }
+
           break;
       }
 
@@ -896,10 +1489,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_RIGHT_BRACKET = true;
+          io.AddKeyEvent (ImGuiKey_RightBracket, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_RIGHT_BRACKET = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_RIGHT_BRACKET = false;
+          io.AddKeyEvent (ImGuiKey_RightBracket, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_RIGHT_BRACKET = false;
+          }
+
           break;
       }
 
@@ -910,10 +1516,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_GRAVE_ACCENT = true;
+          io.AddKeyEvent (ImGuiKey_GraveAccent, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_GRAVE_ACCENT = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_GRAVE_ACCENT = false;
+          io.AddKeyEvent (ImGuiKey_GraveAccent, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_GRAVE_ACCENT = false;
+          }
+
           break;
       }
 
@@ -952,10 +1571,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_ESCAPE = true;
+          io.AddKeyEvent (ImGuiKey_Escape, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_ESCAPE = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_ESCAPE = false;
+          io.AddKeyEvent (ImGuiKey_Escape, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_ESCAPE = false;
+          }
+
           break;
       }
 
@@ -966,10 +1598,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_ENTER = true;
+          io.AddKeyEvent (ImGuiKey_Enter, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_ENTER = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_ENTER = false;
+          io.AddKeyEvent (ImGuiKey_Enter, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_ENTER = false;
+          }
+
           break;
       }
 
@@ -980,10 +1625,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_TAB = true;
+          io.AddKeyEvent (ImGuiKey_Tab, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_TAB = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_TAB = false;
+          io.AddKeyEvent (ImGuiKey_Tab, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_TAB = false;
+          }
+
           break;
       }
 
@@ -994,10 +1652,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_BACKSPACE = true;
+          io.AddKeyEvent (ImGuiKey_Backspace, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_BACKSPACE = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_BACKSPACE = false;
+          io.AddKeyEvent (ImGuiKey_Backspace, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_BACKSPACE = false;
+          }
+
           break;
       }
 
@@ -1008,10 +1679,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_INSERT = true;
+          io.AddKeyEvent (ImGuiKey_Insert, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_INSERT = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_INSERT = false;
+          io.AddKeyEvent (ImGuiKey_Insert, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_INSERT = false;
+          }
           break;
       }
 
@@ -1022,10 +1705,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_DELETE = true;
+          io.AddKeyEvent (ImGuiKey_Delete, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_DELETE = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_DELETE = false;
+          io.AddKeyEvent (ImGuiKey_Delete, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_DELETE = false;
+          }
           break;
       }
 
@@ -1036,10 +1731,21 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_RIGHT = true;
+          io.AddKeyEvent (ImGuiKey_RightArrow, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_RIGHT = true;
+          }
+
           break;
         case GLFW_RELEASE:
-          key_RIGHT = false;
+          io.AddKeyEvent (ImGuiKey_RightArrow, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_RIGHT = false;
+          }
           break;
       }
 
@@ -1050,10 +1756,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_LEFT = true;
+          io.AddKeyEvent (ImGuiKey_LeftArrow, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_LEFT = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_LEFT = false;
+          io.AddKeyEvent (ImGuiKey_LeftArrow, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_LEFT = false;
+          }
+
           break;
       }
 
@@ -1064,10 +1783,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_DOWN = true;
+          io.AddKeyEvent (ImGuiKey_DownArrow, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_DOWN = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_DOWN = false;
+          io.AddKeyEvent (ImGuiKey_DownArrow, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_DOWN = false;
+          }
+
           break;
       }
 
@@ -1078,10 +1810,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_UP = true;
+          io.AddKeyEvent (ImGuiKey_UpArrow, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_UP = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_UP = false;
+          io.AddKeyEvent (ImGuiKey_UpArrow, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_UP = false;
+          }
+
           break;
       }
 
@@ -1092,10 +1837,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_PAGE_UP = true;
+          io.AddKeyEvent (ImGuiKey_PageUp, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_PAGE_UP = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_PAGE_UP = false;
+          io.AddKeyEvent (ImGuiKey_PageUp, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_PAGE_UP = false;
+          }
+
           break;
       }
 
@@ -1106,10 +1864,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_PAGE_DOWN = true;
+          io.AddKeyEvent (ImGuiKey_PageDown, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_PAGE_DOWN = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_PAGE_DOWN = false;
+          io.AddKeyEvent (ImGuiKey_PageDown, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_PAGE_DOWN = false;
+          }
+
           break;
       }
 
@@ -1120,10 +1891,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_HOME = true;
+          io.AddKeyEvent (ImGuiKey_Home, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_HOME = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_HOME = false;
+          io.AddKeyEvent (ImGuiKey_Home, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_HOME = false;
+          }
+
           break;
       }
 
@@ -1134,10 +1918,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_END = true;
+          io.AddKeyEvent (ImGuiKey_End, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_END = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_END = false;
+          io.AddKeyEvent (ImGuiKey_End, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_END = false;
+          }
+
           break;
       }
 
@@ -1148,10 +1945,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_CAPS_LOCK = true;
+          io.AddKeyEvent (ImGuiKey_CapsLock, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_CAPS_LOCK = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_CAPS_LOCK = false;
+          io.AddKeyEvent (ImGuiKey_CapsLock, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_CAPS_LOCK = false;
+          }
+
           break;
       }
 
@@ -1162,10 +1972,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_SCROLL_LOCK = true;
+          io.AddKeyEvent (ImGuiKey_ScrollLock, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_SCROLL_LOCK = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_SCROLL_LOCK = false;
+          io.AddKeyEvent (ImGuiKey_ScrollLock, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_SCROLL_LOCK = false;
+          }
+
           break;
       }
 
@@ -1176,10 +1999,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_NUM_LOCK = true;
+          io.AddKeyEvent (ImGuiKey_NumLock, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_NUM_LOCK = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_NUM_LOCK = false;
+          io.AddKeyEvent (ImGuiKey_NumLock, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_NUM_LOCK = false;
+          }
+
           break;
       }
 
@@ -1190,10 +2026,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_PRINT_SCREEN = true;
+          io.AddKeyEvent (ImGuiKey_PrintScreen, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_PRINT_SCREEN = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_PRINT_SCREEN = false;
+          io.AddKeyEvent (ImGuiKey_PrintScreen, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_PRINT_SCREEN = false;
+          }
+
           break;
       }
 
@@ -1204,10 +2053,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_PAUSE = true;
+          io.AddKeyEvent (ImGuiKey_PrintScreen, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_PAUSE = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_PAUSE = false;
+          io.AddKeyEvent (ImGuiKey_PrintScreen, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_PAUSE = false;
+          }
+
           break;
       }
 
@@ -1218,10 +2080,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_F1 = true;
+          io.AddKeyEvent (ImGuiKey_F1, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F1 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_F1 = false;
+          io.AddKeyEvent (ImGuiKey_F1, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F1 = false;
+          }
+
           break;
       }
 
@@ -1232,10 +2107,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_F2 = true;
+          io.AddKeyEvent (ImGuiKey_F2, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F2 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_F2 = false;
+          io.AddKeyEvent (ImGuiKey_F2, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F2 = false;
+          }
+
           break;
       }
 
@@ -1246,10 +2134,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_F3 = true;
+          io.AddKeyEvent (ImGuiKey_F3, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F3 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_F3 = false;
+          io.AddKeyEvent (ImGuiKey_F3, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F3 = false;
+          }
+
           break;
       }
 
@@ -1260,10 +2161,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_F4 = true;
+          io.AddKeyEvent (ImGuiKey_F4, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F4 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_F4 = false;
+          io.AddKeyEvent (ImGuiKey_F4, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F4 = false;
+          }
+
           break;
       }
 
@@ -1274,10 +2188,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_F5 = true;
+          io.AddKeyEvent (ImGuiKey_F5, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F5 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_F5 = false;
+          io.AddKeyEvent (ImGuiKey_F5, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F5 = false;
+          }
+
           break;
       }
 
@@ -1288,10 +2215,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_F6 = true;
+          io.AddKeyEvent (ImGuiKey_F6, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F6 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_F6 = false;
+          io.AddKeyEvent (ImGuiKey_F6, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F6 = false;
+          }
+
           break;
       }
 
@@ -1302,10 +2242,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_F7 = true;
+          io.AddKeyEvent (ImGuiKey_F7, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F7 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_F7 = false;
+          io.AddKeyEvent (ImGuiKey_F7, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F7 = false;
+          }
+
           break;
       }
 
@@ -1316,10 +2269,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_F8 = true;
+          io.AddKeyEvent (ImGuiKey_F8, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F8 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_F8 = false;
+          io.AddKeyEvent (ImGuiKey_F8, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F8 = false;
+          }
+
           break;
       }
 
@@ -1330,10 +2296,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_F9 = true;
+          io.AddKeyEvent (ImGuiKey_F9, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F9 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_F9 = false;
+          io.AddKeyEvent (ImGuiKey_F9, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F9 = false;
+          }
+
           break;
       }
 
@@ -1344,10 +2323,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_F10 = true;
+          io.AddKeyEvent (ImGuiKey_F10, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F10 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_F10 = false;
+          io.AddKeyEvent (ImGuiKey_F10, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F10 = false;
+          }
+
           break;
       }
 
@@ -1358,10 +2350,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_F11 = true;
+          io.AddKeyEvent (ImGuiKey_F11, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F11 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_F11 = false;
+          io.AddKeyEvent (ImGuiKey_F11, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F11 = false;
+          }
+
           break;
       }
 
@@ -1372,10 +2377,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_F12 = true;
+          io.AddKeyEvent (ImGuiKey_F12, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F12 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_F12 = false;
+          io.AddKeyEvent (ImGuiKey_F12, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_F12 = false;
+          }
+
           break;
       }
 
@@ -1568,10 +2586,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_0 = true;
+          io.AddKeyEvent (ImGuiKey_Keypad0, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_0 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_0 = false;
+          io.AddKeyEvent (ImGuiKey_Keypad0, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_0 = false;
+          }
+
           break;
       }
 
@@ -1582,10 +2613,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_1 = true;
+          io.AddKeyEvent (ImGuiKey_Keypad1, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_1 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_1 = false;
+          io.AddKeyEvent (ImGuiKey_Keypad1, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_1 = false;
+          }
+
           break;
       }
 
@@ -1596,10 +2640,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_2 = true;
+          io.AddKeyEvent (ImGuiKey_Keypad2, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_2 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_2 = false;
+          io.AddKeyEvent (ImGuiKey_Keypad2, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_2 = false;
+          }
+
           break;
       }
 
@@ -1610,10 +2667,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_3 = true;
+          io.AddKeyEvent (ImGuiKey_Keypad3, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_3 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_3 = false;
+          io.AddKeyEvent (ImGuiKey_Keypad3, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_3 = false;
+          }
+
           break;
       }
 
@@ -1624,10 +2694,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_4 = true;
+          io.AddKeyEvent (ImGuiKey_Keypad4, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_4 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_4 = false;
+          io.AddKeyEvent (ImGuiKey_Keypad4, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_4 = false;
+          }
+
           break;
       }
 
@@ -1638,10 +2721,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_5 = true;
+          io.AddKeyEvent (ImGuiKey_Keypad5, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_5 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_5 = false;
+          io.AddKeyEvent (ImGuiKey_Keypad5, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_5 = false;
+          }
+
           break;
       }
 
@@ -1652,10 +2748,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_6 = true;
+          io.AddKeyEvent (ImGuiKey_Keypad6, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_6 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_6 = false;
+          io.AddKeyEvent (ImGuiKey_Keypad6, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_6 = false;
+          }
+
           break;
       }
 
@@ -1666,10 +2775,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_7 = true;
+          io.AddKeyEvent (ImGuiKey_Keypad7, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_7 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_7 = false;
+          io.AddKeyEvent (ImGuiKey_Keypad7, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_7 = false;
+          }
+
           break;
       }
 
@@ -1680,10 +2802,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_8 = true;
+          io.AddKeyEvent (ImGuiKey_Keypad8, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_8 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_8 = false;
+          io.AddKeyEvent (ImGuiKey_Keypad8, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_8 = false;
+          }
+
           break;
       }
 
@@ -1694,10 +2829,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_9 = true;
+          io.AddKeyEvent (ImGuiKey_Keypad9, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_9 = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_9 = false;
+          io.AddKeyEvent (ImGuiKey_Keypad9, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_9 = false;
+          }
+
           break;
       }
 
@@ -1708,10 +2856,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_DECIMAL = true;
+          io.AddKeyEvent (ImGuiKey_KeypadDecimal, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_DECIMAL = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_DECIMAL = false;
+          io.AddKeyEvent (ImGuiKey_KeypadDecimal, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_DECIMAL = false;
+          }
+
           break;
       }
 
@@ -1722,10 +2883,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_DIVIDE = true;
+          io.AddKeyEvent (ImGuiKey_KeypadDivide, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_DIVIDE = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_DIVIDE = false;
+          io.AddKeyEvent (ImGuiKey_KeypadDivide, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_DIVIDE = false;
+          }
+
           break;
       }
 
@@ -1736,10 +2910,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_MULTIPLY = true;
+          io.AddKeyEvent (ImGuiKey_KeypadMultiply, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_MULTIPLY = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_MULTIPLY = false;
+          io.AddKeyEvent (ImGuiKey_KeypadMultiply, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_MULTIPLY = false;
+          }
+
           break;
       }
 
@@ -1750,10 +2937,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_SUBTRACT = true;
+          io.AddKeyEvent (ImGuiKey_KeypadSubtract, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_SUBTRACT = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_SUBTRACT = false;
+          io.AddKeyEvent (ImGuiKey_KeypadSubtract, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_SUBTRACT = false;
+          }
+
           break;
       }
 
@@ -1764,10 +2964,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_ADD = true;
+          io.AddKeyEvent (ImGuiKey_KeypadAdd, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_ADD = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_ADD = false;
+          io.AddKeyEvent (ImGuiKey_KeypadAdd, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_ADD = false;
+          }
+
           break;
       }
 
@@ -1778,10 +2991,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_ENTER = true;
+          io.AddKeyEvent (ImGuiKey_Enter, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_ENTER = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_ENTER = false;
+          io.AddKeyEvent (ImGuiKey_Enter, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_ENTER = false;
+          }
+
           break;
       }
 
@@ -1792,10 +3018,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_KP_EQUAL = true;
+          io.AddKeyEvent (ImGuiKey_Equal, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_EQUAL = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_KP_EQUAL = false;
+          io.AddKeyEvent (ImGuiKey_Equal, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_KP_EQUAL = false;
+          }
+
           break;
       }
 
@@ -1806,10 +3045,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_LEFT_SHIFT = true;
+          io.AddKeyEvent (ImGuiKey_LeftShift, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_LEFT_SHIFT = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_LEFT_SHIFT = false;
+          io.AddKeyEvent (ImGuiKey_LeftShift, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_LEFT_SHIFT = false;
+          }
+
           break;
       }
 
@@ -1820,10 +3072,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_LEFT_CONTROL = true;
+          io.AddKeyEvent (ImGuiKey_LeftCtrl, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_LEFT_CONTROL = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_LEFT_CONTROL = false;
+          io.AddKeyEvent (ImGuiKey_LeftCtrl, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_LEFT_CONTROL = false;
+          }
           break;
       }
 
@@ -1834,10 +3098,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_LEFT_ALT = true;
+          io.AddKeyEvent (ImGuiKey_LeftAlt, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_LEFT_ALT = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_LEFT_ALT = false;
+          io.AddKeyEvent (ImGuiKey_LeftAlt, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_LEFT_ALT = false;
+          }
+
           break;
       }
 
@@ -1848,10 +3125,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_LEFT_SUPER = true;
+          io.AddKeyEvent (ImGuiKey_LeftSuper, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_LEFT_SUPER = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_LEFT_SUPER = false;
+          io.AddKeyEvent (ImGuiKey_LeftSuper, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_LEFT_SUPER = false;
+          }
           break;
       }
 
@@ -1862,10 +3151,22 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_RIGHT_SHIFT = true;
+          io.AddKeyEvent (ImGuiKey_RightShift, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_RIGHT_SHIFT = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_RIGHT_SHIFT = false;
+          io.AddKeyEvent (ImGuiKey_RightShift, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_RIGHT_SHIFT = false;
+          }
           break;
       }
 
@@ -1876,10 +3177,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_RIGHT_CONTROL = true;
+          io.AddKeyEvent (ImGuiKey_RightCtrl, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_RIGHT_CONTROL = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_RIGHT_CONTROL = false;
+          io.AddKeyEvent (ImGuiKey_RightCtrl, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_RIGHT_CONTROL = false;
+          }
+
           break;
       }
 
@@ -1890,10 +3204,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_RIGHT_ALT = true;
+          io.AddKeyEvent (ImGuiKey_RightAlt, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_RIGHT_ALT = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_RIGHT_ALT = false;
+          io.AddKeyEvent (ImGuiKey_RightAlt, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_RIGHT_ALT = false;
+          }
+
           break;
       }
 
@@ -1904,10 +3231,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_RIGHT_SUPER = true;
+          io.AddKeyEvent (ImGuiKey_RightSuper, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_RIGHT_SUPER = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_RIGHT_SUPER = false;
+          io.AddKeyEvent (ImGuiKey_RightSuper, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_RIGHT_SUPER = false;
+          }
+
           break;
       }
 
@@ -1918,10 +3258,23 @@ void nu::opengl::key_pressed
       switch(loc_action)
       {
         case GLFW_PRESS:
-          key_MENU = true;
+          io.AddKeyEvent (ImGuiKey_Menu, true);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_MENU = true;
+          }
+
           break;
+
         case GLFW_RELEASE:
-          key_MENU = false;
+          io.AddKeyEvent (ImGuiKey_Menu, false);
+
+          if(!io.WantCaptureKeyboard)
+          {
+            key_MENU = false;
+          }
+
           break;
       }
 
