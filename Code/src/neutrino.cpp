@@ -89,6 +89,28 @@ void neutrino::get_toc ()
   }
 }
 
+std::string neutrino::get_timestamp ()
+{
+  time_t      file_time = time (0);
+  struct tm   now;
+  char        time_text[256];
+
+  #ifdef WIN32
+    localtime_s (&now, &file_time);                                                                 // Getting local date and time...
+  #endif
+
+  #ifdef __linux__
+    localtime_r (&file_time, &now);                                                                 // Getting local date and time...
+  #endif
+
+  std::string timestamp = "";
+  strftime (time_text, 256, "%Y-%b-%d_%H-%M-%S", &now);                                             // Compiling time string...
+
+  timestamp += time_text;                                                                           // Adding time stamp...
+
+  return timestamp;                                                                                 // Returning timestamp...
+}
+
 void neutrino::work ()
 {
   neutrino::task_tic = glfwGetTime ();                                                              // Getting "tic"...
