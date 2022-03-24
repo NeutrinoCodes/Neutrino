@@ -156,6 +156,10 @@ public:
   /// It does not measure the execution time of the kernel on the client GPU.
   void        get_toc ();
 
+  /// @brief **Timestamp function.**
+  /// @details Return a time stamp in the format %Y-%b-%d_%H-%M-%S according to the "struct tm", as a string.
+  std::string get_timestamp ();
+
   /// @brief **Getter of "task" percentage.**
   /// @details Gets a "task" time percentage, which is the value of operating system precision timer at the
   /// beginning of a task. To be used in combination with the "progress" time in order
