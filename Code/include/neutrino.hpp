@@ -71,6 +71,7 @@
 #include <string>
 #include <vector>
 #include <tuple>
+#include <sstream>
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>

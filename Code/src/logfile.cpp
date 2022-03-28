@@ -22,7 +22,7 @@ void nu::logfile::open (
 {
   time_t      file_time = time (0);
   struct tm   now;
-  char        time_text [256];
+  char        time_text[256];
 
   #ifdef WIN32
     localtime_s (&now, &file_time);                                                                 // Getting local date and time...
@@ -73,7 +73,7 @@ void nu::logfile::write (
 {
   char buffer[1024];                                                                                // Text buffer.
 
-  snprintf (buffer, 1024, "%d", loc_int);                                                           // Compiling data string...                                                             
+  snprintf (buffer, 1024, "%d", loc_int);                                                           // Compiling data string...
   datafile << std::string (buffer);                                                                 // Writing data to file...
 }
 
@@ -83,7 +83,7 @@ void nu::logfile::write (
 {
   char buffer[1024];                                                                                // Text buffer.
 
-  snprintf (buffer, 1024, "%+d", loc_int);                                                          // Compiling data string... 
+  snprintf (buffer, 1024, "%+d", loc_int);                                                          // Compiling data string...
   datafile << std::string (buffer);                                                                 // Writing data to file...
 }
 
@@ -93,9 +93,45 @@ void nu::logfile::write (
 {
   char buffer[1024];                                                                                // Text buffer.
 
-  snprintf (buffer, 1024, "%+.6E", loc_float);                                                      // Compiling data string... 
+  snprintf (buffer, 1024, "%+.6E", loc_float);                                                      // Compiling data string...
   datafile << std::string (buffer);                                                                 // Writing data to file...
 }
+
+void nu::logfile::read ()
+{
+};
+
+/*
+   void nu::logfile::read (
+                        T        var1,
+                        Types... var2
+                       )
+   {
+
+     for(std::string line; std::getline(source, line); )   //read stream line by line
+     {
+     std::istringstream in(line);      //make a stream for the line itself
+
+     std::string type;
+     in >> type;                  //and read the first whitespace-separated token
+
+     if(type == "triangle")       //and check its value
+     {
+        float x, y, z;
+        in >> x >> y >> z;       //now read the whitespace-separated floats
+     }
+     else if(...)
+        ...
+     else
+        ...
+     }
+
+
+   cout << var1 << endl;
+
+   print (var2 ...);
+   }*/
+
 
 void nu::logfile::endline ()
 {
