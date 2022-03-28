@@ -75,7 +75,8 @@ public:
             )
 
   {
-    std::cout << var1 << std::endl;
+    var1->push_back (1.0f);
+    std::cout << var1->size () << std::endl;
     read (var2 ...);
   };
 
