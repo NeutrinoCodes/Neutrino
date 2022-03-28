@@ -66,6 +66,19 @@ public:
               float loc_float                                                                       ///< Float value.
              );
 
+  void read ();
+
+  template <typename T, typename ... Types>
+  void read (
+             T var1,
+             Types... var2
+            )
+
+  {
+    std::cout << var1 << std::endl;
+    read (var2 ...);
+  };
+
   /// @brief **Endline method.**
   /// @details To be invoked by the user in order to write a newline on the log file.
   void endline ();
