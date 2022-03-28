@@ -17,7 +17,7 @@ void nu::logfile::open (
                         std::string  loc_log_file_name,                                             // Log file name.
                         std::string  loc_log_file_extension,                                        // Log file extension.
                         std::string  loc_log_header,                                                // Log file header.
-                        logfile_mode loc_timestamp                                                  // Log file mode.
+                        logfile_mode loc_mode                                                       // Log file mode.
                        )
 {
   time_t      file_time = time (0);
@@ -33,38 +33,29 @@ void nu::logfile::open (
   #endif
 
   std::string file_name = loc_log_file_name;
+  file_name += "." + loc_log_file_extension;                                                        // Adding file extension...
   strftime (time_text, 256, "%Y-%b-%d_%H-%M-%S", &now);                                             // Compiling time string...
 
-  switch(loc_timestamp)
+  switch(loc_mode)
   {
-    case TIMESTAMP:
-      file_name += "_";                                                                             // Adding underscore...
-      file_name += time_text;                                                                       // Adding time stamp...
-      file_name += "." + loc_log_file_extension;                                                    // Adding time file extension...
+    case READ:
+      in_file.open (file_name);                                                                     // Opening data log file (read mode)...
       break;
 
-    case NO_TIMESTAMP:
-      file_name += "." + loc_log_file_extension;                                                    // Adding file extension...
-      break;
-
-    default:
-      file_name += "_";                                                                             // Adding underscore...
-      file_name += time_text;                                                                       // Adding time stamp...
-      file_name += "." + loc_log_file_extension;                                                    // Adding file extension...
+    case WRITE:
+      out_file.open (file_name, std::ios::app);                                                     // Opening data log file (appending mode)...
+      out_file << loc_log_header << std::endl;                                                      // Writing header...
+      out_file << "Time stamp: " << time_text << std::endl;                                         // Writing time stamp...
+      out_file << std::endl;                                                                        // Writing blank line...
       break;
   }
-
-  datafile.open (file_name, std::ios::app);                                                         // Opening data log file (appending mode)...
-  datafile << loc_log_header << std::endl;                                                          // Writing header...
-  datafile << "Time stamp: " << time_text << std::endl;                                             // Writing time stamp...
-  datafile << std::endl;                                                                            // Writing blank line...
 }
 
 void nu::logfile::write (
                          std::string loc_string                                                     // String value.
                         )
 {
-  datafile << loc_string;                                                                           // Writing data...
+  out_file << loc_string;                                                                           // Writing data...
 }
 
 void nu::logfile::write (
@@ -74,7 +65,7 @@ void nu::logfile::write (
   char buffer[1024];                                                                                // Text buffer.
 
   snprintf (buffer, 1024, "%d", loc_int);                                                           // Compiling data string...
-  datafile << std::string (buffer);                                                                 // Writing data to file...
+  out_file << std::string (buffer);                                                                 // Writing data to file...
 }
 
 void nu::logfile::write (
@@ -84,7 +75,7 @@ void nu::logfile::write (
   char buffer[1024];                                                                                // Text buffer.
 
   snprintf (buffer, 1024, "%+d", loc_int);                                                          // Compiling data string...
-  datafile << std::string (buffer);                                                                 // Writing data to file...
+  out_file << std::string (buffer);                                                                 // Writing data to file...
 }
 
 void nu::logfile::write (
@@ -94,53 +85,32 @@ void nu::logfile::write (
   char buffer[1024];                                                                                // Text buffer.
 
   snprintf (buffer, 1024, "%+.6E", loc_float);                                                      // Compiling data string...
-  datafile << std::string (buffer);                                                                 // Writing data to file...
+  out_file << std::string (buffer);                                                                 // Writing data to file...
 }
 
 void nu::logfile::read ()
 {
-};
-
-/*
-   void nu::logfile::read (
-                        T        var1,
-                        Types... var2
-                       )
-   {
-
-     for(std::string line; std::getline(source, line); )   //read stream line by line
-     {
-     std::istringstream in(line);      //make a stream for the line itself
-
-     std::string type;
-     in >> type;                  //and read the first whitespace-separated token
-
-     if(type == "triangle")       //and check its value
-     {
-        float x, y, z;
-        in >> x >> y >> z;       //now read the whitespace-separated floats
-     }
-     else if(...)
-        ...
-     else
-        ...
-     }
-
-
-   cout << var1 << endl;
-
-   print (var2 ...);
-   }*/
-
+}
 
 void nu::logfile::endline ()
 {
-  datafile << std::endl;
+  out_file << std::endl;
 }
 
-void nu::logfile::close ()
+void nu::logfile::close (
+                         logfile_mode loc_mode
+                        )
 {
-  datafile.close ();                                                                                // Closing file...
+  switch(loc_mode)
+  {
+    case READ:
+      in_file.close ();                                                                             // Closing file...
+      break;
+
+    case WRITE:
+      out_file.close ();                                                                            // Closing file...
+      break;
+  }
 }
 
 nu::logfile::~logfile()

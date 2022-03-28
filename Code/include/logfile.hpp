@@ -13,11 +13,11 @@
 
 namespace nu
 {
-// Kernel modes:
+// File modes:
 typedef enum
 {
-  TIMESTAMP,                                                                                        ///< Adds timestamp to log file name.
-  NO_TIMESTAMP                                                                                      ///< Does not add timestamp to log file name.
+  READ,                                                                                             ///< Opens a file in read mode.
+  WRITE                                                                                             ///< Opens a file in write mode.
 } logfile_mode;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,7 +26,21 @@ typedef enum
 class logfile : public neutrino                                                                     /// @brief **Logfile.**
 {
 private:
-  std::ofstream datafile;                                                                           ///< Data file.
+  std::ifstream in_file;                                                                            ///< Data file.
+  std::ofstream out_file;                                                                           ///< Data file.
+  std::string   line;                                                                               ///< File line.
+
+  template<typename T>
+  struct remove_pointer
+  {
+    typedef T type;
+  };
+
+  template<typename T>
+  struct remove_pointer<T*>
+  {
+    typedef typename remove_pointer<T>::type type;
+  };
 
 public:
   /// @brief **Class constructor.**
@@ -42,7 +56,7 @@ public:
              std::string  loc_log_file_name,                                                        ///< Log file name.
              std::string  loc_log_file_extension,                                                   ///< Log file extension.
              std::string  loc_log_header,                                                           ///< Log file header.
-             logfile_mode loc_timestamp                                                             ///< Log file mode, adds time stamp to file and to file name.
+             logfile_mode loc_mode                                                                  ///< Log file mode.
             );
 
   /// @brief **Write method.**
@@ -73,11 +87,22 @@ public:
              T var1,
              Types... var2
             )
-
   {
-    var1->push_back (1.0f);
-    std::cout << var1->size () << std::endl;
-    read (var2 ...);
+    //while(in_file.good ())
+    //{
+    //line = "";
+    //std::getline (in_file, line);                                                                   // Reading single file line...
+    //in_file.clear ();
+    //std::istringstream     input (line);                                                            // Make a stream for the line itself...
+    //std::cout << line << std::endl;
+    typename remove_pointer<T>::type::value_type value;
+    //input >> value;                                                                                 // Reading line token...
+    value = 5.0989f;
+    var1->push_back (value);                                                                        // Filling corresponding vector...
+    //}
+
+
+    read (var2 ...);                                                                                // Recursive self invocation...
   };
 
   /// @brief **Endline method.**
@@ -86,7 +111,9 @@ public:
 
   /// @brief **Close method.**
   /// @details To be invoked by the user in order to close log file.
-  void close ();
+  void close (
+              logfile_mode loc_mode                                                                 ///< Log file mode.
+             );
 
   /// @brief **Class destructor.**
   /// @details Terminates the logfile.
