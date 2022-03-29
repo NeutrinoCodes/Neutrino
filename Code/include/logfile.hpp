@@ -23,7 +23,7 @@ typedef enum
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////// "nu::logfile" class /////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-class logfile : public neutrino                                                                     /// @brief **Logfile.**
+class logfile : public neutrino                                                                     ///< @brief **Logfile.**
 {
 private:
   std::ifstream     in_file;                                                                        ///< Data file.
@@ -32,6 +32,7 @@ private:
   std::stringstream streamline;                                                                     ///< Stream line.
   bool              EOL = true;                                                                     ///< End of line flag.
   bool              END = false;                                                                    ///< End of file flag.
+  std::string       delimiter;                                                                      ///< File delimiter.
 
   template<typename T>
   struct remove_pointer
@@ -59,6 +60,7 @@ public:
              std::string  loc_log_file_name,                                                        ///< Log file name.
              std::string  loc_log_file_extension,                                                   ///< Log file extension.
              std::string  loc_log_header,                                                           ///< Log file header.
+             std::string  loc_log_delimiter,                                                        ///< Log file delimiter.
              logfile_mode loc_mode                                                                  ///< Log file mode.
             );
 
@@ -83,21 +85,31 @@ public:
               float loc_float                                                                       ///< Float value.
              );
 
+  /// @details Helper function, terminates the self-recursion of the "read" method.
   void read ();
 
+  /// @details To be invoked by the user in order to read data from the log file.
   template <typename T, typename ... Types>
   void read (
              T var1,
              Types... var2
             )
   {
-    std::string token;                                                                              // Token.
+    std::string            token;                                                                   // Token.
+    std::string::size_type n = 0;                                                                   // String index.
 
     if(EOL)
     {
       // Reading single line from file:
       if(std::getline (in_file, fileline))
       {
+        // Replasing all "delimiter" instances for a white space:
+        while((n = fileline.find (delimiter, n)) != std::string::npos)
+        {
+          fileline.replace (n, delimiter.size (), " ");                                             // Replacing delimiter...
+          n++;                                                                                      // Incrementing string index...
+        }
+
         streamline << fileline;                                                                     // Copying file line to stream line...
         END = false;
       }
