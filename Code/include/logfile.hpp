@@ -31,7 +31,7 @@ private:
   std::string       fileline;                                                                       ///< File line.
   std::stringstream streamline;                                                                     ///< Stream line.
   bool              EOL = true;                                                                     ///< End of line flag.
-  bool              END = true;                                                                     ///< End of file flag.
+  bool              END = false;                                                                    ///< End of file flag.
 
   template<typename T>
   struct remove_pointer
@@ -83,10 +83,10 @@ public:
               float loc_float                                                                       ///< Float value.
              );
 
-  bool read ();
+  void read ();
 
   template <typename T, typename ... Types>
-  bool read (
+  void read (
              T var1,
              Types... var2
             )
@@ -119,11 +119,8 @@ public:
         var1->push_back (value);                                                                    // Appending value to current vector argument...
         EOL = false;                                                                                // Resetting end of line flag...
       }
-
-      read (var2 ...);                                                                              // Recursive self-invocation...
     }
-
-    return END;
+    read (var2 ...);                                                                                // Recursive self-invocation...
   };
 
   /// @brief **Endline method.**
@@ -135,6 +132,8 @@ public:
   void close (
               logfile_mode loc_mode                                                                 ///< Log file mode.
              );
+
+  bool eof ();
 
   /// @brief **Class destructor.**
   /// @details Terminates the logfile.
