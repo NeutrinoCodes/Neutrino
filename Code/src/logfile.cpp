@@ -88,11 +88,13 @@ void nu::logfile::write (
   out_file << std::string (buffer);                                                                 // Writing data to file...
 }
 
-void nu::logfile::read ()
+bool nu::logfile::read ()
 {
   EOL = true;
   fileline.clear ();
   streamline.clear ();
+
+  return END;
 }
 
 void nu::logfile::endline ()
