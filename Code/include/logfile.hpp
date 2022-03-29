@@ -28,8 +28,10 @@ class logfile : public neutrino                                                 
 private:
   std::ifstream     in_file;                                                                        ///< Data file.
   std::ofstream     out_file;                                                                       ///< Data file.
-  std::string       fileline;                                                                       // File line.
-  std::stringstream streamline;
+  std::string       fileline;                                                                       ///< File line.
+  std::stringstream streamline;                                                                     ///< Stream line.
+  bool              EOL = true;                                                                     ///< End of line flag.
+  bool              END = true;                                                                     ///< End of file flag.
 
   template<typename T>
   struct remove_pointer
@@ -89,23 +91,34 @@ public:
              Types... var2
             )
   {
-
     std::string token;                                                                              // Token.
 
-    //std::getline (in_file, fileline);                                                               // Reading single file line...
-
-    // Make a stream for the line itself...
-
-    if(std::getline (streamline, token, ' '))
+    if(EOL)
     {
-      typename remove_pointer<T>::type::value_type value;
-      std::stringstream                            streamtoken (token);
-      streamtoken >> value;
-      var1->push_back (value);
-      std::cout << value << std::endl;
+      // Reading single line from file:
+      if(std::getline (in_file, fileline))
+      {
+        streamline << fileline;                                                                     // Copying file line to stream line...
+        END = false;
+      }
+
+      else
+      {
+        END = true;
+      }
     }
 
-    read (var2 ...);                                                                                // Recursive self invocation...
+    // Extracting token from streamline:
+    if(std::getline (streamline, token, ' '))
+    {
+      typename remove_pointer<T>::type::value_type value;                                           // Creating value by getting the type from the current vector argument...
+      std::stringstream                            streamtoken (token);                             // Creating stream from extracted token...
+      streamtoken >> value;                                                                         // Streaming token to value for current vector argument...
+      var1->push_back (value);                                                                      // Appending value to current vector argument...
+      EOL = false;                                                                                  // Resetting end of line flag...
+    }
+
+    read (var2 ...);                                                                                // Recursive self-invocation...
   };
 
   /// @brief **Endline method.**
