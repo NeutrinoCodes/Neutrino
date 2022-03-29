@@ -17,12 +17,14 @@ void nu::logfile::open (
                         std::string  loc_log_file_name,                                             // Log file name.
                         std::string  loc_log_file_extension,                                        // Log file extension.
                         std::string  loc_log_header,                                                // Log file header.
+                        std::string  loc_log_delimiter,                                             // Log file delimiter.
                         logfile_mode loc_mode                                                       // Log file mode.
                        )
 {
-  time_t      file_time = time (0);
-  struct tm   now;
-  char        time_text[256];
+  time_t    file_time = time (0);
+  struct tm now;
+  char      time_text[256];
+  delimiter = loc_log_delimiter;
 
   #ifdef WIN32
     localtime_s (&now, &file_time);                                                                 // Getting local date and time...
@@ -55,7 +57,7 @@ void nu::logfile::write (
                          std::string loc_string                                                     // String value.
                         )
 {
-  out_file << loc_string;                                                                           // Writing data...
+  out_file << loc_string << delimiter;                                                              // Writing data...
 }
 
 void nu::logfile::write (
@@ -65,7 +67,7 @@ void nu::logfile::write (
   char buffer[1024];                                                                                // Text buffer.
 
   snprintf (buffer, 1024, "%d", loc_int);                                                           // Compiling data string...
-  out_file << std::string (buffer);                                                                 // Writing data to file...
+  out_file << std::string (buffer) << delimiter;                                                    // Writing data to file...
 }
 
 void nu::logfile::write (
@@ -75,7 +77,7 @@ void nu::logfile::write (
   char buffer[1024];                                                                                // Text buffer.
 
   snprintf (buffer, 1024, "%+d", loc_int);                                                          // Compiling data string...
-  out_file << std::string (buffer);                                                                 // Writing data to file...
+  out_file << std::string (buffer) << delimiter;                                                    // Writing data to file...
 }
 
 void nu::logfile::write (
@@ -85,19 +87,19 @@ void nu::logfile::write (
   char buffer[1024];                                                                                // Text buffer.
 
   snprintf (buffer, 1024, "%+.6E", loc_float);                                                      // Compiling data string...
-  out_file << std::string (buffer);                                                                 // Writing data to file...
+  out_file << std::string (buffer) << delimiter;                                                    // Writing data to file...
 }
 
 void nu::logfile::read ()
 {
-  EOL = true;
-  fileline.clear ();
-  streamline.clear ();
+  EOL = true;                                                                                       // Setting end of line...
+  fileline.clear ();                                                                                // Clearing fileline...
+  streamline.clear ();                                                                              // Clearing streamline...
 }
 
 void nu::logfile::endline ()
 {
-  out_file << std::endl;
+  out_file << std::endl;                                                                            // Ending line...
 }
 
 void nu::logfile::close (
@@ -118,7 +120,7 @@ void nu::logfile::close (
 
 bool nu::logfile::eof ()
 {
-  return END;
+  return END;                                                                                       // Returning END...
 }
 
 nu::logfile::~logfile()
