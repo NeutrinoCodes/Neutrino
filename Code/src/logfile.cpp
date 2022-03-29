@@ -40,8 +40,6 @@ void nu::logfile::open (
   {
     case READ:
       in_file.open (file_name);                                                                     // Opening data log file (read mode)...
-      fileline = "4 +3.567771E-07";
-      streamline << fileline;
       break;
 
     case WRITE:
@@ -92,6 +90,9 @@ void nu::logfile::write (
 
 void nu::logfile::read ()
 {
+  EOL = true;
+  fileline.clear ();
+  streamline.clear ();
 }
 
 void nu::logfile::endline ()
