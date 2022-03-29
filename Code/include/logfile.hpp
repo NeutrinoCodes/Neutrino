@@ -83,10 +83,10 @@ public:
               float loc_float                                                                       ///< Float value.
              );
 
-  void read ();
+  bool read ();
 
   template <typename T, typename ... Types>
-  void read (
+  bool read (
              T var1,
              Types... var2
             )
@@ -108,17 +108,22 @@ public:
       }
     }
 
-    // Extracting token from streamline:
-    if(std::getline (streamline, token, ' '))
+    if(!END)
     {
-      typename remove_pointer<T>::type::value_type value;                                           // Creating value by getting the type from the current vector argument...
-      std::stringstream                            streamtoken (token);                             // Creating stream from extracted token...
-      streamtoken >> value;                                                                         // Streaming token to value for current vector argument...
-      var1->push_back (value);                                                                      // Appending value to current vector argument...
-      EOL = false;                                                                                  // Resetting end of line flag...
+      // Extracting token from streamline:
+      if(std::getline (streamline, token, ' '))
+      {
+        typename remove_pointer<T>::type::value_type value;                                         // Creating value by getting the type from the current vector argument...
+        std::stringstream                            streamtoken (token);                           // Creating stream from extracted token...
+        streamtoken >> value;                                                                       // Streaming token to value for current vector argument...
+        var1->push_back (value);                                                                    // Appending value to current vector argument...
+        EOL = false;                                                                                // Resetting end of line flag...
+      }
+
+      read (var2 ...);                                                                              // Recursive self-invocation...
     }
 
-    read (var2 ...);                                                                                // Recursive self-invocation...
+    return END;
   };
 
   /// @brief **Endline method.**
