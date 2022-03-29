@@ -26,9 +26,10 @@ typedef enum
 class logfile : public neutrino                                                                     /// @brief **Logfile.**
 {
 private:
-  std::ifstream in_file;                                                                            ///< Data file.
-  std::ofstream out_file;                                                                           ///< Data file.
-  std::string   line;                                                                               ///< File line.
+  std::ifstream     in_file;                                                                        ///< Data file.
+  std::ofstream     out_file;                                                                       ///< Data file.
+  std::string       fileline;                                                                       // File line.
+  std::stringstream streamline;
 
   template<typename T>
   struct remove_pointer
@@ -88,19 +89,21 @@ public:
              Types... var2
             )
   {
-    //while(in_file.good ())
-    //{
-    //line = "";
-    //std::getline (in_file, line);                                                                   // Reading single file line...
-    //in_file.clear ();
-    //std::istringstream     input (line);                                                            // Make a stream for the line itself...
-    //std::cout << line << std::endl;
-    typename remove_pointer<T>::type::value_type value;
-    //input >> value;                                                                                 // Reading line token...
-    value = 5.0989f;
-    var1->push_back (value);                                                                        // Filling corresponding vector...
-    //}
 
+    std::string token;                                                                              // Token.
+
+    //std::getline (in_file, fileline);                                                               // Reading single file line...
+
+    // Make a stream for the line itself...
+
+    if(std::getline (streamline, token, ' '))
+    {
+      typename remove_pointer<T>::type::value_type value;
+      std::stringstream                            streamtoken (token);
+      streamtoken >> value;
+      var1->push_back (value);
+      std::cout << value << std::endl;
+    }
 
     read (var2 ...);                                                                                // Recursive self invocation...
   };
