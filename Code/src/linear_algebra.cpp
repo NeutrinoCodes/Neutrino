@@ -189,3 +189,55 @@ void  euler
   // Yaw (z-axis rotation):
   *yaw = atan2 (siny_cosp, cosy_cosp);                                                              // Computing yaw...
 }
+
+float det (
+           float M[4]                                                                               // Input matrix.
+          )
+{
+  return M[0]*M[3] - M[2]*M[1];
+}
+
+float det (
+           float M[9]                                                                               // Input matrix.
+          )
+{
+  // M = (a, b, c)
+  //     (d, e, f)
+  //     (g, h, i)
+
+  float a;
+  float b;
+  float c;
+
+  float A;
+  float B;
+  float C;
+
+  a = M[0];                                                                                         // Getting a...
+  b = M[3];                                                                                         // Getting b...
+  c = M[6];                                                                                         // Getting c...
+
+  A = M[4]*M[8] - M[7]*M[5];                                                                        // Computing Sarrus coefficient A...
+  B = -(M[1]*M[8] - M[7]*M[2]);                                                                     // Computing Sarrus coefficient B...
+  C = M[1]*M[5] - M[4]*M[2];                                                                        // Computing Sarrus coefficient C...
+
+  return a*A + b*B + c*C;                                                                           // Returning det(M)...
+}
+
+void inv (
+          float I[9],                                                                               // Inverse of input matrix.
+          float M[9]                                                                                // Input matrix.
+         )
+{
+
+}
+
+void  minor (
+             float m[4],                                                                            ///< Complementary minor matrix.
+             float M[9],                                                                            ///< Input matrix.
+             int   i,                                                                               ///< Row index.
+             int   j                                                                                ///< Column index.
+            )
+{
+  m[0] = M[]
+}
