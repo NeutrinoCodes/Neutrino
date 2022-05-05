@@ -3689,6 +3689,7 @@ void nu::opengl::init
   glEnable (GL_BLEND);                                                                              // Enabling alpha blending...
 
   PR_mode = MONOCULAR;                                                                              // Setting monoscopic projection mode...
+  VR_mode = DIRECT;                                                                                 // Setting direct view mode (view matrix not inverted)...
 
   // Setting monoscopic perspective:
   perspective_mono
@@ -4137,10 +4138,12 @@ void nu::opengl::clear ()
 void nu::opengl::plot
 (
  nu::shader*         loc_shader,                                                                    // OpenGL shader.
- nu::projection_mode loc_mode                                                                       // OpenGL projection mode.
+ nu::projection_mode loc_pmode,                                                                     // OpenGL projection mode.
+ nu::view_mode       loc_vmode                                                                      // OpenGL view mode.
 )
 {
-  PR_mode = loc_mode;                                                                               // Setting OpenGL projection mode...
+  PR_mode = loc_pmode;                                                                              // Setting OpenGL projection mode...
+  VR_mode = loc_vmode;                                                                              // Setting OpenGL view mode...
 
   switch(PR_mode)
   {
@@ -4149,6 +4152,17 @@ void nu::opengl::plot
 
       // Computing view matrix:
       multiplicate (V_mat, T_mat, R_mat);                                                           // Setting view matrix...
+
+      // Checking whether inverting the view matrix or not:
+      switch(VR_mode)
+      {
+        case DIRECT:
+          break;
+
+        case INVERSE:
+          inv (V_mat, V_mat);                                                                       // Inverting the view matrix...
+          break;
+      }
 
       // Setting plot style:
       set_shader (
@@ -4176,6 +4190,19 @@ void nu::opengl::plot
       multiplicate (V_mat, T_mat, R_mat);                                                           // Setting view matrix...
       multiplicate (VL_mat, TL_mat, V_mat);                                                         // Setting left eye stereoscopic view matrix...
       multiplicate (VR_mat, TR_mat, V_mat);                                                         // Setting right eye stereoscopic view matrix...
+
+      // Checking whether inverting the view matrices or not:
+      switch(VR_mode)
+      {
+        case DIRECT:
+          break;
+
+        case INVERSE:
+          inv (V_mat, V_mat);                                                                       // Inverting the view matrix...
+          inv (VL_mat, VL_mat);                                                                     // Inverting the view matrix...
+          inv (VR_mat, VR_mat);                                                                     // Inverting the view matrix...
+          break;
+      }
 
       // Left eye:
       set_shader (

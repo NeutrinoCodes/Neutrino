@@ -34,6 +34,13 @@ typedef enum
   BINOCULAR                                                                                         ///< Projection mode set as binocular.
 } projection_mode;
 
+// View mode:
+typedef enum
+{
+  DIRECT,                                                                                           ///< View mode set as direct.
+  INVERSE                                                                                           ///< View mode set as inverse (View matrix is inverted).
+} view_mode;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////// "opengl" class ///////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,6 +88,7 @@ private:
   GLuint           shaded_shader;                                                                   ///< @brief **Shaded shader program.**
   GLuint           text_shader;                                                                     ///< @brief **Point shader program.**
   projection_mode  PR_mode;                                                                         ///< @brief **Projection mode.**
+  view_mode        VR_mode;                                                                         ///< @brief **View mode.**
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////// PRIVATE METHODS //////////////////////////////////////////
@@ -555,7 +563,8 @@ public:
   /// Plots graphics in the GUI. TO be invoked by the user.
   void plot (
              nu::shader*         loc_shader,                                                        ///< OpenGL shader.
-             nu::projection_mode loc_mode                                                           ///< OpenGL projection mode.
+             nu::projection_mode loc_pmode,                                                         ///< OpenGL projection mode.
+             nu::view_mode       loc_vmode                                                          ///< OpenGL view mode.
             );
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
