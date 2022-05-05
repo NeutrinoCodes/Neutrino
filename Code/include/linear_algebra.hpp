@@ -85,11 +85,54 @@ void rotation_matrix (
 /// @f$ roll = \arctan{\left(\frac{2(q_4 q_1 + q_2 q_3)}{1 - 2(q_1^2 + q_2^2)}\right)} @f$,
 /// @f$ pitch = \arcsin{\left(2(q_4 q_2 - q_3 q_1)\right)} @f$,
 /// @f$ yaw = \arctan{\left(\frac{2(q_4 q_3 + q_1 q_2)}{1 - 2(q_2^2 + q_3^2)}\right)} @f$
-void euler (
-            float* roll,                                                                            ///< Roll angle [rad].
-            float* pitch,                                                                           ///< Pitch angle [rad].
-            float* yaw,                                                                             ///< Yaw angle [rad].
-            float  q[4]                                                                             ///< Rotation quaternion.
-           );
+void  euler (
+             float* roll,                                                                           ///< Roll angle [rad].
+             float* pitch,                                                                          ///< Pitch angle [rad].
+             float* yaw,                                                                            ///< Yaw angle [rad].
+             float  q[4]                                                                            ///< Rotation quaternion.
+            );
+
+/// @brief **Determinant of a 4x4 matrix.**
+/// @details Computes the determinant of a 4x4 matrix
+float det (
+           float M_mat[16]                                                                          ///< Input matrix.
+          );
+
+// @brief **Determinant of a 3x3 matrix.**
+/// @details Computes the determinant of a 4x4 matrix
+float det (
+           float M_mat[9]                                                                           ///< Input matrix.
+          );
+
+// @brief **Determinant of a 2x2 matrix.**
+/// @details Computes the determinant of a 4x4 matrix
+float det (
+           float M_mat[4]                                                                           ///< Input matrix.
+          );
+
+// @brief **Transpose of a 4x4 matrix.**
+/// @details Computes the transpose of a 4x4 matrix
+void  transpose (
+                 float M_mat[16]                                                                    ///< Input matrix.
+                );
+
+// @brief **Transpose of a 3x3 matrix.**
+/// @details Computes the transpose of a 3x3 matrix
+void  transpose (
+                 float M_mat[16]                                                                    ///< Input matrix.
+                );
+
+// @brief **Transpose of a 2x2 matrix.**
+/// @details Computes the transpose of a 2x2 matrix
+void  transpose (
+                 float M_mat[16]                                                                    ///< Input matrix.
+                );
+
+// @brief **Inverse of a 4x4 matrix.**
+/// @details Computes the inverse of a 4x4 matrix
+void  inv (
+           float I_mat[16],                                                                         ///< Inverse of input matrix.
+           float M_mat[16]                                                                          ///< Input matrix.
+          );
 
 #endif
