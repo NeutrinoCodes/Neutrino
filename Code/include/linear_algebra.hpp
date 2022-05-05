@@ -85,123 +85,19 @@ void rotation_matrix (
 /// @f$ roll = \arctan{\left(\frac{2(q_4 q_1 + q_2 q_3)}{1 - 2(q_1^2 + q_2^2)}\right)} @f$,
 /// @f$ pitch = \arcsin{\left(2(q_4 q_2 - q_3 q_1)\right)} @f$,
 /// @f$ yaw = \arctan{\left(\frac{2(q_4 q_3 + q_1 q_2)}{1 - 2(q_2^2 + q_3^2)}\right)} @f$
-void  euler (
-             float* roll,                                                                           ///< Roll angle [rad].
-             float* pitch,                                                                          ///< Pitch angle [rad].
-             float* yaw,                                                                            ///< Yaw angle [rad].
-             float  q[4]                                                                            ///< Rotation quaternion.
-            );
-
-/// @brief **Determinant of a 2x2 matrix.**
-/// @details Computes the determinant of a 4x4 matrix
-float det (
-           float M[4]                                                                               ///< Input matrix.
-          );
-
-/// @brief **Determinant of a 3x3 matrix.**
-/// @details Computes the determinant of a 4x4 matrix
-float det (
-           float M[9]                                                                               ///< Input matrix.
-          );
-
-/// @brief **Determinant of a 4x4 matrix.**
-/// @details Computes the determinant of a 4x4 matrix
-float det (
-           float M[16]                                                                              ///< Input matrix.
-          );
-
-/// @brief **Transpose of a 4x4 matrix.**
-/// @details Computes the transpose of a 4x4 matrix
-void  transpose (
-                 float M[16]                                                                        ///< Input matrix.
-                );
-
-/// @brief **Transpose of a 3x3 matrix.**
-/// @details Computes the transpose of a 3x3 matrix
-void  transpose (
-                 float M[9]                                                                         ///< Input matrix.
-                );
-
-/// @brief **Transpose of a 2x2 matrix.**
-/// @details Computes the transpose of a 2x2 matrix
-void  transpose (
-                 float M[4]                                                                         ///< Input matrix.
-                );
-
-/// @brief **Complementary minor of a 4x4 matrix.**
-/// @details Computes the complementary minor matrix of a 4x4 matrix
-void  minor (
-             float m[9],                                                                            ///< Complementary minor matrix.
-             float M[16],                                                                           ///< Input matrix.
-             int   i,                                                                               ///< Row index.
-             int   j                                                                                ///< Column index.
-            );
-
-/// @brief **Complementary minor of a 3x3 matrix.**
-/// @details Computes the complementary minor matrix of a 3x3 matrix
-void  minor (
-             float m[4],                                                                            ///< Complementary minor matrix.
-             float M[9],                                                                            ///< Input matrix.
-             int   i,                                                                               ///< Row index.
-             int   j                                                                                ///< Column index.
-            );
-
-/// @brief **Cofactor of a 4x4 matrix.**
-/// @details Computes the cofactor of a 4x4 matrix
-float cof (
-           float M[16],                                                                             ///< Input matrix.
-           int   i,                                                                                 ///< Row index.
-           int   j                                                                                  ///< Column index.
-          );
-
-/// @brief **Cofactor of a 3x3 matrix.**
-/// @details Computes the cofactor of a 3x3 matrix
-float cof (
-           float M[9],                                                                              ///< Input matrix.
-           int   i,                                                                                 ///< Row index.
-           int   j                                                                                  ///< Column index.
-          );
-
-/// @brief **Adjugate of a 4x4 matrix.**
-/// @details Computes the adjugate of a 4x4 matrix
-void  adj (
-           float A[16],                                                                             ///< Adjugate of input matrix.
-           float M[16]                                                                              ///< Input matrix.
-          );
-
-// @brief **Adjugate of a 3x3 matrix.**
-/// @details Computes the adjugate of a 3x3 matrix
-void  adj (
-           float A[9],                                                                              ///< Adjugate of input matrix.
-           float M[9]                                                                               ///< Input matrix.
-          );
-
-// @brief **Adjugate of a 2x2 matrix.**
-/// @details Computes the adjugate of a 2x2 matrix
-void  adj (
-           float A[4],                                                                              ///< Adjugate of input matrix.
-           float M[4]                                                                               ///< Input matrix.
-          );
+void euler (
+            float* roll,                                                                            ///< Roll angle [rad].
+            float* pitch,                                                                           ///< Pitch angle [rad].
+            float* yaw,                                                                             ///< Yaw angle [rad].
+            float  q[4]                                                                             ///< Rotation quaternion.
+           );
 
 /// @brief **Inverse of a 4x4 matrix.**
 /// @details Computes the inverse of a 4x4 matrix
-void  inv (
-           float I[16],                                                                             ///< Inverse of input matrix.
-           float M[16]                                                                              ///< Input matrix.
-          );
-
-/// @brief **Inverse of a 3x3 matrix.**
-/// @details Computes the inverse of a 3x3 matrix
-void  inv (
-           float I[9],                                                                              ///< Inverse of input matrix.
-           float M[9]                                                                               ///< Input matrix.
-          );
-
-/// @brief **Inverse of a 2x2 matrix.**
-/// @details Computes the inverse of a 2x2 matrix
-void  inv (
-           float I[4],                                                                              ///< Inverse of input matrix.
-           float M[4]                                                                               ///< Input matrix.
-          );
+/// Based on [Mubarok's formula](https://github.com/willnode/N-Matrix-Programmer/blob/master/Info/Matrix_4x4.txt).
+void inv (
+          float I[16],                                                                              ///< Inverse of input matrix.
+          float M[16]                                                                               ///< Input matrix.
+         );
 
 #endif
