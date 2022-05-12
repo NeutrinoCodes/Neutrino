@@ -224,6 +224,32 @@ typedef struct _nu_float4_structure
 } nu_float4_structure;
 #pragma pack(pop)
 
+/// @brief    **Data structure. Internally used by Neutrino.**
+/// @details  This structure is used as data storage in the "nu::float16" class. It is tightly packed to
+/// be compatible with the OpenCL requirement of having a contiguous data arrangement without
+/// padding.
+#pragma pack(push, 1)                                                                               // Packing data in 1 column...
+typedef struct _nu_float16_structure
+{
+  GLfloat s0;                                                                                       ///< "s0" coordinate.
+  GLfloat s1;                                                                                       ///< "s1" coordinate.
+  GLfloat s2;                                                                                       ///< "s2" coordinate.
+  GLfloat s3;                                                                                       ///< "s3" coordinate.
+  GLfloat s4;                                                                                       ///< "s4" coordinate.
+  GLfloat s5;                                                                                       ///< "s5" coordinate.
+  GLfloat s6;                                                                                       ///< "s6" coordinate.
+  GLfloat s7;                                                                                       ///< "s7" coordinate.
+  GLfloat s8;                                                                                       ///< "s8" coordinate.
+  GLfloat s9;                                                                                       ///< "s9" coordinate.
+  GLfloat sA;                                                                                       ///< "sA" coordinate.
+  GLfloat sB;                                                                                       ///< "sB" coordinate.
+  GLfloat sC;                                                                                       ///< "sC" coordinate.
+  GLfloat sD;                                                                                       ///< "sD" coordinate.
+  GLfloat sE;                                                                                       ///< "sE" coordinate.
+  GLfloat sF;                                                                                       ///< "sF" coordinate.
+} nu_float4_structure;
+#pragma pack(pop)
+
 // Neutrino data types:
 typedef enum
 {
@@ -235,6 +261,7 @@ typedef enum
   NU_FLOAT2,                                                                                        ///< Neutrino "nu::float2" data type.
   NU_FLOAT3,                                                                                        ///< Neutrino "nu::float3" data type.
   NU_FLOAT4,                                                                                        ///< Neutrino "nu::float4" data type.
+  NU_FLOAT16,                                                                                       ///< Neutrino "nu::float16" data type.
 } nu_type;
 
 namespace nu
