@@ -392,6 +392,33 @@ void nu::shader::setarg
   delete loc_name_buffer;
 };
 
+void nu::shader::setarg
+(
+ nu::float16* loc_data,                                                                             // Data object.
+ GLuint       loc_layout_index                                                                      // Data layout index.
+)
+{
+  size_t loc_name_size;
+  char*  loc_name_buffer;
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  loc_name_size                  = loc_data->name.size ();                                          // Getting source size...
+  loc_name_buffer                = new char[loc_name_size + 1]();
+  loc_data->name.copy (loc_name_buffer, loc_name_size);
+  loc_name_buffer[loc_name_size] = '\0';
+
+  glBindAttribLocation (
+                        program,                                                                    // OpenGL GLSL program.
+                        loc_layout_index,                                                           // Data layout index.
+                        loc_name_buffer                                                             // Data name.
+                       );
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  delete loc_name_buffer;
+};
+
 nu::shader::~shader ()
 {
   // Doing nothing.

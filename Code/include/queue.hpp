@@ -109,6 +109,14 @@ public:
    GLuint      loc_layout_index                                                                     ///< Layout index.
   );
 
+  /// @overload read(nu::float16* loc_data, cl_uint loc_layout_index)
+  /// @details Reads data from the OpenCL queue.
+  void read
+  (
+   nu::float16* loc_data,                                                                           ///< nu::float16 object.
+   GLuint       loc_layout_index                                                                    ///< Layout index.
+  );
+
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////// write "functions" ////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -174,6 +182,14 @@ public:
   (
    nu::float4* loc_data,                                                                            ///< nu::float4 object.
    GLuint      loc_layout_index                                                                     ///< Layout index.
+  );
+
+  /// @overload write(nu::float16* loc_data, cl_uint loc_layout_index)
+  /// @details Writes data from the OpenCL queue.
+  void write
+  (
+   nu::float16* loc_data,                                                                           ///< nu::float16 object.
+   GLuint       loc_layout_index                                                                    ///< Layout index.
   );
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -243,6 +259,14 @@ public:
    GLuint      loc_layout_index                                                                     ///< OpenGL shader layout index.
   );
 
+  /// @overload acquire(nu::float16* loc_data, GLuint loc_layout_index)
+  /// @details Enables OpenCL exclusive data access. It locks data access to OpenGL.
+  void acquire
+  (
+   nu::float16* loc_data,                                                                           ///< Data object.
+   GLuint       loc_layout_index                                                                    ///< OpenGL shader layout index.
+  );
+
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////// release "functions" ///////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -308,6 +332,14 @@ public:
   (
    nu::float4* loc_data,                                                                            ///< Data object.
    GLuint      loc_layout_index                                                                     ///< OpenGL shader layout index.
+  );
+
+  /// @overload release(nu::float16* loc_data, GLuint loc_layout_index)
+  /// @details Disables OpenCL exclusive data access. It opens data access to OpenGL.
+  void release
+  (
+   nu::float16* loc_data,                                                                           ///< Data object.
+   GLuint       loc_layout_index                                                                    ///< OpenGL shader layout index.
   );
 
   /// @brief **Class destructor.**

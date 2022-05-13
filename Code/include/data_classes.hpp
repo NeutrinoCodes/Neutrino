@@ -247,7 +247,7 @@ typedef struct _nu_float16_structure
   GLfloat sD;                                                                                       ///< "sD" coordinate.
   GLfloat sE;                                                                                       ///< "sE" coordinate.
   GLfloat sF;                                                                                       ///< "sF" coordinate.
-} nu_float4_structure;
+} nu_float16_structure;
 #pragma pack(pop)
 
 // Neutrino data types:
@@ -261,7 +261,7 @@ typedef enum
   NU_FLOAT2,                                                                                        ///< Neutrino "nu::float2" data type.
   NU_FLOAT3,                                                                                        ///< Neutrino "nu::float3" data type.
   NU_FLOAT4,                                                                                        ///< Neutrino "nu::float4" data type.
-  NU_FLOAT16,                                                                                       ///< Neutrino "nu::float16" data type.
+  NU_FLOAT16                                                                                        ///< Neutrino "nu::float16" data type.
 } nu_type;
 
 namespace nu
@@ -832,6 +832,74 @@ public:
   /// @details It deallocates the host PC memory previously allocated by the
   /// @link nu::float4::init @endlink as data storage.
   ~float4();
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////// "float16" class ///////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @class nfloat16
+/// ### 16xN vector of "GLfloat" data.
+/// Declares a 16xN vector (N = data size) of "GLfloat" data numbers.
+/// To be used to transfer memory between host and client. It does not have bindings for
+/// OpenGL/CL interoperability. Not intended for graphics rendering.
+class float16 : public data                                                                         /// @brief **16xN vector of "GLfloat" data.**
+{
+private:
+
+public:
+  /// @details 16xN (N = data @link size @endlink ) **GLfloat** data storage.
+  /// These data are stored in the host PC memory.
+  /// They can be eventually exchanged between the client GPU by using the @link queue::init
+  /// @endlink and @link write @endlink methods of the @link queue @endlink class.
+  /// The data storage is created by the @link nu::int1::init @endlink method and destroyed by the
+  /// class destructor. An OpenCL **cl_mem** @link buffer @endlink object is initialized by the
+  /// @link kernel::setarg @endlink method upon the verification of the status of the @link ready
+  /// @endlink flag. The latter one serves as an indicator (internally managed by Neutrino) in order
+  /// allow the @link buffer @endlink initialization and to impede it during subsequents
+  /// calls of the @link kernel::setarg @endlink method.
+  std::vector<nu_float16_structure> data;                                                           ///< @brief **Data [GLfloat].**
+
+  /// @details **cl_mem** OpenCL memory buffer object. It does not contain user data. It is
+  /// internally used by Neutrino within the OpenCL mechanisms to define the properties of
+  /// the memory allocation on the client GPU.
+  cl_mem                            buffer;                                                         ///< @brief **Data memory buffer.**.
+
+  /// @details [OpenGL data Vertex Array Object]
+  /// (https://www.khronos.org/opengl/wiki/Vertex_Specification). Internally used by Neutrino.
+  GLuint                            vao;                                                            ///< @brief **OpenGL data Vertex Array Object.**
+
+  /// @details [OpenGL data Vertex Buffer Object]
+  /// (https://www.khronos.org/opengl/wiki/Shader_Storage_Buffer_Object).
+  /// Internally used by Neutrino.
+  GLuint                            ssbo;                                                           ///< @brief **OpenGL data Shader Storage Buffer Object.**
+
+  /// @details This flag serves as an indicator (internally managed by Neutrino) in order
+  /// allow the @link buffer @endlink initialization and to impede it during subsequents
+  /// calls of the @link kernel::setarg @endlink method. It is internally managed by Neutrino.
+  GLuint                            layout;                                                         ///< @brief **Data layout index [#].**
+
+  /// @details String name of the object instance. To be set by the user according to what
+  /// defined in the GLSL OpenGL shaders. Used to uniquely identify the object reference as
+  /// variable in the GLSL OpenGL shaders.
+  std::string                       name;                                                           ///< @brief **Data name.**
+
+  /// @details This flag serves as an indicator (internally managed by Neutrino) in order
+  /// allow the @link buffer @endlink initialization and to impede it during subsequents
+  /// calls of the @link kernel::setarg @endlink method. It is internally managed by Neutrino.
+  bool                              ready;                                                          ///< @brief **Buffer "ready" flag.**
+
+  /// @brief **Class constructor.**
+  /// @details It resets the @link ready @endlink. The initialization of the class must occur
+  /// after the initialization of the @link opencl @endlink and the @link opengl @endlink object,
+  /// therefore it must be done by invoking the @link nu::float16::init @endlink method.
+  float16 (
+           size_t loc_layout                                                                        ///< Kernel argument layout index.
+          );
+
+  /// @brief **Class destructor.**
+  /// @details It deallocates the host PC memory previously allocated by the
+  /// @link nu::float16::init @endlink as data storage.
+  ~float16();
 };
 }
 #endif

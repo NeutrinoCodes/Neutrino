@@ -232,3 +232,24 @@ nu::float4::~float4 ()
 {
   // Doing nothing!
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////// "float16" class //////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+nu::float16::float16 (
+                      size_t loc_layout                                                             // Kernel argument layout index.
+                     )
+{
+  size_t i;                                                                                         // Data vector current index.
+
+  i                              = nu::data::container.size ();                                     // Getting data vector current index...
+  nu::data::container.push_back (this);
+  nu::data::container[i]->type   = NU_FLOAT16;                                                      // Setting Neutrino data type...
+  nu::data::container[i]->layout = loc_layout;                                                      // Setting kernel argument layout index...
+  ready                          = false;                                                           // Resetting "ready" flag...
+}
+
+nu::float16::~float16 ()
+{
+  // Doing nothing!
+}
