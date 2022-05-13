@@ -172,50 +172,55 @@ void nu::kernel::build (
     switch(container[i]->type)
     {
       case NU_INT:
-        ((nu::int1*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        ((nu::int1*)neutrino::container[i])->name    = std::string ("arg_") + std::to_string (i);
         this->setarg ((nu::int1*)neutrino::container[i], i);
         break;
 
       case NU_INT2:
-        ((nu::int2*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        ((nu::int2*)neutrino::container[i])->name    = std::string ("arg_") + std::to_string (i);
         this->setarg ((nu::int2*)neutrino::container[i], i);
         break;
 
       case NU_INT3:
-        ((nu::int3*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        ((nu::int3*)neutrino::container[i])->name    = std::string ("arg_") + std::to_string (i);
         this->setarg ((nu::int3*)neutrino::container[i], i);
         break;
 
       case NU_INT4:
-        ((nu::int4*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        ((nu::int4*)neutrino::container[i])->name    = std::string ("arg_") + std::to_string (i);
         this->setarg ((nu::int4*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT:
-        ((nu::float1*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        ((nu::float1*)neutrino::container[i])->name  = std::string ("arg_") + std::to_string (i);
         this->setarg ((nu::float1*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT2:
-        ((nu::float2*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        ((nu::float2*)neutrino::container[i])->name  = std::string ("arg_") + std::to_string (i);
         this->setarg ((nu::float2*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT3:
-        ((nu::float3*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        ((nu::float3*)neutrino::container[i])->name  = std::string ("arg_") + std::to_string (i);
         this->setarg ((nu::float3*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT4:
-        ((nu::float4*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        ((nu::float4*)neutrino::container[i])->name  = std::string ("arg_") + std::to_string (i);
         this->setarg ((nu::float4*)neutrino::container[i], i);
+        break;
+
+      case NU_FLOAT16:
+        ((nu::float16*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::float16*)neutrino::container[i], i);
         break;
     }
   }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////// setarg "nu::int1" overload ///////////////////////////////////
+/////////////////////////////////////// setarg "nu::int1" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::kernel::setarg
 (
@@ -346,7 +351,7 @@ void nu::kernel::setarg
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// setarg "nu::int2" overload ///////////////////////////////////
+/////////////////////////////////////// setarg "nu::int2" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::kernel::setarg
 (
@@ -477,7 +482,7 @@ void nu::kernel::setarg
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// setarg "nu::int3" overload ///////////////////////////////////
+/////////////////////////////////////// setarg "nu::int3" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::kernel::setarg
 (
@@ -608,7 +613,7 @@ void nu::kernel::setarg
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// setarg "nu::int4" overload ///////////////////////////////////
+/////////////////////////////////////// setarg "nu::int4" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::kernel::setarg
 (
@@ -739,7 +744,7 @@ void nu::kernel::setarg
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////// setarg "nu::float1" overload ////////////////////////////////////
+//////////////////////////////////// setarg "nu::float1" overload ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::kernel::setarg
 (
@@ -870,7 +875,7 @@ void nu::kernel::setarg
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// setarg "nu::float2" overload /////////////////////////////////////
+/////////////////////////////////// setarg "nu::float2" overload /////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::kernel::setarg
 (
@@ -1001,7 +1006,7 @@ void nu::kernel::setarg
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// setarg "nu::float3" overload /////////////////////////////////////
+///////////////////////////////////// setarg "nu::float3" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::kernel::setarg
 (
@@ -1132,7 +1137,7 @@ void nu::kernel::setarg
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// setarg "nu::float4" overload /////////////////////////////////////
+///////////////////////////////////// setarg "nu::float4" overload ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void nu::kernel::setarg
 (
@@ -1182,6 +1187,137 @@ void nu::kernel::setarg
     (
      GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
      sizeof(nu_float4_structure)*loc_data->data.size (),                                            // SSBO size.
+     loc_data->data.data (),                                                                        // SSBO data.
+     GL_DYNAMIC_DRAW                                                                                // SSBO usage.
+    );
+
+    // Binding buffer object to an indexed buffer target:
+    glBindBufferBase (
+                      GL_SHADER_STORAGE_BUFFER,                                                     // SSBO target.
+                      loc_layout_index,                                                             // SSBO index.
+                      loc_data->ssbo                                                                // SSBO buffer.
+                     );
+
+    // Specifying the format for attribute in vertex shader:
+    glVertexAttribPointer
+    (
+     loc_layout_index,                                                                              // VAO index.
+     1,                                                                                             // VAO's number of components.
+     GL_FLOAT,                                                                                      // Data type.
+     GL_FALSE,                                                                                      // Not using normalized numbers.
+     0,                                                                                             // Data stride.
+     0                                                                                              // Data offset.
+    );
+
+    // Enabling attribute in vertex shader:
+    glEnableVertexAttribArray
+    (
+     loc_layout_index                                                                               // VAO index.
+    );
+
+    // Binding SSBO:
+    glBindBuffer
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
+     loc_data->ssbo                                                                                 // SSBO to bind.
+    );
+
+    glFinish ();                                                                                    // Waiting for OpenGL to finish...
+
+    if(neutrino::interop)                                                                           // Checking for interoperability...
+    {
+      // Creating OpenCL buffer from OpenGL buffer:
+      loc_data->buffer = clCreateFromGLBuffer
+                         (
+                          neutrino::context_id,                                                     // OpenCL context.
+                          CL_MEM_READ_WRITE,                                                        // Memory flags.
+                          loc_data->ssbo,                                                           // VBO.
+                          &loc_error                                                                // Returned error.
+                         );
+    }
+
+    else
+    {
+      // Creating OpenCL memory buffer:
+      loc_data->buffer = clCreateBuffer
+                         (
+                          neutrino::context_id,                                                     // OpenCL context.
+                          CL_MEM_READ_WRITE |                                                       // Memory flag.
+                          CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
+                          sizeof(nu_float4_structure)*loc_data->data.size (),                       // Data buffer size.
+                          loc_data->data.data (),                                                   // Data buffer.
+                          &loc_error                                                                // Error code.
+                         );
+    }
+
+    neutrino::check_error (loc_error);                                                              // Checking returned error code...
+    loc_data->ready = true;                                                                         // Setting "ready" flag...
+  }
+
+  loc_error = clSetKernelArg
+              (
+               kernel_id,                                                                           // Kernel id.
+               loc_layout_index,                                                                    // Layout index.
+               sizeof(cl_mem),                                                                      // Data size.
+               &loc_data->buffer                                                                    // Data value.
+              );
+
+  neutrino::check_error (loc_error);                                                                // Checking returned error code...
+  clFinish (neutrino::queue_id);                                                                    // Waiting for OpenCL to finish...
+  neutrino::done ();                                                                                // Printing message...
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////// setarg "nu::float16" overload //////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+void nu::kernel::setarg
+(
+ nu::float16* loc_data,                                                                             // nu::float16 data.
+ cl_uint      loc_layout_index                                                                      // Layout index.
+)
+{
+  cl_int loc_error;                                                                                 // Error code.
+
+  glFinish ();                                                                                      // Waiting for OpenGL to finish...
+
+  neutrino::action ("setting kernel argument...");                                                  // Printing message...
+
+  loc_data->layout = loc_layout_index;                                                              // Setting layout index.
+
+  if(!loc_data->ready)
+  {
+    // Generating VAO...
+    glGenVertexArrays
+    (
+     1,                                                                                             // Number of VAOs to generate.
+     &loc_data->vao                                                                                 // VAOs array.
+    );
+
+    // Binding node VAO...
+    glBindVertexArray
+    (
+     loc_data->vao                                                                                  // VAOs array.
+    );
+
+    // Generating SSBO:
+    glGenBuffers
+    (
+     1,                                                                                             // Number of SSBOs to generate.
+     &loc_data->ssbo                                                                                // SSBOs array.
+    );
+
+    // Binding SSBO:
+    glBindBuffer
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
+     loc_data->ssbo                                                                                 // SSBO to bind.
+    );
+
+    // Creating and initializing a buffer object's data store:
+    glBufferData
+    (
+     GL_SHADER_STORAGE_BUFFER,                                                                      // SSBO target.
+     sizeof(nu_float16_structure)*loc_data->data.size (),                                           // SSBO size.
      loc_data->data.data (),                                                                        // SSBO data.
      GL_DYNAMIC_DRAW                                                                                // SSBO usage.
     );

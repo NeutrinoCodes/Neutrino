@@ -124,6 +124,13 @@ public:
                GLuint      loc_layout_index                                                         ///< Data layout index.
               );
 
+  /// @overload setarg(nu::float16* loc_data, GLuint loc_layout_index)
+  /// @details Sets an argument in the OpenGL shader.
+  void setarg (
+               nu::float16* loc_data,                                                               ///< Data object.
+               GLuint       loc_layout_index                                                        ///< Data layout index.
+              );
+
   /// @brief **Class destructor.**
   /// @details It does nothing.
   ~shader ();

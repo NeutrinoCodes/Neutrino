@@ -623,43 +623,48 @@ void nu::opencl::read ()
     switch(container[i]->type)
     {
       case NU_INT:
-        ((nu::int1*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        ((nu::int1*)neutrino::container[i])->name    = std::string ("arg_") + std::to_string (i);
         opencl_queue->read ((nu::int1*)neutrino::container[i], i);
         break;
 
       case NU_INT2:
-        ((nu::int2*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        ((nu::int2*)neutrino::container[i])->name    = std::string ("arg_") + std::to_string (i);
         opencl_queue->read ((nu::int2*)neutrino::container[i], i);
         break;
 
       case NU_INT3:
-        ((nu::int3*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        ((nu::int3*)neutrino::container[i])->name    = std::string ("arg_") + std::to_string (i);
         opencl_queue->read ((nu::int3*)neutrino::container[i], i);
         break;
 
       case NU_INT4:
-        ((nu::int4*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        ((nu::int4*)neutrino::container[i])->name    = std::string ("arg_") + std::to_string (i);
         opencl_queue->read ((nu::int4*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT:
-        ((nu::float1*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        ((nu::float1*)neutrino::container[i])->name  = std::string ("arg_") + std::to_string (i);
         opencl_queue->read ((nu::float1*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT2:
-        ((nu::float2*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        ((nu::float2*)neutrino::container[i])->name  = std::string ("arg_") + std::to_string (i);
         opencl_queue->read ((nu::float2*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT3:
-        ((nu::float3*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        ((nu::float3*)neutrino::container[i])->name  = std::string ("arg_") + std::to_string (i);
         opencl_queue->read ((nu::float3*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT4:
-        ((nu::float4*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        ((nu::float4*)neutrino::container[i])->name  = std::string ("arg_") + std::to_string (i);
         opencl_queue->read ((nu::float4*)neutrino::container[i], i);
+        break;
+
+      case NU_FLOAT16:
+        ((nu::float16*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        opencl_queue->read ((nu::float16*)neutrino::container[i], i);
         break;
     }
   }
@@ -673,51 +678,57 @@ void nu::opencl::read (
   switch(container[loc_i]->type)
   {
     case NU_INT:
-      ((nu::int1*)neutrino::container[loc_i])->name   = std::string ("arg_") +
-                                                        std::to_string (loc_i);
+      ((nu::int1*)neutrino::container[loc_i])->name    = std::string ("arg_") +
+                                                         std::to_string (loc_i);
       opencl_queue->read ((nu::int1*)neutrino::container[loc_i], loc_i);
       break;
 
     case NU_INT2:
-      ((nu::int2*)neutrino::container[loc_i])->name   = std::string ("arg_") +
-                                                        std::to_string (loc_i);
+      ((nu::int2*)neutrino::container[loc_i])->name    = std::string ("arg_") +
+                                                         std::to_string (loc_i);
       opencl_queue->read ((nu::int2*)neutrino::container[loc_i], loc_i);
       break;
 
     case NU_INT3:
-      ((nu::int3*)neutrino::container[loc_i])->name   = std::string ("arg_") +
-                                                        std::to_string (loc_i);
+      ((nu::int3*)neutrino::container[loc_i])->name    = std::string ("arg_") +
+                                                         std::to_string (loc_i);
       opencl_queue->read ((nu::int3*)neutrino::container[loc_i], loc_i);
       break;
 
     case NU_INT4:
-      ((nu::int4*)neutrino::container[loc_i])->name   = std::string ("arg_") +
-                                                        std::to_string (loc_i);
+      ((nu::int4*)neutrino::container[loc_i])->name    = std::string ("arg_") +
+                                                         std::to_string (loc_i);
       opencl_queue->read ((nu::int4*)neutrino::container[loc_i], loc_i);
       break;
 
     case NU_FLOAT:
-      ((nu::float1*)neutrino::container[loc_i])->name = std::string ("arg_") +
-                                                        std::to_string (loc_i);
+      ((nu::float1*)neutrino::container[loc_i])->name  = std::string ("arg_") +
+                                                         std::to_string (loc_i);
       opencl_queue->read ((nu::float1*)neutrino::container[loc_i], loc_i);
       break;
 
     case NU_FLOAT2:
-      ((nu::float2*)neutrino::container[loc_i])->name = std::string ("arg_") +
-                                                        std::to_string (loc_i);
+      ((nu::float2*)neutrino::container[loc_i])->name  = std::string ("arg_") +
+                                                         std::to_string (loc_i);
       opencl_queue->read ((nu::float2*)neutrino::container[loc_i], loc_i);
       break;
 
     case NU_FLOAT3:
-      ((nu::float3*)neutrino::container[loc_i])->name = std::string ("arg_") +
-                                                        std::to_string (loc_i);
+      ((nu::float3*)neutrino::container[loc_i])->name  = std::string ("arg_") +
+                                                         std::to_string (loc_i);
       opencl_queue->read ((nu::float3*)neutrino::container[loc_i], loc_i);
       break;
 
     case NU_FLOAT4:
-      ((nu::float4*)neutrino::container[loc_i])->name = std::string ("arg_") +
-                                                        std::to_string (loc_i);
+      ((nu::float4*)neutrino::container[loc_i])->name  = std::string ("arg_") +
+                                                         std::to_string (loc_i);
       opencl_queue->read ((nu::float4*)neutrino::container[loc_i], loc_i);
+      break;
+
+    case NU_FLOAT16:
+      ((nu::float16*)neutrino::container[loc_i])->name = std::string ("arg_") +
+                                                         std::to_string (loc_i);
+      opencl_queue->read ((nu::float16*)neutrino::container[loc_i], loc_i);
       break;
   }
 }
@@ -732,43 +743,48 @@ void nu::opencl::write ()
     switch(container[i]->type)
     {
       case NU_INT:
-        ((nu::int1*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        ((nu::int1*)neutrino::container[i])->name    = std::string ("arg_") + std::to_string (i);
         opencl_queue->write ((nu::int1*)neutrino::container[i], i);
         break;
 
       case NU_INT2:
-        ((nu::int2*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        ((nu::int2*)neutrino::container[i])->name    = std::string ("arg_") + std::to_string (i);
         opencl_queue->write ((nu::int2*)neutrino::container[i], i);
         break;
 
       case NU_INT3:
-        ((nu::int3*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        ((nu::int3*)neutrino::container[i])->name    = std::string ("arg_") + std::to_string (i);
         opencl_queue->write ((nu::int3*)neutrino::container[i], i);
         break;
 
       case NU_INT4:
-        ((nu::int4*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        ((nu::int4*)neutrino::container[i])->name    = std::string ("arg_") + std::to_string (i);
         opencl_queue->write ((nu::int4*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT:
-        ((nu::float1*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        ((nu::float1*)neutrino::container[i])->name  = std::string ("arg_") + std::to_string (i);
         opencl_queue->write ((nu::float1*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT2:
-        ((nu::float2*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        ((nu::float2*)neutrino::container[i])->name  = std::string ("arg_") + std::to_string (i);
         opencl_queue->write ((nu::float2*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT3:
-        ((nu::float3*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        ((nu::float3*)neutrino::container[i])->name  = std::string ("arg_") + std::to_string (i);
         opencl_queue->write ((nu::float3*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT4:
-        ((nu::float4*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        ((nu::float4*)neutrino::container[i])->name  = std::string ("arg_") + std::to_string (i);
         opencl_queue->write ((nu::float4*)neutrino::container[i], i);
+        break;
+
+      case NU_FLOAT16:
+        ((nu::float16*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        opencl_queue->write ((nu::float16*)neutrino::container[i], i);
         break;
     }
   }
@@ -782,51 +798,57 @@ void nu::opencl::write (
   switch(container[loc_i]->type)
   {
     case NU_INT:
-      ((nu::int1*)neutrino::container[loc_i])->name   = std::string ("arg_") +
-                                                        std::to_string (loc_i);
+      ((nu::int1*)neutrino::container[loc_i])->name    = std::string ("arg_") +
+                                                         std::to_string (loc_i);
       opencl_queue->write ((nu::int1*)neutrino::container[loc_i], loc_i);
       break;
 
     case NU_INT2:
-      ((nu::int2*)neutrino::container[loc_i])->name   = std::string ("arg_") +
-                                                        std::to_string (loc_i);
+      ((nu::int2*)neutrino::container[loc_i])->name    = std::string ("arg_") +
+                                                         std::to_string (loc_i);
       opencl_queue->write ((nu::int2*)neutrino::container[loc_i], loc_i);
       break;
 
     case NU_INT3:
-      ((nu::int3*)neutrino::container[loc_i])->name   = std::string ("arg_") +
-                                                        std::to_string (loc_i);
+      ((nu::int3*)neutrino::container[loc_i])->name    = std::string ("arg_") +
+                                                         std::to_string (loc_i);
       opencl_queue->write ((nu::int3*)neutrino::container[loc_i], loc_i);
       break;
 
     case NU_INT4:
-      ((nu::int4*)neutrino::container[loc_i])->name   = std::string ("arg_") +
-                                                        std::to_string (loc_i);
+      ((nu::int4*)neutrino::container[loc_i])->name    = std::string ("arg_") +
+                                                         std::to_string (loc_i);
       opencl_queue->write ((nu::int4*)neutrino::container[loc_i], loc_i);
       break;
 
     case NU_FLOAT:
-      ((nu::float1*)neutrino::container[loc_i])->name = std::string ("arg_") +
-                                                        std::to_string (loc_i);
+      ((nu::float1*)neutrino::container[loc_i])->name  = std::string ("arg_") +
+                                                         std::to_string (loc_i);
       opencl_queue->write ((nu::float1*)neutrino::container[loc_i], loc_i);
       break;
 
     case NU_FLOAT2:
-      ((nu::float2*)neutrino::container[loc_i])->name = std::string ("arg_") +
-                                                        std::to_string (loc_i);
+      ((nu::float2*)neutrino::container[loc_i])->name  = std::string ("arg_") +
+                                                         std::to_string (loc_i);
       opencl_queue->write ((nu::float2*)neutrino::container[loc_i], loc_i);
       break;
 
     case NU_FLOAT3:
-      ((nu::float3*)neutrino::container[loc_i])->name = std::string ("arg_") +
-                                                        std::to_string (loc_i);
+      ((nu::float3*)neutrino::container[loc_i])->name  = std::string ("arg_") +
+                                                         std::to_string (loc_i);
       opencl_queue->write ((nu::float3*)neutrino::container[loc_i], loc_i);
       break;
 
     case NU_FLOAT4:
-      ((nu::float4*)neutrino::container[loc_i])->name = std::string ("arg_") +
-                                                        std::to_string (loc_i);
+      ((nu::float4*)neutrino::container[loc_i])->name  = std::string ("arg_") +
+                                                         std::to_string (loc_i);
       opencl_queue->write ((nu::float4*)neutrino::container[loc_i], loc_i);
+      break;
+
+    case NU_FLOAT16:
+      ((nu::float16*)neutrino::container[loc_i])->name = std::string ("arg_") +
+                                                         std::to_string (loc_i);
+      opencl_queue->write ((nu::float16*)neutrino::container[loc_i], loc_i);
       break;
   }
 }
@@ -870,6 +892,10 @@ void nu::opencl::acquire ()
       case NU_FLOAT4:
         opencl_queue->acquire ((nu::float4*)container[i], i);
         break;
+
+      case NU_FLOAT16:
+        opencl_queue->acquire ((nu::float16*)container[i], i);
+        break;
     }
   }
 }
@@ -912,6 +938,10 @@ void nu::opencl::release ()
 
       case NU_FLOAT4:
         opencl_queue->release ((nu::float4*)container[i], i);
+        break;
+
+      case NU_FLOAT16:
+        opencl_queue->release ((nu::float16*)container[i], i);
         break;
     }
   }
