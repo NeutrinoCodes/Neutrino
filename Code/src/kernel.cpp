@@ -1375,7 +1375,7 @@ void nu::kernel::setarg
                           neutrino::context_id,                                                     // OpenCL context.
                           CL_MEM_READ_WRITE |                                                       // Memory flag.
                           CL_MEM_COPY_HOST_PTR,                                                     // Memory flag.
-                          sizeof(nu_float4_structure)*loc_data->data.size (),                       // Data buffer size.
+                          sizeof(nu_float16_structure)*loc_data->data.size (),                      // Data buffer size.
                           loc_data->data.data (),                                                   // Data buffer.
                           &loc_error                                                                // Error code.
                          );
