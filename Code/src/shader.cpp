@@ -129,43 +129,48 @@ void nu::shader::build (
     switch(container[i]->type)
     {
       case NU_INT:
-        ((nu::int1*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        ((nu::int1*)neutrino::container[i])->name    = std::string ("arg_") + std::to_string (i);
         this->setarg ((nu::int1*)neutrino::container[i], i);
         break;
 
       case NU_INT2:
-        ((nu::int2*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        ((nu::int2*)neutrino::container[i])->name    = std::string ("arg_") + std::to_string (i);
         this->setarg ((nu::int2*)neutrino::container[i], i);
         break;
 
       case NU_INT3:
-        ((nu::int3*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        ((nu::int3*)neutrino::container[i])->name    = std::string ("arg_") + std::to_string (i);
         this->setarg ((nu::int3*)neutrino::container[i], i);
         break;
 
       case NU_INT4:
-        ((nu::int4*)neutrino::container[i])->name   = std::string ("arg_") + std::to_string (i);
+        ((nu::int4*)neutrino::container[i])->name    = std::string ("arg_") + std::to_string (i);
         this->setarg ((nu::int4*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT:
-        ((nu::float1*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        ((nu::float1*)neutrino::container[i])->name  = std::string ("arg_") + std::to_string (i);
         this->setarg ((nu::float1*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT2:
-        ((nu::float2*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        ((nu::float2*)neutrino::container[i])->name  = std::string ("arg_") + std::to_string (i);
         this->setarg ((nu::float2*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT3:
-        ((nu::float3*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        ((nu::float3*)neutrino::container[i])->name  = std::string ("arg_") + std::to_string (i);
         this->setarg ((nu::float3*)neutrino::container[i], i);
         break;
 
       case NU_FLOAT4:
-        ((nu::float4*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        ((nu::float4*)neutrino::container[i])->name  = std::string ("arg_") + std::to_string (i);
         this->setarg ((nu::float4*)neutrino::container[i], i);
+        break;
+
+      case NU_FLOAT16:
+        ((nu::float16*)neutrino::container[i])->name = std::string ("arg_") + std::to_string (i);
+        this->setarg ((nu::float16*)neutrino::container[i], i);
         break;
     }
   }
