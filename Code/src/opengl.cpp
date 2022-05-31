@@ -3593,6 +3593,9 @@ void nu::opengl::init
   int         opengl_msaa;                                                                          // OpenGL multisampling antialiasing factor.
   char        opengl_ver_string[64];                                                                // OpenGL version as string (for ImGui initializaton).
 
+  std::string loc_imgui_logfile;                                                                    // String for IMGUI logfile name.
+  std::string loc_imgui_cmd;                                                                        // String for IMGUI logfile creation command.
+
   opengl_ver_major                 = 4;                                                             // EZOR 04NOV2018: to be generalized by iterative search.
   opengl_ver_minor                 = 6;                                                             // EZOR 04NOV2018: to be generalized by iterative search.
   opengl_msaa                      = 4;                                                             // 3 or 4 is good due to the oversampling-decimation method.
@@ -3732,10 +3735,15 @@ void nu::opengl::init
   ImGui::CreateContext ();                                                                          // Creating ImGui context...
   ImGuiIO &io = ImGui::GetIO ();                                                                    // Getting ImGuiIO handle...
   (void)io;                                                                                         // Casting ImGuiIO handle to void...
-  //io.IniFilename        = NULL;                                                                     // Disabling imgui frames position log (imgui.ini)...
-  #ifdef __linux__
-    system ("cd /dev/shm; touch logfile.ini");
-  #endif
+  io.IniFilename        = NULL;                                                                     // Disabling imgui frames position log (imgui.ini)...
+
+  // EZOR 31JUN2022: let's keep this feature and io.IniFilename disabled until it will be clear
+  //how to implement a RAM-DISK in Windows as well.
+  //#ifdef __linux__
+  ///  loc_imgui_logfile   = "neutrino_" + neutrino::get_timestamp ();
+  //  loc_imgui_cmd       = "cd /dev/shm; touch " + loc_imgui_logfile + ".ini";
+  //  system (loc_imgui_cmd.c_str ());
+  //#endif
 
   ImGui::StyleColorsDark ();                                                                        // Setting ImGui style...
   ImGui_ImplGlfw_InitForOpenGL (glfw_window, true);                                                 // Initializing ImGui context...
