@@ -143,11 +143,15 @@ void nu::imgui::timeplot (
     scrollplot_down_error.push_back (ScrollingBuffer ());                                           // Adding scroll down-errorbar buffer...
   }
 
-  float           history_time = 10.0f;                                                             // History time [s].
+  if(history_time.size () < (loc_ID + 1))
+  {
+    history_time.push_back (10.0f);                                                                 // Adding history time [s]...
+  }
+
   std::string     history_name = "History##_" + std::to_string (loc_ID);                            // History slider unique name.
   std::string     plot_name    = loc_title + "##_Timeplot_" + std::to_string (loc_ID);              // Timeplot unique name...
 
-  ImGui::SliderFloat (history_name.c_str (), &history_time, 1, 30, "%.1f s");                       // Setting history slider...
+  ImGui::SliderFloat (history_name.c_str (), &history_time[loc_ID], 1, 30, "%.1f s");               // Setting history slider...
   ImPlotAxisFlags flags        = ImPlotAxisFlags_AutoFit;
 
   scrollplot_time[loc_ID] += dt;
@@ -160,7 +164,7 @@ void nu::imgui::timeplot (
     ImPlot::SetupAxes ("time [s]", loc_data_axis.c_str (), flags, flags);
     ImPlot::SetupAxisLimits (
                              ImAxis_X1,
-                             scrollplot_time[loc_ID] - history_time,
+                             scrollplot_time[loc_ID] - history_time[loc_ID],
                              scrollplot_time[loc_ID],
                              ImGuiCond_Always
                             );
