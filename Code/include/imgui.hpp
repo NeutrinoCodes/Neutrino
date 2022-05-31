@@ -76,6 +76,7 @@ class imgui : public neutrino                                                   
 private:
   std::vector<ScrollingBuffer> scrollplot_data;                                                     ///< Scroll plot data buffer array.
   std::vector<float>           scrollplot_time;                                                     ///< Scroll plot time buffer array.
+  std::vector<float>           history_time;                                                        ///< History plot time buffer array.
   std::vector<ScrollingBuffer> scrollplot_up_error;                                                 ///< Scroll plot up errorbar buffer array.
   std::vector<ScrollingBuffer> scrollplot_down_error;                                               ///< Scroll plot down errorbar buffer array.
 
